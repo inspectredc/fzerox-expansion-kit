@@ -3,7 +3,7 @@ sha1: d013d19c0e2da82c164bd35565f5d03d67191ff0
 options:
   basename: fzerox-expansion
   target_path: baserom.jp.z64dd
-  elf_path: build/fzerox.jp.elf
+  elf_path: build/fzerox-expansion.jp.elf
   ld_script_path: linker_scripts/jp/fzerox-expansion.ld
   base_path: .
   compiler: IDO
