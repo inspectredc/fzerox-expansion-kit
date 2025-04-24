@@ -3,7 +3,7 @@
     start: 0x0
     vram: 0x806F2800
     subsegments:
-      - [0x0, hasm]
+      - [0x0, hasm, entrypoint]
 
   - name: main
     type: code

@@ -1,1 +1,7 @@
+entrypoint = 0x806F2800;
+// bootproc = 0x806F2860;
+// Idle_ThreadEntry = 0x806F31B8;
+
+
+
 D_807794F0 = 0x807794F0; // force_migration:True

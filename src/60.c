@@ -1,4 +1,5 @@
-#include "common.h"
+#include "global.h"
+#include "fzx_thread.h"
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/60/func_806F2860.s")
 
