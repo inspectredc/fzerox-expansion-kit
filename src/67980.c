@@ -1,0 +1,13 @@
+#include "common.h"
+
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/67980/func_8075A180.s")
+
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/67980/func_8075A240.s")
+
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/67980/func_8075A2F0.s")
+
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/67980/func_8075A4A0.s")
+
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/67980/D_8077B430.s")
+
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/67980/D_8077B470.s")
