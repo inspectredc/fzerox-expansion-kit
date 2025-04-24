@@ -75,5 +75,50 @@ git submodule update --init --recursive
 make toolchain
 ```
 
+#### 5. Prepare a base ROM
+
+Copy your dumped Disk to the root of this new project directory, and rename the file to reflect the version and dumped extension you are using. ex: baserom.jp.ndd
+
+Then run the following command to generate a baserom.jp.z64dd file:
+
+```bash
+make setup
+```
+
+Note that for other disk extensions that aren't .ndd (e.g. .d64/.mame), you will need to set the `DISK_EXT` variable as follows in this step:
+
+```bash
+make setup DISK_EXT=d64
+```
+
+- Please ensure that the resulting baserom.jp.z64dd file matches the checksum in fzerox-expansion.jp.md5
+
+#### 6. Make and Build the ROM
+
+To start the extraction/build process, run the following command:
+
+```bash
+make init
+```
+This will create the build folders, a new folder with the assembly as well as containing the disassembly of nearly all the files containing code.
+
+this make target will also build the ROM. If all goes well, a new ROM called "fzerox-expansion.jp.z64" should be built and the following text should be printed:
+
+```bash
+Calculating Rom Header Checksum... build/fzerox-expansion.jp.z64
+fzerox-expansion.jp.z64: OK
+```
+
+If you instead see the following:
+
+```bash
+Calculating Rom Header Checksum... build/fzerox-expansion.jp.z64
+fzerox-expansion.jp.z64 FAILED
+```
+
+This means that something is wrong with the ROM's contents. Either the base files are incorrect due to a bad ROM, or some of the code is not matching.
+
+From now on you should be able to build the rom by running `make`.
+
 [discord]: https://discord.gg/f2gmBaHySA
 [discord-badge]: https://img.shields.io/discord/1252984267471061053?logo=discord&logoColor=ffffff

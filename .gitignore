@@ -3,7 +3,7 @@ expected
 __pycache__
 .splat/
 fzerox-expansion.ld
-fzerox-expansion.*.*.yaml
+fzerox-expansion.*.yaml
 ctx.c
 ctx.c.m2c
 *.d

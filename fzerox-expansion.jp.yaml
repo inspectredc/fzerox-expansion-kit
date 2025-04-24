@@ -247,8 +247,12 @@ segments:
       - [0x74060, c]
       - [0x74100, c]
       - [0x75000, c]
+
+      # Data
       - [0x76660, data]
       - [0x775F0, data]
+
+      # Rodata
       - [0x80A80, .rodata, 60]
       - [0x80A90, .rodata, CE0]
       - [0x80AA0, .rodata, 2340]
