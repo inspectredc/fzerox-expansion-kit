@@ -1,0 +1,47 @@
+{
+    "python.formatting.autopep8Args": [
+      "--ignore",
+      "E402"
+    ],
+    "search.useIgnoreFiles": false,
+    "search.exclude": {
+      "**/.git": true,
+      "**/.github": true,
+      "build/**": true,
+      "expected/**": true,
+      "tools/**": true,
+      "ctx.c" : true
+    },
+    "defines": [
+      "_LANGUAGE_C",
+      "F3DEX_GBI_2"
+    ],
+    "files.associations": {
+      "hud.h": "c",
+      "global.h": "c",
+      "ultratypes.h": "c",
+      "mbi.h": "c",
+      "common.h": "c",
+      "ultra64.h": "c",
+      "os_internal.h": "c",
+      "structs.h": "c",
+      "stdint.h": "c",
+      "xstdio.h": "c",
+      "controller.h": "c",
+      "os_version.h": "c",
+      "stdbool.h": "c",
+      "variables.h": "c",
+      "functions.h": "c",
+      "macros.h": "c",
+      "random": "c",
+      "limits": "c",
+      "algorithm": "c",
+      "typeinfo": "c",
+      "chrono": "c",
+      "text_encoding": "c",
+      "fzx_thread.h": "c"
+    },
+    "C_Cpp_Runner.msvcBatchPath": "",
+    "C_Cpp.errorSquiggles": "enabled"
+  }
+  
