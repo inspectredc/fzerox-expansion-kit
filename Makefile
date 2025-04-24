@@ -47,8 +47,9 @@ else
 endif
 
 VERSION ?= jp
+DISK_EXT ?= ndd
 
-BASEROM              := baserom.$(VERSION).z64dd
+BASEROM              := baserom.$(VERSION).$(DISK_EXT)
 TARGET               := fzerox-expansion
 
 ### Output ###
@@ -302,8 +303,57 @@ $(shell mkdir -p $(BUILD_DIR)/linker_scripts/$(VERSION) $(BUILD_DIR)/linker_scri
 
 ifeq ($(COMPILER),ido)
 
+# directory flags
+$(BUILD_DIR)/src/libultra/gu/%.o: OPTFLAGS := -O3 -g0
+$(BUILD_DIR)/src/libultra/io/%.o: OPTFLAGS := -O1 -g0
+$(BUILD_DIR)/src/libultra/io/pimgr.o: OPTFLAGS := -O2 -g0
+$(BUILD_DIR)/src/libultra/io/vimgr.o: OPTFLAGS := -O2 -g0
+$(BUILD_DIR)/src/libultra/io/sirawdma.o: OPTFLAGS := -O2 -g0
+$(BUILD_DIR)/src/libultra/io/pfsselectbank.o: OPTFLAGS := -O2 -g0
+$(BUILD_DIR)/src/libultra/io/leointerrupt.o: OPTFLAGS := -O2 -g0
+$(BUILD_DIR)/src/libultra/io/crc.o: OPTFLAGS := -O2 -g0
+$(BUILD_DIR)/src/libultra/io/contramread.o: OPTFLAGS := -O2 -g0
+$(BUILD_DIR)/src/libultra/io/contramwrite.o: OPTFLAGS := -O2 -g0
+$(BUILD_DIR)/src/libultra/io/contreaddata.o: OPTFLAGS := -O2 -g0
+$(BUILD_DIR)/src/libultra/io/contpfs.o: OPTFLAGS := -O2 -g0
+$(BUILD_DIR)/src/libultra/io/pfsreadwritefile.o: OPTFLAGS := -O2 -g0
+$(BUILD_DIR)/src/libultra/io/pfsallocatefile.o: OPTFLAGS := -O2 -g0
+$(BUILD_DIR)/src/libultra/io/pfsfreeblocks.o: OPTFLAGS := -O2 -g0
+$(BUILD_DIR)/src/libultra/io/pfssearchfile.o: OPTFLAGS := -O2 -g0
+$(BUILD_DIR)/src/libultra/io/pfsinitpak.o: OPTFLAGS := -O2 -g0
+$(BUILD_DIR)/src/libultra/io/pfsgetstatus.o: OPTFLAGS := -O2 -g0
+$(BUILD_DIR)/src/libultra/io/pfschecker.o: OPTFLAGS := -O2 -g0
+$(BUILD_DIR)/src/libultra/io/leodiskinit.o: OPTFLAGS := -O2 -g0
+$(BUILD_DIR)/src/libultra/io/viswapcontext.o: OPTFLAGS := -O2 -g0
+$(BUILD_DIR)/src/libultra/io/motor.o: OPTFLAGS := -O2 -g0
+
+$(BUILD_DIR)/src/libultra/os/%.o: OPTFLAGS := -O1 -g0
+
+# libleo
+$(BUILD_DIR)/src/leo/%.o: OPTFLAGS := -g
+
+# per-file flags
+$(BUILD_DIR)/src/libultra/libc/ldiv.o: OPTFLAGS := -O2 -g0
+$(BUILD_DIR)/src/libultra/libc/string.o: OPTFLAGS := -O2 -g0
+$(BUILD_DIR)/src/libultra/libc/sprintf.o: OPTFLAGS := -O2 -g0
+$(BUILD_DIR)/src/libultra/libc/xlitob.o: OPTFLAGS := -O2 -g0
+$(BUILD_DIR)/src/libultra/libc/xldtob.o: OPTFLAGS := -O3 -g0
+$(BUILD_DIR)/src/libultra/libc/xprintf.o: OPTFLAGS := -O3 -g0
+$(BUILD_DIR)/src/libultra/libc/ll.o: OPTFLAGS := -O1 -g0
+$(BUILD_DIR)/src/libultra/libc/ll.o: MIPS_VERSION := -mips3 -32
+$(BUILD_DIR)/src/libultra/libc/llcvt.o: OPTFLAGS := -O1 -g0
+$(BUILD_DIR)/src/libultra/libc/llcvt.o: MIPS_VERSION := -mips3 -32
+
 # cc & asm-processor
 CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(IDO) -- $(AS) $(ASFLAGS) --
+$(BUILD_DIR)/src/libultra/gu/%.o: CC := $(IDO53)
+$(BUILD_DIR)/src/libultra/io/%.o: CC := $(IDO53)
+$(BUILD_DIR)/src/libultra/os/%.o: CC := $(IDO53)
+$(BUILD_DIR)/src/libultra/libc/%.o: CC := $(IDO53)
+
+# libleo
+$(BUILD_DIR)/src/leo_bootdisk.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(IDO53) -- $(AS) $(ASFLAGS) --
+$(BUILD_DIR)/src/leo/lib/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(IDO53) -- $(AS) $(ASFLAGS) --
 else
 
 endif
@@ -312,6 +362,9 @@ all: compressed
 
 toolchain:
 	@$(MAKE) -s -C $(TOOLS)
+
+setup:
+	@$(PYTHON) $(TOOLS)/extract_baserom.py --file $(BASEROM) --version $(VERSION)
 
 init:
 	@$(MAKE) clean
