@@ -252,7 +252,7 @@ COMMON_DEFINES  := -D_MIPS_SZLONG=32
 GBI_DEFINES     := -DF3DEX_GBI_2
 RELEASE_DEFINES := -DNDEBUG
 AS_DEFINES      := -DMIPSEB -D_LANGUAGE_ASSEMBLY -D_ULTRA64
-C_DEFINES       := -DLANGUAGE_C -D_LANGUAGE_C -DBUILD_VERSION=VERSION_H ${RELEASE_DEFINES}
+C_DEFINES       := -DLANGUAGE_C -D_LANGUAGE_C -DBUILD_VERSION=VERSION_J ${RELEASE_DEFINES}
 ENDIAN          := -EB
 
 ICONV_FLAGS     := --from-code=UTF-8 --to-code=EUC-JP
@@ -346,10 +346,10 @@ $(BUILD_DIR)/src/libultra/libc/llcvt.o: MIPS_VERSION := -mips3 -32
 
 # cc & asm-processor
 CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(IDO) -- $(AS) $(ASFLAGS) --
-$(BUILD_DIR)/src/libultra/gu/%.o: CC := $(IDO53)
-$(BUILD_DIR)/src/libultra/io/%.o: CC := $(IDO53)
-$(BUILD_DIR)/src/libultra/os/%.o: CC := $(IDO53)
-$(BUILD_DIR)/src/libultra/libc/%.o: CC := $(IDO53)
+$(BUILD_DIR)/src/libultra/gu/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(IDO53) -- $(AS) $(ASFLAGS) --
+$(BUILD_DIR)/src/libultra/io/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(IDO53) -- $(AS) $(ASFLAGS) --
+$(BUILD_DIR)/src/libultra/os/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(IDO53) -- $(AS) $(ASFLAGS) --
+$(BUILD_DIR)/src/libultra/libc/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(IDO53) -- $(AS) $(ASFLAGS) --
 
 # libleo
 $(BUILD_DIR)/src/leo_bootdisk.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(IDO53) -- $(AS) $(ASFLAGS) --
