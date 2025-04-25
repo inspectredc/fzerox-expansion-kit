@@ -22,7 +22,7 @@
 
 #define _FINALROM
 
-#define OS_MAJOR_VERSION	VERSION_I /* major version */
+#define OS_MAJOR_VERSION	VERSION_J /* major version */
 #define OS_MINOR_VERSION	0 /* patch level */
 
 #endif /* !_OS_VERSION_H_ */
