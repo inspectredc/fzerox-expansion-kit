@@ -252,7 +252,7 @@ COMMON_DEFINES  := -D_MIPS_SZLONG=32
 GBI_DEFINES     := -DF3DEX_GBI_2
 RELEASE_DEFINES := -DNDEBUG
 AS_DEFINES      := -DMIPSEB -D_LANGUAGE_ASSEMBLY -D_ULTRA64
-C_DEFINES       := -DLANGUAGE_C -D_LANGUAGE_C -DBUILD_VERSION=VERSION_H ${RELEASE_DEFINES}
+C_DEFINES       := -DLANGUAGE_C -D_LANGUAGE_C -DBUILD_VERSION=VERSION_J ${RELEASE_DEFINES}
 ENDIAN          := -EB
 
 ICONV_FLAGS     := --from-code=UTF-8 --to-code=EUC-JP
@@ -306,16 +306,26 @@ ifeq ($(COMPILER),ido)
 # directory flags
 $(BUILD_DIR)/src/libultra/gu/%.o: OPTFLAGS := -O3 -g0
 $(BUILD_DIR)/src/libultra/io/%.o: OPTFLAGS := -O1 -g0
+$(BUILD_DIR)/src/libultra/io/devmgr.o: OPTFLAGS := -O2 -g0
 $(BUILD_DIR)/src/libultra/io/pimgr.o: OPTFLAGS := -O2 -g0
 $(BUILD_DIR)/src/libultra/io/vimgr.o: OPTFLAGS := -O2 -g0
+$(BUILD_DIR)/src/libultra/io/pirawdma.o: OPTFLAGS := -O2 -g0
 $(BUILD_DIR)/src/libultra/io/sirawdma.o: OPTFLAGS := -O2 -g0
+$(BUILD_DIR)/src/libultra/io/sirawread.o: OPTFLAGS := -O2 -g0
+$(BUILD_DIR)/src/libultra/io/sirawwrite.o: OPTFLAGS := -O2 -g0
+$(BUILD_DIR)/src/libultra/io/sprawdma.o: OPTFLAGS := -O2 -g0
+$(BUILD_DIR)/src/libultra/io/epirawdma.o: OPTFLAGS := -O2 -g0
+$(BUILD_DIR)/src/libultra/io/epirawread.o: OPTFLAGS := -O2 -g0
+$(BUILD_DIR)/src/libultra/io/epirawwrite.o: OPTFLAGS := -O2 -g0
+$(BUILD_DIR)/src/libultra/io/epiread.o: OPTFLAGS := -O2 -g0
+$(BUILD_DIR)/src/libultra/io/epiwrite.o: OPTFLAGS := -O2 -g0
 $(BUILD_DIR)/src/libultra/io/pfsselectbank.o: OPTFLAGS := -O2 -g0
-$(BUILD_DIR)/src/libultra/io/leointerrupt.o: OPTFLAGS := -O2 -g0
 $(BUILD_DIR)/src/libultra/io/crc.o: OPTFLAGS := -O2 -g0
 $(BUILD_DIR)/src/libultra/io/contramread.o: OPTFLAGS := -O2 -g0
 $(BUILD_DIR)/src/libultra/io/contramwrite.o: OPTFLAGS := -O2 -g0
 $(BUILD_DIR)/src/libultra/io/contreaddata.o: OPTFLAGS := -O2 -g0
 $(BUILD_DIR)/src/libultra/io/contpfs.o: OPTFLAGS := -O2 -g0
+$(BUILD_DIR)/src/libultra/io/cartrominit.o: OPTFLAGS := -O2 -g0
 $(BUILD_DIR)/src/libultra/io/pfsreadwritefile.o: OPTFLAGS := -O2 -g0
 $(BUILD_DIR)/src/libultra/io/pfsallocatefile.o: OPTFLAGS := -O2 -g0
 $(BUILD_DIR)/src/libultra/io/pfsfreeblocks.o: OPTFLAGS := -O2 -g0
@@ -323,7 +333,8 @@ $(BUILD_DIR)/src/libultra/io/pfssearchfile.o: OPTFLAGS := -O2 -g0
 $(BUILD_DIR)/src/libultra/io/pfsinitpak.o: OPTFLAGS := -O2 -g0
 $(BUILD_DIR)/src/libultra/io/pfsgetstatus.o: OPTFLAGS := -O2 -g0
 $(BUILD_DIR)/src/libultra/io/pfschecker.o: OPTFLAGS := -O2 -g0
-$(BUILD_DIR)/src/libultra/io/leodiskinit.o: OPTFLAGS := -O2 -g0
+$(BUILD_DIR)/src/libultra/io/aisetfreq.o: OPTFLAGS := -O2 -g0
+$(BUILD_DIR)/src/libultra/io/visetspecial.o: OPTFLAGS := -O2 -g0
 $(BUILD_DIR)/src/libultra/io/viswapcontext.o: OPTFLAGS := -O2 -g0
 $(BUILD_DIR)/src/libultra/io/motor.o: OPTFLAGS := -O2 -g0
 
@@ -346,9 +357,9 @@ $(BUILD_DIR)/src/libultra/libc/llcvt.o: MIPS_VERSION := -mips3 -32
 
 # cc & asm-processor
 CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(IDO) -- $(AS) $(ASFLAGS) --
-$(BUILD_DIR)/src/libultra/gu/%.o: CC := $(IDO53)
-$(BUILD_DIR)/src/libultra/io/%.o: CC := $(IDO53)
-$(BUILD_DIR)/src/libultra/os/%.o: CC := $(IDO53)
+$(BUILD_DIR)/src/libultra/gu/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(IDO53) -- $(AS) $(ASFLAGS) --
+$(BUILD_DIR)/src/libultra/io/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(IDO53) -- $(AS) $(ASFLAGS) --
+$(BUILD_DIR)/src/libultra/os/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(IDO53) -- $(AS) $(ASFLAGS) --
 $(BUILD_DIR)/src/libultra/libc/%.o: CC := $(IDO53)
 
 # libleo

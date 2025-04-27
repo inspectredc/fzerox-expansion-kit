@@ -1,6 +1,3 @@
-[submodule "fzerox"]
-	path = fzerox
-	url = https://github.com/inspectredc/fzerox.git
 [submodule "tools/leo64dd_python"]
 	path = tools/leo64dd_python
 	url = https://github.com/LuigiBlood/leo64dd_python.git
