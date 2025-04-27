@@ -33,6 +33,13 @@
 #define PHYS_TO_K1ROM(x) (((u32) (x) | 0xB0000000))
 #define ROM_READ(addr) (*(vu32*) PHYS_TO_K1ROM(addr))
 
+
+#define STACK(stack, size) \
+    u64 stack[ALIGN8(size) / sizeof(u64)]
+
+#define STACK_START(stack) \
+    ((u8*)(stack) + sizeof(stack))
+
 /*
  * Macros for libultra
  */
