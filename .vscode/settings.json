@@ -14,7 +14,8 @@
     },
     "defines": [
       "_LANGUAGE_C",
-      "F3DEX_GBI_2"
+      "F3DEX_GBI_2",
+      "BUILD_VERSION=VERSION_J"
     ],
     "files.associations": {
       "hud.h": "c",
@@ -39,7 +40,17 @@
       "typeinfo": "c",
       "chrono": "c",
       "text_encoding": "c",
-      "fzx_thread.h": "c"
+      "fzx_thread.h": "c",
+      "stdarg.h": "c",
+      "rdb.h": "c",
+      "osint.h": "c",
+      "ultraerror.h": "c",
+      "ios": "c",
+      "assert.h": "c",
+      "viint.h": "c",
+      "os.h": "c",
+      "siint.h": "c",
+      "rcp.h": "c"
     },
     "C_Cpp_Runner.msvcBatchPath": "",
     "C_Cpp.errorSquiggles": "enabled"

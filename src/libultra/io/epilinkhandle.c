@@ -1,3 +1,11 @@
-#include "common.h"
+#include "PR/piint.h"
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/libultra/io/epilinkhandle/osEPiLinkHandle.s")
+s32 osEPiLinkHandle(OSPiHandle* EPiHandle) {
+    u32 saveMask = __osDisableInt();
+
+    EPiHandle->next = __osPiTable;
+    __osPiTable = EPiHandle;
+
+    __osRestoreInt(saveMask);
+    return 0;
+}
