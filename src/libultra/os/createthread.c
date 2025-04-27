@@ -10,7 +10,7 @@ void osCreateThread(OSThread* t, OSId id, void (*entry)(void*), void* arg, void*
     OSIntMask mask;
 
 #ifdef _DEBUG
-    if ((u32)sp & 0x7) {
+    if ((u32) sp & 0x7) {
         __osError(ERR_OSCREATETHREAD_SP, 1, sp);
         return;
     }
@@ -25,10 +25,10 @@ void osCreateThread(OSThread* t, OSId id, void (*entry)(void*), void* arg, void*
     t->priority = p;
     t->next = NULL;
     t->queue = NULL;
-    t->context.pc = (u32)entry;
-    t->context.a0 = (s64)(s32)arg; // Double cast gets rid of compiler warning
-    t->context.sp = (s64)(s32)sp - 16;
-    t->context.ra = (s64)(s32)__osCleanupThread;
+    t->context.pc = (u32) entry;
+    t->context.a0 = (s64) (s32) arg; // Double cast gets rid of compiler warning
+    t->context.sp = (s64) (s32) sp - 16;
+    t->context.ra = (s64) (s32) __osCleanupThread;
     mask = OS_IM_ALL;
     t->context.sr = (mask & (SR_IMASK | SR_IE)) | SR_EXL;
     t->context.rcp = (mask & RCP_IMASK) >> RCP_IMASKSHIFT;

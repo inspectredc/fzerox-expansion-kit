@@ -20,17 +20,15 @@ static void* proutSyncPrintf(void* str, const char* buf, size_t n) {
     return 1;
 }
 
-static volatile unsigned int* stat = (unsigned*)0xbff08004;
-static volatile unsigned int* wport = (unsigned*)0xbff08000;
-static volatile unsigned int* piok = (unsigned*)PHYS_TO_K1(PI_STATUS_REG);
+static volatile unsigned int* stat = (unsigned*) 0xbff08004;
+static volatile unsigned int* wport = (unsigned*) 0xbff08000;
+static volatile unsigned int* piok = (unsigned*) PHYS_TO_K1(PI_STATUS_REG);
 
 static void rmonPutchar(char c) {
-    while (*piok & (PI_STATUS_DMA_BUSY | PI_STATUS_IO_BUSY)) {
-    }
+    while (*piok & (PI_STATUS_DMA_BUSY | PI_STATUS_IO_BUSY)) {}
 
-    while (!(*stat & 4)) {
-    }
-    
+    while (!(*stat & 4)) {}
+
     *wport = c;
 }
 
@@ -81,7 +79,7 @@ static void* kmc_proutSyncPrintf(void* str, const char* buf, int n) {
             rmonPutchar(*q++);
         }
     }
-    return (void*)1;
+    return (void*) 1;
 }
 #endif
 

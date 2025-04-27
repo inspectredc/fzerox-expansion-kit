@@ -17,7 +17,7 @@ void osViSwapBuffer(void* frameBufPtr) {
 
     assert(frameBufPtr != NULL);
 
-    if ((u32)frameBufPtr & 0x3f) {
+    if ((u32) frameBufPtr & 0x3f) {
         __osError(ERR_OSVISWAPBUFFER_ADDR, 1, frameBufPtr);
         return;
     }

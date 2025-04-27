@@ -38,7 +38,7 @@ s32 osAiSetFrequency(u32 frequency) {
 #endif
 
     // Calculate the DAC sample period ("dperiod") (dperiod + 1 = vid_clock / frequency)
-    f = osViClock / (float)frequency + .5f;
+    f = osViClock / (float) frequency + .5f;
     dacRate = f;
 
     // Upcoming division by 66. If dacRate is smaller than 2 * 66 = 132, bitrate will be 1 and AI_BITRATE_REG will be
@@ -62,5 +62,5 @@ s32 osAiSetFrequency(u32 frequency) {
 #endif
     // Return the true playback frequency (frequency = vid_clock / (dperiod + 1)), which may differ from the target
     // frequency.
-    return osViClock / (s32)dacRate;
+    return osViClock / (s32) dacRate;
 }
