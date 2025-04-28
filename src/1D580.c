@@ -70,8 +70,8 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/1D580/func_807109AC.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1D580/func_80710A38.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/1D580/Fault_SetFrameBuffer.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1D580/func_80710A60.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/1D580/Fault_Init.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/1D580/func_80710B04.s")
