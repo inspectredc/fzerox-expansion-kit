@@ -13,15 +13,27 @@ mio0Decode = 0x8072E3B0;
 
 // game data
 
+sSpTaskState = 0x8076C760;
+
 // game bss
 
-sBootThreadStack = 0x80795670;
-sIdleThreadStack = 0x80795870;
 sMainThreadStack = 0x80795A70;
 sGameThreadStack = 0x80795E70;
 sAudioThreadStack = 0x80796E70;
-sResetThreadStack = 0x80797670;
 
+gDmaMesgQueue = 0x8079A0A8;
+gSerialEventQueue = 0x8079A0C0;
+gAudioTaskMesgQueue = 0x8079A0D8;
+
+gMainThreadMesgQueue = 0x8079A120;
+gResetMesgQueue = 0x8079A138;
+
+gCurGfxTask = 0x8079A320;
+gCurAudioOSTask = 0x8079A324;
+gFrameBuffers = 0x8079A330;
+gCartRomHandle = 0x8079A33C;
+
+gResetStarted = 0x8079A328;
 
 // libultra
 

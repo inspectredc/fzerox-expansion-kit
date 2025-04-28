@@ -1,3 +1,27 @@
+  - name: framebuffer4
+    dir: framebuffers
+    type: code
+    vram: 0x80000400
+    bss_size: 0x25800
+    subsegments:
+      - { type: .bss, vram: 0x80000400, name: framebuffer4 }
+
+  - name: framebuffer1
+    type: code
+    dir: framebuffers
+    vram: 0x801D9800
+    bss_size: 0x25800
+    subsegments:
+      - { type: .bss, vram: 0x801D9800, name: framebuffer1 }
+
+  - name: framebuffer2
+    type: code
+    dir: framebuffers
+    vram: 0x80200000
+    bss_size: 0x25800
+    subsegments:
+      - { type: .bss, vram: 0x80200000, name: framebuffer2 }
+
   - name: entry
     type: code
     start: 0x0
@@ -210,9 +234,13 @@
       - [0x74100, c]
       - [0x75000, c]
 
-      # Data
       - [0x76660, data]
+
+      # Data
       - [0x775F0, data]
+      - [0x79F60, .data, 60]
+      - [0x79FA0, data]
+
       - [0x7F5F0, data, libultra/os/exceptasm]
       - [0x7F610, .data, libultra/os/thread]
       - [0x7F640, .data, libultra/io/controller]
@@ -342,7 +370,8 @@
       - [0xA2630, .rodata, 75000]
       - [0xA2690, data, aspmain]
       - [0xA2B50, data] # audio tables?
-      - { type: bss, vram: 0x80795670, name: 80795670 }
+      - { type: .bss, vram: 0x80795670, name: 60 }
+      - { type: bss, vram: 0x8079A350, name: 8079A350 }
       - { type: .bss, vram: 0x807C1C00, name: libultra/io/sptask }
       - { type: .bss, vram: 0x807C1C40, name: libultra/io/motor }
       - { type: .bss, vram: 0x807C1D40, name: libultra/io/siacs }
