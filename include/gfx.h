@@ -5,6 +5,7 @@
 #include "macros.h"
 
 typedef union {
+    u64 buffer[SCREEN_HEIGHT * SCREEN_WIDTH / 4];
     u16 data[SCREEN_HEIGHT * SCREEN_WIDTH];
     u16 array[SCREEN_HEIGHT][SCREEN_WIDTH];
 } FrameBuffer; // size = 0x25800

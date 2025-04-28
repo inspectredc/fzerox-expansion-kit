@@ -3,25 +3,49 @@
 #include "PR/viint.h"
 #include "PR/leo.h"
 
-extern char sBootThreadStack[0x200];
-extern char sIdleThreadStack[0x200];
-extern char sMainThreadStack[0x400];
-extern char sGameThreadStack[0x1000];
-extern char sAudioThreadStack[0x800];
-extern char sResetThreadStack[0x1200];
-extern OSThread sIdleThread;
-extern OSThread sMainThread;
-extern OSThread sAudioThread;
-extern OSThread sGameThread;
-extern OSThread sResetThread;
-extern OSMesgQueue sPiMgrCmdQueue;
-extern OSMesgQueue gResetMesgQueue;
-extern OSMesg sPiMgrCmdBuf[64];
-extern OSMesg sResetMsgBuf[1];
-extern OSTask* gCurGfxTask;
-extern OSTask* gCurAudioOSTask;
-extern FrameBuffer* gFrameBuffers[3];
-extern OSPiHandle* gCartRomHandle;
+char sBootThreadStack[0x200];
+char sIdleThreadStack[0x200];
+char sMainThreadStack[0x400];
+char sGameThreadStack[0x1000];
+char sAudioThreadStack[0x800];
+char D_80797670[0x1000];
+char sResetThreadStack[0x200];
+UNUSED char sUnusedThreadStack[0xE00];
+OSThread sIdleThread;
+OSThread sMainThread;
+OSThread sAudioThread;
+OSThread sGameThread;
+OSThread sResetThread;
+OSThread D_80799EE0;
+OSMesgQueue sPiMgrCmdQueue;
+OSMesgQueue gDmaMesgQueue;
+OSMesgQueue gSerialEventQueue;
+OSMesgQueue gAudioTaskMesgQueue;
+OSMesgQueue D_8079A0F0;
+OSMesgQueue D_8079A108;
+OSMesgQueue gMainThreadMesgQueue;
+OSMesgQueue gResetMesgQueue;
+OSMesgQueue D_8079A150;
+OSMesg sPiMgrCmdBuf[64];
+OSMesg sDmaMsgBuf[1];
+OSMesg sSerialEventBuf[1];
+OSMesg sAudioTaskMsgBuf[1];
+OSMesg D_8079A274[1];
+OSMesg D_8079A278[1];
+OSMesg sMainThreadMsgBuf[16];
+OSMesg sResetMsgBuf[1];
+OSMesg D_8079A2C4[1];
+UNUSED s8 D_8079A2C8[0x20];
+OSMesgQueue D_8079A2E8;
+OSMesg D_8079A300[1];
+OSIoMesg D_8079A308;
+OSTask* gCurGfxTask;
+OSTask* gCurAudioOSTask;
+bool gResetStarted;
+s32 D_8079A32C;
+FrameBuffer* gFrameBuffers[3];
+OSPiHandle* gCartRomHandle;
+s32 D_8079A340;
 
 void Idle_ThreadEntry(void*);
 void Reset_ThreadEntry(void*);
@@ -52,9 +76,9 @@ void bootproc(void) {
         ptr[i] = 0x8877665544332211;
     }
 
-    ptr = (u64*)sResetThreadStack;
+    ptr = (u64*)D_80797670;
 
-    for (i = 0; i < sizeof(sResetThreadStack) / sizeof(u64); i++) {
+    for (i = 0; i < sizeof(D_80797670) / sizeof(u64); i++) {
         ptr[i] = 0x8877665544332211;
     }
 
@@ -69,8 +93,8 @@ void bootproc(void) {
     osStartThread(&sIdleThread);
 }
 
-extern s32 sSpTaskState;
-extern bool sSpTaskActive;
+s32 sSpTaskState = SP_TASK_INACTIVE;
+bool sSpTaskActive = false;
 
 void Sched_SpTaskYield(void) {
     osSpTaskYield();
@@ -97,48 +121,22 @@ void Sched_SpTaskResumeGfx(void) {
     sSpTaskActive = true;
 }
 
-extern bool sGfxTaskYielded;
-extern bool sGfxTaskQueued;
-extern s32 D_8076C770;
-extern s32 D_8076C774;
-extern s32 D_8076C778;
-extern s32 D_8076C77C;
-extern bool gRamDDCompatible;
-extern bool sAudioThreadCreated;
-extern s8 sMainThreadStartEnabled;
-extern s8 sGameThreadStartEnabled;
-extern s8 sAudioThreadStartEnabled;
+bool sGfxTaskYielded = false;
+bool sGfxTaskQueued = false;
+s32 D_8076C770 = 1;
+s32 D_8076C774 = 0;
+s32 D_8076C778 = 1;
+s32 D_8076C77C = 1;
+bool D_8076C780 = false;
+bool sAudioThreadCreated = false;
+s8 sMainThreadStartEnabled = true;
+s8 sGameThreadStartEnabled = true;
+s8 sAudioThreadStartEnabled = true;
+UNUSED s8 D_8076C794 = 1;
 
-extern s32 D_8076C780;
-extern s32 D_8079A32C;
-extern s32 D_8079A340;
-
-extern OSMesgQueue gDmaMesgQueue;
-extern OSMesgQueue gSerialEventQueue;
-extern OSMesgQueue gAudioTaskMesgQueue;
-extern OSMesgQueue gMainThreadMesgQueue;
-extern OSMesg sDmaMsgBuf[1];
-extern OSMesg sSerialEventBuf[1];
-extern OSMesg sAudioTaskMsgBuf[1];
-extern OSMesg sMainThreadMsgBuf[16];
 extern LEODiskID leoBootID;
-extern bool gResetStarted;
-extern bool gLeoDDConnected;
 
-extern OSMesgQueue D_8079A0F0;
-extern OSMesgQueue D_8079A108;
-extern OSMesgQueue D_8079A150;
-extern OSMesg D_8079A274[1];
-extern OSMesg D_8079A278[1];
-extern OSMesg D_8079A2C4[1];
-extern OSMesgQueue D_8079A2E8;
-extern OSMesg D_8079A300[1];
-extern OSThread D_80799EE0;
-void func_80767958(void*);
-extern char D_80797670[0x1000];
-void func_80703F90(void);
-s32 func_80768C08(s32 arg0, s32 arg1, s32 arg2);
-s32 func_80768AF0(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5);
+void func_806F33D0(FrameBuffer* arg0);
 
 void Main_ThreadEntry(void* arg0) {
     OSMesg msg;
@@ -166,15 +164,15 @@ void Main_ThreadEntry(void* arg0) {
     switch (osResetType) {
         case OS_TV_PAL:
         case OS_TV_NTSC:
-            D_8076C780 = 1;
+            D_8076C780 = true;
             break;
         case OS_TV_MPAL:
-            D_8076C780 = 1;
+            D_8076C780 = true;
             break;
     }
 
 
-    if (D_8076C780 != 0) {
+    if (D_8076C780) {
         D_8079A32C = func_8075AA60();
         D_8079A340 = func_8075A020();
         if (D_8079A32C != 0) {
@@ -183,9 +181,9 @@ void Main_ThreadEntry(void* arg0) {
         func_80704DB0("01", &leoBootID);
 
         for (i = 0; i < 3; i++) {
-            var_v0 = &gFrameBuffers[i]->data[19199 * 4];
+            var_v0 = &gFrameBuffers[i]->buffer[19199];
     
-            while (var_v0 >= (u64*)gFrameBuffers[i]->data) {
+            while (var_v0 >= gFrameBuffers[i]->buffer) {
                 *var_v0-- = 0x0001000100010001;
             }
         }
@@ -216,7 +214,7 @@ void Main_ThreadEntry(void* arg0) {
 
     osViBlack(false);
 
-    if (D_8076C780 != 0) {
+    if (D_8076C780) {
         osCreateThread(&D_80799EE0, THREAD_ID_6, &func_80767958, 0, D_80797670 + sizeof(D_80797670), 0x1E);
         if (D_8079A32C == 1) {
             osStartThread(&D_80799EE0);
@@ -300,12 +298,12 @@ void Main_ThreadEntry(void* arg0) {
 
 extern FrameBuffer gFrameBuffer1;
 extern FrameBuffer gFrameBuffer2;
-extern FrameBuffer gFrameBuffer3;
+extern FrameBuffer gFrameBuffer4;
 
 void Idle_ThreadEntry(void* arg0) {
     gFrameBuffers[0] = &gFrameBuffer1;
     gFrameBuffers[1] = &gFrameBuffer2;
-    gFrameBuffers[2] = &gFrameBuffer3;
+    gFrameBuffers[2] = &gFrameBuffer4;
     osCreateViManager(OS_PRIORITY_VIMGR);
     if (osTvType == OS_TV_TYPE_NTSC) {
         osViSetMode(&osViModeNtscLan1);
@@ -344,7 +342,7 @@ void Reset_ThreadEntry(void* arg0) {
     gResetStarted = true;
     osViBlack(true);
     osViSetYScale(1.0f);
-    if (gRamDDCompatible && gLeoDDConnected) {
+    if (D_8076C780 && D_8079A32C) {
         LeoReset();
     }
     func_806F5A50();
@@ -352,4 +350,28 @@ void Reset_ThreadEntry(void* arg0) {
     while (true) {}
 }
 
+extern u64 D_80769DF0[];
+
+#ifdef NON_MATCHING
+void func_806F33D0(FrameBuffer* arg0) {
+    u64* var_s0 = &arg0->buffer[19199];
+    s32 i;
+    s32 j;
+
+    // FAKE?
+    while (var_s0 >= arg0->buffer) {
+        *(--var_s0 + 1) = 0x1000100010001;
+    }
+    osWritebackDCache(arg0, SCREEN_HEIGHT * SCREEN_WIDTH * sizeof(u16));
+
+    var_s0 = &arg0->buffer[8023];
+
+    for (i = 0; i < 39; i++) {
+        for (j = 0; j < 34; j++) {
+            var_s0[i * 80 + j] = D_80769DF0[i * 34 + j];
+        }
+    }
+}
+#else
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/60/func_806F33D0.s")
+#endif
