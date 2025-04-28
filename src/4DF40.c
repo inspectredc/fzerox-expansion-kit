@@ -8,7 +8,7 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/4DF40/func_80740B04.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/4DF40/func_80740B10.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/4DF40/Audio_PreNMI.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/4DF40/func_80740B30.s")
 

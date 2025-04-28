@@ -4,7 +4,7 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/63980/func_80756354.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/63980/func_807564B4.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/63980/LeoReset.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/63980/func_80756544.s")
 

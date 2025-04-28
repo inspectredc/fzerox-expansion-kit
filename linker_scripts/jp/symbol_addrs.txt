@@ -2,7 +2,28 @@ entrypoint = 0x806F2800;
 bootproc = 0x806F2860;
 // Idle_ThreadEntry = 0x806F31B8;
 
+Audio_ThreadEntry = 0x806F4A60;
+Game_ThreadEntry = 0x806F3A94;
+Fault_SetFrameBuffer = 0x80710A38;
+Fault_Init = 0x80710A60;
+Audio_PreNMI = 0x80740B10;
+LeoReset = 0x807564B4;
+
 mio0Decode = 0x8072E3B0;
+
+// game data
+
+// game bss
+
+sBootThreadStack = 0x80795670;
+sIdleThreadStack = 0x80795870;
+sMainThreadStack = 0x80795A70;
+sGameThreadStack = 0x80795E70;
+sAudioThreadStack = 0x80796E70;
+sResetThreadStack = 0x80797670;
+
+
+// libultra
 
 __osSetCause = 0x80745DE0;
 osSendMesg = 0x80745DF0;
