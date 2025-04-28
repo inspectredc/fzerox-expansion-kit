@@ -1,10 +1,46 @@
-#include "common.h"
+#include "global.h"
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/75000/func_80767800.s")
+extern unk_807C6F10 D_807C6F10[];
+extern vs32 D_80794E28;
+extern vs32 D_80794E2C;
+extern OSMesgQueue D_807C6E90;
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/75000/func_80767900.s")
+void func_80767800(unk_807C6F10 arg0) {
+    OSIntMask prevMask;
+    s32 temp_lo;
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/75000/func_80767940.s")
+    do {} while (D_80794E28 == ((D_80794E2C + 1) & 7));
+    prevMask = osGetIntMask();
+    osSetIntMask(1);
+    D_80794E2C &= 7;
+    D_807C6F10[D_80794E2C] = arg0;
+    temp_lo = D_80794E2C;
+    D_80794E2C = (D_80794E2C + 1) & 7;
+    osSendMesg(&D_807C6E90, &D_807C6F10[temp_lo], 1);
+    osSetIntMask(prevMask);
+}
+
+void func_80767900(void) {
+    if (D_80794E2C != D_80794E28) {
+        D_80794E28++;
+        D_80794E28 &= 7;
+    }
+}
+
+typedef struct unk_807C6EA8 {
+    s8 unk_00[0x4];
+    s8 unk_04;
+    s32 unk_08;
+    s32 unk_0C;
+} unk_807C6EA8;
+
+extern unk_807C6EA8 D_807C6EA8;
+
+void func_80767940(void) {
+    D_807C6EA8.unk_04 = 0;
+    D_807C6EA8.unk_08 = 0;
+    D_807C6EA8.unk_0C = 0;
+}
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/75000/func_80767958.s")
 
@@ -64,13 +100,59 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/75000/func_807689BC.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/75000/func_80768A5C.s")
+s32 func_80768A5C(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
+    unk_807C6F10 sp34;
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/75000/func_80768AF0.s")
+    sp34.unk_00 = 0;
+    sp34.unk_1C = arg0;
+    sp34.unk_18 = arg1;
+    sp34.unk_04 = arg2;
+    sp34.unk_08 = arg3;
+    sp34.unk_0C = arg4;
+    sp34.unk_20 = arg5;
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/75000/func_80768B88.s")
+    func_80767800(sp34);
+    return 0;
+}
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/75000/func_80768C08.s")
+s32 func_80768AF0(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
+    unk_807C6F10 sp34;
+
+    sp34.unk_00 = 1;
+    sp34.unk_1C = arg0;
+    sp34.unk_18 = arg1;
+    sp34.unk_04 = arg2;
+    sp34.unk_08 = arg3;
+    sp34.unk_0C = arg4;
+    sp34.unk_20 = arg5;
+
+    func_80767800(sp34);
+    return 0;
+}
+
+s32 func_80768B88(s32 arg0, s32 arg1, s32 arg2) {
+    unk_807C6F10 sp34;
+
+    sp34.unk_00 = 2;
+    sp34.unk_10 = arg0;
+    sp34.unk_14 = arg1;
+    sp34.unk_18 = arg2;
+
+    func_80767800(sp34);
+    return 0;
+}
+
+s32 func_80768C08(s32 arg0, s32 arg1, s32 arg2) {
+    unk_807C6F10 sp34;
+
+    sp34.unk_00 = 3;
+    sp34.unk_10 = arg0;
+    sp34.unk_14 = arg1;
+    sp34.unk_18 = arg2;
+
+    func_80767800(sp34);
+    return 0;
+}
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/75000/func_80768C88.s")
 

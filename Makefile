@@ -397,7 +397,7 @@ endif
 extract:
 	@$(RM) -r asm/$(VERSION) bin/$(VERSION)
 	@echo "Unifying yamls..."
-	@$(CAT) yamls/$(VERSION)/header.yaml yamls/$(VERSION)/main.yaml > $(SPLAT_YAML)
+	@$(CAT) yamls/$(VERSION)/header.yaml yamls/$(VERSION)/main.yaml yamls/$(VERSION)/overlays.yaml > $(SPLAT_YAML)
 	@echo "Extracting..."
 	@$(SPLAT) $(SPLAT_YAML)
 
@@ -426,7 +426,7 @@ context:
 disasm:
 	@$(RM) -r asm/$(VERSION) bin/$(VERSION)
 	@echo "Unifying yamls..."
-	@$(CAT) yamls/$(VERSION)/header.yaml yamls/$(VERSION)/main.yaml > $(SPLAT_YAML)
+	@$(CAT) yamls/$(VERSION)/header.yaml yamls/$(VERSION)/main.yaml yamls/$(VERSION)/overlays.yaml > $(SPLAT_YAML)
 	@echo "Extracting..."
 	@$(SPLAT) $(SPLAT_YAML) --disassemble-all
 
