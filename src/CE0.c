@@ -14,4 +14,4 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/CE0/func_806F3924.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/CE0/func_806F3A94.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/CE0/Game_ThreadEntry.s")
