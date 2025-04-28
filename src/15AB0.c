@@ -14,7 +14,7 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/15AB0/func_807084E4.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/15AB0/func_80708770.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/15AB0/Segment_SetPhysicalAddress.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/15AB0/func_80708790.s")
 
@@ -22,7 +22,7 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/15AB0/func_807087C4.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/15AB0/func_807087F8.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/15AB0/Segment_SetTableAddresses.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/15AB0/func_807088A8.s")
 

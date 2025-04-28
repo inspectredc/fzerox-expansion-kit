@@ -22,6 +22,14 @@
     subsegments:
       - { type: .bss, vram: 0x80200000, name: framebuffer2 }
 
+  - name: buffers
+    exclusive_ram_id: buffer
+    type: code
+    vram: 0x802D9CD0
+    bss_size: 0x55000
+    subsegments:
+      - { type: .bss, vram: 0x802D9CD0, name: buffers }
+
   - name: entry
     type: code
     start: 0x0
@@ -233,8 +241,7 @@
       - [0x74060, c]
       - [0x74100, c]
       - [0x75000, c]
-
-      - [0x76660, data]
+      - [0x76660, textbin, aspmain]
 
       # Data
       - [0x775F0, data]
@@ -391,4 +398,3 @@
   - type: bin
     start: 0xA2E70
     follows_vram: main
-  - [0xA4060]

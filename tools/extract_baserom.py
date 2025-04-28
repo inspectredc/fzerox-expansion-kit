@@ -7,7 +7,7 @@ import pathlib
 RESERVED_BLOCK_COUNT = 24
 MAIN_BLOCK_START = 560
 MAIN_BLOCK_END = 598
-OVERLAY_BLOCKS = { 655, 598, 602, 613, 615, 617, 620, 622, 624 }
+OVERLAY_BLOCKS = [ (598, 602), (602, 613), (613, 615), (615, 617), (617, 620), (620, 622), (622, 624), (624, 635), (635, 655), (655, 656) ]
 
 def leo_decode(ba):
     out = bytearray()
@@ -32,6 +32,10 @@ def main(args):
         romBA.extend(disk_obj.get_lba(RESERVED_BLOCK_COUNT + i))
 
     romDecodedBA = leo_decode(romBA)
+
+    # for lbaSE in OVERLAY_BLOCKS:
+    #     for lba in range(lbaSE[0], lbaSE[1]):
+    #         romDecodedBA.extend(disk_obj.get_lba(RESERVED_BLOCK_COUNT + lba))
 
     rom.write_bytes(romDecodedBA)
 

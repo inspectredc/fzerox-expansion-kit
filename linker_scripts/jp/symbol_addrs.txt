@@ -8,6 +8,12 @@ Fault_SetFrameBuffer = 0x80710A38;
 Fault_Init = 0x80710A60;
 Audio_PreNMI = 0x80740B10;
 LeoReset = 0x807564B4;
+Gfx_InitBuffer = 0x806F3514;
+Segment_SetPhysicalAddress = 0x80708770;
+Segment_SetTableAddresses = 0x807087F8;
+Gfx_LoadSegments = 0x806F35A8;
+Gfx_FullSync = 0x806F3610;
+Gfx_SetTask = 0x806F3698;
 
 mio0Decode = 0x8072E3B0;
 
@@ -34,6 +40,12 @@ gFrameBuffers = 0x8079A330;
 gCartRomHandle = 0x8079A33C;
 
 gResetStarted = 0x8079A328;
+
+gGfxPool = 0x8079A350;
+sGfxTask = 0x8079A354;
+gMasterDisp = 0x8079A358;
+
+gGameMode = 0x8079A4B4;
 
 // libultra
 
