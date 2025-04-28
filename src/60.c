@@ -53,41 +53,41 @@ void Reset_ThreadEntry(void*);
 void bootproc(void) {
     u64* ptr;
     u32 i;
-    
+
     osInitialize();
     osCreateMesgQueue(&gResetMesgQueue, sResetMsgBuf, ARRAY_COUNT(sResetMsgBuf));
     osSetEventMesg(OS_EVENT_PRENMI, &gResetMesgQueue, (void*) 0x1B);
 
-    ptr = (u64*)sIdleThreadStack;
+    ptr = (u64*) sIdleThreadStack;
 
     for (i = 0; i < sizeof(sIdleThreadStack) / sizeof(u64); i++) {
         ptr[i] = 0x8877665544332211;
     }
 
-    ptr = (u64*)sMainThreadStack;
+    ptr = (u64*) sMainThreadStack;
 
     for (i = 0; i < sizeof(sMainThreadStack) / sizeof(u64); i++) {
         ptr[i] = 0x8877665544332211;
     }
 
-    ptr = (u64*)sGameThreadStack;
+    ptr = (u64*) sGameThreadStack;
 
     for (i = 0; i < sizeof(sGameThreadStack) / sizeof(u64); i++) {
         ptr[i] = 0x8877665544332211;
     }
 
-    ptr = (u64*)D_80797670;
+    ptr = (u64*) D_80797670;
 
     for (i = 0; i < sizeof(D_80797670) / sizeof(u64); i++) {
         ptr[i] = 0x8877665544332211;
     }
 
-    ptr = (u64*)sAudioThreadStack;
+    ptr = (u64*) sAudioThreadStack;
 
     for (i = 0; i < sizeof(sAudioThreadStack) / sizeof(u64); i++) {
         ptr[i] = 0x8877665544332211;
     }
-    
+
     osCreateThread(&sIdleThread, THREAD_ID_IDLE, Idle_ThreadEntry, NULL, sIdleThreadStack + sizeof(sIdleThreadStack),
                    100);
     osStartThread(&sIdleThread);
@@ -171,7 +171,6 @@ void Main_ThreadEntry(void* arg0) {
             break;
     }
 
-
     if (D_8076C780) {
         D_8079A32C = func_8075AA60();
         D_8079A340 = func_8075A020();
@@ -182,18 +181,18 @@ void Main_ThreadEntry(void* arg0) {
 
         for (i = 0; i < 3; i++) {
             var_v0 = &gFrameBuffers[i]->buffer[19199];
-    
+
             while (var_v0 >= gFrameBuffers[i]->buffer) {
                 *var_v0-- = 0x0001000100010001;
             }
         }
 
         osViSwapBuffer(gFrameBuffers[0]);
-        
+
         while (osViGetCurrentFramebuffer() != gFrameBuffers[0]) {}
-        
+
         osViBlack(false);
-    
+
         func_8070F0F0();
     }
 
