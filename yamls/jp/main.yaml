@@ -197,12 +197,14 @@
       - [0x61470, textbin, l3dex]
       - [0x62600, textbin, f3dex_unk]
 
-      - [0x638F0, c]
-      - [0x63980, c]
-      - [0x63E00, c]
+      - [0x638F0, c, leo/lib/readwrite]
+      - [0x63980, c, leo/lib/leofunc]
+      - [0x63DF0, pad]
+      - [0x63E00, c, leo/lib/leoint]
+      - [0x647F0, pad]
       - [0x64800, c]
       - [0x64E90, c]
-      - [0x65050, c]
+      - [0x65050, c, leo/lib/lbatobyte]
       - [0x651A0, c]
       - [0x652F0, c]
       - [0x654E0, c]
@@ -217,7 +219,7 @@
       - [0x68480, c]
       - [0x686D0, c]
       - [0x68730, c]
-      - [0x687D0, c]
+      - [0x687D0, c, leo/lib/bytetolba]
       - [0x68930, c]
       - [0x68A50, c]
       - [0x68AE0, c]
@@ -361,16 +363,17 @@
       - [0x87C40, data, l3dex]
       - [0x88030, data, f3dex_unk]
 
-      - [0x88440, .rodata, 63980]
-      - [0x88450, rodata]
+      - [0x88440, data]
+
+      - [0x884F0, .rodata, leo/lib/leofunc]
       - [0x88500, .rodata, 64800]
       - [0x885B0, .rodata, 652F0]
       - [0x885C0, .rodata, 654E0]
-      - [0x88630, rodata]
+      - [0x88630, .rodata, leo/lib/leo_tbl]
       - [0x88810, .rodata, 65EF0]
       - [0x88C30, .rodata, 67980]
       - [0x88CB0, .rodata, 68E10]
-      - [0x88CD0, pad]
+      - [0x88CD0, data]
       - [0xA2410, rodata]
       - [0xA25F0, .rodata, 70580]
       - [0xA2610, rodata]
@@ -394,6 +397,8 @@
       - { type: .bss, vram: 0x807C3490, name: libultra/io/cartrominit }
       - { type: .bss, vram: 0x807C3510, name: libultra/io/vimgr }
       - { type: bss, vram: 0x807C4730, name: 807C4730 }
+      - { type: .bss, vram: 0x807C5450, name: leo/lib/leoint }
+      - { type: bss, vram: 0x807C5470, name: 807C5470 }
 
   - type: bin
     start: 0xA2E70

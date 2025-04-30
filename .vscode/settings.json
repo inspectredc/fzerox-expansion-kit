@@ -52,7 +52,9 @@
       "siint.h": "c",
       "rcp.h": "c",
       "fzx_game.h": "c",
-      "sys.h": "c"
+      "sys.h": "c",
+      "leo.h": "c",
+      "leo_internal.h": "c"
     },
     "C_Cpp_Runner.msvcBatchPath": "",
     "C_Cpp.errorSquiggles": "enabled"
