@@ -1,4 +1,4 @@
-#include "common.h"
+#include "global.h"
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/110B0/func_807038B0.s")
 
@@ -8,9 +8,73 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/110B0/func_80703B40.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/110B0/func_80703CA4.s")
+extern u8 D_8077B4D0[];
+extern OSMesgQueue gDmaMesgQueue;
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/110B0/func_80703E08.s")
+s32 func_80703CA4(s32 startLba, void* vram, s32 diskSize, s32 bssSize) {
+    void* bssStart;
+    s32 sp58;
+    s32 lbaCount;
+    s32 nBytes;
+    LEOCmd sp34;
+
+    nBytes = 0;
+    LeoByteToLBA(startLba, diskSize, &lbaCount);
+    osVirtualToPhysical(vram);
+    bssStart = (uintptr_t) vram + diskSize;
+    osVirtualToPhysical(bssStart);
+    osVirtualToPhysical((uintptr_t)bssStart + bssSize);
+
+    if (lbaCount - 1) {
+        LeoLBAToByte(startLba, lbaCount - 1, &nBytes);
+        func_80768A5C(&sp34, OS_READ, startLba, osPhysicalToVirtual((uintptr_t) vram), lbaCount - 1, &gDmaMesgQueue);
+        osRecvMesg(&gDmaMesgQueue, NULL, 1);
+    }
+    diskSize -= nBytes;
+    func_80768A5C(&sp34, OS_READ, (startLba + lbaCount) - 1, osPhysicalToVirtual((uintptr_t) D_8077B4D0), 1, &gDmaMesgQueue);
+    osRecvMesg(&gDmaMesgQueue, NULL, 1);
+    bcopy(&D_8077B4D0, osPhysicalToVirtual((uintptr_t) vram + nBytes), diskSize);
+    bzero((uintptr_t)vram + nBytes + diskSize, bssSize);
+    return sp58;
+}
+
+extern s32 D_8076C770;
+extern s32 D_8076CB40;
+
+s32 func_80703E08(s32 startLba, void* vram, s32 diskSize, s32 bssSize) {
+    void* bssStart;
+    s32 sp70;
+    s32 sp6C;
+    s32 var_a0;
+    LEOCmd sp4C;
+    OSMesg sp48;
+    s32 pad[2];
+
+    LeoByteToLBA(startLba, diskSize, &sp6C);
+    osVirtualToPhysical(vram);
+    bssStart = (uintptr_t)vram + diskSize;
+    osVirtualToPhysical(bssStart);
+    osVirtualToPhysical((uintptr_t)bssStart + bssSize);
+    func_80768A5C(&sp4C, 0, startLba, vram, sp6C, &gDmaMesgQueue);
+
+    if (D_8076CB40 != -1) {
+        func_8012B854();
+    }
+
+    while (osRecvMesg(&gDmaMesgQueue, &sp48, 0) == -1) {
+        if (D_8076CB40 != -1) {
+            osWritebackDCacheAll();
+            var_a0 = (D_8076C770 - D_8076CB40) / 6 + 160;
+            if (var_a0 > 192) {
+                var_a0 = 192;
+            }
+            func_8012B894(var_a0);
+            osWritebackDCacheAll();
+        }
+    }
+    bzero(bssStart, bssSize);
+    return sp70;
+}
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/110B0/func_80703F90.s")
 

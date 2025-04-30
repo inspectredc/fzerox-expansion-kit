@@ -7,7 +7,6 @@ Game_ThreadEntry = 0x806F3A94;
 Fault_SetFrameBuffer = 0x80710A38;
 Fault_Init = 0x80710A60;
 Audio_PreNMI = 0x80740B10;
-LeoReset = 0x807564B4;
 Gfx_InitBuffer = 0x806F3514;
 Segment_SetPhysicalAddress = 0x80708770;
 Segment_SetTableAddresses = 0x807087F8;
@@ -224,6 +223,8 @@ osViGetCurrentFramebuffer = 0x80750400;
 __osSpSetPc = 0x80750440;
 __osSetHWIntrRoutine = 0x80750480;
 
+// libultra data
+
 __osHwIntTable = 0x80771DE0;
 __osRunQueue = 0x80771E18;
 __osRunningThread = 0x80771E20;
@@ -234,8 +235,88 @@ osViModeNtscLan1 = 0x80771F10;
 osViModeMpalLan1 = 0x807727D0;
 __osPiTable = 0x8077300C;
 
+// libultra bss
+
 __MotorDataBuf = 0x807C1C40; //size:0x100
 __osThreadSave = 0x807C1E00;
 __osEventStateTab = 0x807C3390; //size:0x80
+
+// libleo
+
+LeoReadWrite = 0x807560F0;
+leoInitialize = 0x80756180;
+leoCommand = 0x80756354;
+LeoReset = 0x807564B4;
+__leoSetReset = 0x80756544;
+LeoResetClear = 0x80756568;
+leointerrupt = 0x80756600;
+read_write_track = 0x80756790;
+leoChk_mecha_int = 0x80756D8C;
+leosetup_BM = 0x80756DF4;
+leochk_err_reg = 0x80756EDC;
+leomain = 0x80757000;
+LeoLBAToByte = 0x80757850;
+leoWait_mecha_cmd_done = 0x80758130;
+leoSend_asic_cmd_w = 0x80758180;
+leoDetect_index_w = 0x807582A4;
+leoSeek_i = 0x8075831C;
+leoChk_err_retry = 0x80758410;
+leoDrive_reset = 0x80758560;
+leoSet_mseq = 0x8075A2F0;
+leoLba_to_phys = 0x8075AC80;
+leoLba_to_vzone = 0x8075AE74;
+LeoByteToLBA = 0x8075AFD0;
+leoClr_queue = 0x8075B130;
+
+// libleo data
+
+__leoResetCalled = 0x8077AC40;
+__leoQueuesCreated = 0x8077AC44;
+__leoActive = 0x8077ACD0;
+
+// libleo rodata
+
+LEOfirmware_rev = 0x8077AE30;
+LEOBYTE_TBL1 = 0x8077AE38;
+LEOBYTE_TBL2 = 0x8077AE44; //size:0x14
+LEOVZONE_TBL = 0x8077AE58;
+LEOZONE_SCYL_TBL = 0x8077AF38;
+LEOVZONE_PZONEHD_TBL = 0x8077AF58;
+LEOZONE_OUTERCYL_TBL = 0x8077AFC6;
+LEORAM_START_LBA = 0x8077AFD8;
+LEORAM_BYTE = 0x8077AFE8;
+
+// libleo bss
+
+LEOpost_que = 0x807C4730;
+LEOpost_que_buf = 0x807C4748;
+LEOcommandThread = 0x807C4838;
+LEOinterruptThread = 0x807C49E8;
+LEOcommandThreadStack = 0x807C4B98;
+LEOinterruptThreadStack = 0x807C4F98;
+LEOcommand_que = 0x807C5398;
+LEOevent_que = 0x807C53B0;
+LEOcontrol_que = 0x807C53C8;
+LEOdma_que = 0x807C53E0;
+LEOblock_que = 0x807C53F8;
+LEOevent_que_buf = 0x807C5410;
+LEOcontrol_que_buf = 0x807C5414;
+LEOdma_que_buf = 0x807C5418;
+LEOblock_que_buf = 0x807C5420;
+LEOwrite_pointer = 0x807C5424;
+LEOcur_command = 0x807C5428;
+LEOasic_bm_ctl_shadow = 0x807C542C;
+LEOasic_seq_ctl_shadow = 0x807C5430;
+LEOclr_que_flag = 0x807C5435;
+LEOrw_flags = 0x807C5436;
+LEOdisk_type = 0x807C5438;
+LEOtgt_param = 0x807C5440;
+LEOc2ctrl_que_buf = 0x807C5450;
+LEOc2ctrl_que = 0x807C5458;
+LEOPiInfo = 0x807C5470;
+LEOPiDmaParam = 0x807C5478;
+LEOC2_Syndrome = 0x807C5620;
+LEOc2_param = 0x807C5D60;
+
 
 D_807794F0 = 0x807794F0; // force_migration:True
