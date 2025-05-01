@@ -202,14 +202,19 @@
       - [0x63DF0, pad]
       - [0x63E00, c, leo/lib/leoint]
       - [0x647F0, pad]
-      - [0x64800, c]
-      - [0x64E90, c]
+      - [0x64800, c, leo/lib/leocmdex]
+      - [0x64E90, c, leo/lib/leoread]
       - [0x65050, c, leo/lib/lbatobyte]
-      - [0x651A0, c]
-      - [0x652F0, c]
-      - [0x654E0, c]
-      - [0x65EF0, c]
-      - [0x67150, c]
+      - [0x651A0, c, leo/lib/leoinquiry]
+      - [0x65250, c, leo/lib/leodiskinit]
+      - [0x652F0, c, leo/lib/readdiskid]
+      - [0x65350, c, leo/lib/leord_diskid]
+      - [0x654E0, c, leo/lib/leomecha]
+      - [0x65E30, c, leo/lib/spdlmotor]
+      - [0x65EF0, c, leo/lib/leoc2ecc]
+      - [0x66FE0, c, leo/lib/createleomanager]
+      - [0x67150, c, leo/lib/leointerrupt]
+      - [0x67820, c, leo/lib/driverominit]
       - [0x67980, c]
       - [0x67D90, c]
       - [0x68210, hasm]
@@ -225,7 +230,11 @@
       - [0x68AE0, c]
       - [0x68B70, c]
       - [0x68E10, c]
-      - [0x69320, bin] # leo_bootdisk + leo_bootstrap
+      - [0x69320, textbin, leo/lib/getkadr]
+      # - [0x693D8, data, leo/lib/getkadr]
+      - [0x69E20, textbin, leo/lib/getaadr]
+      # - [0x69E90, data, leo/lib/getaadr]
+      - [0x6C2B0, c, leo/lib/leowrite]
       - [0x6C3E0, c]
       - [0x6C620, c]
       - [0x6C850, c]
@@ -364,13 +373,17 @@
       - [0x88030, data, f3dex_unk]
 
       - [0x88440, data]
+      - [0x88450, .data, leo/lib/leocmdex]
+      - [0x884B0, .data, leo/lib/leord_diskid]
+      - [0x884D0, data]
+      - [0x884E0, .data, leo/lib/driverominit]
 
       - [0x884F0, .rodata, leo/lib/leofunc]
-      - [0x88500, .rodata, 64800]
-      - [0x885B0, .rodata, 652F0]
-      - [0x885C0, .rodata, 654E0]
+      - [0x88500, .rodata, leo/lib/leocmdex]
+      - [0x885B0, .rodata, leo/lib/leord_diskid]
+      - [0x885C0, .rodata, leo/lib/leomecha]
       - [0x88630, .rodata, leo/lib/leo_tbl]
-      - [0x88810, .rodata, 65EF0]
+      - [0x88810, .rodata, leo/lib/leoc2ecc]
       - [0x88C30, .rodata, 67980]
       - [0x88CB0, .rodata, 68E10]
       - [0x88CD0, data]
@@ -398,7 +411,15 @@
       - { type: .bss, vram: 0x807C3510, name: libultra/io/vimgr }
       - { type: bss, vram: 0x807C4730, name: 807C4730 }
       - { type: .bss, vram: 0x807C5450, name: leo/lib/leoint }
-      - { type: bss, vram: 0x807C5470, name: 807C5470 }
+      - { type: .bss, vram: 0x807C5470, name: leo/lib/leocmdex }
+      - { type: .bss, vram: 0x807C54A0, name: leo/lib/leodiskinit }
+      - { type: .bss, vram: 0x807C5520, name: leo/lib/leomecha }
+      - { type: bss, vram: 0x807C5530, name: 807C5530 }
+      - { type: .bss, vram: 0x807C5D60, name: leo/lib/leoc2ecc }
+      - { type: .bss, vram: 0x807C5D70, name: leo/lib/createleomanager }
+      - { type: .bss, vram: 0x807C5D80, name: leo/lib/leointerrupt }
+      - { type: .bss, vram: 0x807C6D80, name: leo/lib/driverominit }
+      - { type: bss, vram: 0x807C6E00, name: 807C6E00 }
 
   - type: bin
     start: 0xA2E70

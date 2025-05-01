@@ -16,8 +16,6 @@ s32 func_80768C08(s32, s32, s32);
 s32 Segment_SetPhysicalAddress(s32 segment, s32 addr);
 Gfx* Segment_SetTableAddresses(Gfx*);
 
-s32 func_8075AA60(void);
-s32 func_8075A020(void);
 void func_8070F240(void);
 void func_80704DB0(char*, LEODiskID*);
 void func_8070F0F0(void);

@@ -1,8 +1,8 @@
 #include "common.h"
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/68E10/func_8075B610.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/68E10/leoReadTimer.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/68E10/func_8075B6CC.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/68E10/leoSetTimer.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/68E10/func_8075B904.s")
 
