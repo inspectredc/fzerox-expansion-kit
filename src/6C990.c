@@ -1,6 +1,6 @@
 #include "common.h"
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/6C990/func_8075F190.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/6C990/leoSeek.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/6C990/func_8075F250.s")
 

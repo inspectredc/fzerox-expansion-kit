@@ -3,6 +3,7 @@
 
 #include "libultra/ultra64.h"
 #include "PR/leo.h"
+#include "macros.h"
 
 typedef struct {
   /* 0x0 */ u16 lba;
@@ -175,6 +176,7 @@ void leomain(void*);
 void leoRead_common(u32 offset);
 void leoClrUA_RESET(void);
 void leoClrUA_MEDIUM_CHANGED(void);
+void leoSetUA_MEDIUM_CHANGED(void);
 void leoInitUnit_atten(void);
 void leoClr_queue(void);
 void leoInquiry(void);
@@ -222,6 +224,8 @@ extern s32 (*D_i1_8042A630)(LEOCmd*, OSMesgQueue*);
 extern s32 (*D_i1_8042A634)(LEOCmd*, LEODiskTime*, OSMesgQueue*);
 extern s32 (*D_i1_8042A638)(LEOCmd*, u32, u32, OSMesgQueue*);
 extern s32 (*D_i1_8042A63C)(LEOCmd*, OSMesgQueue*);
+
+extern u8 leoDiskStack[OS_PIM_STACKSIZE];
 
 extern OSPiHandle* LEOPiInfo;
 extern OSIoMesg LEOPiDmaParam;
