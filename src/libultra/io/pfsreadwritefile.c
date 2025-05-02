@@ -58,7 +58,7 @@ s32 osPfsReadWriteFile(OSPfs* pfs, s32 file_no, u8 flag, int offset, int size_in
     }
 
     if (!CHECK_IPAGE(dir.start_page)) {
-        if ((dir.start_page.ipage == PFS_EOF)) {
+        if (dir.start_page.ipage == PFS_EOF) {
             return PFS_ERR_INVALID;
         }
 

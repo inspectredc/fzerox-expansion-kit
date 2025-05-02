@@ -46,10 +46,10 @@ def firstDiffMain():
 
     buildFolder = Path("build")
 
-    BUILTROM = Path(buildFolder / f"fzerox-expansion.jp.z64")
+    BUILTROM = Path(buildFolder / f"fzerox-expansion.jp.z64dd")
     BUILTMAP = buildFolder / f"fzerox-expansion.jp.map"
 
-    EXPECTEDROM = Path("baserom.jp.z64")
+    EXPECTEDROM = Path("baserom.jp.z64dd")
     EXPECTEDMAP = "expected" / BUILTMAP
 
     mapfile_parser.frontends.first_diff.doFirstDiff(BUILTMAP, EXPECTEDMAP, BUILTROM, EXPECTEDROM, args.count, mismatchSize=True, addColons=args.add_colons, bytesConverterCallback=decodeInstruction)

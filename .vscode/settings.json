@@ -50,7 +50,11 @@
       "viint.h": "c",
       "os.h": "c",
       "siint.h": "c",
-      "rcp.h": "c"
+      "rcp.h": "c",
+      "fzx_game.h": "c",
+      "sys.h": "c",
+      "leo.h": "c",
+      "leo_internal.h": "c"
     },
     "C_Cpp_Runner.msvcBatchPath": "",
     "C_Cpp.errorSquiggles": "enabled"

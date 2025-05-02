@@ -340,9 +340,6 @@ $(BUILD_DIR)/src/libultra/io/motor.o: OPTFLAGS := -O2 -g0
 
 $(BUILD_DIR)/src/libultra/os/%.o: OPTFLAGS := -O1 -g0
 
-# libleo
-$(BUILD_DIR)/src/leo/%.o: OPTFLAGS := -g
-
 # per-file flags
 $(BUILD_DIR)/src/libultra/libc/ldiv.o: OPTFLAGS := -O2 -g0
 $(BUILD_DIR)/src/libultra/libc/string.o: OPTFLAGS := -O2 -g0
@@ -397,7 +394,7 @@ endif
 extract:
 	@$(RM) -r asm/$(VERSION) bin/$(VERSION)
 	@echo "Unifying yamls..."
-	@$(CAT) yamls/$(VERSION)/header.yaml yamls/$(VERSION)/main.yaml > $(SPLAT_YAML)
+	@$(CAT) yamls/$(VERSION)/header.yaml yamls/$(VERSION)/main.yaml yamls/$(VERSION)/overlays.yaml > $(SPLAT_YAML)
 	@echo "Extracting..."
 	@$(SPLAT) $(SPLAT_YAML)
 
@@ -426,7 +423,7 @@ context:
 disasm:
 	@$(RM) -r asm/$(VERSION) bin/$(VERSION)
 	@echo "Unifying yamls..."
-	@$(CAT) yamls/$(VERSION)/header.yaml yamls/$(VERSION)/main.yaml > $(SPLAT_YAML)
+	@$(CAT) yamls/$(VERSION)/header.yaml yamls/$(VERSION)/main.yaml yamls/$(VERSION)/overlays.yaml > $(SPLAT_YAML)
 	@echo "Extracting..."
 	@$(SPLAT) $(SPLAT_YAML) --disassemble-all
 
