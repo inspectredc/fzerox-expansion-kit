@@ -7,7 +7,12 @@ Game_ThreadEntry = 0x806F3A94;
 Fault_SetFrameBuffer = 0x80710A38;
 Fault_Init = 0x80710A60;
 Audio_PreNMI = 0x80740B10;
-LeoReset = 0x807564B4;
+Gfx_InitBuffer = 0x806F3514;
+Segment_SetPhysicalAddress = 0x80708770;
+Segment_SetTableAddresses = 0x807087F8;
+Gfx_LoadSegments = 0x806F35A8;
+Gfx_FullSync = 0x806F3610;
+Gfx_SetTask = 0x806F3698;
 
 mio0Decode = 0x8072E3B0;
 
@@ -34,6 +39,12 @@ gFrameBuffers = 0x8079A330;
 gCartRomHandle = 0x8079A33C;
 
 gResetStarted = 0x8079A328;
+
+gGfxPool = 0x8079A350;
+sGfxTask = 0x8079A354;
+gMasterDisp = 0x8079A358;
+
+gGameMode = 0x8079A4B4;
 
 // libultra
 
@@ -212,6 +223,8 @@ osViGetCurrentFramebuffer = 0x80750400;
 __osSpSetPc = 0x80750440;
 __osSetHWIntrRoutine = 0x80750480;
 
+// libultra data
+
 __osHwIntTable = 0x80771DE0;
 __osRunQueue = 0x80771E18;
 __osRunningThread = 0x80771E20;
@@ -222,8 +235,157 @@ osViModeNtscLan1 = 0x80771F10;
 osViModeMpalLan1 = 0x807727D0;
 __osPiTable = 0x8077300C;
 
+// libultra bss
+
 __MotorDataBuf = 0x807C1C40; //size:0x100
 __osThreadSave = 0x807C1E00;
 __osEventStateTab = 0x807C3390; //size:0x80
+
+// libleo
+
+LeoReadWrite = 0x807560F0;
+leoInitialize = 0x80756180;
+leoCommand = 0x80756354;
+LeoReset = 0x807564B4;
+__leoSetReset = 0x80756544;
+LeoResetClear = 0x80756568;
+leointerrupt = 0x80756600;
+read_write_track = 0x80756790;
+leoChk_mecha_int = 0x80756D8C;
+leosetup_BM = 0x80756DF4;
+leochk_err_reg = 0x80756EDC;
+leomain = 0x80757000;
+leoRead_system_area = 0x8075747C;
+leoRead_common = 0x807576BC;
+leoRead = 0x80757690;
+LeoLBAToByte = 0x80757850;
+leoInquiry = 0x807579A0;
+osLeoDiskInit = 0x80757A50;
+LeoReadDiskID = 0x80757AF0;
+leoReadDiskId = 0x80757B50;
+leoAnalize_asic_status = 0x80757CE0;
+leoChk_asic_ready = 0x80757DEC;
+leoChk_done_status = 0x80757ED4;
+leoSend_asic_cmd_i = 0x80758088;
+leoWait_mecha_cmd_done = 0x80758130;
+leoSend_asic_cmd_w = 0x80758180;
+leoSend_asic_cmd_w_nochkDiskChange = 0x807581B8;
+leoDetect_index_w = 0x807582A4;
+leoRecal_i = 0x807582CC;
+leoRecal_w = 0x807582F4;
+leoSeek_i = 0x8075831C;
+leoSeek_w = 0x80758380;
+leoRecv_event_mesg = 0x807583BC;
+leoChk_err_retry = 0x80758410;
+leoChk_cur_drvmode = 0x80758520;
+leoDrive_reset = 0x80758560;
+leoChkUnit_atten = 0x80758590;
+leoRetUnit_atten = 0x8075859C;
+leoClrUA_RESET = 0x807585D0;
+leoClrUA_MEDIUM_CHANGED = 0x807585EC;
+leoSetUA_MEDIUM_CHANGED = 0x80758608;
+leoInitUnit_atten = 0x80758620;
+LeoSpdlMotor = 0x80758630;
+leoC2_Correction = 0x807586F0;
+leoC2_single_ecc = 0x8075877C;
+leoC2_double_ecc = 0x80758850;
+leoC2_3_ecc = 0x80758AD0;
+leoC2_4_ecc = 0x80758EB8;
+leoAlpha_mult = 0x80759754;
+leoAlpha_div = 0x80759798;
+LeoCreateLeoManager = 0x807597E0;
+__osLeoInterrupt = 0x80759950;
+osDriveRomInit = 0x8075A020;
+LeoSetRTC = 0x8075A180;
+leoSet_mseq = 0x8075A2F0;
+leoStart_stop = 0x8075A4A0;
+__LeoBootGame3 = 0x8075AA10;
+LeoDriveExist = 0x8075AA60;
+leoMode_sel = 0x8075AB30;
+leoRd_capacity = 0x8075ABE0;
+leoLba_to_phys = 0x8075AC80;
+leoLba_to_vzone = 0x8075AE74;
+LeoRezero = 0x8075AED0;
+leoRezero = 0x8075AF30;
+LeoByteToLBA = 0x8075AFD0;
+leoClr_queue = 0x8075B130;
+leoClr_reset = 0x8075B1D8;
+LeoModeSelectAsync = 0x8075B250;
+LeoReadCapacity = 0x8075B2E0;
+leoTranslate = 0x8075B370;
+leoReadTimer = 0x8075B610;
+leoSetTimer = 0x8075B6CC;
+LeoGetKAdr = 0x8075BB20;
+LeoGetAAdr = 0x8075C620;
+leoWrite = 0x8075EAB0;
+LeoCJCreateLeoManager = 0x8075EBE0;
+LeoCACreateLeoManager = 0x8075EE20;
+LeoTestUnitReady = 0x8075F050;
+leoTest_unit_rdy = 0x8075F0F0;
+LeoReadRTC = 0x8075F130;
+leoSeek = 0x8075F190;
+LeoSeek = 0x8075F250;
+
+// libleo data
+
+__leoResetCalled = 0x8077AC40;
+__leoQueuesCreated = 0x8077AC44;
+leo_sys_read_cmd = 0x8077AC90;
+__leoActive = 0x8077ACD0;
+
+// libleo rodata
+
+LEOfirmware_rev = 0x8077AE30;
+LEOBYTE_TBL1 = 0x8077AE38;
+LEOBYTE_TBL2 = 0x8077AE44; //size:0x14
+LEOVZONE_TBL = 0x8077AE58;
+LEOZONE_SCYL_TBL = 0x8077AF38;
+LEOVZONE_PZONEHD_TBL = 0x8077AF58;
+LEOZONE_OUTERCYL_TBL = 0x8077AFC6;
+LEORAM_START_LBA = 0x8077AFD8;
+LEORAM_BYTE = 0x8077AFE8;
+
+// libleo bss
+
+LEOpost_que = 0x807C4730;
+LEOpost_que_buf = 0x807C4748;
+LEO_sys_data = 0x807C4750;
+LEOcommandThread = 0x807C4838;
+LEOinterruptThread = 0x807C49E8;
+LEOcommandThreadStack = 0x807C4B98;
+LEOinterruptThreadStack = 0x807C4F98;
+LEOcommand_que = 0x807C5398;
+LEOevent_que = 0x807C53B0;
+LEOcontrol_que = 0x807C53C8;
+LEOdma_que = 0x807C53E0;
+LEOblock_que = 0x807C53F8;
+LEOevent_que_buf = 0x807C5410;
+LEOcontrol_que_buf = 0x807C5414;
+LEOdma_que_buf = 0x807C5418;
+LEOblock_que_buf = 0x807C5420;
+LEOwrite_pointer = 0x807C5424;
+LEOcur_command = 0x807C5428;
+LEOasic_bm_ctl_shadow = 0x807C542C;
+LEOasic_seq_ctl_shadow = 0x807C5430;
+LEOdrive_flag = 0x807C5434;
+LEOclr_que_flag = 0x807C5435;
+LEOrw_flags = 0x807C5436;
+LEOdisk_type = 0x807C5438;
+LEOtgt_param = 0x807C5440;
+LEO_country_code = 0x807C544C;
+LEOc2ctrl_que_buf = 0x807C5450;
+LEOc2ctrl_que = 0x807C5458;
+LEOPiInfo = 0x807C5470;
+LEOPiDmaParam = 0x807C5478;
+LEO_currentCommand = 0x807C5490;
+LeoDiskHandle = 0x807C54A0;
+__osDiskHandle = 0x807C5514;
+LEO_TempBuffer = 0x807C5530;
+LEOC2_Syndrome = 0x807C5620;
+LEOc2_param = 0x807C5D60;
+__leoVersion = 0x807C5D70;
+leoDiskStack = 0x807C5D80; //size:0x1000
+DriveRomHandle = 0x807C6D80; //size:0x74
+
 
 D_807794F0 = 0x807794F0; // force_migration:True

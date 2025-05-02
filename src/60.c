@@ -172,8 +172,8 @@ void Main_ThreadEntry(void* arg0) {
     }
 
     if (D_8076C780) {
-        D_8079A32C = func_8075AA60();
-        D_8079A340 = func_8075A020();
+        D_8079A32C = LeoDriveExist();
+        D_8079A340 = osDriveRomInit();
         if (D_8079A32C != 0) {
             func_8070F240();
         }

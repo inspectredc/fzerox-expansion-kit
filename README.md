@@ -105,15 +105,15 @@ This will create the build folders, a new folder with the assembly as well as co
 this make target will also build the ROM. If all goes well, a new ROM called "fzerox-expansion.jp.z64" should be built and the following text should be printed:
 
 ```bash
-Calculating Rom Header Checksum... build/fzerox-expansion.jp.z64
-fzerox-expansion.jp.z64: OK
+Calculating Rom Header Checksum... build/fzerox-expansion.jp.z64dd
+fzerox-expansion.jp.z64dd: OK
 ```
 
 If you instead see the following:
 
 ```bash
-Calculating Rom Header Checksum... build/fzerox-expansion.jp.z64
-fzerox-expansion.jp.z64 FAILED
+Calculating Rom Header Checksum... build/fzerox-expansion.jp.z64dd
+fzerox-expansion.jp.z64dd FAILED
 ```
 
 This means that something is wrong with the ROM's contents. Either the base files are incorrect due to a bad ROM, or some of the code is not matching.
