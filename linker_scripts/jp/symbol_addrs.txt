@@ -294,26 +294,37 @@ leoC2_4_ecc = 0x80758EB8;
 leoAlpha_mult = 0x80759754;
 leoAlpha_div = 0x80759798;
 LeoCreateLeoManager = 0x807597E0;
+__osLeoInterrupt = 0x80759950;
+osDriveRomInit = 0x8075A020;
+LeoSetRTC = 0x8075A180;
 leoSet_mseq = 0x8075A2F0;
 leoStart_stop = 0x8075A4A0;
+__LeoBootGame3 = 0x8075AA10;
+LeoDriveExist = 0x8075AA60;
 leoMode_sel = 0x8075AB30;
 leoRd_capacity = 0x8075ABE0;
 leoLba_to_phys = 0x8075AC80;
 leoLba_to_vzone = 0x8075AE74;
+LeoRezero = 0x8075AED0;
 leoRezero = 0x8075AF30;
 LeoByteToLBA = 0x8075AFD0;
 leoClr_queue = 0x8075B130;
 leoClr_reset = 0x8075B1D8;
+LeoModeSelectAsync = 0x8075B250;
+LeoReadCapacity = 0x8075B2E0;
 leoTranslate = 0x8075B370;
 leoReadTimer = 0x8075B610;
 leoSetTimer = 0x8075B6CC;
+LeoGetKAdr = 0x8075BB20;
+LeoGetAAdr = 0x8075C620;
 leoWrite = 0x8075EAB0;
+LeoCJCreateLeoManager = 0x8075EBE0;
+LeoCACreateLeoManager = 0x8075EE20;
+LeoTestUnitReady = 0x8075F050;
 leoTest_unit_rdy = 0x8075F0F0;
+LeoReadRTC = 0x8075F130;
 leoSeek = 0x8075F190;
-
-osDriveRomInit = 0x8075A020;
-LeoDriveExist = 0x8075AA60;
-__osLeoInterrupt = 0x80759950;
+LeoSeek = 0x8075F250;
 
 // libleo data
 

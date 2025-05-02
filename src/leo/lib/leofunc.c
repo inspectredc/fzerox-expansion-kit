@@ -34,9 +34,10 @@ void leoInitialize(OSPri compri, OSPri intpri, OSMesg* command_que_buf, u32 cmd_
     osCreateMesgQueue(&LEOpost_que, LEOpost_que_buf, ARRAY_COUNT(LEOpost_que_buf));
     osCreateThread(&LEOcommandThread, 1, leomain, NULL, LEOcommandThreadStack + sizeof(LEOcommandThreadStack), compri);
     osStartThread(&LEOcommandThread);
-    osCreateThread(&LEOinterruptThread, 1, leointerrupt, NULL, LEOinterruptThreadStack + sizeof(LEOinterruptThreadStack), intpri);
+    osCreateThread(&LEOinterruptThread, 1, leointerrupt, NULL,
+                   LEOinterruptThreadStack + sizeof(LEOinterruptThreadStack), intpri);
     osStartThread(&LEOinterruptThread);
-    osSetEventMesg(OS_EVENT_CART, &LEOevent_que, (OSMesg)0x30000);
+    osSetEventMesg(OS_EVENT_CART, &LEOevent_que, (OSMesg) 0x30000);
     osSendMesg(&LEOblock_que, NULL, 0);
     __osRestoreInt(savedMask);
 
@@ -47,47 +48,47 @@ void leoInitialize(OSPri compri, OSPri intpri, OSMesg* command_que_buf, u32 cmd_
 
 void leoCommand(void* cmd_blk_addr) {
     if (__leoResetCalled != 0) {
-        ((LEOCmd*)cmd_blk_addr)->header.status = LEO_STATUS_CHECK_CONDITION;
-        ((LEOCmd*)cmd_blk_addr)->header.sense = LEO_SENSE_WAITING_NMI;
-        if ((((LEOCmd*)cmd_blk_addr)->header.control & LEO_CONTROL_POST) != 0) {
-            osSendMesg(((LEOCmd*)cmd_blk_addr)->header.post, (OSMesg)LEO_SENSE_WAITING_NMI, 1); // Presumably
+        ((LEOCmd*) cmd_blk_addr)->header.status = LEO_STATUS_CHECK_CONDITION;
+        ((LEOCmd*) cmd_blk_addr)->header.sense = LEO_SENSE_WAITING_NMI;
+        if ((((LEOCmd*) cmd_blk_addr)->header.control & LEO_CONTROL_POST) != 0) {
+            osSendMesg(((LEOCmd*) cmd_blk_addr)->header.post, (OSMesg) LEO_SENSE_WAITING_NMI, 1); // Presumably
         }
         return;
     }
     osRecvMesg(&LEOblock_que, NULL, 1);
-    ((LEOCmd*)cmd_blk_addr)->header.status = LEO_STATUS_BUSY;
-    ((LEOCmd*)cmd_blk_addr)->header.sense = LEO_SENSE_NO_ADDITIONAL_SENSE_INFOMATION;
+    ((LEOCmd*) cmd_blk_addr)->header.status = LEO_STATUS_BUSY;
+    ((LEOCmd*) cmd_blk_addr)->header.sense = LEO_SENSE_NO_ADDITIONAL_SENSE_INFOMATION;
 
-    switch (((LEOCmd*)cmd_blk_addr)->header.command) {
+    switch (((LEOCmd*) cmd_blk_addr)->header.command) {
         case 1:
             LEOclr_que_flag = 0xFF;
             leoClr_queue();
             LEOclr_que_flag = 0;
-            ((LEOCmd*)cmd_blk_addr)->header.status = LEO_STATUS_GOOD;
-            if (((LEOCmd*)cmd_blk_addr)->header.control & LEO_CONTROL_POST) {
-                osSendMesg(((LEOCmd*)cmd_blk_addr)->header.post, (OSMesg)0, 1);
+            ((LEOCmd*) cmd_blk_addr)->header.status = LEO_STATUS_GOOD;
+            if (((LEOCmd*) cmd_blk_addr)->header.control & LEO_CONTROL_POST) {
+                osSendMesg(((LEOCmd*) cmd_blk_addr)->header.post, (OSMesg) 0, 1);
             }
             break;
 
         case 5:
         case 6:
-            ((LEOCmd*)cmd_blk_addr)->data.readwrite.rw_bytes = 0;
+            ((LEOCmd*) cmd_blk_addr)->data.readwrite.rw_bytes = 0;
             goto cmd_queing;
 
         default:
-            if ((u32)(((LEOCmd*)cmd_blk_addr)->header.command - 1) >= 0xE) {
-                ((LEOCmd*)cmd_blk_addr)->header.sense = LEO_SENSE_INVALID_COMMAND_OPERATION_CODE;
-                ((LEOCmd*)cmd_blk_addr)->header.status = LEO_STATUS_CHECK_CONDITION;
+            if ((u32) (((LEOCmd*) cmd_blk_addr)->header.command - 1) >= 0xE) {
+                ((LEOCmd*) cmd_blk_addr)->header.sense = LEO_SENSE_INVALID_COMMAND_OPERATION_CODE;
+                ((LEOCmd*) cmd_blk_addr)->header.status = LEO_STATUS_CHECK_CONDITION;
                 break;
             }
 
         cmd_queing:
-            if (osSendMesg(&LEOcommand_que, (OSMesg)cmd_blk_addr, 0) != 0) {
-                ((LEOCmd*)cmd_blk_addr)->header.sense = LEO_SENSE_QUEUE_FULL;
-                ((LEOCmd*)cmd_blk_addr)->header.status = LEO_STATUS_CHECK_CONDITION;
+            if (osSendMesg(&LEOcommand_que, (OSMesg) cmd_blk_addr, 0) != 0) {
+                ((LEOCmd*) cmd_blk_addr)->header.sense = LEO_SENSE_QUEUE_FULL;
+                ((LEOCmd*) cmd_blk_addr)->header.status = LEO_STATUS_CHECK_CONDITION;
             }
     }
-    osSendMesg(&LEOblock_que, (OSMesg)0, 1);
+    osSendMesg(&LEOblock_que, (OSMesg) 0, 1);
 }
 
 void LeoReset(void) {
@@ -97,8 +98,8 @@ void LeoReset(void) {
         leoClr_queue();
         LEOclr_que_flag = 0;
         osRecvMesg(&LEOevent_que, NULL, 0);
-        osSendMesg(&LEOevent_que, (OSMesg)ASIC_SOFT_RESET_CODE, 1);
-        osSendMesg(&LEOcommand_que, (OSMesg)LEO_ZERO_MESG, 1);
+        osSendMesg(&LEOevent_que, (OSMesg) ASIC_SOFT_RESET_CODE, 1);
+        osSendMesg(&LEOcommand_que, (OSMesg) LEO_ZERO_MESG, 1);
     }
 }
 

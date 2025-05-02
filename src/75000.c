@@ -9,7 +9,8 @@ void func_80767800(unk_807C6F10 arg0) {
     OSIntMask prevMask;
     s32 temp_lo;
 
-    do {} while (D_80794E28 == ((D_80794E2C + 1) & 7));
+    do {
+    } while (D_80794E28 == ((D_80794E2C + 1) & 7));
     prevMask = osGetIntMask();
     osSetIntMask(1);
     D_80794E2C &= 7;
@@ -82,7 +83,7 @@ s32 func_80767E30(void) {
 }
 
 void func_80767E98(u16 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7) {
-    
+
     D_807C6EA8.unk_16 = arg0;
     D_807C6EA8.unk_18 = arg1;
     D_807C6EA8.unk_1C = arg2;
@@ -406,7 +407,7 @@ s32 func_80768C88(u16 arg0, s32 arg1, s32 arg2) {
         return 0;
     }
     while (func_80766788() != 0xFFFF) {}
-    
+
     if (func_8075F7C0(arg0, arg1, arg2) == 0xFFFF) {
         if (D_80794CD4 == 0xF2) {
             D_80794CD4 = 0;

@@ -9,6 +9,8 @@ u32 leochk_err_reg(void);
 OSMesg LEOc2ctrl_que_buf[1];
 OSMesgQueue LEOc2ctrl_que;
 
+extern vu16 LEOrw_flags;
+
 void leointerrupt(void* arg) {
     u32 result;
     u32 tg_blocks;
@@ -97,7 +99,6 @@ LEOError read_write_track(void) {
         message = leoChk_mecha_int();
         if (message == LEO_ERROR_GOOD) {
 
-
             if (LEOrw_flags & 0x8000) {
                 // Write Mode
                 leoSet_mseq(1);
@@ -122,7 +123,7 @@ LEOError read_write_track(void) {
                 }
                 goto track_end;
             }
-    
+
             if (LEOrw_flags & 0x4000) {
                 osRecvMesg(&LEOc2ctrl_que, NULL, OS_MESG_BLOCK);
                 osSendMesg(&LEOc2ctrl_que, NULL, OS_MESG_NOBLOCK);
@@ -130,7 +131,7 @@ LEOError read_write_track(void) {
             LEOPiInfo->transferInfo.cmdType = LEO_CMD_TYPE_0;
             osInvalDCache(block_param.pntr, block_param.blkbytes * LEOtgt_param.rdwr_blocks);
             osEPiStartDma(LEOPiInfo, &LEOPiDmaParam, OS_READ);
-    
+
             for (block = 0; LEOtgt_param.rdwr_blocks != 0; block++) {
                 osRecvMesg(&LEOdma_que, NULL, OS_MESG_BLOCK);
                 LEOasic_bm_ctl_shadow = LEOPiInfo->transferInfo.bmCtlShadow;
@@ -151,7 +152,7 @@ LEOError read_write_track(void) {
                                 goto track_end;
                             }
                         }
-    
+
                         if (block == 0) {
                             temp = LEOC2_Syndrome[0];
                         } else {
@@ -183,7 +184,7 @@ LEOError read_write_track(void) {
                 LEOtgt_param.start_block ^= 1;
                 LEOtgt_param.rdwr_blocks--;
             }
-    
+
             return LEO_ERROR_GOOD;
         }
 
@@ -207,7 +208,7 @@ LEOError read_write_track(void) {
                 goto do_retry;
             }
         }
-        
+
         if (message == LEO_ERROR_NO_REFERENCE_POSITION_FOUND ||
             (message == LEO_ERROR_UNRECOVERED_READ_ERROR && retry_cntr == 32)) {
             message = leoDetect_index_w();

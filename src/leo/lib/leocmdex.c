@@ -15,15 +15,17 @@ LEOCmdRead leo_sys_read_cmd = {
     { LEO_COMMAND_READ, 0, 0, 0, 0, 0, 0, 0, 0 }, 12, 1, 0, 0,
 };
 
+extern vu16 LEOrw_flags;
+
 void leomain(void* arg0) {
     u32 cur_status;
     u32 sense_code;
     u8 disktype_bak;
 
-    ((u8*)&LEO_country_code)[0] = *(vu8*)OS_PHYSICAL_TO_K1(0x10);
-    ((u8*)&LEO_country_code)[1] = *(vu8*)OS_PHYSICAL_TO_K1(0x90);
-    ((u8*)&LEO_country_code)[2] = *(vu8*)OS_PHYSICAL_TO_K1(0x110);
-    ((u8*)&LEO_country_code)[3] = *(vu8*)OS_PHYSICAL_TO_K1(0x190);
+    ((u8*) &LEO_country_code)[0] = *(vu8*) OS_PHYSICAL_TO_K1(0x10);
+    ((u8*) &LEO_country_code)[1] = *(vu8*) OS_PHYSICAL_TO_K1(0x90);
+    ((u8*) &LEO_country_code)[2] = *(vu8*) OS_PHYSICAL_TO_K1(0x110);
+    ((u8*) &LEO_country_code)[3] = *(vu8*) OS_PHYSICAL_TO_K1(0x190);
 
     LEOasic_seq_ctl_shadow = 0;
     LEOasic_bm_ctl_shadow = 0;
@@ -41,7 +43,7 @@ void leomain(void* arg0) {
     }
 
     while (true) {
-        osRecvMesg(&LEOcommand_que, (OSMesg*)&LEOcur_command, OS_MESG_BLOCK);
+        osRecvMesg(&LEOcommand_que, (OSMesg*) &LEOcur_command, OS_MESG_BLOCK);
         LEO_currentCommand = LEOcur_command->header.command;
         if (LEOcur_command->header.command == 0) {
             leoDrive_reset();
@@ -171,7 +173,7 @@ void leomain(void* arg0) {
 
     post_exe:
         if (LEOcur_command->header.control & 0x80) {
-            osSendMesg(LEOcur_command->header.post, (void*)(s32)LEOcur_command->header.sense, OS_MESG_BLOCK);
+            osSendMesg(LEOcur_command->header.post, (void*) (s32) LEOcur_command->header.sense, OS_MESG_BLOCK);
         }
         if (LEOclr_que_flag != 0) {
             leoClr_queue();
