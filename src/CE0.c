@@ -48,9 +48,9 @@ void Gfx_FullSync(void) {
     if (D_8076C954 != 0) {
         gMasterDisp = func_8002ED64(gMasterDisp);
     }
-    
+
     gMasterDisp = func_8002F9DC(gMasterDisp);
-    
+
     gDPFullSync(gMasterDisp++);
     gSPEndDisplayList(gMasterDisp++);
 }

@@ -71,14 +71,14 @@ s32 __osLeoInterrupt(void) {
             __osLeoResume();
             return 1;
         } else {
-            blockInfo->dramAddr = (u8*)(blockInfo->dramAddr) + blockInfo->sectorSize;
+            blockInfo->dramAddr = (u8*) (blockInfo->dramAddr) + blockInfo->sectorSize;
             info->sectorNum++;
             __osEPiRawStartDma(__osDiskHandle, 1, LEO_SECTOR_BUFF, blockInfo->dramAddr, blockInfo->sectorSize);
             return 1;
         }
     } else if (info->cmdType == 0) {
         if (info->transferMode == 3) {
-            if (((s32)blockInfo->C1ErrNum + 0x11) < info->sectorNum) {
+            if (((s32) blockInfo->C1ErrNum + 0x11) < info->sectorNum) {
                 blockInfo->errStatus = 0;
                 __osLeoAbnormalResume();
                 return 1;
@@ -89,7 +89,7 @@ s32 __osLeoInterrupt(void) {
                 return 1;
             }
         } else {
-            blockInfo->dramAddr = (u8*)(blockInfo->dramAddr) + blockInfo->sectorSize;
+            blockInfo->dramAddr = (u8*) (blockInfo->dramAddr) + blockInfo->sectorSize;
         }
 
         bm_stat = IO_READ(LEO_BM_STATUS);
@@ -117,7 +117,7 @@ s32 __osLeoInterrupt(void) {
             if ((info->transferMode == 2) && (info->blockNum == 0)) {
                 info->blockNum = 1;
                 info->sectorNum = -1;
-                info->block[1].dramAddr = (u8*)(info->block[1].dramAddr) - info->block[1].sectorSize;
+                info->block[1].dramAddr = (u8*) (info->block[1].dramAddr) - info->block[1].sectorSize;
                 blockInfo->errStatus = 0x16;
             } else {
                 IO_WRITE(PI_STATUS_REG, 2);
@@ -132,8 +132,8 @@ s32 __osLeoInterrupt(void) {
             __OSBlockInfo* bptr = info->block;
 
             if (bptr->C1ErrNum == 0) {
-                if (((u32*)bptr->C2Addr)[0] | ((u32*)bptr->C2Addr)[1] | ((u32*)bptr->C2Addr)[2] |
-                    ((u32*)bptr->C2Addr)[3]) {
+                if (((u32*) bptr->C2Addr)[0] | ((u32*) bptr->C2Addr)[1] | ((u32*) bptr->C2Addr)[2] |
+                    ((u32*) bptr->C2Addr)[3]) {
                     bptr->errStatus = 0x17;
                     __osLeoAbnormalResume();
                     return 1;

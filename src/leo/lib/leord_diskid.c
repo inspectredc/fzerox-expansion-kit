@@ -7,6 +7,8 @@ LEOCmdRead read_id_cmd = {
 
 const u8 leo_disk_id_lba[2] = { 14, 15 };
 
+extern vu16 LEOrw_flags;
+
 void leoReadDiskId(void) {
     LEOCmdRead dummy_cmd;
     u8* temp_pointer;

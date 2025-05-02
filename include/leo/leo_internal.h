@@ -166,6 +166,7 @@ u16 leoLba_to_phys(u32 lba);
 u8 leoRead_system_area(void);
 u8 leoWait_mecha_cmd_done(u32 asic_cmd);
 u8 leoSend_asic_cmd_w(u32 asic_cmd, u32 asic_data);
+u8 leoSend_asic_cmd_w_nochkDiskChange(u32 asic_cmd, u32 asic_data);
 u32 leoChk_err_retry(u32 sense);
 u8 leoChk_cur_drvmode(void);
 void leoDrive_reset(void);
@@ -258,7 +259,7 @@ extern u32 LEOasic_bm_ctl_shadow;
 extern u32 LEOasic_seq_ctl_shadow;
 extern u8 LEOdrive_flag;
 extern vu8 LEOclr_que_flag;
-extern vu16 LEOrw_flags;
+// extern vu16 LEOrw_flags;  -- volatile is file dependent
 extern u8 LEOdisk_type;
 extern tgt_param_form LEOtgt_param;
 extern s32 LEO_country_code;
