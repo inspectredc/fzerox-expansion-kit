@@ -38,7 +38,7 @@ void leoInitialize(OSPri compri, OSPri intpri, OSMesg* command_que_buf, u32 cmd_
                    LEOinterruptThreadStack + sizeof(LEOinterruptThreadStack), intpri);
     osStartThread(&LEOinterruptThread);
     osSetEventMesg(OS_EVENT_CART, &LEOevent_que, (OSMesg) 0x30000);
-    osSendMesg(&LEOblock_que, NULL, 0);
+    osSendMesg(&LEOblock_que, NULL, OS_MESG_NOBLOCK);
     __osRestoreInt(savedMask);
 
     if (oldPri != -1) {
@@ -51,11 +51,12 @@ void leoCommand(void* cmd_blk_addr) {
         ((LEOCmd*) cmd_blk_addr)->header.status = LEO_STATUS_CHECK_CONDITION;
         ((LEOCmd*) cmd_blk_addr)->header.sense = LEO_SENSE_WAITING_NMI;
         if ((((LEOCmd*) cmd_blk_addr)->header.control & LEO_CONTROL_POST) != 0) {
-            osSendMesg(((LEOCmd*) cmd_blk_addr)->header.post, (OSMesg) LEO_SENSE_WAITING_NMI, 1); // Presumably
+            osSendMesg(((LEOCmd*) cmd_blk_addr)->header.post, (OSMesg) LEO_SENSE_WAITING_NMI,
+                       OS_MESG_BLOCK); // Presumably
         }
         return;
     }
-    osRecvMesg(&LEOblock_que, NULL, 1);
+    osRecvMesg(&LEOblock_que, NULL, OS_MESG_BLOCK);
     ((LEOCmd*) cmd_blk_addr)->header.status = LEO_STATUS_BUSY;
     ((LEOCmd*) cmd_blk_addr)->header.sense = LEO_SENSE_NO_ADDITIONAL_SENSE_INFOMATION;
 
@@ -66,7 +67,7 @@ void leoCommand(void* cmd_blk_addr) {
             LEOclr_que_flag = 0;
             ((LEOCmd*) cmd_blk_addr)->header.status = LEO_STATUS_GOOD;
             if (((LEOCmd*) cmd_blk_addr)->header.control & LEO_CONTROL_POST) {
-                osSendMesg(((LEOCmd*) cmd_blk_addr)->header.post, (OSMesg) 0, 1);
+                osSendMesg(((LEOCmd*) cmd_blk_addr)->header.post, (OSMesg) 0, OS_MESG_BLOCK);
             }
             break;
 
@@ -88,7 +89,7 @@ void leoCommand(void* cmd_blk_addr) {
                 ((LEOCmd*) cmd_blk_addr)->header.status = LEO_STATUS_CHECK_CONDITION;
             }
     }
-    osSendMesg(&LEOblock_que, (OSMesg) 0, 1);
+    osSendMesg(&LEOblock_que, (OSMesg) 0, OS_MESG_BLOCK);
 }
 
 void LeoReset(void) {
@@ -97,9 +98,9 @@ void LeoReset(void) {
         LEOclr_que_flag = 0xFF;
         leoClr_queue();
         LEOclr_que_flag = 0;
-        osRecvMesg(&LEOevent_que, NULL, 0);
-        osSendMesg(&LEOevent_que, (OSMesg) ASIC_SOFT_RESET_CODE, 1);
-        osSendMesg(&LEOcommand_que, (OSMesg) LEO_ZERO_MESG, 1);
+        osRecvMesg(&LEOevent_que, NULL, OS_MESG_NOBLOCK);
+        osSendMesg(&LEOevent_que, (OSMesg) ASIC_SOFT_RESET_CODE, OS_MESG_BLOCK);
+        osSendMesg(&LEOcommand_que, (OSMesg) LEO_ZERO_MESG, OS_MESG_BLOCK);
     }
 }
 
@@ -118,7 +119,7 @@ s32 LeoResetClear(void) {
     if (osSendMesg(&LEOcommand_que, &resetclear.command, 0) != 0) {
         return LEO_SENSE_QUEUE_FULL;
     }
-    osRecvMesg(&LEOpost_que, NULL, 1);
+    osRecvMesg(&LEOpost_que, NULL, OS_MESG_BLOCK);
     if (resetclear.status == LEO_STATUS_GOOD) {
         return LEO_SENSE_NO_ADDITIONAL_SENSE_INFOMATION;
     }
