@@ -151,7 +151,6 @@ s32 func_807618B8(u16 arg0, s32 arg1) {
     }
     sp1C = D_80784EF0.unk_16B0[arg0].unk_0A;
 
-    
     for (i = 0, sp18 = 0; i < D_80794CD0; i++) {
         if (D_80784EF0.unk_16B0[i].unk_00 == 0) {
             continue;

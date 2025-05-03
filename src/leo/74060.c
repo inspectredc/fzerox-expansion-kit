@@ -11,4 +11,3 @@ void func_80766860(void) {
     gLeoRezeroFunc = LeoRezero;
     return;
 }
-
