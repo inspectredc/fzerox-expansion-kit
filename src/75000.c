@@ -400,7 +400,7 @@ s32 func_80768C08(s32 arg0, s32 arg1, s32 arg2) {
     return 0;
 }
 
-extern s32 D_80794CD4;
+extern OSMesg D_80794CD4;
 
 s32 func_80768C88(u16 arg0, s32 arg1, s32 arg2) {
     if (func_80766660(arg0) == -1) {
@@ -409,7 +409,7 @@ s32 func_80768C88(u16 arg0, s32 arg1, s32 arg2) {
     while (func_80766788() != 0xFFFF) {}
 
     if (func_8075F7C0(arg0, arg1, arg2) == 0xFFFF) {
-        if (D_80794CD4 == 0xF2) {
+        if ((s32) D_80794CD4 == 0xF2) {
             D_80794CD4 = 0;
         }
         return 0;

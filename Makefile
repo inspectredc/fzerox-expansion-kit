@@ -340,6 +340,9 @@ $(BUILD_DIR)/src/libultra/io/motor.o: OPTFLAGS := -O2 -g0
 
 $(BUILD_DIR)/src/libultra/os/%.o: OPTFLAGS := -O1 -g0
 
+$(BUILD_DIR)/src/leo/%.o: OPTFLAGS := -g
+$(BUILD_DIR)/src/leo/lib/%.o: OPTFLAGS := -O2 -g0
+
 # per-file flags
 $(BUILD_DIR)/src/libultra/libc/ldiv.o: OPTFLAGS := -O2 -g0
 $(BUILD_DIR)/src/libultra/libc/string.o: OPTFLAGS := -O2 -g0
