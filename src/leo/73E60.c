@@ -39,7 +39,8 @@ s32 func_80766660(u16 arg0) {
 
 u16 func_80766788(void) {
     while (D_807C6E62 < D_80794CD0) {
-        if ((D_80784EF0.unk_16B0[D_807C6E62].unk_02 == D_807C6E60) && (D_80784EF0.unk_16B0[D_807C6E62].unk_00 & 0x4000)) {
+        if ((D_80784EF0.unk_16B0[D_807C6E62].unk_02 == D_807C6E60) &&
+            (D_80784EF0.unk_16B0[D_807C6E62].unk_00 & 0x4000)) {
             return D_807C6E62++;
         }
         D_807C6E62++;

@@ -104,7 +104,8 @@ s32 func_80766CC0(s32 arg0, u16 arg1, u16 arg2, u16 arg3) {
         if (D_80784EF0.unk_0E & 0x80) {
             return -1;
         }
-        if ((D_80784EF0.unk_0E & 0x20) && ((Leo_bcmp(D_80794CE8.company, D_80794D40, 2) != 0) || (Leo_bcmp(&D_80794CE8, D_80794D44, 4) != 0))) {
+        if ((D_80784EF0.unk_0E & 0x20) &&
+            ((Leo_bcmp(D_80794CE8.company, D_80794D40, 2) != 0) || (Leo_bcmp(&D_80794CE8, D_80794D44, 4) != 0))) {
             return -1;
         }
         if ((arg0 & 0x20) && (D_80784EF0.unk_16B0[arg1].unk_00 & 0x2000)) {
@@ -135,7 +136,8 @@ s32 func_80766CC0(s32 arg0, u16 arg1, u16 arg2, u16 arg3) {
     sp1E = 0xFFFF;
     if (arg0 & 0x40) {
         sp18 = func_8075F714(arg1);
-        if ((D_80784EF0.unk_0E & 0x40) && ((Leo_bcmp(D_80794CE8.company, D_80794D40, 2) != 0) || (Leo_bcmp(&D_80794CE8, D_80794D44, 4) != 0))) {
+        if ((D_80784EF0.unk_0E & 0x40) &&
+            ((Leo_bcmp(D_80794CE8.company, D_80794D40, 2) != 0) || (Leo_bcmp(&D_80794CE8, D_80794D44, 4) != 0))) {
             return -1;
         }
         if ((arg0 & 0x20) && (D_80784EF0.unk_16B0[arg1].unk_00 & 0x1000) && (sp18 < 0)) {

@@ -33,7 +33,8 @@ s32 func_80761BB0(s32 year, s32 month, s32 day, s32 hour, s32 minute, s32 second
 }
 
 void func_80761CF4(s32 year, s32 month, s32 day, s32 hour, s32 minute, s32 second) {
-    func_80761BB0(Leo_EncodeTime(year % 100), Leo_EncodeTime(month), Leo_EncodeTime(day), Leo_EncodeTime(hour), Leo_EncodeTime(minute), Leo_EncodeTime(second));
+    func_80761BB0(Leo_EncodeTime(year % 100), Leo_EncodeTime(month), Leo_EncodeTime(day), Leo_EncodeTime(hour),
+                  Leo_EncodeTime(minute), Leo_EncodeTime(second));
     return;
 }
 
@@ -223,7 +224,7 @@ s32 func_80762570(u32 arg0, u8* arg1, u32 arg2) {
     u8* sp20;
 
     sp20 = arg1;
-    if (!((uintptr_t)arg1 & 0xF)) {
+    if (!((uintptr_t) arg1 & 0xF)) {
         LeoLBAToByte(arg0, arg2, &sp24);
         osInvalDCache(arg1, sp24);
         D_80794CD8 = 2;
@@ -237,7 +238,7 @@ s32 func_80762570(u32 arg0, u8* arg1, u32 arg2) {
         osWritebackDCache(arg1, sp24);
     } else {
         osInvalDCache(D_8077B4D0, 0x4D10);
-    
+
         for (i = 0; i < arg2; i++) {
             LeoLBAToByte(arg0 + i, 1, &sp24);
             D_80794CD8 = 2;
@@ -264,7 +265,7 @@ s32 func_80762768(u32 arg0, u8* arg1, u32 arg2) {
     s32 i;
     s32 sp24;
 
-    if (!((uintptr_t)arg1 & 0xF)) {
+    if (!((uintptr_t) arg1 & 0xF)) {
         LeoLBAToByte(arg0, arg2, &sp24);
         osWritebackDCache(arg1, sp24);
         D_80794CD8 = 3;
@@ -276,12 +277,12 @@ s32 func_80762768(u32 arg0, u8* arg1, u32 arg2) {
             return -1;
         }
     } else {
-        
+
         LeoLBAToByte(arg0, arg2, &sp24);
         osWritebackDCache(arg1, sp24);
-    
+
         for (i = 0; i < arg2; i++) {
-    
+
             LeoLBAToByte(arg0 + i, 1, &sp24);
             bcopy(arg1, D_8077B4D0, sp24);
             osWritebackDCache(D_8077B4D0, 0x4D10);

@@ -387,7 +387,6 @@ s32 func_80766124(s32 arg0, u8* arg1, u32 arg2, s32 arg3) {
                 return -1;
             }
             sp18 += sp1C;
-            
         }
     } else {
         return func_80762768(arg0, arg1, arg2);
