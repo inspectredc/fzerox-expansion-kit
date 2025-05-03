@@ -387,5 +387,14 @@ __leoVersion = 0x807C5D70;
 leoDiskStack = 0x807C5D80; //size:0x1000
 DriveRomHandle = 0x807C6D80; //size:0x74
 
+gLeoReadWriteFunc = 0x807C6E70;
+gLeoSeekFunc = 0x807C6E74;
+gLeoSpdlMotorFunc = 0x807C6E78;
+gLeoReadDiskIDFunc = 0x807C6E7C;
+gLeoReadRTCFunc = 0x807C6E80;
+gLeoSetRTCFunc = 0x807C6E84;
+gLeoModeSelectAsyncFunc = 0x807C6E88;
+gLeoRezeroFunc = 0x807C6E8C;
+
 
 D_807794F0 = 0x807794F0; // force_migration:True

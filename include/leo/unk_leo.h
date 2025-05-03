@@ -1,0 +1,51 @@
+#ifndef UNK_LEO_H
+#define UNK_LEO_H
+
+#include "libultra/ultra64.h"
+#include "PR/leo.h"
+
+typedef struct unk_leo_timeformat {
+    union {
+        struct {
+            u8 unkb0, unkb1, unkb2, unkb3;
+        };
+        struct {
+            u16 unks0, unks2;
+        };
+        u32 unki1;
+    };
+} unk_leo_timeformat;
+
+typedef struct unk_leo_804285D0 {
+    u16 unk_00;
+    u16 unk_02;
+    s8 unk_04[2];
+    s8 unk_06[4];
+    u16 unk_0A;
+    s32 unk_0C;
+    u8 unk_10[20];
+    u8 unk_24[5];
+    u8 unk_29;
+    u8 unk_2A;
+    s8 unk_2B[0x1];
+    unk_leo_timeformat unk_2C;
+} unk_leo_804285D0; // size = 0x30
+
+typedef struct unk_leo_80419EA0 {
+    u8 unk_00[10];
+    s8 unk_0A[4];
+    u8 unk_0E;
+    u8 unk_0F;
+    u8 unk_10[20];
+    unk_leo_timeformat unk_24;
+    u16 unk_28;
+    s8 unk_2C[0x12];
+    u16 unk_3C[0xB3A];
+    unk_leo_804285D0 unk_16B0[1112];
+} unk_leo_80419EA0;
+
+#define LEO_MANAGER_REGION_NONE 0
+#define LEO_MANAGER_REGION_JP 0x101
+#define LEO_MANAGER_REGION_US 0x102
+
+#endif // UNK_LEO_H
