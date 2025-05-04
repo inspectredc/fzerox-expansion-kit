@@ -5,9 +5,27 @@ import argparse
 import pathlib
 
 RESERVED_BLOCK_COUNT = 24
+LBA_MAX_COUNT = 4316
 MAIN_BLOCK_START = 560
-MAIN_BLOCK_END = 598
-OVERLAY_BLOCKS = [ (598, 602), (602, 613), (613, 615), (615, 617), (617, 620), (620, 622), (622, 624), (624, 635), (635, 655), (655, 656) ]
+OVERLAY_BLOCKS = [ 598, 602, 613, 615, 617, 620, 622, 624, 635, 655, 656, 672, 677 ]
+
+# ROM ADDRS: 0x0, 0xA2E70, 0xB0AB0, 0xDE7C0, 0xE6660, 0xEB850, 0xF5080, 0xFCC60, 0x1039E0, 0x132B30, 0x1872B0, 0x188850, 0x1CB1E0, 0x1E0B00, 0x1FB850(END)
+MAIN_VRAM_JP = (0x806F2800, 0x80795670)
+OVERLAY_VRAM_JP = [
+    (0x80025C00, 0x80033840),
+    (0x8003F2E0, 0x8006CFF0),
+    (0x8006F1B0, 0x80077050),
+    (0x80077080, 0x8007C270),
+    (0x8007C2B0, 0x80085AE0),
+    (0x800927C0, 0x8009A3A0),
+    (0x8009B170, 0x800A1EF0),
+    (0x800A20A0, 0x800D11F0),
+    (0x800D6D90, 0x8012B510),
+    (0x8012B520, 0x8012CAC0),
+    (0x800D6D90, 0x80119720), # course edit
+    (0x8012B520, 0x80140E40), # create machine
+    (0x800D6D90, 0x800F1AE0),
+]
 
 def leo_decode(ba):
     out = bytearray()
@@ -28,14 +46,45 @@ def main(args):
     romBA = bytearray()
     rom = pathlib.Path("baserom." + args.version + ".z64dd")
 
-    for i in range(MAIN_BLOCK_START, MAIN_BLOCK_END):
-        romBA.extend(disk_obj.get_lba(RESERVED_BLOCK_COUNT + i))
+    # Main Block
+
+    nbytes = MAIN_VRAM_JP[1] - MAIN_VRAM_JP[0]
+    disk_type = disk_obj.sys_data.disk_type
+    lbaStart = MAIN_BLOCK_START + RESERVED_BLOCK_COUNT
+
+    for i in range(lbaStart, LBA_MAX_COUNT):
+        nbytes -= leo64dd.size_of_lba(disk_type, i)
+        if (nbytes <= 0):
+            break
+    nbytes += leo64dd.size_of_lba(disk_type, i)
+
+    lbaCount = i + 1 - lbaStart
+    lbaEnd = lbaStart + lbaCount
+
+    for lba in range(lbaStart, lbaEnd - 1):
+        romBA.extend(disk_obj.get_lba(lba))
+
+    romBA.extend(disk_obj.get_lba(lbaEnd - 1)[0:nbytes])
 
     romDecodedBA = leo_decode(romBA)
 
-    # for lbaSE in OVERLAY_BLOCKS:
-    #     for lba in range(lbaSE[0], lbaSE[1]):
-    #         romDecodedBA.extend(disk_obj.get_lba(RESERVED_BLOCK_COUNT + lba))
+    # Overlays
+
+    for i in range(0, 13):
+        lbaStart = OVERLAY_BLOCKS[i] + RESERVED_BLOCK_COUNT
+        vram = OVERLAY_VRAM_JP[i]
+        nbytes = vram[1] - vram[0]
+        for i in range(lbaStart, LBA_MAX_COUNT):
+            nbytes -= leo64dd.size_of_lba(disk_type, i)
+            if (nbytes <= 0):
+                break
+        nbytes += leo64dd.size_of_lba(disk_type, i)
+        lbaCount = i + 1 - lbaStart
+        lbaEnd = lbaStart + lbaCount
+        for lba in range(lbaStart, lbaEnd - 1):
+            romDecodedBA.extend(disk_obj.get_lba(lba))
+
+        romDecodedBA.extend(disk_obj.get_lba(lbaEnd - 1)[0:nbytes])
 
     rom.write_bytes(romDecodedBA)
 

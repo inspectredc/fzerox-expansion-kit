@@ -1,5 +1,6 @@
 #include "PR/os_internal.h"
 #include "PR/rcp.h"
+#include "PR/piint.h"
 #include "macros.h"
 #include "libc/stdbool.h"
 
