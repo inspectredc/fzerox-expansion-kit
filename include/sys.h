@@ -11,6 +11,7 @@
 #include "libc/string.h"
 #include "gfx.h"
 #include "buffers.h"
+#include "other_types.h"
 #include "segment_symbols.h"
 
 
