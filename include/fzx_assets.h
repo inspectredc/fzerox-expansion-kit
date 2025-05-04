@@ -1,0 +1,1903 @@
+#ifndef FZX_ASSETS_H
+#define FZX_ASSETS_H
+
+/* 
+    This File is for externed assets addresses that have not yet been extracted
+ */
+
+ extern Gfx D_3000780[];
+ extern Vtx D_3000788[];
+ extern Vtx D_3000868[];
+ extern Vtx D_3000A78[];
+ extern Vtx D_3000AF8[];
+ extern Vtx D_3000C38[];
+ extern Vtx D_3000C98[];
+ extern Vtx D_30013C8[];
+ extern Vtx D_3001488[];
+ extern Vtx D_30017D8[];
+ extern Vtx D_3001858[];
+ extern Vtx D_30019B8[];
+ extern Vtx D_3001B28[];
+ extern Vtx D_3001BA8[];
+ extern Vtx D_3001CE8[];
+ extern Vtx D_3001D28[];
+ extern Vtx D_3002488[];
+ extern Vtx D_3002568[];
+ extern Vtx D_30025E8[];
+ extern Vtx D_3002828[];
+ extern Vtx D_3002B08[];
+ extern Vtx D_3003168[];
+ extern Vtx D_3003228[];
+ extern Vtx D_3003388[];
+ extern Vtx D_3003468[];
+ extern Vtx D_30034E8[];
+ extern Vtx D_3003758[];
+ extern Vtx D_30037D8[];
+ extern Vtx D_3003918[];
+ extern Vtx D_3003978[];
+ extern Vtx D_30040F8[];
+ extern Vtx D_3004238[];
+ extern u8 aMachineNumber7Tex[];
+ #define _aMachineNumber7Tex_WIDTH 0x10
+ #define _aMachineNumber7Tex_HEIGHT 0x20
+ extern u8 aDecalBlueFalconArrowTex[];
+ #define _aDecalBlueFalconArrowTex_WIDTH 0x10
+ #define _aDecalBlueFalconArrowTex_HEIGHT 0x10
+ extern u8 D_3004618[];
+ #define _D_3004618_WIDTH 0x10
+ #define _D_3004618_HEIGHT 0x10
+ extern u8 aDecalStripeTex[];
+ #define _aDecalStripeTex_WIDTH 0x10
+ #define _aDecalStripeTex_HEIGHT 0x10
+ extern u8 aLogoBlueFalconTex[];
+ #define _aLogoBlueFalconTex_WIDTH 0x40
+ #define _aLogoBlueFalconTex_HEIGHT 0x10
+ extern u16 aDecalBlueFalconWingCheckeredTex[];
+ #define _aDecalBlueFalconWingCheckeredTex_WIDTH 0x10
+ #define _aDecalBlueFalconWingCheckeredTex_HEIGHT 0x10
+ extern u8 aBooster1Tex[];
+ #define _aBooster1Tex_WIDTH 0x20
+ #define _aBooster1Tex_HEIGHT 0x20
+ extern u8 aRearDuctTex[];
+ #define _aRearDuctTex_WIDTH 0x20
+ #define _aRearDuctTex_HEIGHT 0x20
+ extern Vtx D_3004F18[];
+ extern u8 D_3004F58[];
+ #define _D_3004F58_WIDTH 0x20
+ #define _D_3004F58_HEIGHT 0x40
+ extern Vtx D_3005358[];
+ extern Vtx D_30054E8[];
+ extern Vtx D_3005568[];
+ extern Vtx D_3005708[];
+ extern Vtx D_3005B88[];
+ extern Vtx D_3005C08[];
+ extern Vtx D_3005DA8[];
+ extern Vtx D_3005DF8[];
+ extern u8 aMachineNumber3Tex[];
+ #define _aMachineNumber3Tex_WIDTH 0x10
+ #define _aMachineNumber3Tex_HEIGHT 0x20
+ extern u8 aAirDuct1Tex[];
+ #define _aAirDuct1Tex_WIDTH 0x20
+ #define _aAirDuct1Tex_HEIGHT 0x10
+ extern u16 aDecalGoldenFoxStripesTex[];
+ #define _aDecalGoldenFoxStripesTex_WIDTH 0x10
+ #define _aDecalGoldenFoxStripesTex_HEIGHT 0x10
+ extern u8 aBooster2Tex[];
+ #define _aBooster2Tex_WIDTH 0x20
+ #define _aBooster2Tex_HEIGHT 0x20
+ extern u8 aLogoGoldenFoxTex[];
+ #define _aLogoGoldenFoxTex_WIDTH 0x20
+ #define _aLogoGoldenFoxTex_HEIGHT 0x20
+ extern u8 aCompartmentLatchTex[];
+ #define _aCompartmentLatchTex_WIDTH 0x20
+ #define _aCompartmentLatchTex_HEIGHT 0x20
+ extern u8 aFloorDuct1Tex[];
+ #define _aFloorDuct1Tex_WIDTH 0x20
+ #define _aFloorDuct1Tex_HEIGHT 0x20
+ extern Vtx D_3006C78[];
+ extern u8 D_3006CB8[];
+ #define _D_3006CB8_WIDTH 0x20
+ #define _D_3006CB8_HEIGHT 0x40
+ extern Vtx D_30070B8[];
+ extern Vtx D_30072D8[];
+ extern Vtx D_3007478[];
+ extern Vtx D_30077F8[];
+ extern Vtx D_30078D8[];
+ extern Vtx D_3007918[];
+ extern Vtx D_3007C18[];
+ extern Vtx D_3007CD8[];
+ extern u8 aDecalDoubleStripeTex[];
+ #define _aDecalDoubleStripeTex_WIDTH 0x10
+ #define _aDecalDoubleStripeTex_HEIGHT 0x10
+ extern u16 aDecalWildGooseLightningTex[];
+ #define _aDecalWildGooseLightningTex_WIDTH 0x20
+ #define _aDecalWildGooseLightningTex_HEIGHT 0x20
+ extern u8 aAirDuct2Tex[];
+ #define _aAirDuct2Tex_WIDTH 0x10
+ #define _aAirDuct2Tex_HEIGHT 0x10
+ extern u8 aFloorDuct2Tex[];
+ #define _aFloorDuct2Tex_WIDTH 0x20
+ #define _aFloorDuct2Tex_HEIGHT 0x20
+ extern u8 aMachineNumber6Tex[];
+ #define _aMachineNumber6Tex_WIDTH 0x10
+ #define _aMachineNumber6Tex_HEIGHT 0x20
+ extern u8 aBooster3Tex[];
+ #define _aBooster3Tex_WIDTH 0x20
+ #define _aBooster3Tex_HEIGHT 0x20
+ extern Vtx D_3008C18[];
+ extern u8 D_3008C58[];
+ #define _D_3008C58_WIDTH 0x20
+ #define _D_3008C58_HEIGHT 0x40
+ extern Vtx D_3009058[];
+ extern Vtx D_30090D8[];
+ extern Vtx D_3009238[];
+ extern Vtx D_30093A8[];
+ extern Vtx D_3009428[];
+ extern Vtx D_30094C8[];
+ extern Vtx D_3009508[];
+ extern u8 aMachineNumber5Tex[];
+ #define _aMachineNumber5Tex_WIDTH 0x10
+ #define _aMachineNumber5Tex_HEIGHT 0x20
+ extern u16 aDecalFlamesTex[];
+ #define _aDecalFlamesTex_WIDTH 0x20
+ #define _aDecalFlamesTex_HEIGHT 0x20
+ extern Vtx D_300A4E8[];
+ extern u8 D_300A528[];
+ #define _D_300A528_WIDTH 0x20
+ #define _D_300A528_HEIGHT 0x40
+ extern Vtx D_300A928[];
+ extern Vtx D_300AA08[];
+ extern Vtx D_300AA88[];
+ extern Vtx D_300ABC8[];
+ extern Vtx D_300AEC8[];
+ extern Vtx D_300B2F8[];
+ extern Vtx D_300B3B8[];
+ extern Vtx D_300B518[];
+ extern u8 aMetalPlatingTex[];
+ #define _aMetalPlatingTex_WIDTH 0x10
+ #define _aMetalPlatingTex_HEIGHT 0x10
+ extern u8 aLogoWhiteCatTex[];
+ #define _aLogoWhiteCatTex_WIDTH 0x40
+ #define _aLogoWhiteCatTex_HEIGHT 0x20
+ extern u8 aMachineNumber2Tex[];
+ #define _aMachineNumber2Tex_WIDTH 0x10
+ #define _aMachineNumber2Tex_HEIGHT 0x20
+ extern Vtx D_300BB78[];
+ extern u8 D_300BBB8[];
+ #define _D_300BBB8_WIDTH 0x20
+ #define _D_300BBB8_HEIGHT 0x40
+ extern Vtx D_300BFB8[];
+ extern Vtx D_300C608[];
+ extern Vtx D_300C688[];
+ extern Vtx D_300C6C8[];
+ extern Vtx D_300C788[];
+ extern Vtx D_300C8E8[];
+ extern Vtx D_300C9C8[];
+ extern Vtx D_300CB08[];
+ extern u8 aDecalStripeAngleTex[];
+ #define _aDecalStripeAngleTex_WIDTH 0x10
+ #define _aDecalStripeAngleTex_HEIGHT 0x10
+ extern u8 aDecalTripleStripeIncreasingTex[];
+ #define _aDecalTripleStripeIncreasingTex_WIDTH 0x10
+ #define _aDecalTripleStripeIncreasingTex_HEIGHT 0x20
+ extern u8 aLogoRedGazelleTex[];
+ #define _aLogoRedGazelleTex_WIDTH 0x40
+ #define _aLogoRedGazelleTex_HEIGHT 0x20
+ extern u8 aMachineNumber1Tex[];
+ #define _aMachineNumber1Tex_WIDTH 0x10
+ #define _aMachineNumber1Tex_HEIGHT 0x20
+ extern Vtx D_300D3F8[];
+ extern u8 D_300D438[];
+ #define _D_300D438_WIDTH 0x20
+ #define _D_300D438_HEIGHT 0x40
+ extern Vtx D_300D838[];
+ extern Vtx D_300D8D8[];
+ extern Vtx D_300D958[];
+ extern Vtx D_300DB78[];
+ extern Vtx D_300E2A8[];
+ extern Vtx D_300E408[];
+ extern Vtx D_300E488[];
+ extern Vtx D_300E548[];
+ extern u8 aMachineNumber8Tex[];
+ #define _aMachineNumber8Tex_WIDTH 0x10
+ #define _aMachineNumber8Tex_HEIGHT 0x20
+ extern Vtx D_300E9A8[];
+ extern u8 D_300E9E8[];
+ #define _D_300E9E8_WIDTH 0x20
+ #define _D_300E9E8_HEIGHT 0x40
+ extern Vtx D_300EDE8[];
+ extern Vtx D_300EF98[];
+ extern Vtx D_300F3D8[];
+ extern Vtx D_300F4B8[];
+ extern Vtx D_300F608[];
+ extern Vtx D_300F778[];
+ extern Vtx D_300F898[];
+ extern Vtx D_300F918[];
+ extern u16 aDecalLeopardTex[];
+ #define _aDecalLeopardTex_WIDTH 0x20
+ #define _aDecalLeopardTex_HEIGHT 0x20
+ extern u8 aLogoIronTigerTex[];
+ #define _aLogoIronTigerTex_WIDTH 0x20
+ #define _aLogoIronTigerTex_HEIGHT 0x10
+ extern u8 aMachineNumber4Tex[];
+ #define _aMachineNumber4Tex_WIDTH 0x10
+ #define _aMachineNumber4Tex_HEIGHT 0x20
+ extern Vtx D_30104F8[];
+ extern u8 D_3010538[];
+ #define _D_3010538_WIDTH 0x20
+ #define _D_3010538_HEIGHT 0x40
+ extern Vtx D_3010938[];
+ extern Vtx D_3010978[];
+ extern Vtx D_3010BB8[];
+ extern Vtx D_3010D48[];
+ extern Vtx D_3010DE8[];
+ extern Vtx D_3010E88[];
+ extern Vtx D_30110A8[];
+ extern u8 aMachineNumber26Tex[];
+ #define _aMachineNumber26Tex_WIDTH 0x20
+ #define _aMachineNumber26Tex_HEIGHT 0x20
+ extern Vtx D_3011778[];
+ extern u8 D_30117B8[];
+ #define _D_30117B8_WIDTH 0x20
+ #define _D_30117B8_HEIGHT 0x40
+ extern Vtx D_3011BB8[];
+ extern Vtx D_30121F8[];
+ extern Vtx D_30122F8[];
+ extern Vtx D_3012438[];
+ extern Vtx D_30126C8[];
+ extern Vtx D_3012748[];
+ extern Vtx D_3012A68[];
+ extern u8 aDecalCheckeredTex[];
+ #define _aDecalCheckeredTex_WIDTH 0x10
+ #define _aDecalCheckeredTex_HEIGHT 0x10
+ extern u8 aDecalDoubleStripeUnevenTex[];
+ #define _aDecalDoubleStripeUnevenTex_WIDTH 0x10
+ #define _aDecalDoubleStripeUnevenTex_HEIGHT 0x10
+ extern u8 aMachineNumber22Tex[];
+ #define _aMachineNumber22Tex_WIDTH 0x20
+ #define _aMachineNumber22Tex_HEIGHT 0x20
+ extern Vtx D_3012EC8[];
+ extern u8 D_3012F08[];
+ #define _D_3012F08_WIDTH 0x20
+ #define _D_3012F08_HEIGHT 0x40
+ extern Vtx D_3013308[];
+ extern Vtx D_30136C8[];
+ extern Vtx D_3013708[];
+ extern Vtx D_3013948[];
+ extern Vtx D_30139E8[];
+ extern Vtx D_3013AE8[];
+ extern Vtx D_3013DD8[];
+ extern Vtx D_3013E58[];
+ extern u8 aMachineNumber12Tex[];
+ #define _aMachineNumber12Tex_WIDTH 0x20
+ #define _aMachineNumber12Tex_HEIGHT 0x20
+ extern Vtx D_30140D8[];
+ extern u8 D_3014118[];
+ #define _D_3014118_WIDTH 0x20
+ #define _D_3014118_HEIGHT 0x40
+ extern Vtx D_3014518[];
+ extern Vtx D_3014B98[];
+ extern Vtx D_3014BF8[];
+ extern Vtx D_3014CB8[];
+ extern Vtx D_3014D78[];
+ extern Vtx D_3014ED8[];
+ extern Vtx D_3014F58[];
+ extern Vtx D_3015158[];
+ extern u8 aDecalCircle1Tex[];
+ #define _aDecalCircle1Tex_WIDTH 0x10
+ #define _aDecalCircle1Tex_HEIGHT 0x10
+ extern u8 aMachineNumber28Tex[];
+ #define _aMachineNumber28Tex_WIDTH 0x20
+ #define _aMachineNumber28Tex_HEIGHT 0x20
+ extern Vtx D_3015418[];
+ extern u8 D_3015458[];
+ #define _D_3015458_WIDTH 0x20
+ #define _D_3015458_HEIGHT 0x40
+ extern Vtx D_3015858[];
+ extern Vtx D_30158F8[];
+ extern Vtx D_3015978[];
+ extern Vtx D_3015A48[];
+ extern Vtx D_3015BA8[];
+ extern Vtx D_3015CE8[];
+ extern Vtx D_3015E88[];
+ extern Vtx D_3016258[];
+ extern u16 aDecalLittleWyvernStripeEndsTex[];
+ #define _aDecalLittleWyvernStripeEndsTex_WIDTH 0x10
+ #define _aDecalLittleWyvernStripeEndsTex_HEIGHT 0x10
+ extern u8 aMachineNumber10Tex[];
+ #define _aMachineNumber10Tex_WIDTH 0x20
+ #define _aMachineNumber10Tex_HEIGHT 0x20
+ extern Vtx D_3016958[];
+ extern u8 D_3016998[];
+ #define _D_3016998_WIDTH 0x20
+ #define _D_3016998_HEIGHT 0x40
+ extern Vtx D_3016D98[];
+ extern Vtx D_3017238[];
+ extern Vtx D_3017318[];
+ extern Vtx D_3017378[];
+ extern Vtx D_30173F8[];
+ extern Vtx D_3017458[];
+ extern Vtx D_3017498[];
+ extern u8 aMachineNumber19Tex[];
+ #define _aMachineNumber19Tex_WIDTH 0x20
+ #define _aMachineNumber19Tex_HEIGHT 0x20
+ extern Vtx D_30177D8[];
+ extern u8 D_3017818[];
+ #define _D_3017818_WIDTH 0x20
+ #define _D_3017818_HEIGHT 0x40
+ extern Vtx D_3017C18[];
+ extern Vtx D_3017D18[];
+ extern Vtx D_3017F78[];
+ extern Vtx D_3018018[];
+ extern Vtx D_30180F8[];
+ extern Vtx D_30182F8[];
+ extern u8 aMachineNumber17Tex[];
+ #define _aMachineNumber17Tex_WIDTH 0x20
+ #define _aMachineNumber17Tex_HEIGHT 0x20
+ extern u16 aDecalGreenPantherCamoTex[];
+ #define _aDecalGreenPantherCamoTex_WIDTH 0x20
+ #define _aDecalGreenPantherCamoTex_HEIGHT 0x20
+ extern Vtx D_3018E98[];
+ extern u8 D_3018ED8[];
+ #define _D_3018ED8_WIDTH 0x20
+ #define _D_3018ED8_HEIGHT 0x40
+ extern Vtx D_30192D8[];
+ extern Vtx D_3019378[];
+ extern Vtx D_30193D8[];
+ extern Vtx D_3019498[];
+ extern Vtx D_3019518[];
+ extern Vtx D_3019D58[];
+ extern Vtx D_3019E98[];
+ extern u8 aDecalArchTex[];
+ #define _aDecalArchTex_WIDTH 0x10
+ #define _aDecalArchTex_HEIGHT 0x10
+ extern u8 aMachineNumber30Tex[];
+ #define _aMachineNumber30Tex_WIDTH 0x20
+ #define _aMachineNumber30Tex_HEIGHT 0x20
+ extern u8 aDecalCircle2Tex[];
+ #define _aDecalCircle2Tex_WIDTH 0x10
+ #define _aDecalCircle2Tex_HEIGHT 0x10
+ extern Vtx D_301A2E8[];
+ extern u8 D_301A328[];
+ #define _D_301A328_WIDTH 0x20
+ #define _D_301A328_HEIGHT 0x40
+ extern Vtx D_301A728[];
+ extern Vtx D_301A7F8[];
+ extern Vtx D_301A8D8[];
+ extern Vtx D_301AAC8[];
+ extern Vtx D_301AEA8[];
+ extern Vtx D_301AF48[];
+ extern Vtx D_301B008[];
+ extern u8 aLogoWildBoarWhiskersTex[];
+ #define _aLogoWildBoarWhiskersTex_WIDTH 0x40
+ #define _aLogoWildBoarWhiskersTex_HEIGHT 0x20
+ extern u8 aMachineNumber24Tex[];
+ #define _aMachineNumber24Tex_WIDTH 0x20
+ #define _aMachineNumber24Tex_HEIGHT 0x20
+ extern Vtx D_301B7B8[];
+ extern u8 D_301B7F8[];
+ #define _D_301B7F8_WIDTH 0x20
+ #define _D_301B7F8_HEIGHT 0x40
+ extern Vtx D_301BBF8[];
+ extern Vtx D_301BC78[];
+ extern Vtx D_301BCB8[];
+ extern Vtx D_301BE48[];
+ extern Vtx D_301BEE8[];
+ extern Vtx D_301C538[];
+ extern Vtx D_301C638[];
+ extern u8 aDecalTripleStripeUnevenTex[];
+ #define _aDecalTripleStripeUnevenTex_WIDTH 0x10
+ #define _aDecalTripleStripeUnevenTex_HEIGHT 0x10
+ extern u8 aMachineNumber14Tex[];
+ #define _aMachineNumber14Tex_WIDTH 0x20
+ #define _aMachineNumber14Tex_HEIGHT 0x20
+ extern Vtx D_301CA98[];
+ extern u8 D_301CAD8[];
+ #define _D_301CAD8_WIDTH 0x20
+ #define _D_301CAD8_HEIGHT 0x40
+ extern Vtx D_301CED8[];
+ extern Vtx D_301D298[];
+ extern Vtx D_301D338[];
+ extern Vtx D_301D598[];
+ extern Vtx D_301D6B8[];
+ extern Vtx D_301D808[];
+ extern Vtx D_301D928[];
+ extern u8 aLogoArrowTex[];
+ #define _aLogoArrowTex_WIDTH 0x20
+ #define _aLogoArrowTex_HEIGHT 0x40
+ extern u8 aMachineNumber20Tex[];
+ #define _aMachineNumber20Tex_WIDTH 0x20
+ #define _aMachineNumber20Tex_HEIGHT 0x20
+ extern Vtx D_301E058[];
+ extern u8 D_301E098[];
+ #define _D_301E098_WIDTH 0x20
+ #define _D_301E098_HEIGHT 0x40
+ extern Vtx D_301E498[];
+ extern Vtx D_301E6B8[];
+ extern Vtx D_301E7B8[];
+ extern Vtx D_301E838[];
+ extern Vtx D_301EA18[];
+ extern Vtx D_301EB78[];
+ extern Vtx D_301EC98[];
+ extern u8 aMachineNumber21Tex[];
+ #define _aMachineNumber21Tex_WIDTH 0x20
+ #define _aMachineNumber21Tex_HEIGHT 0x20
+ extern Vtx D_301F328[];
+ extern u8 D_301F368[];
+ #define _D_301F368_WIDTH 0x20
+ #define _D_301F368_HEIGHT 0x40
+ extern Vtx D_301F768[];
+ extern Vtx D_301F808[];
+ extern Vtx D_301F888[];
+ extern Vtx D_301F948[];
+ extern Vtx D_301FA08[];
+ extern Vtx D_301FE58[];
+ extern Vtx D_301FF98[];
+ extern Vtx D_3020028[];
+ extern u8 aLogoGreatStarTex[];
+ #define _aLogoGreatStarTex_WIDTH 0x40
+ #define _aLogoGreatStarTex_HEIGHT 0x20
+ extern u8 aMachineNumber9Tex[];
+ #define _aMachineNumber9Tex_WIDTH 0x10
+ #define _aMachineNumber9Tex_HEIGHT 0x20
+ extern Vtx D_3020758[];
+ extern u8 D_3020798[];
+ #define _D_3020798_WIDTH 0x20
+ #define _D_3020798_HEIGHT 0x40
+ extern Vtx D_3020B98[];
+ extern Vtx D_3020CD8[];
+ extern Vtx D_3021098[];
+ extern Vtx D_3021268[];
+ extern Vtx D_3021328[];
+ extern Vtx D_3021448[];
+ extern Vtx D_3021578[];
+ extern u16 aDecalBeastFaceTex[];
+ #define _aDecalBeastFaceTex_WIDTH 0x20
+ #define _aDecalBeastFaceTex_HEIGHT 0x20
+ extern u8 aMachineNumber18Tex[];
+ #define _aMachineNumber18Tex_WIDTH 0x20
+ #define _aMachineNumber18Tex_HEIGHT 0x20
+ extern Vtx D_3022178[];
+ extern u8 D_30221B8[];
+ #define _D_30221B8_WIDTH 0x20
+ #define _D_30221B8_HEIGHT 0x40
+ extern Vtx D_30225B8[];
+ extern Vtx D_3022618[];
+ extern Vtx D_3022718[];
+ extern Vtx D_3022988[];
+ extern Vtx D_3022CB8[];
+ extern Vtx D_3022D58[];
+ extern Vtx D_3022E18[];
+ extern u8 aDecalLightningTex[];
+ #define _aDecalLightningTex_WIDTH 0x20
+ #define _aDecalLightningTex_HEIGHT 0x20
+ extern u8 aMachineNumber13Tex[];
+ #define _aMachineNumber13Tex_WIDTH 0x20
+ #define _aMachineNumber13Tex_HEIGHT 0x20
+ extern Vtx D_3023358[];
+ extern u8 D_3023398[];
+ #define _D_3023398_WIDTH 0x20
+ #define _D_3023398_HEIGHT 0x40
+ extern Vtx D_3023798[];
+ extern Vtx D_3023838[];
+ extern Vtx D_3023878[];
+ extern Vtx D_3023AA8[];
+ extern Vtx D_3023C48[];
+ extern Vtx D_30240F8[];
+ extern Vtx D_30241F8[];
+ extern Vtx D_30242B8[];
+ extern u16 aDecalCrazyBearEyeTex[];
+ #define _aDecalCrazyBearEyeTex_WIDTH 0x20
+ #define _aDecalCrazyBearEyeTex_HEIGHT 0x20
+ extern u8 aAirDuct3Tex[];
+ #define _aAirDuct3Tex_WIDTH 0x10
+ #define _aAirDuct3Tex_HEIGHT 0x10
+ extern u8 aMachineNumber29Tex[];
+ #define _aMachineNumber29Tex_WIDTH 0x20
+ #define _aMachineNumber29Tex_HEIGHT 0x20
+ extern Vtx D_3024D78[];
+ extern u8 D_3024DB8[];
+ #define _D_3024DB8_WIDTH 0x20
+ #define _D_3024DB8_HEIGHT 0x40
+ extern Vtx D_30251B8[];
+ extern Vtx D_3025318[];
+ extern Vtx D_3025378[];
+ extern Vtx D_30253F8[];
+ extern Vtx D_3025438[];
+ extern Vtx D_30259B8[];
+ extern Vtx D_3025A78[];
+ extern u8 aMachineNumber23Tex[];
+ #define _aMachineNumber23Tex_WIDTH 0x20
+ #define _aMachineNumber23Tex_HEIGHT 0x20
+ extern Vtx D_3025DB8[];
+ extern u8 D_3025DF8[];
+ #define _D_3025DF8_WIDTH 0x20
+ #define _D_3025DF8_HEIGHT 0x40
+ extern Vtx D_30261F8[];
+ extern Vtx D_3026658[];
+ extern Vtx D_30266D8[];
+ extern Vtx D_3026788[];
+ extern Vtx D_3026878[];
+ extern Vtx D_30269B8[];
+ extern Vtx D_3026B38[];
+ extern u8 aDecalFadeTex[];
+ #define _aDecalFadeTex_WIDTH 0x10
+ #define _aDecalFadeTex_HEIGHT 0x10
+ extern u8 aMachineNumber15Tex[];
+ #define _aMachineNumber15Tex_WIDTH 0x20
+ #define _aMachineNumber15Tex_HEIGHT 0x20
+ extern Vtx D_3027068[];
+ extern u8 D_30270A8[];
+ #define _D_30270A8_WIDTH 0x20
+ #define _D_30270A8_HEIGHT 0x40
+ extern Vtx D_30274A8[];
+ extern Vtx D_3027508[];
+ extern Vtx D_3027568[];
+ extern Vtx D_3027728[];
+ extern Vtx D_30277A8[];
+ extern Vtx D_30278E8[];
+ extern Vtx D_3027AE8[];
+ extern u8 aMachineNumber27Tex[];
+ #define _aMachineNumber27Tex_WIDTH 0x20
+ #define _aMachineNumber27Tex_HEIGHT 0x20
+ extern Vtx D_30285C8[];
+ extern u8 D_3028608[];
+ #define _D_3028608_WIDTH 0x20
+ #define _D_3028608_HEIGHT 0x40
+ extern Vtx D_3028A08[];
+ extern Vtx D_3028A88[];
+ extern Vtx D_3028B08[];
+ extern Vtx D_3028D68[];
+ extern Vtx D_3028EA8[];
+ extern Vtx D_3028EE8[];
+ extern Vtx D_3028FA8[];
+ extern u8 aMachineNumber11Tex[];
+ #define _aMachineNumber11Tex_WIDTH 0x20
+ #define _aMachineNumber11Tex_HEIGHT 0x20
+ extern u8 aMadWolfRidgeTex[];
+ #define _aMadWolfRidgeTex_WIDTH 0x10
+ #define _aMadWolfRidgeTex_HEIGHT 0x10
+ extern Vtx D_3029648[];
+ extern u8 D_3029688[];
+ #define _D_3029688_WIDTH 0x20
+ #define _D_3029688_HEIGHT 0x40
+ extern Vtx D_3029A88[];
+ extern Vtx D_3029B48[];
+ extern Vtx D_3029C78[];
+ extern Vtx D_3029CF8[];
+ extern Vtx D_3029FD8[];
+ extern Vtx D_302A128[];
+ extern Vtx D_302A628[];
+ extern u8 aDecalSonicPhantomStripesTex[];
+ #define _aDecalSonicPhantomStripesTex_WIDTH 0x10
+ #define _aDecalSonicPhantomStripesTex_HEIGHT 0x10
+ extern u8 aMachineNumber16Tex[];
+ #define _aMachineNumber16Tex_WIDTH 0x20
+ #define _aMachineNumber16Tex_HEIGHT 0x20
+ extern Vtx D_302A908[];
+ extern u8 D_302A948[];
+ #define _D_302A948_WIDTH 0x20
+ #define _D_302A948_HEIGHT 0x40
+ extern Vtx D_302AD48[];
+ extern Vtx D_302AE28[];
+ extern Vtx D_302AF08[];
+ extern Vtx D_302AF48[];
+ extern Vtx D_302B008[];
+ extern Vtx D_302B5D8[];
+ extern Vtx D_302B698[];
+ extern Vtx D_302B798[];
+ extern u8 aMachineNumber25Tex[];
+ #define _aMachineNumber25Tex_WIDTH 0x20
+ #define _aMachineNumber25Tex_HEIGHT 0x20
+ extern Vtx D_302B9F8[];
+ extern u8 D_302BA38[];
+ #define _D_302BA38_WIDTH 0x20
+ #define _D_302BA38_HEIGHT 0x40
+ extern u16 aCustomLogoShieldTex[];
+ #define _aCustomLogoShieldTex_WIDTH 0x20
+ #define _aCustomLogoShieldTex_HEIGHT 0x20
+ extern u16 aCustomLogoBoostArrowPlaneTex[];
+ #define _aCustomLogoBoostArrowPlaneTex_WIDTH 0x20
+ #define _aCustomLogoBoostArrowPlaneTex_HEIGHT 0x20
+ extern u16 aCustomLogoCircleTex[];
+ #define _aCustomLogoCircleTex_WIDTH 0x20
+ #define _aCustomLogoCircleTex_HEIGHT 0x20
+ extern u16 aCustomLogoAnimalSkullTex[];
+ #define _aCustomLogoAnimalSkullTex_WIDTH 0x20
+ #define _aCustomLogoAnimalSkullTex_HEIGHT 0x20
+ extern u16 aCustomLogoYellowGreenTex[];
+ #define _aCustomLogoYellowGreenTex_WIDTH 0x20
+ #define _aCustomLogoYellowGreenTex_HEIGHT 0x20
+ extern u16 aCustomLogoKanjiTex[];
+ #define _aCustomLogoKanjiTex_WIDTH 0x20
+ #define _aCustomLogoKanjiTex_HEIGHT 0x20
+ extern u16 aCustomLogoXTex[];
+ #define _aCustomLogoXTex_WIDTH 0x20
+ #define _aCustomLogoXTex_HEIGHT 0x20
+ extern u16 aCustomLogoN64Tex[];
+ #define _aCustomLogoN64Tex_WIDTH 0x20
+ #define _aCustomLogoN64Tex_HEIGHT 0x20
+ extern u8 aCustomDecalStripeTex[];
+ #define _aCustomDecalStripeTex_WIDTH 0x10
+ #define _aCustomDecalStripeTex_HEIGHT 0x10
+ extern u8 aCustomDecalThinStripeTex[];
+ #define _aCustomDecalThinStripeTex_WIDTH 0x10
+ #define _aCustomDecalThinStripeTex_HEIGHT 0x10
+ extern u8 aCustomDecalDoubleStripeTex[];
+ #define _aCustomDecalDoubleStripeTex_WIDTH 0x10
+ #define _aCustomDecalDoubleStripeTex_HEIGHT 0x10
+ extern u8 aCustomDecalTripleStripeUnevenTex[];
+ #define _aCustomDecalTripleStripeUnevenTex_WIDTH 0x10
+ #define _aCustomDecalTripleStripeUnevenTex_HEIGHT 0x10
+ extern u8 aCustomDecalBlockTex[];
+ #define _aCustomDecalBlockTex_WIDTH 0x10
+ #define _aCustomDecalBlockTex_HEIGHT 0x10
+ extern u8 aMachineNumber31Tex[];
+ #define _aMachineNumber31Tex_WIDTH 0x20
+ #define _aMachineNumber31Tex_HEIGHT 0x20
+ extern u8 aMachineNumber1WideTex[];
+ #define _aMachineNumber1WideTex_WIDTH 0x20
+ #define _aMachineNumber1WideTex_HEIGHT 0x20
+ extern u8 aMachineNumber2WideTex[];
+ #define _aMachineNumber2WideTex_WIDTH 0x20
+ #define _aMachineNumber2WideTex_HEIGHT 0x20
+ extern u8 aMachineNumber3WideTex[];
+ #define _aMachineNumber3WideTex_WIDTH 0x20
+ #define _aMachineNumber3WideTex_HEIGHT 0x20
+ extern u8 aMachineNumber4WideTex[];
+ #define _aMachineNumber4WideTex_WIDTH 0x20
+ #define _aMachineNumber4WideTex_HEIGHT 0x20
+ extern u8 aMachineNumber5WideTex[];
+ #define _aMachineNumber5WideTex_WIDTH 0x20
+ #define _aMachineNumber5WideTex_HEIGHT 0x20
+ extern u8 aMachineNumber6WideTex[];
+ #define _aMachineNumber6WideTex_WIDTH 0x20
+ #define _aMachineNumber6WideTex_HEIGHT 0x20
+ extern u8 aMachineNumber7WideTex[];
+ #define _aMachineNumber7WideTex_WIDTH 0x20
+ #define _aMachineNumber7WideTex_HEIGHT 0x20
+ extern u8 aMachineNumber8WideTex[];
+ #define _aMachineNumber8WideTex_WIDTH 0x20
+ #define _aMachineNumber8WideTex_HEIGHT 0x20
+ extern u8 aMachineNumber9WideTex[];
+ #define _aMachineNumber9WideTex_WIDTH 0x20
+ #define _aMachineNumber9WideTex_HEIGHT 0x20
+ extern Vtx D_30314B8[];
+ extern Vtx D_3031548[];
+ extern Vtx D_3031668[];
+ extern Vtx D_3031848[];
+ extern Vtx D_3031898[];
+ extern Vtx D_30318D8[];
+ extern Vtx D_3031958[];
+ extern Vtx D_3031A98[];
+ extern Vtx D_3031CE8[];
+ extern Vtx D_3031D78[];
+ extern Vtx D_3031F28[];
+ extern Vtx D_3032158[];
+ extern Vtx D_30321D8[];
+ extern Vtx D_3032268[];
+ extern Vtx D_3032358[];
+ extern Vtx D_30326F8[];
+ extern Vtx D_3032738[];
+ extern Vtx D_3032778[];
+ extern Vtx D_3032878[];
+ extern Vtx D_3032A58[];
+ extern Vtx D_3032A98[];
+ extern Vtx D_3032AD8[];
+ extern Vtx D_3032B98[];
+ extern Vtx D_3032C18[];
+ extern Vtx D_3032D58[];
+ extern Vtx D_3032F08[];
+ extern Vtx D_3032F68[];
+ extern Vtx D_3032FE8[];
+ extern Vtx D_3033128[];
+ extern Vtx D_3033268[];
+ extern Vtx D_30332A8[];
+ extern Vtx D_3033308[];
+ extern Vtx D_3033468[];
+ extern Vtx D_30334A8[];
+ extern Vtx D_3033548[];
+ extern Vtx D_3033708[];
+ extern Vtx D_30337A8[];
+ extern Vtx D_30338A8[];
+ extern Vtx D_3033928[];
+ extern Vtx D_3033968[];
+ extern Vtx D_3033A08[];
+ extern Vtx D_3033C68[];
+ extern Vtx D_3033D08[];
+ extern Vtx D_3033E28[];
+ extern Vtx D_3033EA8[];
+ extern Vtx D_3033F48[];
+ extern Vtx D_3033FE8[];
+ extern Vtx D_3034148[];
+ extern Vtx D_30341E8[];
+ extern Vtx D_3034328[];
+ extern Vtx D_30343C8[];
+ extern Vtx D_3034508[];
+ extern Vtx D_3034598[];
+ extern Vtx D_3034818[];
+ extern Vtx D_30348B8[];
+ extern Vtx D_3034958[];
+ extern Vtx D_3034A38[];
+ extern Vtx D_3034B48[];
+ extern Vtx D_3034BC8[];
+ extern Vtx D_3034EC8[];
+ extern Vtx D_3034F68[];
+ extern Vtx D_3035108[];
+ extern Vtx D_3035308[];
+ extern Vtx D_3035348[];
+ extern Vtx D_3035388[];
+ extern Vtx D_30355E8[];
+ extern Vtx D_3035688[];
+ extern Vtx D_3035788[];
+ extern Vtx D_3035A48[];
+ extern Vtx D_3035A88[];
+ extern Vtx D_3035B48[];
+ extern Vtx D_3035FE8[];
+ extern Vtx D_3036088[];
+ extern Vtx D_3036138[];
+ extern Vtx D_3036238[];
+ extern Vtx D_3036398[];
+ extern Vtx D_3036518[];
+ extern Vtx D_3036688[];
+ extern Vtx D_3036808[];
+ extern Vtx D_3036A78[];
+ extern u8 D_3036AB8[];
+ #define _D_3036AB8_WIDTH 0x20
+ #define _D_3036AB8_HEIGHT 0x40
+ extern Vtx D_3036EB8[];
+ extern u8 D_3036EF8[];
+ #define _D_3036EF8_WIDTH 0x20
+ #define _D_3036EF8_HEIGHT 0x40
+ extern Vtx D_30372F8[];
+ extern u8 D_3037338[];
+ #define _D_3037338_WIDTH 0x20
+ #define _D_3037338_HEIGHT 0x40
+ extern Vtx D_3037738[];
+ extern u8 D_3037778[];
+ #define _D_3037778_WIDTH 0x20
+ #define _D_3037778_HEIGHT 0x40
+ extern Vtx D_3037B78[];
+ extern u8 D_3037BB8[];
+ #define _D_3037BB8_WIDTH 0x20
+ #define _D_3037BB8_HEIGHT 0x40
+ extern Vtx D_3037FB8[];
+ extern u8 D_3037FF8[];
+ #define _D_3037FF8_WIDTH 0x20
+ #define _D_3037FF8_HEIGHT 0x40
+ extern Vtx D_30383F8[];
+ extern u8 D_3038438[];
+ #define _D_3038438_WIDTH 0x20
+ #define _D_3038438_HEIGHT 0x40
+ extern Vtx D_3038838[];
+ extern u8 D_3038878[];
+ #define _D_3038878_WIDTH 0x20
+ #define _D_3038878_HEIGHT 0x40
+ extern Vtx D_3038C78[];
+ extern u8 D_3038CB8[];
+ #define _D_3038CB8_WIDTH 0x20
+ #define _D_3038CB8_HEIGHT 0x40
+ extern Vtx D_30390B8[];
+ extern u8 D_30390F8[];
+ #define _D_30390F8_WIDTH 0x20
+ #define _D_30390F8_HEIGHT 0x40
+ extern Vtx D_30394F8[];
+ extern u8 D_3039538[];
+ #define _D_3039538_WIDTH 0x20
+ #define _D_3039538_HEIGHT 0x40
+ extern Vtx D_3039938[];
+ extern u8 D_3039978[];
+ #define _D_3039978_WIDTH 0x20
+ #define _D_3039978_HEIGHT 0x40
+ extern Vtx D_3039D78[];
+ extern u8 D_3039DB8[];
+ #define _D_3039DB8_WIDTH 0x20
+ #define _D_3039DB8_HEIGHT 0x40
+ extern Vtx D_303A1B8[];
+ extern u8 D_303A1F8[];
+ #define _D_303A1F8_WIDTH 0x20
+ #define _D_303A1F8_HEIGHT 0x40
+ extern Gfx D_303A5F8[];
+ extern Gfx D_303A6A8[];
+ extern Gfx D_303A758[];
+ extern Gfx D_303A7D8[];
+ extern Gfx D_303A810[];
+ extern Gfx D_303A8F8[];
+ extern Gfx D_303A9E0[];
+ extern Gfx D_303AA18[];
+ extern Gfx D_303AA40[];
+ extern u16 D_303AA70[];
+ #define _D_303AA70_WIDTH 0x40
+ #define _D_303AA70_HEIGHT 0x10
+ extern u16 D_303B270[];
+ #define _D_303B270_WIDTH 0xc
+ #define _D_303B270_HEIGHT 0xa0
+ extern u16 D_303C170[];
+ #define _D_303C170_WIDTH 0x14
+ #define _D_303C170_HEIGHT 0x10
+ extern u16 D_303C3F0[];
+ #define _D_303C3F0_WIDTH 0x8
+ #define _D_303C3F0_HEIGHT 0xe0
+ extern u16 D_303D1F0[];
+ #define _D_303D1F0_WIDTH 0x10
+ #define _D_303D1F0_HEIGHT 0xc
+
+extern Vtx D_7000008[];
+extern Vtx D_70000C8[];
+extern Vtx D_70002C8[];
+extern Vtx D_7000408[];
+extern Vtx D_7000468[];
+extern Vtx D_7000A38[];
+extern Vtx D_7000AF8[];
+extern Vtx D_7000F08[];
+extern Vtx D_7000FB8[];
+extern Vtx D_7001188[];
+extern Vtx D_7001228[];
+extern Vtx D_7001288[];
+extern Vtx D_70017D8[];
+extern Vtx D_7001898[];
+extern Vtx D_7001A78[];
+extern Vtx D_7001B58[];
+extern Vtx D_7001BF8[];
+extern Vtx D_7001E58[];
+extern Vtx D_7001F18[];
+extern Vtx D_7001FC8[];
+extern Vtx D_7002058[];
+extern Vtx D_70020F8[];
+extern Vtx D_7002288[];
+extern Vtx D_7002348[];
+extern Vtx D_70023A8[];
+extern Vtx D_7002448[];
+extern Vtx D_70025A8[];
+extern Vtx D_70026F8[];
+extern Vtx D_7002778[];
+extern Vtx D_7002818[];
+extern Vtx D_7002858[];
+extern Vtx D_7002EF8[];
+extern Vtx D_7002F98[];
+extern Vtx D_7003098[];
+extern Vtx D_70031C8[];
+extern Vtx D_7003268[];
+extern Vtx D_70032A8[];
+extern Vtx D_7003798[];
+extern Vtx D_70037F8[];
+extern Vtx D_7003858[];
+extern Vtx D_70038E8[];
+extern Vtx D_7003988[];
+extern Vtx D_7003B98[];
+extern Vtx D_7003BD8[];
+extern Vtx D_7003DE8[];
+extern Vtx D_7003EC8[];
+extern Vtx D_7003F48[];
+extern Vtx D_7004008[];
+extern Vtx D_7004228[];
+extern Vtx D_7004758[];
+extern Vtx D_70047F8[];
+extern Vtx D_7004858[];
+extern Vtx D_7004918[];
+extern Vtx D_7004A08[];
+extern Vtx D_7004AC8[];
+extern Vtx D_7004B48[];
+extern Vtx D_7004D48[];
+extern Vtx D_7005248[];
+extern Vtx D_70052E8[];
+extern Vtx D_7005348[];
+extern Vtx D_7005428[];
+extern Vtx D_7005488[];
+extern Vtx D_70054C8[];
+extern Vtx D_7005648[];
+extern Vtx D_70058D8[];
+extern Vtx D_7005938[];
+extern Vtx D_7005968[];
+extern Vtx D_7005AB8[];
+extern Vtx D_7005C18[];
+extern Vtx D_7005C78[];
+extern Vtx D_7005CF8[];
+extern Vtx D_7005DE8[];
+extern Vtx D_7005E48[];
+extern Vtx D_7006548[];
+extern Vtx D_7006688[];
+extern Vtx D_70066C8[];
+extern Vtx D_7006788[];
+extern Vtx D_70069B8[];
+extern Vtx D_7006A38[];
+extern Vtx D_7006B08[];
+extern Vtx D_7006ED8[];
+extern Vtx D_7006F38[];
+extern Vtx D_7007078[];
+extern Vtx D_70070D8[];
+extern Vtx D_7007198[];
+extern Vtx D_7007378[];
+extern Vtx D_70073B8[];
+extern Vtx D_7007418[];
+extern Vtx D_70074B8[];
+extern Vtx D_7007578[];
+extern Vtx D_7007778[];
+extern Vtx D_70077B8[];
+extern Vtx D_7007878[];
+extern Vtx D_7007958[];
+extern Vtx D_7007AC8[];
+extern Vtx D_7007C08[];
+extern Vtx D_7007D48[];
+extern Vtx D_7007D88[];
+extern Vtx D_7007E08[];
+extern Vtx D_7007FA8[];
+extern Vtx D_70081F8[];
+extern Vtx D_7008468[];
+extern Vtx D_7008578[];
+extern Vtx D_7008618[];
+extern Vtx D_7008718[];
+extern Vtx D_7008908[];
+extern Vtx D_7008988[];
+extern Vtx D_7008B28[];
+extern Vtx D_7008C68[];
+extern Vtx D_7008CA8[];
+extern Vtx D_7008DC8[];
+extern Vtx D_7008E28[];
+extern Vtx D_7008EA8[];
+extern Vtx D_7008FA8[];
+extern Vtx D_7008FD8[];
+extern Vtx D_7009038[];
+extern Vtx D_7009138[];
+extern Vtx D_70092F8[];
+extern Vtx D_70093F8[];
+extern Vtx D_7009538[];
+extern Vtx D_7009888[];
+extern Vtx D_7009968[];
+extern Vtx D_70099A8[];
+extern Vtx D_7009A68[];
+extern Vtx D_7009BA8[];
+extern Vtx D_7009CD8[];
+extern Vtx D_7009DB8[];
+extern Vtx D_7009EF8[];
+extern Vtx D_700A198[];
+extern Vtx D_700A1F8[];
+extern Vtx D_700A238[];
+extern Vtx D_700A3B8[];
+extern Vtx D_700A438[];
+extern Vtx D_700A4A8[];
+extern Vtx D_700A4D8[];
+extern Vtx D_700A7A8[];
+extern Vtx D_700A7D8[];
+extern Vtx D_700A908[];
+extern Vtx D_700A9A8[];
+extern Vtx D_700AB28[];
+extern Vtx D_700AC78[];
+extern Vtx D_700ACF8[];
+extern Vtx D_700AD98[];
+extern Vtx D_700ADD8[];
+extern Vtx D_700B378[];
+extern Vtx D_700B418[];
+extern Vtx D_700B538[];
+extern Vtx D_700B668[];
+extern Vtx D_700B708[];
+extern Vtx D_700B748[];
+extern Vtx D_700BAE8[];
+extern Vtx D_700BB48[];
+extern Vtx D_700BBA8[];
+extern Vtx D_700BC38[];
+extern Vtx D_700BCD8[];
+extern Vtx D_700BE38[];
+extern Vtx D_700BE98[];
+extern Vtx D_700BFF8[];
+extern Vtx D_700C0D8[];
+extern Vtx D_700C158[];
+extern Vtx D_700C398[];
+extern Vtx D_700C728[];
+extern Vtx D_700C7C8[];
+extern Vtx D_700C828[];
+extern Vtx D_700C8E8[];
+extern Vtx D_700C9E8[];
+extern Vtx D_700CAA8[];
+extern Vtx D_700CB28[];
+extern Vtx D_700CCF8[];
+extern Vtx D_700D058[];
+extern Vtx D_700D0F8[];
+extern Vtx D_700D158[];
+extern Vtx D_700D238[];
+extern Vtx D_700D298[];
+extern Vtx D_700D2D8[];
+extern Vtx D_700D438[];
+extern Vtx D_700D5D8[];
+extern Vtx D_700D638[];
+extern Vtx D_700D668[];
+extern Vtx D_700D7B8[];
+extern Vtx D_700D858[];
+extern Vtx D_700DBF8[];
+extern Vtx D_700DC78[];
+extern Vtx D_700DD38[];
+extern Vtx D_700DEC8[];
+extern Vtx D_700DFA8[];
+extern Vtx D_700E0E8[];
+extern Vtx D_700E298[];
+extern Vtx D_700E568[];
+extern Vtx D_700E5E8[];
+extern Vtx D_700E6A8[];
+extern Vtx D_700E7A8[];
+extern Vtx D_700E7E8[];
+extern Vtx D_700E888[];
+extern Vtx D_700EA08[];
+extern Vtx D_700EC68[];
+extern Vtx D_700ECA8[];
+extern Vtx D_700ED48[];
+extern Vtx D_700EE98[];
+extern Vtx D_700F008[];
+extern Vtx D_700F038[];
+extern Vtx D_700F0D8[];
+extern Vtx D_700F198[];
+extern Vtx D_700F7C8[];
+extern Vtx D_700F908[];
+extern Vtx D_700FB48[];
+extern Vtx D_700FC18[];
+extern Vtx D_700FCB8[];
+extern Vtx D_7010128[];
+extern Vtx D_70101C8[];
+extern Vtx D_7010408[];
+extern Vtx D_70104D8[];
+extern Vtx D_7010518[];
+extern Vtx D_7010878[];
+extern Vtx D_70108B8[];
+extern Vtx D_7010918[];
+extern Vtx D_7010948[];
+extern Vtx D_7010AF8[];
+extern Vtx D_7010B28[];
+extern Vtx D_7010CB8[];
+extern Vtx D_70110A8[];
+extern Vtx D_70110E8[];
+extern Vtx D_70111A8[];
+extern Vtx D_70112D8[];
+extern Vtx D_7011398[];
+extern Vtx D_7011418[];
+extern Vtx D_70115F8[];
+extern Vtx D_7011738[];
+extern Vtx D_70119E8[];
+extern Vtx D_7011AA8[];
+extern Vtx D_7011B08[];
+extern Vtx D_7011BE8[];
+extern Vtx D_7011CA8[];
+extern Vtx D_7011D28[];
+extern Vtx D_7011E78[];
+extern Vtx D_7012028[];
+extern Vtx D_7012068[];
+extern Vtx D_70120C8[];
+extern Vtx D_70121A8[];
+extern Vtx D_7012208[];
+extern Vtx D_7012268[];
+extern Vtx D_7012348[];
+extern Vtx D_7012488[];
+extern Vtx D_70124B8[];
+extern Vtx D_7012518[];
+extern Vtx D_7012578[];
+extern Vtx D_70127B8[];
+extern Vtx D_7012918[];
+extern Vtx D_70129B8[];
+extern Vtx D_7012A18[];
+extern Vtx D_7012C38[];
+extern Vtx D_7012F98[];
+extern Vtx D_7013138[];
+extern Vtx D_7013228[];
+extern Vtx D_70132C8[];
+extern Vtx D_7013328[];
+extern Vtx D_70134F8[];
+extern Vtx D_70137E8[];
+extern Vtx D_70138A8[];
+extern Vtx D_7013938[];
+extern Vtx D_7013998[];
+extern Vtx D_7013A58[];
+extern Vtx D_7013C68[];
+extern Vtx D_7013C98[];
+extern Vtx D_7013CC8[];
+extern Vtx D_7013CF8[];
+extern Vtx D_7013DB8[];
+extern Vtx D_7013ED8[];
+extern Vtx D_7014438[];
+extern Vtx D_7014538[];
+extern Vtx D_7014718[];
+extern Vtx D_7014798[];
+extern Vtx D_7014898[];
+extern Vtx D_7014918[];
+extern Vtx D_7014B78[];
+extern Vtx D_7014F38[];
+extern Vtx D_7015038[];
+extern Vtx D_70150B8[];
+extern Vtx D_7015178[];
+extern Vtx D_70151F8[];
+extern Vtx D_7015318[];
+extern Vtx D_70154F8[];
+extern Vtx D_70157F8[];
+extern Vtx D_7015978[];
+extern Vtx D_70159F8[];
+extern Vtx D_7015B18[];
+extern Vtx D_7015BD8[];
+extern Vtx D_7015E18[];
+extern Vtx D_7015ED8[];
+extern Vtx D_7016288[];
+extern Vtx D_70162C8[];
+extern Vtx D_7016508[];
+extern Vtx D_70165A8[];
+extern Vtx D_70166A8[];
+extern Vtx D_7016848[];
+extern Vtx D_70168C8[];
+extern Vtx D_7016948[];
+extern Vtx D_7016D18[];
+extern Vtx D_7016D58[];
+extern Vtx D_7016F18[];
+extern Vtx D_7016F98[];
+extern Vtx D_7017028[];
+extern Vtx D_7017168[];
+extern Vtx D_70171A8[];
+extern Vtx D_7017228[];
+extern Vtx D_7017468[];
+extern Vtx D_7017508[];
+extern Vtx D_70175C8[];
+extern Vtx D_70175F8[];
+extern Vtx D_70176F8[];
+extern Vtx D_7017738[];
+extern Vtx D_7017908[];
+extern Vtx D_7017968[];
+extern Vtx D_70179C8[];
+extern Vtx D_7017A28[];
+extern Vtx D_7018018[];
+extern Vtx D_7018078[];
+extern Vtx D_70180D8[];
+extern Vtx D_7018118[];
+extern Vtx D_70181B8[];
+extern Vtx D_7018238[];
+extern Vtx D_70183F8[];
+extern Vtx D_7018438[];
+extern Vtx D_7018998[];
+extern Vtx D_70189F8[];
+extern Vtx D_7018A58[];
+extern Vtx D_7018A98[];
+extern Vtx D_7018B38[];
+extern Vtx D_7018BB8[];
+extern Vtx D_7018BF8[];
+extern Vtx D_7018F38[];
+extern Vtx D_7018FD8[];
+extern Vtx D_7019058[];
+extern Vtx D_7019098[];
+extern Vtx D_7019318[];
+extern Vtx D_7019348[];
+extern Vtx D_70193C8[];
+extern Vtx D_7019428[];
+extern Vtx D_70194C8[];
+extern Vtx D_70195C8[];
+extern Vtx D_7019708[];
+extern Vtx D_7019808[];
+extern Vtx D_7019B38[];
+extern Vtx D_7019E38[];
+extern Vtx D_7019EB8[];
+extern Vtx D_7019F18[];
+extern Vtx D_7019F58[];
+extern Vtx D_7019FD8[];
+extern Vtx D_701A078[];
+extern Vtx D_701A118[];
+extern Vtx D_701A428[];
+extern Vtx D_701A6A8[];
+extern Vtx D_701A708[];
+extern Vtx D_701A748[];
+extern Vtx D_701A7C8[];
+extern Vtx D_701A868[];
+extern Vtx D_701A8A8[];
+extern Vtx D_701AAF8[];
+extern Vtx D_701ACF8[];
+extern Vtx D_701AE98[];
+extern Vtx D_701AED8[];
+extern Vtx D_701B018[];
+extern Vtx D_701B478[];
+extern Vtx D_701B558[];
+extern Vtx D_701B5B8[];
+extern Vtx D_701B638[];
+extern Vtx D_701B698[];
+extern Vtx D_701B6D8[];
+extern Vtx D_701B778[];
+extern Vtx D_701BB18[];
+extern Vtx D_701BBC8[];
+extern Vtx D_701BC28[];
+extern Vtx D_701BCA8[];
+extern Vtx D_701BD08[];
+extern Vtx D_701BD48[];
+extern Vtx D_701BDE8[];
+extern Vtx D_701C108[];
+extern Vtx D_701C1E8[];
+extern Vtx D_701C248[];
+extern Vtx D_701C2A8[];
+extern Vtx D_701C2D8[];
+extern Vtx D_701C378[];
+extern Vtx D_701C5B8[];
+extern Vtx D_701C638[];
+extern Vtx D_701C698[];
+extern Vtx D_701C6C8[];
+extern Vtx D_701C6F8[];
+extern Vtx D_701C7D8[];
+extern Vtx D_701C9B8[];
+extern Vtx D_701CA58[];
+extern Vtx D_701CB38[];
+extern Vtx D_701CC78[];
+extern Vtx D_701CE18[];
+extern Vtx D_701CED8[];
+extern Vtx D_701D088[];
+extern Vtx D_701D128[];
+extern Vtx D_701D168[];
+extern Vtx D_701D268[];
+extern Vtx D_701D3A8[];
+extern Vtx D_701D548[];
+extern Vtx D_701D5E8[];
+extern Vtx D_701D628[];
+extern Vtx D_701D6E8[];
+extern Vtx D_701D768[];
+extern Vtx D_701D838[];
+extern Vtx D_701D8D8[];
+extern Vtx D_701D918[];
+extern Vtx D_701D9D8[];
+extern Vtx D_701DA18[];
+extern Vtx D_701DAB8[];
+extern Vtx D_701DB18[];
+extern Vtx D_701DBB8[];
+extern Vtx D_701DC38[];
+extern Vtx D_701E358[];
+extern Vtx D_701E498[];
+extern Vtx D_701E5E8[];
+extern Vtx D_701E688[];
+extern Vtx D_701E6E8[];
+extern Vtx D_701E788[];
+extern Vtx D_701E808[];
+extern Vtx D_701EDA8[];
+extern Vtx D_701EF08[];
+extern Vtx D_701F018[];
+extern Vtx D_701F0B8[];
+extern Vtx D_701F138[];
+extern Vtx D_701F378[];
+extern Vtx D_701F618[];
+extern Vtx D_701F688[];
+extern Vtx D_701F6F8[];
+extern Vtx D_701F758[];
+extern Vtx D_701F8D8[];
+extern Vtx D_701FA38[];
+extern Vtx D_701FAF8[];
+extern Vtx D_701FB98[];
+extern Vtx D_701FCF8[];
+extern Vtx D_7020158[];
+extern Vtx D_70201F8[];
+extern Vtx D_70202B8[];
+extern Vtx D_7020468[];
+extern Vtx D_70204F8[];
+extern Vtx D_7020598[];
+extern Vtx D_70206F8[];
+extern Vtx D_7020A28[];
+extern Vtx D_7020AB8[];
+extern Vtx D_7020B98[];
+extern Vtx D_7020D08[];
+extern Vtx D_7020DA8[];
+extern Vtx D_7020E68[];
+extern Vtx D_7021088[];
+extern Vtx D_70210B8[];
+extern Vtx D_70211D8[];
+extern Vtx D_7021238[];
+extern Vtx D_7021268[];
+extern Vtx D_7021308[];
+extern Vtx D_7021338[];
+extern Vtx D_7021408[];
+extern Vtx D_7021488[];
+extern Vtx D_70214C8[];
+extern Vtx D_7021638[];
+extern Vtx D_70216D8[];
+extern Vtx D_7021C58[];
+extern Vtx D_7021D38[];
+extern Vtx D_7021E98[];
+extern Vtx D_7021F18[];
+extern Vtx D_7021F58[];
+extern Vtx D_7021FD8[];
+extern Vtx D_7022078[];
+extern Vtx D_70224E8[];
+extern Vtx D_70225C8[];
+extern Vtx D_7022708[];
+extern Vtx D_7022748[];
+extern Vtx D_70227C8[];
+extern Vtx D_7022868[];
+extern Vtx D_7022C08[];
+extern Vtx D_7022C48[];
+extern Vtx D_7022D08[];
+extern Vtx D_7022DB8[];
+extern Vtx D_7022FB8[];
+extern Vtx D_7022FF8[];
+extern Vtx D_7023078[];
+extern Vtx D_7023308[];
+extern Vtx D_70233A8[];
+extern Vtx D_70235C8[];
+extern Vtx D_70236C8[];
+extern Vtx D_7023818[];
+extern Vtx D_7023938[];
+extern Vtx D_7023A38[];
+extern Vtx D_7023C48[];
+extern Vtx D_7023D08[];
+extern Vtx D_7023EC8[];
+extern Vtx D_7023FB8[];
+extern Vtx D_70240A8[];
+extern Vtx D_70241C8[];
+extern Vtx D_70242C8[];
+extern Vtx D_7024468[];
+extern Vtx D_70245A8[];
+extern Vtx D_7024668[];
+extern Vtx D_7024758[];
+extern Vtx D_7024828[];
+extern Vtx D_70248E8[];
+extern Vtx D_70249A8[];
+extern Vtx D_7024AA8[];
+extern Vtx D_7024B08[];
+extern Vtx D_7024B38[];
+extern Vtx D_7024BC8[];
+extern Vtx D_7024DA8[];
+extern Vtx D_7024EA8[];
+extern Vtx D_7024F18[];
+extern Vtx D_7025128[];
+extern Vtx D_7025288[];
+extern Vtx D_7025358[];
+extern Vtx D_7025728[];
+extern Vtx D_70258F8[];
+extern Vtx D_70259F8[];
+extern Vtx D_7025A58[];
+extern Vtx D_7025B98[];
+extern Vtx D_7025CA8[];
+extern Vtx D_7025D78[];
+extern Vtx D_7025FF8[];
+extern Vtx D_70261C8[];
+extern Vtx D_7026228[];
+extern Vtx D_7026348[];
+extern Vtx D_7026468[];
+extern Vtx D_70264F8[];
+extern Vtx D_7026718[];
+extern Vtx D_70267E8[];
+extern Vtx D_70268A8[];
+extern Vtx D_7026918[];
+extern Vtx D_7026948[];
+extern Vtx D_7026A08[];
+extern Vtx D_7026AA8[];
+extern Vtx D_7026B28[];
+extern Vtx D_7026BC8[];
+extern Vtx D_7026C88[];
+extern Vtx D_7027088[];
+extern Vtx D_70271C8[];
+extern Vtx D_7027258[];
+extern Vtx D_7027438[];
+extern Vtx D_70274D8[];
+extern Vtx D_7027558[];
+extern Vtx D_70275B8[];
+extern Vtx D_7027678[];
+extern Vtx D_70279B8[];
+extern Vtx D_7027AF8[];
+extern Vtx D_7027B88[];
+extern Vtx D_7027CE8[];
+extern Vtx D_7027D88[];
+extern Vtx D_7027E48[];
+extern Vtx D_7028188[];
+extern Vtx D_70281C8[];
+extern Vtx D_70282A8[];
+extern Vtx D_70282E8[];
+extern Vtx D_7028348[];
+extern Vtx D_7028468[];
+extern Vtx D_70284A8[];
+extern Vtx D_7028528[];
+extern Vtx D_70285E8[];
+extern Vtx D_7028918[];
+extern Vtx D_7028A38[];
+extern Vtx D_7028AF8[];
+extern Vtx D_7028BE8[];
+extern Vtx D_7028D18[];
+extern Vtx D_7028F38[];
+extern Vtx D_7028FF8[];
+extern Vtx D_70292E8[];
+extern Vtx D_7029408[];
+extern Vtx D_70294C8[];
+extern Vtx D_7029558[];
+extern Vtx D_7029668[];
+extern Vtx D_7029738[];
+extern Vtx D_7029A28[];
+extern Vtx D_7029AE8[];
+extern Vtx D_7029BA8[];
+extern Vtx D_7029BD8[];
+extern Vtx D_7029CD8[];
+extern Vtx D_7029D78[];
+extern Vtx D_7029EF8[];
+extern Vtx D_7029F98[];
+extern Vtx D_7029FC8[];
+extern Vtx D_702A028[];
+extern Vtx D_702A088[];
+extern Vtx D_702A128[];
+extern Vtx D_702A188[];
+extern Vtx D_702A288[];
+extern Vtx D_702A4F8[];
+extern Vtx D_702A808[];
+extern Vtx D_702A8A8[];
+extern Vtx D_702A968[];
+extern Vtx D_702AA68[];
+extern Vtx D_702AAC8[];
+extern Vtx D_702AB28[];
+extern Vtx D_702ACC8[];
+extern Vtx D_702AFB8[];
+extern Vtx D_702B058[];
+extern Vtx D_702B118[];
+extern Vtx D_702B218[];
+extern Vtx D_702B278[];
+extern Vtx D_702B388[];
+extern Vtx D_702B5C8[];
+extern Vtx D_702B668[];
+extern Vtx D_702B728[];
+extern Vtx D_702B7E8[];
+extern Vtx D_702B858[];
+extern Vtx D_702BAA8[];
+extern Vtx D_702BB08[];
+extern Vtx D_702BB48[];
+extern Vtx D_702BB88[];
+extern Vtx D_702BDA8[];
+extern Vtx D_702BEC8[];
+extern Vtx D_702C2C8[];
+extern Vtx D_702C3C8[];
+extern Vtx D_702C488[];
+extern Vtx D_702C4C8[];
+extern Vtx D_702C508[];
+extern Vtx D_702C548[];
+extern Vtx D_702C6C8[];
+extern Vtx D_702C7E8[];
+extern Vtx D_702CAA8[];
+extern Vtx D_702CB48[];
+extern Vtx D_702CC08[];
+extern Vtx D_702CC48[];
+extern Vtx D_702CC88[];
+extern Vtx D_702CDE8[];
+extern Vtx D_702CEC8[];
+extern Vtx D_702D028[];
+extern Vtx D_702D0C8[];
+extern Vtx D_702D188[];
+extern Vtx D_702D1C8[];
+extern Vtx D_702D208[];
+extern Vtx D_702D268[];
+extern Vtx D_702D428[];
+extern Vtx D_702D468[];
+extern Vtx D_702D4A8[];
+extern Vtx D_702D5E8[];
+extern Vtx D_702D648[];
+extern Vtx D_702D6C8[];
+extern Vtx D_702D708[];
+extern Vtx D_702DC48[];
+extern Vtx D_702DD08[];
+extern Vtx D_702DE48[];
+extern Vtx D_702DFA8[];
+extern Vtx D_702E008[];
+extern Vtx D_702E048[];
+extern Vtx D_702E088[];
+extern Vtx D_702E4A8[];
+extern Vtx D_702E568[];
+extern Vtx D_702E668[];
+extern Vtx D_702E808[];
+extern Vtx D_702E868[];
+extern Vtx D_702E8A8[];
+extern Vtx D_702EB38[];
+extern Vtx D_702EC28[];
+extern Vtx D_702ECE8[];
+extern Vtx D_702EDF8[];
+extern Vtx D_702EE28[];
+extern Vtx D_702EF48[];
+extern Vtx D_702EFA8[];
+extern Vtx D_702F068[];
+extern Vtx D_702F4B8[];
+extern Vtx D_702F538[];
+extern Vtx D_702F5E8[];
+extern Vtx D_702F6D8[];
+extern Vtx D_702F818[];
+extern Vtx D_702F998[];
+extern Vtx D_702FBA8[];
+extern Vtx D_702FEF8[];
+extern Vtx D_702FF58[];
+extern Vtx D_7030008[];
+extern Vtx D_70300F8[];
+extern Vtx D_7030228[];
+extern Vtx D_70303A8[];
+extern Vtx D_7030588[];
+extern Vtx D_70306C8[];
+extern Vtx D_70307B8[];
+extern Vtx D_70308E8[];
+extern Vtx D_7030A08[];
+extern Vtx D_7030BC8[];
+extern Vtx D_7030C18[];
+extern Vtx D_7030C48[];
+extern Vtx D_7030CA8[];
+extern Vtx D_7030E28[];
+extern Vtx D_7030E68[];
+extern Vtx D_7030EC8[];
+extern Vtx D_7030F88[];
+extern Vtx D_7031048[];
+extern Vtx D_7031188[];
+extern Vtx D_7031348[];
+extern Vtx D_7031A48[];
+extern Vtx D_7031A88[];
+extern Vtx D_7031AE8[];
+extern Vtx D_7031B68[];
+extern Vtx D_7031C28[];
+extern Vtx D_7031CC8[];
+extern Vtx D_7031E48[];
+extern Vtx D_7032448[];
+extern Vtx D_70324A8[];
+extern Vtx D_7032528[];
+extern Vtx D_70325E8[];
+extern Vtx D_7032688[];
+extern Vtx D_70327A8[];
+extern Vtx D_7032A88[];
+extern Vtx D_7032AB8[];
+extern Vtx D_7032B78[];
+extern Vtx D_7032C08[];
+extern Vtx D_7032C68[];
+extern Vtx D_7032E68[];
+extern Vtx D_7032F08[];
+extern Vtx D_7032F88[];
+extern Vtx D_70331F8[];
+extern Vtx D_7033338[];
+extern Vtx D_7033378[];
+extern Vtx D_70333F8[];
+extern Vtx D_7033818[];
+extern Vtx D_70338B8[];
+extern Vtx D_7033918[];
+extern Vtx D_7033B88[];
+extern Vtx D_7033C18[];
+extern Vtx D_7033C58[];
+extern Vtx D_7033CD8[];
+extern Vtx D_7034078[];
+extern Vtx D_7034118[];
+extern Vtx D_7034148[];
+extern Vtx D_7034368[];
+extern Vtx D_70343F8[];
+extern Vtx D_7034428[];
+extern Vtx D_70346D8[];
+extern Vtx D_7034778[];
+extern Vtx D_70347D8[];
+extern Vtx D_7034808[];
+extern Vtx D_70349C8[];
+extern Vtx D_7034A68[];
+extern Vtx D_7034B78[];
+extern Vtx D_7034BF8[];
+extern Vtx D_7034ED8[];
+extern Vtx D_7034FC8[];
+extern Vtx D_7035408[];
+extern Vtx D_7035488[];
+extern Vtx D_7035598[];
+extern Vtx D_70357A8[];
+extern Vtx D_7035898[];
+extern Vtx D_7035C98[];
+extern Vtx D_7035D78[];
+extern Vtx D_7035F58[];
+extern Vtx D_7035FE8[];
+extern Vtx D_70362C8[];
+extern Vtx D_7036358[];
+extern Vtx D_7036458[];
+extern Vtx D_70364B8[];
+extern Vtx D_7036668[];
+extern Vtx D_7036728[];
+extern Vtx D_70367E8[];
+extern Vtx D_7036868[];
+extern Vtx D_70368E8[];
+extern Vtx D_7036CD8[];
+extern Vtx D_7036D98[];
+extern Vtx D_7036E98[];
+extern Vtx D_7036EF8[];
+extern Vtx D_7036F38[];
+extern Vtx D_7036FD8[];
+extern Vtx D_7037058[];
+extern Vtx D_70370D8[];
+extern Vtx D_7037498[];
+extern Vtx D_7037558[];
+extern Vtx D_7037618[];
+extern Vtx D_7037658[];
+extern Vtx D_70376C8[];
+extern Vtx D_7037728[];
+extern Vtx D_70379B8[];
+extern Vtx D_7037A78[];
+extern Vtx D_7037B28[];
+extern Vtx D_7037B68[];
+extern Vtx D_7037B98[];
+extern Vtx D_7037CD8[];
+extern Vtx D_7037D18[];
+extern Vtx D_7037DB8[];
+extern Vtx D_7037E28[];
+extern Vtx D_7037F18[];
+extern Vtx D_70380C8[];
+extern Vtx D_7038118[];
+extern Vtx D_7038188[];
+extern Vtx D_7038278[];
+extern Vtx D_7038388[];
+extern Vtx D_70383E8[];
+extern Vtx D_70384A8[];
+extern Vtx D_7038578[];
+extern Vtx D_70385A8[];
+extern Vtx D_7038608[];
+extern Vtx D_7038688[];
+extern Vtx D_70386C8[];
+extern Vtx D_7038748[];
+extern Vtx D_7038888[];
+extern Vtx D_7038A28[];
+extern Vtx D_7038A68[];
+extern Vtx D_7038AA8[];
+extern Vtx D_7038B88[];
+extern Vtx D_7038D48[];
+extern Vtx D_7038DD8[];
+extern Vtx D_7038F98[];
+extern Vtx D_7038FC8[];
+extern Vtx D_70390C8[];
+extern Vtx D_7039138[];
+extern Vtx D_7039278[];
+extern Vtx D_7039498[];
+extern Vtx D_7039548[];
+extern Vtx D_70395B8[];
+extern Vtx D_70396D8[];
+extern Vtx D_7039858[];
+extern Vtx D_70398A8[];
+extern Vtx D_7039968[];
+extern Vtx D_7039A88[];
+extern Vtx D_7039AD8[];
+extern Vtx D_7039B08[];
+extern Vtx D_7039C28[];
+extern Vtx D_7039C58[];
+extern Vtx D_7039CC8[];
+extern Vtx D_7039DB8[];
+extern Vtx D_703A0D8[];
+extern Vtx D_703A148[];
+extern Vtx D_703A238[];
+extern Vtx D_703A438[];
+extern Vtx D_703A4F8[];
+extern Vtx D_703A6B8[];
+extern Vtx D_703A748[];
+extern Vtx D_703A858[];
+extern Vtx D_703A898[];
+extern Vtx D_703A8D8[];
+extern Vtx D_703A998[];
+extern Vtx D_703AB78[];
+extern Vtx D_703ABA8[];
+extern Vtx D_703ABE8[];
+extern Vtx D_703AC28[];
+extern Vtx D_703ACE8[];
+extern Vtx D_703AE88[];
+extern Vtx D_703AEB8[];
+extern Vtx D_703AF78[];
+extern Vtx D_703B0E8[];
+extern Vtx D_703B118[];
+extern Vtx D_703B178[];
+extern Vtx D_703B298[];
+extern Vtx D_703B2C8[];
+extern Vtx D_703B308[];
+extern Vtx D_703B398[];
+extern Vtx D_703B3D8[];
+extern Vtx D_703B518[];
+extern Vtx D_703B688[];
+extern Vtx D_703B6C8[];
+extern Vtx D_703B738[];
+extern Vtx D_703B778[];
+extern Vtx D_703B818[];
+extern Vtx D_703B978[];
+extern Vtx D_703B9B8[];
+extern Vtx D_703BA18[];
+extern Vtx D_703BA98[];
+extern Vtx D_703BBC8[];
+extern Vtx D_703BC08[];
+extern Vtx D_703BC78[];
+extern Vtx D_703BCD8[];
+extern Vtx D_703BD58[];
+extern Vtx D_703BDB8[];
+extern Vtx D_703BE38[];
+extern Vtx D_703BF78[];
+extern Vtx D_703C078[];
+extern Vtx D_703C0B8[];
+extern Vtx D_703C118[];
+extern Vtx D_703C158[];
+extern Vtx D_703C298[];
+extern Vtx D_703C378[];
+extern Vtx D_703C3B8[];
+extern Vtx D_703C418[];
+extern Vtx D_703C548[];
+extern Vtx D_703C628[];
+extern Vtx D_703C668[];
+extern Vtx D_703C728[];
+extern Vtx D_703C788[];
+extern Vtx D_703C808[];
+extern Vtx D_703C868[];
+extern Vtx D_703C988[];
+extern Vtx D_703C9C8[];
+extern Vtx D_703CA68[];
+extern Vtx D_703CC28[];
+extern Vtx D_703CCC8[];
+extern Vtx D_703CD28[];
+extern Vtx D_703CE48[];
+extern Vtx D_703CE88[];
+extern Vtx D_703CF28[];
+extern Vtx D_703D0D8[];
+extern Vtx D_703D178[];
+extern Vtx D_703D1D8[];
+extern Vtx D_703D298[];
+extern Vtx D_703D338[];
+extern Vtx D_703D448[];
+extern Vtx D_703D4E8[];
+extern Vtx D_703D5A8[];
+extern Vtx D_703D5E8[];
+extern Vtx D_703D678[];
+extern Vtx D_703D6D8[];
+extern Vtx D_703D7D8[];
+extern Vtx D_703D858[];
+extern Vtx D_703D898[];
+extern Vtx D_703D938[];
+extern Vtx D_703DB58[];
+extern Vtx D_703DBF8[];
+extern Vtx D_703DCE8[];
+extern Vtx D_703DD68[];
+extern Vtx D_703DDA8[];
+extern Vtx D_703DE48[];
+extern Vtx D_703E058[];
+extern Vtx D_703E0F8[];
+extern Vtx D_703E1B8[];
+extern Vtx D_703E238[];
+extern Vtx D_703E2D8[];
+extern Vtx D_703E488[];
+extern Vtx D_703E528[];
+extern Vtx D_703E588[];
+extern Vtx D_703E608[];
+extern Vtx D_703E6A8[];
+extern Vtx D_703E6D8[];
+extern Vtx D_703E738[];
+extern Vtx D_703E858[];
+extern Vtx D_703E8D8[];
+extern Vtx D_703E978[];
+extern Vtx D_703EA18[];
+extern Vtx D_703EB68[];
+extern Vtx D_703EBF8[];
+extern Vtx D_703ED08[];
+extern Vtx D_703ED88[];
+extern Vtx D_703EE28[];
+extern Vtx D_703EEC8[];
+extern Vtx D_703EFE8[];
+extern Vtx D_703F078[];
+extern Vtx D_703F158[];
+extern Vtx D_703F1D8[];
+extern Vtx D_703F278[];
+extern Vtx D_703F398[];
+extern Vtx D_703F428[];
+extern Vtx D_703F488[];
+extern Vtx D_703F518[];
+extern Vtx D_703F5B8[];
+extern Vtx D_703F648[];
+extern Vtx D_703F6A8[];
+extern Vtx D_703F7E8[];
+extern Vtx D_703F888[];
+extern Vtx D_703F9C8[];
+extern Vtx D_703FA58[];
+extern Vtx D_703FBE8[];
+extern Vtx D_703FC88[];
+extern Vtx D_703FDC8[];
+extern Vtx D_703FE68[];
+extern Vtx D_703FFA8[];
+extern Vtx D_7040038[];
+extern Vtx D_70401C8[];
+extern Vtx D_7040268[];
+extern Vtx D_7040308[];
+extern Vtx D_70403A8[];
+extern Vtx D_7040438[];
+extern Vtx D_7040528[];
+extern Vtx D_70405B8[];
+extern Vtx D_70405F8[];
+extern Vtx D_7040688[];
+extern Vtx D_70406E8[];
+extern Vtx D_7040718[];
+extern Vtx D_7040778[];
+extern Vtx D_7040818[];
+extern Vtx D_7040918[];
+extern Vtx D_70409D8[];
+extern Vtx D_7040A58[];
+extern Vtx D_7040CB8[];
+extern Vtx D_7040D58[];
+extern Vtx D_7040DE8[];
+extern Vtx D_7040EE8[];
+extern Vtx D_7040FA8[];
+extern Vtx D_7041028[];
+extern Vtx D_70411D8[];
+extern Vtx D_7041268[];
+extern Vtx D_70412C8[];
+extern Vtx D_7041398[];
+extern Vtx D_7041418[];
+extern Vtx D_70414D8[];
+extern Vtx D_7041568[];
+extern Vtx D_7041608[];
+extern Vtx D_7041648[];
+extern Vtx D_7041678[];
+extern Vtx D_70416D8[];
+extern Vtx D_7041858[];
+extern Vtx D_7041A38[];
+extern Vtx D_7041A78[];
+extern Vtx D_7041AB8[];
+extern Vtx D_7041CC8[];
+extern Vtx D_7041D68[];
+extern Vtx D_7041E18[];
+extern Vtx D_7041FD8[];
+extern Vtx D_7042018[];
+extern Vtx D_7042058[];
+extern Vtx D_7042278[];
+extern Vtx D_7042308[];
+extern Vtx D_7042368[];
+extern Vtx D_7042428[];
+extern Vtx D_7042468[];
+extern Vtx D_7042648[];
+extern Vtx D_70426D8[];
+extern Vtx D_7042738[];
+extern Vtx D_70427F8[];
+extern Vtx D_7042838[];
+extern Vtx D_7042928[];
+extern Vtx D_7042988[];
+extern Vtx D_7042A08[];
+extern Vtx D_7042C48[];
+extern Vtx D_7042C88[];
+extern Vtx D_7042D48[];
+extern Vtx D_7043058[];
+extern Vtx D_70430F8[];
+extern Vtx D_7043178[];
+extern Vtx D_7043378[];
+extern Vtx D_70433F8[];
+extern Vtx D_7043608[];
+extern Vtx D_7043698[];
+extern Vtx D_70436F8[];
+extern Vtx D_70437F8[];
+extern Vtx D_7043858[];
+extern Vtx D_70439E8[];
+extern Vtx D_7043A78[];
+extern Vtx D_7043B38[];
+extern Vtx D_7043B98[];
+extern Vtx D_7043C58[];
+extern Vtx D_7043CE8[];
+extern Vtx D_7043D98[];
+extern Vtx D_7043E18[];
+extern Vtx D_7043E78[];
+extern Vtx D_7043F78[];
+extern Vtx D_7044038[];
+extern Vtx D_70440F8[];
+extern Vtx D_7044238[];
+extern Vtx D_7044358[];
+extern Vtx D_70443F8[];
+extern Vtx D_7044438[];
+extern Vtx D_7044538[];
+extern Vtx D_7044618[];
+extern Vtx D_70446D8[];
+extern Vtx D_70447B8[];
+extern Vtx D_7044878[];
+extern Vtx D_7044908[];
+extern Vtx D_7044938[];
+extern Vtx D_7044A78[];
+extern Vtx D_7044B58[];
+extern Vtx D_7044C18[];
+extern Vtx D_7044C78[];
+extern Vtx D_7044E58[];
+extern Vtx D_7044FD8[];
+extern Vtx D_70450C0[];
+extern Vtx D_7045468[];
+extern Vtx D_7045498[];
+extern Vtx D_7045618[];
+extern Vtx D_7045898[];
+extern Vtx D_70459B8[];
+extern Vtx D_7045C08[];
+extern Vtx D_7046B98[];
+extern Vtx D_7046BC8[];
+extern Vtx D_7046CD8[];
+extern Vtx D_7046F58[];
+extern Vtx D_7047078[];
+extern Vtx D_7047238[];
+extern Vtx D_7047840[];
+extern Vtx D_7047870[];
+extern Vtx D_7047930[];
+extern Vtx D_7047AC0[];
+extern Vtx D_7047B80[];
+extern Vtx D_7047C70[];
+extern Vtx D_70480A0[];
+extern Vtx D_70480D0[];
+extern Vtx D_7048100[];
+extern Vtx D_7048200[];
+extern Vtx D_7048260[];
+extern Vtx D_70482F0[];
+extern Vtx D_70485F8[];
+extern Vtx D_7048628[];
+extern Vtx D_7048688[];
+extern Vtx D_7048868[];
+
+#endif // FZX_ASSETS_H

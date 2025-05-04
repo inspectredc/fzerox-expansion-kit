@@ -19,6 +19,7 @@ mio0Decode = 0x8072E3B0;
 // game data
 
 sSpTaskState = 0x8076C760;
+gBodyHealthValues = 0x8076EF84;
 
 // game bss
 
