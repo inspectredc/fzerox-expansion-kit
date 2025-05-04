@@ -326,6 +326,11 @@ LeoReadRTC = 0x8075F130;
 leoSeek = 0x8075F190;
 LeoSeek = 0x8075F250;
 
+Leo_strcmp = 0x8076294C;
+Leo_strcpy = 0x80762B78;
+Leo_bcmp = 0x807629FC;
+Leo_strlen = 0x80762B1C;
+
 // libleo data
 
 __leoResetCalled = 0x8077AC40;

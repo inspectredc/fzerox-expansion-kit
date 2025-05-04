@@ -1,0 +1,60 @@
+func_i9_800D6D90 = 0x800D6D90; //segment:ovl_i9
+func_i9_8012ADB8 = 0x8012ADB8; //segment:ovl_i9
+func_i9_80129F24 = 0x80129F24; //segment:ovl_i9
+func_i9_80129BBC = 0x80129BBC; //segment:ovl_i9
+func_i9_800E8EF4 = 0x800E8EF4; //segment:ovl_i9
+func_i9_800EAF64 = 0x800EAF64; //segment:ovl_i9
+func_i9_800ECAF0 = 0x800ECAF0; //segment:ovl_i9
+func_i9_80123394 = 0x80123394; //segment:ovl_i9
+
+func_i3_8003F2E0 = 0x8003F2E0; //segment:ovl_i3
+func_i3_80059EC0 = 0x80059EC0; //segment:ovl_i3
+func_i3_8005F6A8 = 0x8005F6A8; //segment:ovl_i3
+
+func_i2_800A762C = 0x800A762C; //segment:ovl_i2
+func_i2_800A9728 = 0x800A9728; //segment:ovl_i2
+func_i2_800AB6B0 = 0x800AB6B0; //segment:ovl_i2
+func_i2_800AB82C = 0x800AB82C; //segment:ovl_i2
+func_i2_800AD4A4 = 0x800AD4A4; //segment:ovl_i2
+func_i2_800AD610 = 0x800AD610; //segment:ovl_i2
+func_i2_800AD758 = 0x800AD758; //segment:ovl_i2
+func_i2_800ADA1C = 0x800ADA1C; //segment:ovl_i2
+func_i2_800AE17C = 0x800AE17C; //segment:ovl_i2
+func_i2_800AE7C4 = 0x800AE7C4; //segment:ovl_i2
+func_i2_800AEA90 = 0x800AEA90; //segment:ovl_i2
+func_i2_800AF584 = 0x800AF584; //segment:ovl_i2
+func_i2_800AF678 = 0x800AF678; //segment:ovl_i2
+func_i2_800AF7E0 = 0x800AF7E0; //segment:ovl_i2
+func_i2_800AF9F8 = 0x800AF9F8; //segment:ovl_i2
+func_i2_800AFB1C = 0x800AFB1C; //segment:ovl_i2
+func_i2_800AFBE4 = 0x800AFBE4; //segment:ovl_i2
+func_i2_800B0418 = 0x800B0418; //segment:ovl_i2
+func_i2_800B079C = 0x800B079C; //segment:ovl_i2
+func_i2_800B20D0 = 0x800B20D0; //segment:ovl_i2
+func_i2_800B2500 = 0x800B2500; //segment:ovl_i2
+func_i2_800B26B8 = 0x800B26B8; //segment:ovl_i2
+func_i2_800B2824 = 0x800B2824; //segment:ovl_i2
+func_i2_800B3640 = 0x800B3640; //segment:ovl_i2
+func_i2_800B39B4 = 0x800B39B4; //segment:ovl_i2
+func_i2_800B934C = 0x800B934C; //segment:ovl_i2
+func_i2_800BDE60 = 0x800BDE60; //segment:ovl_i2
+func_i2_800BE8BC = 0x800BE8BC; //segment:ovl_i2
+func_i2_800BEA18 = 0x800BEA18; //segment:ovl_i2
+
+func_xk1_80025C00 = 0x80025C00; //segment:ovl_xk1
+func_xk1_8002FFDC = 0x8002FFDC; //segment:ovl_xk1
+
+// rodata migrations
+
+D_i3_8006C760 = 0x8006C760; //segment:ovl_i3 force_not_migration:True
+D_i3_8006C764 = 0x8006C764; //segment:ovl_i3 force_not_migration:True
+D_i3_8006C788 = 0x8006C788; //segment:ovl_i3 force_not_migration:True
+D_i3_8006CEE4 = 0x8006CEE4; //segment:ovl_i3 force_migration:True size:0x8
+D_i3_8006CEB0 = 0x8006CEB0; //segment:ovl_i3 force_migration:True size:0x8
+
+D_i2_800C1F30 = 0x800C1F30; //segment:ovl_i2 force_migration:True size:0x8
+D_i2_800C1F3C = 0x800C1F3C; //segment:ovl_i2 force_migration:True size:0x8
+D_i2_800C3190 = 0x800C3190; //segment:ovl_i2 force_migration:True size:0x8
+D_i2_800C31A8 = 0x800C31A8; //segment:ovl_i2 force_migration:True size:0x8
+D_i2_800C31B0 = 0x800C31B0; //segment:ovl_i2 force_migration:True size:0xC
+D_i2_800C31D0 = 0x800C31D0; //segment:ovl_i2 force_migration:True size:0x8
