@@ -429,7 +429,3 @@
       - { type: .bss, vram: 0x807C6D80, name: leo/lib/driverominit }
       - { type: .bss, vram: 0x807C6E00, name: leo/lib/leomseq_tbl }
       - { type: bss, vram: 0x807C6E40, name: 807C6E40 }
-
-  - type: bin
-    start: 0xA2E70
-    follows_vram: main
