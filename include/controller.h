@@ -40,4 +40,29 @@ typedef enum ControllerPort {
     /* 4 */ PORT_DISCONNECTED,
 } ControllerPort;
 
+typedef struct Controller {
+    OSPfs pfs;
+    s8 unk_68[0x3];
+    u8 errno;
+    s8 stickX;
+    s8 stickY;
+    u8 stickCurrent;
+    u8 stickPressed;
+    u8 stickReleased;
+    u8 stickPrev;
+    s16 unk_72;
+    s16 unk_74;
+    s16 unk_76;
+    s16 unk_78;
+    u16 buttonCurrent;
+    u16 buttonPressed;
+    u16 buttonReleased;
+    u16 buttonPrev;
+    u16 unk_82;
+    s32 unk_84;
+    s32 unk_88;
+    s32 unk_8C;
+    s32 unk_90;
+} Controller; // size = 0x94
+
 #endif // CONTROLLER

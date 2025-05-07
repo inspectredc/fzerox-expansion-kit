@@ -57,7 +57,9 @@
       "leo_internal.h": "c",
       "unk_leo.h": "c",
       "leo_functions.h": "c",
-      "gfx.h": "c"
+      "gfx.h": "c",
+      "leoappli.h": "c",
+      "unk_structs.h": "c"
     },
     "C_Cpp_Runner.msvcBatchPath": "",
     "C_Cpp.errorSquiggles": "enabled"

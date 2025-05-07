@@ -12,7 +12,7 @@
     extern u8 name ## _ROM_END[]
 
 #define DECLARE_DISK_SEGMENT(name) \
-    extern u8 name ## _DISK_START[];
+    extern u8 name ## _ROM_START[]
 
 #define DECLARE_TEXT_SEGMENT(name)   \
     extern u8 name ## _TEXT_START[]; \
@@ -54,9 +54,24 @@
 #define SEGMENT_BSS_END(segment)   (segment ## _BSS_END)
 #define SEGMENT_BSS_SIZE(segment)  (SEGMENT_BSS_END(segment) - SEGMENT_BSS_START(segment))
 
-#define SEGMENT_DISK_START(segment) (segment ## _DISK_START)
+#define SEGMENT_DISK_START(segment) (segment ## _ROM_START)
 #define SEGMENT_DISK_SIZE(segment)  (SEGMENT_BSS_START(segment) - SEGMENT_VRAM_START(segment))
 
-// DECLARE_SEGMENT(main);
+DECLARE_SEGMENT(main);
+
+DECLARE_SEGMENT(ovl_i2);
+DECLARE_SEGMENT(ovl_i3);
+DECLARE_SEGMENT(ovl_i4);
+DECLARE_SEGMENT(course_select);
+DECLARE_SEGMENT(ovl_i6);
+DECLARE_SEGMENT(ovl_i7);
+DECLARE_SEGMENT(ovl_i8);
+DECLARE_SEGMENT(ovl_i9);
+DECLARE_SEGMENT(ovl_i10);
+
+DECLARE_SEGMENT(course_edit);
+DECLARE_SEGMENT(machine_create);
+DECLARE_SEGMENT(ovl_xk4);
+
 
 #endif

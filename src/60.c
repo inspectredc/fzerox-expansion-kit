@@ -177,7 +177,7 @@ void Main_ThreadEntry(void* arg0) {
         if (D_8079A32C != 0) {
             func_8070F240();
         }
-        func_80704DB0("01", &leoBootID);
+        func_80704DB0("01", leoBootID.gameName);
 
         for (i = 0; i < 3; i++) {
             var_v0 = &gFrameBuffers[i]->buffer[19199];

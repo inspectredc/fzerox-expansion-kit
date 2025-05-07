@@ -220,7 +220,7 @@ s32 func_8076049C(void) {
 }
 
 s32 func_8076055C(void) {
-    u8 sp1F;
+    LEOStatus sp1F;
 
     D_80794CD4 = LEO_ERROR_GOOD;
     D_80794CD8 = 15;
