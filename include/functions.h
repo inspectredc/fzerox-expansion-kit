@@ -4,6 +4,7 @@
 #include "libultra/ultra64.h"
 #include "gfx.h"
 #include "PR/leo.h"
+#include "libc/stdbool.h"
 
 void Game_ThreadEntry(void* arg0);
 void Audio_ThreadEntry(void* arg0);
@@ -12,12 +13,33 @@ void func_80703F90(void);
 void func_80767958(void*);
 s32 func_80768A5C(LEOCmd*, s32, s32, s32, s32, OSMesgQueue*);
 s32 func_80768AF0(LEOCmd*, s32, s32, s32, s32, OSMesgQueue*);
-s32 func_80768C08(s32, s32, s32);
+s32 func_80768C08(OSPiHandle*, OSIoMesg*, s32);
 s32 Segment_SetPhysicalAddress(s32 segment, s32 addr);
 Gfx* Segment_SetTableAddresses(Gfx*);
 
+void func_807038B0(void);
+void func_80703948(void);
+s32 func_80703CA4(s32 startLba, void* vram, s32 diskSize, s32 bssSize);
+
+
+s32 func_80705310(LEOCmd* cmdBlock, s32 direction, s32 lba, u8* vAddr, u32 nLbas, OSMesgQueue* mq);
+void func_80706100(void);
+void func_80706518(s32, s32, s32);
+void func_8070664C(u16, u8*, u8*, s32);
+void func_80707204(void);
+s32 func_80707780(void);
+s32 func_80707964(void);
+void func_80707B08(void);
+// void func_807088A8(void);
+// void func_80708A44(void);
+// void func_80708B34(void);
+// void func_80708C1C(void);
+// void func_80708CE0(void);
+
+void func_8070F8A4(s32, s32);
 void func_8070F240(void);
-void func_80704DB0(char*, LEODiskID*);
+void func_80704CE0(void);
+void func_80704DB0(char*, char*);
 void func_8070F0F0(void);
 void func_80704F38(OSThread*);
 void func_8073631C(void*);
@@ -32,12 +54,11 @@ Gfx* func_806F59E0(Gfx*);
 void func_80709C3C(void);
 void func_80745CB8(void);
 
-s32 func_80704F44(LEODiskID, LEODiskID);
-void func_80704FF4(LEODiskID*);
+bool func_80704F44(LEODiskID, LEODiskID);
+s32 func_80704FF4(LEODiskID*);
 void func_80705C3C(void);
 
-
-u16 func_8075F7C0(u16, s32, s32);
+s32 func_80768B88(OSPiHandle*, OSIoMesg*, s32);
 u16 func_80766788(void);
 s32 func_80766660(u16);
 

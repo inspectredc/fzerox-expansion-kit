@@ -57,7 +57,8 @@ TARGET               := fzerox-expansion
 BUILD_DIR := build
 TOOLS	  := tools
 PYTHON	  := python3
-ROM	      := $(BUILD_DIR)/$(TARGET).$(VERSION).z64dd
+ROM	      := $(BUILD_DIR)/$(TARGET).$(VERSION)_unpatched.z64dd
+ROMP	    := $(BUILD_DIR)/$(TARGET).$(VERSION).z64dd
 ELF       := $(BUILD_DIR)/$(TARGET).$(VERSION).elf
 LD_MAP    := $(BUILD_DIR)/$(TARGET).$(VERSION).map
 LD_SCRIPT := linker_scripts/$(VERSION)/$(TARGET).ld
@@ -384,7 +385,7 @@ init:
 
 FZERO :=$(PURPLE)________        _______    _______    ______      ____         ___   ___\n|  ____/        |___   |   |  ____|   |  __ \    / __ \        \  \ /  /\n| |____    ___     /  /    | |___     | |_/ /   | |  | |        \  V  /\n|  ____|  |___|   /  /     |  ___|    |  _ |    | |  | |         |   |\n| |              /  /__    | |____    | | \ \   | |__| |        /  .  \ \n|_|             |______|   |______|   |_|  \_|   \____/        /__/ \__\ \n$(NO_COL)
 
-compressed: $(ROM)
+compressed: $(ROMP)
 ifeq ($(COMPARE),1)
 	@echo "$(GREEN)Calculating Rom Header Checksum... $(YELLOW)$<$(NO_COL)"
 	@md5sum --status -c $(TARGET).$(VERSION).md5 && \
@@ -431,6 +432,11 @@ disasm:
 	@$(SPLAT) $(SPLAT_YAML) --disassemble-all
 
 #### Various Recipes ####
+
+# Patched ROM
+$(ROMP): $(ROM)
+	$(call print,ROM->Patched ROM:,$<,$@)
+	$(V)$(PYTHON) $(TOOLS)/patch.py $(ROM) $(ROMP) $(ELF) $(VERSION)
 
 # ROM
 $(ROM): $(ELF)

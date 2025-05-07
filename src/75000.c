@@ -1,4 +1,5 @@
 #include "global.h"
+#include "leo/leo_functions.h"
 
 extern unk_807C6F10 D_807C6F10[];
 extern vs32 D_80794E28;
@@ -12,7 +13,7 @@ void func_80767800(unk_807C6F10 arg0) {
     do {
     } while (D_80794E28 == ((D_80794E2C + 1) & 7));
     prevMask = osGetIntMask();
-    osSetIntMask(1);
+    osSetIntMask(OS_IM_NONE);
     D_80794E2C &= 7;
     D_807C6F10[D_80794E2C] = arg0;
     temp_lo = D_80794E2C;
@@ -376,7 +377,7 @@ s32 func_80768AF0(LEOCmd* cmdBlock, s32 arg1, s32 lba, s32 arg3, s32 arg4, OSMes
     return 0;
 }
 
-s32 func_80768B88(s32 arg0, s32 arg1, s32 arg2) {
+s32 func_80768B88(OSPiHandle* arg0, OSIoMesg* arg1, s32 arg2) {
     unk_807C6F10 sp34;
 
     sp34.unk_00 = 2;
@@ -388,7 +389,7 @@ s32 func_80768B88(s32 arg0, s32 arg1, s32 arg2) {
     return 0;
 }
 
-s32 func_80768C08(s32 arg0, s32 arg1, s32 arg2) {
+s32 func_80768C08(OSPiHandle* arg0, OSIoMesg* arg1, s32 arg2) {
     unk_807C6F10 sp34;
 
     sp34.unk_00 = 3;
@@ -402,7 +403,7 @@ s32 func_80768C08(s32 arg0, s32 arg1, s32 arg2) {
 
 extern OSMesg D_80794CD4;
 
-s32 func_80768C88(u16 arg0, s32 arg1, s32 arg2) {
+s32 func_80768C88(u16 arg0, u8* arg1, u8* arg2) {
     if (func_80766660(arg0) == -1) {
         return 0;
     }

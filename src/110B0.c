@@ -1,6 +1,22 @@
 #include "global.h"
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/110B0/func_807038B0.s")
+extern Controller D_8079A7F0;
+extern OSMesgQueue gSerialEventQueue;
+
+void func_807038B0(void) {
+    s32 sp24;
+
+    func_8070F8A4(-1, 6);
+    sp24 = osRecvMesg(&gSerialEventQueue, NULL, 0);
+    do {
+        osContStartReadData(&gSerialEventQueue);
+        func_806F5B70();
+    } while (!(D_8079A7F0.buttonPressed & BTN_A));
+    if (sp24 != -1) {
+        osContStartReadData(&gSerialEventQueue);
+    }
+    func_8070F8A4(-1, 0xA);
+}
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/110B0/func_80703948.s")
 
