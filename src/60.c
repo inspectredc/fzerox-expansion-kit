@@ -127,7 +127,7 @@ s32 D_8076C770 = 1;
 s32 D_8076C774 = 0;
 s32 D_8076C778 = 1;
 s32 D_8076C77C = 1;
-bool D_8076C780 = false;
+bool gRamDDCompatible = false;
 bool sAudioThreadCreated = false;
 s8 sMainThreadStartEnabled = true;
 s8 sGameThreadStartEnabled = true;
@@ -164,14 +164,14 @@ void Main_ThreadEntry(void* arg0) {
     switch (osResetType) {
         case OS_TV_PAL:
         case OS_TV_NTSC:
-            D_8076C780 = true;
+            gRamDDCompatible = true;
             break;
         case OS_TV_MPAL:
-            D_8076C780 = true;
+            gRamDDCompatible = true;
             break;
     }
 
-    if (D_8076C780) {
+    if (gRamDDCompatible) {
         D_8079A32C = LeoDriveExist();
         D_8079A340 = osDriveRomInit();
         if (D_8079A32C != 0) {
@@ -213,7 +213,7 @@ void Main_ThreadEntry(void* arg0) {
 
     osViBlack(false);
 
-    if (D_8076C780) {
+    if (gRamDDCompatible) {
         osCreateThread(&D_80799EE0, THREAD_ID_6, &func_80767958, 0, D_80797670 + sizeof(D_80797670), 0x1E);
         if (D_8079A32C == 1) {
             osStartThread(&D_80799EE0);
@@ -297,12 +297,12 @@ void Main_ThreadEntry(void* arg0) {
 
 extern FrameBuffer gFrameBuffer1;
 extern FrameBuffer gFrameBuffer2;
-extern FrameBuffer gFrameBuffer4;
+extern FrameBuffer gFrameBuffer3;
 
 void Idle_ThreadEntry(void* arg0) {
     gFrameBuffers[0] = &gFrameBuffer1;
     gFrameBuffers[1] = &gFrameBuffer2;
-    gFrameBuffers[2] = &gFrameBuffer4;
+    gFrameBuffers[2] = &gFrameBuffer3;
     osCreateViManager(OS_PRIORITY_VIMGR);
     if (osTvType == OS_TV_TYPE_NTSC) {
         osViSetMode(&osViModeNtscLan1);
@@ -341,7 +341,7 @@ void Reset_ThreadEntry(void* arg0) {
     gResetStarted = true;
     osViBlack(true);
     osViSetYScale(1.0f);
-    if (D_8076C780 && D_8079A32C) {
+    if (gRamDDCompatible && D_8079A32C) {
         LeoReset();
     }
     func_806F5A50();

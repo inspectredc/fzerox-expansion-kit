@@ -75,7 +75,7 @@ s32 func_80703E08(s32 startLba, void* vram, s32 diskSize, s32 bssSize) {
     func_80768A5C(&sp4C, 0, startLba, vram, sp6C, &gDmaMesgQueue);
 
     if (D_8076CB40 != -1) {
-        func_8012B854();
+        func_i10_8012B854();
     }
 
     while (osRecvMesg(&gDmaMesgQueue, &sp48, 0) == -1) {
@@ -85,12 +85,29 @@ s32 func_80703E08(s32 startLba, void* vram, s32 diskSize, s32 bssSize) {
             if (var_a0 > 192) {
                 var_a0 = 192;
             }
-            func_8012B894(var_a0);
+            func_i10_8012B894(var_a0);
             osWritebackDCacheAll();
         }
     }
     bzero(bssStart, bssSize);
     return sp70;
+
+    // Todo: move into own funcs
+    PRINTF("WAIT MEDIA INIT\n");
+    PRINTF("WAIT MEDIA START\n");
+    PRINTF("WAIT RECOVER MANAGE AREA\n");
+    PRINTF("========================================================\n");
+    PRINTF("LBA %d, dist 0x%x-0x%x-0x%x , %dLBAs\n");
+    PRINTF("========================================================\n");
+    PRINTF("========================================================\n");
+    PRINTF("LBA %d, dist 0x%x-0x%x-0x%x , %dLBAs\n");
+    PRINTF("========================================================\n");
+    PRINTF("========================================================\n");
+    PRINTF("LBA %d, dist 0x%x-0x%x-0x%x , %dLBAs\n");
+    PRINTF("========================================================\n");
+    PRINTF("========================================================\n");
+    PRINTF("LBA %d, dist 0x%x-0x%x-0x%x , %dLBAs\n");
+    PRINTF("========================================================\n");
 }
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/110B0/func_80703F90.s")

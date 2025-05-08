@@ -81,7 +81,7 @@ extern s32 D_80794CD8;
 extern char D_80794D40[2];
 extern char D_80794D44[4];
 
-s32 func_8076007C(s32 region, OSMesg* arg1, s32 arg2) {
+s32 func_8076007C(s32 region, OSMesg* cmdBuf, s32 cmdMsgCount) {
     s32 i = 0;
 
     D_80794CC4 = 0;
@@ -98,15 +98,15 @@ s32 func_8076007C(s32 region, OSMesg* arg1, s32 arg2) {
     switch (region) {
         case LEO_MANAGER_REGION_NONE:
             D_80794CD8 = 0xD;
-            D_80794CD4 = LeoCreateLeoManager(0x95, 0x96, arg1, arg2);
+            D_80794CD4 = LeoCreateLeoManager(0x95, 0x96, cmdBuf, cmdMsgCount);
             break;
         case LEO_MANAGER_REGION_JP:
             D_80794CD8 = 0xE;
-            D_80794CD4 = LeoCJCreateLeoManager(0x95, 0x96, arg1, arg2);
+            D_80794CD4 = LeoCJCreateLeoManager(0x95, 0x96, cmdBuf, cmdMsgCount);
             break;
         case LEO_MANAGER_REGION_US:
             D_80794CD8 = 0xE;
-            D_80794CD4 = LeoCACreateLeoManager(0x95, 0x96, arg1, arg2);
+            D_80794CD4 = LeoCACreateLeoManager(0x95, 0x96, cmdBuf, cmdMsgCount);
             break;
         default:
             D_80794CD4 = 0xF4;

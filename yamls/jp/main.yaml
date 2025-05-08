@@ -1,10 +1,10 @@
-  - name: framebuffer4
+  - name: framebuffer3
     dir: framebuffers
     type: code
     vram: 0x80000400
     bss_size: 0x25800
     subsegments:
-      - { type: .bss, vram: 0x80000400, name: framebuffer4 }
+      - { type: .bss, vram: 0x80000400, name: framebuffer3 }
 
   - name: framebuffer1
     type: code
@@ -46,6 +46,7 @@
     subsegments:
       - [0x60, c]
       - [0xCE0, c]
+      - [0x2250, pad]
       - [0x2260, c]
       - [0x2340, c]
       - [0x3250, c]
@@ -346,7 +347,8 @@
       - [0x80D70, .rodata, 3250]
       - [0x80DF0, .rodata, 6F50]
       - [0x81210, .rodata, 10B20]
-      - [0x81230, .rodata, 11850]
+      - [0x81230, .rodata, 110B0]
+      - [0x81500, .rodata, 11850]
       - [0x82EE0, .rodata, 15AB0]
       - [0x831E0, .rodata, 17490]
       - [0x83620, .rodata, 1C8B0]

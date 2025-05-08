@@ -113,3 +113,39 @@ aDecalBlueFalconWingCheckeredTex = 0x3004918;
 aDecalBlueFalconArrowTex = 0x3004598;
 aLogoBlueFalconTex = 0x3004718;
 aMachineNumber7Tex = 0x3004498;
+
+
+// temp segment addrs
+
+framebuffer_unused_VRAM = 0x803DBC00;
+framebuffer_unused_VRAM_END = 0x80400000;
+unk_gfx_segment_VRAM = 0x80225800;
+unk_gfx_segment_VRAM_END = 0x802BB140;
+unk_context_VRAM = 0x802BB140;
+unk_context_VRAM_END = 0x802D9CD0;
+audio_context_VRAM = 0x806ECA00;
+audio_context_VRAM_END = 0x806F23C0;
+gfxpool_VRAM = 0x8024E260;
+gfxpool_VRAM_END = 0x802BB0C0;
+unk_bss_segment_VRAM = 0x80225800;
+unk_bss_segment_VRAM_END = 0x8024E260;
+segment_16C8A0_DATA_SIZE = 0x22500;
+segment_17B1E0_VRAM_END = 0x3000780;
+segment_17B1E0_VRAM = 0x3000000;
+segment_17B960_VRAM_END = 0x303D370;
+segment_17B960_VRAM = 0x3000780;
+segment_1B8550_VRAM_END = 0x4029EA0;
+segment_1B8550_VRAM = 0x4000000;
+segment_1E23F0_VRAM_END = 0x7048CB0;
+segment_1E23F0_VRAM = 0x7000000;
+segment_22B0A0_DATA_SIZE = 0x18750;
+course_edit_textures_VRAM_END = 0x9014E40;
+course_edit_textures_VRAM = 0x9000000;
+create_machine_textures_VRAM_END = 0x4006B40;
+create_machine_textures_VRAM = 0x4000000;
+D_800D6D90 = 0x800D6D90;
+D_8012B520 = 0x8012B520;
+D_7000000_VRAM_END = 0x7020920;
+D_7000000_VRAM = 0x7000000;
+segment_16C8A0_VRAM_END = 0x800E940;
+segment_16C8A0_VRAM = 0x8000000;
