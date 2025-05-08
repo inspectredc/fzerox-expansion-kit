@@ -61,18 +61,19 @@ void leoCommand(void* cmd_blk_addr) {
     ((LEOCmd*) cmd_blk_addr)->header.sense = LEO_SENSE_NO_ADDITIONAL_SENSE_INFOMATION;
 
     switch (((LEOCmd*) cmd_blk_addr)->header.command) {
-        case 1:
+        case LEO_COMMAND_CLEAR_QUE:
             LEOclr_que_flag = 0xFF;
             leoClr_queue();
             LEOclr_que_flag = 0;
             ((LEOCmd*) cmd_blk_addr)->header.status = LEO_STATUS_GOOD;
             if (((LEOCmd*) cmd_blk_addr)->header.control & LEO_CONTROL_POST) {
-                osSendMesg(((LEOCmd*) cmd_blk_addr)->header.post, (OSMesg) 0, OS_MESG_BLOCK);
+                osSendMesg(((LEOCmd*) cmd_blk_addr)->header.post, (OSMesg) LEO_SENSE_NO_ADDITIONAL_SENSE_INFOMATION,
+                           OS_MESG_BLOCK);
             }
             break;
 
-        case 5:
-        case 6:
+        case LEO_COMMAND_READ:
+        case LEO_COMMAND_WRITE:
             ((LEOCmd*) cmd_blk_addr)->data.readwrite.rw_bytes = 0;
             goto cmd_queing;
 

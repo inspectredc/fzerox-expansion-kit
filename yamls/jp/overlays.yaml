@@ -4,7 +4,7 @@
     dir: overlays/ovl_xk1
     start: 0xA2E70
     vram: 0x80025C00
-    bss_size: 0xBAA0
+    bss_size: 0x8380
     symbol_name_format: xk1_$VRAM
     subsegments:
       - [0xA2E70, c]

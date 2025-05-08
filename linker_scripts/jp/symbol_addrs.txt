@@ -9,6 +9,9 @@ Fault_Init = 0x80710A60;
 Audio_PreNMI = 0x80740B10;
 Gfx_InitBuffer = 0x806F3514;
 Segment_SetPhysicalAddress = 0x80708770;
+Segment_SetAddress = 0x80708790;
+Segment_GetAddress = 0x807087A8;
+Segment_SegmentedToVirtual = 0x807087C4;
 Segment_SetTableAddresses = 0x807087F8;
 Gfx_LoadSegments = 0x806F35A8;
 Gfx_FullSync = 0x806F3610;
@@ -16,9 +19,33 @@ Gfx_SetTask = 0x806F3698;
 
 mio0Decode = 0x8072E3B0;
 
+Math_SinTableInit = 0x806F6A38;
+Math_Rand1Init = 0x806F6C44;
+Audio_SetSoundMode = 0x80740B70;
+Math_Rand2Init = 0x806F6C58;
+Game_Init = 0x806F4B40;
+
+SLForceWritebackDCacheAll = 0x80704D74;
+SLLeoReadDiskID = 0x80704FF4;
+SLLeoReadWrite_DATA = 0x80705310;
+SLLeoReadWrite = 0x80705554;
+SLLeoModeSelectAsync = 0x80705D44;
+SLMFSRecoverManageArea = 0x80706100;
+SLMFSDeleteFile = 0x8070664C;
+SLMFSLoad = 0x8070687C;
+SLMFSLoadHalfway = 0x80706B84;
+SLMFSSave = 0x80706E94;
+SLMFSCreateManager = 0x80707198;
+SLMFSNewDisk = 0x80707204;
+SLMFSFlushManageArea = 0x8070752C;
+SLCheckDiskInsert = 0x80707964;
+SLCheckDiskChange2 = 0x80707A54;
+
 // game data
 
 sSpTaskState = 0x8076C760;
+gRamDDCompatible = 0x8076C780;
+gGameFrameCount = 0x8076C7A0;
 gBodyHealthValues = 0x8076EF84;
 
 // game bss
@@ -46,6 +73,8 @@ sGfxTask = 0x8079A354;
 gMasterDisp = 0x8079A358;
 
 gGameMode = 0x8079A4B4;
+
+gSegments = 0x8079FA40;
 
 // libultra
 

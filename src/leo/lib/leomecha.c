@@ -278,13 +278,13 @@ u32 leoChk_err_retry(u32 sense) {
 
 u8 leoChk_cur_drvmode(void) {
     u8 devstat = 0;
-    if (!(asic_cur_status & 0x1000000)) {
+    if (!(asic_cur_status & LEO_STATUS_DISK_PRESENT)) {
         devstat |= 1;
     }
-    if (asic_cur_status & 0x80000) {
+    if (asic_cur_status & LEO_STATUS_HEAD_RETRACTED) {
         devstat |= 2;
     }
-    if (asic_cur_status & 0x100000) {
+    if (asic_cur_status & LEO_STATUS_MOTOR_NOT_SPINNING) {
         devstat |= 4;
     }
     return devstat;

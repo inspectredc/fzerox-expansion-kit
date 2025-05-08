@@ -45,4 +45,10 @@ typedef struct unk_807C6EA8 {
     s32 unk_60;
 } unk_807C6EA8;
 
+typedef struct unk_80225800 {
+    Mtx unk_000;
+    Vtx unk_040[4][6];
+    Vtx unk_1C0[48][5];
+} unk_80225800; // size = 0x10C0
+
 #endif // UNK_STRUCTS_H

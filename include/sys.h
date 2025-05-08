@@ -14,6 +14,30 @@
 #include "other_types.h"
 #include "segment_symbols.h"
 
+#define CLEAR_OVERLAY_CACHE(textStart, textSize, dataStart, dataSize)  \
+    {                                                                  \
+        OSIntMask prevMask = osGetIntMask();                           \
+        osSetIntMask(OS_IM_NONE);                                      \
+        osInvalICache(textStart, textSize);                            \
+        osInvalDCache(dataStart, dataSize);                            \
+        osSetIntMask(prevMask);                                        \
+    }
+
+#define CLEAR_TEXT_CACHE(vaddr, nbytes)        \
+    {                                          \
+        OSIntMask prevMask = osGetIntMask();   \
+        osSetIntMask(OS_IM_NONE);              \
+        osInvalICache(vaddr, nbytes);          \
+        osSetIntMask(prevMask);                \
+    }
+
+#define CLEAR_DATA_CACHE(vaddr, nbytes)        \
+    {                                          \
+        OSIntMask prevMask = osGetIntMask();   \
+        osSetIntMask(OS_IM_NONE);              \
+        osInvalDCache(vaddr, nbytes);          \
+        osSetIntMask(prevMask);                \
+    }
 
 // FAKE!!
 typedef struct unk_Light_t {
