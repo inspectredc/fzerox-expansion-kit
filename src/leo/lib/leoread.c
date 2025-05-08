@@ -37,7 +37,7 @@ void leoRead_common(u32 offset) {
     }
 
     LEOtgt_param.lba = tg_lba;
-    LEOrw_flags &= 0xFFFF3FFF;
+    LEOrw_flags &= ~(0x8000 | 0x4000);
     osSendMesg(&LEOc2ctrl_que, NULL, OS_MESG_NOBLOCK);
     osStartThread(&LEOinterruptThread);
 

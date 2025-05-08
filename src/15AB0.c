@@ -26,7 +26,7 @@ u8* func_80708474(s32 arg0, size_t arg1) {
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/15AB0/Segment_SetPhysicalAddress.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/15AB0/func_80708790.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/15AB0/Segment_SetAddress.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/15AB0/func_807087A8.s")
 

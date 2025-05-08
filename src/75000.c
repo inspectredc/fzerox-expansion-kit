@@ -44,8 +44,8 @@ extern void* D_807C7030;
 extern OSMesgQueue D_807C7058;
 extern unk_807C6F10* D_807C7050;
 
-// void func_80705554(LEOCmd*, s32, s32, s32, s32, OSMesgQueue*);
-// void func_80705310(LEOCmd*, s32, s32, s32, s32, OSMesgQueue*);
+// void SLLeoReadWrite(LEOCmd*, s32, s32, s32, s32, OSMesgQueue*);
+// void SLLeoReadWrite_DATA(LEOCmd*, s32, s32, s32, s32, OSMesgQueue*);
 // void func_80706E94(s32, s32, s32, s32, s32, s32, s32, s32);
 // void func_800EB938(s32, s32, s32, s32, s32, s32, s32, s32);
 // void func_8070687C(s32, s32, s32, s32, s32);

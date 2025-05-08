@@ -16,11 +16,11 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/3250/func_806F6700.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/3250/func_806F6A38.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/3250/Math_SinTableInit.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/3250/func_806F6C44.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/3250/Math_Rand1Init.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/3250/func_806F6C58.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/3250/Math_Rand2Init.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/3250/func_806F6C6C.s")
 

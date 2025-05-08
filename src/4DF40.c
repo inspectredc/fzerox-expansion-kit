@@ -12,7 +12,7 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/4DF40/func_80740B30.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/4DF40/func_80740B70.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/4DF40/Audio_SetSoundMode.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/4DF40/func_80740B98.s")
 
