@@ -218,51 +218,12 @@ extern u32 D_8079A430;
 extern u32 D_8079A3DC;
 extern u32 D_8079A3E0;
 
-DECLARE_SEGMENT(segment_16C8A0);
-DECLARE_SEGMENT(framebuffer1);
-DECLARE_SEGMENT(framebuffer2);
-DECLARE_SEGMENT(unk_gfx_segment);
-DECLARE_SEGMENT(unk_bss_segment);
-DECLARE_SEGMENT(gfxpool);
-DECLARE_SEGMENT(buffers);
-DECLARE_SEGMENT(framebuffer3);
-DECLARE_SEGMENT(framebuffer_unused);
-DECLARE_SEGMENT(audio_context);
-DECLARE_SEGMENT(unk_context);
-
-DECLARE_SEGMENT(course_edit_textures);
-DECLARE_SEGMENT(create_machine_textures);
-DECLARE_SEGMENT(segment_16C8A0);
-DECLARE_SEGMENT(segment_17B1E0);
-DECLARE_SEGMENT(segment_17B960);
-DECLARE_SEGMENT(segment_1B8550);
-DECLARE_SEGMENT(segment_1E23F0);
-DECLARE_SEGMENT(segment_22B0A0);
-
-
 extern u8 D_800D6D90[];
 extern u8 D_8013A7F0[];
 extern u8 D_8012B520[];
 extern u8 D_801414E0[];
 extern u8 D_7000000_VRAM[];
 extern u8 D_7000000_VRAM_END[];
-
-#define CLEAR_OVERLAY_CACHE(textStart, textSize, dataStart, dataSize)  \
-    {                                                                  \
-        OSIntMask prevMask = osGetIntMask();                           \
-        osSetIntMask(OS_IM_NONE);                                      \
-        osInvalICache(textStart, textSize);                            \
-        osInvalDCache(dataStart, dataSize);                            \
-        osSetIntMask(prevMask);                                        \
-    }
-
-#define CLEAR_ASSET_CACHE(vaddr, nbytes)       \
-    {                                          \
-        OSIntMask prevMask = osGetIntMask();   \
-        osSetIntMask(OS_IM_NONE);              \
-        osInvalDCache(vaddr, nbytes);          \
-        osSetIntMask(prevMask);                \
-    }
 
 extern s32 D_8076CB40;
 extern s32 D_8076C770;
@@ -435,7 +396,7 @@ void Game_ThreadEntry(void* entry) {
     D_8076CB40 = -1;
     func_i10_8012B904();
 
-    CLEAR_ASSET_CACHE(osPhysicalToVirtual(D_8079A414), SEGMENT_DATA_SIZE_CONST(segment_16C8A0));
+    CLEAR_DATA_CACHE(osPhysicalToVirtual(D_8079A414), SEGMENT_DATA_SIZE_CONST(segment_16C8A0));
 
     func_8070818C(D_807C7118,
                (uintptr_t) osPhysicalToVirtual(D_8079A414) + (size_t) SEGMENT_DATA_SIZE_CONST(segment_16C8A0),

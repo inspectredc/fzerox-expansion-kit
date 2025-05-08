@@ -351,13 +351,13 @@ void Reset_ThreadEntry(void* arg0) {
 
 extern u64 D_80769DF0[];
 
-#ifdef NON_MATCHING
 void func_806F33D0(FrameBuffer* arg0) {
     u64* var_s0 = &arg0->buffer[19199];
+    u64* var;
     s32 i;
     s32 j;
 
-    // FAKE?
+    // Very FAKE Throughout
     while (var_s0 >= arg0->buffer) {
         *(--var_s0 + 1) = 0x1000100010001;
     }
@@ -367,10 +367,9 @@ void func_806F33D0(FrameBuffer* arg0) {
 
     for (i = 0; i < 39; i++) {
         for (j = 0; j < 34; j++) {
-            var_s0[i * 80 + j] = D_80769DF0[i * 34 + j];
+            var = &D_80769DF0[i * 34 + j];
+            var_s0[j] = *var;
         }
+        var_s0 += 80;
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/60/func_806F33D0.s")
-#endif

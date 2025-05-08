@@ -28,11 +28,11 @@
     extern u8 name ## _BSS_START[]; \
     extern u8 name ## _BSS_END[]
 
-#define DECLARE_SEGMENT(name) \
-    DECLARE_VRAM_SEGMENT(name); \
-    DECLARE_DISK_SEGMENT(name); \
-    DECLARE_TEXT_SEGMENT(name); \
-    DECLARE_DATA_SEGMENT(name); \
+#define DECLARE_SEGMENT(name)    \
+    DECLARE_VRAM_SEGMENT(name);  \
+    DECLARE_DISK_SEGMENT(name);  \
+    DECLARE_TEXT_SEGMENT(name);  \
+    DECLARE_DATA_SEGMENT(name);  \
     DECLARE_BSS_SEGMENT(name)
 
 #define SEGMENT_VRAM_START(segment) (segment ## _VRAM)
@@ -74,5 +74,30 @@ DECLARE_SEGMENT(course_edit);
 DECLARE_SEGMENT(machine_create);
 DECLARE_SEGMENT(ovl_xk4);
 
+
+// Todo: Create sections in splat for all of these
+
+DECLARE_SEGMENT(framebuffer1);
+DECLARE_SEGMENT(framebuffer2);
+DECLARE_SEGMENT(unk_gfx_segment);
+DECLARE_SEGMENT(unk_bss_segment);
+DECLARE_SEGMENT(gfxpool);
+DECLARE_SEGMENT(buffers);
+DECLARE_SEGMENT(framebuffer3);
+DECLARE_SEGMENT(framebuffer_unused);
+DECLARE_SEGMENT(audio_context);
+DECLARE_SEGMENT(unk_context);
+
+DECLARE_SEGMENT(course_edit_textures);
+DECLARE_SEGMENT(create_machine_textures);
+DECLARE_SEGMENT(segment_145B70);
+DECLARE_SEGMENT(segment_16C8A0);
+DECLARE_SEGMENT(segment_17B1E0);
+DECLARE_SEGMENT(segment_17B960);
+DECLARE_SEGMENT(segment_1B8550);
+DECLARE_SEGMENT(segment_1E23F0);
+DECLARE_SEGMENT(segment_22B0A0);
+DECLARE_SEGMENT(segment_235130);
+DECLARE_SEGMENT(segment_2738A0);
 
 #endif
