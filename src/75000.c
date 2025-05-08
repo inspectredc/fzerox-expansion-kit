@@ -46,14 +46,14 @@ extern unk_807C6F10* D_807C7050;
 
 // void SLLeoReadWrite(LEOCmd*, s32, s32, s32, s32, OSMesgQueue*);
 // void SLLeoReadWrite_DATA(LEOCmd*, s32, s32, s32, s32, OSMesgQueue*);
-// void func_80706E94(s32, s32, s32, s32, s32, s32, s32, s32);
+// void SLMFSSave(s32, s32, s32, s32, s32, s32, s32, s32);
 // void func_800EB938(s32, s32, s32, s32, s32, s32, s32, s32);
-// void func_8070687C(s32, s32, s32, s32, s32);
-// void func_80706B84(s32, s32, s32, s32, s32, s32);
+// void SLMFSLoad(s32, s32, s32, s32, s32);
+// void SLMFSLoadHalfway(s32, s32, s32, s32, s32, s32);
 // void func_807039D4(s32, s32, s32, s32);
 // void func_80706518(s32, s32, s32);
-// void func_8070752C(void);
-// void func_80707204(void);
+// void SLMFSFlushManageArea(void);
+// void SLMFSNewDisk(void);
 // s32 func_8002E368(void);
 // void func_8070F8A4(s32, s32);
 
@@ -422,9 +422,9 @@ extern LEODiskID D_8076CB50;
 extern LEODiskID D_807C7080;
 
 void func_80768D30(void) {
-    func_80704FF4(&D_8076CB50);
+    SLLeoReadDiskID(&D_8076CB50);
     if (func_80704F44(D_807C7080, D_8076CB50)) {
-        func_80705C3C();
+        SLLeo_mfs_newdisk();
         D_807C7080 = D_8076CB50;
     }
 }

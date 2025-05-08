@@ -1,4 +1,5 @@
-#include "common.h"
+#include "global.h"
+#include "leo/leo_internal.h"
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/6F50/func_806F9750.s")
 
@@ -88,11 +89,56 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/6F50/func_8070183C.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/6F50/func_80701C04.s")
+extern OSIoMesg D_8079A308;
+extern OSMesgQueue gDmaMesgQueue;
+extern OSPiHandle* gCartRomHandle;
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/6F50/func_80701CAC.s")
+void func_80701C04(void* romAddr, void* ramAddr, size_t size) {
+    osInvalDCache(osPhysicalToVirtual(ramAddr), size);
+    D_8079A308.hdr.pri = 0;
+    D_8079A308.hdr.retQueue = &gDmaMesgQueue;
+    D_8079A308.dramAddr = osPhysicalToVirtual(ramAddr);
+    D_8079A308.devAddr = romAddr;
+    D_8079A308.size = size;
+    gCartRomHandle->transferInfo.cmdType = LEO_CMD_TYPE_2;
+    osEPiStartDma(gCartRomHandle, &D_8079A308, OS_READ);
+    osRecvMesg(&gDmaMesgQueue, NULL, OS_MESG_BLOCK);
+}
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/6F50/func_80701D7C.s")
+void func_80701CAC(void* romAddr, void* ramAddr, size_t size) {
+    OSMesg sp20[8];
+
+    if (gDmaMesgQueue.validCount >= gDmaMesgQueue.msgCount) {
+        osRecvMesg(&gDmaMesgQueue, sp20, OS_MESG_BLOCK);
+    }
+    osInvalDCache(osPhysicalToVirtual(ramAddr), size);
+    D_8079A308.hdr.pri = OS_MESG_PRI_NORMAL;
+    D_8079A308.hdr.retQueue = &gDmaMesgQueue;
+    D_8079A308.dramAddr = osPhysicalToVirtual(ramAddr);
+    D_8079A308.devAddr = (uintptr_t) romAddr;
+    D_8079A308.size = size;
+    gCartRomHandle->transferInfo.cmdType = LEO_CMD_TYPE_2;
+    func_80768B88(gCartRomHandle, &D_8079A308, OS_READ);
+    osRecvMesg(&gDmaMesgQueue, sp20, OS_MESG_BLOCK);
+}
+
+void func_80701D7C(u8* romAddr, u8* ramAddr, size_t size) {
+    s32 remainder;
+    s32 i;
+    s32 numBlocks = size / 1024;
+
+    for (i = 0; i < numBlocks; i++) {
+        func_80701CAC(romAddr, ramAddr, 0x400);
+
+        romAddr += 0x400;
+        ramAddr += 0x400;
+    }
+
+    remainder = size % 1024;
+    if (remainder) {
+        func_80701CAC(romAddr, ramAddr, remainder);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/6F50/func_80701E08.s")
 

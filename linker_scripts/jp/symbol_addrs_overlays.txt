@@ -33,6 +33,7 @@ func_i2_800BE8BC = 0x800BE8BC; //segment:ovl_i2
 func_i2_800BEA18 = 0x800BEA18; //segment:ovl_i2
 
 gSettingSoundMode = 0x800D1300; //segment:ovl_i2
+gCourseData = 0x800C3230; //segment:ovl_i2 size:0x7E0
 
 func_xk1_80025C00 = 0x80025C00; //segment:ovl_xk1
 func_xk1_8002FFDC = 0x8002FFDC; //segment:ovl_xk1

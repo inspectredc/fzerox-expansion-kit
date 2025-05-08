@@ -26,8 +26,13 @@ void Math_Rand2Init(s32 seed, s32 mask);
 void Audio_SetSoundMode(u8 soundMode);
 void Game_Init(void);
 
+void func_806F5B70(void);
+
 void func_806F6094(void);
 void func_806F86C0(Mtx*, MtxF*, f32, s32, s32, s32, f32, f32, f32);
+
+void func_80701C04(void* romAddr, void* ramAddr, size_t size);
+void func_80701D7C(u8* romAddr, u8* ramAddr, size_t size);
 
 void func_80702A68(void);
 void func_80702A94(void);
@@ -36,14 +41,16 @@ void func_80703948(void);
 s32 func_80703CA4(s32 startLba, void* vram, s32 diskSize, s32 bssSize);
 s32 func_80703E08(s32 startLba, void* vram, s32 diskSize, s32 bssSize);
 
+void SLForceWritebackDCacheAll(void);
+s32 SLLeoReadWrite(LEOCmd* cmdBlock, s32 direction, s32 lba, u8* vAddr, u32 nLbas, OSMesgQueue* mq);
 s32 SLLeoReadWrite_DATA(LEOCmd* cmdBlock, s32 direction, s32 lba, u8* vAddr, u32 nLbas, OSMesgQueue* mq);
-void func_80706100(void);
+void SLMFSRecoverManageArea(void);
 void func_80706518(s32, s32, s32);
-void func_8070664C(u16, u8*, u8*, s32);
-void func_80707204(void);
-void func_807073A0(void);
+void SLMFSDeleteFile(u16, u8*, u8*, s32);
+void SLMFSNewDisk(void);
+void SLMFSNewDisk2(void);
 s32 func_80707780(void);
-s32 func_80707964(void);
+s32 SLCheckDiskInsert(void);
 void func_80707B08(void);
 void func_8070818C(u8* romAddr, u8* ramAddr, size_t size);
 
@@ -74,8 +81,8 @@ void func_80709C3C(void);
 void func_80745CB8(void);
 
 bool func_80704F44(LEODiskID, LEODiskID);
-s32 func_80704FF4(LEODiskID*);
-void func_80705C3C(void);
+s32 SLLeoReadDiskID(LEODiskID*);
+void SLLeo_mfs_newdisk(void);
 
 s32 func_807424CC(void);
 s32 func_80742790(void);
@@ -91,6 +98,7 @@ void func_xk1_8002FFA0(void);
 void func_xk1_8002FFDC(void);
 
 void func_i2_800A2CCC(void);
+void func_i2_800B0D10(s32);
 
 void func_i10_8012B520(void);
 void func_i10_8012B854(void);
