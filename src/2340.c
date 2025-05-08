@@ -1,6 +1,6 @@
 #include "common.h"
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/2340/func_806F4B40.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/2340/Game_Init.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/2340/func_806F4BB4.s")
 
