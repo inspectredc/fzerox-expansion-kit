@@ -67,7 +67,8 @@ void leoCommand(void* cmd_blk_addr) {
             LEOclr_que_flag = 0;
             ((LEOCmd*) cmd_blk_addr)->header.status = LEO_STATUS_GOOD;
             if (((LEOCmd*) cmd_blk_addr)->header.control & LEO_CONTROL_POST) {
-                osSendMesg(((LEOCmd*) cmd_blk_addr)->header.post, (OSMesg) LEO_SENSE_NO_ADDITIONAL_SENSE_INFOMATION, OS_MESG_BLOCK);
+                osSendMesg(((LEOCmd*) cmd_blk_addr)->header.post, (OSMesg) LEO_SENSE_NO_ADDITIONAL_SENSE_INFOMATION,
+                           OS_MESG_BLOCK);
             }
             break;
 

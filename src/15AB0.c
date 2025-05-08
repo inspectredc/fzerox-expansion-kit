@@ -354,14 +354,16 @@ bool func_80708D88(void) {
     if (gGameMode == GAMEMODE_COURSE_EDIT) {
         CLEAR_TEXT_CACHE(SEGMENT_TEXT_START(ovl_i9), SEGMENT_TEXT_SIZE(ovl_i9));
         CLEAR_DATA_CACHE(SEGMENT_DATA_START(ovl_i9), SEGMENT_DATA_SIZE(ovl_i9));
-        func_80703CA4(SEGMENT_DISK_START(ovl_i9), SEGMENT_VRAM_START(ovl_i9), SEGMENT_BSS_START(ovl_i9) - SEGMENT_VRAM_START(ovl_i9), SEGMENT_BSS_SIZE(ovl_i9));
+        func_80703CA4(SEGMENT_DISK_START(ovl_i9), SEGMENT_VRAM_START(ovl_i9),
+                      SEGMENT_BSS_START(ovl_i9) - SEGMENT_VRAM_START(ovl_i9), SEGMENT_BSS_SIZE(ovl_i9));
         D_8076CC40 = 1;
     } else {
         func_80708474(0, SEGMENT_VRAM_SIZE(ovl_i9));
         if (D_8076CC40 == 1) {
             CLEAR_TEXT_CACHE(SEGMENT_TEXT_START(ovl_i9), SEGMENT_TEXT_SIZE(ovl_i9));
             CLEAR_DATA_CACHE(SEGMENT_DATA_START(ovl_i9), SEGMENT_DATA_SIZE(ovl_i9));
-            func_80703CA4(SEGMENT_DISK_START(ovl_i9), SEGMENT_VRAM_START(ovl_i9), SEGMENT_BSS_START(ovl_i9) - SEGMENT_VRAM_START(ovl_i9), SEGMENT_BSS_SIZE(ovl_i9));
+            func_80703CA4(SEGMENT_DISK_START(ovl_i9), SEGMENT_VRAM_START(ovl_i9),
+                          SEGMENT_BSS_START(ovl_i9) - SEGMENT_VRAM_START(ovl_i9), SEGMENT_BSS_SIZE(ovl_i9));
             sp54 = true;
         }
         D_8076CC40 = 0;
@@ -529,20 +531,17 @@ void func_807093F4(void) {
         case GAMEMODE_TIME_ATTACK:
         case GAMEMODE_GP_END_CS:
         case GAMEMODE_DEATH_RACE:
-            func_80701D7C(D_807C70F0, osPhysicalToVirtual(D_8079A424),
-                                SEGMENT_VRAM_SIZE(segment_17B960));
+            func_80701D7C(D_807C70F0, osPhysicalToVirtual(D_8079A424), SEGMENT_VRAM_SIZE(segment_17B960));
             romOffset = D_807C70E0;
             ramSize = SEGMENT_VRAM_SIZE(segment_1B8550);
             break;
         case GAMEMODE_CREATE_MACHINE:
-            func_80701D7C(D_807C70F0, osPhysicalToVirtual(D_8079A424),
-                                SEGMENT_VRAM_SIZE(segment_17B960));
+            func_80701D7C(D_807C70F0, osPhysicalToVirtual(D_8079A424), SEGMENT_VRAM_SIZE(segment_17B960));
             romOffset = D_807C7180;
             ramSize = SEGMENT_VRAM_SIZE(create_machine_textures);
             break;
         case GAMEMODE_COURSE_EDIT:
-            func_80701D7C(D_807C70F0, osPhysicalToVirtual(D_8079A424),
-                                SEGMENT_VRAM_SIZE(segment_17B960));
+            func_80701D7C(D_807C70F0, osPhysicalToVirtual(D_8079A424), SEGMENT_VRAM_SIZE(segment_17B960));
             romOffset = D_807C70E0;
             ramSize = SEGMENT_VRAM_SIZE(segment_1B8550);
             break;
@@ -550,8 +549,7 @@ void func_807093F4(void) {
         case GAMEMODE_LX_MACHINE_SETTINGS:
         case GAMEMODE_LX_GP_RACE_NEXT_MACHINE_SETTINGS:
         case GAMEMODE_FLX_MACHINE_SELECT:
-            func_80701D7C(D_807C70F0, osPhysicalToVirtual(D_8079A424),
-                                SEGMENT_VRAM_SIZE(segment_17B960));
+            func_80701D7C(D_807C70F0, osPhysicalToVirtual(D_8079A424), SEGMENT_VRAM_SIZE(segment_17B960));
         default:
             D_8076CBD0 = 0;
             return;
@@ -653,7 +651,7 @@ void func_80709760(void) {
         } else {
             func_8070818C(romOffset, sp1C, ramSize);
         }
-        if (*(s32*)sp1C == (s32)'MIO0') {
+        if (*(s32*) sp1C == (s32) 'MIO0') {
             mio0Decode(sp1C, osPhysicalToVirtual(D_8079A444));
         }
     }

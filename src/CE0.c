@@ -332,66 +332,76 @@ void Game_ThreadEntry(void* entry) {
     Segment_SetAddress(8, D_8079A414);
     Segment_SetAddress(3, D_8079A41C);
     Segment_SetPhysicalAddress(6, (D_8079A35C * 0x1AF08) + D_80128C90);
-    
+
     func_806F6094();
     func_807083D8();
     func_80708430();
 
     while (func_80742790() != 2) {}
-    
+
     while (func_807424CC() != 0) {}
 
-    CLEAR_OVERLAY_CACHE(SEGMENT_TEXT_START(ovl_i10), SEGMENT_TEXT_SIZE(ovl_i10), SEGMENT_DATA_START(ovl_i10), SEGMENT_DATA_SIZE(ovl_i10));
-    
-    func_80703E08(SEGMENT_DISK_START(ovl_i10), SEGMENT_VRAM_START(ovl_i10),
-                  SEGMENT_DISK_SIZE(ovl_i10), SEGMENT_BSS_SIZE(ovl_i10));
+    CLEAR_OVERLAY_CACHE(SEGMENT_TEXT_START(ovl_i10), SEGMENT_TEXT_SIZE(ovl_i10), SEGMENT_DATA_START(ovl_i10),
+                        SEGMENT_DATA_SIZE(ovl_i10));
+
+    func_80703E08(SEGMENT_DISK_START(ovl_i10), SEGMENT_VRAM_START(ovl_i10), SEGMENT_DISK_SIZE(ovl_i10),
+                  SEGMENT_BSS_SIZE(ovl_i10));
 
     D_8076CB40 = D_8076C770;
-                  
-    CLEAR_OVERLAY_CACHE(SEGMENT_TEXT_START(ovl_xk1), SEGMENT_TEXT_SIZE(ovl_xk1), SEGMENT_DATA_START(ovl_xk1), SEGMENT_DATA_END(ovl_xk1) - SEGMENT_DATA_START(ovl_xk1));
-    
-    func_80703E08(SEGMENT_DISK_START(ovl_xk1), SEGMENT_VRAM_START(ovl_xk1),
-                SEGMENT_DISK_SIZE(ovl_xk1), SEGMENT_BSS_SIZE(ovl_xk1));
 
-    CLEAR_OVERLAY_CACHE(SEGMENT_TEXT_START(ovl_i3), SEGMENT_TEXT_SIZE(ovl_i3), SEGMENT_DATA_START(ovl_i3), SEGMENT_DATA_SIZE(ovl_i3));
-    
-    func_80703E08(SEGMENT_DISK_START(ovl_i3), SEGMENT_VRAM_START(ovl_i3),
-                  SEGMENT_DISK_SIZE(ovl_i3), SEGMENT_BSS_SIZE(ovl_i3));
+    CLEAR_OVERLAY_CACHE(SEGMENT_TEXT_START(ovl_xk1), SEGMENT_TEXT_SIZE(ovl_xk1), SEGMENT_DATA_START(ovl_xk1),
+                        SEGMENT_DATA_END(ovl_xk1) - SEGMENT_DATA_START(ovl_xk1));
 
-    CLEAR_OVERLAY_CACHE(SEGMENT_TEXT_START(ovl_i4), SEGMENT_TEXT_SIZE(ovl_i4), SEGMENT_DATA_START(ovl_i4), SEGMENT_DATA_SIZE(ovl_i4));
-    
-    func_80703E08(SEGMENT_DISK_START(ovl_i4), SEGMENT_VRAM_START(ovl_i4),
-                  SEGMENT_DISK_SIZE(ovl_i4), SEGMENT_BSS_SIZE(ovl_i4));
+    func_80703E08(SEGMENT_DISK_START(ovl_xk1), SEGMENT_VRAM_START(ovl_xk1), SEGMENT_DISK_SIZE(ovl_xk1),
+                  SEGMENT_BSS_SIZE(ovl_xk1));
 
-    CLEAR_OVERLAY_CACHE(SEGMENT_TEXT_START(course_select), SEGMENT_TEXT_SIZE(course_select), SEGMENT_DATA_START(course_select), SEGMENT_DATA_SIZE(course_select));
-    
+    CLEAR_OVERLAY_CACHE(SEGMENT_TEXT_START(ovl_i3), SEGMENT_TEXT_SIZE(ovl_i3), SEGMENT_DATA_START(ovl_i3),
+                        SEGMENT_DATA_SIZE(ovl_i3));
+
+    func_80703E08(SEGMENT_DISK_START(ovl_i3), SEGMENT_VRAM_START(ovl_i3), SEGMENT_DISK_SIZE(ovl_i3),
+                  SEGMENT_BSS_SIZE(ovl_i3));
+
+    CLEAR_OVERLAY_CACHE(SEGMENT_TEXT_START(ovl_i4), SEGMENT_TEXT_SIZE(ovl_i4), SEGMENT_DATA_START(ovl_i4),
+                        SEGMENT_DATA_SIZE(ovl_i4));
+
+    func_80703E08(SEGMENT_DISK_START(ovl_i4), SEGMENT_VRAM_START(ovl_i4), SEGMENT_DISK_SIZE(ovl_i4),
+                  SEGMENT_BSS_SIZE(ovl_i4));
+
+    CLEAR_OVERLAY_CACHE(SEGMENT_TEXT_START(course_select), SEGMENT_TEXT_SIZE(course_select),
+                        SEGMENT_DATA_START(course_select), SEGMENT_DATA_SIZE(course_select));
+
     func_80703E08(SEGMENT_DISK_START(course_select), SEGMENT_VRAM_START(course_select),
                   SEGMENT_DISK_SIZE(course_select), SEGMENT_BSS_SIZE(course_select));
 
-    CLEAR_OVERLAY_CACHE(SEGMENT_TEXT_START(ovl_i6), SEGMENT_TEXT_SIZE(ovl_i6), SEGMENT_DATA_START(ovl_i6), SEGMENT_DATA_SIZE(ovl_i6));
-    
-    func_80703E08(SEGMENT_DISK_START(ovl_i6), SEGMENT_VRAM_START(ovl_i6),
-                  SEGMENT_DISK_SIZE(ovl_i6), SEGMENT_BSS_SIZE(ovl_i6));
+    CLEAR_OVERLAY_CACHE(SEGMENT_TEXT_START(ovl_i6), SEGMENT_TEXT_SIZE(ovl_i6), SEGMENT_DATA_START(ovl_i6),
+                        SEGMENT_DATA_SIZE(ovl_i6));
 
-    CLEAR_OVERLAY_CACHE(SEGMENT_TEXT_START(ovl_i7), SEGMENT_TEXT_SIZE(ovl_i7), SEGMENT_DATA_START(ovl_i7), SEGMENT_DATA_SIZE(ovl_i7));
-    
-    func_80703E08(SEGMENT_DISK_START(ovl_i7), SEGMENT_VRAM_START(ovl_i7),
-                  SEGMENT_DISK_SIZE(ovl_i7), SEGMENT_BSS_SIZE(ovl_i7));
+    func_80703E08(SEGMENT_DISK_START(ovl_i6), SEGMENT_VRAM_START(ovl_i6), SEGMENT_DISK_SIZE(ovl_i6),
+                  SEGMENT_BSS_SIZE(ovl_i6));
 
-    CLEAR_OVERLAY_CACHE(SEGMENT_TEXT_START(ovl_i8), SEGMENT_TEXT_SIZE(ovl_i8), SEGMENT_DATA_START(ovl_i8), SEGMENT_DATA_SIZE(ovl_i8));
-    
-    func_80703E08(SEGMENT_DISK_START(ovl_i8), SEGMENT_VRAM_START(ovl_i8),
-                  SEGMENT_DISK_SIZE(ovl_i8), SEGMENT_BSS_SIZE(ovl_i8));
+    CLEAR_OVERLAY_CACHE(SEGMENT_TEXT_START(ovl_i7), SEGMENT_TEXT_SIZE(ovl_i7), SEGMENT_DATA_START(ovl_i7),
+                        SEGMENT_DATA_SIZE(ovl_i7));
 
-    CLEAR_OVERLAY_CACHE(SEGMENT_TEXT_START(ovl_i2), SEGMENT_TEXT_SIZE(ovl_i2), SEGMENT_DATA_START(ovl_i2), SEGMENT_DATA_END(ovl_i2) - SEGMENT_DATA_START(ovl_i2));
-    
-    func_80703E08(SEGMENT_DISK_START(ovl_i2), SEGMENT_VRAM_START(ovl_i2),
-                  SEGMENT_DISK_SIZE(ovl_i2), SEGMENT_BSS_SIZE(ovl_i2));
+    func_80703E08(SEGMENT_DISK_START(ovl_i7), SEGMENT_VRAM_START(ovl_i7), SEGMENT_DISK_SIZE(ovl_i7),
+                  SEGMENT_BSS_SIZE(ovl_i7));
 
-    CLEAR_OVERLAY_CACHE(SEGMENT_TEXT_START(ovl_i9), SEGMENT_TEXT_SIZE(ovl_i9), SEGMENT_DATA_START(ovl_i9), SEGMENT_DATA_SIZE(ovl_i9));
-    
-    func_80703CA4(SEGMENT_DISK_START(ovl_i9), SEGMENT_VRAM_START(ovl_i9),
-                  SEGMENT_DISK_SIZE(ovl_i9), SEGMENT_BSS_SIZE(ovl_i9));
+    CLEAR_OVERLAY_CACHE(SEGMENT_TEXT_START(ovl_i8), SEGMENT_TEXT_SIZE(ovl_i8), SEGMENT_DATA_START(ovl_i8),
+                        SEGMENT_DATA_SIZE(ovl_i8));
+
+    func_80703E08(SEGMENT_DISK_START(ovl_i8), SEGMENT_VRAM_START(ovl_i8), SEGMENT_DISK_SIZE(ovl_i8),
+                  SEGMENT_BSS_SIZE(ovl_i8));
+
+    CLEAR_OVERLAY_CACHE(SEGMENT_TEXT_START(ovl_i2), SEGMENT_TEXT_SIZE(ovl_i2), SEGMENT_DATA_START(ovl_i2),
+                        SEGMENT_DATA_END(ovl_i2) - SEGMENT_DATA_START(ovl_i2));
+
+    func_80703E08(SEGMENT_DISK_START(ovl_i2), SEGMENT_VRAM_START(ovl_i2), SEGMENT_DISK_SIZE(ovl_i2),
+                  SEGMENT_BSS_SIZE(ovl_i2));
+
+    CLEAR_OVERLAY_CACHE(SEGMENT_TEXT_START(ovl_i9), SEGMENT_TEXT_SIZE(ovl_i9), SEGMENT_DATA_START(ovl_i9),
+                        SEGMENT_DATA_SIZE(ovl_i9));
+
+    func_80703CA4(SEGMENT_DISK_START(ovl_i9), SEGMENT_VRAM_START(ovl_i9), SEGMENT_DISK_SIZE(ovl_i9),
+                  SEGMENT_BSS_SIZE(ovl_i9));
 
     D_8076CB40 = -1;
     func_i10_8012B904();
@@ -399,8 +409,8 @@ void Game_ThreadEntry(void* entry) {
     CLEAR_DATA_CACHE(osPhysicalToVirtual(D_8079A414), SEGMENT_DATA_SIZE_CONST(segment_16C8A0));
 
     func_8070818C(D_807C7118,
-               (uintptr_t) osPhysicalToVirtual(D_8079A414) + (size_t) SEGMENT_DATA_SIZE_CONST(segment_16C8A0),
-               SEGMENT_VRAM_SIZE(segment_16C8A0));
+                  (uintptr_t) osPhysicalToVirtual(D_8079A414) + (size_t) SEGMENT_DATA_SIZE_CONST(segment_16C8A0),
+                  SEGMENT_VRAM_SIZE(segment_16C8A0));
 
     mio0Decode((uintptr_t) osPhysicalToVirtual(D_8079A414) + (size_t) SEGMENT_DATA_SIZE_CONST(segment_16C8A0),
                osPhysicalToVirtual(D_8079A414));
@@ -408,7 +418,6 @@ void Game_ThreadEntry(void* entry) {
     func_8070818C(D_807C70D8, (uintptr_t) osPhysicalToVirtual(D_8079A41C), SEGMENT_VRAM_SIZE(segment_17B1E0));
 
     func_8070818C(D_807C70F0, (uintptr_t) osPhysicalToVirtual(D_8079A424), SEGMENT_VRAM_SIZE(segment_17B960));
-
 
     if ((D_8079A32C != 0) && gRamDDCompatible) {
         if (osAppNMIBuffer[13] != 0x20DE1529) {
