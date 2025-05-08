@@ -47,7 +47,6 @@ s32 func_807039D4(s32 startLba, void* vram, s32 diskSize, s32 bssSize) {
     s32 nBytes;
     LEOCmd sp34;
 
-    
     nBytes = 0;
     LeoByteToLBA(startLba, diskSize, &lbaCount);
     osVirtualToPhysical(vram);
@@ -56,7 +55,8 @@ s32 func_807039D4(s32 startLba, void* vram, s32 diskSize, s32 bssSize) {
     osVirtualToPhysical((uintptr_t) bssStart + bssSize);
 
     PRINTF("========================================================\n");
-    PRINTF("LBA %d, dist 0x%x-0x%x-0x%x , %dLBAs\n", startLba, vram, bssStart, (uintptr_t) bssStart + bssSize, lbaCount);
+    PRINTF("LBA %d, dist 0x%x-0x%x-0x%x , %dLBAs\n", startLba, vram, bssStart, (uintptr_t) bssStart + bssSize,
+           lbaCount);
     PRINTF("========================================================\n");
 
     if (lbaCount - 1) {
@@ -65,7 +65,8 @@ s32 func_807039D4(s32 startLba, void* vram, s32 diskSize, s32 bssSize) {
         osRecvMesg(&gDmaMesgQueue, NULL, 1);
     }
     diskSize -= nBytes;
-    SLLeoReadWrite(&sp34, OS_READ, (startLba + lbaCount) - 1, osPhysicalToVirtual((uintptr_t) D_8077B4D0), 1, &gDmaMesgQueue);
+    SLLeoReadWrite(&sp34, OS_READ, (startLba + lbaCount) - 1, osPhysicalToVirtual((uintptr_t) D_8077B4D0), 1,
+                   &gDmaMesgQueue);
     osRecvMesg(&gDmaMesgQueue, NULL, 1);
     bcopy(D_8077B4D0, osPhysicalToVirtual((uintptr_t) vram + nBytes), diskSize);
     bzero((uintptr_t) vram + nBytes + diskSize, bssSize);
@@ -88,7 +89,8 @@ s32 func_80703B40(s32 startLba, void* vram, s32 diskSize, s32 bssSize) {
     osVirtualToPhysical((uintptr_t) bssStart + bssSize);
 
     PRINTF("========================================================\n");
-    PRINTF("LBA %d, dist 0x%x-0x%x-0x%x , %dLBAs\n", startLba, vram, bssStart, (uintptr_t) bssStart + bssSize, lbaCount);
+    PRINTF("LBA %d, dist 0x%x-0x%x-0x%x , %dLBAs\n", startLba, vram, bssStart, (uintptr_t) bssStart + bssSize,
+           lbaCount);
     PRINTF("========================================================\n");
 
     if (lbaCount - 1) {
@@ -97,7 +99,8 @@ s32 func_80703B40(s32 startLba, void* vram, s32 diskSize, s32 bssSize) {
         osRecvMesg(&gDmaMesgQueue, NULL, 1);
     }
     diskSize -= nBytes;
-    func_80768AF0(&sp34, OS_READ, (startLba + lbaCount) - 1, osPhysicalToVirtual((uintptr_t) D_8077B4D0), 1, &gDmaMesgQueue);
+    func_80768AF0(&sp34, OS_READ, (startLba + lbaCount) - 1, osPhysicalToVirtual((uintptr_t) D_8077B4D0), 1,
+                  &gDmaMesgQueue);
     osRecvMesg(&gDmaMesgQueue, NULL, 1);
     bcopy(D_8077B4D0, osPhysicalToVirtual((uintptr_t) vram + nBytes), diskSize);
     bzero((uintptr_t) vram + nBytes + diskSize, bssSize);
@@ -119,7 +122,8 @@ s32 func_80703CA4(s32 startLba, void* vram, s32 diskSize, s32 bssSize) {
     osVirtualToPhysical((uintptr_t) bssStart + bssSize);
 
     PRINTF("========================================================\n");
-    PRINTF("LBA %d, dist 0x%x-0x%x-0x%x , %dLBAs\n", startLba, vram, bssStart, (uintptr_t) bssStart + bssSize, lbaCount);
+    PRINTF("LBA %d, dist 0x%x-0x%x-0x%x , %dLBAs\n", startLba, vram, bssStart, (uintptr_t) bssStart + bssSize,
+           lbaCount);
     PRINTF("========================================================\n");
 
     if (lbaCount - 1) {
@@ -156,7 +160,8 @@ s32 func_80703E08(s32 startLba, void* vram, s32 diskSize, s32 bssSize) {
     func_80768A5C(&sp4C, OS_READ, startLba, vram, lbaCount, &gDmaMesgQueue);
 
     PRINTF("========================================================\n");
-    PRINTF("LBA %d, dist 0x%x-0x%x-0x%x , %dLBAs\n", startLba, vram, bssStart, (uintptr_t) bssStart + bssSize, lbaCount);
+    PRINTF("LBA %d, dist 0x%x-0x%x-0x%x , %dLBAs\n", startLba, vram, bssStart, (uintptr_t) bssStart + bssSize,
+           lbaCount);
     PRINTF("========================================================\n");
 
     if (D_8076CB40 != -1) {

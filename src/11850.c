@@ -86,7 +86,7 @@ s32 SLMFSLoadSpecial(u16 arg0, u8* arg1, u8* arg2, u8* arg3, s32 arg4) {
     while (true) {
         func_80707B08();
         D_8079F9B4 = func_8076543C(arg0, arg1, arg2, arg3, arg4);
-    
+
         if (D_8079F9B4 == 0) {
             PRINTF("SLMFSLoadSP Good Return\n");
             return D_8079F9B4;
@@ -151,7 +151,7 @@ s32 SLMFSLoadSpecial2(u16 arg0, u8* arg1, u8* arg2, u8* arg3, s32 arg4) {
     while (true) {
         func_80707B08();
         D_8079F9B4 = func_8076543C(arg0, arg1, arg2, arg3, arg4);
-    
+
         if (D_8079F9B4 == 0) {
             PRINTF("SLMFSLoadSpecial2 Good Return\n");
             return D_8079F9B4;
@@ -231,7 +231,7 @@ extern u8 D_800D10F0[];
 void func_8070470C(void) {
     s32 i;
     PRINTF("hoge45\n");
-    
+
     if (D_8076CBC8 == 0) {
         return;
     }
@@ -291,7 +291,7 @@ void func_8070481C(void) {
 void func_80704870(void) {
     func_80704050(1);
     SLLeoReadDiskID(&D_8079FA10);
-    
+
     if (func_807041C0(D_8079FA10) == 2) {
         PRINTF("RECORD_GAME_DISK_ID\n");
         D_8076CB70 = D_8079FA10;
@@ -362,7 +362,7 @@ s32 SLCheckDiskChange(void) {
 
     while (true) {
         D_8079F9B8 = LeoTestUnitReady(&D_8079F954);
-    
+
         switch (D_8079F9B8) {
             case LEO_ERROR_GOOD:
                 return 0;
@@ -423,7 +423,8 @@ s32 SLLeoReadDiskID(LEODiskID* diskId) {
         LeoReadDiskID(&D_8079F958, diskId, &D_8079F978);
         osRecvMesg(&D_8079F978, &D_8079F9B8, OS_MESG_BLOCK);
 
-        PRINTF("GAME ID IS %c%c%c%c\n", diskId->gameName[0], diskId->gameName[2], diskId->gameName[2], diskId->gameName[3]);
+        PRINTF("GAME ID IS %c%c%c%c\n", diskId->gameName[0], diskId->gameName[2], diskId->gameName[2],
+               diskId->gameName[3]);
         PRINTF("KO-JO- LINE NUM iS %d\n", diskId->serialNumber.lineNumber);
         PRINTF("TIME is %d\n", diskId->serialNumber.rawTime);
 
@@ -481,7 +482,7 @@ s32 SLLeoReadDiskID_for_start(void) {
         case LEO_ERROR_MEDIUM_NOT_PRESENT:
             break;
     }
-    
+
     PRINTF("SLLeoReadDiskID_for_start end\n");
     return D_8079F9B8;
 }
@@ -531,14 +532,14 @@ s32 SLLeoReadWrite_DATA(LEOCmd* cmdBlock, s32 direction, s32 lba, u8* vAddr, u32
         osInvalDCache(osPhysicalToVirtual(vAddr), D_8079F950);
         LeoReadWrite(cmdBlock, direction, lba, vAddr, nLbas, &D_8079F978);
         osRecvMesg(&D_8079F978, &D_8079F9B8, OS_MESG_BLOCK);
-    
+
         PRINTF("SLLeoReadWrite_DATA Finished\n");
-    
+
         if (D_8079F9B8 == NULL) {
             PRINTF("MFSMesgQ Send 12\n");
             osSendMesg(mq, D_8079F9B8, OS_MESG_NOBLOCK);
         }
-    
+
         switch (D_8079F9B8) {
             case LEO_ERROR_GOOD:
                 return 0;
@@ -589,22 +590,21 @@ s32 SLLeoReadWrite(LEOCmd* cmdBlock, s32 direction, s32 lba, u8* vAddr, u32 nLba
             SLMFSNewDisk();
             D_8076CBB0 = 0;
         }
-    
+
         if (0) {
             PRINTF("SLLeoReadWrite 0\n");
             PRINTF("SLLeoReadWrite 1\n");
             PRINTF("SLLeoReadWrite 2\n");
         }
-    
+
         func_807040C8();
         LeoLBAToByte(lba, nLbas, &D_8079F950);
         osInvalDCache(osPhysicalToVirtual(vAddr), D_8079F950);
         LeoReadWrite(cmdBlock, direction, lba, vAddr, nLbas, &D_8079F978);
         osRecvMesg(&D_8079F978, &D_8079F9B8, OS_MESG_BLOCK);
-    
-    
+
         PRINTF("SLLeoReadWrite ERROR %d\n", D_8079F9B8);
-    
+
         switch (D_8079F9B8) {
             case LEO_ERROR_GOOD:
                 PRINTF("MFSMesgQ Send 14\n");
@@ -721,7 +721,7 @@ s32 SLLeoCreateManager(s32 arg0) {
 void SLLeoResetClear(void) {
     s32 i;
     PRINTF("hoge16\n");
-    
+
     for (i = 0; i < 30; i++) {
         if (0) {
             PRINTF("hoge17\n");
@@ -786,8 +786,7 @@ void SLLeoModeSelectAsync(u32 standby, u32 sleep) {
             default:
                 func_8070F8A4(D_8079F9B8, 0);
                 while (true) {}
-                
-        }        
+        }
     }
 }
 
@@ -801,17 +800,17 @@ void func_80705E18(void) {
     }
     while (func_80704F44(D_8076CB50, leoBootID) != 0) {
 
-            osViSwapBuffer(gFrameBuffers[0]);
-            while (osViGetNextFramebuffer() != gFrameBuffers[0]) {}
-            func_8070F8A4(-1, 5);
-            osViSwapBuffer(gFrameBuffers[1]);
-            while (osViGetNextFramebuffer() != gFrameBuffers[1]) {}
-            func_8070F8A4(-1, 5);
-            osViSwapBuffer(gFrameBuffers[2]);
-            while (osViGetNextFramebuffer() != gFrameBuffers[2]) {}
-            func_8070F8A4(-1, 5);
-            while (func_80707780() != 0) {}
-            while (SLCheckDiskInsert() != 0) {}
+        osViSwapBuffer(gFrameBuffers[0]);
+        while (osViGetNextFramebuffer() != gFrameBuffers[0]) {}
+        func_8070F8A4(-1, 5);
+        osViSwapBuffer(gFrameBuffers[1]);
+        while (osViGetNextFramebuffer() != gFrameBuffers[1]) {}
+        func_8070F8A4(-1, 5);
+        osViSwapBuffer(gFrameBuffers[2]);
+        while (osViGetNextFramebuffer() != gFrameBuffers[2]) {}
+        func_8070F8A4(-1, 5);
+        while (func_80707780() != 0) {}
+        while (SLCheckDiskInsert() != 0) {}
     }
     func_80704050(0);
 }
@@ -831,7 +830,7 @@ void SLMFSRecoverManageArea(void) {
             PRINTF("SLMFSRecoverManageArea Good Return\n");
             break;
         }
-        
+
         D_8079F9B8 = D_80794CD4;
         switch (D_8079F9B8) {
             case LEO_ERROR_GOOD:
@@ -876,7 +875,6 @@ void SLMFSRecoverManageArea(void) {
             default:
                 func_8070F8A4(D_8079F9B8, 0);
                 while (true) {}
-
         }
     }
 }
@@ -957,7 +955,7 @@ void func_80706518(s32 arg0, s32 arg1, s32 arg2) {
 
     for (D_8079F9CC = 0; D_8079F9CC < D_391 - D_34E; D_8079F9CC++) {
         osWritebackDCacheAll();
-        SLLeoReadWrite_DATA(&D_8079F958, OS_READ, (u32)D_34E + D_8079F9CC, D_8077B4D0, 1, &gDmaMesgQueue);
+        SLLeoReadWrite_DATA(&D_8079F958, OS_READ, (u32) D_34E + D_8079F9CC, D_8077B4D0, 1, &gDmaMesgQueue);
         osRecvMesg(&gDmaMesgQueue, NULL, OS_MESG_BLOCK);
         osWritebackDCacheAll();
         SLLeoReadWrite_DATA(&D_8079F958, OS_WRITE, 0xBF6 + D_8079F9CC, D_8077B4D0, 1, &gDmaMesgQueue);
@@ -1299,9 +1297,10 @@ void SLMFSSave(u16 arg0, u8* arg1, u8* arg2, s32 arg3, u32 arg4, s32 arg5, s32 a
 s32 SLMFSCreateManager(s32 region) {
     PRINTF("hoge51\n");
     PRINTF("hoge52\n");
-    
+
     func_80705A98();
-    if ((func_8076007C(region, D_8079F9D0, 0x10) != 0) && ((s32) D_80794CD4 == LEO_ERROR_DEVICE_COMMUNICATION_FAILURE)) {
+    if ((func_8076007C(region, D_8079F9D0, 0x10) != 0) &&
+        ((s32) D_80794CD4 == LEO_ERROR_DEVICE_COMMUNICATION_FAILURE)) {
         func_8070F8A4(D_8079F9B8, 0);
         while (true) {}
     }
@@ -1327,7 +1326,6 @@ void SLMFSNewDisk(void) {
         PRINTF("SLMFSNewDisk OK (ENTRY LOAD BEFORE)\n");
         PRINTF("SLMFSNewDisk OK (ENTRY LOAD AFTER)\n");
         PRINTF("ERROR SLMFSNewDisk %d\n", D_8079F9B8);
-
 
         switch (D_8079F9B8) {
             case LEO_ERROR_GOOD:
@@ -1372,15 +1370,15 @@ void SLMFSNewDisk2(void) {
     while (true) {
         func_80707B08();
         D_8079F9BC = func_807603A8();
-    
+
         if (D_8079F9BC == 0) {
             PRINTF("SLMFSNewDisk return %d\n", D_8079F9BC);
             return;
         }
-    
+
         D_8079F9B8 = D_80794CD4;
         PRINTF("ERROR SLMFSNewDisk %d\n", D_8079F9B8);
-    
+
         switch (D_8079F9B8) {
             case LEO_ERROR_GOOD:
             case 0xF6:
@@ -1441,7 +1439,7 @@ void SLMFSFlushManageArea(void) {
             PRINTF("hoge56\n");
             PRINTF("SLMFSFlush 3\n");
         }
-        
+
         switch (D_8079F9B8) {
             case LEO_ERROR_GOOD:
                 return;
@@ -1517,12 +1515,12 @@ s32 func_80707780(void) {
 
 s32 func_80707868(LEODiskID* diskId) {
     PRINTF("hoge1\n");
-    
+
     LeoReadDiskID(&D_8079F958, diskId, &D_8079F978);
     osRecvMesg(&D_8079F978, &D_8079F9B8, OS_MESG_BLOCK);
 
     PRINTF("GAME ID IS %c%c%c%c\n", diskId->gameName[0], diskId->gameName[1], diskId->gameName[2], diskId->gameName[3]);
-    
+
     switch (D_8079F9B8) {
         case LEO_ERROR_GOOD:
             D_8076CBBC = 1;
@@ -1547,7 +1545,7 @@ s32 func_80707868(LEODiskID* diskId) {
 
 s32 SLCheckDiskInsert(void) {
     PRINTF("hoge4\n");
-    
+
     D_8079F9B8 = LeoTestUnitReady(&D_8079F954);
     switch (D_8079F9B8) {
         case LEO_ERROR_GOOD:
@@ -1582,10 +1580,10 @@ s32 SLCheckDiskInsert(void) {
 s32 SLCheckDiskChange2(void) {
     PRINTF("hoge8\n");
     PRINTF("hoge0\n");
-    
+
     while (true) {
         D_8079F9B8 = LeoTestUnitReady(&D_8079F954);
-        
+
         switch (D_8079F9B8) {
             case LEO_ERROR_GOOD:
                 return 0;

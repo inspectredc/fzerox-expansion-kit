@@ -37,7 +37,8 @@ void leomain(void* arg0) {
     LEOPiDmaParam.hdr.retQueue = &LEOdma_que;
     osEPiReadIo(LEOPiInfo, LEO_STATUS, &cur_status);
     if (!(cur_status & LEO_STATUS_RESET_STATE)) {
-        if ((cur_status & (LEO_STATUS_BUFFER_MANAGER_INTERRUPT | LEO_STATUS_MECHANIC_INTERRUPT | LEO_STATUS_BUSY_STATE))) {
+        if ((cur_status &
+             (LEO_STATUS_BUFFER_MANAGER_INTERRUPT | LEO_STATUS_MECHANIC_INTERRUPT | LEO_STATUS_BUSY_STATE))) {
             leoDrive_reset();
         }
     }
