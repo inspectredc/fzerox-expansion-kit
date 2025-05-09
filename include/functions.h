@@ -6,6 +6,8 @@
 #include "gfx.h"
 #include "PR/leo.h"
 #include "libc/stdbool.h"
+#include "other_types.h"
+#include "unk_structs.h"
 
 void Game_ThreadEntry(void* arg0);
 void Audio_ThreadEntry(void* arg0);
@@ -72,6 +74,7 @@ void func_8073631C(void*);
 void func_80736328(void*);
 void Fault_Init(void);
 void Fault_SetFrameBuffer(FrameBuffer* buffer, u16 width, u16 height);
+void Audio_Init(RomOffset, RomOffset, RomOffset);
 void Audio_PreNMI(void);
 void func_806F5A50(void);
 

@@ -754,5 +754,64 @@ typedef enum {
 
 #define AUDIO_MK_CMD(b0,b1,b2,b3) ((((b0) & 0xFF) << 0x18) | (((b1) & 0xFF) << 0x10) | (((b2) & 0xFF) << 0x8) | (((b3) & 0xFF) << 0))
 
+void Audio_NoteDisable(Note* note);
+void Audio_ProcessNotes(void);
+TunedSample* Audio_GetInstrumentTunedSample(Instrument* instrument, s32 semitone);
+Instrument* Audio_GetInstrument(s32 fontId, s32 instId);
+Drum* Audio_GetDrum(s32 fontId, s32 drumId);
+void Audio_SeqLayerNoteDecay(SequenceLayer* layer);
+void Audio_InitNoteLists(NotePool* pool);
+void Audio_InitNoteFreeList(void);
+void Audio_NotePoolFill(NotePool* pool, s32 count);
+void Audio_AudioListRemove(Note* note);
+Note* Audio_AllocNote(SequenceLayer* layer);
+void Audio_NoteInitAll(void);
+
+void Audio_NotePortamentoInit(Note* note);
+void AudioSeq_ProcessSequences(s32 arg0);
+void AudioSeq_InitSequencePlayerChannels(s32 seqPlayerIndex);
+void AudioSeq_InitSequencePlayers(void);
+void* AudioLoad_DmaSampleData(uintptr_t devAddr, size_t size, s32 arg2, u8* dmaIndexRef, s32 medium);
+void AudioLoad_InitSampleDmaBuffers(s32 numNotes);
+
+void AudioSeq_SequencePlayerDisable(SequencePlayer* seqPlayer);
+void AudioSeq_AudioListPushBack(AudioListItem* list, AudioListItem* item);
+void AudioSeq_SkipForwardSequence(SequencePlayer* seqPlayer);
+void AudioSeq_ResetSequencePlayer(s32 seqPlayerIndex);
+void AudioLoad_DecreaseSampleDmaTtls(void);
+
+bool AudioLoad_IsFontLoadComplete(s32 fontId);
+bool AudioLoad_IsSeqLoadComplete(s32 seqId);
+void AudioLoad_SetFontLoadStatus(s32 fontId, s32 loadStatus);
+void AudioLoad_SyncLoadSeqParts(s32 seqId, s32 flags);
+s32 AudioLoad_SyncLoadInstrument(s32 fontId, s32 instId, s32 drumId);
+void AudioLoad_AsyncLoadSampleBank(s32 sampleBankId, s32 nChunks, s32 retData, OSMesgQueue* retQueue);
+void AudioLoad_AsyncLoadSeq(s32 seqId, s32 nChunks, s32 retData, OSMesgQueue* retQueue);
+u8* AudioLoad_GetFontsForSequence(s32 seqId, u32* outNumFonts);
+void AudioLoad_DiscardSeqFonts(s32 seqId);
+s32 AudioLoad_SyncInitSeqPlayer(s32 seqPlayerIndex, s32 seqId, s32 arg2);
+s32 AudioLoad_SyncInitSeqPlayerSkipTicks(s32 seqPlayerIndex, s32 seqId, s32 skipTicks);
+void AudioLoad_ProcessLoads(s32 resetStatus);
+
+void AudioLoad_Init(void* heap, size_t heapSize);
+s32 AudioLoad_SlowLoadSample(s32 fontId, u8 instId, s8* status);
+void AudioLoad_LoadPermanentSamples(void);
+void AudioHeap_InitPool(AudioAllocPool* pool, void* ramAddr, size_t size);
+void* AudioHeap_SearchCaches(s32 tableType, s32 cache, s32 id);
+bool AudioHeap_ResetStep(void);
+void* AudioHeap_AllocTemporarySampleCache(size_t size, s32 fontId, void* sampleAddr, s8 medium);
+Acmd* AudioSynth_Update(Acmd* aList, s32* cmdCount, s16* aiBufStart, s32 aiBufLen);
+
+AudioTask* AudioThread_CreateTask(void);
+void AudioThread_QueueCmdF32(s32 opArgs, f32 data);
+void AudioThread_QueueCmdU32(s32 opArgs, u32 data);
+void AudioThread_QueueCmdS8(s32 opArgs, s8 data);
+void AudioThread_QueueCmdU16(s32 opArgs, u16 data);
+void AudioThread_ScheduleProcessCmds(void);
+bool AudioThread_ResetComplete(void);
+s32 AudioThread_ResetAudioHeap(s32 specId);
+void AudioThread_PreNMIInternal(void);
+
+AudioTask* Audio_SetupCreateTask(void);
 
 #endif
