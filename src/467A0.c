@@ -14,11 +14,11 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/467A0/func_80739A64.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/467A0/func_80739AB0.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/467A0/AudioThread_QueueCmdF32.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/467A0/func_80739AD4.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/467A0/AudioThread_QueueCmdU32.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/467A0/func_80739AF8.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/467A0/AudioThread_QueueCmdS8.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/467A0/func_80739B28.s")
 
@@ -42,7 +42,7 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/467A0/func_80739F34.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/467A0/func_80739FD0.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/467A0/AudioThread_PreNMIInternal.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/467A0/func_8073A01C.s")
 

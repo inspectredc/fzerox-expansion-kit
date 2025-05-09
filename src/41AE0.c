@@ -94,7 +94,7 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/41AE0/func_80736334.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/41AE0/func_80736394.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/41AE0/AudioLoad_Init.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/41AE0/func_80736754.s")
 

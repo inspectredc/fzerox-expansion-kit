@@ -265,6 +265,8 @@
       - [0x775F0, data]
       - [0x79F60, .data, 60]
       - [0x79FA0, data]
+      - [0x79FB0, .data, 2260]
+      - [0x79FC0, data]
 
       - [0x7F5F0, data, libultra/os/exceptasm]
       - [0x7F610, .data, libultra/os/thread]
@@ -406,6 +408,8 @@
       - [0xA2B50, data] # audio tables?
       - { type: .bss, vram: 0x80795670, name: 60 }
       - { type: bss, vram: 0x8079A350, name: 8079A350 }
+      - { type: .bss, vram: 0x8079A4A0, name: 2260 }
+      - { type: bss, vram: 0x8079A4B0, name: 8079A4B0 }
       - { type: .bss, vram: 0x807C1C00, name: libultra/io/sptask }
       - { type: .bss, vram: 0x807C1C40, name: libultra/io/motor }
       - { type: .bss, vram: 0x807C1D40, name: libultra/io/siacs }
