@@ -434,16 +434,20 @@ gLeoRezeroFunc = 0x807C6E8C;
 // audio
 
 AudioLoad_Init = 0x80736394;
+AudioLoad_IsFontLoadComplete = 0x807349A0;
+AudioLoad_IsSeqLoadComplete = 0x80734A18;
+AudioLoad_IsSampleLoadComplete = 0x80734A90;
+
 AudioThread_QueueCmdF32 = 0x80739AB0;
 AudioThread_QueueCmdU32 = 0x80739AD4;
 AudioThread_QueueCmdS8 = 0x80739AF8;
+AudioThread_GetAsyncLoadStatus = 0x80739DCC;
+AudioThread_ResetComplete = 0x80739E88;
+AudioThread_ResetAudioHeap = 0x80739F34;
 AudioThread_PreNMIInternal = 0x80739FD0;
 Audio_SetupCreateTask = 0x80745BDC;
 
-
 // audio data
-
-
 
 // audio bss
 
