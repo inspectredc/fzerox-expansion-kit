@@ -24,4 +24,3 @@ void Audio_ThreadEntry(void* arg0) {
         sCurAudioTask = Audio_SetupCreateTask();
     }
 }
-

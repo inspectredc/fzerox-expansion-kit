@@ -6,11 +6,11 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/41AE0/func_80734708.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/41AE0/func_807349A0.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/41AE0/AudioLoad_IsFontLoadComplete.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/41AE0/func_80734A18.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/41AE0/AudioLoad_IsSeqLoadComplete.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/41AE0/func_80734A90.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/41AE0/AudioLoad_IsSampleLoadComplete.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/41AE0/func_80734B08.s")
 

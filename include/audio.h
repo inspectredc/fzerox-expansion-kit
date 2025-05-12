@@ -782,6 +782,7 @@ void AudioLoad_DecreaseSampleDmaTtls(void);
 
 bool AudioLoad_IsFontLoadComplete(s32 fontId);
 bool AudioLoad_IsSeqLoadComplete(s32 seqId);
+bool AudioLoad_IsSampleLoadComplete(s32 sampleBankId);
 void AudioLoad_SetFontLoadStatus(s32 fontId, s32 loadStatus);
 void AudioLoad_SyncLoadSeqParts(s32 seqId, s32 flags);
 s32 AudioLoad_SyncLoadInstrument(s32 fontId, s32 instId, s32 drumId);
@@ -807,6 +808,7 @@ void AudioThread_QueueCmdF32(s32 opArgs, f32 data);
 void AudioThread_QueueCmdU32(s32 opArgs, u32 data);
 void AudioThread_QueueCmdS8(s32 opArgs, s8 data);
 void AudioThread_QueueCmdU16(s32 opArgs, u16 data);
+u32 AudioThread_GetAsyncLoadStatus(u32* outData);
 void AudioThread_ScheduleProcessCmds(void);
 bool AudioThread_ResetComplete(void);
 s32 AudioThread_ResetAudioHeap(s32 specId);

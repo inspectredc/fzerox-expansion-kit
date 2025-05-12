@@ -334,7 +334,7 @@ void LeoReset(void);
 void Reset_ThreadEntry(void* arg0) {
     OSMesg resetMsg;
 
-    MQ_WAIT_FOR_MESG(&gResetMesgQueue, &resetMsg);
+    osRecvMesg(&gResetMesgQueue, &resetMsg, OS_MESG_BLOCK);
     if (!gResetStarted && sAudioThreadCreated) {
         Audio_PreNMI();
     }
