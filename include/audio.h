@@ -448,8 +448,8 @@ typedef struct NotePlaybackState {
     /* 0x1C */ NoteAttributes attributes;
     /* 0x40 */ AdsrState adsr;
     /* 0x60 */ Portamento portamento;
-    /* 0x6C */ VibratoState vibratoState;
-} NotePlaybackState; // size = 0x88
+    /* 0x6C */ s8 unk_6C[0x10];
+} NotePlaybackState; // size = 0x7C
 
 typedef struct NoteSubEu {
     struct {
@@ -491,9 +491,9 @@ typedef struct Note {
     /* 0x00 */ AudioListItem listItem;
     /* 0x10 */ NoteSynthesisState synthesisState;
     /* 0x30 */ NotePlaybackState playbackState;
-    /* 0xB8 */ char unk_B8[0x4];
-    /* 0xBC */ u32 startSamplePos; // initial position/index to start processing s16 samples
-    /* 0xC0 */ NoteSubEu noteSubEu;
+    /* 0xAC */ char unk_AC[0x4];
+    /* 0xB0 */ u32 startSamplePos; // initial position/index to start processing s16 samples
+    /* 0xB4 */ NoteSubEu noteSubEu;
 } Note; // size = 0xE0
 
 typedef struct ReverbSettings {
@@ -766,6 +766,59 @@ typedef struct AudioHeapInitSizes {
     /* 0x08 */ u32 permanentPoolSize;
 } AudioHeapInitSizes; // size = 0xC
 
+typedef struct AudioContext {
+    s8 unk_0000[0x18];
+    /* 0x0018 */ SynthesisReverb synthesisReverbs[1];
+    s8 unk_02E0[0x1510];
+    /* 0x17F0 */ OSMesgQueue externalLoadQueue;
+    s8 unk_1808[0x218];
+    /* 0x1A20 */ OSMesgQueue curAudioFrameDmaQueue;
+    s8 unk_1A38[0x5E0];
+    /* 0x2018 */ AudioBufferParameters audioBufferParameters;
+    s8 unk_2040[0x24];
+    /* 0x2064 */ s32 numNotes;
+    s8 unk_2068[0x2];
+    /* 0x206A */ u8 soundMode;
+    /* 0x206C */ s32 totalTaskCount;
+    /* 0x2070 */ s32 curAudioFrameDmaCount;
+    /* 0x2074 */ s32 rspTaskIndex; 
+    /* 0x2078 */ s32 curAiBufIndex;
+    /* 0x207C */ Acmd* abiCmdBufs[2];
+    /* 0x2084 */ Acmd* curAbiCmdBuf;
+    /* 0x2088 */ AudioTask* curTask;
+    /* 0x2090 */ AudioTask rspTask[2];
+    s8 unk_2130[0x8];
+    /* 0x2138 */ s16* aiBuffers[3];
+    /* 0x2144 */ s16 aiBufLengths[3];
+    /* 0x214C */ u32 audioRandom;
+    s8 unk_2150[0x4];
+    /* 0x2154 */ volatile u32 resetTimer;
+    s8 unk_2158[0xB3E];
+    /* 0x2C96 */ volatile u8 resetStatus;
+    /* 0x2C97 */ u8 specId;
+    s8 unk_2C98[0x10];
+    /* 0x2CA8 */ Note* notes;
+    /* 0x2CAC */ SequencePlayer seqPlayers[4];
+    s8 unk_322C[0x1D40];
+    /* 0x4F6C */ SequenceChannel sequenceChannelNone;
+    s8 unk_5040[0x5C];
+    /* 0x509C */ u8 threadCmdWritePos;
+    /* 0x509D */ u8 threadCmdReadPos;
+    /* 0x509E */ u8 threadCmdQueueFinished;
+    /* 0x50A0 */ u16 threadCmdChannelMask[2];
+    /* 0x50A4 */ OSMesgQueue* audioResetQueueP;
+    /* 0x50A8 */ OSMesgQueue* taskStartQueueP;
+    /* 0x50AC */ OSMesgQueue* threadCmdProcQueueP;
+    /* 0x50B0 */ OSMesgQueue taskStartQueue;
+    /* 0x50C8 */ OSMesgQueue threadCmdProcQueue;
+    /* 0x50E0 */ OSMesgQueue audioResetQueue;
+    /* 0x50F8 */ OSMesg taskStartMsgBuf[1];
+    /* 0x50FC */ OSMesg audioResetMsgBuf[1];
+    /* 0x5100 */ OSMesg threadCmdProcMsgBuf[4];
+    /* 0x5110 */ AudioCmd threadCmdBuf[256];
+} AudioContext; // size = 0x5910
+
+typedef void (*AudioCustomUpdateFunction)(void);
 typedef s32 (*DmaHandler)(OSPiHandle* handle, OSIoMesg* mb, s32 direction);
 
 #define NO_LAYER ((SequenceLayer*) (-1))
@@ -859,6 +912,12 @@ typedef enum {
     /* 3 */ SLOW_LOAD_STATUS_3
 } SlowLoadStatus;
 
+#define MUTE_BEHAVIOR_3 (1 << 3)           // prevent further noteSubEus from playing
+#define MUTE_BEHAVIOR_4 (1 << 4)           // stop something in seqLayer scripts
+#define MUTE_BEHAVIOR_SOFTEN (1 << 5)      // lower volume, by default to half
+#define MUTE_BEHAVIOR_STOP_NOTES (1 << 6)  // prevent further notes from playing
+#define MUTE_BEHAVIOR_STOP_SCRIPT (1 << 7) // stop processing sequence/channel scripts
+
 #define ADSR_DISABLE 0
 #define ADSR_HANG -1
 #define ADSR_GOTO -2
@@ -891,6 +950,9 @@ typedef enum {
 #define AIBUF_LEN (88 * SAMPLES_PER_FRAME) // number of samples
 #define AIBUF_SIZE (AIBUF_LEN * SAMPLE_SIZE) // number of bytes
 
+#define EXTRA_BUFFERED_AI_SAMPLES_TARGET 0x80
+#define SAMPLES_TO_OVERPRODUCE 0x10
+
 #define DMEM_1CH_SIZE (13 * SAMPLES_PER_FRAME * SAMPLE_SIZE)
 #define DMEM_2CH_SIZE (2 * DMEM_1CH_SIZE)
 
@@ -904,6 +966,8 @@ typedef enum {
 #define DMEM_COMPRESSED_ADPCM_DATA 0x940
 
 #define AUDIO_MK_CMD(b0,b1,b2,b3) ((((b0) & 0xFF) << 0x18) | (((b1) & 0xFF) << 0x10) | (((b2) & 0xFF) << 0x8) | (((b3) & 0xFF) << 0))
+
+extern AudioContext gAudioCtx;
 
 void Audio_NoteDisable(Note* note);
 void Audio_ProcessNotes(void);
@@ -938,6 +1002,7 @@ void AudioLoad_SetFontLoadStatus(s32 fontId, s32 loadStatus);
 void AudioLoad_SyncLoadSeqParts(s32 seqId, s32 flags);
 s32 AudioLoad_SyncLoadInstrument(s32 fontId, s32 instId, s32 drumId);
 void AudioLoad_AsyncLoadSampleBank(s32 sampleBankId, s32 nChunks, s32 retData, OSMesgQueue* retQueue);
+void AudioLoad_AsyncLoadFont(s32 fontId, s32 nChunks, s32 retData, OSMesgQueue* retQueue);
 void AudioLoad_AsyncLoadSeq(s32 seqId, s32 nChunks, s32 retData, OSMesgQueue* retQueue);
 u8* AudioLoad_GetFontsForSequence(s32 seqId, u32* outNumFonts);
 void AudioLoad_DiscardSeqFonts(s32 seqId);
@@ -948,15 +1013,18 @@ void AudioLoad_ProcessLoads(s32 resetStatus);
 void AudioLoad_Init(void* heap, size_t heapSize);
 s32 AudioLoad_SlowLoadSample(s32 fontId, u8 instId, s8* status);
 void AudioLoad_LoadPermanentSamples(void);
+void AudioHeap_PopPersistentCache(s32 tableType);
 void AudioHeap_InitPool(AudioAllocPool* pool, void* ramAddr, size_t size);
 void* AudioHeap_SearchCaches(s32 tableType, s32 cache, s32 id);
 bool AudioHeap_ResetStep(void);
 void* AudioHeap_AllocTemporarySampleCache(size_t size, s32 fontId, void* sampleAddr, s8 medium);
 Acmd* AudioSynth_Update(Acmd* aList, s32* cmdCount, s16* aiBufStart, s32 aiBufLen);
 
+s32 Audio_SetFontInstrument(s32 instrumentType, s32 fontId, s32 index, void* value);
+
 AudioTask* AudioThread_CreateTask(void);
 void AudioThread_QueueCmdF32(s32 opArgs, f32 data);
-void AudioThread_QueueCmdU32(s32 opArgs, u32 data);
+void AudioThread_QueueCmdS32(s32 opArgs, s32 data);
 void AudioThread_QueueCmdS8(s32 opArgs, s8 data);
 void AudioThread_QueueCmdU16(s32 opArgs, u16 data);
 u32 AudioThread_GetAsyncLoadStatus(u32* outData);

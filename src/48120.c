@@ -18,7 +18,7 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/48120/func_8073B61C.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/48120/func_8073B710.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/48120/Audio_SetFontInstrument.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/48120/func_8073B854.s")
 

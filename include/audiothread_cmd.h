@@ -253,7 +253,7 @@ typedef enum {
  * @param tempo (s32) the tempo for the sequence, in bpm
  */
 #define AUDIOCMD_SEQPLAYER_SET_TEMPO(seqPlayerIndex, tempo) \
-    AudioThread_QueueCmdU32(AUDIO_MK_CMD(AUDIOCMD_OP_SEQPLAYER_SET_TEMPO, seqPlayerIndex, 0, 0), tempo)
+    AudioThread_QueueCmdS32(AUDIO_MK_CMD(AUDIOCMD_OP_SEQPLAYER_SET_TEMPO, seqPlayerIndex, 0, 0), tempo)
 
 /**
  * Set the transposition
@@ -271,7 +271,7 @@ typedef enum {
  * @param tempoChange (s32) difference in tempo to change, in bpm
  */
 #define AUDIOCMD_SEQPLAYER_CHANGE_TEMPO(seqPlayerIndex, tempoChange) \
-    AudioThread_QueueCmdU32(AUDIO_MK_CMD(AUDIOCMD_OP_SEQPLAYER_CHANGE_TEMPO, seqPlayerIndex, 0, 0), tempoChange)
+    AudioThread_QueueCmdS32(AUDIO_MK_CMD(AUDIOCMD_OP_SEQPLAYER_CHANGE_TEMPO, seqPlayerIndex, 0, 0), tempoChange)
 
 /**
  * Set tempoChange in seqTicks per minute
@@ -280,7 +280,7 @@ typedef enum {
  * @param tempoChange (s32) difference in tempo to change, in seqTicks per minute
  */
 #define AUDIOCMD_SEQPLAYER_CHANGE_TEMPO_SEQTICKS(seqPlayerIndex, tempoChange) \
-    AudioThread_QueueCmdU32(AUDIO_MK_CMD(AUDIOCMD_OP_SEQPLAYER_CHANGE_TEMPO_SEQTICKS, seqPlayerIndex, 0, 0), tempoChange)
+    AudioThread_QueueCmdS32(AUDIO_MK_CMD(AUDIOCMD_OP_SEQPLAYER_CHANGE_TEMPO_SEQTICKS, seqPlayerIndex, 0, 0), tempoChange)
 
 /**
  * Fade the volume to the target volume requested in the command
@@ -290,7 +290,7 @@ typedef enum {
  * @param fadeTimer (s32) number of ticks to fade to `fadeVolume`
  */
 #define AUDIOCMD_SEQPLAYER_FADE_TO_SET_VOLUME(seqPlayerIndex, fadeVolume, fadeTimer)                               \
-    AudioThread_QueueCmdU32(AUDIO_MK_CMD(AUDIOCMD_OP_SEQPLAYER_FADE_TO_SET_VOLUME, seqPlayerIndex, fadeVolume, 0), \
+    AudioThread_QueueCmdS32(AUDIO_MK_CMD(AUDIOCMD_OP_SEQPLAYER_FADE_TO_SET_VOLUME, seqPlayerIndex, fadeVolume, 0), \
                             fadeTimer)
 
 /**
@@ -301,7 +301,7 @@ typedef enum {
  * @param fadeTimer (s32) number of ticks to fade to `targetVolume`
  */
 #define AUDIOCMD_SEQPLAYER_FADE_TO_SCALED_VOLUME(seqPlayerIndex, fadeVolumeScale, fadeTimer) \
-    AudioThread_QueueCmdU32(                                                                 \
+    AudioThread_QueueCmdS32(                                                                 \
         AUDIO_MK_CMD(AUDIOCMD_OP_SEQPLAYER_FADE_TO_SCALED_VOLUME, seqPlayerIndex, fadeVolumeScale, 0), fadeTimer)
 
 /**
@@ -311,7 +311,7 @@ typedef enum {
  * @param fadeTimer (s32) number of ticks to fade the sequence back to its default volume
  */
 #define AUDIOCMD_SEQPLAYER_RESET_VOLUME(seqPlayerIndex, fadeTimer) \
-    AudioThread_QueueCmdU32(AUDIO_MK_CMD(AUDIOCMD_OP_SEQPLAYER_RESET_VOLUME, seqPlayerIndex, 0, 0), fadeTimer)
+    AudioThread_QueueCmdS32(AUDIO_MK_CMD(AUDIOCMD_OP_SEQPLAYER_RESET_VOLUME, seqPlayerIndex, 0, 0), fadeTimer)
 
 /**
  * Set the bend
@@ -331,7 +331,7 @@ typedef enum {
  * @param flags set `& 1` to load the sequence, set `& 2` to load the soundfonts
  */
 #define AUDIOCMD_GLOBAL_SYNC_LOAD_SEQ_PARTS(seqId, flags) \
-    AudioThread_QueueCmdU32(AUDIO_MK_CMD(AUDIOCMD_OP_GLOBAL_SYNC_LOAD_SEQ_PARTS, 0, seqId, flags), 0)
+    AudioThread_QueueCmdS32(AUDIO_MK_CMD(AUDIOCMD_OP_GLOBAL_SYNC_LOAD_SEQ_PARTS, 0, seqId, flags), 0)
 
 /**
  * Synchronously initialize a sequence player
@@ -341,7 +341,7 @@ typedef enum {
  * @param fadeInTimer (s32) number of ticks to fade in the sequence to the requested volume
  */
 #define AUDIOCMD_GLOBAL_INIT_SEQPLAYER(seqPlayerIndex, seqId, arg2, fadeInTimer) \
-    AudioThread_QueueCmdU32(AUDIO_MK_CMD(AUDIOCMD_OP_GLOBAL_INIT_SEQPLAYER, seqPlayerIndex, seqId, arg2), fadeInTimer)
+    AudioThread_QueueCmdS32(AUDIO_MK_CMD(AUDIOCMD_OP_GLOBAL_INIT_SEQPLAYER, seqPlayerIndex, seqId, arg2), fadeInTimer)
 
 /**
  * Disable a sequence player
@@ -350,7 +350,7 @@ typedef enum {
  * @param fadeOutTimer (s32) number of ticks to fade out the sequence
  */
 #define AUDIOCMD_GLOBAL_DISABLE_SEQPLAYER(seqPlayerIndex, fadeOutTimer) \
-    AudioThread_QueueCmdU32(AUDIO_MK_CMD(AUDIOCMD_OP_GLOBAL_DISABLE_SEQPLAYER, seqPlayerIndex, 0, 0), fadeOutTimer)
+    AudioThread_QueueCmdS32(AUDIO_MK_CMD(AUDIOCMD_OP_GLOBAL_DISABLE_SEQPLAYER, seqPlayerIndex, 0, 0), fadeOutTimer)
 
 /**
  * Synchronously initialize a sequence player and skip ticks,
@@ -361,7 +361,7 @@ typedef enum {
  * @param skipTicks (s32) number of ticks to skip before starting the sequence
  */
 #define AUDIOCMD_GLOBAL_INIT_SEQPLAYER_SKIP_TICKS(seqPlayerIndex, seqId, skipTicks)                               \
-    AudioThread_QueueCmdU32(AUDIO_MK_CMD(AUDIOCMD_OP_GLOBAL_INIT_SEQPLAYER_SKIP_TICKS, seqPlayerIndex, seqId, 0), \
+    AudioThread_QueueCmdS32(AUDIO_MK_CMD(AUDIOCMD_OP_GLOBAL_INIT_SEQPLAYER_SKIP_TICKS, seqPlayerIndex, seqId, 0), \
                             skipTicks)
 
 /**
@@ -383,7 +383,7 @@ typedef enum {
  * @param drumPtr (s32) the ptr to the `Drum` struct
  */
 #define AUDIOCMD_GLOBAL_SET_DRUM_FONT(fontId, drumId, drumPtr) \
-    AudioThread_QueueCmdU32(AUDIO_MK_CMD(AUDIOCMD_OP_GLOBAL_SET_DRUM_FONT, fontId, drumId, 0), drumPtr)
+    AudioThread_QueueCmdS32(AUDIO_MK_CMD(AUDIOCMD_OP_GLOBAL_SET_DRUM_FONT, fontId, drumId, 0), drumPtr)
 
 /**
  * Set a soundeffect ptr within a soundfont
@@ -393,7 +393,7 @@ typedef enum {
  * @param soundEffectPtr (s32) the ptr to the `SoundEffect` struct
  */
 #define AUDIOCMD_GLOBAL_SET_SFX_FONT(fontId, soundEffectId, soundEffectPtr) \
-    AudioThread_QueueCmdU32(AUDIO_MK_CMD(AUDIOCMD_OP_GLOBAL_SET_SFX_FONT, fontId, soundEffectId, 0), soundEffectPtr)
+    AudioThread_QueueCmdS32(AUDIO_MK_CMD(AUDIOCMD_OP_GLOBAL_SET_SFX_FONT, fontId, soundEffectId, 0), soundEffectPtr)
 
 /**
  * Set an instrument ptr within a soundfont
@@ -403,7 +403,7 @@ typedef enum {
  * @param instPtr (s32) the ptr to the `Instrument` struct
  */
 #define AUDIOCMD_GLOBAL_SET_INSTRUMENT_FONT(fontId, instId, instPtr) \
-    AudioThread_QueueCmdU32(AUDIO_MK_CMD(AUDIOCMD_OP_GLOBAL_SET_INSTRUMENT_FONT, fontId, instId, 0), instPtr)
+    AudioThread_QueueCmdS32(AUDIO_MK_CMD(AUDIOCMD_OP_GLOBAL_SET_INSTRUMENT_FONT, fontId, instId, 0), instPtr)
 
 /**
  * Pop the persistent cache of the specified table
@@ -411,7 +411,7 @@ typedef enum {
  * @param tableType (s32) see the `AudioTableType` enum
  */
 #define AUDIOCMD_GLOBAL_POP_PERSISTENT_CACHE(tableType) \
-    AudioThread_QueueCmdU32(AUDIO_MK_CMD(AUDIOCMD_OP_GLOBAL_POP_PERSISTENT_CACHE, 0, 0, 0), tableType)
+    AudioThread_QueueCmdS32(AUDIO_MK_CMD(AUDIOCMD_OP_GLOBAL_POP_PERSISTENT_CACHE, 0, 0, 0), tableType)
 
 /**
  * Change the sound mode of audio
@@ -419,13 +419,13 @@ typedef enum {
  * @param soundMode (s32) see the `SoundMode` enum
  */
 #define AUDIOCMD_GLOBAL_SET_SOUND_MODE(soundMode) \
-    AudioThread_QueueCmdU32(AUDIO_MK_CMD(AUDIOCMD_OP_GLOBAL_SET_SOUND_MODE, 0, 0, 0), soundMode)
+    AudioThread_QueueCmdS32(AUDIO_MK_CMD(AUDIOCMD_OP_GLOBAL_SET_SOUND_MODE, 0, 0, 0), soundMode)
 
 /**
  * Mute all sequence players
  */
 #define AUDIOCMD_GLOBAL_MUTE() \
-    AudioThread_QueueCmdU32(AUDIO_MK_CMD(AUDIOCMD_OP_GLOBAL_MUTE, 0, 0, 0), 0)
+    AudioThread_QueueCmdS32(AUDIO_MK_CMD(AUDIOCMD_OP_GLOBAL_MUTE, 0, 0, 0), 0)
 
 /**
  * Unmute all sequence players
@@ -434,7 +434,7 @@ typedef enum {
  * are marked as finished for all seqPlayers
  */
 #define AUDIOCMD_GLOBAL_UNMUTE(restartNotes) \
-    AudioThread_QueueCmdU32(AUDIO_MK_CMD(AUDIOCMD_OP_GLOBAL_UNMUTE, 0, 0, 0), restartNotes)
+    AudioThread_QueueCmdS32(AUDIO_MK_CMD(AUDIOCMD_OP_GLOBAL_UNMUTE, 0, 0, 0), restartNotes)
 
 /**
  * Synchronously load an instrument
@@ -470,13 +470,13 @@ typedef enum {
  * @param seqId the id of the sequence to discard, see `SeqId`
  */
 #define AUDIOCMD_GLOBAL_DISCARD_SEQ_FONTS(seqId) \
-    AudioThread_QueueCmdU32(AUDIO_MK_CMD(AUDIOCMD_OP_GLOBAL_DISCARD_SEQ_FONTS, 0, seqId, 0), 0)
+    AudioThread_QueueCmdS32(AUDIO_MK_CMD(AUDIOCMD_OP_GLOBAL_DISCARD_SEQ_FONTS, 0, seqId, 0), 0)
 
 /**
  * Stop processing all audio thread commands
  */
 #define AUDIOCMD_GLOBAL_STOP_AUDIOCMDS() \
-    AudioThread_QueueCmdU32(AUDIO_MK_CMD(AUDIOCMD_OP_GLOBAL_STOP_AUDIOCMDS, 0, 0, 0), 0)
+    AudioThread_QueueCmdS32(AUDIO_MK_CMD(AUDIOCMD_OP_GLOBAL_STOP_AUDIOCMDS, 0, 0, 0), 0)
 
 /**
  * Reset Audio Heap
@@ -484,7 +484,7 @@ typedef enum {
  * @param specId (s32) index for the audio specifications to set high-level audio parameters
  */
 #define AUDIOCMD_GLOBAL_RESET_AUDIO_HEAP(specId) \
-    AudioThread_QueueCmdU32(AUDIO_MK_CMD(AUDIOCMD_OP_GLOBAL_RESET_AUDIO_HEAP, 0, 0, 0), specId)
+    AudioThread_QueueCmdS32(AUDIO_MK_CMD(AUDIOCMD_OP_GLOBAL_RESET_AUDIO_HEAP, 0, 0, 0), specId)
 
 /**
  * No Operation. No code exists for this OP
@@ -495,7 +495,7 @@ typedef enum {
  * @param data (s32) No info
  */
 #define AUDIOCMD_GLOBAL_NOOP_1(arg0, arg1, arg2, data) \
-    AudioThread_QueueCmdU32(AUDIO_MK_CMD(AUDIOCMD_OP_GLOBAL_NOOP_1, arg0, arg1, arg2), data)
+    AudioThread_QueueCmdS32(AUDIO_MK_CMD(AUDIOCMD_OP_GLOBAL_NOOP_1, arg0, arg1, arg2), data)
 
 /**
  * Set a custom function that runs every audio thread update, see `AudioCustomUpdateFunction`
@@ -503,7 +503,7 @@ typedef enum {
  * @param functionPtr (s32) address of the function to run once every audio frame
  */
 #define AUDIOCMD_GLOBAL_SET_CUSTOM_UPDATE_FUNCTION(functionPtr) \
-    AudioThread_QueueCmdU32(AUDIO_MK_CMD(AUDIOCMD_OP_GLOBAL_SET_CUSTOM_UPDATE_FUNCTION, 0, 0, 0), functionPtr)
+    AudioThread_QueueCmdS32(AUDIO_MK_CMD(AUDIOCMD_OP_GLOBAL_SET_CUSTOM_UPDATE_FUNCTION, 0, 0, 0), functionPtr)
 
 /**
  * Asynchronously load a sequence
@@ -523,7 +523,7 @@ typedef enum {
  * @param data (s32) No info
  */
 #define AUDIOCMD_GLOBAL_NOOP_2(arg0, arg1, arg2, data) \
-    AudioThread_QueueCmdU32(AUDIO_MK_CMD(AUDIOCMD_OP_GLOBAL_NOOP_2, arg0, arg1, arg2), data)
+    AudioThread_QueueCmdS32(AUDIO_MK_CMD(AUDIOCMD_OP_GLOBAL_NOOP_2, arg0, arg1, arg2), data)
 
 /**
  * Disable all sequence players
@@ -534,6 +534,6 @@ typedef enum {
  *       Not setting `& 1` should make this command useless TODO: Test
  */
 #define AUDIOCMD_GLOBAL_DISABLE_ALL_SEQPLAYERS(flags) \
-    AudioThread_QueueCmdU32(AUDIO_MK_CMD(AUDIOCMD_OP_GLOBAL_DISABLE_ALL_SEQPLAYERS, 0, 0, 0), flags)
+    AudioThread_QueueCmdS32(AUDIO_MK_CMD(AUDIOCMD_OP_GLOBAL_DISABLE_ALL_SEQPLAYERS, 0, 0, 0), flags)
 
 #endif

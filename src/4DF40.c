@@ -2,6 +2,7 @@
 #include "audio.h"
 #include "audio_funcs.h"
 #include "audiothread_cmd.h"
+#include "fzx_game.h"
 #include "fzx_racer.h"
 
 extern f32 D_80771B44[];
@@ -38,7 +39,7 @@ void func_80740740(u8 arg0) {
     func_807418D4(arg0 + 2);
     func_807418D4(arg0 + 6);
     D_80771B74[arg0] = 0;
-    func_80739B58();
+    AudioThread_ScheduleProcessCmds();
 }
 
 s32 func_80740838(u8 arg0) {
@@ -163,7 +164,7 @@ void func_80740B98(u8 arg0) {
 
     D_80771B6C[arg0] = 1;
     func_807418D4(14);
-    func_80739B58();
+    AudioThread_ScheduleProcessCmds();
 }
 
 void func_80740BD8(u8 arg0) {
@@ -349,7 +350,7 @@ block_5:
 void func_8074110C(u8 ioData) {
     AUDIOCMD_CHANNEL_SET_PAN(0, 1, 0x3F);
     func_80741888(1, ioData);
-    func_80739B58();
+    AudioThread_ScheduleProcessCmds();
 }
 
 extern u8 D_80771AC8;
@@ -532,7 +533,7 @@ void func_80741588(u8 arg0) {
                 func_80741888(arg0 + 2, 0x1B);
             }
     }
-    func_80739B58();
+    AudioThread_ScheduleProcessCmds();
 }
 
 void func_8074184C(u8 arg0) {
@@ -545,7 +546,7 @@ void func_80741880(u8 arg0) {
 
 void func_80741888(u8 channelIndex, u8 ioData) {
     AUDIOCMD_CHANNEL_SET_IO(0, channelIndex, 0, ioData);
-    func_80739B58();
+    AudioThread_ScheduleProcessCmds();
 }
 
 void func_807418D4(u8 channelIndex) {
@@ -567,7 +568,7 @@ void func_80741910(u8 arg0) {
     D_80771C7C = 1;
 
     AUDIOCMD_GLOBAL_ASYNC_LOAD_SAMPLE_BANK(D_80771C78 + 4, 0, 0x3F);
-    func_80739B58();
+    AudioThread_ScheduleProcessCmds();
 }
 
 extern u8 D_80771C68;
@@ -619,7 +620,7 @@ void func_80741A0C(u8 arg0) {
         D_80771C98 = 0;
         D_80771C9C = 0;
     }
-    func_80739B58();
+    AudioThread_ScheduleProcessCmds();
 }
 
 extern u8 D_80771C64;
@@ -636,7 +637,7 @@ void func_80741AF4(u8 arg0) {
     D_80771B40 = arg0;
     D_80771C64 = arg0;
     D_80771C98 = 1;
-    func_80739B58();
+    AudioThread_ScheduleProcessCmds();
 }
 
 void func_80741B84(void) {
@@ -711,7 +712,7 @@ void func_80741CB4(u8 arg0) {
             func_80741888(0, arg0);
             break;
     }
-    func_80739B58();
+    AudioThread_ScheduleProcessCmds();
 }
 
 void func_80741DD4(void) {
@@ -870,7 +871,7 @@ void func_8074204C(u8 arg0) {
             }
             break;
     }
-    func_80739B58();
+    AudioThread_ScheduleProcessCmds();
 }
 
 extern u8 D_80771B3C;
@@ -894,7 +895,7 @@ void func_80742360(u8 numPlayersIndex) {
 void func_80742370(void) {
     func_807408AC();
     AUDIOCMD_GLOBAL_DISABLE_SEQPLAYER(0, 0);
-    func_80739B58();
+    AudioThread_ScheduleProcessCmds();
     if (D_80771C74 == 1) {
         AUDIOCMD_GLOBAL_DISABLE_SEQPLAYER(1, 0);
     }
@@ -902,12 +903,12 @@ void func_80742370(void) {
 
 void func_807423C4(void) {
     AUDIOCMD_GLOBAL_INIT_SEQPLAYER(0, 1, 0, 0);
-    func_80739B58();
+    AudioThread_ScheduleProcessCmds();
 }
 
 void func_807423F4(s32 arg0) {
     func_807408AC();
-    func_80739B58();
+    AudioThread_ScheduleProcessCmds();
 }
 
 void func_8074241C(u8 racerId, f32 arg1) {
@@ -1282,7 +1283,7 @@ void func_80742E6C(void) {
         D_80771C90 = 0;
         D_80771C94 = 1;
     }
-    func_80739B58();
+    AudioThread_ScheduleProcessCmds();
 }
 
 void func_80742F04(void) {
@@ -1290,7 +1291,7 @@ void func_80742F04(void) {
     AUDIOCMD_GLOBAL_DISABLE_SEQPLAYER(1, 100);
     func_807419F0(0xF);
     D_80771C94 = 0;
-    func_80739B58();
+    AudioThread_ScheduleProcessCmds();
 }
 
 void func_80742F44(void) {
@@ -1721,20 +1722,756 @@ void func_80744280(u8 racerId) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/4DF40/func_807442E4.s")
+extern s32 gNumPlayers;
+extern s8 D_8076C7D8;
+extern s32 gGameMode;
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/4DF40/func_807443F0.s")
+void func_807442E4(void) {
+    s32 temp_lo;
+    SequenceLayer* layer;
+    Note* note;
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/4DF40/func_807447CC.s")
+    if ((D_80771B40 == 0xE) && (&gAudioCtx.sequenceChannelNone != gAudioCtx.seqPlayers[1].channels[0])) {
+        layer = gAudioCtx.seqPlayers[1].channels[0]->layers[0];
+        if (layer != NULL) {
+            note = layer->note;
+            if (note != NULL) {
+                temp_lo = (s32) note->synthesisState.samplePosInt / 100;
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/4DF40/func_80744BDC.s")
+                switch (gNumPlayers) {
+                    case 1:
+                    case 2:
+                        break;
+                    default:
+                        // FAKE
+                        if (note && note && note) {}
+                        break;
+                }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/4DF40/func_807450E0.s")
+                if ((temp_lo > 2100) && (temp_lo < 2110) && (gGameMode == GAMEMODE_FLX_TITLE) && (D_8076C7D8 == 0)) {
+                    if (!note){}
+                    D_8076C7D8 = 1;
+                }
+                if ((temp_lo > 8200) && (temp_lo < 8210) && (D_8076C7D8 == 1)) {
+                    D_8076C7D8 = 3;
+                }
+                if (temp_lo > 250 && temp_lo < 260) {
+                    AUDIOCMD_GLOBAL_INIT_SEQPLAYER(0, 1, 0, 0);
+                }
+            }
+        }
+    }
+}
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/4DF40/func_80745AF4.s")
+void func_807443F0(void) {
+    Vec3f vec;
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/4DF40/Audio_SetupCreateTask.s")
+    if ((D_80771AC0 != 1) && (D_80771AF8 == 0) && (D_80771B00 != 0) && (D_80771B20 != 1) && (D_80771B20 != 2) &&
+        ((gGameMode == GAMEMODE_GP_RACE) || (gGameMode == GAMEMODE_PRACTICE) || (gGameMode == GAMEMODE_DEATH_RACE)) &&
+        (D_80771B38 == 0) && (D_80771B6C[0] == 0)) {
+        if (gRacers[D_80771B00].unk_17C > 9.0f) {
+            vec.x = gRacers[D_80771B00].unk_0C.unk_34.x - gPlayers[0].unk_50.x;
+            vec.y = gRacers[D_80771B00].unk_0C.unk_34.y - gPlayers[0].unk_50.y;
+            vec.z = gRacers[D_80771B00].unk_0C.unk_34.z - gPlayers[0].unk_50.z;
+            D_80771B10 = sqrtf(SQ_SUM(&vec));
+        }
+        if (gRacers[D_80771B00].unk_17C > 9.0f) {
+            if ((D_80771B10 < 820.0f) && (D_80771B10 != 0.0f)) {
+                if (D_80771AFC == 0) {
+                    if (D_80771B6C[0] == 0) {
+                        if (D_80771AE8 == 0) {
+                            func_80741888(14, 1);
+                        }
+                        D_80771AFC = 2;
+                    }
+                } else {
+                    D_80771AFC = 1;
+                }
+            } else {
+                if (D_80771AFC == 1) {
+                    func_807418D4(14);
+                    D_80771AFC = 0;
+                }
+            }
+        }
+        if (D_80771AFC != 0) {
+            D_80771B14 = 1.0f - (D_80771B10 * (1.0f / 1000.0f));
+            if (D_80771B14 > 0.9f) {
+                D_80771B14 = 0.9f;
+            }
+            if (D_80771B14 < 0.001f) {
+                D_80771B14 = 0.001f;
+            }
+            if (D_80771B00 == D_80771B04) {
+                D_80771B0C = (D_80771B08 - D_80771B10) * (1.0f / 30.0f);
+            }
+            D_80771B08 = D_80771B10;
+            D_80771B04 = D_80771B00;
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/4DF40/func_80745CB8.s")
+            D_80771B18 = ((gRacers[D_80771B00].speed + 0.01f) * (1.0f / 21.0f)) + 0.5f + D_80771B0C;
+            if (D_80771B18 < 0.1f) {
+                D_80771B18 = 0.1f;
+            }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/4DF40/D_80777A20.s")
+            AUDIOCMD_CHANNEL_SET_VOL_SCALE(0, 14, D_80771B14);
+            D_80771B78[14] = D_80771B14;
+            AUDIOCMD_CHANNEL_SET_PAN(0, 14, func_80740838(D_80771B1C));
+            AUDIOCMD_CHANNEL_SET_FREQ_SCALE(0, 14, D_80771B18);
+        }
+    }
+}
+
+void func_807447CC(u8 playerId) {
+    f32 freqScale;
+    f32 volumeScale;
+
+    if ((D_80771B20 != 1) && (D_80771B20 != 2)) {
+        if (D_80771B54[playerId] == 0) {
+            if (D_80771B74[playerId] == 0) {
+                return;
+            }
+        }
+
+        if (gRacers[playerId].speed < D_80771B5C[playerId]) {
+            D_80771B58[playerId] = 1;
+        } else {
+            D_80771B58[playerId] = 0;
+        }
+        D_80771B5C[playerId] = gRacers[playerId].speed;
+        if (D_80771B74[playerId] == 0) {
+            if ((gRacers[playerId].unk_1D4 != 0.0f) && (gRacers[playerId].speed > 27.0f)) {
+                if (D_80771B58[playerId] == 1) {
+                    if (D_80771B44[playerId] > -0.5f) {
+                        D_80771B44[playerId] -= 0.004f;
+                    }
+                } else {
+                    D_80771B44[playerId] += 0.004f;
+                }
+            } else {
+                D_80771B44[playerId] = 0.0f;
+            }
+            if (gRacers[playerId].unk_20C != 0) {
+                D_80771B44[playerId] = 0.0f;
+            }
+        } else {
+            // FAKE
+        }
+
+        freqScale = (((0.01f + gRacers[playerId].speed) * (1.0f / 21.0f)) + 0.25f) + D_80771B44[playerId];
+        AUDIOCMD_CHANNEL_SET_FREQ_SCALE(0, playerId + 2, freqScale);
+
+        if ((gRacers[playerId].unk_1D4 == 0.0f) && (gRacers[playerId].unk_1D8 == 0.0f)) {
+            if (D_80771B74[playerId] == 1) {
+                Vec3f vec;
+                f32 temp;
+
+                vec.x = gRacers[playerId].unk_0C.unk_34.x - gPlayers[playerId].unk_50.x;
+                vec.y = gRacers[playerId].unk_0C.unk_34.y - gPlayers[playerId].unk_50.y;
+                vec.z = gRacers[playerId].unk_0C.unk_34.z - gPlayers[playerId].unk_50.z;
+                temp = sqrtf(SQ_SUM(&vec));
+                volumeScale = (-0.002f * temp + 1.2f) * 0.65f;
+
+                if (volumeScale > 0.7f) {
+                    volumeScale = 0.7f;
+                }
+                if (volumeScale < 0.01f) {
+                    volumeScale = 0.01f;
+                }
+            } else {
+                volumeScale = 0.75f;
+            }
+        } else if (D_80771B74[playerId] == 1) {
+            Vec3f vec;
+            f32 temp;
+
+            vec.x = gRacers[playerId].unk_0C.unk_34.x - gPlayers[playerId].unk_50.x;
+            vec.y = gRacers[playerId].unk_0C.unk_34.y - gPlayers[playerId].unk_50.y;
+            vec.z = gRacers[playerId].unk_0C.unk_34.z - gPlayers[playerId].unk_50.z;
+            temp = sqrtf(SQ_SUM(&vec));
+            volumeScale = -0.002f * temp + 1.2f;
+
+            if (volumeScale > 0.73f) {
+                volumeScale = 0.73f;
+            }
+            if (volumeScale < 0.01f) {
+                volumeScale = 0.01f;
+            }
+        } else {
+            volumeScale = 1.0f;
+        }
+
+        AUDIOCMD_CHANNEL_SET_VOL_SCALE(0, playerId + 2, volumeScale);
+        D_80771B78[playerId + 2] = volumeScale;
+    }
+}
+
+void func_80744BDC(u8 arg0) {
+    f32 freqScale;
+    f32 volumeScale;
+
+    if (D_80771CA8 == 1) {
+        return;
+    }
+
+    if (D_80771B6C[arg0] != 0) {
+        if (D_80771B6C[arg0] < 8) {
+            D_80771B6C[arg0] += 1;
+        }
+
+        if (D_80771B6C[arg0] == 8) {
+            func_807418D4(arg0 + 2);
+            func_807418D4(arg0 + 6);
+        }
+    }
+
+    if ((D_80771B20 != 1) && (D_80771B20 != 2) && (D_80771B54[arg0] != 0) && (D_80771B38 == 0)) {
+        switch (D_80771D48[arg0][0]) {
+            case 0:
+                volumeScale = 0.0f;
+                freqScale = 1.0f;
+                break;
+            case 3:
+            case 4:
+            case 10:
+            case 13:
+            case 14:
+            case 20:
+            case 23:
+            case 24:
+            case 30:
+                volumeScale = 1.0f;
+                freqScale = 1.0f;
+                break;
+            case 5:
+            case 15:
+            case 25:
+                volumeScale = (gRacers[arg0].speed * (1.0f / 45.0f)) + 0.5f;
+                if (gRacers[arg0].speed < 0.1f) {
+                    volumeScale = 0.0f;
+                }
+                if (volumeScale > 1.0f) {
+                    volumeScale = 1.0f;
+                }
+                if (volumeScale < 0.1f) {
+                    volumeScale = 0.0f;
+                }
+                freqScale = 1.0f;
+                break;
+            case 11:
+            case 21:
+            case 31:
+                volumeScale = (gRacers[arg0].speed * (1.0f / 45.0f)) + 0.5f;
+                if (gRacers[arg0].speed < 0.1f) {
+                    volumeScale = 0.0f;
+                }
+                if (volumeScale > 1.0f) {
+                    volumeScale = 1.0f;
+                }
+                if (volumeScale < 0.1f) {
+                    volumeScale = 0.0f;
+                }
+                freqScale = 1.0f;
+                break;
+            case 8:
+            case 18:
+            case 28:
+                volumeScale = 0.8f;
+                freqScale = (gRacers[arg0].speed * (1.0f / 30.0f)) - (8.0f / 10.0f);
+                if (freqScale > 2.5f) {
+                    freqScale = 2.5f;
+                }
+                if (freqScale < 0.3f) {
+                    freqScale = 0.3f;
+                }
+                break;
+            case 9:
+            case 19:
+            case 29:
+                volumeScale = 0.85f;
+                freqScale = gRacers[arg0].speed * (1.0f / 20.0f);
+                if (freqScale > 8.0f) {
+                    freqScale = 8.0f;
+                }
+                if (freqScale < 0.1f) {
+                    freqScale = 0.1f;
+                }
+                break;
+            case 6:
+            case 16:
+            case 26:
+                if (gRacers[arg0].unk_5C.x > 0.0f) {
+                    volumeScale = gRacers[arg0].unk_5C.x * (2.0f / 30.0f);
+                    freqScale = (gRacers[arg0].unk_5C.x * (1.0f / 80.0f)) + 1.0f;
+                    if (volumeScale > 1.0f) {
+                        volumeScale = 1.0f;
+                    }
+                    if (volumeScale < 0.1f) {
+                        volumeScale = 0.0f;
+                    }
+                    if (freqScale > 1.3f) {
+                        freqScale = 1.3f;
+                    }
+                    if (freqScale < 0.3f) {
+                        freqScale = 0.3f;
+                    }
+                } else {
+                    volumeScale = -gRacers[arg0].unk_5C.x * (1.0f / 15.0f);
+                    freqScale = (-gRacers[arg0].unk_5C.x * (1.0f / 80.0f)) + 1.0f;
+                    if (volumeScale > 1.0f) {
+                        volumeScale = 1.0f;
+                    }
+                    if (volumeScale < 0.1f) {
+                        volumeScale = 0.0f;
+                    }
+                    if (freqScale > 1.3f) {
+                        freqScale = 1.3f;
+                    }
+                    if (freqScale < 0.3f) {
+                        freqScale = 0.3f;
+                    }
+                }
+                break;
+        }
+
+        D_80771B78[arg0 + 6] = volumeScale;
+        AUDIOCMD_CHANNEL_SET_VOL_SCALE(0, arg0 + 6, volumeScale);
+        AUDIOCMD_CHANNEL_SET_FREQ_SCALE(0, arg0 + 6, freqScale);
+    }
+}
+
+void func_807450E0(u8 arg0) {
+    switch (D_80771AF8) {
+        case 0:
+            if (D_80771B70[0] == 1) {
+                gAudioCtx.synthesisReverbs[0].volume = 0x7FFF;
+                AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 14, 80);
+                AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 15, 80);
+                AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 2, 80);
+                if ((D_80771BB8[0] == 19) || (D_80771BB8[0] == 20) || (D_80771BB8[0] == 21)) {
+                    AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 10, 0);
+                } else {
+                    AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 10, 80);
+                }
+                if ((D_80771D48[0][0] == 3) || (D_80771D48[0][0] == 4)) {
+                    AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 6, 0);
+                } else {
+                    AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 6, 80);
+                }
+            } else {
+                gAudioCtx.synthesisReverbs[0].volume = 0;
+                AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 15, 0);
+                AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 14, 0);
+                AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 2, 0);
+                AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 10, 0);
+                AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 6, 0);
+            }
+            break;
+        case 1:
+            if ((D_80771B70[0] == 1) || (D_80771B70[1] == 1)) {
+                gAudioCtx.synthesisReverbs[0].volume = 0x7FFF;
+            } else {
+                gAudioCtx.synthesisReverbs[0].volume = 0;
+            }
+            if (D_80771B70[0] == 1) {
+                AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 2, 80);
+                if ((D_80771BB8[0] == 19) || (D_80771BB8[0] == 20) || (D_80771BB8[0] == 21)) {
+                    AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 10, 0);
+                } else {
+                    AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 10, 80);
+                }
+                if ((D_80771D48[0][0] == 3) || (D_80771D48[0][0] == 4)) {
+                    AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 6, 0);
+                } else {
+                    AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 6, 80);
+                }
+            } else {
+                AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 2, 0);
+                AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 10, 0);
+                AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 6, 0);
+            }
+            if (D_80771B70[1] == 1) {
+                AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 3, 80);
+                if ((D_80771BB8[1] == 19) || (D_80771BB8[1] == 20) || (D_80771BB8[1] == 21)) {
+                    AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 11, 0);
+                } else {
+                    AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 11, 80);
+                }
+                if ((D_80771D48[1][0] == 3) || (D_80771D48[1][0] == 4)) {
+                    AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 7, 0);
+                } else {
+                    AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 7, 80);
+                }
+            } else {
+                AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 3, 0);
+                AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 11, 0);
+                AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 7, 0);
+            }
+            break;
+        case 2:
+            if ((D_80771B70[0] == 1) || (D_80771B70[1] == 1) || (D_80771B70[2] == 1)) {
+                gAudioCtx.synthesisReverbs[0].volume = 0x7FFF;
+            } else {
+                gAudioCtx.synthesisReverbs[0].volume = 0;
+            }
+            if (D_80771B70[0] == 1) {
+                AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 2, 80);
+                if ((D_80771BB8[0] == 19) || (D_80771BB8[0] == 20) || (D_80771BB8[0] == 21)) {
+                    AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 10, 0);
+                } else {
+                    AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 10, 80);
+                }
+                if ((D_80771D48[0][0] == 3) || (D_80771D48[0][0] == 4)) {
+                    AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 6, 0);
+                } else {
+                    AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 6, 80);
+                }
+            } else {
+                AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 2, 0);
+                AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 10, 0);
+                AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 6, 0);
+            }
+            if (D_80771B70[1] == 1) {
+                AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 3, 80);
+                if ((D_80771BB8[1] == 19) || (D_80771BB8[1] == 20) || (D_80771BB8[1] == 21)) {
+                    AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 11, 0);
+                } else {
+                    AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 11, 80);
+                }
+                if ((D_80771D48[1][0] == 3) || (D_80771D48[1][0] == 4)) {
+                    AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 7, 0);
+                } else {
+                    AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 7, 80);
+                }
+            } else {
+                AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 3, 0);
+                AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 11, 0);
+                AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 7, 0);
+            }
+            if (D_80771B70[2] == 1) {
+                AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 4, 80);
+                if ((D_80771BB8[2] == 19) || (D_80771BB8[2] == 20) || (D_80771BB8[2] == 21)) {
+                    AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 12, 0);
+                } else {
+                    AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 12, 80);
+                }
+                if ((D_80771D48[2][0] == 3) || (D_80771D48[2][0] == 4)) {
+                    AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 8, 0);
+                } else {
+                    AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 8, 80);
+                }
+            } else {
+                AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 4, 0);
+                AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 12, 0);
+                AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 8, 0);
+            }
+            break;
+        case 3:
+            if ((D_80771B70[0] == 1) || (D_80771B70[1] == 1) || (D_80771B70[2] == 1) || (D_80771B70[3] == 1)) {
+                gAudioCtx.synthesisReverbs[0].volume = 0x7FFF;
+            } else {
+                gAudioCtx.synthesisReverbs[0].volume = 0;
+            }
+            if (D_80771B70[0] == 1) {
+                AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 2, 80);
+                if ((D_80771BB8[0] == 19) || (D_80771BB8[0] == 20) || (D_80771BB8[0] == 21)) {
+                    AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 10, 0);
+                } else {
+                    AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 10, 80);
+                }
+                if ((D_80771D48[0][0] == 3) || (D_80771D48[0][0] == 4)) {
+                    AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 6, 0);
+                } else {
+                    AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 6, 80);
+                }
+            } else {
+                AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 2, 0);
+                AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 10, 0);
+                AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 6, 0);
+            }
+            if (D_80771B70[1] == 1) {
+                AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 3, 80);
+                if ((D_80771BB8[1] == 19) || (D_80771BB8[1] == 20) || (D_80771BB8[1] == 21)) {
+                    AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 11, 0);
+                } else {
+                    AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 11, 80);
+                }
+                if ((D_80771D48[1][0] == 3) || (D_80771D48[1][0] == 4)) {
+                    AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 7, 0);
+                } else {
+                    AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 7, 80);
+                }
+            } else {
+                AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 3, 0);
+                AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 11, 0);
+                AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 7, 0);
+            }
+            if (D_80771B70[2] == 1) {
+                AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 4, 80);
+                if ((D_80771BB8[2] == 19) || (D_80771BB8[2] == 20) || (D_80771BB8[2] == 21)) {
+                    AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 12, 0);
+                } else {
+                    AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 12, 80);
+                }
+                if ((D_80771D48[2][0] == 3) || (D_80771D48[2][0] == 4)) {
+                    AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 8, 0);
+                } else {
+                    AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 8, 80);
+                }
+            } else {
+                AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 4, 0);
+                AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 12, 0);
+                AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 8, 0);
+            }
+            if (D_80771B70[3] == 1) {
+                AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 5, 80);
+                if ((D_80771BB8[3] == 19) || (D_80771BB8[3] == 20) || (D_80771BB8[3] == 21)) {
+                    AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 13, 0);
+                } else {
+                    AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 13, 80);
+                }
+                if ((D_80771D48[3][0] == 3) || (D_80771D48[3][0] == 4)) {
+                    AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 9, 0);
+                } else {
+                    AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 9, 80);
+                }
+            } else {
+                AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 5, 0);
+                AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 13, 0);
+                AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 9, 0);
+            }
+            break;
+    }
+}
+
+extern u8 D_80771AC4;
+
+void func_80745AF4(void) {
+
+    if ((D_80771AC4 == 0) && (D_80771AC8 != 0)) {
+        func_8074110C(D_80771AC8);
+    }
+
+    D_80771AC4 = D_80771AC8;
+    if (D_80771AD8 != 0) {
+        D_80771AD8--;
+        if (D_80771AD8 == 0) {
+            D_80771AC8 = D_80771ACC;
+            D_80771AD8 = D_80771ADC;
+            D_80771ACC = D_80771AD0;
+            D_80771ADC = D_80771AE0;
+            D_80771AD0 = D_80771AD4;
+            D_80771AE0 = D_80771AE4;
+            D_80771AC4 = 0;
+            D_80771AD4 = 0;
+            D_80771AE4 = 0;
+        }
+    }
+}
+
+extern AudioTask* gCurAudioTask;
+extern s32 D_80771968;
+extern u8 D_80771CB8;
+
+AudioTask* Audio_SetupCreateTask(void) {
+    AudioTask* curAudioTask;
+
+    if (D_80771C84 == 0) {
+        func_807427C0();
+    }
+    func_80742D90();
+    func_80742E6C();
+    if (D_80771CAC == 1) {
+        D_80771CB0++;
+    }
+    if (D_80771968 == 0) {
+        if (D_80771CB8 > 10) {
+            D_80771CBC = 0;
+        } else {
+            D_80771CB8++;
+        }
+    } else {
+        D_80771CB8 = 0;
+        D_80771CBC = D_80771968;
+    }
+    func_80742FB8();
+    func_807431A8();
+    func_807437CC();
+    AudioThread_ScheduleProcessCmds();
+    gCurAudioTask = curAudioTask = AudioThread_CreateTask();
+
+    return curAudioTask;
+}
+
+void func_80745CB8(void) {
+    u8 i;
+
+    func_80742654();
+    func_8074252C();
+    func_8074270C();
+    func_80741C58();
+    func_807425D0();
+    func_8074199C();
+    func_807443F0();
+    func_807442E4();
+    func_80745AF4();
+
+    for (i = 0; i < D_80771AF8 + 1; i++) {
+        func_807447CC(i);
+        func_807450E0(i);
+        func_80743BCC(i);
+        func_80744BDC(i);
+    }
+    if (D_80771AF8 == 0) {
+        for (i = 0; i < 30; i++) {
+            func_80744280(i);
+        }
+    } else {
+        for (i = 0; i < D_80771AF8 + 1; i++) {
+            func_80744280(i);
+        }
+    }
+    AudioThread_ScheduleProcessCmds();
+}
+
+// Todo: Migrate these to their appropriate places in the above functions
+
+static const char devrostring000[] = "==BANDO== Na_Reset Called\n";
+static const char devrostring001[] = "==BANDO== Nas_InitAudio_DD Called\n";
+static const char devrostring002[] = "==BANDO== SEQ ROM START = %x\n";
+static const char devrostring003[] = "==BANDO== BNK ROM START = %x\n";
+static const char devrostring004[] = "==BANDO== TBL ROM START = %x\n";
+static const char devrostring005[] = "==BANDO== Na_SetOutMode Called. mode = %d\n";
+static const char devrostring006[] = "==BANDO== Na_Player_Goal player = %d\n";
+static const char devrostring007[] = "==BANDO== Na_PlyLevelSE_Start Called player =  %02x SE number = %02x\n";
+static const char devrostring008[] = "==BANDO== PLAYER LEVEL SE STACK OVER!!\n";
+static const char devrostring009[] = "==BANDO== Na_PlyLevelSE_Stop Called player = %02x num = %02x \n";
+static const char devrostring010[] = "==BANDO== NON ENTRIED LEVEL SE STOPED! SE NUMBER = %02x\n";
+static const char devrostring011[] = "==BANDO== Na_PlyTrgSE_Start Called. player = %02x num = %02x\n";
+static const char devrostring012[] = "==BANDO== Na_PlyTrgSE_Start Called BUT RETURN! cause GOAL\n";
+static const char devrostring013[] = "==BANDO== Na_PlyTrgSE_Start Called BUT RETURN! cause GOAL\n";
+static const char devrostring014[] = "==BANDO== VOICE SE STACK OVER!!\n";
+static const char devrostring015[] = "==BANDO== System SE = %02x\n";
+static const char devrostring016[] = "==BANDO== Na_hanabi Called. pan = %02x volume = %02x \n";
+static const char devrostring017[] = "==BANDO== ENGINE SOUND ECHO START MACHINE NO = %02x\n";
+static const char devrostring018[] = "==BANDO== ENGINE SOUND ECHO STOPED! MACHINE No.= %02x\n";
+static const char devrostring019[] = "==BANDO== ENGINE SOUND STOPED! MACHINE No.= %02x\n";
+static const char devrostring020[] = "==BANDO== Na_PlyEng_Start Called player = %02x\n";
+static const char devrostring021[] = "==BANDO== WINING RUN ENGINE SOUND START! MACHINE No.= %02x\n";
+static const char devrostring022[] = "==BANDO== Na_SE_Start CALLED!! setype = %02x(hex) senum = %02x(hex) \n";
+static const char devrostring023[] = "==BANDO== Na_DDBgm_Ready_Inter Called num = %02x\n";
+static const char devrostring024[] = "==BANDO== in dd_bgm_ready_taiki count up complete!\n";
+static const char devrostring025[] = "==BANDO== in dd_bgm_ready_taiki calling Na_DDBgm_Ready_Inter...\n";
+static const char devrostring026[] = "==BANDO== Na_DDBgm_Ready Called num = %02x\n";
+static const char devrostring027[] = "==BANDO== Na_DDBgm_Start num =%d\n";
+static const char devrostring028[] = "==BANDO== Na_DDBgm_Start2 num = %d\n";
+static const char devrostring029[] = "==BANDO== Na_DDBgm_Stop Called\n";
+static const char devrostring030[] = "==BANDO== Na_BetaBgm_Start num = %02x\n";
+static const char devrostring031[] = "==BANDO== Na_BetaBgm_Stop Called\n";
+static const char devrostring032[] = "==BANDO== Na_ROMBgm_Ready Called %02x\n";
+static const char devrostring033[] = "==BANDO== in Na_ROMBgm_Ready Wave Data BG Load Start\n";
+static const char devrostring034[] = "==BANDO== in Na_ROMBgm_Ready Ready Bgm Stack\n";
+static const char devrostring035[] = "==BANDO== in rom_bgm_ready_taiki Na_ROMBgm_Ready Calling num = %02x\n";
+static const char devrostring036[] = "==BANDO== Na_ROMBgm_Start Called num = %02x\n";
+static const char devrostring037[] = "==BANDO== GAMEOVER BGM CALLED so DDBgm Stoping!! for ILLEGULALL COURSE MAKING\n";
+static const char devrostring038[] = "==BANDO== Na_ROMBgm_Start SELECT or OPTION BGM START\n";
+static const char devrostring039[] = "==BANDO== Na_ROMBgm_Stop Called\n";
+static const char devrostring040[] = "==BANDO== Na_ROMBgm_Stop Called\n";
+static const char devrostring041[] = "==BANDO== Na_START_DEMO Called\n";
+static const char devrostring042[] = "==BANDO== Na_RETIRE CALLED!!\n";
+static const char devrostring043[] = "==BANDO== Na_Level_SE_Fadeout Called\n";
+static const char devrostring044[] = "==BANDO== Na_Test_Run_Start Called\n";
+static const char devrostring045[] = "==BANDO== Na_Test_Run_End Called\n";
+static const char devrostring046[] = "==BANDO== Na_BetaBgm_Stop2 Called\n";
+static const char devrostring047[] = "==BANDO== Na_BetaBgm_Stop3 Called\n";
+static const char devrostring048[] = "==BANDO== Pause Called!! Status =  %02x\n";
+static const char devrostring049[] = "==BANDO== Na_PauseSet DD BGM Volume Down\n";
+static const char devrostring050[] = "==BANDO== in Na_PauseSet Wave Data Load End\n";
+static const char devrostring051[] = "==BANDO== Spec Change No = %02x\n";
+static const char devrostring052[] = "==BANDO== Player Mode = %02x\n";
+static const char devrostring053[] = "==BANDO== All Sound Off\n";
+static const char devrostring054[] = "==BANDO== Na_SeSeq_Start for 64DD Called\n";
+static const char devrostring055[] = "==BANDO== Na_ChangeSoundMode Called. course = %02x\n";
+static const char devrostring056[] = "==BANDO== Na_chakuchi Called BUT RETURN! cause GOAL\n";
+static const char devrostring057[] = "==BANDO== Na_chakuchi Edited volume = %f \n";
+static const char devrostring058[] = "==BANDO== dd_bgm_data_load2 -SeqStart-\n";
+static const char devrostring059[] = "==BANDO== dd_bgm_forground_load_check end num = %d\n";
+static const char devrostring060[] = "==BANDO== dd_bgm_data_load WAVE Data Load End\n";
+static const char devrostring061[] = "==BANDO== ROM BGM LOAD OK!\n";
+static const char devrostring062[] = "==BANDO== TAIKI ROM BGM START!\n";
+static const char devrostring063[] = "==BANDO== Na_Guitor_Start Called\n";
+static const char devrostring064[] = "==BANDO== Na_Guitor_Start for 64DD Called\n";
+static const char devrostring065[] = "==BANDO== SE BANK LOAD START\n";
+static const char devrostring066[] = "==BANDO== GUITOR & SE ROM WAVE DMA END\n";
+static const char devrostring067[] = "==BANDO== ALL GUITOR DATA LOAD END CHECKING... wav =%d bnk=%d seq=%d\n";
+static const char devrostring068[] = "==BANDO== ALL GUITOR DATA LOAD END\n";
+static const char devrostring069[] = "==BANDO== SE DATA LOAD END\n";
+static const char devrostring070[] = "==BANDO== DDBGM_MUTE_CITY BANK DATA LOAD END\n";
+static const char devrostring071[] = "==BANDO== DDBGM_SILENCE BANK DATA LOAD END\n";
+static const char devrostring072[] = "==BANDO== DDBGM_SAND_OCEAN BANK DATA LOAD END\n";
+static const char devrostring073[] = "==BANDO== DDBGM_PORT_TOWN BANK DATA LOAD END\n";
+static const char devrostring074[] = "==BANDO== DDBGM_BIG_BLUE BANK DATA LOAD END\n";
+static const char devrostring075[] = "==BANDO== DDBGM_DEVILS_FOREST BANK DATA LOAD END\n";
+static const char devrostring076[] = "==BANDO== DDBGM_RED_CANYON BANK DATA LOAD END\n";
+static const char devrostring077[] = "==BANDO== DDBGM_SECTOR BANK DATA LOAD END\n";
+static const char devrostring078[] = "==BANDO== DDBGM_WHITE_LAND BANK DATA LOAD END\n";
+static const char devrostring079[] = "==BANDO== DDBGM_RAINBOW_ROAD BANK DATA LOAD END\n";
+static const char devrostring080[] = "==BANDO== DDBGM_NEW_03 BANK DATA LOAD END\n";
+static const char devrostring081[] = "==BANDO== DDBGM_NEW_02 BANK DATA LOAD END\n";
+static const char devrostring082[] = "==BANDO== DDBGM_NEW_01 BANK DATA LOAD END\n";
+static const char devrostring083[] = "==BANDO== DDBGM_NEW_04 BANK DATA LOAD END\n";
+static const char devrostring084[] = "==BANDO== DDBGM_TITLE BANK DATA LOAD END\n";
+static const char devrostring085[] = "==BANDO== DDBGM_SELECT BANK DATA LOAD END\n";
+static const char devrostring086[] = "==BANDO== DDBGM_OPTION BANK DATA LOAD END\n";
+static const char devrostring087[] = "==BANDO== DDBGM_DEATHRACE BANK DATA LOAD END\n";
+static const char devrostring088[] = "==BANDO== DDBGM_COURSE_EDITOR BANK DATA LOAD END\n";
+static const char devrostring089[] = "==BANDO== DDBGM_MACHINE_EDITOR BANK DATA LOAD END\n";
+static const char devrostring090[] = "==BANDO== DDBGM_EAD_DEMO BANK DATA LOAD END\n";
+static const char devrostring091[] = "==BANDO== DDBGM_MUTE_CITY SEQ DATA LOAD END\n";
+static const char devrostring092[] = "==BANDO== DDBGM_SILENCE SEQ DATA LOAD END\n";
+static const char devrostring093[] = "==BANDO== DDBGM_SAND_OCEAN SEQ DATA LOAD END\n";
+static const char devrostring094[] = "==BANDO== DDBGM_PORT_TOWN SEQ DATA LOAD END\n";
+static const char devrostring095[] = "==BANDO== DDBGM_BIG_BLUE SEQ DATA LOAD END\n";
+static const char devrostring096[] = "==BANDO== DDBGM_DEVILS_FOREST SEQ DATA LOAD END\n";
+static const char devrostring097[] = "==BANDO== DDBGM_RED_CANYON SEQ DATA LOAD END\n";
+static const char devrostring098[] = "==BANDO== DDBGM_SECTOR SEQ DATA LOAD END\n";
+static const char devrostring099[] = "==BANDO== DDBGM_WHITE_LAND SEQ DATA LOAD END\n";
+static const char devrostring100[] = "==BANDO== DDBGM_RAINBOW_ROAD SEQ DATA LOAD END\n";
+static const char devrostring101[] = "==BANDO== DDBGM_NEW_01 SEQ DATA LOAD END\n";
+static const char devrostring102[] = "==BANDO== DDBGM_NEW_02 SEQ DATA LOAD END\n";
+static const char devrostring103[] = "==BANDO== DDBGM_NEW_03 SEQ DATA LOAD END\n";
+static const char devrostring104[] = "==BANDO== DDBGM_NEW_04 SEQ DATA LOAD END\n";
+static const char devrostring105[] = "==BANDO== DDBGM_TITLE SEQ DATA LOAD END\n";
+static const char devrostring106[] = "==BANDO== DDBGM_SELECT SEQ DATA LOAD END\n";
+static const char devrostring107[] = "==BANDO== DDBGM_OPTION SEQ DATA LOAD END\n";
+static const char devrostring108[] = "==BANDO== DDBGM_DEATHRACE SEQ DATA LOAD END\n";
+static const char devrostring109[] = "==BANDO== DDBGM_COURSE_EDITOR SEQ DATA LOAD END\n";
+static const char devrostring110[] = "==BANDO== DDBGM_MACHINE_EDITOR SEQ DATA LOAD END\n";
+static const char devrostring111[] = "==BANDO== DDBGM_EAD_DEMO SEQ DATA LOAD END\n";
+static const char devrostring112[] = "==BANDO== Na_Init_Editor Called\n";
+static const char devrostring113[] = "==BANDO== dd_editor_bgm_delay_set -- SEQ START\n";
+static const char devrostring114[] = "==BANDO== Na_Init_Editor2 Called\n";
+static const char devrostring115[] = "==BANDO== dd_editor2_bgm_delay_set -- SEQ START\n";
+static const char devrostring116[] = "==BANDO== Na_Exit_Editor Called\n";
+static const char devrostring117[] = "==BANDO== Na_Editor_Bgm_Stop Called \n";
+static const char devrostring118[] = "==BANDO== Na_Editor_Bgm_Restart Called \n";
+static const char devrostring119[] = "==BANDO== BGM FADEOUT1 COMPLETE ROUTINE\n";
+static const char devrostring120[] = "==BANDO== BGM FADEOUT2 COMPLETE ROUTINE\n";
+static const char devrostring121[] = "==BANDO== BGM FADEOUT3 COMPLETE ROUTINE\n";
+static const char devrostring122[] = "==BANDO== LEVEL SE FADEOUT COMPLETE ROUTINE\n";
+static const char devrostring123[] = "==BANDO== BGM FADEOUT COMPLETE ROUTINE (in the PAUSE ROUTINE)\n";
+static const char devrostring124[] = "==BANDO== LEVEL SE INTERNAL CALL! player=%02x SE Number= %02x \n";
+static const char devrostring125[] = "==BANDO== LEVEL SE FINAL CALL! player=%02x SE Number= %02x \n";
+static const char devrostring126[] = "==BANDO== LEVEL SE FINAL CALL! player=%02x SE Number= %02x \n";
+static const char devrostring127[] = "==BANDO== LEVEL SE FINAL CALL! player=%02x SE Number= %02x \n";
+static const char devrostring128[] = "==BANDO== LEVEL SE FINAL CALL! player=%02x SE Number= %02x \n";
+static const char devrostring129[] = "==BANDO== LEVEL SE FINAL CALL! player=%02x SE Number= %02x \n";
+static const char devrostring130[] = "==BANDO== LEVEL SE FINAL CALL! player=%02x SE Number= %02x \n";
+static const char devrostring131[] = "==BANDO== LEVEL SE FINAL CALL! player=%02x SE Number= %02x \n";
+static const char devrostring132[] = "==BANDO== LEVEL SE FINAL CALL! player=%02x SE Number= %02x \n";
+static const char devrostring133[] = "==BANDO== LEVEL SE FINAL CALL! player=%02x SE Number= %02x \n";
+static const char devrostring134[] = "==BANDO== LEVEL SE FINAL CALL! player=%02x SE Number= %02x \n";
+static const char devrostring135[] = "==BANDO== Ouch!! UN-SUPORTED TRG SE NUM WAS CALLED !!!!!!! num = %02x\n";
+static const char devrostring136[] = "==BANDO== SE SEQ START\n";
+static const char devrostring137[] = "==BANDO== ENEMY ENGINE START MACHINE No.= %02x\n";
+static const char devrostring138[] = "==BANDO== ENEMY ENGINE STOP!\n";
+static const char devrostring139[] = "==BANDO== len = %d\n";

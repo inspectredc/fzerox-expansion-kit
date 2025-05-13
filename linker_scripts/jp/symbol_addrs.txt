@@ -436,24 +436,58 @@ gLeoRezeroFunc = 0x807C6E8C;
 
 // audio
 
+AudioHeap_PopPersistentCache = 0x807315A8;
+AudioHeap_ResetStep = 0x807329EC;
+
 AudioLoad_Init = 0x80736394;
+AudioLoad_DecreaseSampleDmaTtls = 0x807342E0;
 AudioLoad_IsFontLoadComplete = 0x807349A0;
 AudioLoad_IsSeqLoadComplete = 0x80734A18;
 AudioLoad_IsSampleLoadComplete = 0x80734A90;
+AudioLoad_SyncLoadSeqParts = 0x80734CF4;
+AudioLoad_SyncLoadInstrument = 0x80734E2C;
+AudioLoad_AsyncLoadSampleBank = 0x80734F78;
+AudioLoad_AsyncLoadFont = 0x80734FBC;
+AudioLoad_AsyncLoadSeq = 0x80734F34;
+AudioLoad_DiscardSeqFonts = 0x80735044;
+AudioLoad_SyncInitSeqPlayer = 0x8073519C;
+AudioLoad_SyncInitSeqPlayerSkipTicks = 0x807351EC;
+AudioLoad_ProcessLoads = 0x80736238;
+AudioLoad_ProcessScriptLoads = 0x807388BC;
 
+AudioThread_CreateTask = 0x80738FA0;
+AudioThread_CreateTaskImpl = 0x80738FC0;
+AudioThread_ProcessGlobalCmd = 0x8073954C;
+AudioThread_SetFadeOutTimer = 0x80739930;
+AudioThread_SetFadeInTimer = 0x80739984;
+AudioThread_InitMesgQueuesImpl = 0x807399CC;
 AudioThread_QueueCmdF32 = 0x80739AB0;
-AudioThread_QueueCmdU32 = 0x80739AD4;
+AudioThread_QueueCmdS32 = 0x80739AD4;
 AudioThread_QueueCmdS8 = 0x80739AF8;
+AudioThread_ScheduleProcessCmds = 0x80739B58;
+AudioThread_ProcessCmds = 0x80739D18;
 AudioThread_GetAsyncLoadStatus = 0x80739DCC;
 AudioThread_ResetComplete = 0x80739E88;
 AudioThread_ResetAudioHeap = 0x80739F34;
 AudioThread_PreNMIInternal = 0x80739FD0;
+
+Audio_SetFontInstrument = 0x8073B710;
+
+AudioSeq_SequencePlayerDisable = 0x8073D990;
+
 Audio_SetupCreateTask = 0x80745BDC;
 
 // audio data
 
+gCurAudioTask = 0x80771D68;
+
 // audio bss
 
+gAudioCtx = 0x806ECA10; // segment:audio_context size:0x5910
+D_806F2328 = 0x806F2328; // segment:audio_context size:0x18
+D_806F2348 = 0x806F2348; // segment:audio_context size:0x8
+D_806F2350 = 0x806F2350; // segment:audio_context size:0x6C
+gAudioCustomUpdateFunction = 0x806F2320; // segment:audio_context
 
 gCourseInfos = 0x802BB140; //segment:unk_context size:0x3480
 gRacers = 0x802D2F20; //segment:unk_context size:0x6DB0

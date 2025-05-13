@@ -1,6 +1,6 @@
 #include "common.h"
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/41AE0/func_807342E0.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/41AE0/AudioLoad_DecreaseSampleDmaTtls.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/41AE0/func_807343CC.s")
 
@@ -24,29 +24,29 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/41AE0/func_80734C58.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/41AE0/func_80734CF4.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/41AE0/AudioLoad_SyncLoadSeqParts.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/41AE0/func_80734D40.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/41AE0/func_80734E2C.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/41AE0/AudioLoad_SyncLoadInstrument.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/41AE0/func_80734EFC.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/41AE0/func_80734F34.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/41AE0/AudioLoad_AsyncLoadSeq.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/41AE0/func_80734F78.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/41AE0/AudioLoad_AsyncLoadSampleBank.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/41AE0/func_80734FBC.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/41AE0/AudioLoad_AsyncLoadFont.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/41AE0/func_80735000.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/41AE0/func_80735044.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/41AE0/AudioLoad_DiscardSeqFonts.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/41AE0/func_807350F4.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/41AE0/func_8073519C.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/41AE0/AudioLoad_SyncInitSeqPlayer.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/41AE0/func_807351EC.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/41AE0/AudioLoad_SyncInitSeqPlayerSkipTicks.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/41AE0/func_80735244.s")
 
@@ -84,7 +84,7 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/41AE0/func_80735F2C.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/41AE0/func_80736238.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/41AE0/AudioLoad_ProcessLoads.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/41AE0/func_80736268.s")
 
@@ -156,7 +156,7 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/41AE0/func_80738850.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/41AE0/func_807388BC.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/41AE0/AudioLoad_ProcessScriptLoads.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/41AE0/func_80738914.s")
 
