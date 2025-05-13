@@ -22,7 +22,7 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/4A920/func_8073D8F8.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/4A920/func_8073D990.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/4A920/AudioSeq_SequencePlayerDisable.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/4A920/func_8073D9B8.s")
 

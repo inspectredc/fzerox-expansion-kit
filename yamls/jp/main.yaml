@@ -36,6 +36,13 @@
     subsegments:
       - { type: .bss, vram: 0x802D9CD0, name: buffers }
 
+  - name: audio_context
+    type: code
+    vram: 0x806ECA00
+    bss_size: 0x59C0
+    subsegments:
+      - { type: .bss, vram: 0x806ECA00, name: audio/audio_context }
+
   - name: entry
     type: code
     start: 0x0
@@ -411,6 +418,7 @@
       - [0xA2610, rodata]
       - [0xA2630, .rodata, 75000]
       - [0xA2690, data, aspmain]
+      - [0xA2970, data]
       - [0xA2B50, data] # audio tables?
       - { type: .bss, vram: 0x80795670, name: 60 }
       - { type: bss, vram: 0x8079A350, name: 8079A350 }
