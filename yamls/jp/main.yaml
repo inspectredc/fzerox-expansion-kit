@@ -22,8 +22,14 @@
     subsegments:
       - { type: .bss, vram: 0x80200000, name: framebuffer2 }
 
+  - name: unk_context
+    type: code
+    vram: 0x802BB140
+    bss_size: 0x1EB90
+    subsegments:
+      - { type: .bss, vram: 0x802BB140, name: unk_context }
+
   - name: buffers
-    exclusive_ram_id: buffer
     type: code
     vram: 0x802D9CD0
     bss_size: 0x55000

@@ -2,6 +2,7 @@
 #include "audio.h"
 #include "audio_funcs.h"
 #include "audiothread_cmd.h"
+#include "fzx_racer.h"
 
 extern f32 D_80771B44[];
 extern u8 D_80771B54[];
@@ -72,7 +73,7 @@ extern f32 D_80771B18;
 extern u8 D_80771B1C;
 extern u8 D_80771B20;
 extern u8 D_80771B28;
-extern s16 D_80771B30;
+extern u16 D_80771B30;
 extern u8 D_80771B38;
 extern u8 D_80771B40;
 extern f32 D_80771B78[];
@@ -1284,25 +1285,441 @@ void func_80742E6C(void) {
     func_80739B58();
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/4DF40/func_80742F04.s")
+void func_80742F04(void) {
+    func_8074122C(0x10);
+    AUDIOCMD_GLOBAL_DISABLE_SEQPLAYER(1, 100);
+    func_807419F0(0xF);
+    D_80771C94 = 0;
+    func_80739B58();
+}
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/4DF40/func_80742F44.s")
+void func_80742F44(void) {
+    AUDIOCMD_GLOBAL_DISABLE_SEQPLAYER(1, 200);
+}
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/4DF40/func_80742F68.s")
+void func_80742F68(void) {
+    if (D_800D11D0 == 1) {
+        AUDIOCMD_GLOBAL_INIT_SEQPLAYER(1, 20, 0, 0);
+        D_80771C74 = 1;
+        D_80771B40 = 0x12;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/4DF40/func_80742FB8.s")
+void func_80742FB8(void) {
+    f32 volumeScale;
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/4DF40/func_807431A8.s")
+    switch (D_80771B28) {
+        case 1:
+            D_80771B2C++;
+            if (D_80771B2C == 0x22) {
+                D_80771B28 = 0;
+                D_80771B2C = 0;
+                AUDIOCMD_CHANNEL_SET_VOL_SCALE(0, 0, 0.0f);
+                func_807418D4(0);
+            } else {
+                volumeScale = 1.0f - (D_80771B2C * (1.0f / 35.0f));
+                AUDIOCMD_CHANNEL_SET_VOL_SCALE(0, 0, volumeScale);
+            }
+    
+            break;
+        case 2:
+            D_80771B2C++;
+            if (D_80771B2C == 0x45) {
+                D_80771B28 = 0;
+                D_80771B2C = 0;
+                AUDIOCMD_CHANNEL_SET_VOL_SCALE(0, 0, 0.0f);
+                func_807418D4(0);
+            } else {
+                volumeScale = 1.0f - (D_80771B2C * (1.0f / 70.0f));
+                AUDIOCMD_CHANNEL_SET_VOL_SCALE(0, 0, volumeScale);
+            }
+            break;
+        case 3:
+            D_80771B2C++;
+            if (D_80771B2C == 0x15D) {
+                D_80771B28 = 0;
+                D_80771B2C = 0;
+                AUDIOCMD_CHANNEL_SET_VOL_SCALE(0, 0, 0.0f);
+                func_807418D4(0);
+            } else {
+                volumeScale = 1.0f - (D_80771B2C * (1.0f / 350.0f));
+                AUDIOCMD_CHANNEL_SET_VOL_SCALE(0, 0, volumeScale);
+            }
+            break;
+        case 0:
+        default:
+            break;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/4DF40/func_807437CC.s")
+void func_807431A8(void) {
+    f32 volumeScale;
+    s8 reverbVolume;
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/4DF40/func_80743874.s")
+    if (D_80771B38 == 0 || D_80771B20 == 2) {
+        return;
+    }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/4DF40/func_80743BCC.s")
+    D_80771B30++;
+    if (D_80771B30 == 29) {
+        D_80771B38 = 0;
+        D_80771B30 = 0;
+        func_807418D4(2);
+        func_807418D4(3);
+        func_807418D4(4);
+        func_807418D4(5);
+        func_807418D4(6);
+        func_807418D4(7);
+        func_807418D4(8);
+        func_807418D4(9);
+        func_807418D4(14);
+        D_80771B54[0] = 0;
+        D_80771B54[1] = 0;
+        D_80771B54[2] = 0;
+        D_80771B54[3] = 0;
+        return;
+    }
+    reverbVolume = 0x50 - (D_80771B30 * 2);
+    if (D_80771B54[0] == 1) {
+        volumeScale = D_80771B78[2] - ((D_80771B78[2] / 30.0f) * D_80771B30);
+        AUDIOCMD_CHANNEL_SET_VOL_SCALE(0, 2, volumeScale);
+        if (D_80771B70[0] == 1) {
+            AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 2, reverbVolume);
+        }
+    }
+    if (D_80771B54[1] == 1) {
+        volumeScale = D_80771B78[3] - ((D_80771B78[3] / 30.0f) * D_80771B30);
+        AUDIOCMD_CHANNEL_SET_VOL_SCALE(0, 3, volumeScale);
+        if (D_80771B70[1] == 1) {
+            AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 3, reverbVolume);
+        }
+    }
+    if (D_80771B54[2] == 1) {
+        volumeScale = D_80771B78[4] - ((D_80771B78[4] / 30.0f) * D_80771B30);
+        AUDIOCMD_CHANNEL_SET_VOL_SCALE(0, 4, volumeScale);
+        if (D_80771B70[2] == 1) {
+            AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 4, reverbVolume);
+        }
+    }
+    if (D_80771B54[3] == 1) {
+        volumeScale = D_80771B78[5] - ((D_80771B78[5] / 30.0f) * D_80771B30);
+        AUDIOCMD_CHANNEL_SET_VOL_SCALE(0, 5, volumeScale);
+        if (D_80771B70[3] == 1) {
+            AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 5, reverbVolume);
+        }
+    }
+    if ((D_80771B54[0] != 0) && (D_80771D48[0][0] != 0) && (D_80771B78[6] != 0.0f)) {
+        volumeScale = D_80771B78[6] - ((D_80771B78[6] / 30.0f) * D_80771B30);
+        AUDIOCMD_CHANNEL_SET_VOL_SCALE(0, 6, volumeScale);
+        if (D_80771B70[0] == 1) {
+            AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 6, reverbVolume);
+        }
+    }
+    if ((D_80771B54[1] != 0) && (D_80771D48[1][0] != 0) && (D_80771B78[7] != 0.0f)) {
+        volumeScale = D_80771B78[7] - ((D_80771B78[7] / 30.0f) * D_80771B30);
+        AUDIOCMD_CHANNEL_SET_VOL_SCALE(0, 7, volumeScale);
+        if (D_80771B70[1] == 1) {
+            AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 7, reverbVolume);
+        }
+    }
+    if ((D_80771B54[2] != 0) && (D_80771D48[2][0] != 0) && (D_80771B78[8] != 0.0f)) {
+        volumeScale = D_80771B78[8] - ((D_80771B78[8] / 30.0f) * D_80771B30);
+        AUDIOCMD_CHANNEL_SET_VOL_SCALE(0, 8, volumeScale);
+        if (D_80771B70[2] == 1) {
+            AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 8, reverbVolume);
+        }
+    }
+    if ((D_80771B54[3] != 0) && (D_80771D48[3][0] != 0) && (D_80771B78[9] != 0.0f)) {
+        volumeScale = D_80771B78[9] - ((D_80771B78[9] / 30.0f) * D_80771B30);
+        AUDIOCMD_CHANNEL_SET_VOL_SCALE(0, 9, volumeScale);
+        if (D_80771B70[3] == 1) {
+            AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 9, reverbVolume);
+        }
+    }
+    if ((D_80771AFC != 0) && (D_80771B78[14] != 0.0f)) {
+        volumeScale = D_80771B78[14] - ((D_80771B78[14] / 30.0f) * D_80771B30);
+        AUDIOCMD_CHANNEL_SET_VOL_SCALE(0, 14, volumeScale);
+        if (D_80771B70[0] == 1) {
+            AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 14, reverbVolume);
+        }
+    }
+}
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/4DF40/func_80743C40.s")
+void func_807437CC(void) {
+    f32 volumeScale;
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/4DF40/func_80744280.s")
+    if (D_80771B20 == 2) {
+        D_80771B24++;
+        if (D_80771B24 == 0x31) {
+            D_80771B20 = 0;
+            D_80771B24 = 0;
+            func_807418D4(0);
+        } else {
+            volumeScale = 0.4f - (D_80771B24 * 0.008f);
+            AUDIOCMD_CHANNEL_SET_VOL_SCALE(0, 0, volumeScale);
+        }
+    }
+}
+
+void func_80743874(u8 playerNum, u8 arg1) {
+
+    if (D_80771D48[playerNum][0] == 0) {
+        D_80771D48[playerNum][0] = arg1;
+    } else if (D_80771D48[playerNum][1] == 0) {
+        D_80771D48[playerNum][1] = D_80771D48[playerNum][0];
+        D_80771D48[playerNum][0] = arg1;
+    } else if (D_80771D48[playerNum][2] == 0) {
+        D_80771D48[playerNum][2] = D_80771D48[playerNum][1];
+        D_80771D48[playerNum][1] = D_80771D48[playerNum][0];
+        D_80771D48[playerNum][0] = arg1;
+    } else if (D_80771D48[playerNum][3] == 0) {
+        D_80771D48[playerNum][3] = D_80771D48[playerNum][2];
+        D_80771D48[playerNum][2] = D_80771D48[playerNum][1];
+        D_80771D48[playerNum][1] = D_80771D48[playerNum][0];
+        D_80771D48[playerNum][0] = arg1;
+    } else if (D_80771D48[playerNum][4] == 0) {
+        D_80771D48[playerNum][4] = D_80771D48[playerNum][3];
+        D_80771D48[playerNum][3] = D_80771D48[playerNum][2];
+        D_80771D48[playerNum][2] = D_80771D48[playerNum][1];
+        D_80771D48[playerNum][1] = D_80771D48[playerNum][0];
+        D_80771D48[playerNum][0] = arg1;
+    } else if (D_80771D48[playerNum][5] == 0) {
+        D_80771D48[playerNum][5] = D_80771D48[playerNum][4];
+        D_80771D48[playerNum][4] = D_80771D48[playerNum][3];
+        D_80771D48[playerNum][3] = D_80771D48[playerNum][2];
+        D_80771D48[playerNum][2] = D_80771D48[playerNum][1];
+        D_80771D48[playerNum][1] = D_80771D48[playerNum][0];
+        D_80771D48[playerNum][0] = arg1;
+    } else if (D_80771D48[playerNum][6] == 0) {
+        D_80771D48[playerNum][6] = D_80771D48[playerNum][5];
+        D_80771D48[playerNum][5] = D_80771D48[playerNum][4];
+        D_80771D48[playerNum][4] = D_80771D48[playerNum][3];
+        D_80771D48[playerNum][3] = D_80771D48[playerNum][2];
+        D_80771D48[playerNum][2] = D_80771D48[playerNum][1];
+        D_80771D48[playerNum][1] = D_80771D48[playerNum][0];
+        D_80771D48[playerNum][0] = arg1;
+    } else if (D_80771D48[playerNum][7] == 0) {
+        D_80771D48[playerNum][7] = D_80771D48[playerNum][6];
+        D_80771D48[playerNum][6] = D_80771D48[playerNum][5];
+        D_80771D48[playerNum][5] = D_80771D48[playerNum][4];
+        D_80771D48[playerNum][4] = D_80771D48[playerNum][3];
+        D_80771D48[playerNum][3] = D_80771D48[playerNum][2];
+        D_80771D48[playerNum][2] = D_80771D48[playerNum][1];
+        D_80771D48[playerNum][1] = D_80771D48[playerNum][0];
+        D_80771D48[playerNum][0] = arg1;
+    }
+    switch (D_80771AF8) {
+        case 0:
+            AUDIOCMD_CHANNEL_SET_PAN(0, 6, 0x3F);
+            func_80741888(6, arg1);
+            break;
+        case 1:
+            switch (playerNum) {
+                case 0:
+                    AUDIOCMD_CHANNEL_SET_PAN(0, 6, 0);
+                    func_80741888(6, arg1 + 10);
+                    break;
+                case 1:
+                    AUDIOCMD_CHANNEL_SET_PAN(0, 7, 0x7F);
+                    func_80741888(7, arg1 + 10);
+                    break;
+            }
+            break;
+        case 2:
+            switch (playerNum) {
+                case 0:
+                    AUDIOCMD_CHANNEL_SET_PAN(0, 6, 0);
+                    func_80741888(6, arg1 + 20);
+                    break;
+                case 1:
+                    AUDIOCMD_CHANNEL_SET_PAN(0, 7, 0);
+                    func_80741888(7, arg1 + 20);
+                    break;
+                case 2:
+                    AUDIOCMD_CHANNEL_SET_PAN(0, 8, 0x7F);
+                    func_80741888(8, arg1 + 20);
+                    break;
+            }
+            break;
+        case 3:
+            switch (playerNum) {
+                case 0:
+                    AUDIOCMD_CHANNEL_SET_PAN(0, 6, 0);
+                    func_80741888(6, arg1 + 20);
+                    break;
+                case 1:
+                    AUDIOCMD_CHANNEL_SET_PAN(0, 7, 0);
+                    func_80741888(7, arg1 + 20);
+                    break;
+                case 2:
+                    AUDIOCMD_CHANNEL_SET_PAN(0, 8, 0x7F);
+                    func_80741888(8, arg1 + 20);
+                    break;
+                case 3:
+                    AUDIOCMD_CHANNEL_SET_PAN(0, 9, 0x7F);
+                    func_80741888(9, arg1 + 20);
+                    break;
+            }
+            break;
+    }
+}
+
+void func_80743BCC(u8 arg0) {
+
+    if (D_80771CA8 == 1) {
+        return;
+    }
+
+    if (D_80771D38[arg0][0] != 0) {
+        func_80743874(arg0, D_80771D38[arg0][0]);
+        D_80771D38[arg0][0] = D_80771D38[arg0][1];
+        D_80771D38[arg0][1] = D_80771D38[arg0][2];
+        D_80771D38[arg0][2] = D_80771D38[arg0][3];
+        D_80771D38[arg0][3] = 0;
+    }
+}
+
+extern Player gPlayers[];
+
+void func_80743C40(u8 arg0, u8 arg1) {
+    f32 volumeScale;
+    f32 freqScale;
+    f32 var_fv1;
+    Vec3f vec;
+    u8 pan;
+
+    if ((D_80771B54[arg0] != 0) || (arg1 == 0x16) || (arg1 == 0x10) || (arg1 == 0x21) || (arg1 == 0x1E) ||
+        (arg1 == 5) || (arg1 == 8) || (arg1 == 0xF) || (arg1 == 0x30) || (arg1 == 0x31) || (arg1 == 0x34) ||
+        (arg1 == 0x35) || (arg1 == 0x3E)) {
+        D_80771BB8[arg0] = arg1;
+        switch (D_80771AF8) {
+            case 0:
+                if (arg0 == 0) {
+                    AUDIOCMD_CHANNEL_SET_PAN(0, 10, 0x3F);
+                    volumeScale = D_80771BD8[arg0];
+                    AUDIOCMD_CHANNEL_SET_VOL_SCALE(0, 10, volumeScale);
+
+                    if (arg1 >= 0x3F || arg1 < 0) {
+                        arg1 = 0;
+                    }
+                    func_80741888(10, arg1);
+                } else if (D_80771AFC != 0) {
+                    if (arg0 == D_80771B00) {
+                        var_fv1 = D_80771B10;
+                    } else {
+                        vec.x = gRacers[arg0].unk_0C.unk_34.x - gPlayers[0].unk_50.x;
+                        vec.y = gRacers[arg0].unk_0C.unk_34.y - gPlayers[0].unk_50.y;
+                        vec.z = gRacers[arg0].unk_0C.unk_34.z - gPlayers[0].unk_50.z;
+
+                        var_fv1 = sqrtf(SQ_SUM(&vec));
+                    }
+                    if ((var_fv1 < 10000.0f) && (var_fv1 > 0.0f)) {
+                        volumeScale = (-(9.0f / 190000.0f) * var_fv1) + 0.87f;
+                        if (volumeScale > 0.24f) {
+                            if (volumeScale > 0.68f) {
+                                volumeScale = 0.68f;
+                            }
+
+                            AUDIOCMD_CHANNEL_SET_VOL_SCALE(0, 15, volumeScale);
+                            if (arg0 == D_80771B00) {
+                                freqScale = (D_80771B18 * (2.0f / 7.0f)) + 0.2f;
+                            } else {
+                                freqScale = volumeScale * 1.2f;
+                            }
+                            if (freqScale > 2.0f) {
+                                freqScale = 2.0f;
+                            }
+                            if (freqScale < 0.1f) {
+                                freqScale = 0.1f;
+                            }
+
+                            AUDIOCMD_CHANNEL_SET_FREQ_SCALE(0, 15, freqScale);
+
+                            if (arg0 == D_80771B00) {
+                                pan = func_80740838(D_80771B1C);
+                            } else {
+                                pan = 0x3F;
+                            }
+                            AUDIOCMD_CHANNEL_SET_PAN(0, 15, pan);
+                            func_80741888(15, arg1);
+                        }
+                    }
+                }
+                break;
+            case 1:
+                volumeScale = D_80771BD8[arg0] * 0.975f;
+                switch (arg0) {
+                    case 0:
+                        AUDIOCMD_CHANNEL_SET_PAN(0, 10, 0);
+                        AUDIOCMD_CHANNEL_SET_VOL_SCALE(0, 10, volumeScale);
+                        func_80741888(10, arg1);
+                        break;
+                    case 1:
+                        AUDIOCMD_CHANNEL_SET_PAN(0, 11, 0x7F);
+                        AUDIOCMD_CHANNEL_SET_VOL_SCALE(0, 11, volumeScale);
+                        func_80741888(11, arg1);
+                        break;
+                }
+                break;
+            case 2:
+                volumeScale = D_80771BD8[arg0] * 0.95f;
+                switch (arg0) {
+                    case 0:
+                        AUDIOCMD_CHANNEL_SET_PAN(0, 10, 0);
+                        AUDIOCMD_CHANNEL_SET_VOL_SCALE(0, 10, volumeScale);
+                        func_80741888(10, arg1);
+                        break;
+                    case 1:
+                        AUDIOCMD_CHANNEL_SET_PAN(0, 11, 0);
+                        AUDIOCMD_CHANNEL_SET_VOL_SCALE(0, 11, volumeScale);
+                        func_80741888(11, arg1);
+                        break;
+                    case 2:
+                        AUDIOCMD_CHANNEL_SET_PAN(0, 12, 0x7F);
+                        AUDIOCMD_CHANNEL_SET_VOL_SCALE(0, 12, volumeScale);
+                        func_80741888(12, arg1);
+                        break;
+                }
+                break;
+            case 3:
+                volumeScale = D_80771BD8[arg0] * 0.95f;
+                switch (arg0) {
+                    case 0:
+                        AUDIOCMD_CHANNEL_SET_PAN(0, 10, 0);
+                        AUDIOCMD_CHANNEL_SET_VOL_SCALE(0, 10, volumeScale);
+                        func_80741888(10, arg1);
+                        break;
+                    case 1:
+                        AUDIOCMD_CHANNEL_SET_PAN(0, 11, 0);
+                        AUDIOCMD_CHANNEL_SET_VOL_SCALE(0, 11, volumeScale);
+                        func_80741888(11, arg1);
+                        break;
+                    case 2:
+                        AUDIOCMD_CHANNEL_SET_PAN(0, 12, 0x7F);
+                        AUDIOCMD_CHANNEL_SET_VOL_SCALE(0, 12, volumeScale);
+                        func_80741888(12, arg1);
+                        break;
+                    case 3:
+                        AUDIOCMD_CHANNEL_SET_PAN(0, 13, 0x7F);
+                        AUDIOCMD_CHANNEL_SET_VOL_SCALE(0, 13, volumeScale);
+                        func_80741888(13, arg1);
+                        break;
+                }
+                break;
+        }
+    }
+}
+
+void func_80744280(u8 racerId) {
+
+    if (D_80771CC0[racerId][0] != 0) {
+        func_80743C40(racerId, D_80771CC0[racerId][0]);
+        D_80771CC0[racerId][0] = D_80771CC0[racerId][1];
+        D_80771CC0[racerId][1] = D_80771CC0[racerId][2];
+        D_80771CC0[racerId][2] = D_80771CC0[racerId][3];
+        D_80771CC0[racerId][3] = 0;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/4DF40/func_807442E4.s")
 

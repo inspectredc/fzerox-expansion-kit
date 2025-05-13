@@ -46,6 +46,7 @@ SLCheckDiskChange2 = 0x80707A54;
 sSpTaskState = 0x8076C760;
 gRamDDCompatible = 0x8076C780;
 gGameFrameCount = 0x8076C7A0;
+gNumPlayers = 0x8076C7C8;
 gBodyHealthValues = 0x8076EF84;
 
 // game bss
@@ -75,6 +76,8 @@ gMasterDisp = 0x8079A358;
 gGameMode = 0x8079A4B4;
 
 gSegments = 0x8079FA40;
+
+gPlayers = 0x807A0930; //size:0x770
 
 // libultra
 
@@ -452,6 +455,7 @@ Audio_SetupCreateTask = 0x80745BDC;
 // audio bss
 
 
-
+gCourseInfos = 0x802BB140; //segment:unk_context size:0x3480
+gRacers = 0x802D2F20; //segment:unk_context size:0x6DB0
 
 D_807794F0 = 0x807794F0; // force_migration:True
