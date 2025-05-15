@@ -6,7 +6,7 @@
 // Temp include for external audio funcs and unmigrated funcs
 
 void func_80738944(void);
-s32 func_8073A678(s32 flags);
+void func_80739EE0(void);
 
 void func_80740740(u8);
 void func_8074184C(u8);

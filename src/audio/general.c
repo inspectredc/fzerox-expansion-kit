@@ -1321,7 +1321,7 @@ void func_80742FB8(void) {
                 volumeScale = 1.0f - (D_80771B2C * (1.0f / 35.0f));
                 AUDIOCMD_CHANNEL_SET_VOL_SCALE(0, 0, volumeScale);
             }
-    
+
             break;
         case 2:
             D_80771B2C++;
@@ -1749,7 +1749,7 @@ void func_807442E4(void) {
                 }
 
                 if ((temp_lo > 2100) && (temp_lo < 2110) && (gGameMode == GAMEMODE_FLX_TITLE) && (D_8076C7D8 == 0)) {
-                    if (!note){}
+                    if (!note) {}
                     D_8076C7D8 = 1;
                 }
                 if ((temp_lo > 8200) && (temp_lo < 8210) && (D_8076C7D8 == 1)) {

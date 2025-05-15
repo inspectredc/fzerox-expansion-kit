@@ -4,7 +4,7 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/3BC60/func_8072E7DC.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/3BC60/func_8072E8A4.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/3BC60/AudioSynth_Update.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/3BC60/func_8072EAA0.s")
 

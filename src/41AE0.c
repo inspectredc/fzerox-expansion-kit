@@ -1,6 +1,37 @@
-#include "common.h"
+#include "global.h"
+#include "audio.h"
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/41AE0/AudioLoad_DecreaseSampleDmaTtls.s")
+void AudioLoad_DecreaseSampleDmaTtls(void) {
+    u32 i;
+
+    for (i = 0; i < gAudioCtx.sampleDmaListSize1; i++) {
+        SampleDma* dma = &gAudioCtx.sampleDmas[i];
+
+        if (dma->ttl != 0) {
+            dma->ttl--;
+            if (dma->ttl == 0) {
+                dma->reuseIndex = gAudioCtx.sampleDmaReuseQueue1WrPos;
+                gAudioCtx.sampleDmaReuseQueue1[gAudioCtx.sampleDmaReuseQueue1WrPos] = i;
+                gAudioCtx.sampleDmaReuseQueue1WrPos++;
+            }
+        }
+    }
+
+    for (i = gAudioCtx.sampleDmaListSize1; i < gAudioCtx.sampleDmaCount; i++) {
+        SampleDma* dma = &gAudioCtx.sampleDmas[i];
+
+        if (dma->ttl != 0) {
+            dma->ttl--;
+            if (dma->ttl == 0) {
+                dma->reuseIndex = gAudioCtx.sampleDmaReuseQueue2WrPos;
+                gAudioCtx.sampleDmaReuseQueue2[gAudioCtx.sampleDmaReuseQueue2WrPos] = i;
+                gAudioCtx.sampleDmaReuseQueue2WrPos++;
+            }
+        }
+    }
+
+    gAudioCtx.unused1DF8 = 0;
+}
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/41AE0/func_807343CC.s")
 
@@ -38,7 +69,7 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/41AE0/AudioLoad_AsyncLoadFont.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/41AE0/func_80735000.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/41AE0/AudioLoad_GetFontsForSequence.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/41AE0/AudioLoad_DiscardSeqFonts.s")
 
