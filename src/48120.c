@@ -12,9 +12,9 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/48120/func_8073B428.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/48120/func_8073B464.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/48120/Audio_GetInstrument.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/48120/func_8073B538.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/48120/Audio_GetDrum.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/48120/func_8073B61C.s")
 
