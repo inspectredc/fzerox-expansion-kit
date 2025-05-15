@@ -6,17 +6,17 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/3E700/func_80731060.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/3E700/func_80731150.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/3E700/AudioHeap_DiscardFont.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/3E700/func_80731234.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/3E700/func_807312AC.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/3E700/func_80731330.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/3E700/AudioHeap_WritebackDCache.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/3E700/func_80731350.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/3E700/func_807313A8.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/3E700/AudioHeap_AllocAttemptExternal.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/3E700/func_80731400.s")
 
@@ -24,7 +24,7 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/3E700/func_80731478.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/3E700/func_807314D4.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/3E700/AudioHeap_Alloc.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/3E700/AudioHeap_InitPool.s")
 
@@ -46,9 +46,9 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/3E700/func_80731914.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/3E700/func_807319D8.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/3E700/AudioHeap_AllocCached.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/3E700/func_8073216C.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/3E700/AudioHeap_SearchCaches.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/3E700/func_807321C4.s")
 
@@ -72,11 +72,11 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/3E700/func_80732CF0.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/3E700/func_807335F0.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/3E700/AudioHeap_SearchPermanentCache.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/3E700/func_80733648.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/3E700/AudioHeap_AllocPermanent.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/3E700/func_807336CC.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/3E700/AudioHeap_AllocSampleCache.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/3E700/func_8073373C.s")
 
@@ -98,7 +98,7 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/3E700/func_80733F74.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/3E700/func_80733F98.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/3E700/AudioHeap_ApplySampleBankCache.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/3E700/func_80733FBC.s")
 

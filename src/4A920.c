@@ -22,9 +22,9 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/4A920/func_8073D8F8.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/4A920/AudioSeq_SequencePlayerDisable.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/4A920/AudioSeq_SequencePlayerDisableAsFinished.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/4A920/func_8073D9B8.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/4A920/AudioSeq_SequencePlayerDisable.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/4A920/func_8073DA98.s")
 
@@ -64,9 +64,9 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/4A920/func_80740344.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/4A920/func_807403F8.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/4A920/AudioSeq_SkipForwardSequence.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/4A920/func_80740448.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/4A920/AudioSeq_ResetSequencePlayer.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/4A920/func_80740514.s")
 

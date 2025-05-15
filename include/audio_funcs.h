@@ -5,6 +5,9 @@
 
 // Temp include for external audio funcs and unmigrated funcs
 
+s32 func_80735ECC(s32 unkMediumParam, uintptr_t* devAddrPtr);
+void func_807383B0(s32 unkMediumParam, uintptr_t devAddr, u8* ramAddr, size_t size);
+
 void func_80738944(void);
 void func_80739EE0(void);
 

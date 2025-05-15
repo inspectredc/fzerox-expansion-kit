@@ -214,7 +214,7 @@ void AudioThread_ProcessGlobalCmd(AudioCmd* cmd) {
         case AUDIOCMD_OP_GLOBAL_DISABLE_SEQPLAYER:
             if (gAudioCtx.seqPlayers[cmd->arg0].enabled) {
                 if (cmd->asInt == 0) {
-                    AudioSeq_SequencePlayerDisable(&gAudioCtx.seqPlayers[cmd->arg0]);
+                    AudioSeq_SequencePlayerDisableAsFinished(&gAudioCtx.seqPlayers[cmd->arg0]);
                 } else {
                     AudioThread_SetFadeOutTimer(cmd->arg0, cmd->asInt);
                 }
@@ -302,7 +302,7 @@ void AudioThread_ProcessGlobalCmd(AudioCmd* cmd) {
                     SequencePlayer* seqPlayer = &gAudioCtx.seqPlayers[i];
 
                     if (seqPlayer->enabled) {
-                        AudioSeq_SequencePlayerDisable(seqPlayer);
+                        AudioSeq_SequencePlayerDisableAsFinished(seqPlayer);
                     }
                 }
             }
