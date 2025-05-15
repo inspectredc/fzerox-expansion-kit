@@ -285,8 +285,8 @@ typedef struct NoteAttributes {
     /* 0x08 */ f32 freqScale;
     /* 0x0C */ f32 velocity;
     /* 0x10 */ s16* filter;
-    /* 0x14 */ s16 filterBuf[8];
-} NoteAttributes; // size = 0x24
+    // /* 0x14 */ s16 filterBuf[8];
+} NoteAttributes; // size = 0x14
 
 // Also known as a SubTrack, according to sm64 debug strings.
 typedef struct SequenceChannel {
@@ -350,7 +350,8 @@ typedef struct SequenceChannel {
     /* 0xC4 */ s8 seqScriptIO[8]; // bridge between .seq script and audio lib, "io ports"
     /* 0xCC */ s16* filter;
     /* 0xD0 */ Stereo stereo;
-} SequenceChannel; // size = 0xD4
+    /* 0xD4 */ s32 unk_D4;
+} SequenceChannel; // size = 0xD8
 
 // Might also be known as a Track, according to sm64 debug strings (?).
 typedef struct SequenceLayer {
@@ -446,9 +447,10 @@ typedef struct NotePlaybackState {
     /* 0x14 */ SequenceLayer* parentLayer;
     /* 0x18 */ SequenceLayer* wantedParentLayer;
     /* 0x1C */ NoteAttributes attributes;
-    /* 0x40 */ AdsrState adsr;
-    /* 0x60 */ Portamento portamento;
-    /* 0x6C */ s8 unk_6C[0x10];
+    /* 0x30 */ AdsrState adsr;
+    /* 0x50 */ Portamento portamento;
+    /* 0x5C */ VibratoState vibratoState;
+    /* 0x78 */ s32 unk_78;
 } NotePlaybackState; // size = 0x7C
 
 typedef struct NoteSubEu {
@@ -773,7 +775,19 @@ typedef struct AudioContext {
     /* 0x17F0 */ OSMesgQueue externalLoadQueue;
     s8 unk_1808[0x218];
     /* 0x1A20 */ OSMesgQueue curAudioFrameDmaQueue;
-    s8 unk_1A38[0x5E0];
+    s8 unk_1A38[0x3B4];
+    /* 0x1DEC */ SampleDma* sampleDmas;
+    /* 0x1DF0 */ u32 sampleDmaCount;
+    /* 0x1DF4 */ u32 sampleDmaListSize1;
+    /* 0x1DF8 */ s32 unused1DF8;
+    /* 0x1DFC */ u8 sampleDmaReuseQueue1[0x100];
+    /* 0x1EFC */ u8 sampleDmaReuseQueue2[0x100];
+    /* 0x1FFC */ u8 sampleDmaReuseQueue1RdPos;
+    /* 0x1FFD */ u8 sampleDmaReuseQueue2RdPos;
+    /* 0x1FFE */ u8 sampleDmaReuseQueue1WrPos;
+    /* 0x1FFF */ u8 sampleDmaReuseQueue2WrPos;
+    s8 unk_2000[0x14];
+    /* 0x2014 */ SoundFont* soundFontList;
     /* 0x2018 */ AudioBufferParameters audioBufferParameters;
     s8 unk_2040[0x24];
     /* 0x2064 */ s32 numNotes;
@@ -793,7 +807,9 @@ typedef struct AudioContext {
     /* 0x214C */ u32 audioRandom;
     s8 unk_2150[0x4];
     /* 0x2154 */ volatile u32 resetTimer;
-    s8 unk_2158[0xB3E];
+    s8 unk_2158[0x18];
+    /* 0x2170 */ AudioAllocPool externalPool;
+    s8 unk_2180[0xB16];
     /* 0x2C96 */ volatile u8 resetStatus;
     /* 0x2C97 */ u8 specId;
     s8 unk_2C98[0x10];
@@ -994,6 +1010,7 @@ void AudioSeq_AudioListPushBack(AudioListItem* list, AudioListItem* item);
 void AudioSeq_SkipForwardSequence(SequencePlayer* seqPlayer);
 void AudioSeq_ResetSequencePlayer(s32 seqPlayerIndex);
 void AudioLoad_DecreaseSampleDmaTtls(void);
+void AudioLoad_ProcessScriptLoads(void);
 
 bool AudioLoad_IsFontLoadComplete(s32 fontId);
 bool AudioLoad_IsSeqLoadComplete(s32 seqId);
@@ -1027,11 +1044,15 @@ void AudioThread_QueueCmdF32(s32 opArgs, f32 data);
 void AudioThread_QueueCmdS32(s32 opArgs, s32 data);
 void AudioThread_QueueCmdS8(s32 opArgs, s8 data);
 void AudioThread_QueueCmdU16(s32 opArgs, u16 data);
+void AudioThread_ProcessSeqPlayerCmd(SequencePlayer* seqPlayer, AudioCmd* cmd);
+void AudioThread_ProcessChannelCmd(SequenceChannel* channel, AudioCmd* cmd);
+void AudioThread_ProcessCmds(u32 msg);
 u32 AudioThread_GetAsyncLoadStatus(u32* outData);
-void AudioThread_ScheduleProcessCmds(void);
-bool AudioThread_ResetComplete(void);
+s32 AudioThread_ScheduleProcessCmds(void);
+s32 AudioThread_ResetComplete(void);
 s32 AudioThread_ResetAudioHeap(s32 specId);
 void AudioThread_PreNMIInternal(void);
+s32 AudioThread_SilenceCheck(s32 flags);
 
 AudioTask* Audio_SetupCreateTask(void);
 

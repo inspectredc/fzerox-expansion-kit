@@ -26,7 +26,7 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/3E700/func_807314D4.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/3E700/func_8073152C.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/3E700/AudioHeap_InitPool.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/3E700/func_80731554.s")
 

@@ -436,6 +436,9 @@ gLeoRezeroFunc = 0x807C6E8C;
 
 // audio
 
+AudioSynth_Update = 0x8072E8A4;
+
+AudioHeap_InitPool = 0x8073152C;
 AudioHeap_PopPersistentCache = 0x807315A8;
 AudioHeap_ResetStep = 0x807329EC;
 
@@ -449,6 +452,7 @@ AudioLoad_SyncLoadInstrument = 0x80734E2C;
 AudioLoad_AsyncLoadSampleBank = 0x80734F78;
 AudioLoad_AsyncLoadFont = 0x80734FBC;
 AudioLoad_AsyncLoadSeq = 0x80734F34;
+AudioLoad_GetFontsForSequence = 0x80735000;
 AudioLoad_DiscardSeqFonts = 0x80735044;
 AudioLoad_SyncInitSeqPlayer = 0x8073519C;
 AudioLoad_SyncInitSeqPlayerSkipTicks = 0x807351EC;
@@ -470,6 +474,9 @@ AudioThread_GetAsyncLoadStatus = 0x80739DCC;
 AudioThread_ResetComplete = 0x80739E88;
 AudioThread_ResetAudioHeap = 0x80739F34;
 AudioThread_PreNMIInternal = 0x80739FD0;
+AudioThread_InitMesgQueues = 0x8073A7F4;
+
+osAiSetNextBuffer = 0x8073A8A0;
 
 Audio_SetFontInstrument = 0x8073B710;
 
@@ -479,6 +486,7 @@ Audio_SetupCreateTask = 0x80745BDC;
 
 // audio data
 
+gAudioContextInitialized = 0x80771A20;
 gCurAudioTask = 0x80771D68;
 
 // audio bss
