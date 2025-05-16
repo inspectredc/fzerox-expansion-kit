@@ -6,7 +6,7 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/48120/func_8073AE0C.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/48120/func_8073AECC.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/48120/Audio_NoteDisable.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/48120/func_8073AF30.s")
 
@@ -30,7 +30,7 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/48120/func_8073BAFC.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/48120/func_8073BB4C.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/48120/Audio_InitNoteFreeList.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/48120/func_8073BBF0.s")
 
@@ -38,7 +38,7 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/48120/func_8073BE8C.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/48120/func_8073BECC.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/48120/Audio_AudioListRemove.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/48120/func_8073BEF8.s")
 
@@ -56,4 +56,4 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/48120/func_8073C2B8.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/48120/func_8073C58C.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/48120/Audio_NoteInitAll.s")
