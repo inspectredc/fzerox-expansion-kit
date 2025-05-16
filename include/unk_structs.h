@@ -11,7 +11,7 @@ typedef struct unk_807C6F10 {
     s32 unk_0C;
     OSPiHandle* unk_10;
     OSIoMesg* unk_14;
-    s32 unk_18;
+    s32 direction;
     LEOCmd* cmdBlock;
     OSMesgQueue* mq;
 } unk_807C6F10;

@@ -22,7 +22,7 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/3E700/func_8073143C.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/3E700/func_80731478.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/3E700/AudioHeap_AllocZeroed.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/3E700/AudioHeap_Alloc.s")
 
@@ -36,7 +36,7 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/3E700/AudioHeap_PopPersistentCache.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/3E700/func_807316E8.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/3E700/AudioHeap_InitMainPools.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/3E700/func_80731748.s")
 
