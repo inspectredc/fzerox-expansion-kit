@@ -16,7 +16,7 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/48120/Audio_GetDrum.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/48120/func_8073B61C.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/48120/Audio_GetSoundEffect.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/48120/Audio_SetFontInstrument.s")
 
