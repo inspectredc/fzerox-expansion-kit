@@ -280,6 +280,7 @@
       - [0x79FA0, data]
       - [0x79FB0, .data, 2260]
       - [0x79FC0, data]
+      - [0x7F160, .data, audio/load]
       - [0x7F230, .data, audio/thread]
       - [0x7F250, data]
 
