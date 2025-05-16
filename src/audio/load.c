@@ -265,7 +265,7 @@ void AudioLoad_SetSampleFontLoadStatus(s32 sampleBankId, s32 loadStatus) {
     }
 }
 
-void AudioLoad_InitTable(AudioTable* table, u32 romAddr, u16 unkMediumParam) {
+void AudioLoad_InitTable(AudioTable* table, uintptr_t romAddr, u16 unkMediumParam) {
     s32 i;
 
     table->header.unkMediumParam = unkMediumParam;
@@ -1022,7 +1022,7 @@ void AudioLoad_ProcessLoads(s32 resetStatus) {
     AudioLoad_ProcessAsyncLoads(resetStatus);
 }
 
-extern s32 (*sLeoHandler)(LEOCmd*, s32, u32, void*, u32, OSMesgQueue*);
+extern LeoHandler sLeoHandler;
 
 s32 func_80736268(LEOCmd* cmdBlock, s32 direction, u32 lba, void* arg3, u32 nLbas, OSMesgQueue* mq, bool arg6) {
     void* vAddr;
@@ -1046,13 +1046,171 @@ s32 func_80736268(LEOCmd* cmdBlock, s32 direction, u32 lba, void* arg3, u32 nLba
     return 0;
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/audio/load/func_8073631C.s")
+void AudioLoad_SetDmaHandler(DmaHandler callback) {
+    sDmaHandler = callback;
+}
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/audio/load/func_80736328.s")
+void AudioLoad_SetLeoHandler(LeoHandler callback) {
+    sLeoHandler = callback;
+}
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/audio/load/func_80736334.s")
+void AudioLoad_InitSoundFont(s32 fontId) {
+    SoundFont* font = &gAudioCtx.soundFontList[fontId];
+    AudioTableEntry* entry = &gAudioCtx.soundFontTable->entries[fontId];
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/audio/load/AudioLoad_Init.s")
+    font->sampleBankId1 = (entry->shortData1 >> 8) & 0xFF;
+    font->sampleBankId2 = (entry->shortData1) & 0xFF;
+    font->numInstruments = (entry->shortData2 >> 8) & 0xFF;
+    font->numDrums = entry->shortData2 & 0xFF;
+    font->numSfx = entry->shortData3;
+}
+
+extern s32 D_807C1BE0;
+extern s32 D_807C1BE4;
+extern s32 D_807C1BE8;
+
+extern s32 D_80771DC8;
+extern s32 D_80771DCC;
+extern s32 D_80771DD0;
+
+extern s32 D_806F2348[];
+
+extern OSMesgQueue D_806F2328;
+extern OSMesg D_806F2340[1];
+
+extern AudioCustomUpdateFunction gAudioCustomUpdateFunction;
+
+extern bool gAudioContextInitialized;
+
+extern AudioHeapInitSizes gAudioHeapInitSizes;
+
+extern AudioTable gSequenceTable;
+extern AudioTable gSoundFontTable;
+extern AudioTable gSampleBankTable;
+extern u8 gSequenceFontTable[];
+
+extern u8 gAudioHeap[];
+
+void AudioLoad_Init(void* heap, size_t heapSize) {
+    s32 pad[18];
+    s32 numFonts;
+    void* ramAddr;
+    s32 i;
+
+    gAudioCustomUpdateFunction = NULL;
+    gAudioCtx.resetTimer = 0;
+    gAudioCtx.unk_215C = 0;
+
+    {
+        s32 i;
+        u8* audioContextPtr = (u8*)&gAudioCtx;
+
+        //! @bug This clearing loop sets one extra byte to 0 following gAudioCtx.
+        for (i = sizeof(gAudioCtx); i >= 0; i--) {
+            *audioContextPtr++ = 0;
+        }
+    }
+
+    // 1000 is a conversion from seconds to milliseconds
+    switch (osTvType) {
+        case OS_TV_PAL:
+            gAudioCtx.maxTempoTvTypeFactors = 1000 * REFRESH_RATE_DEVIATION_PAL / REFRESH_RATE_PAL;
+            gAudioCtx.refreshRate = REFRESH_RATE_PAL;
+            break;
+
+        case OS_TV_MPAL:
+            gAudioCtx.maxTempoTvTypeFactors = 1000 * REFRESH_RATE_DEVIATION_MPAL / REFRESH_RATE_MPAL;
+            gAudioCtx.refreshRate = REFRESH_RATE_MPAL;
+            break;
+
+        case OS_TV_NTSC:
+        default:
+            gAudioCtx.maxTempoTvTypeFactors = 1000 * REFRESH_RATE_DEVIATION_NTSC / REFRESH_RATE_NTSC;
+            gAudioCtx.refreshRate = REFRESH_RATE_NTSC;
+            break;
+    }
+
+    AudioThread_InitMesgQueues();
+
+    for (i = 0; i < 3; i++) {
+        gAudioCtx.aiBufLengths[i] = 0xA0;
+    }
+
+    gAudioCtx.totalTaskCount = 0;
+    gAudioCtx.rspTaskIndex = 0;
+    gAudioCtx.curAiBufIndex = 0;
+    gAudioCtx.soundMode = SOUNDMODE_STEREO;
+    gAudioCtx.curTask = NULL;
+    gAudioCtx.rspTask[0].task.t.data_size = 0;
+    gAudioCtx.rspTask[1].task.t.data_size = 0;
+    osCreateMesgQueue(&gAudioCtx.syncDmaQueue, &gAudioCtx.syncDmaMesg, 1);
+    osCreateMesgQueue(&gAudioCtx.curAudioFrameDmaQueue, gAudioCtx.curAudioFrameDmaMsgBuf,
+                      ARRAY_COUNT(gAudioCtx.curAudioFrameDmaMsgBuf));
+    osCreateMesgQueue(&gAudioCtx.externalLoadQueue, gAudioCtx.externalLoadMsgBuf,
+                      ARRAY_COUNT(gAudioCtx.externalLoadMsgBuf));
+    osCreateMesgQueue(&gAudioCtx.preloadSampleQueue, gAudioCtx.preloadSampleMsgBuf,
+                      ARRAY_COUNT(gAudioCtx.preloadSampleMsgBuf));
+    gAudioCtx.curAudioFrameDmaCount = 0;
+    gAudioCtx.sampleDmaCount = 0;
+    gAudioCtx.cartHandle = osCartRomInit();
+    gAudioCtx.driveHandle = osDriveRomInit();
+
+    if (heap == NULL) {
+        gAudioCtx.audioHeap = gAudioHeap;
+        gAudioCtx.audioHeapSize = gAudioHeapInitSizes.heapSize;
+    } else {
+        gAudioCtx.audioHeap = heap;
+        gAudioCtx.audioHeapSize = heapSize;
+    }
+
+    for (i = 0; i < (s32)gAudioCtx.audioHeapSize / 8; i++) {
+        ((u64*)gAudioCtx.audioHeap)[i] = 0;
+    }
+
+    // Main Pool Split (split entirety of audio heap into initPool and sessionPool)
+    AudioHeap_InitMainPools(gAudioHeapInitSizes.initPoolSize);
+
+    // Initialize the audio interface buffers
+    for (i = 0; i < ARRAY_COUNT(gAudioCtx.aiBuffers); i++) {
+        gAudioCtx.aiBuffers[i] = AudioHeap_AllocZeroed(&gAudioCtx.initPool, AIBUF_SIZE);
+    }
+
+    // Set audio tables pointers
+    gAudioCtx.sequenceTable = &gSequenceTable;
+    gAudioCtx.soundFontTable = &gSoundFontTable;
+    gAudioCtx.sampleBankTable = &gSampleBankTable;
+    gAudioCtx.sequenceFontTable = gSequenceFontTable;
+
+    gAudioCtx.numSequences = gAudioCtx.sequenceTable->header.numEntries;
+
+    gAudioCtx.specId = 0;
+    gAudioCtx.resetStatus = 1;
+
+    AudioHeap_ResetStep();
+
+    // Initialize audio tables
+    AudioLoad_InitTable(gAudioCtx.sequenceTable, D_807C1BE0, D_80771DCC);
+    AudioLoad_InitTable(gAudioCtx.soundFontTable, D_807C1BE4, D_80771DC8);
+    AudioLoad_InitTable(gAudioCtx.sampleBankTable, D_807C1BE8, D_80771DD0);
+    osCreateMesgQueue(&D_806F2328, D_806F2340, ARRAY_COUNT(D_806F2340));
+    D_806F2348[1] = AudioHeap_Alloc(&gAudioCtx.initPool, 0x4D10);
+    D_806F2348[0] = -1;
+    numFonts = gAudioCtx.soundFontTable->header.numEntries;
+    gAudioCtx.soundFontList = AudioHeap_Alloc(&gAudioCtx.initPool, numFonts * sizeof(SoundFont));
+
+    for (i = 0; i < numFonts; i++) {
+        AudioLoad_InitSoundFont(i);
+    }
+
+    ramAddr = AudioHeap_Alloc(&gAudioCtx.initPool, gAudioHeapInitSizes.permanentPoolSize);
+    if (ramAddr == NULL) {
+        gAudioHeapInitSizes.permanentPoolSize = 0;
+    }
+
+    AudioHeap_InitPool(&gAudioCtx.permanentPool, ramAddr, gAudioHeapInitSizes.permanentPoolSize);
+    gAudioContextInitialized = true;
+    osSendMesg(gAudioCtx.taskStartQueueP, (OSMesg)gAudioCtx.totalTaskCount, OS_MESG_NOBLOCK);
+}
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/audio/load/func_80736754.s")
 

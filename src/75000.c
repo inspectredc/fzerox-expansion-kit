@@ -347,55 +347,55 @@ void func_807689BC(u16 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
     }
 }
 
-s32 func_80768A5C(LEOCmd* cmdBlock, s32 arg1, s32 lba, s32 arg3, s32 arg4, OSMesgQueue* mq) {
+s32 func_80768A5C(LEOCmd* cmdBlock, s32 direction, u32 lba, void* vAddr, u32 nLbas, OSMesgQueue* mq) {
     unk_807C6F10 sp34;
 
     sp34.unk_00 = 0;
     sp34.cmdBlock = cmdBlock;
-    sp34.unk_18 = arg1;
+    sp34.direction = direction;
     sp34.lba = lba;
-    sp34.unk_08 = arg3;
-    sp34.unk_0C = arg4;
+    sp34.unk_08 = vAddr;
+    sp34.unk_0C = nLbas;
     sp34.mq = mq;
 
     func_80767800(sp34);
     return 0;
 }
 
-s32 func_80768AF0(LEOCmd* cmdBlock, s32 arg1, s32 lba, s32 arg3, s32 arg4, OSMesgQueue* mq) {
+s32 func_80768AF0(LEOCmd* cmdBlock, s32 direction, u32 lba, void* vAddr, u32 nLbas, OSMesgQueue* mq) {
     unk_807C6F10 sp34;
 
     sp34.unk_00 = 1;
     sp34.cmdBlock = cmdBlock;
-    sp34.unk_18 = arg1;
+    sp34.direction = direction;
     sp34.lba = lba;
-    sp34.unk_08 = arg3;
-    sp34.unk_0C = arg4;
+    sp34.unk_08 = vAddr;
+    sp34.unk_0C = nLbas;
     sp34.mq = mq;
 
     func_80767800(sp34);
     return 0;
 }
 
-s32 func_80768B88(OSPiHandle* arg0, OSIoMesg* arg1, s32 arg2) {
+s32 func_80768B88(OSPiHandle* arg0, OSIoMesg* arg1, s32 direction) {
     unk_807C6F10 sp34;
 
     sp34.unk_00 = 2;
     sp34.unk_10 = arg0;
     sp34.unk_14 = arg1;
-    sp34.unk_18 = arg2;
+    sp34.direction = direction;
 
     func_80767800(sp34);
     return 0;
 }
 
-s32 func_80768C08(OSPiHandle* arg0, OSIoMesg* arg1, s32 arg2) {
+s32 func_80768C08(OSPiHandle* arg0, OSIoMesg* arg1, s32 direction) {
     unk_807C6F10 sp34;
 
     sp34.unk_00 = 3;
     sp34.unk_10 = arg0;
     sp34.unk_14 = arg1;
-    sp34.unk_18 = arg2;
+    sp34.direction = direction;
 
     func_80767800(sp34);
     return 0;

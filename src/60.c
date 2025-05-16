@@ -1,4 +1,5 @@
 #include "global.h"
+#include "audio.h"
 #include "fzx_thread.h"
 #include "PR/viint.h"
 #include "PR/leo.h"
@@ -223,8 +224,8 @@ void Main_ThreadEntry(void* arg0) {
 
     func_80704F38(&sGameThread);
 
-    func_8073631C(&func_80768C08);
-    func_80736328(&func_80768AF0);
+    AudioLoad_SetDmaHandler(&func_80768C08);
+    AudioLoad_SetLeoHandler(&func_80768AF0);
 
     osCreateThread(&sAudioThread, THREAD_ID_AUDIO, Audio_ThreadEntry, NULL,
                    sAudioThreadStack + sizeof(sAudioThreadStack), 20);
