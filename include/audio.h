@@ -603,9 +603,9 @@ typedef struct SampleCacheEntry {
  */
 typedef struct AudioSampleCache {
     /* 0x000 */ AudioAllocPool pool;
-    /* 0x010 */ SampleCacheEntry entries[32];
-    /* 0x290 */ s32 numEntries;
-} AudioSampleCache; // size = 0x294
+    /* 0x010 */ SampleCacheEntry entries[24];
+    /* 0x1F0 */ s32 numEntries;
+} AudioSampleCache; // size = 0x1F4
 
 typedef struct AudioPersistentCache {
     /* 0x00*/ u32 numEntries;
@@ -749,6 +749,13 @@ typedef struct SampleDma {
     /* 0x0E */ u8 ttl;        // duration after which the DMA can be discarded
 } SampleDma; // size = 0x10
 
+typedef struct StorageChange {
+    uintptr_t oldAddr;
+    uintptr_t newAddr;
+    size_t size;
+    u8 newMedium;
+} StorageChange;
+
 typedef struct AudioTask {
     /* 0x00 */ OSTask task;
     /* 0x40 */ OSMesgQueue* msgQueue;
@@ -781,7 +788,12 @@ typedef struct AudioHeapInitSizes {
 } AudioHeapInitSizes; // size = 0xC
 
 typedef struct AudioContext {
-    s8 unk_0000[0x18];
+    s8 unk_0000;
+    /* 0x0001 */ s8 numSynthesisReverbs;
+    /* 0x0002 */ u16 unk_2;
+    /* 0x0004 */ u16 unk_4;
+    s8 unk_0006[0xE];
+    /* 0x0014 */ NoteSubEu* noteSubsEu;
     /* 0x0018 */ SynthesisReverb synthesisReverbs[1];
     s8 unk_02E0[0x30];
     /* 0x0310 */ Sample* usedSamples[128];
@@ -823,14 +835,14 @@ typedef struct AudioContext {
     /* 0x2010 */ s16 numSequences;
     /* 0x2014 */ SoundFont* soundFontList;
     /* 0x2018 */ AudioBufferParameters audioBufferParameters;
-    s8 unk_2040[0x4];
+    /* 0x2040 */ f32 unk_2040;
     /* 0x2044 */ s32 sampleDmaBufSize1;
     /* 0x2048 */ s32 sampleDmaBufSize2;
     s8 unk_204C[0x10];
     /* 0x205C */ s32 sampleDmaBufSize;
-    s8 unk_2060[0x4];
+    /* 0x2060 */ s32 maxAudioCmds;
     /* 0x2064 */ s32 numNotes;
-    s8 unk_2068[0x2];
+    /* 0x2068 */ s16 maxTempo;
     /* 0x206A */ u8 soundMode;
     /* 0x206C */ s32 totalTaskCount;
     /* 0x2070 */ s32 curAudioFrameDmaCount;
@@ -849,30 +861,41 @@ typedef struct AudioContext {
     /* 0x2154 */ volatile u32 resetTimer;
     s8 unk_2158[0x4];
     /* 0x215C */ s8 unk_215C;
-    s8 unk_215D[0x13];
+    /* 0x2160 */ AudioAllocPool sessionPool;
     /* 0x2170 */ AudioAllocPool externalPool;
     /* 0x2180 */ AudioAllocPool initPool;
     /* 0x2190 */ AudioAllocPool miscPool;
-    s8 unk_21A0[0x50];
+    s8 unk_21A0[0x20];
+    /* 0x21C0 */ AudioAllocPool cachePool;
+    /* 0x21D0 */ AudioAllocPool persistentCommonPool;
+    /* 0x21E0 */ AudioAllocPool temporaryCommonPool;
     /* 0x21F0 */ AudioCache seqCache;
     /* 0x2300 */ AudioCache fontCache;
     /* 0x2410 */ AudioCache sampleBankCache;
     /* 0x2520 */ AudioAllocPool permanentPool;
     /* 0x2530 */ AudioCacheEntry permanentCache[32];
-    s8 unk_26B0[0x598];
+    s8 unk_26B0[0x180];
+    /* 0x2830 */ AudioSampleCache persistentSampleCache;
+    /* 0x2944 */ AudioSampleCache temporarySampleCache;
+    /* 0x2C18 */ AudioSessionPoolSplit sessionPoolSplit;
+    /* 0x2C28 */ AudioCachePoolSplit cachePoolSplit;
+    /* 0x2C30 */ AudioCommonPoolSplit persistentCommonPoolSplit;
+    /* 0x2C3C */ AudioCommonPoolSplit temporaryCommonPoolSplit;
     /* 0x2C48 */ u8 sampleFontLoadStatus[0x1A];
     /* 0x2C62 */ u8 fontLoadStatus[0x1A];
     /* 0x2C7C */ u8 seqLoadStatus[0x1A];
     /* 0x2C96 */ volatile u8 resetStatus;
     /* 0x2C97 */ u8 specId;
-    s8 unk_2C98[0x8];
+    /* 0x2C98 */ s32 audioResetFadeOutFramesLeft;
+    /* 0x2C9C */ f32* adsrDecayTable;
     /* 0x2CA0 */ u8* audioHeap;
     /* 0x2CA4 */ size_t audioHeapSize;
     /* 0x2CA8 */ Note* notes;
     /* 0x2CAC */ SequencePlayer seqPlayers[4];
     s8 unk_322C[0x1D40];
     /* 0x4F6C */ SequenceChannel sequenceChannelNone;
-    s8 unk_5044[0x58];
+    s8 unk_5044[0x18];
+    /* 0x505C */ NotePool noteFreeLists;
     /* 0x509C */ u8 threadCmdWritePos;
     /* 0x509D */ u8 threadCmdReadPos;
     /* 0x509E */ u8 threadCmdQueueFinished;
@@ -1014,6 +1037,11 @@ typedef enum {
 #define REFRESH_RATE_DEVIATION_MPAL 0.99276f
 #define REFRESH_RATE_DEVIATION_NTSC 1.00278f
 
+// Filter sizes
+#define FILTER_SIZE (8 * SAMPLE_SIZE)
+#define FILTER_BUF_PART1 (8 * SAMPLE_SIZE)
+#define FILTER_BUF_PART2 (8 * SAMPLE_SIZE)
+
 #define SAMPLE_SIZE sizeof(s16)
 
 // Samples are processed in groups of 16 called a "frame"
@@ -1103,6 +1131,9 @@ AudioAsyncLoad* AudioLoad_StartAsyncLoad(uintptr_t devAddr, void* ramAddr, size_
 void AudioLoad_DiscardFont(s32 fontId);
 void AudioLoad_DiscardSeqFonts(s32 seqId);
 void* AudioLoad_SyncLoadSeq(s32 seqId);
+void AudioLoad_InitSlowLoads(void);
+void AudioLoad_InitScriptLoads(void);
+void AudioLoad_InitAsyncLoads(void);
 s32 AudioLoad_SyncInitSeqPlayer(s32 playerIdx, s32 seqId, s32 arg2);
 s32 AudioLoad_SyncInitSeqPlayerSkipTicks(s32 playerIdx, s32 seqId, s32 skipTicks);
 void AudioLoad_ProcessLoads(s32 resetStatus);
@@ -1119,12 +1150,13 @@ s32 AudioLoad_SlowLoadSample(s32 fontId, s32 instId, s8* status);
 void AudioLoad_LoadPermanentSamples(void);
 
 void Audio_InvalDCache(void* buf, s32 size);
+void Audio_WritebackDCache(void* buf, s32 size);
 
 void AudioHeap_DiscardFont(s32 fontId);
 void* AudioHeap_AllocZeroed(AudioAllocPool* pool, size_t size);
 void* AudioHeap_Alloc(AudioAllocPool* pool, size_t size);
 void* AudioHeap_AllocAttemptExternal(AudioAllocPool* pool, size_t size);
-void* AudioHeap_AllocCached(s32 tableType, size_t size, s32 cache, s32 id);
+void* AudioHeap_AllocCached(s32 tableType, ssize_t size, s32 cache, s32 id);
 void* AudioHeap_AllocPermanent(s32 tableType, s32 id, size_t size);
 void AudioHeap_WritebackDCache(void* ramAddr, size_t size);
 void* AudioHeap_AllocSampleCache(size_t size, s32 fontId, void* sampleAddr, s8 medium, s32 cache);
@@ -1132,10 +1164,22 @@ void AudioHeap_ApplySampleBankCache(s32 sampleBankId);
 void AudioHeap_PopPersistentCache(s32 tableType);
 void AudioHeap_InitPool(AudioAllocPool* pool, void* ramAddr, size_t size);
 void AudioHeap_InitMainPools(size_t initPoolSize);
+void* AudioHeap_SearchRegularCaches(s32 tableType, s32 cache, s32 id);
 void* AudioHeap_SearchCaches(s32 tableType, s32 cache, s32 id);
 void* AudioHeap_SearchPermanentCache(s32 tableType, s32 id);
 bool AudioHeap_ResetStep(void);
+void AudioHeap_Init(void);
+void AudioHeap_InitSampleCaches(size_t persistentSampleCacheSize, size_t temporarySampleCacheSize);
+void AudioHeap_DiscardSampleBank(s32 sampleBankId);
+void AudioHeap_DiscardSampleCaches(void);
+void AudioHeap_DiscardSampleBanks(void);
 void* AudioHeap_AllocTemporarySampleCache(size_t size, s32 fontId, void* sampleAddr, s8 medium);
+SampleCacheEntry* AudioHeap_AllocTemporarySampleCacheEntry(size_t size);
+SampleCacheEntry* AudioHeap_AllocPersistentSampleCacheEntry(size_t size);
+void AudioHeap_DiscardSampleCacheEntry(SampleCacheEntry* entry);
+void AudioHeap_UnapplySampleCache(SampleCacheEntry* entry, Sample* sample);
+void AudioHeap_ApplySampleBankCacheInternal(bool apply, s32 sampleBankId);
+
 Acmd* AudioSynth_Update(Acmd* aList, s32* cmdCount, s16* aiBufStart, s32 aiBufLen);
 
 s32 Audio_SetFontInstrument(s32 instrumentType, s32 fontId, s32 index, void* value);
@@ -1157,6 +1201,9 @@ s32 AudioThread_SilenceCheck(s32 flags);
 void AudioThread_InitMesgQueues(void);
 
 AudioTask* Audio_SetupCreateTask(void);
+
+extern AudioSpec gAudioSpecs[18];
+extern TempoData gTempoData;
 
 // Unknown Section:
 

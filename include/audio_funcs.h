@@ -14,8 +14,6 @@ void func_80738B84(unk_807C1948* arg0);
 void func_80738944(void);
 void func_80739EE0(void);
 
-void func_8073A860(void*, s32);
-
 void func_80740740(u8);
 void func_8074184C(u8);
 void func_80741888(u8 channelIndex, u8 ioData);

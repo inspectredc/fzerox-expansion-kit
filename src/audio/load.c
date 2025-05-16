@@ -2426,7 +2426,7 @@ void* func_80738E1C(unk_807C1948* arg0, s32 arg1) {
         sp28 = 0x10A00 - sp2C;
         Audio_InvalDCache(arg0->unk_00 + sp2C, sp28);
         bcopy(arg0->unk_00 + sp2C, (arg0->unk_00 - sp28) + 0x1000, sp28);
-        func_8073A860((arg0->unk_00 - sp28) + 0x1000, sp28);
+        Audio_WritebackDCache((arg0->unk_00 - sp28) + 0x1000, sp28);
         sp2C = 0x1000 - sp28;
     }
     if (arg0->unk_0C >= 0x10A00) {
