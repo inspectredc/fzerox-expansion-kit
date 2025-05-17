@@ -492,11 +492,11 @@ void* AudioHeap_AllocCached(s32 tableType, ssize_t size, s32 cache, s32 id) {
 
                     switch (tableType) {
                         case SEQUENCE_TABLE:
-                            AudioHeap_DiscardSequence((s32)temporaryCache->entries[1].id);
+                            AudioHeap_DiscardSequence((s32) temporaryCache->entries[1].id);
                             break;
 
                         case FONT_TABLE:
-                            AudioHeap_DiscardFont((s32)temporaryCache->entries[1].id);
+                            AudioHeap_DiscardFont((s32) temporaryCache->entries[1].id);
                             break;
                     }
 
@@ -509,7 +509,7 @@ void* AudioHeap_AllocCached(s32 tableType, ssize_t size, s32 cache, s32 id) {
 
             case 1:
                 temporaryCache->entries[1].ramAddr =
-                    (u8*)((u32)(temporaryPool->startRamAddr + temporaryPool->size - size) & ~0xF);
+                    (u8*) ((u32) (temporaryPool->startRamAddr + temporaryPool->size - size) & ~0xF);
                 temporaryCache->entries[1].id = id;
                 temporaryCache->entries[1].size = size;
                 if (temporaryCache->entries[0].id != -1 &&
@@ -830,7 +830,7 @@ void AudioHeap_Init(void) {
         (gAudioCtx.audioBufferParameters.samplesPerFrameTarget / gAudioCtx.audioBufferParameters.ticksPerUpdate) & ~7;
     gAudioCtx.audioBufferParameters.samplesPerTickMax = gAudioCtx.audioBufferParameters.samplesPerTick + 8;
     gAudioCtx.audioBufferParameters.samplesPerTickMin = gAudioCtx.audioBufferParameters.samplesPerTick - 8;
-    gAudioCtx.audioBufferParameters.resampleRate = 32000.0f / (s32)gAudioCtx.audioBufferParameters.samplingFrequency;
+    gAudioCtx.audioBufferParameters.resampleRate = 32000.0f / (s32) gAudioCtx.audioBufferParameters.samplingFrequency;
     gAudioCtx.audioBufferParameters.ticksPerUpdateInvScaled =
         (1.0f / 256.0f) / gAudioCtx.audioBufferParameters.ticksPerUpdate;
     gAudioCtx.audioBufferParameters.ticksPerUpdateScaled = gAudioCtx.audioBufferParameters.ticksPerUpdate / 4.0f;
@@ -849,8 +849,8 @@ void AudioHeap_Init(void) {
 
     // (ticks / min)
     // 60 * 1000 is a conversion from milliseconds to minutes
-    gAudioCtx.maxTempo = (u32)(gAudioCtx.audioBufferParameters.ticksPerUpdate * (f32)(60 * 1000 * SEQTICKS_PER_BEAT) /
-                               gTempoData.seqTicksPerBeat / gAudioCtx.maxTempoTvTypeFactors);
+    gAudioCtx.maxTempo = (u32) (gAudioCtx.audioBufferParameters.ticksPerUpdate * (f32) (60 * 1000 * SEQTICKS_PER_BEAT) /
+                                gTempoData.seqTicksPerBeat / gAudioCtx.maxTempoTvTypeFactors);
 
     gAudioCtx.unk_2040 = gAudioCtx.refreshRate;
     gAudioCtx.unk_2040 *= gAudioCtx.audioBufferParameters.ticksPerUpdate;
@@ -868,8 +868,8 @@ void AudioHeap_Init(void) {
     }
 
     // Determine the length of the buffer for storing the audio command list passed to the rsp audio microcode
-    gAudioCtx.maxAudioCmds = gAudioCtx.numNotes * 0x10 * gAudioCtx.audioBufferParameters.ticksPerUpdate +
-                             spec->numReverbs * 0x18 + 0x140;
+    gAudioCtx.maxAudioCmds =
+        gAudioCtx.numNotes * 0x10 * gAudioCtx.audioBufferParameters.ticksPerUpdate + spec->numReverbs * 0x18 + 0x140;
 
     // Calculate sizes for various caches on the audio heap
     persistentSize =
@@ -962,7 +962,7 @@ void AudioHeap_Init(void) {
         reverb->sample.codec = CODEC_REVERB;
         reverb->sample.medium = MEDIUM_RAM;
         reverb->sample.size = reverb->windowSize * SAMPLE_SIZE;
-        reverb->sample.sampleAddr = (u8*)reverb->leftRingBuf;
+        reverb->sample.sampleAddr = (u8*) reverb->leftRingBuf;
         reverb->loop.header.start = 0;
         reverb->loop.header.count = 1;
         reverb->loop.header.end = reverb->windowSize;
@@ -1301,7 +1301,7 @@ void AudioHeap_ChangeStorage(StorageChange* change, Sample* sample) {
         uintptr_t startAddr = change->oldAddr;
         uintptr_t endAddr = change->oldAddr + change->size;
 
-        if (((uintptr_t)sample->sampleAddr >= startAddr) && ((uintptr_t)sample->sampleAddr < endAddr)) {
+        if (((uintptr_t) sample->sampleAddr >= startAddr) && ((uintptr_t) sample->sampleAddr < endAddr)) {
             sample->sampleAddr += -startAddr + change->newAddr;
             sample->medium = change->newMedium;
         }
@@ -1311,7 +1311,6 @@ void AudioHeap_ChangeStorage(StorageChange* change, Sample* sample) {
 void AudioHeap_DiscardSampleBank(s32 sampleBankId) {
     AudioHeap_ApplySampleBankCacheInternal(false, sampleBankId);
 }
-
 
 void AudioHeap_ApplySampleBankCache(s32 sampleBankId) {
     AudioHeap_ApplySampleBankCacheInternal(true, sampleBankId);
@@ -1336,7 +1335,7 @@ void AudioHeap_ApplySampleBankCacheInternal(bool apply, s32 sampleBankId) {
 
     sampleBankTable = gAudioCtx.sampleBankTable;
     numFonts = gAudioCtx.soundFontTable->header.numEntries;
-    change.oldAddr = (uintptr_t)AudioHeap_SearchCaches(SAMPLE_TABLE, CACHE_EITHER, sampleBankId);
+    change.oldAddr = (uintptr_t) AudioHeap_SearchCaches(SAMPLE_TABLE, CACHE_EITHER, sampleBankId);
     if (change.oldAddr == 0) {
         return;
     }

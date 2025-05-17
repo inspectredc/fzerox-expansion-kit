@@ -1,6 +1,6 @@
 #include "global.h"
 #include "audio.h"
- 
+
 void Audio_InvalDCache(void* buf, s32 size) {
     OSIntMask prevMask = osSetIntMask(OS_IM_NONE);
 
@@ -28,7 +28,7 @@ void Audio_WritebackDCache(void* buf, s32 size) {
  */
 s32 osAiSetNextBuffer(void* buf, u32 size) {
     static u8 hdwrBugFlag = false;
-    u32 bufAdjusted = (u32)buf;
+    u32 bufAdjusted = (u32) buf;
     s32 status;
 
     // Workaround for a hardware bug. If the end of the previous buffer was on an 0x2000 byte boundary, adjust the
@@ -37,7 +37,7 @@ s32 osAiSetNextBuffer(void* buf, u32 size) {
         bufAdjusted -= 0x2000;
     }
     // Current buffer ends on an 0x2000 byte boundary, set flag to account for this in next buffer.
-    if ((((u32)buf + size) & 0x1FFF) == 0) {
+    if ((((u32) buf + size) & 0x1FFF) == 0) {
         hdwrBugFlag = true;
     } else {
         hdwrBugFlag = false;

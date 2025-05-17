@@ -2,7 +2,7 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/49EC0/func_8073C6C0.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/49EC0/func_8073C888.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/49EC0/Audio_SequencePlayerProcessSound.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/49EC0/func_8073C9D4.s")
 
@@ -12,9 +12,9 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/49EC0/func_8073CC7C.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/49EC0/func_8073CCD8.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/49EC0/Audio_NoteVibratoInit.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/49EC0/func_8073CD90.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/49EC0/Audio_NotePortamentoInit.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/49EC0/func_8073CDBC.s")
 

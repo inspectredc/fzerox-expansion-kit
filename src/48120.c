@@ -8,9 +8,9 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/48120/Audio_NoteDisable.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/48120/func_8073AF30.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/48120/Audio_ProcessNotes.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/48120/func_8073B428.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/48120/Audio_GetInstrumentTunedSample.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/48120/Audio_GetInstrument.s")
 
@@ -22,19 +22,19 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/48120/func_8073B854.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/48120/func_8073BAAC.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/48120/Audio_SeqLayerNoteDecay.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/48120/func_8073BACC.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/48120/Audio_SeqLayerNoteRelease.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/48120/func_8073BAEC.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/48120/func_8073BAFC.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/48120/Audio_InitNoteLists.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/48120/Audio_InitNoteFreeList.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/48120/func_8073BBF0.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/48120/Audio_NotePoolClear.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/48120/func_8073BD50.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/48120/Audio_NotePoolFill.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/48120/func_8073BE8C.s")
 
@@ -54,6 +54,6 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/48120/func_8073C1C0.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/48120/func_8073C2B8.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/48120/Audio_AllocNote.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/48120/Audio_NoteInitAll.s")
