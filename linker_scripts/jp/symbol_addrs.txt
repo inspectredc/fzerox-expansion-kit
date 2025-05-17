@@ -578,17 +578,52 @@ Audio_WritebackDCache = 0x8073A860;
 osAiSetNextBuffer = 0x8073A8A0;
 
 Audio_NoteDisable = 0x8073AECC;
+Audio_ProcessNotes = 0x8073AF30;
+Audio_GetInstrumentTunedSample = 0x8073B428;
 Audio_GetInstrument = 0x8073B464;
 Audio_GetDrum = 0x8073B538;
 Audio_GetSoundEffect = 0x8073B61C;
 Audio_SetFontInstrument = 0x8073B710;
+Audio_SeqLayerNoteDecay = 0x8073BAAC;
+Audio_SeqLayerNoteRelease = 0x8073BACC;
+Audio_InitNoteLists = 0x8073BAFC;
 Audio_InitNoteFreeList = 0x8073BB4C;
+Audio_NotePoolClear = 0x8073BBF0;
+Audio_NotePoolFill = 0x8073BD50;
 Audio_AudioListRemove = 0x8073BECC;
+Audio_AllocNote = 0x8073C2B8;
 Audio_NoteInitAll = 0x8073C58C;
+Audio_SequencePlayerProcessSound = 0x8073C888;
+Audio_NoteVibratoInit = 0x8073CCD8;
+Audio_NotePortamentoInit = 0x8073CD90;
 
+AudioSeq_GetScriptControlFlowArgument = 0x8073D120;
+AudioSeq_HandleScriptFlowControl = 0x8073D188;
+AudioSeq_InitSequenceChannel = 0x8073D364;
+AudioSeq_SeqChannelSetLayer = 0x8073D4C8;
+AudioSeq_SeqLayerDisable = 0x8073D5EC;
+AudioSeq_AudioListPushBack2 = 0x8073D668;
+AudioSeq_SeqLayerFree = 0x8073D6B0;
+AudioSeq_SequenceChannelDisable = 0x8073D710;
+AudioSeq_SequencePlayerSetupChannels = 0x8073D780;
+AudioSeq_SequencePlayerDisableChannels = 0x8073D878;
+AudioSeq_SequenceChannelEnable = 0x8073D8F8;
 AudioSeq_SequencePlayerDisableAsFinished = 0x8073D990;
 AudioSeq_SequencePlayerDisable = 0x8073D9B8;
 AudioSeq_AudioListPushBack = 0x8073DA98;
+AudioSeq_AudioListPopBack = 0x8073DAD8;
+AudioSeq_InitLayerFreelist = 0x8073DB18;
+AudioSeq_ScriptReadU8 = 0x8073DBB8;
+AudioSeq_ScriptReadS16 = 0x8073DBCC;
+AudioSeq_ScriptReadCompressedU16 = 0x8073DC04;
+AudioSeq_SeqLayerProcessScript = 0x8073DC44;
+AudioSeq_SetChannelPriorities = 0x8073ED34;
+AudioSeq_GetInstrument = 0x8073ED64;
+AudioSeq_SetInstrument = 0x8073EDD8;
+AudioSeq_SequenceChannelSetVolume = 0x8073EE84;
+AudioSeq_SequenceChannelProcessScript = 0x8073EEA8;
+AudioSeq_SequencePlayerProcessSequence = 0x8073FB28;
+AudioSeq_ProcessSequences = 0x80740344;
 AudioSeq_SkipForwardSequence = 0x807403F8;
 AudioSeq_ResetSequencePlayer = 0x80740448;
 AudioSeq_InitSequencePlayerChannels = 0x80740514;
@@ -601,8 +636,15 @@ Audio_SetupCreateTask = 0x80745BDC;
 gLowPassFilterData = 0x80770320;
 gHighPassFilterData = 0x80770420;
 
+gBendPitchOneOctaveFrequencies = 0x80770734;
+gBendPitchTwoSemitonesFrequencies = 0x80770B34;
+gPitchFrequencies = 0x80770F34;
+
+gDefaultShortNoteVelocityTable = 0x80771134;
+gDefaultShortNoteGateTimeTable = 0x80771144;
+
+gDefaultEnvelope = 0x80771154;
 gAudioSpecs = 0x80771D88; // size:0x3F0
-gTempoData = 0x807795F0; // size:0x4
 
 sDmaHandler = 0x80771960;
 sLeoHandler = 0x80771964;
@@ -610,12 +652,18 @@ D_80771978 = 0x80771978; // size:0x24
 D_807719A0 = 0x807719A0; // size:0x40
 D_807719E0 = 0x807719E0; // size:0x40
 gAudioContextInitialized = 0x80771A20;
+
+sSeqInstructionArgsTable = 0x80771A70;
+
 gCurAudioTask = 0x80771D68;
-gAudioHeapInitSizes = 0x807795F4;
+
 
 D_80771DC8 = 0x80771DC8;
 D_80771DCC = 0x80771DCC;
 D_80771DD0 = 0x80771DD0;
+
+gTempoData = 0x807795F0; // size:0x4
+gAudioHeapInitSizes = 0x807795F4;
 
 gSoundFontTable = 0x80795170;
 gSequenceFontTable = 0x807952F0;

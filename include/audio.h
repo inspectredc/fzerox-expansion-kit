@@ -354,7 +354,8 @@ typedef struct SequenceChannel {
     /* 0xCC */ s16* filter;
     /* 0xD0 */ Stereo stereo;
     /* 0xD4 */ s32 unk_D4;
-} SequenceChannel; // size = 0xD8
+    /* 0xD8 */ s32 unk_D8;
+} SequenceChannel; // size = 0xDC
 
 // Might also be known as a Track, according to sm64 debug strings (?).
 typedef struct SequenceLayer {
@@ -891,10 +892,11 @@ typedef struct AudioContext {
     /* 0x2CA0 */ u8* audioHeap;
     /* 0x2CA4 */ size_t audioHeapSize;
     /* 0x2CA8 */ Note* notes;
-    /* 0x2CAC */ SequencePlayer seqPlayers[4];
-    s8 unk_322C[0x1D40];
+    /* 0x2CAC */ SequencePlayer seqPlayers[2];
+    /* 0x2F6C */ SequenceLayer sequenceLayers[64];
     /* 0x4F6C */ SequenceChannel sequenceChannelNone;
-    s8 unk_5044[0x18];
+    /* 0x5048 */ s32 noteSubEuOffset;
+    /* 0x504C */ AudioListItem layerFreeList;
     /* 0x505C */ NotePool noteFreeLists;
     /* 0x509C */ u8 threadCmdWritePos;
     /* 0x509D */ u8 threadCmdReadPos;
@@ -917,7 +919,7 @@ typedef s32 (*DmaHandler)(OSPiHandle* handle, OSIoMesg* mb, s32 direction);
 typedef s32 (*LeoHandler)(LEOCmd* cmdBlock, s32 direction, u32 lba, void* vAddr, u32 nLbas, OSMesgQueue* mq);
 
 #define NO_LAYER ((SequenceLayer*) (-1))
-#define IS_SEQUENCE_CHANNEL_VALID(ptr) ((uintptr_t) (ptr) != (uintptr_t) &gSeqChannelNone)
+#define IS_SEQUENCE_CHANNEL_VALID(ptr) ((uintptr_t) (ptr) != (uintptr_t) &gAudioCtx.sequenceChannelNone)
 
 typedef enum {
     /* 0 */ LOAD_STATUS_NOT_LOADED, // the entry data is not loaded
@@ -1076,16 +1078,20 @@ Instrument* Audio_GetInstrument(s32 fontId, s32 instId);
 Drum* Audio_GetDrum(s32 fontId, s32 drumId);
 SoundEffect* Audio_GetSoundEffect(s32 fontId, s32 sfxId);
 void Audio_SeqLayerNoteDecay(SequenceLayer* layer);
+void Audio_SeqLayerNoteRelease(SequenceLayer* layer);
 void Audio_InitNoteLists(NotePool* pool);
 void Audio_InitNoteFreeList(void);
+void Audio_NotePoolClear(NotePool* pool);
 void Audio_NotePoolFill(NotePool* pool, s32 count);
 void Audio_AudioListRemove(Note* note);
 Note* Audio_AllocNote(SequenceLayer* layer);
 void Audio_NoteInitAll(void);
-
 void Audio_NotePortamentoInit(Note* note);
+void Audio_NoteVibratoInit(Note* note);
+void Audio_SequencePlayerProcessSound(SequencePlayer* seqPlayer);
+
 void AudioSeq_ProcessSequences(s32 arg0);
-void AudioSeq_InitSequencePlayerChannels(s32 seqPlayerIndex);
+void AudioSeq_InitSequencePlayerChannels(s32 playerIdx);
 void AudioSeq_InitSequencePlayers(void);
 void* AudioLoad_DmaSampleData(uintptr_t devAddr, size_t size, s32 arg2, u8* dmaIndexRef, s32 medium);
 void AudioLoad_InitSampleDmaBuffers(s32 numNotes);
@@ -1093,8 +1099,19 @@ void AudioLoad_InitSampleDmaBuffers(s32 numNotes);
 void AudioSeq_SequencePlayerDisableAsFinished(SequencePlayer* seqPlayer);
 void AudioSeq_SequencePlayerDisable(SequencePlayer* seqPlayer);
 void AudioSeq_AudioListPushBack(AudioListItem* list, AudioListItem* item);
+void* AudioSeq_AudioListPopBack(AudioListItem* list);
 void AudioSeq_SkipForwardSequence(SequencePlayer* seqPlayer);
-void AudioSeq_ResetSequencePlayer(s32 seqPlayerIndex);
+void AudioSeq_ResetSequencePlayer(SequencePlayer* seqPlayer);
+u8 AudioSeq_ScriptReadU8(SeqScriptState* state);
+s16 AudioSeq_ScriptReadS16(SeqScriptState* state);
+u16 AudioSeq_ScriptReadCompressedU16(SeqScriptState* state);
+void AudioSeq_SeqLayerProcessScriptStep1(SequenceLayer* layer);
+s32 AudioSeq_SeqLayerProcessScriptStep2(SequenceLayer* layer);
+s32 AudioSeq_SeqLayerProcessScriptStep3(SequenceLayer* layer, s32 cmd);
+s32 AudioSeq_SeqLayerProcessScriptStep4(SequenceLayer* layer, s32 cmd);
+s32 AudioSeq_SeqLayerProcessScriptStep5(SequenceLayer* layer, s32 sameTunedSample);
+u8 AudioSeq_GetInstrument(SequenceChannel* channel, u8 instId, Instrument** instOut, AdsrSettings* adsr);
+
 void AudioLoad_DecreaseSampleDmaTtls(void);
 void AudioLoad_ProcessScriptLoads(void);
 
@@ -1105,6 +1122,7 @@ bool AudioLoad_IsFontLoadComplete(s32 fontId);
 bool AudioLoad_IsSeqLoadComplete(s32 seqId);
 bool AudioLoad_IsSampleLoadComplete(s32 sampleBankId);
 void AudioLoad_SetFontLoadStatus(s32 fontId, s32 loadStatus);
+void AudioLoad_SetSeqLoadStatus(s32 seqId, s32 loadStatus);
 void* AudioLoad_SyncLoadFont(s32 fontId);
 void* AudioLoad_SyncLoad(u32 tableType, u32 id, bool* didAllocate);
 void* AudioLoad_SearchCaches(s32 tableType, u32 id);
@@ -1134,8 +1152,10 @@ void* AudioLoad_SyncLoadSeq(s32 seqId);
 void AudioLoad_InitSlowLoads(void);
 void AudioLoad_InitScriptLoads(void);
 void AudioLoad_InitAsyncLoads(void);
+s32 AudioLoad_SlowLoadSeq(s32 seqId, u8* ramAddr, s8* status);
 s32 AudioLoad_SyncInitSeqPlayer(s32 playerIdx, s32 seqId, s32 arg2);
 s32 AudioLoad_SyncInitSeqPlayerSkipTicks(s32 playerIdx, s32 seqId, s32 skipTicks);
+void AudioLoad_ScriptLoad(s32 tableType, s32 id, s8* status);
 void AudioLoad_ProcessLoads(s32 resetStatus);
 void AudioLoad_Init(void* heap, size_t heapSize);
 Sample* AudioLoad_GetFontSample(s32 fontId, s32 instId);
@@ -1167,6 +1187,8 @@ void AudioHeap_InitMainPools(size_t initPoolSize);
 void* AudioHeap_SearchRegularCaches(s32 tableType, s32 cache, s32 id);
 void* AudioHeap_SearchCaches(s32 tableType, s32 cache, s32 id);
 void* AudioHeap_SearchPermanentCache(s32 tableType, s32 id);
+void AudioHeap_ReleaseNotesForFont(s32 fontId);
+void AudioHeap_LoadFilter(s16* filter, s32 lowPassCutoff, s32 highPassCutoff);
 bool AudioHeap_ResetStep(void);
 void AudioHeap_Init(void);
 void AudioHeap_InitSampleCaches(size_t persistentSampleCacheSize, size_t temporarySampleCacheSize);

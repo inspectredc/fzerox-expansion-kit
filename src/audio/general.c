@@ -1731,7 +1731,7 @@ void func_807442E4(void) {
     SequenceLayer* layer;
     Note* note;
 
-    if ((D_80771B40 == 0xE) && (&gAudioCtx.sequenceChannelNone != gAudioCtx.seqPlayers[1].channels[0])) {
+    if ((D_80771B40 == 0xE) && (IS_SEQUENCE_CHANNEL_VALID(gAudioCtx.seqPlayers[1].channels[0]))) {
         layer = gAudioCtx.seqPlayers[1].channels[0]->layers[0];
         if (layer != NULL) {
             note = layer->note;
