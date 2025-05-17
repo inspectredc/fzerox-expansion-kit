@@ -403,10 +403,7 @@ typedef struct NoteSynthesisBuffers {
     /* 0x000 */ s16 adpcmdecState[16];
     /* 0x020 */ s16 finalResampleState[16];
     /* 0x040 */ s16 mixEnvelopeState[32];
-    /* 0x080 */ s16 unusedState[16];
-    /* 0x0A0 */ s16 haasEffectDelayState[32];
-    /* 0x0E0 */ s16 combFilterState[128];
-} NoteSynthesisBuffers; // size = 0x1E0
+} NoteSynthesisBuffers; // size = 0x80
 
 typedef struct NoteSynthesisState {
     /* 0x00 */ u8 restart;
@@ -455,7 +452,9 @@ typedef struct NotePlaybackState {
     /* 0x50 */ Portamento portamento;
     /* 0x5C */ VibratoState vibratoState;
     /* 0x78 */ s32 unk_78;
-} NotePlaybackState; // size = 0x7C
+    /* 0x7C */ s32 unk_7C;
+    /* 0x80 */ s32 startSamplePos; // initial position/index to start processing s16 samples
+} NotePlaybackState; // size = 0x84
 
 typedef struct NoteSubEu {
     struct {
@@ -497,8 +496,6 @@ typedef struct Note {
     /* 0x00 */ AudioListItem listItem;
     /* 0x10 */ NoteSynthesisState synthesisState;
     /* 0x30 */ NotePlaybackState playbackState;
-    /* 0xAC */ char unk_AC[0x4];
-    /* 0xB0 */ u32 startSamplePos; // initial position/index to start processing s16 samples
     /* 0xB4 */ NoteSubEu noteSubEu;
 } Note; // size = 0xE0
 
@@ -844,7 +841,7 @@ typedef struct AudioContext {
     /* 0x2060 */ s32 maxAudioCmds;
     /* 0x2064 */ s32 numNotes;
     /* 0x2068 */ s16 maxTempo;
-    /* 0x206A */ u8 soundMode;
+    /* 0x206A */ s8 soundMode;
     /* 0x206C */ s32 totalTaskCount;
     /* 0x2070 */ s32 curAudioFrameDmaCount;
     /* 0x2074 */ s32 rspTaskIndex; 
@@ -858,7 +855,7 @@ typedef struct AudioContext {
     /* 0x2138 */ s16* aiBuffers[3];
     /* 0x2144 */ s16 aiBufLengths[3];
     /* 0x214C */ u32 audioRandom;
-    s8 unk_2150[0x4];
+    /* 0x2150 */ s32 audioErrorFlags;
     /* 0x2154 */ volatile u32 resetTimer;
     s8 unk_2158[0x4];
     /* 0x215C */ s8 unk_215C;
@@ -1071,6 +1068,7 @@ typedef enum {
 
 extern AudioContext gAudioCtx;
 
+void Audio_NoteSetResamplingRate(Note* note, f32 freqScale);
 void Audio_NoteDisable(Note* note);
 void Audio_ProcessNotes(void);
 TunedSample* Audio_GetInstrumentTunedSample(Instrument* instrument, s32 semitone);
@@ -1083,12 +1081,18 @@ void Audio_InitNoteLists(NotePool* pool);
 void Audio_InitNoteFreeList(void);
 void Audio_NotePoolClear(NotePool* pool);
 void Audio_NotePoolFill(NotePool* pool, s32 count);
-void Audio_AudioListRemove(Note* note);
+void Audio_AudioListRemove(AudioListItem* item);
+void Audio_AudioListPushFront(AudioListItem* item1, AudioListItem* item2);
+void Audio_NoteInitForLayer(Note* note, SequenceLayer* layer);
 Note* Audio_AllocNote(SequenceLayer* layer);
 void Audio_NoteInitAll(void);
-void Audio_NotePortamentoInit(Note* note);
+
+void Audio_NoteVibratoUpdate(Note* note);
 void Audio_NoteVibratoInit(Note* note);
+void Audio_NotePortamentoInit(Note* note);
 void Audio_SequencePlayerProcessSound(SequencePlayer* seqPlayer);
+void Audio_AdsrInit(AdsrState* adsr, EnvelopePoint* envelope, s16* volOut);
+f32 Audio_AdsrUpdate(AdsrState* adsr);
 
 void AudioSeq_ProcessSequences(s32 arg0);
 void AudioSeq_InitSequencePlayerChannels(s32 playerIdx);
@@ -1102,6 +1106,7 @@ void AudioSeq_AudioListPushBack(AudioListItem* list, AudioListItem* item);
 void* AudioSeq_AudioListPopBack(AudioListItem* list);
 void AudioSeq_SkipForwardSequence(SequencePlayer* seqPlayer);
 void AudioSeq_ResetSequencePlayer(SequencePlayer* seqPlayer);
+void AudioSeq_SequenceChannelDisable(SequenceChannel* channel);
 u8 AudioSeq_ScriptReadU8(SeqScriptState* state);
 s16 AudioSeq_ScriptReadS16(SeqScriptState* state);
 u16 AudioSeq_ScriptReadCompressedU16(SeqScriptState* state);
@@ -1176,6 +1181,7 @@ void AudioHeap_DiscardFont(s32 fontId);
 void* AudioHeap_AllocZeroed(AudioAllocPool* pool, size_t size);
 void* AudioHeap_Alloc(AudioAllocPool* pool, size_t size);
 void* AudioHeap_AllocAttemptExternal(AudioAllocPool* pool, size_t size);
+void* AudioHeap_AllocDmaMemory(AudioAllocPool* pool, size_t size);
 void* AudioHeap_AllocCached(s32 tableType, ssize_t size, s32 cache, s32 id);
 void* AudioHeap_AllocPermanent(s32 tableType, s32 id, size_t size);
 void AudioHeap_WritebackDCache(void* ramAddr, size_t size);
