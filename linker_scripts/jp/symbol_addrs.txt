@@ -436,7 +436,35 @@ gLeoRezeroFunc = 0x807C6E8C;
 
 // audio
 
+AudioSynth_InitNextRingBuf = 0x8072E460;
+AudioSynth_SyncSampleStates = 0x8072E7DC;
 AudioSynth_Update = 0x8072E8A4;
+AudioSynth_LoadRingBuffer = 0x8072EB10;
+AudioSynth_SaveRingBuffer = 0x8072EBB8;
+AudioSynth_LeakReverb = 0x8072EC60;
+AudioSynth_FilterReverb = 0x8072F220;
+AudioSynth_MaybeMixRingBuffer1 = 0x8072F2C8;
+AudioSynth_ClearBuffer = 0x8072F390;
+AudioSynth_SetBuffer = 0x8072F3E8;
+AudioSynth_InterL = 0x8072F454;
+AudioSynth_SaveBuffer = 0x8072F490;
+AudioSynth_S8Dec = 0x8072F4D8;
+AudioSynth_HiLoGain = 0x8072F4F4;
+AudioSynth_UnkCmd19 = 0x8072F528;
+AudioSynth_LoadFilterBuffer = 0x8072F59C;
+AudioSynth_LoadFilterSize = 0x8072F5C0;
+AudioSynth_LoadRingBuffer1 = 0x8072F5D8;
+AudioSynth_LoadRingBuffer2 = 0x8072F684;
+AudioSynth_LoadRingBufferPart = 0x8072F730;
+AudioSynth_SaveRingBufferPart = 0x8072F79C;
+AudioSynth_MaybeLoadRingBuffer2 = 0x8072F84C;
+AudioSynth_LoadReverbSamples = 0x8072F88C;
+AudioSynth_SaveReverbSamples = 0x8072F900;
+AudioSynth_SaveRingBuffer2 = 0x8072FA04;
+AudioSynth_SingleAudioUpdate = 0x8072FAAC;
+AudioSynth_ProcessNote = 0x80730048;
+AudioSynth_FinalResample = 0x80730BE8;
+AudioSynth_ProcessEnvelope = 0x80730C88;
 
 AudioHeap_InitAdsrDecayTable = 0x80730F1C;
 AudioHeap_ResetLoadStatus = 0x80731060;
@@ -660,6 +688,7 @@ gBendPitchOneOctaveFrequencies = 0x80770734;
 gBendPitchTwoSemitonesFrequencies = 0x80770B34;
 gPitchFrequencies = 0x80770F34;
 
+D_80771228 = 0x80771228;
 gDefaultShortNoteVelocityTable = 0x80771134;
 gDefaultShortNoteGateTimeTable = 0x80771144;
 
@@ -671,7 +700,8 @@ gHeadsetPanVolume = 0x807712A8;
 gStereoPanVolume = 0x807714A8;
 gDefaultPanVolume = 0x807716A8;
 
-gAudioSpecs = 0x80771D88; // size:0x3F0
+sEnvMixerOp = 0x80771934;
+sEnvMixerDefaultDmemDests = 0x80771940;
 
 sDmaHandler = 0x80771960;
 sLeoHandler = 0x80771964;
@@ -684,6 +714,7 @@ sSeqInstructionArgsTable = 0x80771A70;
 
 gCurAudioTask = 0x80771D68;
 
+gAudioSpecs = 0x80771D88; // size:0x38
 
 D_80771DC8 = 0x80771DC8;
 D_80771DCC = 0x80771DCC;
