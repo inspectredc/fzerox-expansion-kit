@@ -419,6 +419,7 @@ typedef struct NoteSynthesisState {
     /* 0x12 */ s16 curVolRight;
     /* 0x14 */ char unk_14[0x6];
     /* 0x1A */ u8 combFilterNeedsInit;
+    /* 0x1B */ u8 unk_1B;
     /* 0x1C */ char unk_1C[0x4];
 } NoteSynthesisState; // size = 0x20
 
@@ -452,7 +453,7 @@ typedef struct NotePlaybackState {
     /* 0x50 */ Portamento portamento;
     /* 0x5C */ VibratoState vibratoState;
     /* 0x78 */ s32 unk_78;
-    /* 0x7C */ s32 unk_7C;
+    /* 0x7C */ u8 unk_7C;
     /* 0x80 */ s32 startSamplePos; // initial position/index to start processing s16 samples
 } NotePlaybackState; // size = 0x84
 
@@ -790,7 +791,8 @@ typedef struct AudioContext {
     /* 0x0001 */ s8 numSynthesisReverbs;
     /* 0x0002 */ u16 unk_2;
     /* 0x0004 */ u16 unk_4;
-    s8 unk_0006[0xE];
+    s8 unk_0006[0xA];
+    /* 0x0010 */ s16* curLoadedBook;
     /* 0x0014 */ NoteSubEu* noteSubsEu;
     /* 0x0018 */ SynthesisReverb synthesisReverbs[1];
     s8 unk_02E0[0x30];
@@ -959,7 +961,8 @@ typedef enum {
     /* 2 */ CODEC_S16_INMEMORY,
     /* 3 */ CODEC_SMALL_ADPCM, // 16 2-byte samples (32 bytes) compressed into 2-bit samples (4 bytes) + 1 header byte
     /* 4 */ CODEC_REVERB,
-    /* 5 */ CODEC_S16
+    /* 5 */ CODEC_S16,
+    /* 6 */ CODEC_UNK6
 } SampleCodec;
 
 typedef enum {
@@ -999,12 +1002,11 @@ typedef enum {
     /* 3 */ SLOW_LOAD_DONE
 } SlowLoadState;
 
-typedef enum {
-    /* 0 */ SLOW_LOAD_STATUS_0,
-    /* 1 */ SLOW_LOAD_STATUS_1,
-    /* 2 */ SLOW_LOAD_STATUS_2,
-    /* 3 */ SLOW_LOAD_STATUS_3
-} SlowLoadStatus;
+typedef enum HaasEffectDelaySide {
+    /* 0 */ HAAS_EFFECT_DELAY_NONE,
+    /* 1 */ HAAS_EFFECT_DELAY_LEFT, // Delay left channel so that right channel is heard first
+    /* 2 */ HAAS_EFFECT_DELAY_RIGHT // Delay right channel so that left channel is heard first
+} HaasEffectDelaySide;
 
 #define MUTE_BEHAVIOR_3 (1 << 3)           // prevent further noteSubEus from playing
 #define MUTE_BEHAVIOR_4 (1 << 4)           // stop something in seqLayer scripts
@@ -1058,6 +1060,8 @@ typedef enum {
 #define DMEM_TEMP 0x3C0
 #define DMEM_LEFT_CH 0x940
 #define DMEM_RIGHT_CH 0xAE0
+#define DMEM_WET_TEMP 0x3E0
+#define DMEM_WET_SCRATCH 0x720
 #define DMEM_WET_LEFT_CH 0xC80
 #define DMEM_WET_RIGHT_CH 0xE20
 
@@ -1209,6 +1213,13 @@ void AudioHeap_UnapplySampleCache(SampleCacheEntry* entry, Sample* sample);
 void AudioHeap_ApplySampleBankCacheInternal(bool apply, s32 sampleBankId);
 
 Acmd* AudioSynth_Update(Acmd* aList, s32* cmdCount, s16* aiBufStart, s32 aiBufLen);
+Acmd* AudioSynth_SingleAudioUpdate(s16* aiBuf, s32 aiBufLen, Acmd* aList, s32 updateIndex);
+Acmd* AudioSynth_LoadRingBufferPart(Acmd* aList, u16 dmem, u16 startPos, s32 size, SynthesisReverb* reverb);
+Acmd* AudioSynth_SaveRingBufferPart(Acmd* aList, u16 dmem, u16 startPos, s32 size, SynthesisReverb* reverb);
+Acmd* AudioSynth_SaveBufferOffset(Acmd* aList, u16 dmem, u16 offset, s32 size, s16* buf);
+Acmd* AudioSynth_ProcessNote(s32 noteIndex, NoteSubEu* noteSubEu, NoteSynthesisState* synthState, s16* aiBuf, s32 aiBufLen, Acmd* aList, s32 updateIndex);
+Acmd* AudioSynth_FinalResample(Acmd* aList, NoteSynthesisState* synthState, s32 size, u16 pitch, u16 inpDmem, s32 resampleFlags);
+Acmd* AudioSynth_ProcessEnvelope(Acmd* aList, NoteSubEu* noteSubEu, NoteSynthesisState* synthState, s32 aiBufLen, u16 dmemSrc, s32 haasEffectDelaySide, s32 flags);
 
 s32 Audio_SetFontInstrument(s32 instrumentType, s32 fontId, s32 index, void* value);
 
@@ -1230,7 +1241,7 @@ void AudioThread_InitMesgQueues(void);
 
 AudioTask* Audio_SetupCreateTask(void);
 
-extern AudioSpec gAudioSpecs[18];
+extern AudioSpec gAudioSpecs[];
 extern TempoData gTempoData;
 
 // Unknown Section:
