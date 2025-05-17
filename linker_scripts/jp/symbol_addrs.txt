@@ -577,6 +577,9 @@ Audio_InvalDCache = 0x8073A820;
 Audio_WritebackDCache = 0x8073A860;
 osAiSetNextBuffer = 0x8073A8A0;
 
+Audio_InitNoteSub = 0x8073A920;
+Audio_NoteSetResamplingRate = 0x8073AD54;
+Audio_NoteInit = 0x8073AE0C;
 Audio_NoteDisable = 0x8073AECC;
 Audio_ProcessNotes = 0x8073AF30;
 Audio_GetInstrumentTunedSample = 0x8073B428;
@@ -584,18 +587,34 @@ Audio_GetInstrument = 0x8073B464;
 Audio_GetDrum = 0x8073B538;
 Audio_GetSoundEffect = 0x8073B61C;
 Audio_SetFontInstrument = 0x8073B710;
+Audio_SeqLayerDecayRelease = 0x8073B854;
 Audio_SeqLayerNoteDecay = 0x8073BAAC;
 Audio_SeqLayerNoteRelease = 0x8073BACC;
+Audio_InitNoteList = 0x8073BAEC;
 Audio_InitNoteLists = 0x8073BAFC;
 Audio_InitNoteFreeList = 0x8073BB4C;
 Audio_NotePoolClear = 0x8073BBF0;
 Audio_NotePoolFill = 0x8073BD50;
+Audio_AudioListPushFront = 0x8073BE8C;
 Audio_AudioListRemove = 0x8073BECC;
+Audio_FindLowerPriorityNode = 0x8073BEF8;
+Audio_NoteInitForLayer = 0x8073BF78;
+Audio_AllocNoteFromDisabled = 0x8073C124;
+Audio_AllocNoteFromDecaying = 0x8073C170;
+Audio_AllocNoteFromActive = 0x8073C1C0;
 Audio_AllocNote = 0x8073C2B8;
 Audio_NoteInitAll = 0x8073C58C;
+
+Audio_SequenceChannelProcessSound = 0x8073C6C0;
 Audio_SequencePlayerProcessSound = 0x8073C888;
+Audio_GetPortamentoFreqScale = 0x8073C9D4;
+Audio_GetVibratoPitchChange = 0x8073CA30;
+Audio_GetVibratoFreqScale = 0x8073CA68;
+Audio_NoteVibratoUpdate = 0x8073CC7C;
 Audio_NoteVibratoInit = 0x8073CCD8;
 Audio_NotePortamentoInit = 0x8073CD90;
+Audio_AdsrInit = 0x8073CDBC;
+Audio_AdsrUpdate = 0x8073CDDC;
 
 AudioSeq_GetScriptControlFlowArgument = 0x8073D120;
 AudioSeq_HandleScriptFlowControl = 0x8073D188;
@@ -636,6 +655,7 @@ Audio_SetupCreateTask = 0x80745BDC;
 gLowPassFilterData = 0x80770320;
 gHighPassFilterData = 0x80770420;
 
+gWaveSamples = 0x80770710;
 gBendPitchOneOctaveFrequencies = 0x80770734;
 gBendPitchTwoSemitonesFrequencies = 0x80770B34;
 gPitchFrequencies = 0x80770F34;
@@ -644,6 +664,13 @@ gDefaultShortNoteVelocityTable = 0x80771134;
 gDefaultShortNoteGateTimeTable = 0x80771144;
 
 gDefaultEnvelope = 0x80771154;
+gZeroNoteSub = 0x80771164;
+gDefaultNoteSub = 0x80771184;
+gHaasEffectDelaySizes = 0x807711A4;
+gHeadsetPanVolume = 0x807712A8;
+gStereoPanVolume = 0x807714A8;
+gDefaultPanVolume = 0x807716A8;
+
 gAudioSpecs = 0x80771D88; // size:0x3F0
 
 sDmaHandler = 0x80771960;
