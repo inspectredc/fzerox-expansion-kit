@@ -22,13 +22,33 @@
     subsegments:
       - { type: .bss, vram: 0x80200000, name: framebuffer2 }
 
+  - name: unk_context
+    type: code
+    vram: 0x802BB140
+    bss_size: 0x1EB90
+    subsegments:
+      - { type: .bss, vram: 0x802BB140, name: unk_context }
+
   - name: buffers
-    exclusive_ram_id: buffer
     type: code
     vram: 0x802D9CD0
     bss_size: 0x55000
     subsegments:
       - { type: .bss, vram: 0x802D9CD0, name: buffers }
+
+  - name: audio_context
+    type: code
+    vram: 0x806ECA00
+    bss_size: 0x59C0
+    subsegments:
+      - { type: .bss, vram: 0x806ECA00, name: audio/audio_context }
+
+  - name: audio_heap
+    type: code
+    vram: 0x80400000
+    bss_size: 0x3B000
+    subsegments:
+      - { type: .bss, vram: 0x80400000, name: audio/audio_heap }
 
   - name: entry
     type: code
@@ -65,15 +85,16 @@
       - [0x1F320, c]
       - [0x27110, c]
       - [0x3BBB0, hasm, game/mio0Decode]
-      - [0x3BC60, c]
-      - [0x3E700, c]
-      - [0x41AE0, c]
-      - [0x467A0, c]
-      - [0x48020, c]
-      - [0x48120, c]
-      - [0x49EC0, c]
-      - [0x4A920, c]
-      - [0x4DF40, c]
+      - [0x3BC60, c, audio/synthesis]
+      - [0x3E700, c, audio/heap]
+      - [0x41AD0, pad]
+      - [0x41AE0, c, audio/load]
+      - [0x467A0, c, audio/thread]
+      - [0x48020, c, audio/os]
+      - [0x48120, c, audio/playback]
+      - [0x49EC0, c, audio/effects]
+      - [0x4A920, c, audio/seqplayer]
+      - [0x4DF40, c, audio/general]
       - [0x535E0, hasm, libultra/os/setcause]
       - [0x535F0, c, libultra/os/sendmesg]
       - [0x53740, c, libultra/os/stopthread]
@@ -265,8 +286,20 @@
       - [0x775F0, data]
       - [0x79F60, .data, 60]
       - [0x79FA0, data]
+      - [0x79FB0, .data, 2260]
+      - [0x79FC0, data]
+      - [0x7DB20, .data, audio/filter_data]
+      - [0x7DD10, .data, audio/note_data]
+      - [0x7F130, .data, audio/synthesis]
+      - [0x7F160, .data, audio/load]
+      - [0x7F230, .data, audio/thread]
+      - [0x7F250, .data, audio/os]
+      - [0x7F260, .data, audio/effects]
+      - [0x7F270, .data, audio/seqplayer]
+      - [0x7F2C0, data, audio/general]
+      - [0x7F570, .data, audio/audio_context]
 
-      - [0x7F5F0, data, libultra/os/exceptasm]
+      - [0x7F5E0, data, libultra/os/exceptasm]
       - [0x7F610, .data, libultra/os/thread]
       - [0x7F640, .data, libultra/io/controller]
       - [0x7F650, .data, libultra/os/initialize]
@@ -358,14 +391,14 @@
       - [0x83BB0, .rodata, 1E970]
       - [0x83BD0, .rodata, 1F320]
       - [0x846F0, .rodata, 27110]
-      - [0x84970, .rodata, 3BC60]
-      - [0x84990, .rodata, 3E700]
-      - [0x849C0, .rodata, 41AE0]
-      - [0x84A60, .rodata, 467A0]
-      - [0x84B90, .rodata, 48120]
-      - [0x84BB0, .rodata, 49EC0]
-      - [0x84BE0, .rodata, 4A920]
-      - [0x85220, .rodata, 4DF40]
+      - [0x84970, .rodata, audio/synthesis]
+      - [0x84990, .rodata, audio/heap]
+      - [0x849C0, .rodata, audio/load]
+      - [0x84A60, .rodata, audio/thread]
+      - [0x84B90, .rodata, audio/playback]
+      - [0x84BB0, .rodata, audio/effects]
+      - [0x84BE0, .rodata, audio/seqplayer]
+      - [0x85220, .rodata, audio/general]
       - [0x86DF0, rodata]
       - [0x86E00, rodata, libultra/libc/setintmask]
       - [0x86EA0, rodata, libultra/os/exceptasm]
@@ -403,9 +436,12 @@
       - [0xA2610, rodata]
       - [0xA2630, .rodata, 75000]
       - [0xA2690, data, aspmain]
+      - [0xA2970, data]
       - [0xA2B50, data] # audio tables?
       - { type: .bss, vram: 0x80795670, name: 60 }
       - { type: bss, vram: 0x8079A350, name: 8079A350 }
+      - { type: .bss, vram: 0x8079A4A0, name: 2260 }
+      - { type: bss, vram: 0x8079A4B0, name: 8079A4B0 }
       - { type: .bss, vram: 0x807C1C00, name: libultra/io/sptask }
       - { type: .bss, vram: 0x807C1C40, name: libultra/io/motor }
       - { type: .bss, vram: 0x807C1D40, name: libultra/io/siacs }

@@ -183,7 +183,7 @@ s32 func_80703E08(s32 startLba, void* vram, s32 diskSize, s32 bssSize) {
     return sp70;
 }
 
-extern u8 D_807C70A0[];
+extern RomOffset D_807C70A0[];
 
 void func_80703F90(void) {
     size_t size = osAppNMIBuffer[1] - osAppNMIBuffer[0];

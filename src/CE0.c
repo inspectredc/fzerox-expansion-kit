@@ -102,14 +102,14 @@ extern OSMesgQueue D_8079A108;
 extern OSMesg D_8079A370;
 
 void func_806F37F0(void) {
-    MQ_WAIT_FOR_MESG(&D_8079A0F0, &D_8079A370);
+    osRecvMesg(&D_8079A0F0, &D_8079A370, OS_MESG_BLOCK);
     func_80745CB8();
     Gfx_InitBuffer();
     func_806F5310();
     Gfx_LoadSegments();
     gMasterDisp = func_806F59E0(gMasterDisp);
     Gfx_FullSync();
-    MQ_WAIT_FOR_MESG(&D_8079A108, &D_8079A370);
+    osRecvMesg(&D_8079A108, &D_8079A370, OS_MESG_BLOCK);
 
     while (osDpGetStatus() &
            (DPC_STATUS_DMA_BUSY | DPC_STATUS_CMD_BUSY | DPC_STATUS_PIPE_BUSY | DPC_STATUS_TMEM_BUSY)) {}
@@ -126,7 +126,7 @@ void func_806F37F0(void) {
 void func_806F3924(void) {
     s32 retries = 100000;
 
-    MQ_WAIT_FOR_MESG(&D_8079A0F0, &D_8079A370);
+    osRecvMesg(&D_8079A0F0, &D_8079A370, OS_MESG_BLOCK);
     Gfx_InitBuffer();
     func_806F5310();
     func_806F34E0();
@@ -134,7 +134,7 @@ void func_806F3924(void) {
     gMasterDisp = func_806F59E0(gMasterDisp);
     Gfx_FullSync();
     func_80745CB8();
-    MQ_WAIT_FOR_MESG(&D_8079A108, &D_8079A370);
+    osRecvMesg(&D_8079A108, &D_8079A370, OS_MESG_BLOCK);
     func_i2_800A2CCC();
     osViSwapBuffer(gFrameBuffers[D_8079A368]);
     func_80709C3C();

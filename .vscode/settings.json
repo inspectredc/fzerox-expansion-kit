@@ -60,7 +60,9 @@
       "gfx.h": "c",
       "leoappli.h": "c",
       "unk_structs.h": "c",
-      "other_types.h": "c"
+      "other_types.h": "c",
+      "audio.h": "c",
+      "fzx_racer.h": "c"
     },
     "C_Cpp_Runner.msvcBatchPath": "",
     "C_Cpp.errorSquiggles": "enabled"
