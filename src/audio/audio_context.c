@@ -14,7 +14,8 @@ ReverbSettings sReverbSettings[] = {
 };
 
 AudioSpec gAudioSpecs[] = {
-    { 32000, 1, 10, 2, 0, 0, ARRAY_COUNT(sReverbSettings), sReverbSettings, 0x400, 0x200, 0x7FFF, 0, 0, 0x2AB00, 0, 0, 0x24C100, 0x52F00, 0 },
+    { 32000, 1, 10, 2, 0, 0, ARRAY_COUNT(sReverbSettings), sReverbSettings, 0x400, 0x200, 0x7FFF, 0, 0, 0x2AB00, 0, 0,
+      0x24C100, 0x52F00, 0 },
 };
 
 s32 D_80771DC0 = 0x384;

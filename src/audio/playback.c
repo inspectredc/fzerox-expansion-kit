@@ -97,8 +97,8 @@ void Audio_InitNoteSub(Note* note, NoteSubAttributes* noteAttr) {
     velocity = 0.0f > velocity ? 0.0f : velocity;
     velocity = 1.0f < velocity ? 1.0f : velocity;
 
-    noteSub->targetVolLeft = (s32)((velocity * volLeft) * (0x1000 - 0.001f));
-    noteSub->targetVolRight = (s32)((velocity * volRight) * (0x1000 - 0.001f));
+    noteSub->targetVolLeft = (s32) ((velocity * volLeft) * (0x1000 - 0.001f));
+    noteSub->targetVolRight = (s32) ((velocity * volRight) * (0x1000 - 0.001f));
 
     noteSub->gain = noteAttr->gain;
     noteSub->filter = noteAttr->filter;
@@ -173,7 +173,7 @@ void Audio_ProcessNotes(void) {
         note = &gAudioCtx.notes[i];
         playbackState = &note->playbackState;
         if (playbackState->parentLayer != NO_LAYER) {
-            if ((u32)playbackState->parentLayer < 0x7FFFFFFF) {
+            if ((u32) playbackState->parentLayer < 0x7FFFFFFF) {
                 continue;
             }
 
@@ -349,7 +349,7 @@ Drum* Audio_GetDrum(s32 fontId, s32 drumId) {
         gAudioCtx.audioErrorFlags = ((fontId << 8) + drumId) + 0x4000000;
         return NULL;
     }
-    if ((uintptr_t)gAudioCtx.soundFontList[fontId].drums < AUDIO_RELOCATED_ADDRESS_START) {
+    if ((uintptr_t) gAudioCtx.soundFontList[fontId].drums < AUDIO_RELOCATED_ADDRESS_START) {
         return NULL;
     }
     drum = gAudioCtx.soundFontList[fontId].drums[drumId];
@@ -378,7 +378,7 @@ SoundEffect* Audio_GetSoundEffect(s32 fontId, s32 sfxId) {
         return NULL;
     }
 
-    if ((uintptr_t)gAudioCtx.soundFontList[fontId].soundEffects < AUDIO_RELOCATED_ADDRESS_START) {
+    if ((uintptr_t) gAudioCtx.soundFontList[fontId].soundEffects < AUDIO_RELOCATED_ADDRESS_START) {
         return NULL;
     }
 
@@ -416,7 +416,7 @@ s32 Audio_SetFontInstrument(s32 instrumentType, s32 fontId, s32 index, void* val
             if (index >= gAudioCtx.soundFontList[fontId].numSfx) {
                 return -3;
             }
-            gAudioCtx.soundFontList[fontId].soundEffects[index] = *(SoundEffect*)value;
+            gAudioCtx.soundFontList[fontId].soundEffects[index] = *(SoundEffect*) value;
             break;
 
         default:
@@ -503,7 +503,7 @@ void Audio_SeqLayerDecayRelease(SequenceLayer* layer, s32 target) {
                 note->playbackState.adsr.fadeOutVel = gAudioCtx.adsrDecayTable[layer->adsr.decayIndex];
             }
             note->playbackState.adsr.sustain =
-                ((f32)(s32)(layer->channel->adsr.sustain) * note->playbackState.adsr.current) / 256.0f;
+                ((f32) (s32) (layer->channel->adsr.sustain) * note->playbackState.adsr.current) / 256.0f;
         }
     }
 
@@ -826,14 +826,14 @@ Note* Audio_AllocNote(SequenceLayer* layer) {
     }
 
     else if ((note = Audio_AllocNoteFromDisabled(&layer->channel->notePool, layer)) ||
-        (note = Audio_AllocNoteFromDisabled(&layer->channel->seqPlayer->notePool, layer)) ||
-        (note = Audio_AllocNoteFromDisabled(&gAudioCtx.noteFreeLists, layer)) ||
-        (note = Audio_AllocNoteFromDecaying(&layer->channel->notePool, layer)) ||
-        (note = Audio_AllocNoteFromDecaying(&layer->channel->seqPlayer->notePool, layer)) ||
-        (note = Audio_AllocNoteFromDecaying(&gAudioCtx.noteFreeLists, layer)) ||
-        (note = Audio_AllocNoteFromActive(&layer->channel->notePool, layer)) ||
-        (note = Audio_AllocNoteFromActive(&layer->channel->seqPlayer->notePool, layer)) ||
-        (note = Audio_AllocNoteFromActive(&gAudioCtx.noteFreeLists, layer))) {
+             (note = Audio_AllocNoteFromDisabled(&layer->channel->seqPlayer->notePool, layer)) ||
+             (note = Audio_AllocNoteFromDisabled(&gAudioCtx.noteFreeLists, layer)) ||
+             (note = Audio_AllocNoteFromDecaying(&layer->channel->notePool, layer)) ||
+             (note = Audio_AllocNoteFromDecaying(&layer->channel->seqPlayer->notePool, layer)) ||
+             (note = Audio_AllocNoteFromDecaying(&gAudioCtx.noteFreeLists, layer)) ||
+             (note = Audio_AllocNoteFromActive(&layer->channel->notePool, layer)) ||
+             (note = Audio_AllocNoteFromActive(&layer->channel->seqPlayer->notePool, layer)) ||
+             (note = Audio_AllocNoteFromActive(&gAudioCtx.noteFreeLists, layer))) {
         return note;
     }
 
