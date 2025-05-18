@@ -106,7 +106,7 @@ f32 Audio_GetPortamentoFreqScale(Portamento* portamento) {
 s16 Audio_GetVibratoPitchChange(VibratoState* vib) {
     s32 index;
 
-    vib->time += (s32)vib->rate;
+    vib->time += (s32) vib->rate;
     index = (vib->time >> 10) & 0x3F;
     return vib->curve[index];
 }
@@ -128,32 +128,32 @@ f32 Audio_GetVibratoFreqScale(VibratoState* vib) {
 
     //! @bug this probably meant to compare with gAudioCtx.sequenceChannelNone.
     //! -1 isn't used as a channel pointer anywhere else.
-    if (channel != ((SequenceChannel*)(-1))) {
+    if (channel != ((SequenceChannel*) (-1))) {
         if (vib->depthChangeTimer) {
             if (vib->depthChangeTimer == 1) {
-                vib->depth = (s32)channel->vibratoDepthTarget;
+                vib->depth = (s32) channel->vibratoDepthTarget;
             } else {
-                vib->depth += ((s32)channel->vibratoDepthTarget - vib->depth) / (s32)vib->depthChangeTimer;
+                vib->depth += ((s32) channel->vibratoDepthTarget - vib->depth) / (s32) vib->depthChangeTimer;
             }
 
             vib->depthChangeTimer--;
-        } else if (channel->vibratoDepthTarget != (s32)vib->depth) {
+        } else if (channel->vibratoDepthTarget != (s32) vib->depth) {
             if ((vib->depthChangeTimer = channel->vibratoDepthChangeDelay) == 0) {
-                vib->depth = (s32)channel->vibratoDepthTarget;
+                vib->depth = (s32) channel->vibratoDepthTarget;
             }
         }
 
         if (vib->rateChangeTimer) {
             if (vib->rateChangeTimer == 1) {
-                vib->rate = (s32)channel->vibratoRateTarget;
+                vib->rate = (s32) channel->vibratoRateTarget;
             } else {
-                vib->rate += ((s32)channel->vibratoRateTarget - vib->rate) / (s32)vib->rateChangeTimer;
+                vib->rate += ((s32) channel->vibratoRateTarget - vib->rate) / (s32) vib->rateChangeTimer;
             }
 
             vib->rateChangeTimer--;
-        } else if (channel->vibratoRateTarget != (s32)vib->rate) {
+        } else if (channel->vibratoRateTarget != (s32) vib->rate) {
             if ((vib->rateChangeTimer = channel->vibratoRateChangeDelay) == 0) {
-                vib->rate = (s32)channel->vibratoRateTarget;
+                vib->rate = (s32) channel->vibratoRateTarget;
             }
         }
     }
@@ -164,7 +164,7 @@ f32 Audio_GetVibratoFreqScale(VibratoState* vib) {
 
     pitchChange = Audio_GetVibratoPitchChange(vib);
     depth = (vib->depth / 4096.0f);
-    
+
     result = 65536.0f / ((pitchChange * depth) + 65536.0f);
 
     D_80771A60 += result;
@@ -199,15 +199,15 @@ void Audio_NoteVibratoInit(Note* note) {
     vib->channel = note->playbackState.parentLayer->channel;
     channel = vib->channel;
     if ((vib->depthChangeTimer = channel->vibratoDepthChangeDelay) == 0) {
-        vib->depth = (s32)channel->vibratoDepthTarget;
+        vib->depth = (s32) channel->vibratoDepthTarget;
     } else {
-        vib->depth = (s32)channel->vibratoDepthStart;
+        vib->depth = (s32) channel->vibratoDepthStart;
     }
 
     if ((vib->rateChangeTimer = channel->vibratoRateChangeDelay) == 0) {
-        vib->rate = (s32)channel->vibratoRateTarget;
+        vib->rate = (s32) channel->vibratoRateTarget;
     } else {
-        vib->rate = (s32)channel->vibratoRateStart;
+        vib->rate = (s32) channel->vibratoRateStart;
     }
     vib->delay = channel->vibratoDelay;
 }
