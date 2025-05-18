@@ -716,9 +716,9 @@ gCurAudioTask = 0x80771D68;
 
 gAudioSpecs = 0x80771D88; // size:0x38
 
-D_80771DC8 = 0x80771DC8;
-D_80771DCC = 0x80771DCC;
-D_80771DD0 = 0x80771DD0;
+gSoundFontTableLba = 0x80771DC8;
+gSequenceTableLba = 0x80771DCC;
+gSampleBankTableLba = 0x80771DD0;
 
 gTempoData = 0x807795F0; // size:0x4
 gAudioHeapInitSizes = 0x807795F4;

@@ -1,6 +1,25 @@
 #include "global.h"
 #include "audio.h"
 
+s32 D_80771930 = 0;
+
+u32 sEnvMixerOp = _SHIFTL(A_ENVMIXER, 24, 8);
+
+// Store the left dry channel in a temp space to be delayed to produce the haas effect
+u32 sEnvMixerLeftHaasDmemDests =
+    AUDIO_MK_CMD(DMEM_HAAS_TEMP >> 4, DMEM_RIGHT_CH >> 4, DMEM_WET_LEFT_CH >> 4, DMEM_WET_RIGHT_CH >> 4);
+
+// Store the right dry channel in a temp space to be delayed to produce the haas effect
+u32 sEnvMixerRightHaasDmemDests =
+    AUDIO_MK_CMD(DMEM_LEFT_CH >> 4, DMEM_HAAS_TEMP >> 4, DMEM_WET_LEFT_CH >> 4, DMEM_WET_RIGHT_CH >> 4);
+
+u32 sEnvMixerDefaultDmemDests =
+    AUDIO_MK_CMD(DMEM_LEFT_CH >> 4, DMEM_RIGHT_CH >> 4, DMEM_WET_LEFT_CH >> 4, DMEM_WET_RIGHT_CH >> 4);
+
+u16 D_80771944[] = {
+    0x7FFF, 0xD001, 0x3FFF, 0xF001, 0x5FFF, 0x9001, 0x7FFF, 0x8001,
+};
+
 void AudioSynth_InitNextRingBuf(s32 chunkLen, s32 updateIndex, s32 reverbIndex) {
     ReverbRingBufferItem* bufItem;
     s32 pad[3];
@@ -620,8 +639,6 @@ Acmd* AudioSynth_SingleAudioUpdate(s16* aiBuf, s32 aiBufLen, Acmd* aList, s32 up
     return aList;
 }
 
-extern s16 D_80771228[];
-
 Acmd* AudioSynth_ProcessNote(s32 noteIndex, NoteSubEu* noteSubEu, NoteSynthesisState* synthState, s16* aiBuf, s32 aiBufLen, Acmd* aList, s32 updateIndex) {
     s32 pad1[3];
     Sample* sample;
@@ -1025,9 +1042,6 @@ Acmd* AudioSynth_FinalResample(Acmd* aList, NoteSynthesisState* synthState, s32 
     }
     return aList;
 }
-
-extern u32 sEnvMixerDefaultDmemDests;
-extern u32 sEnvMixerOp;
 
 Acmd* AudioSynth_ProcessEnvelope(Acmd* aList, NoteSubEu* noteSubEu, NoteSynthesisState* synthState, s32 aiBufLen,
                                  u16 dmemSrc, s32 haasEffectDelaySide, s32 flags) {

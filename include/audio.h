@@ -1058,6 +1058,7 @@ typedef enum HaasEffectDelaySide {
 #define DMEM_2CH_SIZE (2 * DMEM_1CH_SIZE)
 
 #define DMEM_TEMP 0x3C0
+#define DMEM_HAAS_TEMP 0x5C0
 #define DMEM_LEFT_CH 0x940
 #define DMEM_RIGHT_CH 0xAE0
 #define DMEM_WET_TEMP 0x3E0
@@ -1243,6 +1244,8 @@ AudioTask* Audio_SetupCreateTask(void);
 
 extern AudioSpec gAudioSpecs[];
 extern TempoData gTempoData;
+
+extern s16 D_80771228[];
 
 // Unknown Section:
 
