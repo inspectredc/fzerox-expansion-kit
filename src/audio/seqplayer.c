@@ -13,7 +13,116 @@ typedef enum {
     /* 5 */ PORTAMENTO_MODE_5
 } PortamentoMode;
 
-extern u8 sSeqInstructionArgsTable[];
+/**
+ * sSeqInstructionArgsTable is a table for each sequence instruction
+ * that contains both how many arguments an instruction takes, as well
+ * as the type of each argument
+ *
+ * sSeqInstructionArgsTable is bitpacked as follows:
+ * abcUUUnn
+ *
+ * n - number of arguments that the sequence instruction takes
+ *
+ * a - bitFlag for the type of arg0 if it exists
+ * b - bitFlag for the type of arg1 if it exists
+ * c - bitFlag for the type of arg2 if it exists
+ *
+ * bitFlag on - argument is s16
+ * bitFlag off - argument is u8
+ *
+ * U - Unused
+ */
+
+// CMD_ARGS_(NUMBER_OF_ARGS)
+#define CMD_ARGS_0() 0
+#define CMD_ARGS_1(arg0Type) (((sizeof(arg0Type) - 1) << 7) | 1)
+#define CMD_ARGS_2(arg0Type, arg1Type) (((sizeof(arg0Type) - 1) << 7) | ((sizeof(arg1Type) - 1) << 6) | 2)
+#define CMD_ARGS_3(arg0Type, arg1Type, arg2Type) \
+    (((sizeof(arg0Type) - 1) << 7) | ((sizeof(arg1Type) - 1) << 6) | ((sizeof(arg2Type) - 1) << 5) | 3)
+
+u8 sSeqInstructionArgsTable[] = {
+    CMD_ARGS_1(s16),        // ASEQ_OP_CHAN_LDFILTER
+    CMD_ARGS_0(),           // ASEQ_OP_CHAN_FREEFILTER
+    CMD_ARGS_1(s16),        // ASEQ_OP_CHAN_LDSEQTOPTR
+    CMD_ARGS_1(u8),         // ASEQ_OP_CHAN_FILTER
+    CMD_ARGS_0(),           // ASEQ_OP_CHAN_PTRTODYNTBL
+    CMD_ARGS_0(),           // ASEQ_OP_CHAN_DYNTBLTOPTR
+    CMD_ARGS_0(),           // ASEQ_OP_CHAN_DYNTBLV
+    CMD_ARGS_1(s16),        // ASEQ_OP_CHAN_RANDTOPTR
+    CMD_ARGS_1(u8),         // ASEQ_OP_CHAN_RAND
+    CMD_ARGS_1(u8),         // ASEQ_OP_CHAN_RANDVEL
+    CMD_ARGS_1(u8),         // ASEQ_OP_CHAN_RANDGATE
+    CMD_ARGS_2(u8, s16),    // ASEQ_OP_CHAN_COMBFILTER
+    CMD_ARGS_1(s16),        // ASEQ_OP_CHAN_PTRADD
+    CMD_ARGS_1(s16),        // ASEQ_OP_CHAN_RANDPTR
+    CMD_ARGS_0(),           // 0xBE
+    CMD_ARGS_0(),           // 0xBF
+    CMD_ARGS_0(),           // 0xC0
+    CMD_ARGS_1(u8),         // ASEQ_OP_CHAN_INSTR
+    CMD_ARGS_1(s16),        // ASEQ_OP_CHAN_DYNTBL
+    CMD_ARGS_0(),           // ASEQ_OP_CHAN_SHORT
+    CMD_ARGS_0(),           // ASEQ_OP_CHAN_NOSHORT
+    CMD_ARGS_0(),           // ASEQ_OP_CHAN_DYNTBLLOOKUP
+    CMD_ARGS_1(u8),         // ASEQ_OP_CHAN_FONT
+    CMD_ARGS_2(u8, s16),    // ASEQ_OP_CHAN_STSEQ
+    CMD_ARGS_1(u8),         // ASEQ_OP_CHAN_SUB
+    CMD_ARGS_1(u8),         // ASEQ_OP_CHAN_AND
+    CMD_ARGS_1(u8),         // ASEQ_OP_CHAN_MUTEBHV
+    CMD_ARGS_1(s16),        // ASEQ_OP_CHAN_LDSEQ
+    CMD_ARGS_1(u8),         // ASEQ_OP_CHAN_LDI
+    CMD_ARGS_1(u8),         // ASEQ_OP_CHAN_STOPCHAN
+    CMD_ARGS_1(s16),        // ASEQ_OP_CHAN_LDPTR
+    CMD_ARGS_1(s16),        // ASEQ_OP_CHAN_STPTRTOSEQ
+    CMD_ARGS_1(u8),         // ASEQ_OP_CHAN_EFFECTS
+    CMD_ARGS_1(u8),         // ASEQ_OP_CHAN_NOTEALLOC
+    CMD_ARGS_1(u8),         // ASEQ_OP_CHAN_SUSTAIN
+    CMD_ARGS_1(u8),         // ASEQ_OP_CHAN_BEND
+    CMD_ARGS_1(u8),         // ASEQ_OP_CHAN_REVERB
+    CMD_ARGS_1(u8),         // 0xD5
+    CMD_ARGS_1(u8),         // 0xD6
+    CMD_ARGS_1(u8),         // ASEQ_OP_CHAN_VIBFREQ
+    CMD_ARGS_1(u8),         // ASEQ_OP_CHAN_VIBDEPTH
+    CMD_ARGS_1(u8),         // ASEQ_OP_CHAN_RELEASERATE
+    CMD_ARGS_1(s16),        // ASEQ_OP_CHAN_ENV
+    CMD_ARGS_1(u8),         // ASEQ_OP_CHAN_TRANSPOSE
+    CMD_ARGS_1(u8),         // ASEQ_OP_CHAN_PANWEIGHT
+    CMD_ARGS_1(u8),         // ASEQ_OP_CHAN_PAN
+    CMD_ARGS_1(s16),        // ASEQ_OP_CHAN_FREQSCALE
+    CMD_ARGS_1(u8),         // ASEQ_OP_CHAN_VOL
+    CMD_ARGS_1(u8),         // ASEQ_OP_CHAN_VOLEXP
+    CMD_ARGS_3(u8, u8, u8), // ASEQ_OP_CHAN_VIBFREQGRAD
+    CMD_ARGS_3(u8, u8, u8), // ASEQ_OP_CHAN_VIBDEPTHGRAD
+    CMD_ARGS_1(u8),         // ASEQ_OP_CHAN_VIBDELAY
+    CMD_ARGS_0(),           // ASEQ_OP_CHAN_DYNCALL
+    CMD_ARGS_1(u8),         // ASEQ_OP_CHAN_REVERBIDX
+    CMD_ARGS_1(u8),         // ASEQ_OP_CHAN_SAMPLEBOOK
+    CMD_ARGS_1(s16),        // ASEQ_OP_CHAN_LDPARAMS
+    CMD_ARGS_3(u8, u8, u8), // ASEQ_OP_CHAN_PARAMS
+    CMD_ARGS_1(u8),         // ASEQ_OP_CHAN_NOTEPRI
+    CMD_ARGS_0(),           // ASEQ_OP_CHAN_STOP
+    CMD_ARGS_2(u8, u8),     // ASEQ_OP_CHAN_FONTINSTR
+    CMD_ARGS_0(),           // ASEQ_OP_CHAN_VIBRESET
+    CMD_ARGS_1(u8),         // ASEQ_OP_CHAN_GAIN
+    CMD_ARGS_1(u8),         // ASEQ_OP_CHAN_BENDFINE
+    CMD_ARGS_2(s16, u8),    // 0xEF
+    CMD_ARGS_0(),           // ASEQ_OP_CHAN_FREENOTELIST
+    CMD_ARGS_1(u8),         // ASEQ_OP_CHAN_ALLOCNOTELIST
+    // Control flow instructions (>= ASEQ_OP_CONTROL_FLOW_FIRST) can only have 0 or 1 args
+    CMD_ARGS_1(u8),  // ASEQ_OP_RBLTZ
+    CMD_ARGS_1(u8),  // ASEQ_OP_RBEQZ
+    CMD_ARGS_1(u8),  // ASEQ_OP_RJUMP
+    CMD_ARGS_1(s16), // ASEQ_OP_BGEZ
+    CMD_ARGS_0(),    // ASEQ_OP_BREAK
+    CMD_ARGS_0(),    // ASEQ_OP_LOOPEND
+    CMD_ARGS_1(u8),  // ASEQ_OP_LOOP
+    CMD_ARGS_1(s16), // ASEQ_OP_BLTZ
+    CMD_ARGS_1(s16), // ASEQ_OP_BEQZ
+    CMD_ARGS_1(s16), // ASEQ_OP_JUMP
+    CMD_ARGS_1(s16), // ASEQ_OP_CALL
+    CMD_ARGS_0(),    // ASEQ_OP_DELAY
+    CMD_ARGS_0(),    // ASEQ_OP_DELAY1
+    CMD_ARGS_0(),    // ASEQ_OP_END
+};
 
 u16 AudioSeq_GetScriptControlFlowArgument(SeqScriptState* state, u8 cmd) {
     u8 highBits = sSeqInstructionArgsTable[cmd - 0xB0];

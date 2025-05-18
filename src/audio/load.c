@@ -1073,9 +1073,9 @@ extern s32 D_807C1BE0;
 extern s32 D_807C1BE4;
 extern s32 D_807C1BE8;
 
-extern s32 D_80771DC8;
-extern s32 D_80771DCC;
-extern s32 D_80771DD0;
+extern s32 gSoundFontTableLba;
+extern s32 gSequenceTableLba;
+extern s32 gSampleBankTableLba;
 
 extern LbaVaddrPair D_806F2348;
 
@@ -1192,9 +1192,9 @@ void AudioLoad_Init(void* heap, size_t heapSize) {
     AudioHeap_ResetStep();
 
     // Initialize audio tables
-    AudioLoad_InitTable(gAudioCtx.sequenceTable, D_807C1BE0, D_80771DCC);
-    AudioLoad_InitTable(gAudioCtx.soundFontTable, D_807C1BE4, D_80771DC8);
-    AudioLoad_InitTable(gAudioCtx.sampleBankTable, D_807C1BE8, D_80771DD0);
+    AudioLoad_InitTable(gAudioCtx.sequenceTable, D_807C1BE0, gSequenceTableLba);
+    AudioLoad_InitTable(gAudioCtx.soundFontTable, D_807C1BE4, gSoundFontTableLba);
+    AudioLoad_InitTable(gAudioCtx.sampleBankTable, D_807C1BE8, gSampleBankTableLba);
     osCreateMesgQueue(&D_806F2328, D_806F2340, ARRAY_COUNT(D_806F2340));
     D_806F2348.vAddr = AudioHeap_Alloc(&gAudioCtx.initPool, 0x4D10);
     D_806F2348.lba = -1;
