@@ -6,14 +6,16 @@
 #include "gfx.h"
 #include "PR/leo.h"
 #include "libc/stdbool.h"
+#include "other_types.h"
+#include "unk_structs.h"
 
 void Game_ThreadEntry(void* arg0);
 void Audio_ThreadEntry(void* arg0);
 
 void func_80703F90(void);
 void func_80767958(void*);
-s32 func_80768A5C(LEOCmd*, s32, s32, s32, s32, OSMesgQueue*);
-s32 func_80768AF0(LEOCmd*, s32, s32, s32, s32, OSMesgQueue*);
+s32 func_80768A5C(LEOCmd* cmdBlock, s32 direction, u32 lba, void* vAddr, u32 nLbas, OSMesgQueue* mq);
+s32 func_80768AF0(LEOCmd* cmdBlock, s32 direction, u32 lba, void* vAddr, u32 nLbas, OSMesgQueue* mq);
 s32 func_80768C08(OSPiHandle*, OSIoMesg*, s32);
 s32 Segment_SetPhysicalAddress(s32 segment, s32 addr);
 Gfx* Segment_SetTableAddresses(Gfx*);
@@ -68,10 +70,9 @@ void func_80704CE0(void);
 void func_80704DB0(char*, char*);
 void func_8070F0F0(void);
 void func_80704F38(OSThread*);
-void func_8073631C(void*);
-void func_80736328(void*);
 void Fault_Init(void);
 void Fault_SetFrameBuffer(FrameBuffer* buffer, u16 width, u16 height);
+void Audio_Init(RomOffset, RomOffset, RomOffset);
 void Audio_PreNMI(void);
 void func_806F5A50(void);
 
