@@ -311,4 +311,7 @@ typedef enum BorderlessRoad {
 #define TRACK_FLAG_CONTINUOUS 0x40000000
 #define TRACK_FLAG_80000000 0x80000000
 
+extern CourseData gCourseData;
+extern CourseInfo* gCurrentCourseInfo;
+
 #endif // FZX_COURSE_H

@@ -5,822 +5,849 @@
     This File is for externed assets addresses that have not yet been extracted
  */
 
- extern Gfx D_3000780[];
- extern Vtx D_3000788[];
- extern Vtx D_3000868[];
- extern Vtx D_3000A78[];
- extern Vtx D_3000AF8[];
- extern Vtx D_3000C38[];
- extern Vtx D_3000C98[];
- extern Vtx D_30013C8[];
- extern Vtx D_3001488[];
- extern Vtx D_30017D8[];
- extern Vtx D_3001858[];
- extern Vtx D_30019B8[];
- extern Vtx D_3001B28[];
- extern Vtx D_3001BA8[];
- extern Vtx D_3001CE8[];
- extern Vtx D_3001D28[];
- extern Vtx D_3002488[];
- extern Vtx D_3002568[];
- extern Vtx D_30025E8[];
- extern Vtx D_3002828[];
- extern Vtx D_3002B08[];
- extern Vtx D_3003168[];
- extern Vtx D_3003228[];
- extern Vtx D_3003388[];
- extern Vtx D_3003468[];
- extern Vtx D_30034E8[];
- extern Vtx D_3003758[];
- extern Vtx D_30037D8[];
- extern Vtx D_3003918[];
- extern Vtx D_3003978[];
- extern Vtx D_30040F8[];
- extern Vtx D_3004238[];
- extern u8 aMachineNumber7Tex[];
- #define _aMachineNumber7Tex_WIDTH 0x10
- #define _aMachineNumber7Tex_HEIGHT 0x20
- extern u8 aDecalBlueFalconArrowTex[];
- #define _aDecalBlueFalconArrowTex_WIDTH 0x10
- #define _aDecalBlueFalconArrowTex_HEIGHT 0x10
- extern u8 D_3004618[];
- #define _D_3004618_WIDTH 0x10
- #define _D_3004618_HEIGHT 0x10
- extern u8 aDecalStripeTex[];
- #define _aDecalStripeTex_WIDTH 0x10
- #define _aDecalStripeTex_HEIGHT 0x10
- extern u8 aLogoBlueFalconTex[];
- #define _aLogoBlueFalconTex_WIDTH 0x40
- #define _aLogoBlueFalconTex_HEIGHT 0x10
- extern u16 aDecalBlueFalconWingCheckeredTex[];
- #define _aDecalBlueFalconWingCheckeredTex_WIDTH 0x10
- #define _aDecalBlueFalconWingCheckeredTex_HEIGHT 0x10
- extern u8 aBooster1Tex[];
- #define _aBooster1Tex_WIDTH 0x20
- #define _aBooster1Tex_HEIGHT 0x20
- extern u8 aRearDuctTex[];
- #define _aRearDuctTex_WIDTH 0x20
- #define _aRearDuctTex_HEIGHT 0x20
- extern Vtx D_3004F18[];
- extern u8 D_3004F58[];
- #define _D_3004F58_WIDTH 0x20
- #define _D_3004F58_HEIGHT 0x40
- extern Vtx D_3005358[];
- extern Vtx D_30054E8[];
- extern Vtx D_3005568[];
- extern Vtx D_3005708[];
- extern Vtx D_3005B88[];
- extern Vtx D_3005C08[];
- extern Vtx D_3005DA8[];
- extern Vtx D_3005DF8[];
- extern u8 aMachineNumber3Tex[];
- #define _aMachineNumber3Tex_WIDTH 0x10
- #define _aMachineNumber3Tex_HEIGHT 0x20
- extern u8 aAirDuct1Tex[];
- #define _aAirDuct1Tex_WIDTH 0x20
- #define _aAirDuct1Tex_HEIGHT 0x10
- extern u16 aDecalGoldenFoxStripesTex[];
- #define _aDecalGoldenFoxStripesTex_WIDTH 0x10
- #define _aDecalGoldenFoxStripesTex_HEIGHT 0x10
- extern u8 aBooster2Tex[];
- #define _aBooster2Tex_WIDTH 0x20
- #define _aBooster2Tex_HEIGHT 0x20
- extern u8 aLogoGoldenFoxTex[];
- #define _aLogoGoldenFoxTex_WIDTH 0x20
- #define _aLogoGoldenFoxTex_HEIGHT 0x20
- extern u8 aCompartmentLatchTex[];
- #define _aCompartmentLatchTex_WIDTH 0x20
- #define _aCompartmentLatchTex_HEIGHT 0x20
- extern u8 aFloorDuct1Tex[];
- #define _aFloorDuct1Tex_WIDTH 0x20
- #define _aFloorDuct1Tex_HEIGHT 0x20
- extern Vtx D_3006C78[];
- extern u8 D_3006CB8[];
- #define _D_3006CB8_WIDTH 0x20
- #define _D_3006CB8_HEIGHT 0x40
- extern Vtx D_30070B8[];
- extern Vtx D_30072D8[];
- extern Vtx D_3007478[];
- extern Vtx D_30077F8[];
- extern Vtx D_30078D8[];
- extern Vtx D_3007918[];
- extern Vtx D_3007C18[];
- extern Vtx D_3007CD8[];
- extern u8 aDecalDoubleStripeTex[];
- #define _aDecalDoubleStripeTex_WIDTH 0x10
- #define _aDecalDoubleStripeTex_HEIGHT 0x10
- extern u16 aDecalWildGooseLightningTex[];
- #define _aDecalWildGooseLightningTex_WIDTH 0x20
- #define _aDecalWildGooseLightningTex_HEIGHT 0x20
- extern u8 aAirDuct2Tex[];
- #define _aAirDuct2Tex_WIDTH 0x10
- #define _aAirDuct2Tex_HEIGHT 0x10
- extern u8 aFloorDuct2Tex[];
- #define _aFloorDuct2Tex_WIDTH 0x20
- #define _aFloorDuct2Tex_HEIGHT 0x20
- extern u8 aMachineNumber6Tex[];
- #define _aMachineNumber6Tex_WIDTH 0x10
- #define _aMachineNumber6Tex_HEIGHT 0x20
- extern u8 aBooster3Tex[];
- #define _aBooster3Tex_WIDTH 0x20
- #define _aBooster3Tex_HEIGHT 0x20
- extern Vtx D_3008C18[];
- extern u8 D_3008C58[];
- #define _D_3008C58_WIDTH 0x20
- #define _D_3008C58_HEIGHT 0x40
- extern Vtx D_3009058[];
- extern Vtx D_30090D8[];
- extern Vtx D_3009238[];
- extern Vtx D_30093A8[];
- extern Vtx D_3009428[];
- extern Vtx D_30094C8[];
- extern Vtx D_3009508[];
- extern u8 aMachineNumber5Tex[];
- #define _aMachineNumber5Tex_WIDTH 0x10
- #define _aMachineNumber5Tex_HEIGHT 0x20
- extern u16 aDecalFlamesTex[];
- #define _aDecalFlamesTex_WIDTH 0x20
- #define _aDecalFlamesTex_HEIGHT 0x20
- extern Vtx D_300A4E8[];
- extern u8 D_300A528[];
- #define _D_300A528_WIDTH 0x20
- #define _D_300A528_HEIGHT 0x40
- extern Vtx D_300A928[];
- extern Vtx D_300AA08[];
- extern Vtx D_300AA88[];
- extern Vtx D_300ABC8[];
- extern Vtx D_300AEC8[];
- extern Vtx D_300B2F8[];
- extern Vtx D_300B3B8[];
- extern Vtx D_300B518[];
- extern u8 aMetalPlatingTex[];
- #define _aMetalPlatingTex_WIDTH 0x10
- #define _aMetalPlatingTex_HEIGHT 0x10
- extern u8 aLogoWhiteCatTex[];
- #define _aLogoWhiteCatTex_WIDTH 0x40
- #define _aLogoWhiteCatTex_HEIGHT 0x20
- extern u8 aMachineNumber2Tex[];
- #define _aMachineNumber2Tex_WIDTH 0x10
- #define _aMachineNumber2Tex_HEIGHT 0x20
- extern Vtx D_300BB78[];
- extern u8 D_300BBB8[];
- #define _D_300BBB8_WIDTH 0x20
- #define _D_300BBB8_HEIGHT 0x40
- extern Vtx D_300BFB8[];
- extern Vtx D_300C608[];
- extern Vtx D_300C688[];
- extern Vtx D_300C6C8[];
- extern Vtx D_300C788[];
- extern Vtx D_300C8E8[];
- extern Vtx D_300C9C8[];
- extern Vtx D_300CB08[];
- extern u8 aDecalStripeAngleTex[];
- #define _aDecalStripeAngleTex_WIDTH 0x10
- #define _aDecalStripeAngleTex_HEIGHT 0x10
- extern u8 aDecalTripleStripeIncreasingTex[];
- #define _aDecalTripleStripeIncreasingTex_WIDTH 0x10
- #define _aDecalTripleStripeIncreasingTex_HEIGHT 0x20
- extern u8 aLogoRedGazelleTex[];
- #define _aLogoRedGazelleTex_WIDTH 0x40
- #define _aLogoRedGazelleTex_HEIGHT 0x20
- extern u8 aMachineNumber1Tex[];
- #define _aMachineNumber1Tex_WIDTH 0x10
- #define _aMachineNumber1Tex_HEIGHT 0x20
- extern Vtx D_300D3F8[];
- extern u8 D_300D438[];
- #define _D_300D438_WIDTH 0x20
- #define _D_300D438_HEIGHT 0x40
- extern Vtx D_300D838[];
- extern Vtx D_300D8D8[];
- extern Vtx D_300D958[];
- extern Vtx D_300DB78[];
- extern Vtx D_300E2A8[];
- extern Vtx D_300E408[];
- extern Vtx D_300E488[];
- extern Vtx D_300E548[];
- extern u8 aMachineNumber8Tex[];
- #define _aMachineNumber8Tex_WIDTH 0x10
- #define _aMachineNumber8Tex_HEIGHT 0x20
- extern Vtx D_300E9A8[];
- extern u8 D_300E9E8[];
- #define _D_300E9E8_WIDTH 0x20
- #define _D_300E9E8_HEIGHT 0x40
- extern Vtx D_300EDE8[];
- extern Vtx D_300EF98[];
- extern Vtx D_300F3D8[];
- extern Vtx D_300F4B8[];
- extern Vtx D_300F608[];
- extern Vtx D_300F778[];
- extern Vtx D_300F898[];
- extern Vtx D_300F918[];
- extern u16 aDecalLeopardTex[];
- #define _aDecalLeopardTex_WIDTH 0x20
- #define _aDecalLeopardTex_HEIGHT 0x20
- extern u8 aLogoIronTigerTex[];
- #define _aLogoIronTigerTex_WIDTH 0x20
- #define _aLogoIronTigerTex_HEIGHT 0x10
- extern u8 aMachineNumber4Tex[];
- #define _aMachineNumber4Tex_WIDTH 0x10
- #define _aMachineNumber4Tex_HEIGHT 0x20
- extern Vtx D_30104F8[];
- extern u8 D_3010538[];
- #define _D_3010538_WIDTH 0x20
- #define _D_3010538_HEIGHT 0x40
- extern Vtx D_3010938[];
- extern Vtx D_3010978[];
- extern Vtx D_3010BB8[];
- extern Vtx D_3010D48[];
- extern Vtx D_3010DE8[];
- extern Vtx D_3010E88[];
- extern Vtx D_30110A8[];
- extern u8 aMachineNumber26Tex[];
- #define _aMachineNumber26Tex_WIDTH 0x20
- #define _aMachineNumber26Tex_HEIGHT 0x20
- extern Vtx D_3011778[];
- extern u8 D_30117B8[];
- #define _D_30117B8_WIDTH 0x20
- #define _D_30117B8_HEIGHT 0x40
- extern Vtx D_3011BB8[];
- extern Vtx D_30121F8[];
- extern Vtx D_30122F8[];
- extern Vtx D_3012438[];
- extern Vtx D_30126C8[];
- extern Vtx D_3012748[];
- extern Vtx D_3012A68[];
- extern u8 aDecalCheckeredTex[];
- #define _aDecalCheckeredTex_WIDTH 0x10
- #define _aDecalCheckeredTex_HEIGHT 0x10
- extern u8 aDecalDoubleStripeUnevenTex[];
- #define _aDecalDoubleStripeUnevenTex_WIDTH 0x10
- #define _aDecalDoubleStripeUnevenTex_HEIGHT 0x10
- extern u8 aMachineNumber22Tex[];
- #define _aMachineNumber22Tex_WIDTH 0x20
- #define _aMachineNumber22Tex_HEIGHT 0x20
- extern Vtx D_3012EC8[];
- extern u8 D_3012F08[];
- #define _D_3012F08_WIDTH 0x20
- #define _D_3012F08_HEIGHT 0x40
- extern Vtx D_3013308[];
- extern Vtx D_30136C8[];
- extern Vtx D_3013708[];
- extern Vtx D_3013948[];
- extern Vtx D_30139E8[];
- extern Vtx D_3013AE8[];
- extern Vtx D_3013DD8[];
- extern Vtx D_3013E58[];
- extern u8 aMachineNumber12Tex[];
- #define _aMachineNumber12Tex_WIDTH 0x20
- #define _aMachineNumber12Tex_HEIGHT 0x20
- extern Vtx D_30140D8[];
- extern u8 D_3014118[];
- #define _D_3014118_WIDTH 0x20
- #define _D_3014118_HEIGHT 0x40
- extern Vtx D_3014518[];
- extern Vtx D_3014B98[];
- extern Vtx D_3014BF8[];
- extern Vtx D_3014CB8[];
- extern Vtx D_3014D78[];
- extern Vtx D_3014ED8[];
- extern Vtx D_3014F58[];
- extern Vtx D_3015158[];
- extern u8 aDecalCircle1Tex[];
- #define _aDecalCircle1Tex_WIDTH 0x10
- #define _aDecalCircle1Tex_HEIGHT 0x10
- extern u8 aMachineNumber28Tex[];
- #define _aMachineNumber28Tex_WIDTH 0x20
- #define _aMachineNumber28Tex_HEIGHT 0x20
- extern Vtx D_3015418[];
- extern u8 D_3015458[];
- #define _D_3015458_WIDTH 0x20
- #define _D_3015458_HEIGHT 0x40
- extern Vtx D_3015858[];
- extern Vtx D_30158F8[];
- extern Vtx D_3015978[];
- extern Vtx D_3015A48[];
- extern Vtx D_3015BA8[];
- extern Vtx D_3015CE8[];
- extern Vtx D_3015E88[];
- extern Vtx D_3016258[];
- extern u16 aDecalLittleWyvernStripeEndsTex[];
- #define _aDecalLittleWyvernStripeEndsTex_WIDTH 0x10
- #define _aDecalLittleWyvernStripeEndsTex_HEIGHT 0x10
- extern u8 aMachineNumber10Tex[];
- #define _aMachineNumber10Tex_WIDTH 0x20
- #define _aMachineNumber10Tex_HEIGHT 0x20
- extern Vtx D_3016958[];
- extern u8 D_3016998[];
- #define _D_3016998_WIDTH 0x20
- #define _D_3016998_HEIGHT 0x40
- extern Vtx D_3016D98[];
- extern Vtx D_3017238[];
- extern Vtx D_3017318[];
- extern Vtx D_3017378[];
- extern Vtx D_30173F8[];
- extern Vtx D_3017458[];
- extern Vtx D_3017498[];
- extern u8 aMachineNumber19Tex[];
- #define _aMachineNumber19Tex_WIDTH 0x20
- #define _aMachineNumber19Tex_HEIGHT 0x20
- extern Vtx D_30177D8[];
- extern u8 D_3017818[];
- #define _D_3017818_WIDTH 0x20
- #define _D_3017818_HEIGHT 0x40
- extern Vtx D_3017C18[];
- extern Vtx D_3017D18[];
- extern Vtx D_3017F78[];
- extern Vtx D_3018018[];
- extern Vtx D_30180F8[];
- extern Vtx D_30182F8[];
- extern u8 aMachineNumber17Tex[];
- #define _aMachineNumber17Tex_WIDTH 0x20
- #define _aMachineNumber17Tex_HEIGHT 0x20
- extern u16 aDecalGreenPantherCamoTex[];
- #define _aDecalGreenPantherCamoTex_WIDTH 0x20
- #define _aDecalGreenPantherCamoTex_HEIGHT 0x20
- extern Vtx D_3018E98[];
- extern u8 D_3018ED8[];
- #define _D_3018ED8_WIDTH 0x20
- #define _D_3018ED8_HEIGHT 0x40
- extern Vtx D_30192D8[];
- extern Vtx D_3019378[];
- extern Vtx D_30193D8[];
- extern Vtx D_3019498[];
- extern Vtx D_3019518[];
- extern Vtx D_3019D58[];
- extern Vtx D_3019E98[];
- extern u8 aDecalArchTex[];
- #define _aDecalArchTex_WIDTH 0x10
- #define _aDecalArchTex_HEIGHT 0x10
- extern u8 aMachineNumber30Tex[];
- #define _aMachineNumber30Tex_WIDTH 0x20
- #define _aMachineNumber30Tex_HEIGHT 0x20
- extern u8 aDecalCircle2Tex[];
- #define _aDecalCircle2Tex_WIDTH 0x10
- #define _aDecalCircle2Tex_HEIGHT 0x10
- extern Vtx D_301A2E8[];
- extern u8 D_301A328[];
- #define _D_301A328_WIDTH 0x20
- #define _D_301A328_HEIGHT 0x40
- extern Vtx D_301A728[];
- extern Vtx D_301A7F8[];
- extern Vtx D_301A8D8[];
- extern Vtx D_301AAC8[];
- extern Vtx D_301AEA8[];
- extern Vtx D_301AF48[];
- extern Vtx D_301B008[];
- extern u8 aLogoWildBoarWhiskersTex[];
- #define _aLogoWildBoarWhiskersTex_WIDTH 0x40
- #define _aLogoWildBoarWhiskersTex_HEIGHT 0x20
- extern u8 aMachineNumber24Tex[];
- #define _aMachineNumber24Tex_WIDTH 0x20
- #define _aMachineNumber24Tex_HEIGHT 0x20
- extern Vtx D_301B7B8[];
- extern u8 D_301B7F8[];
- #define _D_301B7F8_WIDTH 0x20
- #define _D_301B7F8_HEIGHT 0x40
- extern Vtx D_301BBF8[];
- extern Vtx D_301BC78[];
- extern Vtx D_301BCB8[];
- extern Vtx D_301BE48[];
- extern Vtx D_301BEE8[];
- extern Vtx D_301C538[];
- extern Vtx D_301C638[];
- extern u8 aDecalTripleStripeUnevenTex[];
- #define _aDecalTripleStripeUnevenTex_WIDTH 0x10
- #define _aDecalTripleStripeUnevenTex_HEIGHT 0x10
- extern u8 aMachineNumber14Tex[];
- #define _aMachineNumber14Tex_WIDTH 0x20
- #define _aMachineNumber14Tex_HEIGHT 0x20
- extern Vtx D_301CA98[];
- extern u8 D_301CAD8[];
- #define _D_301CAD8_WIDTH 0x20
- #define _D_301CAD8_HEIGHT 0x40
- extern Vtx D_301CED8[];
- extern Vtx D_301D298[];
- extern Vtx D_301D338[];
- extern Vtx D_301D598[];
- extern Vtx D_301D6B8[];
- extern Vtx D_301D808[];
- extern Vtx D_301D928[];
- extern u8 aLogoArrowTex[];
- #define _aLogoArrowTex_WIDTH 0x20
- #define _aLogoArrowTex_HEIGHT 0x40
- extern u8 aMachineNumber20Tex[];
- #define _aMachineNumber20Tex_WIDTH 0x20
- #define _aMachineNumber20Tex_HEIGHT 0x20
- extern Vtx D_301E058[];
- extern u8 D_301E098[];
- #define _D_301E098_WIDTH 0x20
- #define _D_301E098_HEIGHT 0x40
- extern Vtx D_301E498[];
- extern Vtx D_301E6B8[];
- extern Vtx D_301E7B8[];
- extern Vtx D_301E838[];
- extern Vtx D_301EA18[];
- extern Vtx D_301EB78[];
- extern Vtx D_301EC98[];
- extern u8 aMachineNumber21Tex[];
- #define _aMachineNumber21Tex_WIDTH 0x20
- #define _aMachineNumber21Tex_HEIGHT 0x20
- extern Vtx D_301F328[];
- extern u8 D_301F368[];
- #define _D_301F368_WIDTH 0x20
- #define _D_301F368_HEIGHT 0x40
- extern Vtx D_301F768[];
- extern Vtx D_301F808[];
- extern Vtx D_301F888[];
- extern Vtx D_301F948[];
- extern Vtx D_301FA08[];
- extern Vtx D_301FE58[];
- extern Vtx D_301FF98[];
- extern Vtx D_3020028[];
- extern u8 aLogoGreatStarTex[];
- #define _aLogoGreatStarTex_WIDTH 0x40
- #define _aLogoGreatStarTex_HEIGHT 0x20
- extern u8 aMachineNumber9Tex[];
- #define _aMachineNumber9Tex_WIDTH 0x10
- #define _aMachineNumber9Tex_HEIGHT 0x20
- extern Vtx D_3020758[];
- extern u8 D_3020798[];
- #define _D_3020798_WIDTH 0x20
- #define _D_3020798_HEIGHT 0x40
- extern Vtx D_3020B98[];
- extern Vtx D_3020CD8[];
- extern Vtx D_3021098[];
- extern Vtx D_3021268[];
- extern Vtx D_3021328[];
- extern Vtx D_3021448[];
- extern Vtx D_3021578[];
- extern u16 aDecalBeastFaceTex[];
- #define _aDecalBeastFaceTex_WIDTH 0x20
- #define _aDecalBeastFaceTex_HEIGHT 0x20
- extern u8 aMachineNumber18Tex[];
- #define _aMachineNumber18Tex_WIDTH 0x20
- #define _aMachineNumber18Tex_HEIGHT 0x20
- extern Vtx D_3022178[];
- extern u8 D_30221B8[];
- #define _D_30221B8_WIDTH 0x20
- #define _D_30221B8_HEIGHT 0x40
- extern Vtx D_30225B8[];
- extern Vtx D_3022618[];
- extern Vtx D_3022718[];
- extern Vtx D_3022988[];
- extern Vtx D_3022CB8[];
- extern Vtx D_3022D58[];
- extern Vtx D_3022E18[];
- extern u8 aDecalLightningTex[];
- #define _aDecalLightningTex_WIDTH 0x20
- #define _aDecalLightningTex_HEIGHT 0x20
- extern u8 aMachineNumber13Tex[];
- #define _aMachineNumber13Tex_WIDTH 0x20
- #define _aMachineNumber13Tex_HEIGHT 0x20
- extern Vtx D_3023358[];
- extern u8 D_3023398[];
- #define _D_3023398_WIDTH 0x20
- #define _D_3023398_HEIGHT 0x40
- extern Vtx D_3023798[];
- extern Vtx D_3023838[];
- extern Vtx D_3023878[];
- extern Vtx D_3023AA8[];
- extern Vtx D_3023C48[];
- extern Vtx D_30240F8[];
- extern Vtx D_30241F8[];
- extern Vtx D_30242B8[];
- extern u16 aDecalCrazyBearEyeTex[];
- #define _aDecalCrazyBearEyeTex_WIDTH 0x20
- #define _aDecalCrazyBearEyeTex_HEIGHT 0x20
- extern u8 aAirDuct3Tex[];
- #define _aAirDuct3Tex_WIDTH 0x10
- #define _aAirDuct3Tex_HEIGHT 0x10
- extern u8 aMachineNumber29Tex[];
- #define _aMachineNumber29Tex_WIDTH 0x20
- #define _aMachineNumber29Tex_HEIGHT 0x20
- extern Vtx D_3024D78[];
- extern u8 D_3024DB8[];
- #define _D_3024DB8_WIDTH 0x20
- #define _D_3024DB8_HEIGHT 0x40
- extern Vtx D_30251B8[];
- extern Vtx D_3025318[];
- extern Vtx D_3025378[];
- extern Vtx D_30253F8[];
- extern Vtx D_3025438[];
- extern Vtx D_30259B8[];
- extern Vtx D_3025A78[];
- extern u8 aMachineNumber23Tex[];
- #define _aMachineNumber23Tex_WIDTH 0x20
- #define _aMachineNumber23Tex_HEIGHT 0x20
- extern Vtx D_3025DB8[];
- extern u8 D_3025DF8[];
- #define _D_3025DF8_WIDTH 0x20
- #define _D_3025DF8_HEIGHT 0x40
- extern Vtx D_30261F8[];
- extern Vtx D_3026658[];
- extern Vtx D_30266D8[];
- extern Vtx D_3026788[];
- extern Vtx D_3026878[];
- extern Vtx D_30269B8[];
- extern Vtx D_3026B38[];
- extern u8 aDecalFadeTex[];
- #define _aDecalFadeTex_WIDTH 0x10
- #define _aDecalFadeTex_HEIGHT 0x10
- extern u8 aMachineNumber15Tex[];
- #define _aMachineNumber15Tex_WIDTH 0x20
- #define _aMachineNumber15Tex_HEIGHT 0x20
- extern Vtx D_3027068[];
- extern u8 D_30270A8[];
- #define _D_30270A8_WIDTH 0x20
- #define _D_30270A8_HEIGHT 0x40
- extern Vtx D_30274A8[];
- extern Vtx D_3027508[];
- extern Vtx D_3027568[];
- extern Vtx D_3027728[];
- extern Vtx D_30277A8[];
- extern Vtx D_30278E8[];
- extern Vtx D_3027AE8[];
- extern u8 aMachineNumber27Tex[];
- #define _aMachineNumber27Tex_WIDTH 0x20
- #define _aMachineNumber27Tex_HEIGHT 0x20
- extern Vtx D_30285C8[];
- extern u8 D_3028608[];
- #define _D_3028608_WIDTH 0x20
- #define _D_3028608_HEIGHT 0x40
- extern Vtx D_3028A08[];
- extern Vtx D_3028A88[];
- extern Vtx D_3028B08[];
- extern Vtx D_3028D68[];
- extern Vtx D_3028EA8[];
- extern Vtx D_3028EE8[];
- extern Vtx D_3028FA8[];
- extern u8 aMachineNumber11Tex[];
- #define _aMachineNumber11Tex_WIDTH 0x20
- #define _aMachineNumber11Tex_HEIGHT 0x20
- extern u8 aMadWolfRidgeTex[];
- #define _aMadWolfRidgeTex_WIDTH 0x10
- #define _aMadWolfRidgeTex_HEIGHT 0x10
- extern Vtx D_3029648[];
- extern u8 D_3029688[];
- #define _D_3029688_WIDTH 0x20
- #define _D_3029688_HEIGHT 0x40
- extern Vtx D_3029A88[];
- extern Vtx D_3029B48[];
- extern Vtx D_3029C78[];
- extern Vtx D_3029CF8[];
- extern Vtx D_3029FD8[];
- extern Vtx D_302A128[];
- extern Vtx D_302A628[];
- extern u8 aDecalSonicPhantomStripesTex[];
- #define _aDecalSonicPhantomStripesTex_WIDTH 0x10
- #define _aDecalSonicPhantomStripesTex_HEIGHT 0x10
- extern u8 aMachineNumber16Tex[];
- #define _aMachineNumber16Tex_WIDTH 0x20
- #define _aMachineNumber16Tex_HEIGHT 0x20
- extern Vtx D_302A908[];
- extern u8 D_302A948[];
- #define _D_302A948_WIDTH 0x20
- #define _D_302A948_HEIGHT 0x40
- extern Vtx D_302AD48[];
- extern Vtx D_302AE28[];
- extern Vtx D_302AF08[];
- extern Vtx D_302AF48[];
- extern Vtx D_302B008[];
- extern Vtx D_302B5D8[];
- extern Vtx D_302B698[];
- extern Vtx D_302B798[];
- extern u8 aMachineNumber25Tex[];
- #define _aMachineNumber25Tex_WIDTH 0x20
- #define _aMachineNumber25Tex_HEIGHT 0x20
- extern Vtx D_302B9F8[];
- extern u8 D_302BA38[];
- #define _D_302BA38_WIDTH 0x20
- #define _D_302BA38_HEIGHT 0x40
- extern u16 aCustomLogoShieldTex[];
- #define _aCustomLogoShieldTex_WIDTH 0x20
- #define _aCustomLogoShieldTex_HEIGHT 0x20
- extern u16 aCustomLogoBoostArrowPlaneTex[];
- #define _aCustomLogoBoostArrowPlaneTex_WIDTH 0x20
- #define _aCustomLogoBoostArrowPlaneTex_HEIGHT 0x20
- extern u16 aCustomLogoCircleTex[];
- #define _aCustomLogoCircleTex_WIDTH 0x20
- #define _aCustomLogoCircleTex_HEIGHT 0x20
- extern u16 aCustomLogoAnimalSkullTex[];
- #define _aCustomLogoAnimalSkullTex_WIDTH 0x20
- #define _aCustomLogoAnimalSkullTex_HEIGHT 0x20
- extern u16 aCustomLogoYellowGreenTex[];
- #define _aCustomLogoYellowGreenTex_WIDTH 0x20
- #define _aCustomLogoYellowGreenTex_HEIGHT 0x20
- extern u16 aCustomLogoKanjiTex[];
- #define _aCustomLogoKanjiTex_WIDTH 0x20
- #define _aCustomLogoKanjiTex_HEIGHT 0x20
- extern u16 aCustomLogoXTex[];
- #define _aCustomLogoXTex_WIDTH 0x20
- #define _aCustomLogoXTex_HEIGHT 0x20
- extern u16 aCustomLogoN64Tex[];
- #define _aCustomLogoN64Tex_WIDTH 0x20
- #define _aCustomLogoN64Tex_HEIGHT 0x20
- extern u8 aCustomDecalStripeTex[];
- #define _aCustomDecalStripeTex_WIDTH 0x10
- #define _aCustomDecalStripeTex_HEIGHT 0x10
- extern u8 aCustomDecalThinStripeTex[];
- #define _aCustomDecalThinStripeTex_WIDTH 0x10
- #define _aCustomDecalThinStripeTex_HEIGHT 0x10
- extern u8 aCustomDecalDoubleStripeTex[];
- #define _aCustomDecalDoubleStripeTex_WIDTH 0x10
- #define _aCustomDecalDoubleStripeTex_HEIGHT 0x10
- extern u8 aCustomDecalTripleStripeUnevenTex[];
- #define _aCustomDecalTripleStripeUnevenTex_WIDTH 0x10
- #define _aCustomDecalTripleStripeUnevenTex_HEIGHT 0x10
- extern u8 aCustomDecalBlockTex[];
- #define _aCustomDecalBlockTex_WIDTH 0x10
- #define _aCustomDecalBlockTex_HEIGHT 0x10
- extern u8 aMachineNumber31Tex[];
- #define _aMachineNumber31Tex_WIDTH 0x20
- #define _aMachineNumber31Tex_HEIGHT 0x20
- extern u8 aMachineNumber1WideTex[];
- #define _aMachineNumber1WideTex_WIDTH 0x20
- #define _aMachineNumber1WideTex_HEIGHT 0x20
- extern u8 aMachineNumber2WideTex[];
- #define _aMachineNumber2WideTex_WIDTH 0x20
- #define _aMachineNumber2WideTex_HEIGHT 0x20
- extern u8 aMachineNumber3WideTex[];
- #define _aMachineNumber3WideTex_WIDTH 0x20
- #define _aMachineNumber3WideTex_HEIGHT 0x20
- extern u8 aMachineNumber4WideTex[];
- #define _aMachineNumber4WideTex_WIDTH 0x20
- #define _aMachineNumber4WideTex_HEIGHT 0x20
- extern u8 aMachineNumber5WideTex[];
- #define _aMachineNumber5WideTex_WIDTH 0x20
- #define _aMachineNumber5WideTex_HEIGHT 0x20
- extern u8 aMachineNumber6WideTex[];
- #define _aMachineNumber6WideTex_WIDTH 0x20
- #define _aMachineNumber6WideTex_HEIGHT 0x20
- extern u8 aMachineNumber7WideTex[];
- #define _aMachineNumber7WideTex_WIDTH 0x20
- #define _aMachineNumber7WideTex_HEIGHT 0x20
- extern u8 aMachineNumber8WideTex[];
- #define _aMachineNumber8WideTex_WIDTH 0x20
- #define _aMachineNumber8WideTex_HEIGHT 0x20
- extern u8 aMachineNumber9WideTex[];
- #define _aMachineNumber9WideTex_WIDTH 0x20
- #define _aMachineNumber9WideTex_HEIGHT 0x20
- extern Vtx D_30314B8[];
- extern Vtx D_3031548[];
- extern Vtx D_3031668[];
- extern Vtx D_3031848[];
- extern Vtx D_3031898[];
- extern Vtx D_30318D8[];
- extern Vtx D_3031958[];
- extern Vtx D_3031A98[];
- extern Vtx D_3031CE8[];
- extern Vtx D_3031D78[];
- extern Vtx D_3031F28[];
- extern Vtx D_3032158[];
- extern Vtx D_30321D8[];
- extern Vtx D_3032268[];
- extern Vtx D_3032358[];
- extern Vtx D_30326F8[];
- extern Vtx D_3032738[];
- extern Vtx D_3032778[];
- extern Vtx D_3032878[];
- extern Vtx D_3032A58[];
- extern Vtx D_3032A98[];
- extern Vtx D_3032AD8[];
- extern Vtx D_3032B98[];
- extern Vtx D_3032C18[];
- extern Vtx D_3032D58[];
- extern Vtx D_3032F08[];
- extern Vtx D_3032F68[];
- extern Vtx D_3032FE8[];
- extern Vtx D_3033128[];
- extern Vtx D_3033268[];
- extern Vtx D_30332A8[];
- extern Vtx D_3033308[];
- extern Vtx D_3033468[];
- extern Vtx D_30334A8[];
- extern Vtx D_3033548[];
- extern Vtx D_3033708[];
- extern Vtx D_30337A8[];
- extern Vtx D_30338A8[];
- extern Vtx D_3033928[];
- extern Vtx D_3033968[];
- extern Vtx D_3033A08[];
- extern Vtx D_3033C68[];
- extern Vtx D_3033D08[];
- extern Vtx D_3033E28[];
- extern Vtx D_3033EA8[];
- extern Vtx D_3033F48[];
- extern Vtx D_3033FE8[];
- extern Vtx D_3034148[];
- extern Vtx D_30341E8[];
- extern Vtx D_3034328[];
- extern Vtx D_30343C8[];
- extern Vtx D_3034508[];
- extern Vtx D_3034598[];
- extern Vtx D_3034818[];
- extern Vtx D_30348B8[];
- extern Vtx D_3034958[];
- extern Vtx D_3034A38[];
- extern Vtx D_3034B48[];
- extern Vtx D_3034BC8[];
- extern Vtx D_3034EC8[];
- extern Vtx D_3034F68[];
- extern Vtx D_3035108[];
- extern Vtx D_3035308[];
- extern Vtx D_3035348[];
- extern Vtx D_3035388[];
- extern Vtx D_30355E8[];
- extern Vtx D_3035688[];
- extern Vtx D_3035788[];
- extern Vtx D_3035A48[];
- extern Vtx D_3035A88[];
- extern Vtx D_3035B48[];
- extern Vtx D_3035FE8[];
- extern Vtx D_3036088[];
- extern Vtx D_3036138[];
- extern Vtx D_3036238[];
- extern Vtx D_3036398[];
- extern Vtx D_3036518[];
- extern Vtx D_3036688[];
- extern Vtx D_3036808[];
- extern Vtx D_3036A78[];
- extern u8 D_3036AB8[];
- #define _D_3036AB8_WIDTH 0x20
- #define _D_3036AB8_HEIGHT 0x40
- extern Vtx D_3036EB8[];
- extern u8 D_3036EF8[];
- #define _D_3036EF8_WIDTH 0x20
- #define _D_3036EF8_HEIGHT 0x40
- extern Vtx D_30372F8[];
- extern u8 D_3037338[];
- #define _D_3037338_WIDTH 0x20
- #define _D_3037338_HEIGHT 0x40
- extern Vtx D_3037738[];
- extern u8 D_3037778[];
- #define _D_3037778_WIDTH 0x20
- #define _D_3037778_HEIGHT 0x40
- extern Vtx D_3037B78[];
- extern u8 D_3037BB8[];
- #define _D_3037BB8_WIDTH 0x20
- #define _D_3037BB8_HEIGHT 0x40
- extern Vtx D_3037FB8[];
- extern u8 D_3037FF8[];
- #define _D_3037FF8_WIDTH 0x20
- #define _D_3037FF8_HEIGHT 0x40
- extern Vtx D_30383F8[];
- extern u8 D_3038438[];
- #define _D_3038438_WIDTH 0x20
- #define _D_3038438_HEIGHT 0x40
- extern Vtx D_3038838[];
- extern u8 D_3038878[];
- #define _D_3038878_WIDTH 0x20
- #define _D_3038878_HEIGHT 0x40
- extern Vtx D_3038C78[];
- extern u8 D_3038CB8[];
- #define _D_3038CB8_WIDTH 0x20
- #define _D_3038CB8_HEIGHT 0x40
- extern Vtx D_30390B8[];
- extern u8 D_30390F8[];
- #define _D_30390F8_WIDTH 0x20
- #define _D_30390F8_HEIGHT 0x40
- extern Vtx D_30394F8[];
- extern u8 D_3039538[];
- #define _D_3039538_WIDTH 0x20
- #define _D_3039538_HEIGHT 0x40
- extern Vtx D_3039938[];
- extern u8 D_3039978[];
- #define _D_3039978_WIDTH 0x20
- #define _D_3039978_HEIGHT 0x40
- extern Vtx D_3039D78[];
- extern u8 D_3039DB8[];
- #define _D_3039DB8_WIDTH 0x20
- #define _D_3039DB8_HEIGHT 0x40
- extern Vtx D_303A1B8[];
- extern u8 D_303A1F8[];
- #define _D_303A1F8_WIDTH 0x20
- #define _D_303A1F8_HEIGHT 0x40
- extern Gfx D_303A5F8[];
- extern Gfx D_303A6A8[];
- extern Gfx D_303A758[];
- extern Gfx D_303A7D8[];
- extern Gfx D_303A810[];
- extern Gfx D_303A8F8[];
- extern Gfx D_303A9E0[];
- extern Gfx D_303AA18[];
- extern Gfx D_303AA40[];
- extern u16 D_303AA70[];
- #define _D_303AA70_WIDTH 0x40
- #define _D_303AA70_HEIGHT 0x10
- extern u16 D_303B270[];
- #define _D_303B270_WIDTH 0xc
- #define _D_303B270_HEIGHT 0xa0
- extern u16 D_303C170[];
- #define _D_303C170_WIDTH 0x14
- #define _D_303C170_HEIGHT 0x10
- extern u16 D_303C3F0[];
- #define _D_303C3F0_WIDTH 0x8
- #define _D_303C3F0_HEIGHT 0xe0
- extern u16 D_303D1F0[];
- #define _D_303D1F0_WIDTH 0x10
- #define _D_303D1F0_HEIGHT 0xc
+extern Gfx D_3000000[];
+extern Gfx D_3000028[];
+extern Gfx D_3000050[];
+extern Gfx D_3000088[];
+extern Gfx D_30000C0[];
+extern Gfx D_3000100[];
+extern Gfx D_3000138[];
+extern Gfx D_3000170[];
+extern Gfx D_30001A8[];
+extern Gfx D_3000270[];
+extern Vp D_30002D0;
+extern Gfx D_30002E0[];
+extern Gfx D_3000338[];
+extern Gfx D_3000400[];
+extern Gfx D_3000438[];
+extern Gfx D_3000470[];
+extern Gfx D_30004A8[];
+extern Gfx D_30004E0[];
+extern Gfx D_3000510[];
+extern Gfx D_3000540[];
+extern Gfx D_3000590[];
+extern Gfx D_30005D8[];
+extern Vtx D_3000608[];
+extern Gfx D_3000688[];
+extern Gfx D_30006D0[];
+extern Vtx D_30006F8[];
+
+extern Gfx D_3000780[];
+extern Vtx D_3000788[];
+extern Vtx D_3000868[];
+extern Vtx D_3000A78[];
+extern Vtx D_3000AF8[];
+extern Vtx D_3000C38[];
+extern Vtx D_3000C98[];
+extern Vtx D_30013C8[];
+extern Vtx D_3001488[];
+extern Vtx D_30017D8[];
+extern Vtx D_3001858[];
+extern Vtx D_30019B8[];
+extern Vtx D_3001B28[];
+extern Vtx D_3001BA8[];
+extern Vtx D_3001CE8[];
+extern Vtx D_3001D28[];
+extern Vtx D_3002488[];
+extern Vtx D_3002568[];
+extern Vtx D_30025E8[];
+extern Vtx D_3002828[];
+extern Vtx D_3002B08[];
+extern Vtx D_3003168[];
+extern Vtx D_3003228[];
+extern Vtx D_3003388[];
+extern Vtx D_3003468[];
+extern Vtx D_30034E8[];
+extern Vtx D_3003758[];
+extern Vtx D_30037D8[];
+extern Vtx D_3003918[];
+extern Vtx D_3003978[];
+extern Vtx D_30040F8[];
+extern Vtx D_3004238[];
+extern u8 aMachineNumber7Tex[];
+#define _aMachineNumber7Tex_WIDTH 0x10
+#define _aMachineNumber7Tex_HEIGHT 0x20
+extern u8 aDecalBlueFalconArrowTex[];
+#define _aDecalBlueFalconArrowTex_WIDTH 0x10
+#define _aDecalBlueFalconArrowTex_HEIGHT 0x10
+extern u8 D_3004618[];
+#define _D_3004618_WIDTH 0x10
+#define _D_3004618_HEIGHT 0x10
+extern u8 aDecalStripeTex[];
+#define _aDecalStripeTex_WIDTH 0x10
+#define _aDecalStripeTex_HEIGHT 0x10
+extern u8 aLogoBlueFalconTex[];
+#define _aLogoBlueFalconTex_WIDTH 0x40
+#define _aLogoBlueFalconTex_HEIGHT 0x10
+extern u16 aDecalBlueFalconWingCheckeredTex[];
+#define _aDecalBlueFalconWingCheckeredTex_WIDTH 0x10
+#define _aDecalBlueFalconWingCheckeredTex_HEIGHT 0x10
+extern u8 aBooster1Tex[];
+#define _aBooster1Tex_WIDTH 0x20
+#define _aBooster1Tex_HEIGHT 0x20
+extern u8 aRearDuctTex[];
+#define _aRearDuctTex_WIDTH 0x20
+#define _aRearDuctTex_HEIGHT 0x20
+extern Vtx D_3004F18[];
+extern u8 D_3004F58[];
+#define _D_3004F58_WIDTH 0x20
+#define _D_3004F58_HEIGHT 0x40
+extern Vtx D_3005358[];
+extern Vtx D_30054E8[];
+extern Vtx D_3005568[];
+extern Vtx D_3005708[];
+extern Vtx D_3005B88[];
+extern Vtx D_3005C08[];
+extern Vtx D_3005DA8[];
+extern Vtx D_3005DF8[];
+extern u8 aMachineNumber3Tex[];
+#define _aMachineNumber3Tex_WIDTH 0x10
+#define _aMachineNumber3Tex_HEIGHT 0x20
+extern u8 aAirDuct1Tex[];
+#define _aAirDuct1Tex_WIDTH 0x20
+#define _aAirDuct1Tex_HEIGHT 0x10
+extern u16 aDecalGoldenFoxStripesTex[];
+#define _aDecalGoldenFoxStripesTex_WIDTH 0x10
+#define _aDecalGoldenFoxStripesTex_HEIGHT 0x10
+extern u8 aBooster2Tex[];
+#define _aBooster2Tex_WIDTH 0x20
+#define _aBooster2Tex_HEIGHT 0x20
+extern u8 aLogoGoldenFoxTex[];
+#define _aLogoGoldenFoxTex_WIDTH 0x20
+#define _aLogoGoldenFoxTex_HEIGHT 0x20
+extern u8 aCompartmentLatchTex[];
+#define _aCompartmentLatchTex_WIDTH 0x20
+#define _aCompartmentLatchTex_HEIGHT 0x20
+extern u8 aFloorDuct1Tex[];
+#define _aFloorDuct1Tex_WIDTH 0x20
+#define _aFloorDuct1Tex_HEIGHT 0x20
+extern Vtx D_3006C78[];
+extern u8 D_3006CB8[];
+#define _D_3006CB8_WIDTH 0x20
+#define _D_3006CB8_HEIGHT 0x40
+extern Vtx D_30070B8[];
+extern Vtx D_30072D8[];
+extern Vtx D_3007478[];
+extern Vtx D_30077F8[];
+extern Vtx D_30078D8[];
+extern Vtx D_3007918[];
+extern Vtx D_3007C18[];
+extern Vtx D_3007CD8[];
+extern u8 aDecalDoubleStripeTex[];
+#define _aDecalDoubleStripeTex_WIDTH 0x10
+#define _aDecalDoubleStripeTex_HEIGHT 0x10
+extern u16 aDecalWildGooseLightningTex[];
+#define _aDecalWildGooseLightningTex_WIDTH 0x20
+#define _aDecalWildGooseLightningTex_HEIGHT 0x20
+extern u8 aAirDuct2Tex[];
+#define _aAirDuct2Tex_WIDTH 0x10
+#define _aAirDuct2Tex_HEIGHT 0x10
+extern u8 aFloorDuct2Tex[];
+#define _aFloorDuct2Tex_WIDTH 0x20
+#define _aFloorDuct2Tex_HEIGHT 0x20
+extern u8 aMachineNumber6Tex[];
+#define _aMachineNumber6Tex_WIDTH 0x10
+#define _aMachineNumber6Tex_HEIGHT 0x20
+extern u8 aBooster3Tex[];
+#define _aBooster3Tex_WIDTH 0x20
+#define _aBooster3Tex_HEIGHT 0x20
+extern Vtx D_3008C18[];
+extern u8 D_3008C58[];
+#define _D_3008C58_WIDTH 0x20
+#define _D_3008C58_HEIGHT 0x40
+extern Vtx D_3009058[];
+extern Vtx D_30090D8[];
+extern Vtx D_3009238[];
+extern Vtx D_30093A8[];
+extern Vtx D_3009428[];
+extern Vtx D_30094C8[];
+extern Vtx D_3009508[];
+extern u8 aMachineNumber5Tex[];
+#define _aMachineNumber5Tex_WIDTH 0x10
+#define _aMachineNumber5Tex_HEIGHT 0x20
+extern u16 aDecalFlamesTex[];
+#define _aDecalFlamesTex_WIDTH 0x20
+#define _aDecalFlamesTex_HEIGHT 0x20
+extern Vtx D_300A4E8[];
+extern u8 D_300A528[];
+#define _D_300A528_WIDTH 0x20
+#define _D_300A528_HEIGHT 0x40
+extern Vtx D_300A928[];
+extern Vtx D_300AA08[];
+extern Vtx D_300AA88[];
+extern Vtx D_300ABC8[];
+extern Vtx D_300AEC8[];
+extern Vtx D_300B2F8[];
+extern Vtx D_300B3B8[];
+extern Vtx D_300B518[];
+extern u8 aMetalPlatingTex[];
+#define _aMetalPlatingTex_WIDTH 0x10
+#define _aMetalPlatingTex_HEIGHT 0x10
+extern u8 aLogoWhiteCatTex[];
+#define _aLogoWhiteCatTex_WIDTH 0x40
+#define _aLogoWhiteCatTex_HEIGHT 0x20
+extern u8 aMachineNumber2Tex[];
+#define _aMachineNumber2Tex_WIDTH 0x10
+#define _aMachineNumber2Tex_HEIGHT 0x20
+extern Vtx D_300BB78[];
+extern u8 D_300BBB8[];
+#define _D_300BBB8_WIDTH 0x20
+#define _D_300BBB8_HEIGHT 0x40
+extern Vtx D_300BFB8[];
+extern Vtx D_300C608[];
+extern Vtx D_300C688[];
+extern Vtx D_300C6C8[];
+extern Vtx D_300C788[];
+extern Vtx D_300C8E8[];
+extern Vtx D_300C9C8[];
+extern Vtx D_300CB08[];
+extern u8 aDecalStripeAngleTex[];
+#define _aDecalStripeAngleTex_WIDTH 0x10
+#define _aDecalStripeAngleTex_HEIGHT 0x10
+extern u8 aDecalTripleStripeIncreasingTex[];
+#define _aDecalTripleStripeIncreasingTex_WIDTH 0x10
+#define _aDecalTripleStripeIncreasingTex_HEIGHT 0x20
+extern u8 aLogoRedGazelleTex[];
+#define _aLogoRedGazelleTex_WIDTH 0x40
+#define _aLogoRedGazelleTex_HEIGHT 0x20
+extern u8 aMachineNumber1Tex[];
+#define _aMachineNumber1Tex_WIDTH 0x10
+#define _aMachineNumber1Tex_HEIGHT 0x20
+extern Vtx D_300D3F8[];
+extern u8 D_300D438[];
+#define _D_300D438_WIDTH 0x20
+#define _D_300D438_HEIGHT 0x40
+extern Vtx D_300D838[];
+extern Vtx D_300D8D8[];
+extern Vtx D_300D958[];
+extern Vtx D_300DB78[];
+extern Vtx D_300E2A8[];
+extern Vtx D_300E408[];
+extern Vtx D_300E488[];
+extern Vtx D_300E548[];
+extern u8 aMachineNumber8Tex[];
+#define _aMachineNumber8Tex_WIDTH 0x10
+#define _aMachineNumber8Tex_HEIGHT 0x20
+extern Vtx D_300E9A8[];
+extern u8 D_300E9E8[];
+#define _D_300E9E8_WIDTH 0x20
+#define _D_300E9E8_HEIGHT 0x40
+extern Vtx D_300EDE8[];
+extern Vtx D_300EF98[];
+extern Vtx D_300F3D8[];
+extern Vtx D_300F4B8[];
+extern Vtx D_300F608[];
+extern Vtx D_300F778[];
+extern Vtx D_300F898[];
+extern Vtx D_300F918[];
+extern u16 aDecalLeopardTex[];
+#define _aDecalLeopardTex_WIDTH 0x20
+#define _aDecalLeopardTex_HEIGHT 0x20
+extern u8 aLogoIronTigerTex[];
+#define _aLogoIronTigerTex_WIDTH 0x20
+#define _aLogoIronTigerTex_HEIGHT 0x10
+extern u8 aMachineNumber4Tex[];
+#define _aMachineNumber4Tex_WIDTH 0x10
+#define _aMachineNumber4Tex_HEIGHT 0x20
+extern Vtx D_30104F8[];
+extern u8 D_3010538[];
+#define _D_3010538_WIDTH 0x20
+#define _D_3010538_HEIGHT 0x40
+extern Vtx D_3010938[];
+extern Vtx D_3010978[];
+extern Vtx D_3010BB8[];
+extern Vtx D_3010D48[];
+extern Vtx D_3010DE8[];
+extern Vtx D_3010E88[];
+extern Vtx D_30110A8[];
+extern u8 aMachineNumber26Tex[];
+#define _aMachineNumber26Tex_WIDTH 0x20
+#define _aMachineNumber26Tex_HEIGHT 0x20
+extern Vtx D_3011778[];
+extern u8 D_30117B8[];
+#define _D_30117B8_WIDTH 0x20
+#define _D_30117B8_HEIGHT 0x40
+extern Vtx D_3011BB8[];
+extern Vtx D_30121F8[];
+extern Vtx D_30122F8[];
+extern Vtx D_3012438[];
+extern Vtx D_30126C8[];
+extern Vtx D_3012748[];
+extern Vtx D_3012A68[];
+extern u8 aDecalCheckeredTex[];
+#define _aDecalCheckeredTex_WIDTH 0x10
+#define _aDecalCheckeredTex_HEIGHT 0x10
+extern u8 aDecalDoubleStripeUnevenTex[];
+#define _aDecalDoubleStripeUnevenTex_WIDTH 0x10
+#define _aDecalDoubleStripeUnevenTex_HEIGHT 0x10
+extern u8 aMachineNumber22Tex[];
+#define _aMachineNumber22Tex_WIDTH 0x20
+#define _aMachineNumber22Tex_HEIGHT 0x20
+extern Vtx D_3012EC8[];
+extern u8 D_3012F08[];
+#define _D_3012F08_WIDTH 0x20
+#define _D_3012F08_HEIGHT 0x40
+extern Vtx D_3013308[];
+extern Vtx D_30136C8[];
+extern Vtx D_3013708[];
+extern Vtx D_3013948[];
+extern Vtx D_30139E8[];
+extern Vtx D_3013AE8[];
+extern Vtx D_3013DD8[];
+extern Vtx D_3013E58[];
+extern u8 aMachineNumber12Tex[];
+#define _aMachineNumber12Tex_WIDTH 0x20
+#define _aMachineNumber12Tex_HEIGHT 0x20
+extern Vtx D_30140D8[];
+extern u8 D_3014118[];
+#define _D_3014118_WIDTH 0x20
+#define _D_3014118_HEIGHT 0x40
+extern Vtx D_3014518[];
+extern Vtx D_3014B98[];
+extern Vtx D_3014BF8[];
+extern Vtx D_3014CB8[];
+extern Vtx D_3014D78[];
+extern Vtx D_3014ED8[];
+extern Vtx D_3014F58[];
+extern Vtx D_3015158[];
+extern u8 aDecalCircle1Tex[];
+#define _aDecalCircle1Tex_WIDTH 0x10
+#define _aDecalCircle1Tex_HEIGHT 0x10
+extern u8 aMachineNumber28Tex[];
+#define _aMachineNumber28Tex_WIDTH 0x20
+#define _aMachineNumber28Tex_HEIGHT 0x20
+extern Vtx D_3015418[];
+extern u8 D_3015458[];
+#define _D_3015458_WIDTH 0x20
+#define _D_3015458_HEIGHT 0x40
+extern Vtx D_3015858[];
+extern Vtx D_30158F8[];
+extern Vtx D_3015978[];
+extern Vtx D_3015A48[];
+extern Vtx D_3015BA8[];
+extern Vtx D_3015CE8[];
+extern Vtx D_3015E88[];
+extern Vtx D_3016258[];
+extern u16 aDecalLittleWyvernStripeEndsTex[];
+#define _aDecalLittleWyvernStripeEndsTex_WIDTH 0x10
+#define _aDecalLittleWyvernStripeEndsTex_HEIGHT 0x10
+extern u8 aMachineNumber10Tex[];
+#define _aMachineNumber10Tex_WIDTH 0x20
+#define _aMachineNumber10Tex_HEIGHT 0x20
+extern Vtx D_3016958[];
+extern u8 D_3016998[];
+#define _D_3016998_WIDTH 0x20
+#define _D_3016998_HEIGHT 0x40
+extern Vtx D_3016D98[];
+extern Vtx D_3017238[];
+extern Vtx D_3017318[];
+extern Vtx D_3017378[];
+extern Vtx D_30173F8[];
+extern Vtx D_3017458[];
+extern Vtx D_3017498[];
+extern u8 aMachineNumber19Tex[];
+#define _aMachineNumber19Tex_WIDTH 0x20
+#define _aMachineNumber19Tex_HEIGHT 0x20
+extern Vtx D_30177D8[];
+extern u8 D_3017818[];
+#define _D_3017818_WIDTH 0x20
+#define _D_3017818_HEIGHT 0x40
+extern Vtx D_3017C18[];
+extern Vtx D_3017D18[];
+extern Vtx D_3017F78[];
+extern Vtx D_3018018[];
+extern Vtx D_30180F8[];
+extern Vtx D_30182F8[];
+extern u8 aMachineNumber17Tex[];
+#define _aMachineNumber17Tex_WIDTH 0x20
+#define _aMachineNumber17Tex_HEIGHT 0x20
+extern u16 aDecalGreenPantherCamoTex[];
+#define _aDecalGreenPantherCamoTex_WIDTH 0x20
+#define _aDecalGreenPantherCamoTex_HEIGHT 0x20
+extern Vtx D_3018E98[];
+extern u8 D_3018ED8[];
+#define _D_3018ED8_WIDTH 0x20
+#define _D_3018ED8_HEIGHT 0x40
+extern Vtx D_30192D8[];
+extern Vtx D_3019378[];
+extern Vtx D_30193D8[];
+extern Vtx D_3019498[];
+extern Vtx D_3019518[];
+extern Vtx D_3019D58[];
+extern Vtx D_3019E98[];
+extern u8 aDecalArchTex[];
+#define _aDecalArchTex_WIDTH 0x10
+#define _aDecalArchTex_HEIGHT 0x10
+extern u8 aMachineNumber30Tex[];
+#define _aMachineNumber30Tex_WIDTH 0x20
+#define _aMachineNumber30Tex_HEIGHT 0x20
+extern u8 aDecalCircle2Tex[];
+#define _aDecalCircle2Tex_WIDTH 0x10
+#define _aDecalCircle2Tex_HEIGHT 0x10
+extern Vtx D_301A2E8[];
+extern u8 D_301A328[];
+#define _D_301A328_WIDTH 0x20
+#define _D_301A328_HEIGHT 0x40
+extern Vtx D_301A728[];
+extern Vtx D_301A7F8[];
+extern Vtx D_301A8D8[];
+extern Vtx D_301AAC8[];
+extern Vtx D_301AEA8[];
+extern Vtx D_301AF48[];
+extern Vtx D_301B008[];
+extern u8 aLogoWildBoarWhiskersTex[];
+#define _aLogoWildBoarWhiskersTex_WIDTH 0x40
+#define _aLogoWildBoarWhiskersTex_HEIGHT 0x20
+extern u8 aMachineNumber24Tex[];
+#define _aMachineNumber24Tex_WIDTH 0x20
+#define _aMachineNumber24Tex_HEIGHT 0x20
+extern Vtx D_301B7B8[];
+extern u8 D_301B7F8[];
+#define _D_301B7F8_WIDTH 0x20
+#define _D_301B7F8_HEIGHT 0x40
+extern Vtx D_301BBF8[];
+extern Vtx D_301BC78[];
+extern Vtx D_301BCB8[];
+extern Vtx D_301BE48[];
+extern Vtx D_301BEE8[];
+extern Vtx D_301C538[];
+extern Vtx D_301C638[];
+extern u8 aDecalTripleStripeUnevenTex[];
+#define _aDecalTripleStripeUnevenTex_WIDTH 0x10
+#define _aDecalTripleStripeUnevenTex_HEIGHT 0x10
+extern u8 aMachineNumber14Tex[];
+#define _aMachineNumber14Tex_WIDTH 0x20
+#define _aMachineNumber14Tex_HEIGHT 0x20
+extern Vtx D_301CA98[];
+extern u8 D_301CAD8[];
+#define _D_301CAD8_WIDTH 0x20
+#define _D_301CAD8_HEIGHT 0x40
+extern Vtx D_301CED8[];
+extern Vtx D_301D298[];
+extern Vtx D_301D338[];
+extern Vtx D_301D598[];
+extern Vtx D_301D6B8[];
+extern Vtx D_301D808[];
+extern Vtx D_301D928[];
+extern u8 aLogoArrowTex[];
+#define _aLogoArrowTex_WIDTH 0x20
+#define _aLogoArrowTex_HEIGHT 0x40
+extern u8 aMachineNumber20Tex[];
+#define _aMachineNumber20Tex_WIDTH 0x20
+#define _aMachineNumber20Tex_HEIGHT 0x20
+extern Vtx D_301E058[];
+extern u8 D_301E098[];
+#define _D_301E098_WIDTH 0x20
+#define _D_301E098_HEIGHT 0x40
+extern Vtx D_301E498[];
+extern Vtx D_301E6B8[];
+extern Vtx D_301E7B8[];
+extern Vtx D_301E838[];
+extern Vtx D_301EA18[];
+extern Vtx D_301EB78[];
+extern Vtx D_301EC98[];
+extern u8 aMachineNumber21Tex[];
+#define _aMachineNumber21Tex_WIDTH 0x20
+#define _aMachineNumber21Tex_HEIGHT 0x20
+extern Vtx D_301F328[];
+extern u8 D_301F368[];
+#define _D_301F368_WIDTH 0x20
+#define _D_301F368_HEIGHT 0x40
+extern Vtx D_301F768[];
+extern Vtx D_301F808[];
+extern Vtx D_301F888[];
+extern Vtx D_301F948[];
+extern Vtx D_301FA08[];
+extern Vtx D_301FE58[];
+extern Vtx D_301FF98[];
+extern Vtx D_3020028[];
+extern u8 aLogoGreatStarTex[];
+#define _aLogoGreatStarTex_WIDTH 0x40
+#define _aLogoGreatStarTex_HEIGHT 0x20
+extern u8 aMachineNumber9Tex[];
+#define _aMachineNumber9Tex_WIDTH 0x10
+#define _aMachineNumber9Tex_HEIGHT 0x20
+extern Vtx D_3020758[];
+extern u8 D_3020798[];
+#define _D_3020798_WIDTH 0x20
+#define _D_3020798_HEIGHT 0x40
+extern Vtx D_3020B98[];
+extern Vtx D_3020CD8[];
+extern Vtx D_3021098[];
+extern Vtx D_3021268[];
+extern Vtx D_3021328[];
+extern Vtx D_3021448[];
+extern Vtx D_3021578[];
+extern u16 aDecalBeastFaceTex[];
+#define _aDecalBeastFaceTex_WIDTH 0x20
+#define _aDecalBeastFaceTex_HEIGHT 0x20
+extern u8 aMachineNumber18Tex[];
+#define _aMachineNumber18Tex_WIDTH 0x20
+#define _aMachineNumber18Tex_HEIGHT 0x20
+extern Vtx D_3022178[];
+extern u8 D_30221B8[];
+#define _D_30221B8_WIDTH 0x20
+#define _D_30221B8_HEIGHT 0x40
+extern Vtx D_30225B8[];
+extern Vtx D_3022618[];
+extern Vtx D_3022718[];
+extern Vtx D_3022988[];
+extern Vtx D_3022CB8[];
+extern Vtx D_3022D58[];
+extern Vtx D_3022E18[];
+extern u8 aDecalLightningTex[];
+#define _aDecalLightningTex_WIDTH 0x20
+#define _aDecalLightningTex_HEIGHT 0x20
+extern u8 aMachineNumber13Tex[];
+#define _aMachineNumber13Tex_WIDTH 0x20
+#define _aMachineNumber13Tex_HEIGHT 0x20
+extern Vtx D_3023358[];
+extern u8 D_3023398[];
+#define _D_3023398_WIDTH 0x20
+#define _D_3023398_HEIGHT 0x40
+extern Vtx D_3023798[];
+extern Vtx D_3023838[];
+extern Vtx D_3023878[];
+extern Vtx D_3023AA8[];
+extern Vtx D_3023C48[];
+extern Vtx D_30240F8[];
+extern Vtx D_30241F8[];
+extern Vtx D_30242B8[];
+extern u16 aDecalCrazyBearEyeTex[];
+#define _aDecalCrazyBearEyeTex_WIDTH 0x20
+#define _aDecalCrazyBearEyeTex_HEIGHT 0x20
+extern u8 aAirDuct3Tex[];
+#define _aAirDuct3Tex_WIDTH 0x10
+#define _aAirDuct3Tex_HEIGHT 0x10
+extern u8 aMachineNumber29Tex[];
+#define _aMachineNumber29Tex_WIDTH 0x20
+#define _aMachineNumber29Tex_HEIGHT 0x20
+extern Vtx D_3024D78[];
+extern u8 D_3024DB8[];
+#define _D_3024DB8_WIDTH 0x20
+#define _D_3024DB8_HEIGHT 0x40
+extern Vtx D_30251B8[];
+extern Vtx D_3025318[];
+extern Vtx D_3025378[];
+extern Vtx D_30253F8[];
+extern Vtx D_3025438[];
+extern Vtx D_30259B8[];
+extern Vtx D_3025A78[];
+extern u8 aMachineNumber23Tex[];
+#define _aMachineNumber23Tex_WIDTH 0x20
+#define _aMachineNumber23Tex_HEIGHT 0x20
+extern Vtx D_3025DB8[];
+extern u8 D_3025DF8[];
+#define _D_3025DF8_WIDTH 0x20
+#define _D_3025DF8_HEIGHT 0x40
+extern Vtx D_30261F8[];
+extern Vtx D_3026658[];
+extern Vtx D_30266D8[];
+extern Vtx D_3026788[];
+extern Vtx D_3026878[];
+extern Vtx D_30269B8[];
+extern Vtx D_3026B38[];
+extern u8 aDecalFadeTex[];
+#define _aDecalFadeTex_WIDTH 0x10
+#define _aDecalFadeTex_HEIGHT 0x10
+extern u8 aMachineNumber15Tex[];
+#define _aMachineNumber15Tex_WIDTH 0x20
+#define _aMachineNumber15Tex_HEIGHT 0x20
+extern Vtx D_3027068[];
+extern u8 D_30270A8[];
+#define _D_30270A8_WIDTH 0x20
+#define _D_30270A8_HEIGHT 0x40
+extern Vtx D_30274A8[];
+extern Vtx D_3027508[];
+extern Vtx D_3027568[];
+extern Vtx D_3027728[];
+extern Vtx D_30277A8[];
+extern Vtx D_30278E8[];
+extern Vtx D_3027AE8[];
+extern u8 aMachineNumber27Tex[];
+#define _aMachineNumber27Tex_WIDTH 0x20
+#define _aMachineNumber27Tex_HEIGHT 0x20
+extern Vtx D_30285C8[];
+extern u8 D_3028608[];
+#define _D_3028608_WIDTH 0x20
+#define _D_3028608_HEIGHT 0x40
+extern Vtx D_3028A08[];
+extern Vtx D_3028A88[];
+extern Vtx D_3028B08[];
+extern Vtx D_3028D68[];
+extern Vtx D_3028EA8[];
+extern Vtx D_3028EE8[];
+extern Vtx D_3028FA8[];
+extern u8 aMachineNumber11Tex[];
+#define _aMachineNumber11Tex_WIDTH 0x20
+#define _aMachineNumber11Tex_HEIGHT 0x20
+extern u8 aMadWolfRidgeTex[];
+#define _aMadWolfRidgeTex_WIDTH 0x10
+#define _aMadWolfRidgeTex_HEIGHT 0x10
+extern Vtx D_3029648[];
+extern u8 D_3029688[];
+#define _D_3029688_WIDTH 0x20
+#define _D_3029688_HEIGHT 0x40
+extern Vtx D_3029A88[];
+extern Vtx D_3029B48[];
+extern Vtx D_3029C78[];
+extern Vtx D_3029CF8[];
+extern Vtx D_3029FD8[];
+extern Vtx D_302A128[];
+extern Vtx D_302A628[];
+extern u8 aDecalSonicPhantomStripesTex[];
+#define _aDecalSonicPhantomStripesTex_WIDTH 0x10
+#define _aDecalSonicPhantomStripesTex_HEIGHT 0x10
+extern u8 aMachineNumber16Tex[];
+#define _aMachineNumber16Tex_WIDTH 0x20
+#define _aMachineNumber16Tex_HEIGHT 0x20
+extern Vtx D_302A908[];
+extern u8 D_302A948[];
+#define _D_302A948_WIDTH 0x20
+#define _D_302A948_HEIGHT 0x40
+extern Vtx D_302AD48[];
+extern Vtx D_302AE28[];
+extern Vtx D_302AF08[];
+extern Vtx D_302AF48[];
+extern Vtx D_302B008[];
+extern Vtx D_302B5D8[];
+extern Vtx D_302B698[];
+extern Vtx D_302B798[];
+extern u8 aMachineNumber25Tex[];
+#define _aMachineNumber25Tex_WIDTH 0x20
+#define _aMachineNumber25Tex_HEIGHT 0x20
+extern Vtx D_302B9F8[];
+extern u8 D_302BA38[];
+#define _D_302BA38_WIDTH 0x20
+#define _D_302BA38_HEIGHT 0x40
+extern u16 aCustomLogoShieldTex[];
+#define _aCustomLogoShieldTex_WIDTH 0x20
+#define _aCustomLogoShieldTex_HEIGHT 0x20
+extern u16 aCustomLogoBoostArrowPlaneTex[];
+#define _aCustomLogoBoostArrowPlaneTex_WIDTH 0x20
+#define _aCustomLogoBoostArrowPlaneTex_HEIGHT 0x20
+extern u16 aCustomLogoCircleTex[];
+#define _aCustomLogoCircleTex_WIDTH 0x20
+#define _aCustomLogoCircleTex_HEIGHT 0x20
+extern u16 aCustomLogoAnimalSkullTex[];
+#define _aCustomLogoAnimalSkullTex_WIDTH 0x20
+#define _aCustomLogoAnimalSkullTex_HEIGHT 0x20
+extern u16 aCustomLogoYellowGreenTex[];
+#define _aCustomLogoYellowGreenTex_WIDTH 0x20
+#define _aCustomLogoYellowGreenTex_HEIGHT 0x20
+extern u16 aCustomLogoKanjiTex[];
+#define _aCustomLogoKanjiTex_WIDTH 0x20
+#define _aCustomLogoKanjiTex_HEIGHT 0x20
+extern u16 aCustomLogoXTex[];
+#define _aCustomLogoXTex_WIDTH 0x20
+#define _aCustomLogoXTex_HEIGHT 0x20
+extern u16 aCustomLogoN64Tex[];
+#define _aCustomLogoN64Tex_WIDTH 0x20
+#define _aCustomLogoN64Tex_HEIGHT 0x20
+extern u8 aCustomDecalStripeTex[];
+#define _aCustomDecalStripeTex_WIDTH 0x10
+#define _aCustomDecalStripeTex_HEIGHT 0x10
+extern u8 aCustomDecalThinStripeTex[];
+#define _aCustomDecalThinStripeTex_WIDTH 0x10
+#define _aCustomDecalThinStripeTex_HEIGHT 0x10
+extern u8 aCustomDecalDoubleStripeTex[];
+#define _aCustomDecalDoubleStripeTex_WIDTH 0x10
+#define _aCustomDecalDoubleStripeTex_HEIGHT 0x10
+extern u8 aCustomDecalTripleStripeUnevenTex[];
+#define _aCustomDecalTripleStripeUnevenTex_WIDTH 0x10
+#define _aCustomDecalTripleStripeUnevenTex_HEIGHT 0x10
+extern u8 aCustomDecalBlockTex[];
+#define _aCustomDecalBlockTex_WIDTH 0x10
+#define _aCustomDecalBlockTex_HEIGHT 0x10
+extern u8 aMachineNumber31Tex[];
+#define _aMachineNumber31Tex_WIDTH 0x20
+#define _aMachineNumber31Tex_HEIGHT 0x20
+extern u8 aMachineNumber1WideTex[];
+#define _aMachineNumber1WideTex_WIDTH 0x20
+#define _aMachineNumber1WideTex_HEIGHT 0x20
+extern u8 aMachineNumber2WideTex[];
+#define _aMachineNumber2WideTex_WIDTH 0x20
+#define _aMachineNumber2WideTex_HEIGHT 0x20
+extern u8 aMachineNumber3WideTex[];
+#define _aMachineNumber3WideTex_WIDTH 0x20
+#define _aMachineNumber3WideTex_HEIGHT 0x20
+extern u8 aMachineNumber4WideTex[];
+#define _aMachineNumber4WideTex_WIDTH 0x20
+#define _aMachineNumber4WideTex_HEIGHT 0x20
+extern u8 aMachineNumber5WideTex[];
+#define _aMachineNumber5WideTex_WIDTH 0x20
+#define _aMachineNumber5WideTex_HEIGHT 0x20
+extern u8 aMachineNumber6WideTex[];
+#define _aMachineNumber6WideTex_WIDTH 0x20
+#define _aMachineNumber6WideTex_HEIGHT 0x20
+extern u8 aMachineNumber7WideTex[];
+#define _aMachineNumber7WideTex_WIDTH 0x20
+#define _aMachineNumber7WideTex_HEIGHT 0x20
+extern u8 aMachineNumber8WideTex[];
+#define _aMachineNumber8WideTex_WIDTH 0x20
+#define _aMachineNumber8WideTex_HEIGHT 0x20
+extern u8 aMachineNumber9WideTex[];
+#define _aMachineNumber9WideTex_WIDTH 0x20
+#define _aMachineNumber9WideTex_HEIGHT 0x20
+extern Vtx D_30314B8[];
+extern Vtx D_3031548[];
+extern Vtx D_3031668[];
+extern Vtx D_3031848[];
+extern Vtx D_3031898[];
+extern Vtx D_30318D8[];
+extern Vtx D_3031958[];
+extern Vtx D_3031A98[];
+extern Vtx D_3031CE8[];
+extern Vtx D_3031D78[];
+extern Vtx D_3031F28[];
+extern Vtx D_3032158[];
+extern Vtx D_30321D8[];
+extern Vtx D_3032268[];
+extern Vtx D_3032358[];
+extern Vtx D_30326F8[];
+extern Vtx D_3032738[];
+extern Vtx D_3032778[];
+extern Vtx D_3032878[];
+extern Vtx D_3032A58[];
+extern Vtx D_3032A98[];
+extern Vtx D_3032AD8[];
+extern Vtx D_3032B98[];
+extern Vtx D_3032C18[];
+extern Vtx D_3032D58[];
+extern Vtx D_3032F08[];
+extern Vtx D_3032F68[];
+extern Vtx D_3032FE8[];
+extern Vtx D_3033128[];
+extern Vtx D_3033268[];
+extern Vtx D_30332A8[];
+extern Vtx D_3033308[];
+extern Vtx D_3033468[];
+extern Vtx D_30334A8[];
+extern Vtx D_3033548[];
+extern Vtx D_3033708[];
+extern Vtx D_30337A8[];
+extern Vtx D_30338A8[];
+extern Vtx D_3033928[];
+extern Vtx D_3033968[];
+extern Vtx D_3033A08[];
+extern Vtx D_3033C68[];
+extern Vtx D_3033D08[];
+extern Vtx D_3033E28[];
+extern Vtx D_3033EA8[];
+extern Vtx D_3033F48[];
+extern Vtx D_3033FE8[];
+extern Vtx D_3034148[];
+extern Vtx D_30341E8[];
+extern Vtx D_3034328[];
+extern Vtx D_30343C8[];
+extern Vtx D_3034508[];
+extern Vtx D_3034598[];
+extern Vtx D_3034818[];
+extern Vtx D_30348B8[];
+extern Vtx D_3034958[];
+extern Vtx D_3034A38[];
+extern Vtx D_3034B48[];
+extern Vtx D_3034BC8[];
+extern Vtx D_3034EC8[];
+extern Vtx D_3034F68[];
+extern Vtx D_3035108[];
+extern Vtx D_3035308[];
+extern Vtx D_3035348[];
+extern Vtx D_3035388[];
+extern Vtx D_30355E8[];
+extern Vtx D_3035688[];
+extern Vtx D_3035788[];
+extern Vtx D_3035A48[];
+extern Vtx D_3035A88[];
+extern Vtx D_3035B48[];
+extern Vtx D_3035FE8[];
+extern Vtx D_3036088[];
+extern Vtx D_3036138[];
+extern Vtx D_3036238[];
+extern Vtx D_3036398[];
+extern Vtx D_3036518[];
+extern Vtx D_3036688[];
+extern Vtx D_3036808[];
+extern Vtx D_3036A78[];
+extern u8 D_3036AB8[];
+#define _D_3036AB8_WIDTH 0x20
+#define _D_3036AB8_HEIGHT 0x40
+extern Vtx D_3036EB8[];
+extern u8 D_3036EF8[];
+#define _D_3036EF8_WIDTH 0x20
+#define _D_3036EF8_HEIGHT 0x40
+extern Vtx D_30372F8[];
+extern u8 D_3037338[];
+#define _D_3037338_WIDTH 0x20
+#define _D_3037338_HEIGHT 0x40
+extern Vtx D_3037738[];
+extern u8 D_3037778[];
+#define _D_3037778_WIDTH 0x20
+#define _D_3037778_HEIGHT 0x40
+extern Vtx D_3037B78[];
+extern u8 D_3037BB8[];
+#define _D_3037BB8_WIDTH 0x20
+#define _D_3037BB8_HEIGHT 0x40
+extern Vtx D_3037FB8[];
+extern u8 D_3037FF8[];
+#define _D_3037FF8_WIDTH 0x20
+#define _D_3037FF8_HEIGHT 0x40
+extern Vtx D_30383F8[];
+extern u8 D_3038438[];
+#define _D_3038438_WIDTH 0x20
+#define _D_3038438_HEIGHT 0x40
+extern Vtx D_3038838[];
+extern u8 D_3038878[];
+#define _D_3038878_WIDTH 0x20
+#define _D_3038878_HEIGHT 0x40
+extern Vtx D_3038C78[];
+extern u8 D_3038CB8[];
+#define _D_3038CB8_WIDTH 0x20
+#define _D_3038CB8_HEIGHT 0x40
+extern Vtx D_30390B8[];
+extern u8 D_30390F8[];
+#define _D_30390F8_WIDTH 0x20
+#define _D_30390F8_HEIGHT 0x40
+extern Vtx D_30394F8[];
+extern u8 D_3039538[];
+#define _D_3039538_WIDTH 0x20
+#define _D_3039538_HEIGHT 0x40
+extern Vtx D_3039938[];
+extern u8 D_3039978[];
+#define _D_3039978_WIDTH 0x20
+#define _D_3039978_HEIGHT 0x40
+extern Vtx D_3039D78[];
+extern u8 D_3039DB8[];
+#define _D_3039DB8_WIDTH 0x20
+#define _D_3039DB8_HEIGHT 0x40
+extern Vtx D_303A1B8[];
+extern u8 D_303A1F8[];
+#define _D_303A1F8_WIDTH 0x20
+#define _D_303A1F8_HEIGHT 0x40
+extern Gfx D_303A5F8[];
+extern Gfx D_303A6A8[];
+extern Gfx D_303A758[];
+extern Gfx D_303A7D8[];
+extern Gfx D_303A810[];
+extern Gfx D_303A8F8[];
+extern Gfx D_303A9E0[];
+extern Gfx D_303AA18[];
+extern Gfx D_303AA40[];
+extern u16 D_303AA70[];
+#define _D_303AA70_WIDTH 0x40
+#define _D_303AA70_HEIGHT 0x10
+extern u16 D_303B270[];
+#define _D_303B270_WIDTH 0xc
+#define _D_303B270_HEIGHT 0xa0
+extern u16 D_303C170[];
+#define _D_303C170_WIDTH 0x14
+#define _D_303C170_HEIGHT 0x10
+extern u16 D_303C3F0[];
+#define _D_303C3F0_WIDTH 0x8
+#define _D_303C3F0_HEIGHT 0xe0
+extern u16 D_303D1F0[];
+#define _D_303D1F0_WIDTH 0x10
+#define _D_303D1F0_HEIGHT 0xc
 
 extern Vtx D_7000008[];
 extern Vtx D_70000C8[];
@@ -1899,5 +1926,246 @@ extern Vtx D_70485F8[];
 extern Vtx D_7048628[];
 extern Vtx D_7048688[];
 extern Vtx D_7048868[];
+
+extern Gfx D_8000000[];
+extern u16 D_8000008[];
+#define _D_8000008_WIDTH 0x80
+#define _D_8000008_HEIGHT 0x10
+extern u16 D_8001008[];
+#define _D_8001008_WIDTH 0x80
+#define _D_8001008_HEIGHT 0x10
+extern u16 D_8002008[];
+#define _D_8002008_WIDTH 0x80
+#define _D_8002008_HEIGHT 0x10
+extern u16 D_8003008[];
+#define _D_8003008_WIDTH 0x80
+#define _D_8003008_HEIGHT 0x10
+extern u16 D_8004008[];
+#define _D_8004008_WIDTH 0x40
+#define _D_8004008_HEIGHT 0x10
+extern u16 D_8004808[];
+#define _D_8004808_WIDTH 0x40
+#define _D_8004808_HEIGHT 0x10
+extern u16 D_8005008[];
+#define _D_8005008_WIDTH 0x40
+#define _D_8005008_HEIGHT 0x10
+extern u16 D_8005808[];
+#define _D_8005808_WIDTH 0x40
+#define _D_8005808_HEIGHT 0x10
+extern u16 D_8006008[];
+#define _D_8006008_WIDTH 0x40
+#define _D_8006008_HEIGHT 0x10
+extern u16 D_8006808[];
+#define _D_8006808_WIDTH 0x40
+#define _D_8006808_HEIGHT 0x10
+extern u16 D_8007008[];
+#define _D_8007008_WIDTH 0x40
+#define _D_8007008_HEIGHT 0x10
+extern u16 D_8007808[];
+#define _D_8007808_WIDTH 0x40
+#define _D_8007808_HEIGHT 0x10
+extern u16 D_8008008[];
+#define _D_8008008_WIDTH 0x80
+#define _D_8008008_HEIGHT 0x8
+extern u16 D_8008808[];
+#define _D_8008808_WIDTH 0x80
+#define _D_8008808_HEIGHT 0x8
+extern u16 D_8009008[];
+#define _D_8009008_WIDTH 0x80
+#define _D_8009008_HEIGHT 0x8
+extern u16 D_8009808[];
+#define _D_8009808_WIDTH 0x80
+#define _D_8009808_HEIGHT 0x8
+extern u16 D_800A008[];
+#define _D_800A008_WIDTH 0x80
+#define _D_800A008_HEIGHT 0x8
+extern u16 D_800A808[];
+#define _D_800A808_WIDTH 0x80
+#define _D_800A808_HEIGHT 0x8
+extern u16 D_800B008[];
+#define _D_800B008_WIDTH 0x80
+#define _D_800B008_HEIGHT 0x8
+extern u16 D_800B808[];
+#define _D_800B808_WIDTH 0x80
+#define _D_800B808_HEIGHT 0x8
+extern u16 D_800C008[];
+#define _D_800C008_WIDTH 0x80
+#define _D_800C008_HEIGHT 0x10
+extern u16 D_800D008[];
+#define _D_800D008_WIDTH 0x80
+#define _D_800D008_HEIGHT 0x10
+extern u16 D_800E008[];
+#define _D_800E008_WIDTH 0x80
+#define _D_800E008_HEIGHT 0x10
+extern u16 D_800F008[];
+#define _D_800F008_WIDTH 0x80
+#define _D_800F008_HEIGHT 0x10
+extern u16 D_8010008[];
+#define _D_8010008_WIDTH 0x40
+#define _D_8010008_HEIGHT 0x20
+extern u16 D_8011008[];
+#define _D_8011008_WIDTH 0x40
+#define _D_8011008_HEIGHT 0x20
+extern u16 D_8012008[];
+#define _D_8012008_WIDTH 0x40
+#define _D_8012008_HEIGHT 0x20
+extern u16 D_8013008[];
+#define _D_8013008_WIDTH 0x40
+#define _D_8013008_HEIGHT 0x20
+extern Gfx D_8014008[];
+extern Gfx D_8014040[];
+extern Gfx D_8014078[];
+extern Gfx D_80140F0[];
+extern Gfx D_8014138[];
+extern Gfx D_8014180[];
+extern Gfx D_80141C8[];
+extern Gfx D_8014210[];
+extern Gfx D_8014268[];
+extern Gfx D_80142C0[];
+extern Gfx D_8014308[];
+extern Gfx D_8014350[];
+extern Gfx D_8014398[];
+extern Gfx D_80143E0[];
+extern Gfx D_8014430[];
+extern Gfx D_8014480[];
+extern Gfx D_80144D0[];
+extern Gfx D_8014520[];
+extern Gfx D_8014580[];
+extern Gfx D_80145E0[];
+extern Gfx D_8014640[];
+extern Gfx D_80146A0[];
+extern Vp D_80146A8;
+extern Vp D_80146B8;
+extern Vp D_80146C8;
+extern Vp D_80146D8;
+extern Vp D_80146E8;
+extern Vp D_80146F8;
+extern Vp D_8014708;
+extern Vp D_8014718;
+extern Vp D_8014728;
+extern Vp D_8014738;
+extern Vp D_8014748;
+extern Vp D_8014758;
+extern Vp D_8014768;
+extern Gfx D_8014780[];
+extern Gfx D_80147B0[];
+extern Gfx D_8014810[];
+extern Gfx D_8014888[];
+extern Gfx D_80148C0[];
+extern Gfx D_8014940[];
+extern Gfx D_80149A0[];
+extern Gfx D_80149D0[];
+extern u16 D_8014A20[];
+#define _D_8014A20_WIDTH 0x20
+#define _D_8014A20_HEIGHT 0x20
+extern u16 D_8015220[];
+#define _D_8015220_WIDTH 0x20
+#define _D_8015220_HEIGHT 0x20
+extern u16 D_8015A20[];
+#define _D_8015A20_WIDTH 0x20
+#define _D_8015A20_HEIGHT 0x20
+extern u16 aPitEffectTex[];
+#define _aPitEffectTex_WIDTH 0x20
+#define _aPitEffectTex_HEIGHT 0x20
+extern u16 aDashEffectTex[];
+#define _aDashEffectTex_WIDTH 0x10
+#define _aDashEffectTex_HEIGHT 0x10
+extern u16 aDirtEffectTex[];
+#define _aDirtEffectTex_WIDTH 0x20
+#define _aDirtEffectTex_HEIGHT 0x10
+extern u16 aIceEffectTex[];
+#define _aIceEffectTex_WIDTH 0x10
+#define _aIceEffectTex_HEIGHT 0x10
+extern Gfx D_8017220[];
+extern Gfx D_80172A0[];
+extern Vtx segment_16C8A0_seg8_vtx_17388[];
+extern Vtx segment_16C8A0_seg8_vtx_17478[];
+extern Vtx segment_16C8A0_seg8_vtx_174F8[];
+extern Vtx segment_16C8A0_seg8_vtx_17598[];
+extern Vtx segment_16C8A0_seg8_vtx_175D8[];
+extern u16 D_8017618[];
+#define _D_8017618_WIDTH 0x20
+#define _D_8017618_HEIGHT 0x20
+extern u16 D_8017E18[];
+#define _D_8017E18_WIDTH 0x20
+#define _D_8017E18_HEIGHT 0x20
+extern Gfx D_8018618[];
+extern Vtx segment_16C8A0_seg8_vtx_18778[];
+extern Vtx segment_16C8A0_seg8_vtx_187A8[];
+extern Vtx segment_16C8A0_seg8_vtx_187D8[];
+extern Vtx segment_16C8A0_seg8_vtx_18818[];
+extern Vtx segment_16C8A0_seg8_vtx_18858[];
+extern Vtx segment_16C8A0_seg8_vtx_18898[];
+extern Vtx segment_16C8A0_seg8_vtx_18938[];
+extern u16 D_80189F8[];
+#define _D_80189F8_WIDTH 0x20
+#define _D_80189F8_HEIGHT 0x20
+extern u16 D_80191F8[];
+#define _D_80191F8_WIDTH 0x20
+#define _D_80191F8_HEIGHT 0x20
+extern u16 D_80199F8[];
+#define _D_80199F8_WIDTH 0x20
+#define _D_80199F8_HEIGHT 0x20
+extern Gfx D_801A1F8[];
+extern Gfx D_801A278[];
+extern Vtx segment_16C8A0_seg8_vtx_1A318[];
+extern Vtx segment_16C8A0_seg8_vtx_1A3D8[];
+extern Vtx segment_16C8A0_seg8_vtx_1A5D8[];
+extern u16 D_801A6F8[];
+#define _D_801A6F8_WIDTH 0x20
+#define _D_801A6F8_HEIGHT 0x20
+extern Gfx D_801AEF8[];
+extern Vtx segment_16C8A0_seg8_vtx_1AF98[];
+extern u16 D_801B018[];
+#define _D_801B018_WIDTH 0x40
+#define _D_801B018_HEIGHT 0x20
+extern u16 D_801C018[];
+#define _D_801C018_WIDTH 0x40
+#define _D_801C018_HEIGHT 0x20
+extern u8 D_801D018[];
+extern Gfx D_801D030[];
+extern Gfx D_801D0B0[];
+extern Vtx segment_16C8A0_seg8_vtx_1D0E0[];
+extern u16 D_801D160[];
+#define _D_801D160_WIDTH 0x20
+#define _D_801D160_HEIGHT 0x20
+extern u16 D_801D960[];
+#define _D_801D960_WIDTH 0x20
+#define _D_801D960_HEIGHT 0x20
+extern u8 D_801E160[];
+extern Gfx D_801E178[];
+extern Gfx D_801E1F8[];
+extern Vtx segment_16C8A0_seg8_vtx_1E228[];
+extern u16 D_801E2A8[];
+#define _D_801E2A8_WIDTH 0x20
+#define _D_801E2A8_HEIGHT 0x20
+extern Gfx D_801EAA8[];
+extern Vtx segment_16C8A0_seg8_vtx_1EAD8[];
+extern Gfx D_801EBF8[];
+extern Vtx segment_16C8A0_seg8_vtx_1EC28[];
+extern Gfx D_801ED28[];
+extern Vtx segment_16C8A0_seg8_vtx_1ED60[];
+extern Gfx D_801EEA0[];
+extern Vtx segment_16C8A0_seg8_vtx_1EED8[];
+extern u16 D_801F018[];
+#define _D_801F018_WIDTH 0x20
+#define _D_801F018_HEIGHT 0x20
+extern Gfx D_801F818[];
+extern Vtx segment_16C8A0_seg8_vtx_1F838[];
+extern u16 D_801F8C8[];
+#define _D_801F8C8_WIDTH 0x20
+#define _D_801F8C8_HEIGHT 0x20
+extern Gfx D_80200C8[];
+extern Vtx segment_16C8A0_seg8_vtx_200F8[];
+extern u16 D_8020208[];
+#define _D_8020208_WIDTH 0x20
+#define _D_8020208_HEIGHT 0x40
+extern Gfx D_8021208[];
+extern Vtx segment_16C8A0_seg8_vtx_21240[];
+extern u16 D_8021380[];
+#define _D_8021380_WIDTH 0x20
+#define _D_8021380_HEIGHT 0x40
+extern Gfx D_8022380[];
+extern Gfx aSetupCourseEffectTextureDL[];
 
 #endif // FZX_ASSETS_H

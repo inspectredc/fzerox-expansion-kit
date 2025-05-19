@@ -65,4 +65,7 @@ typedef struct Controller {
     s32 unk_90;
 } Controller; // size = 0x94
 
+extern OSContStatus gControllerStatus[];
+extern Controller gControllers[];
+
 #endif // CONTROLLER
