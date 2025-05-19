@@ -32,7 +32,7 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/17490/func_8070D358.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/17490/func_8070D43C.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/17490/Controller_SetGlobalInputs.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/17490/func_8070D4A8.s")
 

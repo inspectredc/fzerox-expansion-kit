@@ -46,7 +46,7 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/107680/func_i2_800A6EB4.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/107680/func_i2_800A7024.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/107680/Save_UpdateCourseCharacterSave.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/107680/func_i2_800A706C.s")
 

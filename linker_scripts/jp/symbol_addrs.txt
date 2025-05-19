@@ -25,6 +25,9 @@ Audio_SetSoundMode = 0x80740B70;
 Math_Rand2Init = 0x806F6C58;
 Game_Init = 0x806F4B40;
 
+Controller_ClearInputs = 0x806F5AE0;
+Controller_UpdateInputs = 0x806F5B70;
+
 SLForceWritebackDCacheAll = 0x80704D74;
 SLLeoReadDiskID = 0x80704FF4;
 SLLeoReadWrite_DATA = 0x80705310;
@@ -41,13 +44,27 @@ SLMFSFlushManageArea = 0x8070752C;
 SLCheckDiskInsert = 0x80707964;
 SLCheckDiskChange2 = 0x80707A54;
 
+Controller_SetGlobalInputs = 0x8070D43C;
+
 // game data
 
 sSpTaskState = 0x8076C760;
 gRamDDCompatible = 0x8076C780;
 gGameFrameCount = 0x8076C7A0;
-gNumPlayers = 0x8076C7C8;
 gBodyHealthValues = 0x8076EF84;
+
+gNumPlayers = 0x8076C7C8;
+gCupType = 0x8076C7CC;
+gDifficulty = 0x8076C7D0;
+gTotalLapCount = 0x8076C7D4;
+sTitleDemoNumPlayerState = 0x8076C7DC;
+sTitleDemoCoursesState = 0x8076C7E0;
+sTitleDemoGameModes = 0x8076C7F0;
+sTitleDemoNumPlayers = 0x8076C7FC;
+sTitleDemoCourses = 0x8076C808;
+sGamemodeInitFuncs = 0x8076C818;
+sGamemodeUpdateFuncs = 0x8076C874;
+sGamemodeDrawFuncs = 0x8076C8D0;
 
 // game bss
 
@@ -74,10 +91,20 @@ sGfxTask = 0x8079A354;
 gMasterDisp = 0x8079A358;
 
 gGameMode = 0x8079A4B4;
+gQueuedGameMode = 0x8079A4B8;
+gGamePaused = 0x8079A4CC;
+
+gControllerPads = 0x8079A4F0;
+gControllers = 0x8079A508; // size:0x2E4
+gSharedController = 0x8079A7F0;
+gPlayerControlPorts = 0x8079A888;
+gControllersConnected = 0x8079A898;
 
 gSegments = 0x8079FA40;
+gInputButtonPressed = 0x8079FB1E;
 
-gPlayers = 0x807A0930; //size:0x770
+gPlayers = 0x807A0930; // size:0x770
+gPlayerEngine = 0x807A1600;
 
 // libultra
 

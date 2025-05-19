@@ -216,8 +216,8 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i6/EDA70/func_i6_80082438.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i6/EDA70/func_i6_8008256C.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i6/EDA70/Credits_Init.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i6/EDA70/func_i6_800825CC.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i6/EDA70/Credits_Update.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i6/EDA70/func_i6_80082638.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i6/EDA70/Credits_Draw.s")

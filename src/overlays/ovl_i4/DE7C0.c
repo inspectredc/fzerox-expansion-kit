@@ -1,16 +1,16 @@
 #include "common.h"
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/func_i4_8006F1B0.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/MachineSelect_Init.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/func_i4_8006F498.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/MachineSettings_Init.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/func_i4_8006F6DC.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/MachineSelect_Update.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/func_i4_8006FC94.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/MachineSettings_Update.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/func_i4_80070184.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/MachineSelect_Draw.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/func_i4_800701D0.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/MachineSettings_Draw.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/func_i4_8007021C.s")
 

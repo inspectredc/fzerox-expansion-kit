@@ -1,7 +1,8 @@
 func_i3_8003F2E0 = 0x8003F2E0; //segment:ovl_i3
 func_i3_80059EC0 = 0x80059EC0; //segment:ovl_i3
-func_i3_8005F6A8 = 0x8005F6A8; //segment:ovl_i3
+func_i3_ResetLivesChangeCounter = 0x8005F6A8; //segment:ovl_i3
 
+Save_UpdateCourseCharacterSave = 0x800A7024; //segment:ovl_i2
 func_i2_800A762C = 0x800A762C; //segment:ovl_i2
 func_i2_800A9728 = 0x800A9728; //segment:ovl_i2
 func_i2_800AB6B0 = 0x800AB6B0; //segment:ovl_i2
@@ -34,6 +35,8 @@ func_i2_800BEA18 = 0x800BEA18; //segment:ovl_i2
 
 gSettingSoundMode = 0x800D1300; //segment:ovl_i2
 gCourseData = 0x800C3230; //segment:ovl_i2 size:0x7E0
+gCurrentCourseInfo = 0x800D65C0; //segment:ovl_i2
+gCourseIndex = 0x800D65C4; //segment:ovl_i2
 
 func_xk1_80025C00 = 0x80025C00; //segment:ovl_xk1
 func_xk1_8002FFDC = 0x8002FFDC; //segment:ovl_xk1
@@ -339,6 +342,49 @@ Machine_DrawLoadBlueFalconTextures = 0x8012ADB8; //segment:ovl_i9
 sFrontMachineDrawFuncs = 0x8012B360; //segment:ovl_i9
 sRearMachineDrawFuncs = 0x8012B3EC; //segment:ovl_i9
 sWingMachineDrawFuncs = 0x8012B478; //segment:ovl_i9
+
+// misc mix
+
+Title_Init = 0x80074450; //segment:ovl_i4
+Race_Init = 0x800AAC2C; //segment:ovl_i2
+Records_Init = 0x8009B170; //segment:ovl_i8
+MainMenu_Init = 0x8007C2B0; //segment:ovl_i6
+MachineSelect_Init = 0x8006F1B0; //segment:ovl_i4
+MachineSettings_Init = 0x8006F498; //segment:ovl_i4
+CourseSelect_Init = 0x80077F10; //segment:course_select
+Credits_Init = 0x8008256C; //segment:ovl_i6
+CourseEdit_Init = 0x800EC5C4; //segment:course_edit
+NextCourseSelect_Init = 0x8007842C; //segment:course_select
+MachineCreate_Init = 0x8012B520; //segment:machine_create
+EndingCutscene_Init = 0x800928E4; //segment:ovl_i7
+OptionsMenu_Init = 0x80082670; //segment:ovl_i6
+
+Title_Update = 0x80074530; //segment:ovl_i4
+Race_Update = 0x800AAD50; //segment:ovl_i2
+Records_Update = 0x8009B904; //segment:ovl_i8
+MainMenu_Update = 0x8007C4E0; //segment:ovl_i6
+MachineSelect_Update = 0x8006F6DC; //segment:ovl_i4
+MachineSettings_Update = 0x8006FC94; //segment:ovl_i4
+CourseSelect_Update = 0x80078660; //segment:course_select
+Credits_Update = 0x800825CC; //segment:ovl_i6
+CourseEdit_Update = 0x800ECE70; //segment:course_edit
+NextCourseSelect_Update = 0x800790CC; //segment:course_select
+MachineCreate_Update = 0x8012B768; //segment:machine_create
+EndingCutscene_Update = 0x8009306C; //segment:ovl_i7
+OptionsMenu_Update = 0x80082CFC; //segment:ovl_i6
+
+Title_Draw = 0x80074688; //segment:ovl_i4
+Race_Draw = 0x800AADA4; //segment:ovl_i2
+Records_Draw = 0x8009C4B0; //segment:ovl_i8
+MainMenu_Draw = 0x8007CC68; //segment:ovl_i6
+MachineSelect_Draw = 0x80070184; //segment:ovl_i4
+MachineSettings_Draw = 0x800701D0; //segment:ovl_i4
+CourseSelect_Draw = 0x80079184; //segment:course_select
+Credits_Draw = 0x80082638; //segment:ovl_i6
+CourseEdit_Draw = 0x800ED7A0; //segment:course_edit
+MachineCreate_Draw = 0x8012B84C; //segment:machine_create
+EndingCutscene_Draw = 0x800936E0; //segment:ovl_i7
+OptionsMenu_Draw = 0x800833D8; //segment:ovl_i6
 
 // rodata migrations
 

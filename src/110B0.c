@@ -1,6 +1,6 @@
 #include "global.h"
 
-extern Controller D_8079A7F0;
+extern Controller gSharedController;
 extern OSMesgQueue gSerialEventQueue;
 
 void func_807038B0(void) {
@@ -14,8 +14,8 @@ void func_807038B0(void) {
     sp24 = osRecvMesg(&gSerialEventQueue, NULL, 0);
     do {
         osContStartReadData(&gSerialEventQueue);
-        func_806F5B70();
-    } while (!(D_8079A7F0.buttonPressed & BTN_A));
+        Controller_UpdateInputs();
+    } while (!(gSharedController.buttonPressed & BTN_A));
     if (sp24 != -1) {
         osContStartReadData(&gSerialEventQueue);
     }
@@ -29,8 +29,8 @@ void func_80703948(void) {
     sp24 = osRecvMesg(&gSerialEventQueue, NULL, 0);
     do {
         osContStartReadData(&gSerialEventQueue);
-        func_806F5B70();
-    } while (!(D_8079A7F0.buttonPressed & BTN_A));
+        Controller_UpdateInputs();
+    } while (!(gSharedController.buttonPressed & BTN_A));
     if (sp24 != -1) {
         osContStartReadData(&gSerialEventQueue);
     }

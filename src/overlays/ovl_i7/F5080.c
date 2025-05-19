@@ -4,13 +4,13 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i7/F5080/func_i7_80092880.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i7/F5080/func_i7_800928E4.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i7/F5080/EndingCutscene_Init.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i7/F5080/func_i7_8009306C.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i7/F5080/EndingCutscene_Update.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i7/F5080/func_i7_8009318C.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i7/F5080/func_i7_800936E0.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i7/F5080/EndingCutscene_Draw.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i7/F5080/func_i7_80093A18.s")
 
