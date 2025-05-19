@@ -1,8 +1,14 @@
 #include "global.h"
+#include "fzx_assets.h"
+
+OSContStatus gControllerStatus[MAXCONTROLLERS];
+OSContPad gControllerPads[MAXCONTROLLERS];
+Controller gControllers[MAXCONTROLLERS + 1];
+Controller gSharedController;
+s32 gPlayerControlPorts[MAXCONTROLLERS];
+s32 gControllersConnected;
 
 extern s16 D_8076C938;
-extern Controller gControllers[];
-extern Controller gSharedController;
 
 void func_806F5A50(void) {
     s32 i;
@@ -197,21 +203,21 @@ void Controller_UpdateInputs(void) {
     }
 }
 
-extern OSContStatus D_8079A4E0[];
+extern OSContStatus gControllerStatus[];
 
 void Controller_Init(void) {
     s32 i;
     u8 sp53;
 
-    osContInit(&gSerialEventQueue, &sp53, D_8079A4E0);
+    osContInit(&gSerialEventQueue, &sp53, gControllerStatus);
     gControllersConnected = 0;
 
     for (i = 0; i < MAXCONTROLLERS; i++) {
 
-        gControllers[i].errno = D_8079A4E0[i].errno;
+        gControllers[i].errno = gControllerStatus[i].errno;
         gControllers[i].unk_72 = gControllers[i].unk_74 = gControllers[i].unk_76 = gControllers[i].unk_78 = 0;
         gControllers[i].unk_88 = gControllers[i].unk_8C = gControllers[i].unk_90 = 0;
-        if (D_8079A4E0[i].errno == 0) {
+        if (gControllerStatus[i].errno == 0) {
             gPlayerControlPorts[gControllersConnected] = i;
             gControllersConnected++;
             if (osMotorInit(&gSerialEventQueue, &gControllers[i].pfs, i) == 0) {
@@ -227,96 +233,3 @@ void Controller_Init(void) {
 
     Controller_ClearInputs();
 }
-
-extern OSContStatus D_8079A4E0[];
-
-Controller* Controller_GetMouse(void) {
-    s32 i;
-
-    for (i = 0; i < MAXCONTROLLERS; i++) {
-        if ((D_8079A4E0[i].type & CONT_TYPE_MASK) == CONT_TYPE_MOUSE) {
-            return &gControllers[i];
-        }
-    }
-
-    return NULL;
-}
-
-extern RomOffset D_807C70A0[];
-
-void func_806F62AC(u64* arg0) {
-    u64* var_s0 = &arg0[19199];
-    s32 var_s1;
-
-    // FAKE?
-    while (var_s0 >= arg0) {
-        *(--var_s0 + 1) = 0x1000100010001;
-    }
-    osWritebackDCache(arg0, SCREEN_HEIGHT * SCREEN_WIDTH * sizeof(u16));
-
-    var_s0 = &arg0[5624];
-
-    for (var_s1 = 0; var_s1 < 0x6A00; var_s1 += 0x100, var_s0 += 80) {
-        func_80701C04(D_807C70A0[6] + var_s1 + sizeof(Gfx), var_s0, 0x100);
-    }
-}
-
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/3250/func_806F6360.s")
-
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/3250/func_806F6700.s")
-
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/3250/Math_SinTableInit.s")
-
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/3250/Math_Rand1Init.s")
-
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/3250/Math_Rand2Init.s")
-
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/3250/func_806F6C6C.s")
-
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/3250/func_806F6CCC.s")
-
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/3250/func_806F6D34.s")
-
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/3250/func_806F6D8C.s")
-
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/3250/func_806F6F64.s")
-
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/3250/func_806F7138.s")
-
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/3250/func_806F731C.s")
-
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/3250/func_806F7338.s")
-
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/3250/func_806F7354.s")
-
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/3250/func_806F7364.s")
-
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/3250/func_806F73D0.s")
-
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/3250/func_806F74E0.s")
-
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/3250/func_806F7684.s")
-
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/3250/func_806F7C50.s")
-
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/3250/func_806F7EC8.s")
-
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/3250/func_806F7F30.s")
-
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/3250/func_806F7FCC.s")
-
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/3250/func_806F8314.s")
-
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/3250/func_806F85C0.s")
-
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/3250/func_806F86C0.s")
-
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/3250/func_806F8868.s")
-
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/3250/func_806F8E54.s")
-
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/3250/func_806F8FE0.s")
-
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/3250/func_806F9384.s")
-
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/3250/func_806F9628.s")

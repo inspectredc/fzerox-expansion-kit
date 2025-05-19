@@ -47,8 +47,9 @@ typedef struct unk_807C6EA8 {
 
 typedef struct unk_80225800 {
     Mtx unk_000;
-    Vtx unk_040[4][6];
-    Vtx unk_1C0[48][5];
+    Vtx unk_040[4 * 6];
+    s8 pad_1C0[0x180];
+    Vtx unk_1C0[48 * 5];
 } unk_80225800; // size = 0x10C0
 
 typedef struct Player {
@@ -212,10 +213,10 @@ typedef struct unk_802D3D38 {
 } unk_802D3D38; // size = 0x40
 
 typedef struct unk_802D3978 {
-    s32 unk_00;
+    // s32 unk_00; Field Removed in DD Version
     Vec3f unk_04;
     s8 unk_10[0x4];
-} unk_802D3978; // size = 0x14
+} unk_802D3978; // size = 0x10
 
 typedef struct unk_802D3E38 {
     s32 effectType;

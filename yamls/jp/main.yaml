@@ -70,6 +70,8 @@
       - [0x2260, c]
       - [0x2340, c]
       - [0x3250, c]
+      - [0x3A10, c]
+      - [0x6F40, pad]
       - [0x6F50, c]
       - [0x10AB0, c]
       - [0x10B20, c]
@@ -288,7 +290,8 @@
       - [0x79FA0, .data, CE0]
       - [0x79FB0, .data, 2260]
       - [0x79FC0, .data, 2340]
-      - [0x7A140, data]
+      - [0x7A140, .data, 3A10]
+      - [0x7A150, data]
       - [0x7DB20, .data, audio/filter_data]
       - [0x7DD10, .data, audio/note_data]
       - [0x7F130, .data, audio/synthesis]
@@ -379,7 +382,7 @@
       - [0x80A80, .rodata, 60]
       - [0x80A90, .rodata, CE0]
       - [0x80AA0, .rodata, 2340]
-      - [0x80D70, .rodata, 3250]
+      - [0x80D70, .rodata, 3A10]
       - [0x80DF0, .rodata, 6F50]
       - [0x81210, .rodata, 10B20]
       - [0x81230, .rodata, 110B0]
@@ -443,7 +446,9 @@
       - { type: .bss, vram: 0x8079A350, name: CE0 }
       - { type: .bss, vram: 0x8079A4A0, name: 2260 }
       - { type: .bss, vram: 0x8079A4B0, name: 2340 }
-      - { type: bss, vram: 0x8079A4E0, name: 8079A4E0}
+      - { type: .bss, vram: 0x8079A4E0, name: 3250 }
+      - { type: .bss, vram: 0x8079A8A0, name: 3A10 }
+      - { type: bss, vram: 0x8079E920, name: 8079E920 }
       - { type: .bss, vram: 0x807C1C00, name: libultra/io/sptask }
       - { type: .bss, vram: 0x807C1C40, name: libultra/io/motor }
       - { type: .bss, vram: 0x807C1D40, name: libultra/io/siacs }

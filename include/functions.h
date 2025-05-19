@@ -25,22 +25,30 @@ Gfx* Segment_SetTableAddresses(Gfx*);
 s32 Segment_SetAddress(s32 segment, s32 addr);
 
 void mio0Decode(u8*, void*);
-void Math_SinTableInit(void);
-void Math_Rand1Init(s32 seed, s32 mask);
-void Math_Rand2Init(s32 seed, s32 mask);
 void Audio_SetSoundMode(u8 soundMode);
 void Game_Init(void);
 
 void Controller_UpdateInputs(void);
 void Controller_Init(void);
 
+void Math_SinTableInit(void);
+void Math_Rand1Init(s32 seed, s32 mask);
+void Math_Rand2Init(s32 seed, s32 mask);
+s32 Math_Round(f32 num);
 void func_806F86C0(Mtx*, MtxF*, f32, s32, s32, s32, f32, f32, f32);
+void func_806F7FCC(Mtx*, MtxF*, f32, f32, f32, f32, f32, f32, f32, f32, f32, f32, f32, f32);
+void func_806F8868(Mtx*, MtxF*, f32, s32, f32, f32, f32, f32, f32, f32);
 
 void func_80701C04(void* romAddr, void* ramAddr, size_t size);
 void func_80701D7C(u8* romAddr, u8* ramAddr, size_t size);
 
+
 void func_80702A68(void);
 void func_80702A94(void);
+
+void func_80703320(f32*, f32*);
+s32 func_80703444(Vec3f*, f32);
+
 void func_807038B0(void);
 void func_80703948(void);
 s32 func_80703CA4(s32 startLba, void* vram, s32 diskSize, s32 bssSize);
@@ -129,6 +137,10 @@ void func_i2_800AABD0(void);
 void func_i2_800B079C(void);
 void func_i2_800B07F0(void);
 void func_i2_800B0D10(s32);
+f32 func_i2_800B20D0(CourseSegment*, f32, f32*);
+f32 func_i2_800B2500(CourseSegment*, f32, Vec3f*);
+void func_i2_800B26B8(CourseSegment*, f32, Vec3f*);
+f32 func_i2_800B2824(CourseSegment*, f32, Mtx3F*, f32);
 void func_i2_800B904C(void);
 
 void func_i3_ResetLivesChangeCounter(void);

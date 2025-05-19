@@ -19,14 +19,26 @@ Gfx_SetTask = 0x806F3698;
 
 mio0Decode = 0x8072E3B0;
 
-Math_SinTableInit = 0x806F6A38;
-Math_Rand1Init = 0x806F6C44;
-Audio_SetSoundMode = 0x80740B70;
-Math_Rand2Init = 0x806F6C58;
 Game_Init = 0x806F4B40;
 
 Controller_ClearInputs = 0x806F5AE0;
 Controller_UpdateInputs = 0x806F5B70;
+
+Math_SinTableInit = 0x806F6A38;
+Math_Rand1Init = 0x806F6C44;
+Math_Rand2Init = 0x806F6C58;
+Math_Rand1 = 0x806F6C6C;
+Math_Rand2 = 0x806F6CCC;
+Math_Round = 0x806F6D34;
+Lights_SetAmbient = 0x806F731C;
+Lights_SetColor = 0x806F7338;
+Lights_SetDirection = 0x806F7354;
+Lights_SetSource = 0x806F7364;
+Light_SetLookAtSource = 0x806F73D0;
+Matrix_FromMtx = 0x806F7EC8;
+Matrix_ToMtx = 0x806F7F30;
+
+CourseFeature_IsDecorational = 0x806F9750;
 
 SLForceWritebackDCacheAll = 0x80704D74;
 SLLeoReadDiskID = 0x80704FF4;
@@ -66,6 +78,11 @@ sGamemodeInitFuncs = 0x8076C818;
 sGamemodeUpdateFuncs = 0x8076C874;
 sGamemodeDrawFuncs = 0x8076C8D0;
 
+gRandSeed1 = 0x8076C940;
+gRandMask1 = 0x8076C944;
+gRandSeed2 = 0x8076C948;
+gRandMask2 = 0x8076C94C;
+
 // game bss
 
 sMainThreadStack = 0x80795A70;
@@ -97,14 +114,18 @@ gGamePaused = 0x8079A4CC;
 gControllerPads = 0x8079A4F0;
 gControllers = 0x8079A508; // size:0x2E4
 gSharedController = 0x8079A7F0;
-gPlayerControlPorts = 0x8079A888;
+gPlayerControlPorts = 0x8079A888; // size:0x10
 gControllersConnected = 0x8079A898;
+
+gSinTable = 0x8079A8A0; // size:0x4000
 
 gSegments = 0x8079FA40;
 gInputButtonPressed = 0x8079FB1E;
 
 gPlayers = 0x807A0930; // size:0x770
 gPlayerEngine = 0x807A1600;
+
+D_802259C0 = 0x802259C0;
 
 // libultra
 
@@ -703,6 +724,7 @@ AudioSeq_ResetSequencePlayer = 0x80740448;
 AudioSeq_InitSequencePlayerChannels = 0x80740514;
 AudioSeq_InitSequencePlayers = 0x807406BC;
 
+Audio_SetSoundMode = 0x80740B70;
 Audio_SetupCreateTask = 0x80745BDC;
 
 // audio data
