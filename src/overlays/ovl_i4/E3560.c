@@ -10,11 +10,11 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/E3560/func_i4_80074314.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/E3560/func_i4_80074450.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/E3560/Title_Init.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/E3560/func_i4_80074530.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/E3560/Title_Update.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/E3560/func_i4_80074688.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/E3560/Title_Draw.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/E3560/func_i4_800746A8.s")
 

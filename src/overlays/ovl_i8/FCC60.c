@@ -1,6 +1,6 @@
 #include "common.h"
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i8/FCC60/func_i8_8009B170.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i8/FCC60/Records_Init.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i8/FCC60/func_i8_8009B348.s")
 
@@ -10,7 +10,7 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i8/FCC60/func_i8_8009B81C.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i8/FCC60/func_i8_8009B904.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i8/FCC60/Records_Update.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i8/FCC60/func_i8_8009BB60.s")
 
@@ -20,7 +20,7 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i8/FCC60/func_i8_8009C44C.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i8/FCC60/func_i8_8009C4B0.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i8/FCC60/Records_Draw.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i8/FCC60/func_i8_8009C708.s")
 
