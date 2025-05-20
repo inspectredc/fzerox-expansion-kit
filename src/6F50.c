@@ -24,7 +24,10 @@ typedef struct unk_80128C94 {
     s8 unk_0000[0x53A0];
     Vtx unk_53A0[0x30];
     Vtx unk_56A0[0x30];
-    s8 unk_59A0[0x9800];
+    s8 unk_59A0[0xC00];
+    Vtx unk_65A0[0x800];
+    Vtx unk_E5A0[0x80];
+    s8 unk_EDA0[0x400];
     Mtx unk_F1A0[0x1];
 } unk_80128C94;
 
@@ -614,7 +617,6 @@ Gfx* func_806FC9FC(Gfx* gfx) {
     return gfx;
 }
 
-
 Gfx* func_806FCAF8(Gfx* gfx) {
 
     if (D_8079F938 != 4) {
@@ -903,12 +905,12 @@ void func_806FD3C0(s32 arg0, unk_8006FF90_arg_1* arg1, Vtx** arg2) {
     *arg2 = vtx;
 }
 
-#ifdef IMPORT_DATA
 extern s32 D_8076C9E4;
 extern s32 D_8079F940;
 extern u8 D_xk2_80104CA7;
 extern Vtx* D_8079F944;
 
+#ifdef IMPORT_DATA
 Vtx* func_806FDA64(CourseSegment* arg0, f32 arg1, unk_8006FF90_arg_1* arg2, Vtx* arg3, f32 arg4, f32 arg5) {
     bool sp114 = false;
     f32 temp_fa1;
@@ -926,7 +928,6 @@ Vtx* func_806FDA64(CourseSegment* arg0, f32 arg1, unk_8006FF90_arg_1* arg2, Vtx*
     Vec3f spB8 = { 0.0f, 0.0f, 0.0f };
     Vec3f spAC = { 0.0f, 0.0f, 0.0f };
     Mtx3F sp88;
-    f32 temp = 1.0f;
 
     var_s2 = 0;
 
@@ -1018,7 +1019,7 @@ Vtx* func_806FDA64(CourseSegment* arg0, f32 arg1, unk_8006FF90_arg_1* arg2, Vtx*
 
             if (arg2->unk_0C <= arg1) {
                 arg1 = arg2->unk_0C;
-                continue;
+            } else {
             }
         }
     }
@@ -1026,45 +1027,1951 @@ Vtx* func_806FDA64(CourseSegment* arg0, f32 arg1, unk_8006FF90_arg_1* arg2, Vtx*
 }
 #else
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/6F50/func_806FDA64.s")
+Vtx* func_806FDA64(CourseSegment* arg0, f32 arg1, unk_8006FF90_arg_1* arg2, Vtx* arg3, f32 arg4, f32 arg5);
 #endif
 
+#ifdef IMPORT_DATA
+extern s32 D_80128690[][3];
+typedef struct unk_8011C220 {
+    s8 unk_00[0x4];
+    f32 unk_04;
+    Vec3f unk_08;
+    Mtx3F unk_14;
+} unk_8011C220;
+
+extern unk_8011C220 D_8011C220[];
+
+Vtx* func_806FE174(CourseSegment* arg0, unk_8006FF90_arg_1* arg1, Vtx* arg2, f32 arg3, f32 arg4) {
+    s32 i;
+    bool sp120 = false;
+    f32 temp_fv0;
+    f32 sp118;
+    s32 pad;
+    f32 sp110;
+    f32 sp10C;
+    s32 var_s2;
+    Vec3f spFC;
+    f32 spF8;
+    f32 spF4;
+    f32 temp_fv1;
+    Vec3f spE4;
+    Vec3f spD8 = { 0.0f, 0.0f, 0.0f };
+    Vec3f spCC = { 0.0f, 0.0f, 0.0f };
+    Vec3f spC0 = { 0.0f, 0.0f, 0.0f };
+    Vec3f spB4 = { 0.0f, 0.0f, 0.0f };
+    Mtx3F sp90;
+
+    var_s2 = 0;
+
+    i = D_80128690[arg0->segmentIndex][0];
+
+    if (i >= 0x10000) {
+        return arg2;
+    }
+
+    sp118 = D_8011C220[i].unk_04;
+
+    while (true) {
+        temp_fv0 = func_i2_800B20D0(arg0, sp118, &spFC);
+        spE4.x = D_8011C220[i].unk_08.x;
+        spE4.y = D_8011C220[i].unk_08.y;
+        spE4.z = D_8011C220[i].unk_08.z;
+        sp90 = D_8011C220[i].unk_14;
+
+        spE4.x += sp90.y.x * 10.0f;
+        spE4.y += sp90.y.y * 10.0f;
+        spE4.z += sp90.y.z * 10.0f;
+
+        spF8 = arg0->radiusLeft + ((arg0->next->radiusLeft - arg0->radiusLeft) * temp_fv0);
+        spF4 = arg0->radiusRight + ((arg0->next->radiusRight - arg0->radiusRight) * temp_fv0);
+
+        temp_fv1 = spF8 + spF4;
+        temp_fv1 /= 2.0f;
+
+        if (arg1->unk_10 < -1.0f * temp_fv1) {
+            sp110 = -1.0f * temp_fv1;
+        } else {
+            sp110 = arg1->unk_10;
+        }
+
+        if (temp_fv1 < arg1->unk_14) {
+            sp10C = temp_fv1;
+        } else {
+            sp10C = arg1->unk_14;
+        }
+
+        spE4.x += sp90.z.x * (spF8 - temp_fv1);
+        spE4.y += sp90.z.y * (spF8 - temp_fv1);
+        spE4.z += sp90.z.z * (spF8 - temp_fv1);
+
+        spCC.x = Math_Round((sp90.z.x * sp110) + spE4.x);
+        spCC.y = Math_Round((sp90.z.y * sp110) + spE4.y);
+        spCC.z = Math_Round((sp90.z.z * sp110) + spE4.z);
+        spB4.x = Math_Round((sp90.z.x * sp10C) + spE4.x);
+        spB4.y = Math_Round((sp90.z.y * sp10C) + spE4.y);
+        spB4.z = Math_Round((sp90.z.z * sp10C) + spE4.z);
+        if (!sp120) {
+            spD8 = spCC;
+            spC0 = spB4;
+            sp120 = true;
+        }
+        arg3 += 4.5f * func_807032B0(spCC, spD8);
+        arg4 += 4.5f * func_807032B0(spB4, spC0);
+        if ((arg3 > 32768.0f) || (arg4 > 32768.0f)) {
+            arg3 = (func_807032B0(spCC, spD8) * 4.5f) + -32768.0f;
+            arg4 = (func_807032B0(spB4, spC0) * 4.5f) + -32768.0f;
+        }
+        arg2->v.ob[0] = spCC.x;
+        arg2->v.ob[1] = spCC.y;
+        arg2->v.ob[2] = spCC.z;
+        spD8 = spCC;
+        arg2->v.tc[0] = 0;
+        arg2->v.tc[1] = arg3 * 1;
+        arg2++;
+        D_8076C9E4++;
+        var_s2++;
+
+        arg2->v.ob[0] = spB4.x;
+        arg2->v.ob[1] = spB4.y;
+        arg2->v.ob[2] = spB4.z;
+        spC0 = spB4;
+        arg2->v.tc[0] = func_807032B0(spCC, spB4) * 3.0f * 1;
+        arg2->v.tc[1] = arg4 * 1;
+        arg2++;
+        D_8076C9E4++;
+        var_s2++;
+
+        if (D_8076C9E4 >= D_8079F940) {
+            D_xk2_80104CA7 = 1;
+            return arg2;
+        }
+
+        if (sp118 == arg1->unk_0C) {
+            break;
+        }
+
+        if (var_s2 == 0x20) {
+            var_s2 = 0;
+            while (true) {
+                arg3 -= 1024.0f;
+                arg4 -= 1024.0f;
+                if (arg3 < -31744.0f || arg4 < -31744.0f) {
+                    break;
+                }
+            }
+        } else {
+            if (D_8011C220[i + 1].unk_04 < sp118) {
+                sp118 = 1.0f;
+            } else {
+                sp118 = D_8011C220[i + 1].unk_04;
+            }
+            i++;
+        }
+    }
+    return arg2;
+}
+#else
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/6F50/func_806FE174.s")
+Vtx* func_806FE174(CourseSegment* arg0, unk_8006FF90_arg_1* arg1, Vtx* arg2, f32 arg3, f32 arg4);
+#endif
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/6F50/func_806FE8F8.s")
+extern s32 D_8079A35C;
+extern s32 D_8079F93C;
+extern s32 D_8079F940;
+extern Vtx D_80226A40[];
+extern Vtx D_8022EA40[];
+extern unk_802D2D70 D_807BDD68;
+extern unk_802D2D78 D_807BDD70[][0xC0];
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/6F50/func_806FEEEC.s")
+void func_806FE8F8(s32 arg0) {
+    s32 i;
+    s32 j;
+    CourseSegment* courseSegment;
+    unk_8006FF90_arg_1* temp_s0;
+    s32 pad[2];
+    unk_802D2D70* temp;
+    f32 temp_fa0;
+    f32 temp_fv0;
+    Vtx* spA8;
+    Vtx* spA4;
+    unk_802D2D70* var_s2;
+    s32 temp_v0;
+    f32 var_fv0;
+    f32 var_fv1;
+    unk_802D2D78* var_a2;
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/6F50/func_806FF12C.s")
+    D_8076C9E4 = 0;
+    if ((D_8076C954 != 0) && (D_8076C950 == 0)) {
+        D_8079F93C = D_8079A35C;
+        D_8079F940 = 0x400;
+        D_8079F944 = D_80128C94->unk_65A0;
+        spA8 = D_80128C94->unk_65A0;
+        spA4 = D_80128C94->unk_E5A0;
+        var_s2 = &D_807BDD68;
+    } else {
+        D_8079F93C = 0;
+        D_8079F940 = 0x800;
+        D_8079F944 = D_80226A40;
+        spA8 = D_80226A40;
+        spA4 = D_8022EA40;
+        var_s2 = &D_807BDD68;
+    }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/6F50/func_806FF364.s")
+    for (i = 0; i < var_s2->count; i++) {
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/6F50/func_806FF598.s")
+        temp_s0 = &var_s2->unk_00[i];
+        courseSegment = &gCurrentCourseInfo->courseSegments[temp_s0->segmentIndex];
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/6F50/func_806FF630.s")
+        D_807BDD70[D_8079F93C][i].effectType = temp_s0->effectType;
+        D_807BDD70[D_8079F93C][i].vtxStart = spA8;
+        D_807BFA70[i].effectType = temp_s0->effectType;
+        D_807BFA70[i].unk_04 = temp_s0->unk_08;
+        D_807BFA70[i].unk_08 = temp_s0->unk_0C;
+        D_807BFA70[i].unk_0C.x = temp_s0->unk_10;
+        D_807BFA70[i].unk_18.x = temp_s0->unk_14;
+        temp_fa0 = temp_s0->unk_08;
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/6F50/func_80700254.s")
+        if (temp_s0->effectType == COURSE_EFFECT_DASH) {
+            var_fv1 = (courseSegment->radiusLeft + courseSegment->radiusRight) / 520.0f;
+            if (var_fv1 < 1.0f) {
+                var_fv1 = 1.0f;
+            } else {
+            }
+            D_8076C9D8 = 150.0f * var_fv1;
+            D_8076C9DC = 50.0f * var_fv1;
+            D_8076C9E0 = 50.0f * var_fv1;
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/6F50/func_80700570.s")
+            switch (courseSegment->trackSegmentInfo & TRACK_SHAPE_MASK) {
+                case TRACK_SHAPE_ROAD:
+                case TRACK_SHAPE_WALLED_ROAD:
+                case TRACK_SHAPE_TUNNEL:
+                case TRACK_SHAPE_BORDERLESS_ROAD:
+                    func_806FCECC(i, temp_s0, &spA4);
+                    break;
+                default:
+                    func_806FD3C0(i, temp_s0, &spA4);
+                    break;
+            }
+        } else {
+            var_fv0 = -32768.0f;
+            var_fv1 = -32768.0f;
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/6F50/func_807009C8.s")
+            for (j = 0; j < i; j++) {
+                if ((temp_s0->segmentIndex == (var_s2->unk_00[j].segmentIndex + 1)) &&
+                    (temp_s0->effectType == var_s2->unk_00[j].effectType) && (var_s2->unk_00[j].unk_0C == 1.0f) &&
+                    (temp_s0->unk_10 == var_s2->unk_00[j].unk_10) && (temp_s0->unk_14 == var_s2->unk_00[j].unk_14)) {
+                    // float calculation just needs to be 1.0f
+                    var_fv0 = (D_807BDD70[D_8079F93C][j].vtxEnd - 2)->v.tc[1] / (2.0f - 1.0f);
+                    var_fv1 = (D_807BDD70[D_8079F93C][j].vtxEnd - 1)->v.tc[1] / (2.0f - 1.0f);
+                    while (true) {
+                        var_fv0 -= 1024.0f;
+                        var_fv1 -= 1024.0f;
+                        if (var_fv0 < -31744.0f || var_fv1 < -31744.0f) {
+                            break;
+                        }
+                    }
+                }
+            }
+            if (arg0 == 0) {
+                spA8 = func_806FDA64(courseSegment, temp_fa0, temp_s0, spA8, var_fv0, var_fv1);
+            } else {
+                spA8 = func_806FE174(courseSegment, temp_s0, spA8, var_fv0, var_fv1);
+            }
+            if (D_8076C9E4 >= D_8079F940) {
+                var_s2->count = i - 1;
+            }
+        }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/6F50/func_80700B18.s")
+        D_807BDD70[D_8079F93C][i].vtxEnd = spA8;
+    }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/6F50/func_80700CE4.s")
+    for (i = 0; i < gCurrentCourseInfo->segmentCount; i++) {
+        gCurrentCourseInfo->courseSegments[i].unk_54 = NULL;
+        gCurrentCourseInfo->courseSegments[i].unk_58 = NULL;
+    }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/6F50/func_80700EBC.s")
+    for (i = 0; i < gCurrentCourseInfo->segmentCount; i++) {
+        for (j = 0; j < var_s2->count; j++) {
+            temp_s0 = &var_s2->unk_00[j];
+            if (i == temp_s0->segmentIndex) {
+                gCurrentCourseInfo->courseSegments[i].unk_58 = &D_807BFA70[j + 1];
+            }
+        }
+    }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/6F50/func_80701094.s")
+    for (i = 0; i < gCurrentCourseInfo->segmentCount; i++) {
+        for (j = var_s2->count - 1; j >= 0; j--) {
+            temp_s0 = &var_s2->unk_00[j];
+            if (i == temp_s0->segmentIndex) {
+                gCurrentCourseInfo->courseSegments[i].unk_54 = &D_807BFA70[j];
+            }
+        }
+    }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/6F50/func_80701328.s")
+    for (i = 0; i < (temp = var_s2)->count; i++) {}
+}
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/6F50/func_80701360.s")
+extern unk_8006FF90_arg_1 D_807BCB68[];
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/6F50/func_807016AC.s")
+void func_806FEEEC(s32 courseIndex, s32 segmentIndex) {
+    s32 index = D_807BDD68.count;
+    unk_8006FF90_arg_1* var_v1 = &D_807BDD68.unk_00[index];
+    CourseSegment* courseSegment;
+    f32 var_fv0 = 100.0f;
+    f32 var_fa0;
+    f32 temp_fv1;
+    f32 temp_ft4;
+    f32 temp_fs1;
+    f32 temp_fs3;
+    f32 temp;
+    s32 pad[6];
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/6F50/func_80701754.s")
+    courseSegment = &gCourseInfos[courseIndex].courseSegments[segmentIndex];
+    temp_fv1 = courseSegment->radiusLeft + courseSegment->radiusRight;
+    temp_ft4 = courseSegment->next->radiusLeft + courseSegment->next->radiusRight;
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/6F50/func_8070183C.s")
+    temp_fs3 = (courseSegment->radiusLeft - courseSegment->radiusRight) / 2;
+    temp_fs1 = (courseSegment->next->radiusLeft - courseSegment->next->radiusRight) / 2;
+    temp_fs1 -= temp_fs3;
+
+    if (courseIndex >= COURSE_EDIT_1 || D_8076C950 != 0) {
+        if (temp_fv1 < temp_ft4) {
+            var_fa0 = temp_fv1;
+        } else {
+            var_fa0 = temp_ft4;
+        }
+        temp = var_fa0 / 2.0f;
+        if (temp < 101.0f) {
+            var_fv0 = temp - 10.0f;
+        }
+    }
+
+    // clang-format off
+    switch (gCourseData.pit[segmentIndex]) {
+        case PIT_LEFT:
+            var_v1->segmentIndex = segmentIndex;
+            var_v1->effectType = COURSE_EFFECT_PIT;
+            var_v1->unk_08 = 0.0f;
+            var_v1->unk_0C = 1.0f;
+            var_v1->unk_10 = var_fv0; \
+            var_v1->unk_14 = 5000.0f;
+            index++;
+            break;
+        case PIT_RIGHT:
+            var_v1->segmentIndex = segmentIndex;
+            var_v1->effectType = COURSE_EFFECT_PIT;
+            var_v1->unk_08 = 0.0f;
+            var_v1->unk_0C = 1.0f;
+            var_v1->unk_10 = -5000.0f;
+            var_v1->unk_14 = -1.0f * var_fv0;
+            index++;
+            break;
+        case PIT_BOTH:
+            var_v1->segmentIndex = segmentIndex;
+            var_v1->effectType = COURSE_EFFECT_PIT;
+            var_v1->unk_08 = 0.0f;
+            var_v1->unk_0C = 1.0f;
+            var_v1->unk_10 = var_fv0; \
+            var_v1->unk_14 = 5000.0f;
+            var_v1++;
+            index++;
+            var_v1->effectType = COURSE_EFFECT_PIT;
+            var_v1->segmentIndex = segmentIndex;
+            var_v1->unk_08 = 0.0f;
+            var_v1->unk_0C = 1.0f;
+            var_v1->unk_10 = -5000.0f;
+            var_v1->unk_14 = -1.0f * var_fv0;
+            index++;
+            break;
+        case 3:
+            var_v1->segmentIndex = segmentIndex;
+            var_v1->effectType = COURSE_EFFECT_PIT;
+            var_v1->unk_08 = 0.0f;
+            var_v1->unk_0C = 1.0f;
+            var_v1->unk_10 = -1.0f * var_fv0;
+            var_v1->unk_14 = var_fv0;
+            index++;
+            break;
+    }
+    // clang-format on
+    D_807BDD68.unk_00 = D_807BCB68;
+    D_807BDD68.count = index;
+}
+
+void func_806FF12C(s32 courseIndex, s32 segmentIndex) {
+    s32 index;
+    unk_8006FF90_arg_1* var_v1;
+    CourseSegment* courseSegment;
+    f32 temp_fv1;
+    f32 temp_ft4;
+    f32 var_fv0 = 100.0f;
+    f32 var_fa0;
+    f32 temp;
+    f32 temp_fs1;
+    f32 temp_fs3;
+    s32 pad[6];
+
+    if (courseIndex == COURSE_RED_CANYON_2) {
+        return;
+    }
+
+    index = D_807BDD68.count;
+    var_v1 = &D_807BDD68.unk_00[index];
+
+    courseSegment = &gCourseInfos[courseIndex].courseSegments[segmentIndex];
+
+    temp_fv1 = courseSegment->radiusLeft + courseSegment->radiusRight;
+    temp_ft4 = courseSegment->next->radiusLeft + courseSegment->next->radiusRight;
+
+    temp_fs3 = (courseSegment->radiusLeft - courseSegment->radiusRight) / 2;
+    temp_fs1 = (courseSegment->next->radiusLeft - courseSegment->next->radiusRight) / 2;
+    temp_fs1 -= temp_fs3;
+
+    if (temp_fv1 < temp_ft4) {
+        var_fa0 = temp_fv1;
+    } else {
+        var_fa0 = temp_ft4;
+    }
+    temp = var_fa0 / 2.0f;
+    if (temp < 101.0f) {
+        var_fv0 = temp - 10.0f;
+    }
+
+    // clang-format off
+    switch (gCourseData.dirt[segmentIndex]) {
+        case DIRT_LEFT:
+            var_v1->segmentIndex = segmentIndex;
+            var_v1->effectType = COURSE_EFFECT_DIRT;
+            var_v1->unk_08 = 0.0f;
+            var_v1->unk_0C = 1.0f;
+            var_v1->unk_10 = var_fv0; \
+            var_v1->unk_14 = 5000.0f;
+            index++;
+            break;
+        case DIRT_RIGHT:
+            var_v1->segmentIndex = segmentIndex;
+            var_v1->effectType = COURSE_EFFECT_DIRT;
+            var_v1->unk_08 = 0.0f;
+            var_v1->unk_0C = 1.0f;
+            var_v1->unk_10 = -5000.0f;
+            var_v1->unk_14 = -1.0f * var_fv0;
+            index++;
+            break;
+        case DIRT_BOTH:
+            var_v1->segmentIndex = segmentIndex;
+            var_v1->effectType = COURSE_EFFECT_DIRT;
+            var_v1->unk_08 = 0.0f;
+            var_v1->unk_0C = 1.0f;
+            var_v1->unk_10 = var_fv0; \
+            var_v1->unk_14 = 5000.0f;
+            var_v1++;
+            index++;
+            var_v1->effectType = COURSE_EFFECT_DIRT;
+            var_v1->segmentIndex = segmentIndex;
+            var_v1->unk_08 = 0.0f;
+            var_v1->unk_0C = 1.0f;
+            var_v1->unk_10 = -5000.0f;
+            var_v1->unk_14 = -1.0f * var_fv0;
+            index++;
+            break;
+        case DIRT_MIDDLE:
+            var_v1->segmentIndex = segmentIndex;
+            var_v1->effectType = COURSE_EFFECT_DIRT;
+            var_v1->unk_08 = 0.0f;
+            var_v1->unk_0C = 1.0f;
+            var_v1->unk_10 = -1.0f * var_fv0;
+            var_v1->unk_14 = var_fv0;
+            index++;
+            break;
+    }
+    // clang-format on
+
+    D_807BDD68.unk_00 = D_807BCB68;
+    D_807BDD68.count = index;
+}
+
+void func_806FF364(s32 courseIndex, s32 segmentIndex) {
+    s32 index;
+    unk_8006FF90_arg_1* var_v1;
+    CourseSegment* courseSegment;
+    f32 temp_fv1;
+    f32 temp_ft4;
+    f32 var_fv0 = 100.0f;
+    f32 var_fa0;
+    f32 temp;
+    f32 temp_fs1;
+    f32 temp_fs3;
+    s32 pad[6];
+
+    index = D_807BDD68.count;
+    var_v1 = &D_807BDD68.unk_00[index];
+
+    courseSegment = &gCourseInfos[courseIndex].courseSegments[segmentIndex];
+
+    temp_fv1 = courseSegment->radiusLeft + courseSegment->radiusRight;
+    temp_ft4 = courseSegment->next->radiusLeft + courseSegment->next->radiusRight;
+
+    temp_fs3 = (courseSegment->radiusLeft - courseSegment->radiusRight) / 2;
+    temp_fs1 = (courseSegment->next->radiusLeft - courseSegment->next->radiusRight) / 2;
+    temp_fs1 -= temp_fs3;
+
+    if (temp_fv1 < temp_ft4) {
+        var_fa0 = temp_fv1;
+    } else {
+        var_fa0 = temp_ft4;
+    }
+    temp = var_fa0 / 2.0f;
+    if (temp < 101.0f) {
+        var_fv0 = temp - 10.0f;
+    }
+
+    // clang-format off
+    switch (gCourseData.ice[segmentIndex]) {
+        case ICE_LEFT:
+            var_v1->effectType = COURSE_EFFECT_ICE;
+            var_v1->segmentIndex = segmentIndex;
+            var_v1->unk_08 = 0.0f;
+            var_v1->unk_0C = 1.0f;
+            var_v1->unk_10 = var_fv0; \
+            var_v1->unk_14 = 5000.0f;
+            index++;
+            break;
+        case ICE_RIGHT:
+            var_v1->effectType = COURSE_EFFECT_ICE;
+            var_v1->segmentIndex = segmentIndex;
+            var_v1->unk_08 = 0.0f;
+            var_v1->unk_0C = 1.0f;
+            var_v1->unk_10 = -5000.0f;
+            var_v1->unk_14 = -1.0f * var_fv0;
+            index++;
+            break;
+        case ICE_BOTH:
+            var_v1->effectType = COURSE_EFFECT_ICE;
+            var_v1->segmentIndex = segmentIndex;
+            var_v1->unk_08 = 0.0f;
+            var_v1->unk_0C = 1.0f;
+            var_v1->unk_10 = var_fv0; \
+            var_v1->unk_14 = 5000.0f;
+            var_v1++;
+            index++;
+            var_v1->effectType = COURSE_EFFECT_ICE;
+            var_v1->segmentIndex = segmentIndex;
+            var_v1->unk_08 = 0.0f;
+            var_v1->unk_0C = 1.0f;
+            var_v1->unk_10 = -5000.0f;
+            var_v1->unk_14 = -1.0f * var_fv0;
+            index++;
+            break;
+        case ICE_MIDDLE:
+            var_v1->effectType = COURSE_EFFECT_ICE;
+            var_v1->segmentIndex = segmentIndex;
+            var_v1->unk_08 = 0.0f;
+            var_v1->unk_0C = 1.0f;
+            var_v1->unk_10 = -1.0f * var_fv0; \
+            var_v1->unk_14 = var_fv0;
+            index++;
+            break;
+    }
+    // clang-format on
+
+    D_807BDD68.unk_00 = D_807BCB68;
+    D_807BDD68.count = index;
+}
+
+f32 func_806FF598(CourseSegment* arg0, f32 arg1, f32 arg2) {
+    s32 i;
+    s32 temp_v0;
+    f32 temp;
+    Vec3f sp38;
+
+    temp_v0 = Math_Round(arg2 / 5.0f);
+
+    for (i = 0; i < temp_v0; i++) {
+        temp = func_i2_800B2500(arg0, arg1, &sp38);
+        arg1 += 5.0f / temp;
+    }
+    return arg1;
+}
+
+void func_806FF630(s32 courseIndex) {
+    unk_802D1B60_unk_00* var_s0;
+    s32 i;
+    s32 spBC;
+    CourseSegment* courseSegment;
+    f32 var_fs0;
+    f32 temp_fs2;
+    f32 temp_fs3;
+    f32 temp_fs4;
+    f32 temp_ft4;
+    f32 temp_fs5;
+    s32 var_s1;
+    s32 var_s2;
+    f32 temp;
+    Vec3f sp88;
+
+    var_s1 = D_807BCB58.unk_04;
+    var_s2 = D_807BCB58.unk_08;
+    spBC = D_807BCB58.unk_0C;
+    var_s0 = &D_807BCB58.unk_00[var_s1];
+
+    for (i = 0; i < gCourseInfos[courseIndex].segmentCount; i++) {
+        courseSegment = &gCourseInfos[courseIndex].courseSegments[i];
+        temp_fs2 = courseSegment->length;
+
+        temp_fs3 = courseSegment->radiusLeft + courseSegment->radiusRight;
+        temp_ft4 = (courseSegment->next->radiusLeft + courseSegment->next->radiusRight);
+        temp_fs4 = (courseSegment->radiusLeft - courseSegment->radiusRight) / 2;
+        temp_fs5 = (courseSegment->next->radiusLeft - courseSegment->next->radiusRight) / 2;
+        temp_ft4 -= temp_fs3;
+        temp_fs5 -= temp_fs4;
+
+        var_fs0 = 0.0f;
+
+        switch (gCourseData.landmine[i]) {
+            case LANDMINE_MIDDLE:
+                if (temp_fs3) {}
+                temp_fs2 /= 5.0f;
+                temp = func_i2_800B2500(courseSegment, 0.0f, &sp88);
+                var_fs0 += temp_fs2 / temp;
+                var_s0->segmentIndex = i;
+                var_s0->featureType = COURSE_FEATURE_LANDMINE;
+                // clang-format off
+                var_s0->unk_10.x = 0.0f; \
+                var_s0->unk_10.y = 0.0f; \
+                var_s0->unk_10.z = 0.0f;
+                // clang-format on
+                var_s0->unk_08 = var_fs0;
+                var_s0->unk_0C = ((temp_fs5 * var_fs0) + temp_fs4) - ((temp_fs3 + (temp_ft4 * var_fs0)) / 4);
+                var_s0++;
+                var_s1++;
+                var_s2++;
+
+                var_s0->segmentIndex = i;
+                var_s0->featureType = COURSE_FEATURE_LANDMINE;
+                // clang-format off
+                var_s0->unk_10.x = 0.0f; \
+                var_s0->unk_10.y = 0.0f; \
+                var_s0->unk_10.z = 0.0f;
+                // clang-format on
+                var_s0->unk_08 = var_fs0;
+                var_s0->unk_0C = ((temp_fs5 * var_fs0) + temp_fs4) + ((temp_fs3 + (temp_ft4 * var_fs0)) / 4);
+                var_s0++;
+                var_s1++;
+                var_s2++;
+
+                temp = func_i2_800B2500(courseSegment, var_fs0, &sp88);
+                var_fs0 += temp_fs2 / temp;
+                var_s0->featureType = COURSE_FEATURE_LANDMINE;
+                var_s0->segmentIndex = i;
+                // clang-format off
+                var_s0->unk_10.x = 0.0f; \
+                var_s0->unk_10.y = 0.0f; \
+                var_s0->unk_10.z = 0.0f;
+                // clang-format on
+                var_s0->unk_08 = var_fs0;
+                var_s0->unk_0C = (temp_fs5 * var_fs0) + temp_fs4;
+                var_s0++;
+                var_s1++;
+                var_s2++;
+
+                temp = func_i2_800B2500(courseSegment, var_fs0, &sp88);
+                var_fs0 += temp_fs2 / temp;
+                var_s0->segmentIndex = i;
+                var_s0->featureType = COURSE_FEATURE_LANDMINE;
+                // clang-format off
+                var_s0->unk_10.x = 0.0f; \
+                var_s0->unk_10.y = 0.0f; \
+                var_s0->unk_10.z = 0.0f;
+                // clang-format on
+                var_s0->unk_08 = var_fs0;
+                var_s0->unk_0C = ((temp_fs5 * var_fs0) + temp_fs4) - ((temp_fs3 + (temp_ft4 * var_fs0)) / 4);
+                var_s0++;
+                var_s1++;
+                var_s2++;
+
+                var_s0->segmentIndex = i;
+                var_s0->featureType = COURSE_FEATURE_LANDMINE;
+                // clang-format off
+                var_s0->unk_10.x = 0.0f; \
+                var_s0->unk_10.y = 0.0f; \
+                var_s0->unk_10.z = 0.0f;
+                // clang-format on
+                var_s0->unk_08 = var_fs0;
+                var_s0->unk_0C = ((temp_fs5 * var_fs0) + temp_fs4) + ((temp_fs3 + (temp_ft4 * var_fs0)) / 4);
+                var_s0++;
+                var_s1++;
+                var_s2++;
+
+                temp = func_i2_800B2500(courseSegment, var_fs0, &sp88);
+                var_fs0 += temp_fs2 / temp;
+                var_s0->segmentIndex = i;
+                var_s0->featureType = COURSE_FEATURE_LANDMINE;
+                // clang-format off
+                var_s0->unk_10.x = 0.0f; \
+                var_s0->unk_10.y = 0.0f; \
+                var_s0->unk_10.z = 0.0f;
+                // clang-format on
+                var_s0->unk_08 = var_fs0;
+                var_s0->unk_0C = (temp_fs5 * var_fs0) + temp_fs4;
+                var_s0++;
+                var_s1++;
+                var_s2++;
+                if (var_fs0 > 1.0f) {
+                    var_s0 -= 6;
+                    var_s1 -= 6;
+                    var_s2 -= 6;
+
+                    func_806FF598(courseSegment, 0, temp_fs2);
+                    var_s0->unk_08 = 0.2f;
+                    var_s0->unk_0C = ((temp_fs5 * 0.2f) + temp_fs4) - ((temp_fs3 + (temp_ft4 * 0.2f)) / 4);
+                    var_s0++;
+                    var_s1++;
+                    var_s2++;
+                    var_s0->unk_08 = 0.2f;
+                    var_s0->unk_0C = ((temp_fs5 * 0.2f) + temp_fs4) + ((temp_fs3 + (temp_ft4 * 0.2f)) / 4);
+                    var_s0++;
+                    var_s1++;
+                    var_s2++;
+                    func_806FF598(courseSegment, 0.2f, temp_fs2);
+                    var_s0->unk_08 = 0.4f;
+                    var_s0->unk_0C = (temp_fs5 * 0.4f) + temp_fs4;
+                    var_s0++;
+                    var_s1++;
+                    var_s2++;
+                    func_806FF598(courseSegment, 0.4f, temp_fs2);
+                    var_s0->unk_08 = 0.6f;
+                    var_s0->unk_0C = ((temp_fs5 * 0.6f) + temp_fs4) - ((temp_fs3 + (temp_ft4 * 0.6f)) / 4);
+                    var_s0++;
+                    var_s1++;
+                    var_s2++;
+                    var_s0->unk_08 = 0.6f;
+                    var_s0->unk_0C = ((temp_fs5 * 0.6f) + temp_fs4) + ((temp_fs3 + (temp_ft4 * 0.6f)) / 4);
+                    var_s0++;
+                    var_s1++;
+                    var_s2++;
+                    func_806FF598(courseSegment, 0.6f, temp_fs2);
+                    var_s0->unk_08 = 0.8f;
+                    var_s0->unk_0C = (temp_fs5 * 0.8f) + temp_fs4;
+                    var_s0++;
+                    var_s1++;
+                    var_s2++;
+                }
+                break;
+            case LANDMINE_LEFT:
+                temp_fs2 /= 6.0f;
+                var_s0->featureType = COURSE_FEATURE_LANDMINE;
+                var_s0->segmentIndex = i;
+                var_s0->unk_08 = 0.0f;
+                // clang-format off
+                var_s0->unk_10.x = 0.0f; \
+                var_s0->unk_10.y = 0.0f; \
+                var_s0->unk_10.z = 0.0f;
+                // clang-format on
+                var_s0->unk_0C = var_fs0 + temp_fs4 + ((temp_fs3 + var_fs0) / 8);
+                var_s0++;
+                var_s1++;
+                var_s2++;
+
+                temp = func_i2_800B2500(courseSegment, 0.0f, &sp88);
+                var_fs0 += temp_fs2 / temp;
+                var_s0->segmentIndex = i;
+                var_s0->featureType = COURSE_FEATURE_LANDMINE;
+                // clang-format off
+                var_s0->unk_10.x = 0.0f; \
+                var_s0->unk_10.y = 0.0f; \
+                var_s0->unk_10.z = 0.0f;
+                // clang-format on
+                var_s0->unk_08 = var_fs0;
+                var_s0->unk_0C = (temp_fs5 * var_fs0) + temp_fs4 + (((temp_fs3 + (temp_ft4 * var_fs0)) * 3.0f) / 8);
+                var_s0++;
+                var_s1++;
+                var_s2++;
+
+                temp = func_i2_800B2500(courseSegment, var_fs0, &sp88);
+                var_fs0 += temp_fs2 / temp;
+                var_s0->segmentIndex = i;
+                var_s0->featureType = COURSE_FEATURE_LANDMINE;
+                // clang-format off
+                var_s0->unk_10.x = 0.0f; \
+                var_s0->unk_10.y = 0.0f; \
+                var_s0->unk_10.z = 0.0f;
+                // clang-format on
+                var_s0->unk_08 = var_fs0;
+                var_s0->unk_0C = (temp_fs5 * var_fs0) + temp_fs4 + ((temp_fs3 + (temp_ft4 * var_fs0)) / 8);
+                var_s0++;
+                var_s1++;
+                var_s2++;
+
+                temp = func_i2_800B2500(courseSegment, var_fs0, &sp88);
+                var_fs0 += temp_fs2 / temp;
+                var_s0->segmentIndex = i;
+                var_s0->featureType = COURSE_FEATURE_LANDMINE;
+                // clang-format off
+                var_s0->unk_10.x = 0.0f; \
+                var_s0->unk_10.y = 0.0f; \
+                var_s0->unk_10.z = 0.0f;
+                // clang-format on
+                var_s0->unk_08 = var_fs0;
+                var_s0->unk_0C = (temp_fs5 * var_fs0) + temp_fs4 + (((temp_fs3 + (temp_ft4 * var_fs0)) * 3.0f) / 8);
+                var_s0++;
+                var_s1++;
+                var_s2++;
+
+                temp = func_i2_800B2500(courseSegment, var_fs0, &sp88);
+                var_fs0 += temp_fs2 / temp;
+                var_s0->segmentIndex = i;
+                var_s0->featureType = COURSE_FEATURE_LANDMINE;
+                // clang-format off
+                var_s0->unk_10.x = 0.0f; \
+                var_s0->unk_10.y = 0.0f; \
+                var_s0->unk_10.z = 0.0f;
+                // clang-format on
+                var_s0->unk_08 = var_fs0;
+                var_s0->unk_0C = (temp_fs5 * var_fs0) + temp_fs4 + ((temp_fs3 + (temp_ft4 * var_fs0)) / 8);
+                var_s0++;
+                var_s1++;
+                var_s2++;
+
+                temp = func_i2_800B2500(courseSegment, var_fs0, &sp88);
+                var_fs0 += temp_fs2 / temp;
+                var_s0->segmentIndex = i;
+                var_s0->featureType = COURSE_FEATURE_LANDMINE;
+                // clang-format off
+                var_s0->unk_10.x = 0.0f; \
+                var_s0->unk_10.y = 0.0f; \
+                var_s0->unk_10.z = 0.0f;
+                // clang-format on
+                var_s0->unk_08 = var_fs0;
+                var_s0->unk_0C = (temp_fs5 * var_fs0) + temp_fs4 + (((temp_fs3 + (temp_ft4 * var_fs0)) * 3.0f) / 8);
+                var_s0++;
+                var_s1++;
+                var_s2++;
+                if (var_fs0 > 1.0f) {
+                    var_s0 -= 6;
+                    var_s1 -= 6;
+                    var_s2 -= 6;
+
+                    var_s0->unk_08 = 0;
+                    var_s0->unk_0C = ((temp_fs5 * 0) + temp_fs4) + ((temp_fs3 + (temp_ft4 * 0)) / 8);
+                    var_s0++;
+                    var_s1++;
+                    var_s2++;
+
+                    var_s0->unk_08 = 0.166667f;
+                    var_s0->unk_0C =
+                        ((temp_fs5 * 0.166667f) + temp_fs4) + (((temp_fs3 + (temp_ft4 * 0.166667f)) * 3.0f) / 8);
+                    var_s0++;
+                    var_s1++;
+                    var_s2++;
+
+                    var_s0->unk_08 = 0.333333f;
+                    var_s0->unk_0C = ((temp_fs5 * 0.333333f) + temp_fs4) + ((temp_fs3 + (temp_ft4 * 0.333333f)) / 8);
+                    var_s0++;
+                    var_s1++;
+                    var_s2++;
+
+                    var_s0->unk_08 = 0.5f;
+                    var_s0->unk_0C = ((temp_fs5 * 0.5f) + temp_fs4) + (((temp_fs3 + (temp_ft4 * 0.5f)) * 3.0f) / 8);
+                    var_s0++;
+                    var_s1++;
+                    var_s2++;
+
+                    var_s0->unk_08 = 0.666667f;
+                    var_s0->unk_0C = ((temp_fs5 * 0.666667f) + temp_fs4) + ((temp_fs3 + (temp_ft4 * 0.666667f)) / 8);
+                    var_s0++;
+                    var_s1++;
+                    var_s2++;
+
+                    var_s0->unk_08 = 0.833333f;
+                    var_s0->unk_0C =
+                        ((temp_fs5 * 0.833333f) + temp_fs4) + (((temp_fs3 + (temp_ft4 * 0.833333f)) * 3.0f) / 8);
+                    var_s0++;
+                    var_s1++;
+                    var_s2++;
+                }
+                break;
+            case LANDMINE_RIGHT:
+                temp_fs2 /= 6.0f;
+                var_s0->featureType = COURSE_FEATURE_LANDMINE;
+                var_s0->segmentIndex = i;
+                var_s0->unk_08 = 0.0f;
+                // clang-format off
+                var_s0->unk_10.x = 0.0f; \
+                var_s0->unk_10.y = 0.0f; \
+                var_s0->unk_10.z = 0.0f;
+                // clang-format on
+                var_s0->unk_0C = (var_fs0 + temp_fs4) - ((temp_fs3 + var_fs0) / 8);
+                var_s0++;
+                var_s1++;
+                var_s2++;
+
+                temp = func_i2_800B2500(courseSegment, 0.0f, &sp88);
+                var_fs0 += temp_fs2 / temp;
+                var_s0->segmentIndex = i;
+                var_s0->featureType = COURSE_FEATURE_LANDMINE;
+                // clang-format off
+                var_s0->unk_10.x = 0.0f; \
+                var_s0->unk_10.y = 0.0f; \
+                var_s0->unk_10.z = 0.0f;
+                // clang-format on
+                var_s0->unk_08 = var_fs0;
+                var_s0->unk_0C = ((temp_fs5 * var_fs0) + temp_fs4) - (((temp_fs3 + (temp_ft4 * var_fs0)) * 3.0f) / 8);
+                var_s0++;
+                var_s1++;
+                var_s2++;
+
+                temp = func_i2_800B2500(courseSegment, var_fs0, &sp88);
+                var_fs0 += temp_fs2 / temp;
+                var_s0->segmentIndex = i;
+                var_s0->featureType = COURSE_FEATURE_LANDMINE;
+                // clang-format off
+                var_s0->unk_10.x = 0.0f; \
+                var_s0->unk_10.y = 0.0f; \
+                var_s0->unk_10.z = 0.0f;
+                // clang-format on
+                var_s0->unk_08 = var_fs0;
+                var_s0->unk_0C = ((temp_fs5 * var_fs0) + temp_fs4) - ((temp_fs3 + (temp_ft4 * var_fs0)) / 8);
+                var_s0++;
+                var_s1++;
+                var_s2++;
+
+                temp = func_i2_800B2500(courseSegment, var_fs0, &sp88);
+                var_fs0 += temp_fs2 / temp;
+                var_s0->segmentIndex = i;
+                var_s0->featureType = COURSE_FEATURE_LANDMINE;
+                // clang-format off
+                var_s0->unk_10.x = 0.0f; \
+                var_s0->unk_10.y = 0.0f; \
+                var_s0->unk_10.z = 0.0f;
+                // clang-format on
+                var_s0->unk_08 = var_fs0;
+                var_s0->unk_0C = ((temp_fs5 * var_fs0) + temp_fs4) - (((temp_fs3 + (temp_ft4 * var_fs0)) * 3.0f) / 8);
+                var_s0++;
+                var_s1++;
+                var_s2++;
+
+                temp = func_i2_800B2500(courseSegment, var_fs0, &sp88);
+                var_fs0 += temp_fs2 / temp;
+                var_s0->segmentIndex = i;
+                var_s0->featureType = COURSE_FEATURE_LANDMINE;
+                // clang-format off
+                var_s0->unk_10.x = 0.0f; \
+                var_s0->unk_10.y = 0.0f; \
+                var_s0->unk_10.z = 0.0f;
+                // clang-format on
+                var_s0->unk_08 = var_fs0;
+                var_s0->unk_0C = ((temp_fs5 * var_fs0) + temp_fs4) - ((temp_fs3 + (temp_ft4 * var_fs0)) / 8);
+                var_s0++;
+                var_s1++;
+                var_s2++;
+
+                temp = func_i2_800B2500(courseSegment, var_fs0, &sp88);
+                var_fs0 += temp_fs2 / temp;
+                var_s0->segmentIndex = i;
+                var_s0->featureType = COURSE_FEATURE_LANDMINE;
+                // clang-format off
+                var_s0->unk_10.x = 0.0f; \
+                var_s0->unk_10.y = 0.0f; \
+                var_s0->unk_10.z = 0.0f;
+                // clang-format on
+                var_s0->unk_08 = var_fs0;
+                var_s0->unk_0C = ((temp_fs5 * var_fs0) + temp_fs4) - (((temp_fs3 + (temp_ft4 * var_fs0)) * 3.0f) / 8);
+                var_s0++;
+                var_s1++;
+                var_s2++;
+                if (var_fs0 > 1.0f) {
+                    var_s0 -= 6;
+                    var_s1 -= 6;
+                    var_s2 -= 6;
+
+                    var_s0->unk_08 = 0;
+                    var_s0->unk_0C = ((temp_fs5 * 0) + temp_fs4) - ((temp_fs3 + (temp_ft4 * 0)) / 8);
+                    var_s0++;
+                    var_s1++;
+                    var_s2++;
+
+                    var_s0->unk_08 = 0.166667f;
+                    var_s0->unk_0C =
+                        ((temp_fs5 * 0.166667f) + temp_fs4) - (((temp_fs3 + (temp_ft4 * 0.166667f)) * 3.0f) / 8);
+                    var_s0++;
+                    var_s1++;
+                    var_s2++;
+
+                    var_s0->unk_08 = 0.333333f;
+                    var_s0->unk_0C = ((temp_fs5 * 0.333333f) + temp_fs4) - ((temp_fs3 + (temp_ft4 * 0.333333f)) / 8);
+                    var_s0++;
+                    var_s1++;
+                    var_s2++;
+
+                    var_s0->unk_08 = 0.5f;
+                    var_s0->unk_0C = ((temp_fs5 * 0.5f) + temp_fs4) - (((temp_fs3 + (temp_ft4 * 0.5f)) * 3.0f) / 8);
+                    var_s0++;
+                    var_s1++;
+                    var_s2++;
+
+                    var_s0->unk_08 = 0.666667f;
+                    var_s0->unk_0C = ((temp_fs5 * 0.666667f) + temp_fs4) - ((temp_fs3 + (temp_ft4 * 0.666667f)) / 8);
+                    var_s0++;
+                    var_s1++;
+                    var_s2++;
+
+                    var_s0->unk_08 = 0.833333f;
+                    var_s0->unk_0C =
+                        ((temp_fs5 * 0.833333f) + temp_fs4) - (((temp_fs3 + (temp_ft4 * 0.833333f)) * 3.0f) / 8);
+                    var_s0++;
+                    var_s1++;
+                    var_s2++;
+                }
+                break;
+        }
+    }
+
+    D_807BCB58.unk_08 = var_s2;
+    D_807BCB58.unk_0C = spBC;
+    D_807BCB58.unk_04 = var_s1;
+}
+
+void func_80700254(s32 courseIndex) {
+    unk_802D1B60_unk_00* var_s0;
+    s32 spC0;
+    f32 temp_fa0;
+    f32 temp_fs0;
+    f32 temp_fs1;
+    f32 temp_fs2;
+    f32 temp_fs3;
+    f32 temp_ft3;
+    s32 i;
+    s32 var_s2;
+    s32 var_s3;
+    f32 temp_fv1;
+    CourseSegment* temp_a0;
+    Vec3f sp88;
+
+    spC0 = D_807BCB58.unk_08;
+    var_s3 = D_807BCB58.unk_0C;
+    var_s2 = D_807BCB58.unk_04;
+
+    var_s0 = &D_807BCB58.unk_00[var_s2];
+
+    for (i = 0; i < gCourseInfos[courseIndex].segmentCount; i++) {
+        temp_a0 = &gCourseInfos[courseIndex].courseSegments[i];
+
+        temp_fs2 = temp_a0->radiusLeft + temp_a0->radiusRight;
+        temp_fs0 = temp_a0->next->radiusLeft + temp_a0->next->radiusRight;
+        temp_fs3 = (temp_a0->radiusLeft - temp_a0->radiusRight) / 2;
+        temp_fs1 = ((temp_a0->next->radiusLeft - temp_a0->next->radiusRight) / 2);
+        temp_fs0 -= temp_fs2;
+        temp_fs1 -= temp_fs3;
+
+        temp_fv1 = 0.0f;
+
+        switch (gCourseData.jump[i]) {
+            case JUMP_ALL:
+                temp_fv1 -= 100.0f / func_i2_800B2500(temp_a0, 1.0f, &sp88);
+                temp_fv1 += 1.0f;
+
+                var_s0->featureType = COURSE_FEATURE_JUMP;
+                var_s0->segmentIndex = i;
+                var_s0->unk_08 = temp_fv1;
+                var_s0->unk_0C = (temp_fs1 * temp_fv1) + temp_fs3;
+                var_s0->unk_10.x = temp_fs2 + (temp_fs0 * temp_fv1);
+                var_s0->unk_10.y = 30.0f;
+                var_s0->unk_10.z = 60.0f;
+                var_s0++;
+                var_s2++;
+                var_s3++;
+                break;
+            case JUMP_LEFT:
+                temp_fv1 -= 100.0f / func_i2_800B2500(temp_a0, 1.0f, &sp88);
+                temp_fv1 += 1.0f;
+
+                var_s0->featureType = COURSE_FEATURE_JUMP;
+                var_s0->segmentIndex = i;
+                var_s0->unk_08 = temp_fv1;
+                var_s0->unk_0C = ((temp_fs1 * temp_fv1) + temp_fs3) + ((temp_fs2 + (temp_fs0 * temp_fv1)) / 4);
+                var_s0->unk_10.x = (temp_fs2 + (temp_fs0 * temp_fv1)) / 2;
+                var_s0->unk_10.y = 30.0f;
+                var_s0->unk_10.z = 60.0f;
+                var_s0++;
+                var_s2++;
+                var_s3++;
+                break;
+            case JUMP_RIGHT:
+                temp_fv1 -= 100.0f / func_i2_800B2500(temp_a0, 1.0f, &sp88);
+                temp_fv1 += 1.0f;
+
+                var_s0->featureType = COURSE_FEATURE_JUMP;
+                var_s0->segmentIndex = i;
+                var_s0->unk_08 = temp_fv1;
+                var_s0->unk_0C = ((temp_fs1 * temp_fv1) + temp_fs3) - ((temp_fs2 + (temp_fs0 * temp_fv1)) / 4);
+                var_s0->unk_10.x = (temp_fs2 + (temp_fs0 * temp_fv1)) / 2;
+                var_s0->unk_10.y = 30.0f;
+                var_s0->unk_10.z = 60.0f;
+                var_s0++;
+                var_s2++;
+                var_s3++;
+                break;
+        }
+    }
+
+    D_807BCB58.unk_08 = spC0;
+    D_807BCB58.unk_0C = var_s3;
+    D_807BCB58.unk_04 = var_s2;
+}
+
+void func_80700570(s32 courseIndex, s32 segmentIndex) {
+    s32 sp5C;
+    f32 sp58;
+    f32 temp;
+    f32 var_fs0;
+    f32 sp4C;
+    f32 sp48;
+    f32 sp44;
+    f32 sp40;
+    CourseSegment* sp3C;
+    unk_8006FF90_arg_1* sp38;
+    Vec3f sp2C;
+
+    sp5C = D_807BDD68.count;
+    sp38 = &D_807BDD68.unk_00[sp5C];
+    sp3C = &gCourseInfos[courseIndex].courseSegments[segmentIndex];
+    sp4C = sp3C->radiusLeft + sp3C->radiusRight;
+    sp48 = sp3C->next->radiusLeft + sp3C->next->radiusRight;
+    sp44 = (sp3C->radiusLeft - sp3C->radiusRight) / 2;
+    sp40 = (sp3C->next->radiusLeft - sp3C->next->radiusRight) / 2;
+    sp48 -= sp4C;
+    sp40 -= sp44;
+    sp58 = sp3C->length;
+
+    var_fs0 = 0;
+
+    switch (gCourseData.dash[segmentIndex]) {
+        case DASH_MIDDLE:
+            sp58 /= 2;
+            temp = func_i2_800B2500(sp3C, 0, &sp2C);
+            var_fs0 += sp58 / temp;
+            sp38->segmentIndex = segmentIndex;
+            sp38->effectType = COURSE_EFFECT_DASH;
+            sp38->unk_08 = var_fs0;
+            sp38->unk_0C = 1.0f;
+
+            switch (sp3C->trackSegmentInfo & TRACK_SHAPE_MASK) {
+                case TRACK_SHAPE_HALF_PIPE:
+                    sp38->unk_10 = sp38->unk_14 = 0.0f;
+                    break;
+                case TRACK_SHAPE_PIPE:
+                    sp38->unk_10 = sp38->unk_14 = 22.5f;
+                    break;
+                case TRACK_SHAPE_CYLINDER:
+                    sp38->unk_10 = sp38->unk_14 = 202.5f;
+                    break;
+                default:
+                    sp38->unk_10 = 0.0f;
+                    sp38->unk_14 = 0.0f;
+                    break;
+            }
+            sp5C++;
+            break;
+        case DASH_LEFT:
+            sp58 /= 2;
+            temp = func_i2_800B2500(sp3C, 0, &sp2C);
+            var_fs0 += sp58 / temp;
+            sp4C = (var_fs0 * sp48) + sp4C;
+            sp38->segmentIndex = segmentIndex;
+            sp38->effectType = COURSE_EFFECT_DASH;
+            sp38->unk_08 = var_fs0;
+            sp38->unk_0C = 1.0f;
+            sp38->unk_10 = (sp4C / 2.0) - 100.0f;
+            sp38->unk_14 = sp38->unk_10;
+            if (sp38->unk_10 < 0.0f) {
+                sp38->unk_10 = 0.0f;
+            }
+            sp38->unk_14 = sp38->unk_10;
+
+            switch (sp3C->trackSegmentInfo & TRACK_SHAPE_MASK) {
+                case TRACK_SHAPE_HALF_PIPE:
+                    sp38->unk_10 = sp38->unk_14 = 45.0f;
+                    break;
+                case TRACK_SHAPE_PIPE:
+                    sp38->unk_10 = sp38->unk_14 = 157.5f;
+                    break;
+                case TRACK_SHAPE_CYLINDER:
+                    sp38->unk_10 = sp38->unk_14 = 337.5f;
+                    break;
+            }
+            sp5C++;
+            break;
+        case DASH_RIGHT:
+            sp58 /= 2;
+            temp = func_i2_800B2500(sp3C, 0, &sp2C);
+            var_fs0 += sp58 / temp;
+            sp4C = (var_fs0 * sp48) + sp4C;
+            sp38->segmentIndex = segmentIndex;
+            sp38->effectType = COURSE_EFFECT_DASH;
+            sp38->unk_08 = var_fs0;
+            sp38->unk_0C = 1.0f;
+            sp38->unk_10 = ((sp4C / 2.0) - 100.0f) * -1.0f;
+
+            if (sp38->unk_10 > 0.0f) {
+                sp38->unk_10 = 0.0f;
+            }
+            sp38->unk_14 = sp38->unk_10;
+
+            switch (sp3C->trackSegmentInfo & TRACK_SHAPE_MASK) {
+                case TRACK_SHAPE_HALF_PIPE:
+                    sp38->unk_10 = sp38->unk_14 = 315.0f;
+                    break;
+                case TRACK_SHAPE_PIPE:
+                    sp38->unk_10 = sp38->unk_14 = 247.5f;
+                    break;
+                case TRACK_SHAPE_CYLINDER:
+                    sp38->unk_10 = sp38->unk_14 = 67.5f;
+                    break;
+            }
+            sp5C++;
+            break;
+    }
+
+    D_807BDD68.unk_00 = D_807BCB68;
+    D_807BDD68.count = sp5C;
+}
+
+void func_807009C8(s32 courseIndex) {
+    s32 j;
+    s32 i;
+    s32 var_a1;
+    CourseSegment* temp_t2;
+    unk_802D1B60_unk_00* var_a2;
+    s32 temp_v0 = D_807BCB58.unk_08;
+    s32 temp_v1 = D_807BCB58.unk_0C;
+    f32 temp_fs0;
+    f32 temp_fs1;
+    f32 temp_fs2;
+    f32 temp_fs3;
+
+    var_a1 = D_807BCB58.unk_04;
+
+    var_a2 = &D_807BCB58.unk_00[var_a1];
+    for (i = 0; i < 3; i++) {
+        for (j = 0; j < gCourseInfos[courseIndex].segmentCount; j++) {
+            temp_t2 = &gCourseInfos[courseIndex].courseSegments[j];
+
+            if (i == 3) {}
+
+            temp_fs2 = temp_t2->radiusLeft + temp_t2->radiusRight;
+            temp_fs0 = temp_t2->next->radiusLeft + temp_t2->next->radiusRight;
+            temp_fs3 = (temp_t2->radiusLeft - temp_t2->radiusRight) / 2;
+            temp_fs1 = (temp_t2->next->radiusLeft - temp_t2->next->radiusRight) / 2;
+            temp_fs0 -= temp_fs2;
+            temp_fs1 -= temp_fs3;
+
+            if (i == gCourseData.gate[j]) {
+                switch (gCourseData.gate[j]) {
+                    case GATE_SQUARE:
+                        var_a2->featureType = COURSE_FEATURE_GATE_SQUARE;
+                        break;
+                    case GATE_START:
+                        var_a2->featureType = COURSE_FEATURE_GATE_START;
+                        break;
+                    case GATE_HEXAGONAL:
+                        var_a2->featureType = COURSE_FEATURE_GATE_HEXAGONAL;
+                        break;
+                }
+                var_a2->segmentIndex = j;
+                var_a2->unk_08 = 0.0f;
+                var_a2->unk_0C = temp_fs3;
+                var_a2->unk_10.x = 0.0f;
+                var_a2->unk_10.y = 0.0f;
+                var_a2->unk_10.z = 0.0f;
+                var_a1++;
+                var_a2++;
+            }
+        }
+    }
+    D_807BCB58.unk_08 = temp_v0;
+    D_807BCB58.unk_0C = temp_v1;
+    D_807BCB58.unk_04 = var_a1;
+}
+
+void func_80700B18(s32 courseIndex) {
+    s32 var_a1;
+    s32 i;
+    CourseSegment* temp_a0;
+    unk_802D1B60_unk_00* var_a2;
+    s32 temp_v0 = D_807BCB58.unk_08;
+    s32 temp_v1 = D_807BCB58.unk_0C;
+    f32 temp_fs0;
+    f32 temp_fs1;
+    f32 temp_fs2;
+    f32 temp_fs3;
+
+    var_a1 = D_807BCB58.unk_04;
+
+    var_a2 = &D_807BCB58.unk_00[var_a1];
+
+    for (i = 0; i < gCourseInfos[courseIndex].segmentCount; i++) {
+        temp_a0 = &gCourseInfos[courseIndex].courseSegments[i];
+
+        temp_fs2 = temp_a0->radiusLeft + temp_a0->radiusRight;
+        temp_fs0 = temp_a0->next->radiusLeft + temp_a0->next->radiusRight;
+        temp_fs3 = (temp_a0->radiusLeft - temp_a0->radiusRight) / 2;
+        temp_fs1 = (temp_a0->next->radiusLeft - temp_a0->next->radiusRight) / 2;
+        temp_fs0 -= temp_fs2;
+        temp_fs1 -= temp_fs3;
+
+        switch (gCourseData.building[i]) {
+            case BUILDING_TALL_LEFT:
+                var_a2->featureType = COURSE_FEATURE_BUILDING_TALL_LEFT;
+                var_a2->segmentIndex = i;
+                var_a2->unk_08 = 0.0f;
+                var_a2->unk_0C = temp_a0->radiusLeft + 500.0f;
+                // clang-format off
+                var_a2->unk_10.x = 0.0f; \
+                var_a2->unk_10.y = 0.0f; \
+                var_a2->unk_10.z = 0.0f;
+                // clang-format on
+                var_a2++;
+                var_a1++;
+                break;
+            case BUILDING_TALL_RIGHT:
+                var_a2->featureType = COURSE_FEATURE_BUILDING_TALL_RIGHT;
+                var_a2->segmentIndex = i;
+                var_a2->unk_08 = 0.0f;
+                var_a2->unk_0C = (temp_a0->radiusRight + 500.0f) * -1.0f;
+                // clang-format off
+                var_a2->unk_10.x = 0.0f; \
+                var_a2->unk_10.y = 0.0f; \
+                var_a2->unk_10.z = 0.0f;
+                // clang-format on
+                var_a2++;
+                var_a1++;
+                break;
+            case BUILDING_TALL_BOTH:
+                var_a2->featureType = COURSE_FEATURE_BUILDING_TALL_LEFT;
+                var_a2->segmentIndex = i;
+                var_a2->unk_08 = 0.0f;
+                var_a2->unk_0C = temp_a0->radiusLeft + 500.0f;
+                // clang-format off
+                var_a2->unk_10.x = 0.0f; \
+                var_a2->unk_10.y = 0.0f; \
+                var_a2->unk_10.z = 0.0f;
+                // clang-format on
+                var_a2++;
+                var_a1++;
+                var_a2->segmentIndex = i;
+                var_a2->featureType = COURSE_FEATURE_BUILDING_TALL_RIGHT;
+                var_a2->unk_08 = 0.0f;
+                var_a2->unk_0C = (temp_a0->radiusRight + 500.0f) * -1.0f;
+                // clang-format off
+                var_a2->unk_10.x = 0.0f; \
+                var_a2->unk_10.y = 0.0f; \
+                var_a2->unk_10.z = 0.0f;
+                // clang-format on
+                var_a2++;
+                var_a1++;
+                break;
+        }
+    }
+    D_807BCB58.unk_08 = temp_v0;
+    D_807BCB58.unk_0C = temp_v1;
+    D_807BCB58.unk_04 = var_a1;
+}
+
+void func_80700CE4(s32 courseIndex) {
+    s32 var_a1;
+    s32 i;
+    s32 j;
+    CourseSegment* temp_a0;
+    unk_802D1B60_unk_00* var_a2;
+    s32 temp_v0 = D_807BCB58.unk_08;
+    s32 temp_v1 = D_807BCB58.unk_0C;
+    f32 temp_fs0;
+    f32 temp_fs1;
+    f32 temp_fs2;
+    f32 temp_fs3;
+
+    var_a1 = D_807BCB58.unk_04;
+
+    var_a2 = &D_807BCB58.unk_00[var_a1];
+
+    for (i = 0; i < gCourseInfos[courseIndex].segmentCount; i++) {
+        temp_a0 = &gCourseInfos[courseIndex].courseSegments[i];
+
+        temp_fs2 = temp_a0->radiusLeft + temp_a0->radiusRight;
+        temp_fs0 = temp_a0->next->radiusLeft + temp_a0->next->radiusRight;
+        temp_fs3 = (temp_a0->radiusLeft - temp_a0->radiusRight) / 2;
+        temp_fs1 = (temp_a0->next->radiusLeft - temp_a0->next->radiusRight) / 2;
+        temp_fs0 -= temp_fs2;
+        temp_fs1 -= temp_fs3;
+
+        switch (gCourseData.building[i]) {
+            case BUILDING_SHORT_LEFT:
+                var_a2->featureType = COURSE_FEATURE_BUILDING_SHORT_LEFT;
+                var_a2->segmentIndex = i;
+                var_a2->unk_08 = 0.0f;
+                var_a2->unk_0C = temp_a0->radiusLeft + 500.0f;
+                // clang-format off
+                var_a2->unk_10.x = 0.0f; \
+                var_a2->unk_10.y = 0.0f; \
+                var_a2->unk_10.z = 0.0f;
+                // clang-format on
+                var_a2++;
+                var_a1++;
+                break;
+            case BUILDING_SHORT_RIGHT:
+                var_a2->featureType = COURSE_FEATURE_BUILDING_SHORT_RIGHT;
+                var_a2->segmentIndex = i;
+                var_a2->unk_08 = 0.0f;
+                var_a2->unk_0C = (temp_a0->radiusRight + 500.0f) * -1.0f;
+                // clang-format off
+                var_a2->unk_10.x = 0.0f; \
+                var_a2->unk_10.y = 0.0f; \
+                var_a2->unk_10.z = 0.0f;
+                // clang-format on
+                var_a2++;
+                var_a1++;
+                break;
+            case BUILDING_SHORT_BOTH:
+                var_a2->featureType = COURSE_FEATURE_BUILDING_SHORT_LEFT;
+                var_a2->segmentIndex = i;
+                var_a2->unk_08 = 0.0f;
+                var_a2->unk_0C = temp_a0->radiusLeft + 500.0f;
+                // clang-format off
+                var_a2->unk_10.x = 0.0f; \
+                var_a2->unk_10.y = 0.0f; \
+                var_a2->unk_10.z = 0.0f;
+                // clang-format on
+                var_a2++;
+                var_a1++;
+                var_a2->segmentIndex = i;
+                var_a2->featureType = COURSE_FEATURE_BUILDING_SHORT_RIGHT;
+                var_a2->unk_08 = 0.0f;
+                var_a2->unk_0C = (temp_a0->radiusRight + 500.0f) * -1.0f;
+                // clang-format off
+                var_a2->unk_10.x = 0.0f; \
+                var_a2->unk_10.y = 0.0f; \
+                var_a2->unk_10.z = 0.0f;
+                // clang-format on
+                var_a2++;
+                var_a1++;
+                break;
+        }
+    }
+
+    D_807BCB58.unk_08 = temp_v0;
+    D_807BCB58.unk_0C = temp_v1;
+    D_807BCB58.unk_04 = var_a1;
+}
+
+void func_80700EBC(s32 courseIndex) {
+    s32 var_a1;
+    s32 i;
+    s32 j;
+    CourseSegment* temp_a0;
+    unk_802D1B60_unk_00* var_a2;
+    s32 temp_v0 = D_807BCB58.unk_08;
+    s32 temp_v1 = D_807BCB58.unk_0C;
+    f32 temp_fs0;
+    f32 temp_fs1;
+    f32 temp_fs2;
+    f32 temp_fs3;
+
+    var_a1 = D_807BCB58.unk_04;
+    var_a2 = &D_807BCB58.unk_00[var_a1];
+
+    for (i = 0; i < gCourseInfos[courseIndex].segmentCount; i++) {
+        temp_a0 = &gCourseInfos[courseIndex].courseSegments[i];
+
+        temp_fs2 = temp_a0->radiusLeft + temp_a0->radiusRight;
+        temp_fs0 = temp_a0->next->radiusLeft + temp_a0->next->radiusRight;
+        temp_fs3 = (temp_a0->radiusLeft - temp_a0->radiusRight) / 2;
+        temp_fs1 = (temp_a0->next->radiusLeft - temp_a0->next->radiusRight) / 2;
+        temp_fs0 -= temp_fs2;
+        temp_fs1 -= temp_fs3;
+
+        switch (gCourseData.building[i]) {
+            case BUILDING_SPIRE_LEFT:
+                var_a2->featureType = COURSE_FEATURE_BUILDING_SPIRE_LEFT;
+                var_a2->segmentIndex = i;
+                var_a2->unk_08 = 0.0f;
+                var_a2->unk_0C = temp_a0->radiusLeft + 500.0f;
+                // clang-format off
+                var_a2->unk_10.x = 0.0f; \
+                var_a2->unk_10.y = 0.0f; \
+                var_a2->unk_10.z = 0.0f;
+                // clang-format on
+                var_a2++;
+                var_a1++;
+                break;
+            case BUILDING_SPIRE_RIGHT:
+                var_a2->featureType = COURSE_FEATURE_BUILDING_SPIRE_RIGHT;
+                var_a2->segmentIndex = i;
+                var_a2->unk_08 = 0.0f;
+                var_a2->unk_0C = (temp_a0->radiusRight + 500.0f) * -1.0f;
+                // clang-format off
+                var_a2->unk_10.x = 0.0f; \
+                var_a2->unk_10.y = 0.0f; \
+                var_a2->unk_10.z = 0.0f;
+                // clang-format on
+                var_a2++;
+                var_a1++;
+                break;
+            case BUILDING_SPIRE_BOTH:
+                var_a2->featureType = COURSE_FEATURE_BUILDING_SPIRE_LEFT;
+                var_a2->segmentIndex = i;
+                var_a2->unk_08 = 0.0f;
+                var_a2->unk_0C = temp_a0->radiusLeft + 500.0f;
+                // clang-format off
+                var_a2->unk_10.x = 0.0f; \
+                var_a2->unk_10.y = 0.0f; \
+                var_a2->unk_10.z = 0.0f;
+                // clang-format on
+                var_a2++;
+                var_a1++;
+                var_a2->segmentIndex = i;
+                var_a2->featureType = COURSE_FEATURE_BUILDING_SPIRE_RIGHT;
+                var_a2->unk_08 = 0.0f;
+                var_a2->unk_0C = (temp_a0->radiusRight + 500.0f) * -1.0f;
+                // clang-format off
+                var_a2->unk_10.x = 0.0f; \
+                var_a2->unk_10.y = 0.0f; \
+                var_a2->unk_10.z = 0.0f;
+                // clang-format on
+                var_a2++;
+                var_a1++;
+                break;
+        }
+    }
+
+    D_807BCB58.unk_08 = temp_v0;
+    D_807BCB58.unk_0C = temp_v1;
+    D_807BCB58.unk_04 = var_a1;
+}
+
+void func_80701094(s32 courseIndex) {
+    s32 var_a1;
+    s32 i;
+    s32 j;
+    CourseSegment* temp_a0;
+    unk_802D1B60_unk_00* var_a2;
+    s32 temp_v0 = D_807BCB58.unk_08;
+    s32 temp_v1 = D_807BCB58.unk_0C;
+    f32 temp_fs0;
+    f32 temp_fs1;
+    f32 temp_fs2;
+    f32 temp_fs3;
+
+    var_a1 = D_807BCB58.unk_04;
+
+    var_a2 = &D_807BCB58.unk_00[var_a1];
+
+    for (i = 0; i < gCourseInfos[courseIndex].segmentCount; i++) {
+        temp_a0 = &gCourseInfos[courseIndex].courseSegments[i];
+
+        temp_fs2 = temp_a0->radiusLeft + temp_a0->radiusRight;
+        temp_fs0 = temp_a0->next->radiusLeft + temp_a0->next->radiusRight;
+        temp_fs3 = (temp_a0->radiusLeft - temp_a0->radiusRight) / 2;
+        temp_fs1 = (temp_a0->next->radiusLeft - temp_a0->next->radiusRight) / 2;
+        temp_fs0 -= temp_fs2;
+        temp_fs1 -= temp_fs3;
+
+        switch (gCourseData.building[i]) {
+            case BUILDING_MOUNTAIN_BOTH:
+                var_a2->featureType = COURSE_FEATURE_BUILDING_MOUNTAIN_LEFT;
+                var_a2->segmentIndex = i;
+                var_a2->unk_08 = 0.0f;
+                var_a2->unk_0C = temp_a0->radiusLeft + 500.0f;
+                // clang-format off
+                var_a2->unk_10.x = 0.0f; \
+                var_a2->unk_10.y = 0.0f; \
+                var_a2->unk_10.z = 0.0f;
+                // clang-format on
+                var_a2++;
+                var_a1++;
+                var_a2->segmentIndex = i;
+                var_a2->featureType = COURSE_FEATURE_BUILDING_MOUNTAIN_RIGHT;
+                var_a2->unk_08 = 0.0f;
+                var_a2->unk_0C = (temp_a0->radiusRight + 500.0f) * -1.0f;
+                // clang-format off
+                var_a2->unk_10.x = 0.0f; \
+                var_a2->unk_10.y = 0.0f; \
+                var_a2->unk_10.z = 0.0f;
+                // clang-format on
+                var_a2++;
+                var_a1++;
+                break;
+            case BUILDING_MOUNTAIN_LEFT:
+                var_a2->featureType = COURSE_FEATURE_BUILDING_MOUNTAIN_LEFT;
+                var_a2->segmentIndex = i;
+                var_a2->unk_08 = 0.0f;
+                var_a2->unk_0C = temp_a0->radiusLeft + 500.0f;
+                // clang-format off
+                var_a2->unk_10.x = 0.0f; \
+                var_a2->unk_10.y = 0.0f; \
+                var_a2->unk_10.z = 0.0f;
+                // clang-format on
+                var_a2++;
+                var_a1++;
+                break;
+            case BUILDING_MOUNTAIN_RIGHT:
+                var_a2->featureType = COURSE_FEATURE_BUILDING_MOUNTAIN_RIGHT;
+                var_a2->segmentIndex = i;
+                var_a2->unk_08 = 0.0f;
+                var_a2->unk_0C = (temp_a0->radiusRight + 500.0f) * -1.0f;
+                // clang-format off
+                var_a2->unk_10.x = 0.0f; \
+                var_a2->unk_10.y = 0.0f; \
+                var_a2->unk_10.z = 0.0f;
+                // clang-format on
+                var_a2++;
+                var_a1++;
+                break;
+            case BUILDING_TALL_GOLD_BOTH:
+                var_a2->featureType = COURSE_FEATURE_BUILDING_TALL_GOLD_LEFT;
+                var_a2->segmentIndex = i;
+                var_a2->unk_08 = 0.0f;
+                var_a2->unk_0C = temp_a0->radiusLeft + 500.0f;
+                // clang-format off
+                var_a2->unk_10.x = 0.0f; \
+                var_a2->unk_10.y = 0.0f; \
+                var_a2->unk_10.z = 0.0f;
+                // clang-format on
+                var_a2++;
+                var_a1++;
+                var_a2->segmentIndex = i;
+                var_a2->featureType = COURSE_FEATURE_BUILDING_TALL_GOLD_RIGHT;
+                var_a2->unk_08 = 0.0f;
+                var_a2->unk_0C = (temp_a0->radiusRight + 500.0f) * -1.0f;
+                // clang-format off
+                var_a2->unk_10.x = 0.0f; \
+                var_a2->unk_10.y = 0.0f; \
+                var_a2->unk_10.z = 0.0f;
+                // clang-format on
+                var_a2++;
+                var_a1++;
+                break;
+            case BUILDING_TALL_GOLD_LEFT:
+                var_a2->featureType = COURSE_FEATURE_BUILDING_TALL_GOLD_LEFT;
+                var_a2->segmentIndex = i;
+                var_a2->unk_08 = 0.0f;
+                var_a2->unk_0C = temp_a0->radiusLeft + 500.0f;
+                // clang-format off
+                var_a2->unk_10.x = 0.0f; \
+                var_a2->unk_10.y = 0.0f; \
+                var_a2->unk_10.z = 0.0f;
+                // clang-format on
+                var_a2++;
+                var_a1++;
+                break;
+            case BUILDING_TALL_GOLD_RIGHT:
+                var_a2->featureType = COURSE_FEATURE_BUILDING_TALL_GOLD_RIGHT;
+                var_a2->segmentIndex = i;
+                var_a2->unk_08 = 0.0f;
+                var_a2->unk_0C = (temp_a0->radiusRight + 500.0f) * -1.0f;
+                // clang-format off
+                var_a2->unk_10.x = 0.0f; \
+                var_a2->unk_10.y = 0.0f; \
+                var_a2->unk_10.z = 0.0f;
+                // clang-format on
+                var_a2++;
+                var_a1++;
+                break;
+        }
+    }
+
+    D_807BCB58.unk_08 = temp_v0;
+    D_807BCB58.unk_0C = temp_v1;
+    D_807BCB58.unk_04 = var_a1;
+}
+
+void func_80701328(s32 courseIndex) {
+    func_80700B18(courseIndex);
+    func_80700CE4(courseIndex);
+    func_80700EBC(courseIndex);
+    func_80701094(courseIndex);
+}
+
+void func_80701360(s32 courseIndex) {
+    unk_802D1B60_unk_00* var_a2;
+    s32 var_a1 = D_807BCB58.unk_04;
+    s32 temp_v0 = D_807BCB58.unk_08;
+    s32 temp_v1 = D_807BCB58.unk_0C;
+    f32 temp_fs0;
+    f32 temp_fs1;
+    f32 temp_fs2;
+    f32 temp_fs3;
+    CourseSegment* temp_a0;
+    s32 i;
+    s32 j;
+
+    var_a2 = &D_807BCB58.unk_00[var_a1];
+
+    for (i = 0; i < 5; i++) {
+        for (j = 0; j < gCourseInfos[courseIndex].segmentCount; j++) {
+            temp_a0 = &gCourseInfos[courseIndex].courseSegments[j];
+
+            if (i == 5) {}
+
+            temp_fs2 = temp_a0->radiusLeft + temp_a0->radiusRight;
+            temp_fs0 = temp_a0->next->radiusLeft + temp_a0->next->radiusRight;
+            temp_fs3 = (temp_a0->radiusLeft - temp_a0->radiusRight) / 2;
+            temp_fs1 = (temp_a0->next->radiusLeft - temp_a0->next->radiusRight) / 2;
+            temp_fs0 -= temp_fs2;
+            temp_fs1 -= temp_fs3;
+
+            if (i == gCourseData.sign[j]) {
+                switch (gCourseData.sign[j]) {
+                    case SIGN_TV:
+                        var_a2->featureType = COURSE_FEATURE_SIGN_TV_RIGHT;
+                        var_a2->segmentIndex = j;
+                        var_a2->unk_08 = 0.0f;
+                        var_a2->unk_0C = (temp_a0->radiusRight + 23.0f + 20.0f) * -1.0f;
+                        // clang-format off
+                        var_a2->unk_10.x = 0.0f; \
+                        var_a2->unk_10.y = 0.0f; \
+                        var_a2->unk_10.z = 0.0f;
+                        // clang-format on
+                        var_a2++;
+                        var_a1++;
+                        var_a2->segmentIndex = j;
+                        var_a2->featureType = COURSE_FEATURE_SIGN_TV_LEFT;
+                        var_a2->unk_08 = 0.0f;
+                        var_a2->unk_0C = temp_a0->radiusLeft + 23.0f + 20.0f;
+                        // clang-format off
+                        var_a2->unk_10.x = 0.0f; \
+                        var_a2->unk_10.y = 0.0f; \
+                        var_a2->unk_10.z = 0.0f;
+                        // clang-format on
+                        var_a2++;
+                        var_a1++;
+                        break;
+                    case SIGN_2:
+                        var_a2->featureType = COURSE_FEATURE_SIGN_2_RIGHT;
+                        var_a2->segmentIndex = j;
+                        var_a2->unk_08 = 0.0f;
+                        var_a2->unk_0C = (temp_a0->radiusRight + 23.0f + 20.0f) * -1.0f;
+                        // clang-format off
+                        var_a2->unk_10.x = 0.0f; \
+                        var_a2->unk_10.y = 0.0f; \
+                        var_a2->unk_10.z = 0.0f;
+                        // clang-format on
+                        var_a2++;
+                        var_a1++;
+                        var_a2->segmentIndex = j;
+                        var_a2->featureType = COURSE_FEATURE_SIGN_2_LEFT;
+                        var_a2->unk_08 = 0.0f;
+                        var_a2->unk_0C = temp_a0->radiusLeft + 23.0f + 20.0f;
+                        // clang-format off
+                        var_a2->unk_10.x = 0.0f; \
+                        var_a2->unk_10.y = 0.0f; \
+                        var_a2->unk_10.z = 0.0f;
+                        // clang-format on
+                        var_a2++;
+                        var_a1++;
+                        break;
+                    case SIGN_1:
+                        var_a2->featureType = COURSE_FEATURE_SIGN_1_RIGHT;
+                        var_a2->segmentIndex = j;
+                        var_a2->unk_08 = 0.0f;
+                        var_a2->unk_0C = (temp_a0->radiusRight + 23.0f + 20.0f) * -1.0f;
+                        // clang-format off
+                        var_a2->unk_10.x = 0.0f; \
+                        var_a2->unk_10.y = 0.0f; \
+                        var_a2->unk_10.z = 0.0f;
+                        // clang-format on
+                        var_a2++;
+                        var_a1++;
+                        var_a2->segmentIndex = j;
+                        var_a2->featureType = COURSE_FEATURE_SIGN_1_LEFT;
+                        var_a2->unk_08 = 0.0f;
+                        var_a2->unk_0C = temp_a0->radiusLeft + 23.0f + 20.0f;
+                        // clang-format off
+                        var_a2->unk_10.x = 0.0f; \
+                        var_a2->unk_10.y = 0.0f; \
+                        var_a2->unk_10.z = 0.0f;
+                        // clang-format on
+                        var_a2++;
+                        var_a1++;
+                        break;
+                    case SIGN_NINTEX:
+                        var_a2->featureType = COURSE_FEATURE_SIGN_NINTEX_RIGHT;
+                        var_a2->segmentIndex = j;
+                        var_a2->unk_08 = 0.0f;
+                        var_a2->unk_0C = (temp_a0->radiusRight + 23.0f + 20.0f) * -1.0f;
+                        // clang-format off
+                        var_a2->unk_10.x = 0.0f; \
+                        var_a2->unk_10.y = 0.0f; \
+                        var_a2->unk_10.z = 0.0f;
+                        // clang-format on
+                        var_a2++;
+                        var_a1++;
+                        var_a2->segmentIndex = j;
+                        var_a2->featureType = COURSE_FEATURE_SIGN_NINTEX_LEFT;
+                        var_a2->unk_08 = 0.0f;
+                        var_a2->unk_0C = temp_a0->radiusLeft + 23.0f + 20.0f;
+                        // clang-format off
+                        var_a2->unk_10.x = 0.0f; \
+                        var_a2->unk_10.y = 0.0f; \
+                        var_a2->unk_10.z = 0.0f;
+                        // clang-format on
+                        var_a2++;
+                        var_a1++;
+                        break;
+                    case SIGN_OVERHEAD:
+                        var_a2->featureType = COURSE_FEATURE_SIGN_OVERHEAD;
+                        var_a2->segmentIndex = j;
+                        var_a2->unk_08 = 0.0f;
+                        var_a2->unk_0C = temp_fs3;
+                        // clang-format off
+                        var_a2->unk_10.x = 0.0f; \
+                        var_a2->unk_10.y = 0.0f; \
+                        var_a2->unk_10.z = 0.0f;
+                        // clang-format on
+                        var_a2++;
+                        var_a1++;
+                        break;
+                }
+            }
+        }
+    }
+
+    D_807BCB58.unk_04 = var_a1;
+    D_807BCB58.unk_08 = temp_v0;
+    D_807BCB58.unk_0C = temp_v1;
+}
+
+extern s32 D_807B6520;
+
+void func_807016AC(s32 courseIndex) {
+    if ((D_8076C954 != 0) && (D_8076C950 == 0)) {
+        if (D_807B6520 < 4) {
+            return;
+        }
+    } else if (gCourseData.controlPointCount < 4) {
+        return;
+    }
+
+    D_807BCB58.unk_08 = 0;
+    D_807BCB58.unk_0C = 0;
+    D_807BCB58.unk_04 = 0;
+    func_806FF630(courseIndex);
+    func_80700254(courseIndex);
+    func_807009C8(courseIndex);
+    func_80701328(courseIndex);
+    func_80701360(courseIndex);
+}
+
+void func_80701754(s32 courseIndex) {
+    s32 i;
+
+    if ((D_8076C954 != 0) && (D_8076C950 == 0)) {
+        if (D_807B6520 < 4) {
+            return;
+        }
+    } else if (gCourseData.controlPointCount < 4) {
+        return;
+    }
+
+    D_807BDD68.count = 0;
+
+    for (i = 0; i < gCourseInfos[courseIndex].segmentCount; i++) {
+        func_806FF364(courseIndex, i);
+        func_806FF12C(courseIndex, i);
+        func_806FEEEC(courseIndex, i);
+        func_80700570(courseIndex, i);
+    }
+}
+
+extern CourseData D_800CF950;
+extern CourseData D_800D0130;
+extern s32 gCourseIndex;
+extern CourseSegment D_807B8E30[];
+extern CourseSegment D_802D0620[];
+
+void func_8070183C(void) {
+    CourseSegment* segment;
+    CourseInfo* courseInfo;
+    s32 var_a3;
+    s32 i;
+
+    D_800D0130 = gCourseData;
+
+    courseInfo = &gCourseInfos[gCourseIndex];
+    courseInfo->courseSegments = D_802D0620;
+
+    for (i = 0, segment = D_802D0620; i < courseInfo->segmentCount; i++) {
+        segment->segmentIndex = i;
+        segment->next = segment + 1;
+        segment->prev = segment - 1;
+        segment++;
+    }
+
+    courseInfo->courseSegments[0].prev = &courseInfo->courseSegments[courseInfo->segmentCount - 1];
+    courseInfo->courseSegments[courseInfo->segmentCount - 1].next = courseInfo->courseSegments;
+
+    var_a3 = 0;
+    for (i = 0; i < courseInfo->segmentCount; i++) {
+        segment = &courseInfo->courseSegments[i];
+        if (!(segment->trackSegmentInfo & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK))) {
+            var_a3 = i;
+            break;
+        }
+    }
+
+    segment = &courseInfo->courseSegments[var_a3];
+
+    for (i = 0; i < courseInfo->segmentCount; i++) {
+        if (segment->next->trackSegmentInfo & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK)) {
+            var_a3 = segment->segmentIndex;
+            break;
+        }
+        segment = segment->next;
+    }
+
+    var_a3 = courseInfo->courseSegments[var_a3].next->segmentIndex;
+    segment = &courseInfo->courseSegments[var_a3];
+    for (i = 0; i < courseInfo->segmentCount; i++) {
+        var_a3 = segment->segmentIndex;
+        D_807B8E30[i] = *segment;
+
+        D_800CF950.bankAngle[i] = gCourseData.bankAngle[var_a3];
+        D_800CF950.pit[i] = gCourseData.pit[var_a3];
+        D_800CF950.dash[i] = gCourseData.dash[var_a3];
+        D_800CF950.dirt[i] = gCourseData.dirt[var_a3];
+        D_800CF950.ice[i] = gCourseData.ice[var_a3];
+        D_800CF950.jump[i] = gCourseData.jump[var_a3];
+        D_800CF950.landmine[i] = gCourseData.landmine[var_a3];
+        D_800CF950.gate[i] = gCourseData.gate[var_a3];
+        D_800CF950.building[i] = gCourseData.building[var_a3];
+        D_800CF950.sign[i] = gCourseData.sign[var_a3];
+        segment = segment->next;
+    }
+
+    for (i = 0; i < courseInfo->segmentCount; i++) {
+        courseInfo->courseSegments[i] = D_807B8E30[i];
+
+        gCourseData.bankAngle[i] = D_800CF950.bankAngle[i];
+        gCourseData.pit[i] = D_800CF950.pit[i];
+        gCourseData.dash[i] = D_800CF950.dash[i];
+        gCourseData.dirt[i] = D_800CF950.dirt[i];
+        gCourseData.ice[i] = D_800CF950.ice[i];
+        gCourseData.jump[i] = D_800CF950.jump[i];
+        gCourseData.landmine[i] = D_800CF950.landmine[i];
+        gCourseData.gate[i] = D_800CF950.gate[i];
+        gCourseData.building[i] = D_800CF950.building[i];
+        gCourseData.sign[i] = D_800CF950.sign[i];
+    }
+
+    segment = courseInfo->courseSegments;
+    for (i = 0; i < courseInfo->segmentCount; i++) {
+        segment->segmentIndex = i;
+        segment->next = segment + 1;
+        segment->prev = segment - 1;
+        segment++;
+    }
+    courseInfo->courseSegments[0].prev = &courseInfo->courseSegments[courseInfo->segmentCount - 1];
+    courseInfo->courseSegments[courseInfo->segmentCount - 1].next = courseInfo->courseSegments;
+}
 
 extern OSIoMesg D_8079A308;
 extern OSMesgQueue gDmaMesgQueue;
@@ -1117,9 +3024,37 @@ void func_80701D7C(u8* romAddr, u8* ramAddr, size_t size) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/6F50/func_80701E08.s")
+void func_80701E08(void) {
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/6F50/D_807735F0.s")
+    func_80704050(1);
+
+    switch (func_8070595C()) {
+        case 1:
+            func_8070F8A4(-1, 3);
+            break;
+        case 0:
+            func_8070F8A4(-1, 4);
+            break;
+        default:
+            break;
+    }
+    while (func_8070595C() != 2) {}
+    func_80704050(0);
+}
+
+// todo: move these to appropriate places
+static const char devrostr00[] = "%d startVtx error %d/%d\n";
+static const char devrostr01[] = "GADGET OVER !! OVER !! OVER !!\n";
+static const char devrostr02[] = "devide idx error\n";
+static const char devrostr03[] = "\n/***\nCOURSE GADGET TEXTURE OVER!! %f,%f\n***/\n";
+static const char devrostr04[] = "GADGET OVER !! OVER !! OVER !!\n";
+static const char devrostr05[] = "Gadget Vtx Over %d!!\n";
+static const char devrostr06[] = "U ERROR RETRY\n";
+static const char devrostr07[] = "U ERROR RETRY\n";
+static const char devrostr08[] = "U ERROR RETRY\n";
+static const char devrostr09[] = "============== COURSE LOAD %2d  ==============\n";
+static const char devrostr10[] = "ENTRY CHECK\n";
+static const char devrostr11[] = "ENTRY CHECK NONE(DEFAULT COURSE)\n";
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/6F50/func_80701E90.s")
 
