@@ -16,7 +16,8 @@ u16 D_8076C7E8 = 0;
 s8 D_8076C7EC = 0;
 s32 sTitleDemoGameModes[] = { GAMEMODE_GP_RACE, GAMEMODE_VS_2P, GAMEMODE_VS_4P };
 s32 sTitleDemoNumPlayers[] = { 1, 2, 4 };
-s8 sTitleDemoCourses[] = { COURSE_DEVILS_FOREST, COURSE_SILENCE, COURSE_SAND_OCEAN, COURSE_BIG_BLUE, COURSE_WHITE_LAND_2 };
+s8 sTitleDemoCourses[] = { COURSE_DEVILS_FOREST, COURSE_SILENCE, COURSE_SAND_OCEAN, COURSE_BIG_BLUE,
+                           COURSE_WHITE_LAND_2 };
 s16 D_8076C810 = 0;
 s16 D_8076C814 = 0;
 
@@ -31,81 +32,81 @@ s8 gGamePaused;
 UNUSED s32 D_8079A4D0;
 
 void (*sGamemodeInitFuncs[])(void) = {
-    Title_Init,             // GAMEMODE_TITLE
-    Race_Init,              // GAMEMODE_GP_RACE
-    Race_Init,              // GAMEMODE_PRACTICE
-    Race_Init,              // GAMEMODE_VS_2P
-    Race_Init,              // GAMEMODE_VS_3P
-    Race_Init,              // GAMEMODE_VS_4P
-    Records_Init,           // GAMEMODE_RECORDS
-    MainMenu_Init,          // GAMEMODE_MAIN_MENU
-    MachineSelect_Init,     // GAMEMODE_MACHINE_SELECT
-    MachineSettings_Init,   // GAMEMODE_MACHINE_SETTINGS
-    CourseSelect_Init,      // GAMEMODE_COURSE_SELECT
-    Credits_Init,           // GAMEMODE_SKIPPABLE_CREDITS
-    Credits_Init,           // GAMEMODE_UNSKIPPABLE_CREDITS
-    CourseEdit_Init,        // GAMEMODE_COURSE_EDIT
-    Race_Init,              // GAMEMODE_TIME_ATTACK
-    NextCourseSelect_Init,  // GAMEMODE_GP_RACE_NEXT_COURSE
-    MachineCreate_Init,     // GAMEMODE_CREATE_MACHINE
-    EndingCutscene_Init,    // GAMEMODE_GP_END_CS
-    MachineSettings_Init,   // GAMEMODE_GP_RACE_NEXT_MACHINE_SETTINGS
-    CourseSelect_Init,      // GAMEMODE_RECORDS_COURSE_SELECT
-    OptionsMenu_Init,       // GAMEMODE_OPTIONS_MENU
-    Race_Init,              // GAMEMODE_DEATH_RACE
-    func_xk4_800D8260,      // GAMEMODE_16
+    Title_Init,            // GAMEMODE_TITLE
+    Race_Init,             // GAMEMODE_GP_RACE
+    Race_Init,             // GAMEMODE_PRACTICE
+    Race_Init,             // GAMEMODE_VS_2P
+    Race_Init,             // GAMEMODE_VS_3P
+    Race_Init,             // GAMEMODE_VS_4P
+    Records_Init,          // GAMEMODE_RECORDS
+    MainMenu_Init,         // GAMEMODE_MAIN_MENU
+    MachineSelect_Init,    // GAMEMODE_MACHINE_SELECT
+    MachineSettings_Init,  // GAMEMODE_MACHINE_SETTINGS
+    CourseSelect_Init,     // GAMEMODE_COURSE_SELECT
+    Credits_Init,          // GAMEMODE_SKIPPABLE_CREDITS
+    Credits_Init,          // GAMEMODE_UNSKIPPABLE_CREDITS
+    CourseEdit_Init,       // GAMEMODE_COURSE_EDIT
+    Race_Init,             // GAMEMODE_TIME_ATTACK
+    NextCourseSelect_Init, // GAMEMODE_GP_RACE_NEXT_COURSE
+    MachineCreate_Init,    // GAMEMODE_CREATE_MACHINE
+    EndingCutscene_Init,   // GAMEMODE_GP_END_CS
+    MachineSettings_Init,  // GAMEMODE_GP_RACE_NEXT_MACHINE_SETTINGS
+    CourseSelect_Init,     // GAMEMODE_RECORDS_COURSE_SELECT
+    OptionsMenu_Init,      // GAMEMODE_OPTIONS_MENU
+    Race_Init,             // GAMEMODE_DEATH_RACE
+    func_xk4_800D8260,     // GAMEMODE_16
 };
 
 s32 (*sGamemodeUpdateFuncs[])(void) = {
-    Title_Update,             // GAMEMODE_TITLE
-    Race_Update,              // GAMEMODE_GP_RACE
-    Race_Update,              // GAMEMODE_PRACTICE
-    Race_Update,              // GAMEMODE_VS_2P
-    Race_Update,              // GAMEMODE_VS_3P
-    Race_Update,              // GAMEMODE_VS_4P
-    Records_Update,           // GAMEMODE_RECORDS
-    MainMenu_Update,          // GAMEMODE_MAIN_MENU
-    MachineSelect_Update,     // GAMEMODE_MACHINE_SELECT
-    MachineSettings_Update,   // GAMEMODE_MACHINE_SETTINGS
-    CourseSelect_Update,      // GAMEMODE_COURSE_SELECT
-    Credits_Update,           // GAMEMODE_SKIPPABLE_CREDITS
-    Credits_Update,           // GAMEMODE_UNSKIPPABLE_CREDITS
-    CourseEdit_Update,        // GAMEMODE_COURSE_EDIT
-    Race_Update,              // GAMEMODE_TIME_ATTACK
-    NextCourseSelect_Update,  // GAMEMODE_GP_RACE_NEXT_COURSE
-    MachineCreate_Update,     // GAMEMODE_CREATE_MACHINE
-    EndingCutscene_Update,    // GAMEMODE_GP_END_CS
-    MachineSettings_Update,   // GAMEMODE_GP_RACE_NEXT_MACHINE_SETTINGS
-    CourseSelect_Update,      // GAMEMODE_RECORDS_COURSE_SELECT
-    OptionsMenu_Update,       // GAMEMODE_OPTIONS_MENU
-    Race_Update,              // GAMEMODE_DEATH_RACE
-    func_xk4_800D82A4,        // GAMEMODE_16
+    Title_Update,            // GAMEMODE_TITLE
+    Race_Update,             // GAMEMODE_GP_RACE
+    Race_Update,             // GAMEMODE_PRACTICE
+    Race_Update,             // GAMEMODE_VS_2P
+    Race_Update,             // GAMEMODE_VS_3P
+    Race_Update,             // GAMEMODE_VS_4P
+    Records_Update,          // GAMEMODE_RECORDS
+    MainMenu_Update,         // GAMEMODE_MAIN_MENU
+    MachineSelect_Update,    // GAMEMODE_MACHINE_SELECT
+    MachineSettings_Update,  // GAMEMODE_MACHINE_SETTINGS
+    CourseSelect_Update,     // GAMEMODE_COURSE_SELECT
+    Credits_Update,          // GAMEMODE_SKIPPABLE_CREDITS
+    Credits_Update,          // GAMEMODE_UNSKIPPABLE_CREDITS
+    CourseEdit_Update,       // GAMEMODE_COURSE_EDIT
+    Race_Update,             // GAMEMODE_TIME_ATTACK
+    NextCourseSelect_Update, // GAMEMODE_GP_RACE_NEXT_COURSE
+    MachineCreate_Update,    // GAMEMODE_CREATE_MACHINE
+    EndingCutscene_Update,   // GAMEMODE_GP_END_CS
+    MachineSettings_Update,  // GAMEMODE_GP_RACE_NEXT_MACHINE_SETTINGS
+    CourseSelect_Update,     // GAMEMODE_RECORDS_COURSE_SELECT
+    OptionsMenu_Update,      // GAMEMODE_OPTIONS_MENU
+    Race_Update,             // GAMEMODE_DEATH_RACE
+    func_xk4_800D82A4,       // GAMEMODE_16
 };
 
 Gfx* (*sGamemodeDrawFuncs[])(Gfx*) = {
-    Title_Draw,            // GAMEMODE_TITLE
-    Race_Draw,             // GAMEMODE_GP_RACE
-    Race_Draw,             // GAMEMODE_PRACTICE
-    Race_Draw,             // GAMEMODE_VS_2P
-    Race_Draw,             // GAMEMODE_VS_3P
-    Race_Draw,             // GAMEMODE_VS_4P
-    Records_Draw,          // GAMEMODE_RECORDS
-    MainMenu_Draw,         // GAMEMODE_MAIN_MENU
-    MachineSelect_Draw,    // GAMEMODE_MACHINE_SELECT
-    MachineSettings_Draw,  // GAMEMODE_MACHINE_SETTINGS
-    CourseSelect_Draw,     // GAMEMODE_COURSE_SELECT
-    Credits_Draw,          // GAMEMODE_SKIPPABLE_CREDITS
-    Credits_Draw,          // GAMEMODE_UNSKIPPABLE_CREDITS
-    CourseEdit_Draw,       // GAMEMODE_COURSE_EDIT
-    Race_Draw,             // GAMEMODE_TIME_ATTACK
-    CourseSelect_Draw,     // GAMEMODE_GP_RACE_NEXT_COURSE
-    MachineCreate_Draw,    // GAMEMODE_CREATE_MACHINE
-    EndingCutscene_Draw,   // GAMEMODE_GP_END_CS
-    MachineSettings_Draw,  // GAMEMODE_GP_RACE_NEXT_MACHINE_SETTINGS
-    CourseSelect_Draw,     // GAMEMODE_RECORDS_COURSE_SELECT
-    OptionsMenu_Draw,      // GAMEMODE_OPTIONS_MENU
-    Race_Draw,             // GAMEMODE_DEATH_RACE
-    func_xk4_800D8348,     // GAMEMODE_16
+    Title_Draw,           // GAMEMODE_TITLE
+    Race_Draw,            // GAMEMODE_GP_RACE
+    Race_Draw,            // GAMEMODE_PRACTICE
+    Race_Draw,            // GAMEMODE_VS_2P
+    Race_Draw,            // GAMEMODE_VS_3P
+    Race_Draw,            // GAMEMODE_VS_4P
+    Records_Draw,         // GAMEMODE_RECORDS
+    MainMenu_Draw,        // GAMEMODE_MAIN_MENU
+    MachineSelect_Draw,   // GAMEMODE_MACHINE_SELECT
+    MachineSettings_Draw, // GAMEMODE_MACHINE_SETTINGS
+    CourseSelect_Draw,    // GAMEMODE_COURSE_SELECT
+    Credits_Draw,         // GAMEMODE_SKIPPABLE_CREDITS
+    Credits_Draw,         // GAMEMODE_UNSKIPPABLE_CREDITS
+    CourseEdit_Draw,      // GAMEMODE_COURSE_EDIT
+    Race_Draw,            // GAMEMODE_TIME_ATTACK
+    CourseSelect_Draw,    // GAMEMODE_GP_RACE_NEXT_COURSE
+    MachineCreate_Draw,   // GAMEMODE_CREATE_MACHINE
+    EndingCutscene_Draw,  // GAMEMODE_GP_END_CS
+    MachineSettings_Draw, // GAMEMODE_GP_RACE_NEXT_MACHINE_SETTINGS
+    CourseSelect_Draw,    // GAMEMODE_RECORDS_COURSE_SELECT
+    OptionsMenu_Draw,     // GAMEMODE_OPTIONS_MENU
+    Race_Draw,            // GAMEMODE_DEATH_RACE
+    func_xk4_800D8348,    // GAMEMODE_16
 };
 
 extern s32 gGameMode;

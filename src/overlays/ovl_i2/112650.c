@@ -1,4 +1,5 @@
-#include "common.h"
+#include "global.h"
+#include "fzx_course.h"
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/112650/func_i2_800B0D10.s")
 
@@ -14,7 +15,32 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/112650/func_i2_800B20D0.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/112650/func_i2_800B2500.s")
+// Get un-normalised tangent vector along course segment (and magnitude)
+f32 func_i2_800B2500(CourseSegment* arg0, f32 arg1, Vec3f* arg2) {
+    f32 square;
+    f32 temp_fv0;
+    f32 sp44;
+    f32 sp40;
+    f32 sp3C;
+    f32 sp38;
+    CourseSegment* temp_v0 = arg0->next;
+    CourseSegment* temp_v1 = arg0->prev;
+    CourseSegment* temp_a1 = temp_v0->next;
+
+    square = SQ(arg1);
+    temp_fv0 = arg0->unk_24;
+
+    sp44 = (4.0f * arg1 - 1.0f - (3.0f * square)) * temp_fv0;
+    sp40 = (6.0f - 3.0f * temp_fv0) * square + (2.0f * temp_fv0 - 6.0f) * arg1;
+    sp3C = (3.0f * temp_fv0 - 6.0f) * square + (6.0f - 4.0f * temp_fv0) * arg1 + temp_fv0;
+    sp38 = ((3.0f * square) - 2.0f * arg1) * temp_fv0;
+
+    arg2->x = sp44 * temp_v1->pos.x + sp40 * arg0->pos.x + sp3C * temp_v0->pos.x + sp38 * temp_a1->pos.x;
+    arg2->y = sp44 * temp_v1->pos.y + sp40 * arg0->pos.y + sp3C * temp_v0->pos.y + sp38 * temp_a1->pos.y;
+    arg2->z = sp44 * temp_v1->pos.z + sp40 * arg0->pos.z + sp3C * temp_v0->pos.z + sp38 * temp_a1->pos.z;
+
+    return sqrtf(SQ(arg2->x) + SQ(arg2->y) + SQ(arg2->z));
+}
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/112650/func_i2_800B26B8.s")
 

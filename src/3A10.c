@@ -374,30 +374,30 @@ void Lights_SetDirection(Light* light, s32 x, s32 y, s32 z) {
 }
 
 void Lights_SetSource(Lights1* light, s32 ambientR, s32 ambientG, s32 ambientB, s32 r, s32 g, s32 b, s32 x, s32 y,
-    s32 z) {
+                      s32 z) {
 
-// FAKE
-((s8*) light)[3] = ((s8*) light)[7] = ((s8*) light)[11] = ((s8*) light)[15] = ((s8*) light)[19] = 0;
-// light->a.l.pad1 = light->a.l.pad2 = light->l[0].l.pad1 = light->l[0].l.pad2 = light->l[0].l.pad3 = 0;
+    // FAKE
+    ((s8*) light)[3] = ((s8*) light)[7] = ((s8*) light)[11] = ((s8*) light)[15] = ((s8*) light)[19] = 0;
+    // light->a.l.pad1 = light->a.l.pad2 = light->l[0].l.pad1 = light->l[0].l.pad2 = light->l[0].l.pad3 = 0;
 
-Lights_SetAmbient(&light->a, ambientR, ambientG, ambientB);
-Lights_SetColor(&light->l[0], r, g, b);
-Lights_SetDirection(&light->l[0], x, y, z);
+    Lights_SetAmbient(&light->a, ambientR, ambientG, ambientB);
+    Lights_SetColor(&light->l[0], r, g, b);
+    Lights_SetDirection(&light->l[0], x, y, z);
 }
 
 void Light_SetLookAtSource(LookAt* lookAt, MtxF* mtx) {
 
-// FAKE
-((s8*) lookAt)[3] = ((s8*) lookAt)[7] = ((s8*) lookAt)[19] = ((s8*) lookAt)[23] = 0;
-// lookAt->l[0].l.pad1 = lookAt->l[0].l.pad2 = lookAt->l[1].l.pad1 = lookAt->l[1].l.pad2 = 0;
+    // FAKE
+    ((s8*) lookAt)[3] = ((s8*) lookAt)[7] = ((s8*) lookAt)[19] = ((s8*) lookAt)[23] = 0;
+    // lookAt->l[0].l.pad1 = lookAt->l[0].l.pad2 = lookAt->l[1].l.pad1 = lookAt->l[1].l.pad2 = 0;
 
-Lights_SetColor(&lookAt->l[0], 0, 0, 0);
-Lights_SetColor(&lookAt->l[1], 0, 128, 0);
+    Lights_SetColor(&lookAt->l[0], 0, 0, 0);
+    Lights_SetColor(&lookAt->l[1], 0, 128, 0);
 
-Lights_SetDirection(&lookAt->l[0], Math_Round(mtx->m[0][0] * 120.0f), Math_Round(mtx->m[1][0] * 120.0f),
-      Math_Round(mtx->m[2][0] * 120.0f));
-Lights_SetDirection(&lookAt->l[1], Math_Round(mtx->m[0][1] * 120.0f), Math_Round(mtx->m[1][1] * 120.0f),
-      Math_Round(mtx->m[2][1] * 120.0f));
+    Lights_SetDirection(&lookAt->l[0], Math_Round(mtx->m[0][0] * 120.0f), Math_Round(mtx->m[1][0] * 120.0f),
+                        Math_Round(mtx->m[2][0] * 120.0f));
+    Lights_SetDirection(&lookAt->l[1], Math_Round(mtx->m[0][1] * 120.0f), Math_Round(mtx->m[1][1] * 120.0f),
+                        Math_Round(mtx->m[2][1] * 120.0f));
 }
 
 void func_806F74E0(LookAt* lookAt, s32* arg1, MtxF* arg2, f32 arg3, f32 arg4, f32 arg5, s32 arg6, s32 arg7) {

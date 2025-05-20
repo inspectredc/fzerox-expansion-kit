@@ -317,7 +317,8 @@ void Game_ThreadEntry(void* entry) {
     gCourseEditTexturesVramEnd = gCourseEditTexturesVramStart + (size_t) SEGMENT_VRAM_SIZE(course_edit_textures);
 
     gCreateMachineTexturesVramStart = D_8079A470;
-    gCreateMachineTexturesVramEnd = gCreateMachineTexturesVramStart + (size_t) SEGMENT_VRAM_SIZE(create_machine_textures);
+    gCreateMachineTexturesVramEnd =
+        gCreateMachineTexturesVramStart + (size_t) SEGMENT_VRAM_SIZE(create_machine_textures);
 
     D_8079A3D4 = osVirtualToPhysical(D_800D6D90);
     D_8079A3D8 = osVirtualToPhysical(D_8013A7F0);
@@ -411,15 +412,19 @@ void Game_ThreadEntry(void* entry) {
     CLEAR_DATA_CACHE(osPhysicalToVirtual(gSegment16C8A0VramStart), SEGMENT_DATA_SIZE_CONST(segment_16C8A0));
 
     func_8070818C(D_807C7118,
-                  (uintptr_t) osPhysicalToVirtual(gSegment16C8A0VramStart) + (size_t) SEGMENT_DATA_SIZE_CONST(segment_16C8A0),
+                  (uintptr_t) osPhysicalToVirtual(gSegment16C8A0VramStart) +
+                      (size_t) SEGMENT_DATA_SIZE_CONST(segment_16C8A0),
                   SEGMENT_VRAM_SIZE(segment_16C8A0));
 
-    mio0Decode((uintptr_t) osPhysicalToVirtual(gSegment16C8A0VramStart) + (size_t) SEGMENT_DATA_SIZE_CONST(segment_16C8A0),
+    mio0Decode((uintptr_t) osPhysicalToVirtual(gSegment16C8A0VramStart) +
+                   (size_t) SEGMENT_DATA_SIZE_CONST(segment_16C8A0),
                osPhysicalToVirtual(gSegment16C8A0VramStart));
 
-    func_8070818C(D_807C70D8, (uintptr_t) osPhysicalToVirtual(gSegment17B1E0VramStart), SEGMENT_VRAM_SIZE(segment_17B1E0));
+    func_8070818C(D_807C70D8, (uintptr_t) osPhysicalToVirtual(gSegment17B1E0VramStart),
+                  SEGMENT_VRAM_SIZE(segment_17B1E0));
 
-    func_8070818C(D_807C70F0, (uintptr_t) osPhysicalToVirtual(gSegment17B960VramStart), SEGMENT_VRAM_SIZE(segment_17B960));
+    func_8070818C(D_807C70F0, (uintptr_t) osPhysicalToVirtual(gSegment17B960VramStart),
+                  SEGMENT_VRAM_SIZE(segment_17B960));
 
     if ((D_8079A32C != 0) && gRamDDCompatible) {
         if (osAppNMIBuffer[13] != 0x20DE1529) {

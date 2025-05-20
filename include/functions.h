@@ -46,6 +46,7 @@ void func_80701D7C(u8* romAddr, u8* ramAddr, size_t size);
 void func_80702A68(void);
 void func_80702A94(void);
 
+f32 func_807032B0(Vec3f, Vec3f);
 void func_80703320(f32*, f32*);
 s32 func_80703444(Vec3f*, f32);
 
@@ -54,6 +55,8 @@ void func_80703948(void);
 s32 func_80703CA4(s32 startLba, void* vram, s32 diskSize, s32 bssSize);
 s32 func_80703E08(s32 startLba, void* vram, s32 diskSize, s32 bssSize);
 
+void func_80704050(s32);
+s32 func_8070595C(void);
 void SLForceWritebackDCacheAll(void);
 s32 SLLeoReadWrite(LEOCmd* cmdBlock, s32 direction, s32 lba, u8* vAddr, u32 nLbas, OSMesgQueue* mq);
 s32 SLLeoReadWrite_DATA(LEOCmd* cmdBlock, s32 direction, s32 lba, u8* vAddr, u32 nLbas, OSMesgQueue* mq);

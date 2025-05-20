@@ -313,5 +313,6 @@ typedef enum BorderlessRoad {
 
 extern CourseData gCourseData;
 extern CourseInfo* gCurrentCourseInfo;
+extern CourseInfo gCourseInfos[];
 
 #endif // FZX_COURSE_H
