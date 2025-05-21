@@ -60,6 +60,7 @@ Gfx* func_806FC9FC(Gfx* gfx);
 Gfx* func_806FCAF8(Gfx* gfx);
 void func_80701C04(void* romAddr, void* ramAddr, size_t size);
 void func_80701D7C(u8* romAddr, u8* ramAddr, size_t size);
+void func_80701E90(s32 courseIndex);
 void func_80702A68(void);
 void func_80702A94(void);
 void func_80702BC4(s32 courseIndex);
@@ -144,6 +145,7 @@ s32 func_80768B88(OSPiHandle*, OSIoMesg*, s32);
 u16 func_80766788(void);
 s32 func_80766660(u16);
 void func_8076852C(u16, u8*, u8*, void*, s32);
+void func_807684AC(u16, u8*, u8*, void*, s32, s32);
 
 Gfx* func_xk1_8002ED64(Gfx*);
 Gfx* func_xk1_8002F9DC(Gfx*);

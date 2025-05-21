@@ -95,6 +95,11 @@ typedef struct CupSave {
     u16 cupCompletion[4][10];
 } CupSave; // size = 0x60
 
+typedef struct GhostSave {
+    GhostRecord record;
+    GhostData data;
+} GhostSave;
+
 typedef struct SaveContext {
     ProfileSave profileSaves[2];
     GhostRecord ghostRecord;
@@ -104,12 +109,23 @@ typedef struct SaveContext {
     s8 unk_7FE0[0x20];
 } SaveContext; // size = 0x8000
 
+// extern u8 gSaveBuffer[];
+extern SaveContext gSaveContext;
+
 s32 Save_Init(SaveContext*, s32);
 
 void Save_ClearData(void* data, s32 size);
 
+void Save_SaveCharacterSave(CharacterSave* characterSave);
+
+void func_i2_800A7C84(GhostRecord* ghostRecord);
+
 void Save_LoadCourseRecord(SaveCourseRecords* courseRecord, s32 courseIndex);
+
 s32 Save_CalculateSaveCourseRecordChecksum(SaveCourseRecords* courseRecords);
+s32 Save_CalculateGhostRecordChecksum(GhostRecord* ghostRecord);
+s32 Save_CalculateCharacterSaveChecksum(CharacterSave* characterSave);
+void Sram_ReadWrite(s32 direction, u32 offset, void* dramAddr, size_t size);
 
 #define REPLAY_DATA_LARGE_FLAG -0x80
 #define REPLAY_DATA_LARGE(x) REPLAY_DATA_LARGE_FLAG, (((x) >> 8) & 0xFF), ((x) & 0xFF)
