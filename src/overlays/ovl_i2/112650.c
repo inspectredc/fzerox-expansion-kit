@@ -184,10 +184,10 @@ bool func_i2_800BE9D4(f32* regValue) {
 
 s32 Course_CalculateChecksum(void) {
     s32 i;
-    u32 var_v1 = gCourseData.controlPointCount;
+    u32 var_v1 = gCourseCtx.courseData.controlPointCount;
 
-    for (i = 0; i < gCourseData.controlPointCount; i++) {
-        ControlPoint* controlPoint = &gCourseData.controlPoint[i];
+    for (i = 0; i < gCourseCtx.courseData.controlPointCount; i++) {
+        ControlPoint* controlPoint = &gCourseCtx.courseData.controlPoint[i];
 
         controlPoint->trackSegmentInfo &= ~TRACK_JOIN_MASK;
         controlPoint->trackSegmentInfo &= ~TRACK_FORM_MASK;
@@ -231,19 +231,19 @@ s32 Course_CalculateChecksum(void) {
                    ((2.2f + (1.2f * i)) * controlPoint->pos.z * (4.4f + (0.9f * i))) +
                    controlPoint->radiusLeft +
                    ((5.5f + (0.8f * i)) * controlPoint->radiusRight * 4.8f)) +
-            controlPoint->trackSegmentInfo * (0xFE - i) + gCourseData.bankAngle[i] * (0x93DE - i * 2);
+            controlPoint->trackSegmentInfo * (0xFE - i) + gCourseCtx.courseData.bankAngle[i] * (0x93DE - i * 2);
     }
 
-    for (i = 0; i < gCourseData.controlPointCount; i++) {
-        var_v1 += (gCourseData.pit[i] * i);
-        var_v1 += (gCourseData.dash[i] * (i + 0x10));
-        var_v1 += (gCourseData.dirt[i] * (i + 0x80));
-        var_v1 += (gCourseData.ice[i] * (i + 0x100));
-        var_v1 += (gCourseData.jump[i] * (i + 0x800));
-        var_v1 += (gCourseData.landmine[i] * (i + 0x1000));
-        var_v1 += (gCourseData.gate[i] * (i + 0x8000));
-        var_v1 += (gCourseData.building[i] * (i + 0x10000));
-        var_v1 += (gCourseData.sign[i] * (i + 0x80000));
+    for (i = 0; i < gCourseCtx.courseData.controlPointCount; i++) {
+        var_v1 += (gCourseCtx.courseData.pit[i] * i);
+        var_v1 += (gCourseCtx.courseData.dash[i] * (i + 0x10));
+        var_v1 += (gCourseCtx.courseData.dirt[i] * (i + 0x80));
+        var_v1 += (gCourseCtx.courseData.ice[i] * (i + 0x100));
+        var_v1 += (gCourseCtx.courseData.jump[i] * (i + 0x800));
+        var_v1 += (gCourseCtx.courseData.landmine[i] * (i + 0x1000));
+        var_v1 += (gCourseCtx.courseData.gate[i] * (i + 0x8000));
+        var_v1 += (gCourseCtx.courseData.building[i] * (i + 0x10000));
+        var_v1 += (gCourseCtx.courseData.sign[i] * (i + 0x80000));
     }
 
     return var_v1;

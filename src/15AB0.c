@@ -662,7 +662,6 @@ extern u8* D_8076CBE8[];
 extern u8* D_8076CC14[];
 extern s32 D_8079A44C;
 extern RomOffset D_807C7120[][2];
-extern CourseData gCourseData;
 
 void func_80709914(void) {
     s32 pad;
@@ -687,7 +686,7 @@ void func_80709914(void) {
         case GAMEMODE_TIME_ATTACK:
         case GAMEMODE_GP_END_CS:
         case GAMEMODE_DEATH_RACE:
-            venue = gCourseData.venue;
+            venue = gCourseCtx.courseData.venue;
             romOffset = D_807C7120[venue][0];
             ramSize = D_8076CC14[venue] - D_8076CBE8[venue];
             break;

@@ -44,13 +44,24 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/107680/func_i2_800A6DD0.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/107680/func_i2_800A6E18.s")
+void Save_WriteCharacterSave(CharacterSave* characterSave, s32 courseIndex) {
+    characterSave->checksum = Save_CalculateCharacterSaveChecksum(characterSave);
+    Sram_ReadWrite(OS_WRITE, (uintptr_t) &gSaveContext.characterSaves[courseIndex] - (uintptr_t) &gSaveContext,
+                   characterSave, sizeof(CharacterSave));
+}
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/107680/func_i2_800A6E6C.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/107680/func_i2_800A6EB4.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/107680/Save_UpdateCourseCharacterSave.s")
+s32 Save_UpdateCourseCharacterSave(s32 courseIndex) {
+    s32 pad[2];
+    CharacterSave* characterSave = &gSaveContext.characterSaves[courseIndex];
+
+    Save_SaveCharacterSave(characterSave);
+    Save_WriteCharacterSave(characterSave, courseIndex);
+    return 0;
+}
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/107680/func_i2_800A706C.s")
 
@@ -129,9 +140,30 @@ void Save_InitCourseRecord(SaveCourseRecords* courseRecords, bool shouldClear) {
     func_i2_800A7A8C(&courseRecords->unk_F0);
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/107680/func_i2_800A7BFC.s")
+void Save_InitGhostRecord(GhostRecord* ghostRecord, bool shouldClear) {
+    s32 i;
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/107680/func_i2_800A7C84.s")
+    if (shouldClear) {
+        Save_ClearData(ghostRecord, sizeof(GhostRecord));
+    }
+
+    ghostRecord->replayChecksum = 0;
+    ghostRecord->ghostType = GHOST_NONE;
+    ghostRecord->encodedCourseIndex = 0;
+    ghostRecord->raceTime = MAX_TIMER;
+    ghostRecord->unk_10 = 0;
+
+    func_i2_800A7A8C(&ghostRecord->unk_20);
+
+    for (i = 0; i < 9; i++) {
+        ghostRecord->trackName[i] = 0;
+    }
+}
+
+void func_i2_800A7C84(GhostRecord* ghostRecord) {
+    Save_InitGhostRecord(ghostRecord, true);
+    ghostRecord->checksum = Save_CalculateGhostRecordChecksum(ghostRecord);
+}
 
 void func_i2_800A7CB8(SaveCourseRecords* courseRecords) {
     Save_InitCourseRecord(courseRecords, true);
@@ -170,13 +202,46 @@ void func_i2_800A81D4(void) {
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/107680/func_i2_800A8320.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/107680/func_i2_800A83EC.s")
+extern f32 gCharacterLastEngine[];
+
+void Save_SaveCharacterSave(CharacterSave* characterSave) {
+    s32 i;
+
+    for (i = 0; i < 30; i++) {
+        characterSave->characterEngine[i] = gCharacterLastEngine[i];
+    }
+
+    characterSave->unk_02 = 0;
+    characterSave->unk_04 = 0;
+}
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/107680/func_i2_800A8450.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/107680/func_i2_800A85E0.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/107680/func_i2_800A88D8.s")
+void func_i2_800A88D8(unk_80141C88_unk_1D* arg0, MachineInfo* arg1) {
+
+    arg1->character = arg0->unk_00.character;
+    arg1->customType = arg0->unk_00.customType;
+    arg1->frontType = arg0->unk_00.frontType;
+    arg1->rearType = arg0->unk_00.rearType;
+    arg1->wingType = arg0->unk_00.wingType;
+    arg1->logo = arg0->unk_00.logo;
+    arg1->number = arg0->unk_00.number;
+    arg1->decal = arg0->unk_00.decal;
+    arg1->bodyR = arg0->unk_00.bodyR;
+    arg1->bodyG = arg0->unk_00.bodyG;
+    arg1->bodyB = arg0->unk_00.bodyB;
+    arg1->numberR = arg0->unk_00.numberR;
+    arg1->numberG = arg0->unk_00.numberG;
+    arg1->numberB = arg0->unk_00.numberB;
+    arg1->decalR = arg0->unk_00.decalR;
+    arg1->decalG = arg0->unk_00.decalG;
+    arg1->decalB = arg0->unk_00.decalB;
+    arg1->cockpitR = arg0->unk_00.cockpitR;
+    arg1->cockpitG = arg0->unk_00.cockpitG;
+    arg1->cockpitB = arg0->unk_00.cockpitB;
+}
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/107680/func_i2_800A897C.s")
 
@@ -246,17 +311,35 @@ s32 Save_CalculateSaveCourseRecordChecksum(SaveCourseRecords* courseRecords) {
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/107680/func_i2_800A9540.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/107680/func_i2_800A9564.s")
+s32 Save_CalculateGhostRecordChecksum(GhostRecord* ghostRecord) {
+    return Save_CalculateChecksum(&ghostRecord->ghostType, sizeof(GhostRecord) - sizeof(u16));
+}
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/107680/func_i2_800A9588.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/107680/func_i2_800A95AC.s")
+s32 Save_CalculateCharacterSaveChecksum(CharacterSave* characterSave) {
+    return Save_CalculateChecksum(&characterSave->unk_02, sizeof(CharacterSave) - sizeof(u16));
+}
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/107680/func_i2_800A95D0.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/107680/func_i2_800A95F4.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/107680/func_i2_800A9684.s")
+extern OSIoMesg sSramIoMesg;
+extern OSPiHandle* gSramPiHandlePtr;
+extern OSMesgQueue gDmaMesgQueue;
+
+void Sram_ReadWrite(s32 direction, u32 offset, void* dramAddr, size_t size) {
+    osWritebackDCache(dramAddr, size);
+    osInvalDCache(osPhysicalToVirtual((uintptr_t) dramAddr), size);
+    sSramIoMesg.hdr.pri = 0;
+    sSramIoMesg.hdr.retQueue = &gDmaMesgQueue;
+    sSramIoMesg.dramAddr = dramAddr;
+    sSramIoMesg.devAddr = offset + OS_K1_TO_PHYSICAL(0xA8000000);
+    sSramIoMesg.size = size;
+    func_80768B88(gSramPiHandlePtr, &sSramIoMesg, direction);
+    osRecvMesg(&gDmaMesgQueue, NULL, OS_MESG_BLOCK);
+}
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/107680/func_i2_800A9728.s")
 

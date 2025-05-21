@@ -120,6 +120,7 @@ gControllersConnected = 0x8079A898;
 gSinTable = 0x8079A8A0; // size:0x4000
 
 gSegments = 0x8079FA40;
+gCharacterLastEngine = 0x8079FAA0;
 gInputButtonPressed = 0x8079FB1E;
 
 gPlayers = 0x807A0930; // size:0x770
