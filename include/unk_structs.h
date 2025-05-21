@@ -24,15 +24,15 @@ typedef struct unk_807C6EA8 {
     s32 unk_10;
     s8 unk_14[0x2];
     u16 unk_16;
-    s32 unk_18;
-    s32 unk_1C;
+    u8* unk_18;
+    u8* unk_1C;
     s32 unk_20;
     s32 unk_24;
     s32 unk_28;
     s32 unk_2C;
     s32 unk_30;
     s32 unk_34;
-    s32 unk_38;
+    void* unk_38;
     s32 unk_3C;
     s32 unk_40;
     s32 unk_44;
@@ -162,6 +162,11 @@ typedef struct MachineInfo {
     /* 0x12 */ u8 cockpitG;
     /* 0x13 */ u8 cockpitB;
 } MachineInfo; // size = 0x14
+
+typedef struct unk_80141C88_unk_1D {
+    MachineInfo unk_00;
+    s8 unk_14[12];
+} unk_80141C88_unk_1D; // size = 0x20
 
 typedef struct CourseInfo {
     /* 0x00 */ s32 encodedCourseIndex;

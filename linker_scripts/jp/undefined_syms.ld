@@ -114,6 +114,7 @@ aDecalBlueFalconArrowTex = 0x3004598;
 aLogoBlueFalconTex = 0x3004718;
 aMachineNumber7Tex = 0x3004498;
 
+D_9002188 = 0x9002188;
 
 // temp segment addrs
 

@@ -11,7 +11,7 @@ typedef struct ControlPoint {
 } ControlPoint; // size = 0x14
 
 typedef struct CourseData {
-    /* 0x000 */ s8 creatorId;
+    /* 0x000 */ u8 creatorId;
     /* 0x001 */ s8 controlPointCount;
     /* 0x002 */ s8 venue;
     /* 0x003 */ s8 skybox;
@@ -313,6 +313,6 @@ typedef enum BorderlessRoad {
 
 extern CourseData gCourseData;
 extern CourseInfo* gCurrentCourseInfo;
-extern CourseInfo gCourseInfos[];
+extern CourseInfo gCourseInfos[56];
 
 #endif // FZX_COURSE_H
