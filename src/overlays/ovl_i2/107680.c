@@ -1,4 +1,8 @@
-#include "common.h"
+#include "global.h"
+#include "fzx_game.h"
+#include "fzx_save.h"
+#include "fzx_course.h"
+#include "fzx_machine.h"
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/107680/func_i2_800A5D40.s")
 
@@ -74,17 +78,65 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/107680/func_i2_800A7A30.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/107680/func_i2_800A7A8C.s")
+void func_i2_800A7A8C(unk_80141C88_unk_1D* arg0) {
+
+    arg0->unk_00.character = 0;
+    arg0->unk_00.customType = 0;
+    arg0->unk_00.frontType = 0;
+    arg0->unk_00.rearType = 0;
+    arg0->unk_00.wingType = 0;
+    arg0->unk_00.logo = 0;
+    arg0->unk_00.number = 0;
+    arg0->unk_00.decal = 0;
+    arg0->unk_00.bodyR = 0;
+    arg0->unk_00.bodyG = 0;
+    arg0->unk_00.bodyB = 0;
+    arg0->unk_00.numberR = 0;
+    arg0->unk_00.numberG = 0;
+    arg0->unk_00.numberB = 0;
+    arg0->unk_00.decalR = 0;
+    arg0->unk_00.decalG = 0;
+    arg0->unk_00.decalB = 0;
+    arg0->unk_00.cockpitR = 0;
+    arg0->unk_00.cockpitG = 0;
+    arg0->unk_00.cockpitB = 0;
+}
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/107680/func_i2_800A7AE0.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/107680/func_i2_800A7B2C.s")
+void Save_InitCourseRecord(SaveCourseRecords* courseRecords, bool shouldClear) {
+    s32 i;
+    s32 j;
+
+    if (shouldClear) {
+        Save_ClearData(courseRecords, sizeof(SaveCourseRecords));
+    }
+
+    for (i = 0; i < 5; i++) {
+        courseRecords->timeRecord[i] = MAX_TIMER;
+        courseRecords->engines[i] = 0.5f;
+        func_i2_800A7A8C(&courseRecords->unk_50[i]);
+        // clang-format off
+        for (j = 0; j < 4; j++) { \
+            courseRecords->name[i][j] = '\0';
+        }
+        // clang-format on
+    }
+
+    courseRecords->maxSpeed = 0.0f;
+    courseRecords->bestTime = MAX_TIMER;
+
+    func_i2_800A7A8C(&courseRecords->unk_F0);
+}
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/107680/func_i2_800A7BFC.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/107680/func_i2_800A7C84.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/107680/func_i2_800A7CB8.s")
+void func_i2_800A7CB8(SaveCourseRecords* courseRecords) {
+    Save_InitCourseRecord(courseRecords, true);
+    courseRecords->checksum = Save_CalculateSaveCourseRecordChecksum(courseRecords);
+}
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/107680/func_i2_800A7CEC.s")
 
@@ -92,7 +144,16 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/107680/func_i2_800A7DA8.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/107680/func_i2_800A7E20.s")
+void Save_ClearData(void* data, s32 size) {
+    s32 i;
+    u8* ptr;
+
+    // clang-format off
+    for (i = 0, ptr = data; i < size; i++, ptr++) { \
+        *ptr = 0;
+    }
+    // clang-format on
+}
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/107680/func_i2_800A7E70.s")
 
@@ -121,9 +182,30 @@ void func_i2_800A81D4(void) {
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/107680/func_i2_800A8B00.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/107680/func_i2_800A8CE4.s")
+void func_i2_800A8CE4(SaveCourseRecords* courseRecord, s32 courseIndex) {
+    Save_LoadCourseRecord(courseRecord, courseIndex);
+}
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/107680/func_i2_800A8D04.s")
+void Save_LoadCourseRecord(SaveCourseRecords* courseRecord, s32 courseIndex) {
+    u16 checksum;
+    s32 i;
+    s32 j;
+    CourseInfo* courseInfo;
+
+    courseInfo = &gCourseInfos[courseIndex];
+
+    for (i = 0; i < 5; i++) {
+        courseInfo->timeRecord[i] = courseRecord->timeRecord[i];
+        courseInfo->recordEngines[i] = courseRecord->engines[i];
+        func_i2_800A88D8(&courseRecord->unk_50[i], &courseInfo->recordMachineInfos[i]);
+        for (j = 0; j < 4; j++) {
+            courseInfo->recordNames[i][j] = courseRecord->name[i][j];
+        }
+    }
+    courseInfo->maxSpeed = courseRecord->maxSpeed;
+    courseInfo->bestTime = courseRecord->bestTime;
+    func_i2_800A88D8(&courseRecord->unk_F0, &courseInfo->maxSpeedMachine);
+}
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/107680/func_i2_800A8E20.s")
 
@@ -138,7 +220,17 @@ void func_i2_800A8FBC(void) {
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/107680/func_i2_800A91AC.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/107680/func_i2_800A940C.s")
+u16 Save_CalculateChecksum(void* data, s32 size) {
+    u8* dataPtr = data;
+    u16 checksum = 0;
+    s32 i;
+
+    for (i = 0; i < size; i++) {
+        checksum += *dataPtr++;
+    }
+
+    return checksum;
+}
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/107680/func_i2_800A9480.s")
 
@@ -146,7 +238,9 @@ void func_i2_800A8FBC(void) {
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/107680/func_i2_800A94C4.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/107680/func_i2_800A94F8.s")
+s32 Save_CalculateSaveCourseRecordChecksum(SaveCourseRecords* courseRecords) {
+    return Save_CalculateChecksum(&courseRecords->unk_02, sizeof(SaveCourseRecords) - sizeof(u16));
+}
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/107680/func_i2_800A951C.s")
 

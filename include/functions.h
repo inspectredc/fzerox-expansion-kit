@@ -6,9 +6,12 @@
 #include "gfx.h"
 #include "PR/leo.h"
 #include "libc/stdbool.h"
+#include "libc/stdint.h"
 #include "other_types.h"
 #include "unk_structs.h"
 #include "controller.h"
+#include "fzx_course.h"
+#include "fzx_save.h"
 
 void Game_ThreadEntry(void* arg0);
 void Audio_ThreadEntry(void* arg0);
@@ -23,6 +26,7 @@ s32 func_80768C08(OSPiHandle*, OSIoMesg*, s32);
 s32 Segment_SetPhysicalAddress(s32 segment, s32 addr);
 Gfx* Segment_SetTableAddresses(Gfx*);
 s32 Segment_SetAddress(s32 segment, s32 addr);
+s32 Segment_SegmentedToVirtual(uintptr_t segmentedAddr);
 
 void mio0Decode(u8*, void*);
 void Audio_SetSoundMode(u8 soundMode);
@@ -35,22 +39,37 @@ void Math_SinTableInit(void);
 void Math_Rand1Init(s32 seed, s32 mask);
 void Math_Rand2Init(s32 seed, s32 mask);
 s32 Math_Round(f32 num);
+void Matrix_ToMtx(MtxF* src, Mtx* dest2);
 void func_806F86C0(Mtx*, MtxF*, f32, s32, s32, s32, f32, f32, f32);
 void func_806F7FCC(Mtx*, MtxF*, f32, f32, f32, f32, f32, f32, f32, f32, f32, f32, f32, f32);
 void func_806F8868(Mtx*, MtxF*, f32, s32, f32, f32, f32, f32, f32, f32);
 
+Gfx* func_806FC340(Gfx* gfx);
+Gfx* func_806FC3AC(Gfx* gfx);
+Gfx* func_806FC3E0(Gfx* gfx);
+Gfx* func_806FC44C(Gfx* gfx);
+Gfx* func_806FC47C(Gfx* gfx);
+Gfx* func_806FC4E4(Gfx* gfx);
+Gfx* func_806FC54C(Gfx* gfx);
+Gfx* func_806FC5F4(Gfx* gfx);
+Gfx* func_806FC664(Gfx* gfx);
+Gfx* func_806FC70C(Gfx* gfx);
+Gfx* func_806FC804(Gfx* gfx);
+Gfx* func_806FC900(Gfx* gfx);
+Gfx* func_806FC9FC(Gfx* gfx);
+Gfx* func_806FCAF8(Gfx* gfx);
 void func_80701C04(void* romAddr, void* ramAddr, size_t size);
 void func_80701D7C(u8* romAddr, u8* ramAddr, size_t size);
-
-
 void func_80702A68(void);
 void func_80702A94(void);
+void func_80702BC4(s32 courseIndex);
 
 f32 func_807032B0(Vec3f, Vec3f);
 void func_80703320(f32*, f32*);
 s32 func_80703444(Vec3f*, f32);
 
 void func_807038B0(void);
+s32 func_80703B40(s32 startLba, void* vram, s32 diskSize, s32 bssSize);
 void func_80703948(void);
 s32 func_80703CA4(s32 startLba, void* vram, s32 diskSize, s32 bssSize);
 s32 func_80703E08(s32 startLba, void* vram, s32 diskSize, s32 bssSize);
@@ -84,6 +103,8 @@ void func_8071EA88(void);
 void func_807419F0(u8);
 s32 func_80703228(void);
 void func_806F4FC8(void);
+
+void func_807034F0(CourseInfo*);
 
 void func_8070F8A4(s32, s32);
 void func_8070F240(void);
@@ -122,6 +143,7 @@ void func_8074279C(void);
 s32 func_80768B88(OSPiHandle*, OSIoMesg*, s32);
 u16 func_80766788(void);
 s32 func_80766660(u16);
+void func_8076852C(u16, u8*, u8*, void*, s32);
 
 Gfx* func_xk1_8002ED64(Gfx*);
 Gfx* func_xk1_8002F9DC(Gfx*);
@@ -135,16 +157,26 @@ void func_i2_800A2CCC(void);
 void func_i2_800A20EC(void);
 void func_i2_800A231C(void);
 s32 func_i2_800A27C4(void);
+void func_i2_800A7CB8(SaveCourseRecords*);
+void func_i2_800A8CE4(SaveCourseRecords*, s32);
+bool func_i2_800A9F98(void);
+void func_i2_800AA80C(void);
+SaveCourseRecords* func_i2_800AA84C(void);
 void func_i2_800AA994(void);
 void func_i2_800AABD0(void);
 void func_i2_800B079C(void);
 void func_i2_800B07F0(void);
 void func_i2_800B0D10(s32);
+void Course_GenerateRandomCourse(void);
 f32 func_i2_800B20D0(CourseSegment*, f32, f32*);
 f32 func_i2_800B2500(CourseSegment*, f32, Vec3f*);
 void func_i2_800B26B8(CourseSegment*, f32, Vec3f*);
 f32 func_i2_800B2824(CourseSegment*, f32, Mtx3F*, f32);
+void func_i2_800B3640(CourseInfo*);
+s32 func_i2_800B39B4(CourseInfo*);
 void func_i2_800B904C(void);
+s32 func_i2_800BE8BC(CourseInfo*);
+s32 Course_CalculateChecksum(void);
 
 void func_i3_ResetLivesChangeCounter(void);
 void func_i3_8005FDB0(void);

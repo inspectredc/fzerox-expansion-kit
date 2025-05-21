@@ -4,6 +4,11 @@ func_i3_ResetLivesChangeCounter = 0x8005F6A8; //segment:ovl_i3
 
 Save_UpdateCourseCharacterSave = 0x800A7024; //segment:ovl_i2
 func_i2_800A762C = 0x800A762C; //segment:ovl_i2
+Save_InitCourseRecord = 0x800A7B2C; //segment:ovl_i2
+Save_ClearData = 0x800A7E20; //segment:ovl_i2
+Save_LoadCourseRecord = 0x800A8D04; //segment:ovl_i2
+Save_CalculateChecksum = 0x800A940C; //segment:ovl_i2
+Save_CalculateSaveCourseRecordChecksum = 0x800A94F8; //segment:ovl_i2
 func_i2_800A9728 = 0x800A9728; //segment:ovl_i2
 func_i2_800AB6B0 = 0x800AB6B0; //segment:ovl_i2
 func_i2_800AB82C = 0x800AB82C; //segment:ovl_i2
@@ -28,15 +33,20 @@ func_i2_800B26B8 = 0x800B26B8; //segment:ovl_i2
 func_i2_800B2824 = 0x800B2824; //segment:ovl_i2
 func_i2_800B3640 = 0x800B3640; //segment:ovl_i2
 func_i2_800B39B4 = 0x800B39B4; //segment:ovl_i2
+Course_GenerateRandomCourse = 0x800B74C8; //segment:ovl_i2
 func_i2_800B934C = 0x800B934C; //segment:ovl_i2
 func_i2_800BDE60 = 0x800BDE60; //segment:ovl_i2
 func_i2_800BE8BC = 0x800BE8BC; //segment:ovl_i2
-func_i2_800BEA18 = 0x800BEA18; //segment:ovl_i2
+Course_CalculateChecksum = 0x800BEA18; //segment:ovl_i2
 
-gSettingSoundMode = 0x800D1300; //segment:ovl_i2
+gPlayer1OverallPosition = 0x800BF068; //segment:ovl_i2
 gCourseData = 0x800C3230; //segment:ovl_i2 size:0x7E0
+gSaveBuffer = 0x800C3A10; //segment:ovl_i2
+gEditCupTrackNames = 0x800D10F0; //segment:ovl_i2
+gSettingSoundMode = 0x800D1300; //segment:ovl_i2
 gCurrentCourseInfo = 0x800D65C0; //segment:ovl_i2
 gCourseIndex = 0x800D65C4; //segment:ovl_i2
+
 
 func_xk1_80025C00 = 0x80025C00; //segment:ovl_xk1
 func_xk1_8002FFDC = 0x8002FFDC; //segment:ovl_xk1
