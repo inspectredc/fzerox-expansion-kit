@@ -46,7 +46,7 @@ bool gResetStarted;
 s32 D_8079A32C;
 FrameBuffer* gFrameBuffers[3];
 OSPiHandle* gCartRomHandle;
-s32 D_8079A340;
+OSPiHandle* gDriveRomHandle;
 
 void Idle_ThreadEntry(void*);
 void Reset_ThreadEntry(void*);
@@ -174,9 +174,9 @@ void Main_ThreadEntry(void* arg0) {
 
     if (gRamDDCompatible) {
         D_8079A32C = LeoDriveExist();
-        D_8079A340 = osDriveRomInit();
+        gDriveRomHandle = osDriveRomInit();
         if (D_8079A32C != 0) {
-            func_8070F240();
+            LeoFault_LoadFontSet();
         }
         func_80704DB0("01", leoBootID.gameName);
 

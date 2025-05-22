@@ -226,12 +226,10 @@ s32 Course_CalculateChecksum(void) {
             return -1;
         }
 
-        var_v1 +=
-            (s32) ((controlPoint->pos.x + ((1.1f + (0.7f * i)) * controlPoint->pos.y)) +
-                   ((2.2f + (1.2f * i)) * controlPoint->pos.z * (4.4f + (0.9f * i))) +
-                   controlPoint->radiusLeft +
-                   ((5.5f + (0.8f * i)) * controlPoint->radiusRight * 4.8f)) +
-            controlPoint->trackSegmentInfo * (0xFE - i) + gCourseCtx.courseData.bankAngle[i] * (0x93DE - i * 2);
+        var_v1 += (s32) ((controlPoint->pos.x + ((1.1f + (0.7f * i)) * controlPoint->pos.y)) +
+                         ((2.2f + (1.2f * i)) * controlPoint->pos.z * (4.4f + (0.9f * i))) + controlPoint->radiusLeft +
+                         ((5.5f + (0.8f * i)) * controlPoint->radiusRight * 4.8f)) +
+                  controlPoint->trackSegmentInfo * (0xFE - i) + gCourseCtx.courseData.bankAngle[i] * (0x93DE - i * 2);
     }
 
     for (i = 0; i < gCourseCtx.courseData.controlPointCount; i++) {

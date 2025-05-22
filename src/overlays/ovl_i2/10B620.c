@@ -2,15 +2,16 @@
 #include "fzx_course.h"
 #include "fzx_save.h"
 
-//! @bug (gCourseCtx.saveBuffer + 3 * sizeof(GhostSave)) starts to read into D_800CF950 which is used as CourseData elsewhere
+//! @bug (gCourseCtx.saveBuffer + 3 * sizeof(GhostSave)) starts to read into D_800CF950 which is used as CourseData
+//! elsewhere
 extern char D_i2_800BF030[]; // = "GHOST00";
 extern char D_i2_800D1018[][9];
 extern OSMesgQueue D_8079F998;
 
 void func_i2_800A9CE0(s32 courseIndex, GhostRecord* ghostRecord) {
     s32 i;
-    GhostSave* ghostSave = (GhostSave*)gCourseCtx.saveBuffer;
-    SaveCourseRecords* courseRecords = (SaveCourseRecords*)(gCourseCtx.saveBuffer + 3 * sizeof(GhostSave));
+    GhostSave* ghostSave = (GhostSave*) gCourseCtx.saveBuffer;
+    SaveCourseRecords* courseRecords = (SaveCourseRecords*) (gCourseCtx.saveBuffer + 3 * sizeof(GhostSave));
 
     PRINTF("Load Ghost Info\n");
     PRINTF("Load Ghost Info2\n");
@@ -26,7 +27,8 @@ void func_i2_800A9CE0(s32 courseIndex, GhostRecord* ghostRecord) {
         return;
     }
     func_i2_800AA80C();
-    func_807684AC(0xFFFB, D_i2_800BF030, "GOST", gCourseCtx.saveBuffer, offsetof(CourseContext, saveBuffer), 3 * sizeof(GhostSave) + sizeof(SaveCourseRecords));
+    func_807684AC(0xFFFB, D_i2_800BF030, "GOST", gCourseCtx.saveBuffer, offsetof(CourseContext, saveBuffer),
+                  3 * sizeof(GhostSave) + sizeof(SaveCourseRecords));
     osRecvMesg(&D_8079F998, NULL, OS_MESG_BLOCK);
     for (i = 0; i < 3; i++, ghostRecord++, ghostSave++) {
         PRINTF("Ghost Name %s\n");
@@ -43,9 +45,9 @@ void func_i2_800A9CE0(s32 courseIndex, GhostRecord* ghostRecord) {
 
 void func_i2_800A9ED0(s32 courseIndex, GhostRecord* ghostRecord) {
     s32 i;
-    GhostSave* ghostSave = (GhostSave*)gCourseCtx.saveBuffer;
-    SaveCourseRecords* courseRecords = (SaveCourseRecords*)(gCourseCtx.saveBuffer + 3 * sizeof(GhostSave));
-    
+    GhostSave* ghostSave = (GhostSave*) gCourseCtx.saveBuffer;
+    SaveCourseRecords* courseRecords = (SaveCourseRecords*) (gCourseCtx.saveBuffer + 3 * sizeof(GhostSave));
+
     for (i = 0; i < 3; i++, ghostRecord++, ghostSave++) {
         if (ghostSave->record.checksum != Save_CalculateGhostRecordChecksum(&ghostSave->record) * 1) {
             PRINTF("GHOST_INFO_DATA_BROKEN\n");
@@ -59,16 +61,16 @@ void func_i2_800A9ED0(s32 courseIndex, GhostRecord* ghostRecord) {
 
 bool func_i2_800A9F98(void) {
     s32 i;
-    GhostSave* ghostSave = (GhostSave*)gCourseCtx.saveBuffer;
-    SaveCourseRecords* courseRecord = (SaveCourseRecords*)(gCourseCtx.saveBuffer + 3 * sizeof(GhostSave));
-    
+    GhostSave* ghostSave = (GhostSave*) gCourseCtx.saveBuffer;
+    SaveCourseRecords* courseRecord = (SaveCourseRecords*) (gCourseCtx.saveBuffer + 3 * sizeof(GhostSave));
+
     for (i = 0; i < 3; i++, ghostSave++) {
         if (ghostSave->record.checksum != Save_CalculateGhostRecordChecksum(&ghostSave->record) * 1) {
             PRINTF("GHOST_INFO_DATA_BROKEN\n");
             return true;
         }
     }
-    
+
     if (courseRecord->checksum != Save_CalculateSaveCourseRecordChecksum(courseRecord) * 1) {
         PRINTF("RECORD_DATA_BROKEN\n");
         return true;
@@ -77,8 +79,8 @@ bool func_i2_800A9F98(void) {
 }
 
 void func_i2_800AA024(s32 courseIndex, s32 ghostIndex, GhostData* ghostData) {
-    GhostSave* ghostSave = (GhostSave*)gCourseCtx.saveBuffer;
-    
+    GhostSave* ghostSave = (GhostSave*) gCourseCtx.saveBuffer;
+
     PRINTF("Load Ghost Data\n");
     D_i2_800BF030[5] = (courseIndex / 10) + '0';
     D_i2_800BF030[6] = (courseIndex % 10) + '0';
@@ -87,27 +89,90 @@ void func_i2_800AA024(s32 courseIndex, s32 ghostIndex, GhostData* ghostData) {
         return;
     }
     func_i2_800AA80C();
-    func_807684AC(0xFFFB, D_i2_800BF030, "GOST", gCourseCtx.saveBuffer, offsetof(CourseContext, saveBuffer), 3 * sizeof(GhostSave));
+    func_807684AC(0xFFFB, D_i2_800BF030, "GOST", gCourseCtx.saveBuffer, offsetof(CourseContext, saveBuffer),
+                  3 * sizeof(GhostSave));
     osRecvMesg(&D_8079F998, NULL, OS_MESG_BLOCK);
     *ghostData = ghostSave[ghostIndex].data;
 }
 
 void func_i2_800AA1C0(s32 courseIndex, s32 ghostIndex, GhostData* ghostData) {
-    GhostSave* ghostSave = (GhostSave*)gCourseCtx.saveBuffer;
+    GhostSave* ghostSave = (GhostSave*) gCourseCtx.saveBuffer;
 
     *ghostData = ghostSave[ghostIndex].data;
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/10B620/func_i2_800AA220.s")
+extern CourseData D_i2_800D0130;
 
+void func_i2_800AA220(s32 courseIndex, s32 ghostIndex, s32 arg2) {
+    GhostSave* ghostSave = (GhostSave*) gCourseCtx.saveBuffer + ghostIndex;
+    
+    D_i2_800BF030[5] = (courseIndex / 10) + '0';
+    D_i2_800BF030[6] = (courseIndex % 10) + '0';
+    gCourseCtx.courseData = D_i2_800D0130;
+    func_80707E58();
+    if (arg2 != 0) {
+        func_i2_800A81DC(arg2);
+        func_i2_800A8320(arg2);
+    }
+    *ghostSave = gSaveContext.ghostSave;
+
+    func_807680EC(0xFFFB, D_i2_800BF030, "GOST", &gCourseCtx, 0xC830, 0, 0xFF, 1);
+}
+
+extern u8 gEditCupTrackNames[][9];
+
+#ifdef IMPORT_DATA
+void func_i2_800AA368(s32 courseIndex, s32 ghostIndex, s32 arg2) {
+    GhostSave* ghostSave = (GhostSave*) gCourseCtx.saveBuffer + ghostIndex;
+
+    D_i2_800BF030[5] = (courseIndex / 10) + '0';
+    D_i2_800BF030[6] = (courseIndex % 10) + '0';
+
+    gCourseCtx.courseData = D_i2_800D0130;
+    if (arg2 != 0) {
+        func_i2_800A81DC(arg2);
+        func_i2_800A8320(arg2);
+    }
+    *ghostSave = gSaveContext.ghostSave;
+    if ((courseIndex >= COURSE_EDIT_1) && (courseIndex <= COURSE_EDIT_6)) {
+        if (gEditCupTrackNames[courseIndex - COURSE_EDIT_1][0] != '\0') {
+            func_807680EC(0xFFFB, gEditCupTrackNames[courseIndex - COURSE_EDIT_1], "CRSD", &gCourseCtx, 0xC830, 0, 0xFF, 1);
+            return;
+        }
+    }
+    func_807680EC(0xFFFB, &D_i2_800BF030, "GOST", &gCourseCtx, 0xC830, 0, 0xFF, 1);
+    PRINTF("ERASE DISK GHOST %d\n");
+}
+#else
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/10B620/func_i2_800AA368.s")
+#endif
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/10B620/func_i2_800AA520.s")
+void func_i2_800AA520(s32 courseIndex) {
+    GhostSave* ghostSave;
+    
+    D_i2_800BF030[5] = (courseIndex / 10) + '0';
+    D_i2_800BF030[6] = (courseIndex % 10) + '0';
+
+    ghostSave = (GhostSave*) gCourseCtx.saveBuffer;
+    func_i2_800A7C84(&ghostSave->record);
+    ghostSave++;
+    func_i2_800A7C84(&ghostSave->record);
+    ghostSave++;
+    func_i2_800A7C84(&ghostSave->record);
+    if ((courseIndex >= COURSE_EDIT_1) && (courseIndex <= COURSE_EDIT_6)) {
+        if (gEditCupTrackNames[courseIndex - COURSE_EDIT_1][0] != '\0') {
+            gCourseCtx.courseData = D_i2_800D0130;
+            func_807680EC(0xFFFB, gEditCupTrackNames[courseIndex - COURSE_EDIT_1], "CRSD", &gCourseCtx, 0xC830, 0, 0xFF, 1);
+            return;
+        }
+    }
+    func_807680EC(0xFFFB, D_i2_800BF030, "GOST", &gCourseCtx, 0xC830, 0, 0xFF, 1);
+}
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/10B620/func_i2_800AA694.s")
 
 void func_i2_800AA80C(void) {
-    GhostSave* ghostSave = (GhostSave*)gCourseCtx.saveBuffer;
+    GhostSave* ghostSave = (GhostSave*) gCourseCtx.saveBuffer;
 
     func_i2_800A7C84(&ghostSave->record);
     ghostSave++;
@@ -117,7 +182,7 @@ void func_i2_800AA80C(void) {
 }
 
 SaveCourseRecords* func_i2_800AA84C(void) {
-    return (SaveCourseRecords*)(gCourseCtx.saveBuffer + 3 * sizeof(GhostSave));
+    return (SaveCourseRecords*) (gCourseCtx.saveBuffer + 3 * sizeof(GhostSave));
 }
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/10B620/func_i2_800AA858.s")

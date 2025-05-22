@@ -4,8 +4,6 @@ bootproc = 0x806F2860;
 
 Audio_ThreadEntry = 0x806F4A60;
 Game_ThreadEntry = 0x806F3A94;
-Fault_SetFrameBuffer = 0x80710A38;
-Fault_Init = 0x80710A60;
 Audio_PreNMI = 0x80740B10;
 Gfx_InitBuffer = 0x806F3514;
 Segment_SetPhysicalAddress = 0x80708770;
@@ -58,6 +56,15 @@ SLCheckDiskChange2 = 0x80707A54;
 
 Controller_SetGlobalInputs = 0x8070D43C;
 
+LeoFault_CopyFontToRam = 0x8070F170;
+LeoFault_DrawErrorMessage = 0x8070F6C8;
+LeoFault_DrawErrorMessageNumber = 0x8070F76C;
+
+Fault_FillRectangle = 0x8070FD80;
+Fault_DisplayChar = 0x8070FE6C;
+Fault_SetFrameBuffer = 0x80710A38;
+Fault_Init = 0x80710A60;
+
 // game data
 
 sSpTaskState = 0x8076C760;
@@ -83,6 +90,14 @@ gRandMask1 = 0x8076C944;
 gRandSeed2 = 0x8076C948;
 gRandMask2 = 0x8076C94C;
 
+sLeoErrorMessages = 0x8076D344; // size:0x98
+sLeoFontPallete = 0x8076D4BC;
+
+sFaultCharIndex = 0x8076D4E0;
+sFaultCharPixelFlags = 0x8076D560;
+sFaultCauses = 0x8076D660;
+sFloatExceptions = 0x8076D6A8;
+
 // game bss
 
 sMainThreadStack = 0x80795A70;
@@ -98,10 +113,10 @@ gResetMesgQueue = 0x8079A138;
 
 gCurGfxTask = 0x8079A320;
 gCurAudioOSTask = 0x8079A324;
+gResetStarted = 0x8079A328;
 gFrameBuffers = 0x8079A330;
 gCartRomHandle = 0x8079A33C;
-
-gResetStarted = 0x8079A328;
+gDriveRomHandle = 0x8079A340;
 
 gGfxPool = 0x8079A350;
 sGfxTask = 0x8079A354;
@@ -122,6 +137,17 @@ gSinTable = 0x8079A8A0; // size:0x4000
 gSegments = 0x8079FA40;
 gCharacterLastEngine = 0x8079FAA0;
 gInputButtonPressed = 0x8079FB1E;
+
+sLeoPrintFrameBuffer = 0x8079FC80;
+sLeoPrintCurPixel = 0x8079FC84;
+sLeoFontIoMsg = 0x8079FCA8;
+
+idleThreadCounter = 0x8079FE80;
+mainThreadCounter = 0x8079FE84;
+gameThreadCounter = 0x8079FE88;
+audioThreadCounter = 0x8079FE8C;
+unkThreadCounter = 0x8079FE90;
+gFaultMgr = 0x8079FE98; // size:0x9D8
 
 gPlayers = 0x807A0930; // size:0x770
 gPlayerEngine = 0x807A1600;
