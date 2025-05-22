@@ -107,12 +107,15 @@ void func_806F4FC8(void);
 
 void func_807034F0(CourseInfo*);
 
+void func_80703FC8(void);
+
 void func_8070F8A4(s32, s32);
-void func_8070F240(void);
+void LeoFault_LoadFontSet(void);
 void func_80704CE0(void);
 void func_80704DB0(char*, char*);
 void func_8070F0F0(void);
 void func_80704F38(OSThread*);
+void Fault_FillRectangle(s32 xPos, s32 yPos, s32 width, s32 height);
 void Fault_Init(void);
 void Fault_SetFrameBuffer(FrameBuffer* buffer, u16 width, u16 height);
 void Audio_Init(RomOffset, RomOffset, RomOffset);
@@ -144,6 +147,7 @@ void func_8074279C(void);
 s32 func_80768B88(OSPiHandle*, OSIoMesg*, s32);
 u16 func_80766788(void);
 s32 func_80766660(u16);
+void func_80767940(void);
 void func_8076852C(u16, u8*, u8*, void*, s32);
 void func_807684AC(u16, u8*, u8*, void*, s32, s32);
 

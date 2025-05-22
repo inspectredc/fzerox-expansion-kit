@@ -6,6 +6,14 @@
 #include "segment_symbols.h"
 #include "leo/leo_internal.h"
 
+OSMesg D_8079E920;
+UNUSED s8 D_8079E928[0x10];
+s16 D_8079E938[0x800];
+s32 D_8079F938;
+s32 D_8079F93C;
+s32 D_8079F940;
+Vtx* D_8079F944;
+
 bool CourseFeature_IsDecorational(s32 courseFeature) {
     if ((courseFeature >= COURSE_FEATURE_GATE_SQUARE) && (courseFeature <= COURSE_FEATURE_BUILDING_TALL_GOLD_RIGHT)) {
         return true;
@@ -467,8 +475,6 @@ void func_806FBBC8(void) {
     }
 }
 
-extern s32 D_8079F938;
-
 Gfx* func_806FC340(Gfx* gfx) {
 
     gSPSetGeometryMode(gfx++, G_CULL_BACK);
@@ -677,7 +683,6 @@ void func_806FCBF4(CourseSegment* arg0, f32 arg1, Vec3f* arg2) {
     arg2->z += sp58 * sp28.z.z;
 }
 
-extern s16 D_8079E938[];
 extern s32 D_800D65C8;
 
 void func_806FCCE4(s32 arg0, s32 arg1, f32 arg2) {
@@ -932,9 +937,7 @@ void func_806FD3C0(s32 arg0, unk_8006FF90_arg_1* arg1, Vtx** arg2) {
 
 s32 D_8076C9E4 = 0;
 
-extern s32 D_8079F940;
 extern u8 D_xk2_80104CA7;
-extern Vtx* D_8079F944;
 
 Vtx* func_806FDA64(CourseSegment* arg0, f32 arg1, unk_8006FF90_arg_1* arg2, Vtx* arg3, f32 arg4, f32 arg5) {
     bool sp114 = false;
@@ -1043,8 +1046,8 @@ Vtx* func_806FDA64(CourseSegment* arg0, f32 arg1, unk_8006FF90_arg_1* arg2, Vtx*
             arg1 = func_806FCE04(arg0->segmentIndex, arg1);
 
             if (arg2->unk_0C <= arg1) {
+                if (1) {}
                 arg1 = arg2->unk_0C;
-            } else {
             }
         }
     }
@@ -1192,8 +1195,7 @@ Vtx* func_806FE174(CourseSegment* arg0, unk_8006FF90_arg_1* arg1, Vtx* arg2, f32
 }
 
 extern s32 D_8079A35C;
-extern s32 D_8079F93C;
-extern s32 D_8079F940;
+
 extern Vtx D_80226A40[];
 extern Vtx D_8022EA40[];
 extern unk_802D2D70 D_807BDD68;
@@ -3112,24 +3114,27 @@ void func_80701E90(s32 courseIndex) {
             sp38[5] = (courseIndex / 10) + '0';
             sp38[6] = (courseIndex % 10) + '0';
             func_i2_800A7CB8(func_i2_800AA84C());
-            func_8076852C(0xFFFB, sp38, "GOST", &gCourseCtx, sizeof(CourseData) + 3 * sizeof(GhostSave) + sizeof(SaveCourseRecords));
+            func_8076852C(0xFFFB, sp38, "GOST", &gCourseCtx,
+                          sizeof(CourseData) + 3 * sizeof(GhostSave) + sizeof(SaveCourseRecords));
             osRecvMesg(&D_8079F998, NULL, OS_MESG_BLOCK);
             Course_CalculateChecksum();
             if (func_i2_800A9F98()) {
                 PRINTF("GHOST DATA WAS BROKEN\n");
                 func_i2_800AA80C();
                 func_i2_800A7CB8(func_i2_800AA84C());
-                PRINTF("DEF LOAD OK\n");
             }
+            PRINTF("DEF LOAD OK\n");
             func_i2_800A8CE4(func_i2_800AA84C(), courseIndex);
             func_80703B40(D_320 + sp50, &gCourseCtx.courseData, sizeof(CourseData), 0);
-            if ((Course_CalculateChecksum() != gCourseCtx.courseData.checksum) || (gCourseCtx.courseData.creatorId != CREATOR_NINTENDO) ||
+            if ((Course_CalculateChecksum() != gCourseCtx.courseData.checksum) ||
+                (gCourseCtx.courseData.creatorId != CREATOR_NINTENDO) ||
                 ((s8) gCourseCtx.courseData.fileName[0x16] >= 0xE)) {
                 func_8070F8A4(-1, 9);
                 while (true) {}
             }
         } else {
-            func_8076852C(0xFFFB, gEditCupTrackNames[sp50], "CRSD", &gCourseCtx, sizeof(CourseData) + 3 * sizeof(GhostSave) + sizeof(SaveCourseRecords));
+            func_8076852C(0xFFFB, gEditCupTrackNames[sp50], "CRSD", &gCourseCtx,
+                          sizeof(CourseData) + 3 * sizeof(GhostSave) + sizeof(SaveCourseRecords));
             osRecvMesg(&D_8079F998, NULL, OS_MESG_BLOCK);
             PRINTF("ENTRY CHECK BUT NONE %s (DEFAULT COURSE)\n");
             if (D_8079F9B4 != 0) {
@@ -3140,19 +3145,21 @@ void func_80701E90(s32 courseIndex) {
                         sp30[5] = (courseIndex / 10) + '0';
                         sp30[6] = (courseIndex % 10) + '0';
                         func_i2_800A7CB8(func_i2_800AA84C());
-                        func_8076852C(0xFFFB, sp30, "GOST", &gCourseCtx, sizeof(CourseData) + 3 * sizeof(GhostSave) + sizeof(SaveCourseRecords));
+                        func_8076852C(0xFFFB, sp30, "GOST", &gCourseCtx,
+                                      sizeof(CourseData) + 3 * sizeof(GhostSave) + sizeof(SaveCourseRecords));
                         osRecvMesg(&D_8079F998, NULL, OS_MESG_BLOCK);
                         Course_CalculateChecksum();
                         if (func_i2_800A9F98()) {
                             PRINTF("GHOST DATA WAS BROKEN\n");
                             func_i2_800AA80C();
                             func_i2_800A7CB8(func_i2_800AA84C());
-                            PRINTF("DEF LOAD OK\n");
                         }
+                        PRINTF("DEF LOAD OK\n");
                         func_i2_800A8CE4(func_i2_800AA84C(), courseIndex);
                         func_80703B40(D_320 + sp50, &gCourseCtx.courseData, sizeof(CourseData), 0);
                         if ((Course_CalculateChecksum() != gCourseCtx.courseData.checksum) ||
-                        (gCourseCtx.courseData.creatorId != CREATOR_NINTENDO) || ((s8) gCourseCtx.courseData.fileName[0x16] >= 0xE)) {
+                            (gCourseCtx.courseData.creatorId != CREATOR_NINTENDO) ||
+                            ((s8) gCourseCtx.courseData.fileName[0x16] >= 0xE)) {
                             func_8070F8A4(-1, 9);
                             while (true) {}
                         }
@@ -3171,7 +3178,8 @@ void func_80701E90(s32 courseIndex) {
         sp28[6] = (courseIndex % 10) + '0';
         func_i2_800A7CB8(func_i2_800AA84C());
         if (D_8076C7D8 == 0) {
-            func_8076852C(0xFFFB, sp28, "GOST", &gCourseCtx, sizeof(CourseData) + 3 * sizeof(GhostSave) + sizeof(SaveCourseRecords));
+            func_8076852C(0xFFFB, sp28, "GOST", &gCourseCtx,
+                          sizeof(CourseData) + 3 * sizeof(GhostSave) + sizeof(SaveCourseRecords));
             osRecvMesg(&D_8079F998, NULL, OS_MESG_BLOCK);
         }
         sp48 = D_807C70C8 + courseIndex * sizeof(CourseData);
@@ -3230,24 +3238,27 @@ void func_80702448(s32 courseIndex) {
             sp38[5] = (courseIndex / 10) + '0';
             sp38[6] = (courseIndex % 10) + '0';
             func_i2_800A7CB8(func_i2_800AA84C());
-            func_8076852C(0xFFFB, sp38, "GOST", &gCourseCtx, sizeof(CourseData) + 3 * sizeof(GhostSave) + sizeof(SaveCourseRecords));
+            func_8076852C(0xFFFB, sp38, "GOST", &gCourseCtx,
+                          sizeof(CourseData) + 3 * sizeof(GhostSave) + sizeof(SaveCourseRecords));
             osRecvMesg(&D_8079F998, NULL, OS_MESG_BLOCK);
-            PRINTF("course index is %d\n");
             Course_CalculateChecksum();
             if (func_i2_800A9F98()) {
                 func_i2_800AA80C();
                 func_i2_800A7CB8(func_i2_800AA84C());
-                PRINTF("DEF LOAD OK\n");
             }
+            PRINTF("course index is %d\n", courseIndex);
+            PRINTF("DEF LOAD OK\n");
             func_i2_800A8CE4(func_i2_800AA84C(), courseIndex);
             func_80703B40(D_320 + sp4C, &gCourseCtx.courseData, sizeof(CourseData), 0);
-            if ((Course_CalculateChecksum() != gCourseCtx.courseData.checksum) || (gCourseCtx.courseData.creatorId != CREATOR_NINTENDO) ||
+            if ((Course_CalculateChecksum() != gCourseCtx.courseData.checksum) ||
+                (gCourseCtx.courseData.creatorId != CREATOR_NINTENDO) ||
                 ((s8) gCourseCtx.courseData.fileName[0x16] >= 0xE)) {
                 func_8070F8A4(-1, 9);
                 while (true) {}
             }
         } else {
-            func_8076852C(0xFFFB, gEditCupTrackNames[sp4C], "CRSD", &gCourseCtx, sizeof(CourseData) + 3 * sizeof(GhostSave) + sizeof(SaveCourseRecords));
+            func_8076852C(0xFFFB, gEditCupTrackNames[sp4C], "CRSD", &gCourseCtx,
+                          sizeof(CourseData) + 3 * sizeof(GhostSave) + sizeof(SaveCourseRecords));
             osRecvMesg(&D_8079F998, NULL, OS_MESG_BLOCK);
             PRINTF("ENTRY CHECK BUT NONE %s (DEFAULT COURSE)\n");
             if (D_8079F9B4 != 0) {
@@ -3260,27 +3271,29 @@ void func_80702448(s32 courseIndex) {
                         sp30[5] = (courseIndex / 10) + '0';
                         sp30[6] = (courseIndex % 10) + '0';
                         func_i2_800A7CB8(func_i2_800AA84C());
-                        func_8076852C(0xFFFB, sp30, "GOST", &gCourseCtx, sizeof(CourseData) + 3 * sizeof(GhostSave) + sizeof(SaveCourseRecords));
+                        func_8076852C(0xFFFB, sp30, "GOST", &gCourseCtx,
+                                      sizeof(CourseData) + 3 * sizeof(GhostSave) + sizeof(SaveCourseRecords));
                         osRecvMesg(&D_8079F998, NULL, OS_MESG_BLOCK);
-                        PRINTF("course index is %d\n");
-                        PRINTF("DEF LOAD OK\n");
-                        PRINTF("ENTRY LOAD OK\n");
-                        PRINTF("course ID is %d\n");
                         Course_CalculateChecksum();
                         if (func_i2_800A9F98()) {
                             func_i2_800AA80C();
                             func_i2_800A7CB8(func_i2_800AA84C());
                         }
+                        PRINTF("course index is %d\n", courseIndex);
+                        PRINTF("DEF LOAD OK\n");
                         func_i2_800A8CE4(func_i2_800AA84C(), courseIndex);
                         func_80703B40(D_320 + sp4C, &gCourseCtx.courseData, sizeof(CourseData), 0);
                         if ((Course_CalculateChecksum() != gCourseCtx.courseData.checksum) ||
-                            (gCourseCtx.courseData.creatorId != CREATOR_NINTENDO) || ((s8) gCourseCtx.courseData.fileName[0x16] >= 0xE)) {
+                            (gCourseCtx.courseData.creatorId != CREATOR_NINTENDO) ||
+                            ((s8) gCourseCtx.courseData.fileName[0x16] >= 0xE)) {
                             func_8070F8A4(-1, 9);
                             while (true) {}
                         }
                     }
                 }
             } else {
+                PRINTF("ENTRY LOAD OK\n");
+                PRINTF("course ID is %d\n", courseIndex);
                 func_i2_800A8CE4(func_i2_800AA84C(), courseIndex);
             }
         }

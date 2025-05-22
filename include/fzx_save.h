@@ -102,8 +102,7 @@ typedef struct GhostSave {
 
 typedef struct SaveContext {
     ProfileSave profileSaves[2];
-    GhostRecord ghostRecord;
-    GhostData ghostData;
+    GhostSave ghostSave;
     CharacterSave characterSaves[24];
     CupSave cupSave;
     s8 unk_7FE0[0x20];
