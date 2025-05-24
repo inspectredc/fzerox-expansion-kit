@@ -24,15 +24,15 @@ typedef struct unk_807C6EA8 {
     s32 unk_10;
     s8 unk_14[0x2];
     u16 unk_16;
-    s32 unk_18;
-    s32 unk_1C;
-    s32 unk_20;
+    u8* unk_18;
+    u8* unk_1C;
+    void* unk_20;
     s32 unk_24;
     s32 unk_28;
     s32 unk_2C;
     s32 unk_30;
     s32 unk_34;
-    s32 unk_38;
+    void* unk_38;
     s32 unk_3C;
     s32 unk_40;
     s32 unk_44;
@@ -47,8 +47,9 @@ typedef struct unk_807C6EA8 {
 
 typedef struct unk_80225800 {
     Mtx unk_000;
-    Vtx unk_040[4][6];
-    Vtx unk_1C0[48][5];
+    Vtx unk_040[4 * 6];
+    s8 pad_1C0[0x180];
+    Vtx unk_1C0[48 * 5];
 } unk_80225800; // size = 0x10C0
 
 typedef struct Player {
@@ -162,6 +163,34 @@ typedef struct MachineInfo {
     /* 0x13 */ u8 cockpitB;
 } MachineInfo; // size = 0x14
 
+typedef struct unk_80141C88_unk_1D {
+    MachineInfo unk_00;
+    s8 unk_14[12];
+} unk_80141C88_unk_1D; // size = 0x20
+
+typedef struct GhostInfo {
+    /* 0x00 */ s32 courseIndex;
+    /* 0x04 */ s32 encodedCourseIndex;
+    /* 0x08 */ s32 raceTime;
+    /* 0x0C */ s32 replayChecksum;
+    /* 0x10 */ u16 ghostType;
+    /* 0x12 */ u16 unk_12;
+    /* 0x14 */ char trackName[9];
+    /* 0x1D */ unk_80141C88_unk_1D unk_1D;
+} GhostInfo; // size = 0x40
+
+typedef struct Ghost {
+    /* 0x0000 */ s32 encodedCourseIndex;
+    /* 0x0004 */ s32 raceTime;
+    /* 0x0008 */ s32 lapTimes[3];
+    /* 0x0014 */ s32 replayEnd;
+    /* 0x0018 */ s32 replaySize;
+    /* 0x001C */ s8 replayData[16200];
+    /* 0x3F64 */ s32 replayChecksum;
+    /* 0x3F68 */ s16 ghostType;
+    /* 0x3F6A */ MachineInfo machineInfo;
+} Ghost; // size = 0x3F80
+
 typedef struct CourseInfo {
     /* 0x00 */ s32 encodedCourseIndex;
     /* 0x04 */ s32 courseIndex;
@@ -212,10 +241,10 @@ typedef struct unk_802D3D38 {
 } unk_802D3D38; // size = 0x40
 
 typedef struct unk_802D3978 {
-    s32 unk_00;
+    // s32 unk_00; Field Removed in DD Version
     Vec3f unk_04;
     s8 unk_10[0x4];
-} unk_802D3978; // size = 0x14
+} unk_802D3978; // size = 0x10
 
 typedef struct unk_802D3E38 {
     s32 effectType;

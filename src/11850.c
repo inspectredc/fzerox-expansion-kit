@@ -226,7 +226,7 @@ s32 SLMFSLoadSpecial2(u16 arg0, u8* arg1, u8* arg2, u8* arg3, s32 arg4) {
     }
 }
 
-extern u8 D_800D10F0[];
+extern u8 gEditCupTrackNames[][9];
 
 void func_8070470C(void) {
     s32 i;
@@ -236,35 +236,35 @@ void func_8070470C(void) {
         return;
     }
 
-    D_800D10F0[0] = 0;
-    D_800D10F0[9] = 0;
-    D_800D10F0[18] = 0;
-    D_800D10F0[27] = 0;
-    D_800D10F0[36] = 0;
-    D_800D10F0[45] = 0;
+    gEditCupTrackNames[0][0] = '\0';
+    gEditCupTrackNames[1][0] = '\0';
+    gEditCupTrackNames[2][0] = '\0';
+    gEditCupTrackNames[3][0] = '\0';
+    gEditCupTrackNames[4][0] = '\0';
+    gEditCupTrackNames[5][0] = '\0';
 
-    SLMFSLoadSpecial(0xFFFB, "CRS_ENTRY", "CENT", D_800D10F0, 0xD8);
+    SLMFSLoadSpecial(0xFFFB, "CRS_ENTRY", "CENT", gEditCupTrackNames[0], 0xD8);
 
     PRINTF("===============================================\n");
     PRINTF("ENTRY LOAD AGAIN\n");
     PRINTF("===============================================\n");
 
     for (i = 0; i < 6; i++) {
-        if (func_80762D80(&D_800D10F0[i * 9]) != 0) {
-            D_800D10F0[i * 9] = 0;
+        if (func_80762D80(&gEditCupTrackNames[i]) != 0) {
+            gEditCupTrackNames[i][0] = '\0';
         }
     }
 }
 
 void func_807047AC(void) {
     if (D_8076CBC8 != 0) {
-        D_800D10F0[0] = 0;
-        D_800D10F0[9] = 0;
-        D_800D10F0[18] = 0;
-        D_800D10F0[27] = 0;
-        D_800D10F0[36] = 0;
-        D_800D10F0[45] = 0;
-        SLMFSLoadSpecial2(0xFFFB, "CRS_ENTRY", "CENT", D_800D10F0, 0xD8);
+        gEditCupTrackNames[0][0] = '\0';
+        gEditCupTrackNames[1][0] = '\0';
+        gEditCupTrackNames[2][0] = '\0';
+        gEditCupTrackNames[3][0] = '\0';
+        gEditCupTrackNames[4][0] = '\0';
+        gEditCupTrackNames[5][0] = '\0';
+        SLMFSLoadSpecial2(0xFFFB, "CRS_ENTRY", "CENT", gEditCupTrackNames[0], 0xD8);
     }
 
     PRINTF("Mesg Wait Before\n");

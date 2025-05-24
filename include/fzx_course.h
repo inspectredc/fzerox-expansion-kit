@@ -2,6 +2,7 @@
 #define FZX_COURSE_H
 
 #include "fzx_math.h"
+#include "fzx_save.h"
 
 typedef struct ControlPoint {
     /* 0x00 */ Vec3f pos;
@@ -11,7 +12,7 @@ typedef struct ControlPoint {
 } ControlPoint; // size = 0x14
 
 typedef struct CourseData {
-    /* 0x000 */ s8 creatorId;
+    /* 0x000 */ u8 creatorId;
     /* 0x001 */ s8 controlPointCount;
     /* 0x002 */ s8 venue;
     /* 0x003 */ s8 skybox;
@@ -30,6 +31,11 @@ typedef struct CourseData {
     /* 0x760 */ s8 building[64];
     /* 0x7A0 */ s8 sign[64];
 } CourseData; // size = 0x7E0
+
+typedef struct CourseContext {
+    /* 0x0000 */ CourseData courseData;
+    /* 0x07E0 */ u8 saveBuffer[0xBF40];
+} CourseContext; // size >= 0xC720
 
 typedef enum Courses {
     /*  0 */ COURSE_MUTE_CITY,
@@ -310,5 +316,9 @@ typedef enum BorderlessRoad {
 #define TRACK_FLAG_20000000 0x20000000
 #define TRACK_FLAG_CONTINUOUS 0x40000000
 #define TRACK_FLAG_80000000 0x80000000
+
+extern CourseContext gCourseCtx;
+extern CourseInfo* gCurrentCourseInfo;
+extern CourseInfo gCourseInfos[56];
 
 #endif // FZX_COURSE_H

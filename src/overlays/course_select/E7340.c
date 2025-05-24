@@ -8,15 +8,15 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/func_i5_80077EEC.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/func_i5_80077F10.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/CourseSelect_Init.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/func_i5_8007842C.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/NextCourseSelect_Init.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/func_i5_80078660.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/CourseSelect_Update.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/func_i5_800790CC.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/NextCourseSelect_Update.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/func_i5_80079184.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/CourseSelect_Draw.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/func_i5_800791A4.s")
 

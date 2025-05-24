@@ -56,7 +56,7 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i3/CB690/func_i3_8005F664.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i3/CB690/func_i3_8005F6A8.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i3/CB690/func_i3_ResetLivesChangeCounter.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i3/CB690/func_i3_8005F6B4.s")
 
