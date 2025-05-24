@@ -193,7 +193,7 @@ s32 func_i2_800A5F58(s32 courseIndex, s32 encodedCourseIndex) {
                 func_i2_800AA024(courseIndex, var_s3->unk_02, &gSaveContext.ghostSave.data);
                 Save_LoadGhostRecord(&gSaveContext.ghostSave.record, &gSaveContext.ghostSave.data, &gGhosts[j], false);
                 Save_LoadGhostData(&gSaveContext.ghostSave.record, &gSaveContext.ghostSave.data, &gGhosts[j], false);
-                
+
                 break;
             default:
                 break;
@@ -506,15 +506,16 @@ s32 Save_SaveCourseRecordProfiles(s32 courseIndex) {
     if ((courseIndex >= COURSE_MUTE_CITY) && (courseIndex <= COURSE_BIG_HAND)) {
         Save_SaveCourseRecord(&profileSaves[0].courses[courseIndex], courseIndex);
         profileSaves[1].courses[courseIndex] = profileSaves[0].courses[courseIndex];
-    
+
         checksum = Save_CalculateProfileSaveCourseRecordChecksum(profileSaves, courseIndex);
-    
+
         for (i = 0; i < 2; i++) {
             Save_WriteSaveCourseRecord(profileSaves, i, courseIndex, checksum);
         }
     } else {
         Save_SaveCourseRecord(gSaveContext.profileSaves[0].courses, courseIndex);
-        gSaveContext.profileSaves[0].courses[0].checksum = Save_CalculateProfileSaveCourseRecordChecksum(gSaveContext.profileSaves, 0);
+        gSaveContext.profileSaves[0].courses[0].checksum =
+            Save_CalculateProfileSaveCourseRecordChecksum(gSaveContext.profileSaves, 0);
         saveCourseRecord = func_i2_800AA84C();
         *saveCourseRecord = gSaveContext.profileSaves[0].courses[0];
         func_i2_800AA864(courseIndex);
@@ -560,13 +561,13 @@ s32 Save_UpdateCupCompletion(s32 difficulty, s32 cupType, s32 character) {
         profileSaves[1].editCup2 = profileSaves[0].editCup2;
         i = 1;
         checksum = Save_CalculateSaveEditCup2Checksum(profileSaves);
-    
+
         for (i = 0; i < 2; i++) {
             Save_WriteSaveEditCup2(profileSaves, i, checksum);
         }
     } else {
         u16 cupCompletion;
-        
+
         Save_ReadCupSave(cupSave);
         Save_LoadCupSave(cupSave, NULL);
 
@@ -1466,13 +1467,13 @@ void Save_LoadGhostData(GhostRecord* ghostRecord, GhostData* ghostData, Ghost* g
         for (i = 0; i < 3; i++) {
             ghost->lapTimes[i] = ghostData->replayInfo.lapTimes[i];
         }
-    
+
         ghost->replayEnd = ghostData->replayInfo.end;
         ghost->replaySize = ghostData->replayInfo.size;
-    
+
         var_v0 = ghostData->replayData;
         var_v1 = ghost->replayData;
-    
+
         for (i = 0; i < 16200; i++) {
             *var_v1++ = *var_v0++;
         }
@@ -1514,7 +1515,7 @@ void Save_LoadCupSave(CupSave* cupSave, u8* arg1) {
         return;
     }
 
-    var_a0 = (s8*)arg1;
+    var_a0 = (s8*) arg1;
 
     for (i = 0; i < 4; i++) {
         for (j = 0; j < 10; j++) {
@@ -1730,13 +1731,11 @@ extern s32 D_807C7108;
 extern uintptr_t D_i2_800BEE60[][3];
 
 void func_i2_800A9894(GhostRecord* ghostRecord, s32 courseIndex) {
-    func_80701CAC(D_807C7108 + D_i2_800BEE60[courseIndex][0], ghostRecord,
-                     sizeof(GhostRecord));
+    func_80701CAC(D_807C7108 + D_i2_800BEE60[courseIndex][0], ghostRecord, sizeof(GhostRecord));
 }
 
 void func_i2_800A98E4(GhostData* ghostData, s32 courseIndex) {
-    func_80701CAC(D_807C7108 + D_i2_800BEE60[courseIndex][1], &ghostData->replayInfo,
-                     sizeof(GhostReplayInfo));
+    func_80701CAC(D_807C7108 + D_i2_800BEE60[courseIndex][1], &ghostData->replayInfo, sizeof(GhostReplayInfo));
 }
 
 s32 Save_LoadStaffGhost(s32 courseIndex, s32 encodedCourseIndex) {
@@ -1757,7 +1756,7 @@ s32 Save_LoadStaffGhost(s32 courseIndex, s32 encodedCourseIndex) {
     } else {
         Save_LoadStaffGhostRecord(&ghostInfo, courseIndex);
     }
-    
+
     if (func_i2_800A68A8(&ghostInfo)) {
         return 0;
     }
