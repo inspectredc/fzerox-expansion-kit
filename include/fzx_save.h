@@ -39,6 +39,12 @@ typedef struct SaveEditCup {
     u8 editCupTrackNames[6][9];
 } SaveEditCup; // size = 0x40
 
+typedef struct SaveEditCup2 {
+    u16 checksum;
+    u16 unk_02;
+    u8 unk_04[30 * 2];
+} SaveEditCup2; // size = 0x40
+
 typedef struct SaveSettings {
     u8 fileName[8];
     u8 settings;
@@ -58,7 +64,10 @@ typedef struct ProfileSave {
     SaveSettings saveSettings;
     SaveDeathRace deathRace;
     SaveCourseRecords courses[24];
-    SaveEditCup editCup;
+    union {
+        SaveEditCup editCup;
+        SaveEditCup2 editCup2;
+    };
 } ProfileSave; // size = 0x19E0
 
 typedef struct GhostRecord {
@@ -111,20 +120,72 @@ typedef struct SaveContext {
 // extern u8 gSaveBuffer[];
 extern SaveContext gSaveContext;
 
-s32 Save_Init(SaveContext*, s32);
+s32 func_i2_800A5F58(s32 courseIndex, s32 encodedCourseIndex);
+s32 Save_LoadPlayerGhost(s32 courseIndex, s32 encodedCourseIndex, s32 ghostIndex);
+
+bool func_i2_800A68A8(GhostInfo* ghostInfo);
+
+void Save_SaveGhostRecord(Ghost* ghost);
+void Save_SaveGhostData(Ghost* ghost);
+void Save_SaveSettings(SaveSettings* saveSettings);
+void Save_SaveDeathRace(SaveDeathRace* deathRace);
+void Save_SaveCourseRecord(SaveCourseRecords* courseRecords, s32 courseIndex);
+void Save_SaveCharacterSave(CharacterSave* characterSave);
+
+s32 Save_Init(SaveContext* saveContext, s32 arg1);
+void Save_CreateNew(SaveContext* saveContext, s32 arg1);
+
+void Save_InitSaveSettings(SaveSettings* saveSettings, bool shouldClear);
+void Save_InitDeathRace(SaveDeathRace* deathRace, bool shouldClear);
+void Save_InitEditCup(SaveEditCup* editCup, bool shouldClear);
+void Save_InitCourseRecord(SaveCourseRecords* courseRecords, bool shouldClear);
+void Save_InitGhostRecord(GhostRecord* ghostRecord, bool shouldClear);
+void Save_InitGhostData(GhostData* ghostData, bool shouldClear);
+void Save_InitCharacterSave(CharacterSave* characterSave, bool shouldClear);
+
+void func_i2_800A7438(GhostRecord* ghostRecord, GhostInfo* ghostInfo);
+void func_i2_800A7C84(GhostRecord* ghostRecord);
+
+void func_i2_800A88D8(unk_80141C88_unk_1D* arg0, MachineInfo* arg1);
+
+void Save_Load(SaveContext* saveContext);
+void Save_LoadSaveSettings(ProfileSave* profileSaves, bool arg1);
+void Save_LoadDeathRace(ProfileSave* profileSaves);
+void Save_LoadCourseRecord(ProfileSave* profileSaves, s32 courseIndex);
+void Save_LoadCourseRecord2(SaveCourseRecords* courseRecord, s32 courseIndex);
+s32 Save_LoadGhostInfo(GhostInfo* ghostInfo);
+void Save_LoadGhostRecord(GhostRecord* ghostRecord, GhostData* ghostData, Ghost* ghost, bool arg3);
+void Save_LoadGhostData(GhostRecord* ghostRecord, GhostData* ghostData, Ghost* ghost, bool arg3);
+void Save_LoadCharacterSave(CharacterSave* characterSave, s32 courseIndex);
+void Save_LoadCupSave(CupSave* cupSave, u8* arg1);
+void Save_LoadEditCup2(ProfileSave* profileSaves, u8* arg1, u16* arg2);
+
+s32 Save_CalculateSaveSettingsChecksum(ProfileSave* profileSave);
+s32 Save_CalculateSaveDeathRaceChecksum(ProfileSave* profileSave);
+s32 Save_CalculateProfileSaveCourseRecordChecksum(ProfileSave* profileSave, s32 courseIndex);
+s32 Save_CalculateSaveCourseRecordChecksum(SaveCourseRecords* courseRecords);
+s32 Save_CalculateSaveEditCupChecksum(ProfileSave* profileSave);
+s32 Save_CalculateSaveEditCup2Checksum(ProfileSave* profileSave);
+s32 Save_CalculateGhostRecordChecksum(GhostRecord* ghostRecord);
+s32 Save_CalculateGhostDataChecksum(GhostData* ghostData);
+s32 Save_CalculateCharacterSaveChecksum(CharacterSave* characterSave);
+s32 Save_CalculateCupSaveChecksum(CupSave* cupSave);
 
 void Save_ClearData(void* data, s32 size);
 
-void Save_SaveCharacterSave(CharacterSave* characterSave);
-
-void func_i2_800A7C84(GhostRecord* ghostRecord);
-
-void Save_LoadCourseRecord(SaveCourseRecords* courseRecord, s32 courseIndex);
-
-s32 Save_CalculateSaveCourseRecordChecksum(SaveCourseRecords* courseRecords);
-s32 Save_CalculateGhostRecordChecksum(GhostRecord* ghostRecord);
-s32 Save_CalculateCharacterSaveChecksum(CharacterSave* characterSave);
 void Sram_ReadWrite(s32 direction, u32 offset, void* dramAddr, size_t size);
+
+void func_i2_800A9894(GhostRecord* ghostRecord, s32 courseIndex);
+void func_i2_800A98E4(GhostData* ghostData, s32 courseIndex);
+s32 Save_LoadStaffGhost(s32 courseIndex, s32 encodedCourseIndex);
+void func_i2_800A9A54(GhostData* ghostData, s32 courseIndex);
+
+void func_i2_800A9CE0(s32 courseIndex, GhostRecord* ghostRecord);
+void func_i2_800AA024(s32 courseIndex, s32 ghostIndex, GhostData* ghostData);
+void func_i2_800AA864(s32 courseIndex);
+void func_i2_800AAA14(s32 ghostIndex, GhostRecord* ghostRecord);
+void func_i2_800AAA64(s32 ghostIndex, GhostData* ghostData);
+void func_i2_800AAAC0(s32 courseIndex);
 
 #define REPLAY_DATA_LARGE_FLAG -0x80
 #define REPLAY_DATA_LARGE(x) REPLAY_DATA_LARGE_FLAG, (((x) >> 8) & 0xFF), ((x) & 0xFF)

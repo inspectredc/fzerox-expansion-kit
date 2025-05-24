@@ -90,6 +90,9 @@ gRandMask1 = 0x8076C944;
 gRandSeed2 = 0x8076C948;
 gRandMask2 = 0x8076C94C;
 
+gSettingEverythingUnlocked = 0x8076CC98;
+gCurrentGhostType = 0x8076CC9C;
+
 sLeoErrorMessages = 0x8076D344; // size:0x98
 sLeoFontPallete = 0x8076D4BC;
 
@@ -97,6 +100,9 @@ sFaultCharIndex = 0x8076D4E0;
 sFaultCharPixelFlags = 0x8076D560;
 sFaultCauses = 0x8076D660;
 sFloatExceptions = 0x8076D6A8;
+
+gSettingVsHandicap = 0x8076E2F0;
+gSettingVsCom = 0x8076E2F4;
 
 // game bss
 
@@ -137,6 +143,7 @@ gSinTable = 0x8079A8A0; // size:0x4000
 gSegments = 0x8079FA40;
 gCharacterLastEngine = 0x8079FAA0;
 gInputButtonPressed = 0x8079FB1E;
+gCupNumDifficultiesCleared = 0x8079FB24;
 
 sLeoPrintFrameBuffer = 0x8079FC80;
 sLeoPrintCurPixel = 0x8079FC84;
@@ -151,6 +158,7 @@ gFaultMgr = 0x8079FE98; // size:0x9D8
 
 gPlayers = 0x807A0930; // size:0x770
 gPlayerEngine = 0x807A1600;
+gGhosts = 0x807A1708;
 
 D_802259C0 = 0x802259C0;
 

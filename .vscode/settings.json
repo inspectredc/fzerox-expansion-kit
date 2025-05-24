@@ -65,7 +65,8 @@
       "fzx_racer.h": "c",
       "fzx_assets.h": "c",
       "fzx_course.h": "c",
-      "fzx_save.h": "c"
+      "fzx_save.h": "c",
+      "fzx_math.h": "c"
     },
     "C_Cpp_Runner.msvcBatchPath": "",
     "C_Cpp.errorSquiggles": "enabled"
