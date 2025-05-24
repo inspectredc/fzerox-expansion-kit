@@ -10,8 +10,8 @@ extern u8 D_8023F020[];
 extern u8 D_8024E200[];
 extern u8 D_807C7190[];
 
-extern s32 D_8079A420;
-extern s32 D_8079A428;
+extern s32 gSegment17B1E0VramEnd;
+extern s32 gSegment17B960VramEnd;
 extern s32 gGameMode;
 
 void func_807082B0(void) {
@@ -40,10 +40,10 @@ void func_807082B0(void) {
         case GAMEMODE_LX_MACHINE_SETTINGS:
         case GAMEMODE_LX_GP_RACE_NEXT_MACHINE_SETTINGS:
         case GAMEMODE_FLX_MACHINE_SELECT:
-            *block2 = ALIGN16((uintptr_t) osPhysicalToVirtual(D_8079A428));
+            *block2 = ALIGN16((uintptr_t) osPhysicalToVirtual(gSegment17B960VramEnd));
             break;
         default:
-            *block2 = ALIGN16((uintptr_t) osPhysicalToVirtual(D_8079A420));
+            *block2 = ALIGN16((uintptr_t) osPhysicalToVirtual(gSegment17B1E0VramEnd));
             break;
     }
 }
@@ -176,8 +176,8 @@ Gfx* Segment_SetTableAddresses(Gfx* gfx) {
 
 extern s32 D_80128C90;
 extern u16 D_8076CBD0;
-extern s32 D_8079A434;
-extern s32 D_8079A438;
+extern s32 gSegment1B8550VramStart;
+extern s32 gSegment1B8550VramEnd;
 
 void func_807088A8(void) {
     size_t segmentSize;
@@ -207,21 +207,21 @@ void func_807088A8(void) {
         case GAMEMODE_LX_GP_RACE_NEXT_MACHINE_SETTINGS:
         case GAMEMODE_FLX_MACHINE_SELECT:
             D_8076CBD0 = 2;
-            Segment_SetAddress(4, D_8079A434);
+            Segment_SetAddress(4, gSegment1B8550VramStart);
             return;
         default:
             D_8076CBD0 = 0;
-            Segment_SetAddress(4, D_8079A434);
+            Segment_SetAddress(4, gSegment1B8550VramStart);
             return;
     }
-    D_8079A434 = osVirtualToPhysical(func_807084E4(0, segmentSize));
-    D_8079A438 = ALIGN16(D_8079A434 + segmentSize);
-    Segment_SetAddress(4, D_8079A434);
+    gSegment1B8550VramStart = osVirtualToPhysical(func_807084E4(0, segmentSize));
+    gSegment1B8550VramEnd = ALIGN16(gSegment1B8550VramStart + segmentSize);
+    Segment_SetAddress(4, gSegment1B8550VramStart);
 }
 
 extern s8 D_8076CBD4;
-extern s32 D_8079A43C;
-extern s32 D_8079A440;
+extern s32 gSegment1E23F0VramStart;
+extern s32 gSegment1E23F0VramEnd;
 
 void func_80708A44(void) {
     size_t ramSize;
@@ -243,18 +243,18 @@ void func_80708A44(void) {
             break;
         default:
             D_8076CBD4 = 0;
-            Segment_SetAddress(7, D_8079A43C);
+            Segment_SetAddress(7, gSegment1E23F0VramStart);
             return;
     }
 
-    D_8079A43C = osVirtualToPhysical(func_807084E4(0, ramSize));
-    D_8079A440 = ALIGN16(D_8079A43C + ramSize);
-    Segment_SetAddress(7, D_8079A43C);
+    gSegment1E23F0VramStart = osVirtualToPhysical(func_807084E4(0, ramSize));
+    gSegment1E23F0VramEnd = ALIGN16(gSegment1E23F0VramStart + ramSize);
+    Segment_SetAddress(7, gSegment1E23F0VramStart);
 }
 
 extern s8 D_8076CBD8;
-extern s32 D_8079A444;
-extern s32 D_8079A448;
+extern s32 gSegment22B0A0VramStart;
+extern s32 gSegment22B0A0VramEnd;
 
 void func_80708B34(void) {
     size_t segmentSize;
@@ -272,12 +272,12 @@ void func_80708B34(void) {
             break;
         default:
             D_8076CBD8 = 0;
-            Segment_SetAddress(9, D_8079A444);
+            Segment_SetAddress(9, gSegment22B0A0VramStart);
             return;
     }
-    D_8079A444 = osVirtualToPhysical(func_807084E4(0, segmentSize));
-    D_8079A448 = ALIGN16(D_8079A444 + segmentSize);
-    Segment_SetAddress(9, D_8079A444);
+    gSegment22B0A0VramStart = osVirtualToPhysical(func_807084E4(0, segmentSize));
+    gSegment22B0A0VramEnd = ALIGN16(gSegment22B0A0VramStart + segmentSize);
+    Segment_SetAddress(9, gSegment22B0A0VramStart);
 }
 
 extern s8 D_8076CBDC;
@@ -346,7 +346,7 @@ bool func_80708D88(void) {
     size_t segmentDataSize;
     size_t segmentBssSize;
 
-    if (gGameMode == 0x16) {
+    if (gGameMode == GAMEMODE_16) {
         D_8076CC40 = 1;
         return 0;
     }
@@ -477,7 +477,7 @@ void func_80708F4C(void) {
             segmentVramSize = SEGMENT_VRAM_SIZE(machine_create);
             segmentBssSize = SEGMENT_BSS_SIZE(machine_create);
             break;
-        case 0x16:
+        case GAMEMODE_16:
             var_t1 = true;
             vramTextStart = SEGMENT_TEXT_START(ovl_xk4);
             vramStart = SEGMENT_VRAM_START(ovl_xk4);
@@ -508,7 +508,7 @@ void func_80708F4C(void) {
     func_80708CE0();
 }
 
-extern s32 D_8079A424;
+extern s32 gSegment17B960VramStart;
 
 extern s32 D_807C70E0;
 extern s32 D_807C70F0;
@@ -531,17 +531,17 @@ void func_807093F4(void) {
         case GAMEMODE_TIME_ATTACK:
         case GAMEMODE_GP_END_CS:
         case GAMEMODE_DEATH_RACE:
-            func_80701D7C(D_807C70F0, osPhysicalToVirtual(D_8079A424), SEGMENT_VRAM_SIZE(segment_17B960));
+            func_80701D7C(D_807C70F0, osPhysicalToVirtual(gSegment17B960VramStart), SEGMENT_VRAM_SIZE(segment_17B960));
             romOffset = D_807C70E0;
             ramSize = SEGMENT_VRAM_SIZE(segment_1B8550);
             break;
         case GAMEMODE_CREATE_MACHINE:
-            func_80701D7C(D_807C70F0, osPhysicalToVirtual(D_8079A424), SEGMENT_VRAM_SIZE(segment_17B960));
+            func_80701D7C(D_807C70F0, osPhysicalToVirtual(gSegment17B960VramStart), SEGMENT_VRAM_SIZE(segment_17B960));
             romOffset = D_807C7180;
             ramSize = SEGMENT_VRAM_SIZE(create_machine_textures);
             break;
         case GAMEMODE_COURSE_EDIT:
-            func_80701D7C(D_807C70F0, osPhysicalToVirtual(D_8079A424), SEGMENT_VRAM_SIZE(segment_17B960));
+            func_80701D7C(D_807C70F0, osPhysicalToVirtual(gSegment17B960VramStart), SEGMENT_VRAM_SIZE(segment_17B960));
             romOffset = D_807C70E0;
             ramSize = SEGMENT_VRAM_SIZE(segment_1B8550);
             break;
@@ -549,14 +549,14 @@ void func_807093F4(void) {
         case GAMEMODE_LX_MACHINE_SETTINGS:
         case GAMEMODE_LX_GP_RACE_NEXT_MACHINE_SETTINGS:
         case GAMEMODE_FLX_MACHINE_SELECT:
-            func_80701D7C(D_807C70F0, osPhysicalToVirtual(D_8079A424), SEGMENT_VRAM_SIZE(segment_17B960));
+            func_80701D7C(D_807C70F0, osPhysicalToVirtual(gSegment17B960VramStart), SEGMENT_VRAM_SIZE(segment_17B960));
         default:
             D_8076CBD0 = 0;
             return;
     }
 
-    CLEAR_DATA_CACHE(osPhysicalToVirtual(D_8079A434), ramSize);
-    func_8070818C(romOffset, osPhysicalToVirtual(D_8079A434), ramSize);
+    CLEAR_DATA_CACHE(osPhysicalToVirtual(gSegment1B8550VramStart), ramSize);
+    func_8070818C(romOffset, osPhysicalToVirtual(gSegment1B8550VramStart), ramSize);
     D_8076CBD0 = 0;
 }
 
@@ -594,11 +594,11 @@ void func_80709620(void) {
             D_8076CBD4 = 0;
             return;
     }
-    CLEAR_DATA_CACHE(osPhysicalToVirtual(D_8079A43C), ramSize);
+    CLEAR_DATA_CACHE(osPhysicalToVirtual(gSegment1E23F0VramStart), ramSize);
     if (loadFromDisk) {
-        func_80703CA4(diskOffset, osPhysicalToVirtual(D_8079A43C), ramSize, 0);
+        func_80703CA4(diskOffset, osPhysicalToVirtual(gSegment1E23F0VramStart), ramSize, 0);
     } else {
-        func_8070818C(romOffset, osPhysicalToVirtual(D_8079A43C), ramSize);
+        func_8070818C(romOffset, osPhysicalToVirtual(gSegment1E23F0VramStart), ramSize);
     }
     D_8076CBD4 = 0;
 }
@@ -638,9 +638,9 @@ void func_80709760(void) {
 
     if (gGameMode == GAMEMODE_COURSE_EDIT) {
         if (loadFromDisk) {
-            func_80703CA4(diskOffset, osPhysicalToVirtual(D_8079A444), ramSize, 0);
+            func_80703CA4(diskOffset, osPhysicalToVirtual(gSegment22B0A0VramStart), ramSize, 0);
         } else {
-            func_8070818C(romOffset, osPhysicalToVirtual(D_8079A444), ramSize);
+            func_8070818C(romOffset, osPhysicalToVirtual(gSegment22B0A0VramStart), ramSize);
         }
     } else {
         sp1C = func_807084E4(1, ramSize);
@@ -652,7 +652,7 @@ void func_80709760(void) {
             func_8070818C(romOffset, sp1C, ramSize);
         }
         if (*(s32*) sp1C == (s32) 'MIO0') {
-            mio0Decode(sp1C, osPhysicalToVirtual(D_8079A444));
+            mio0Decode(sp1C, osPhysicalToVirtual(gSegment22B0A0VramStart));
         }
     }
     D_8076CBD8 = 0;
@@ -662,7 +662,6 @@ extern u8* D_8076CBE8[];
 extern u8* D_8076CC14[];
 extern s32 D_8079A44C;
 extern RomOffset D_807C7120[][2];
-extern CourseData gCourseData;
 
 void func_80709914(void) {
     s32 pad;
@@ -687,7 +686,7 @@ void func_80709914(void) {
         case GAMEMODE_TIME_ATTACK:
         case GAMEMODE_GP_END_CS:
         case GAMEMODE_DEATH_RACE:
-            venue = gCourseData.venue;
+            venue = gCourseCtx.courseData.venue;
             romOffset = D_807C7120[venue][0];
             ramSize = D_8076CC14[venue] - D_8076CBE8[venue];
             break;

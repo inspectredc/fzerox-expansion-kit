@@ -24,6 +24,7 @@ typedef enum GameMode {
     /* 0x13 */ GAMEMODE_RECORDS_COURSE_SELECT,
     /* 0x14 */ GAMEMODE_OPTIONS_MENU,
     /* 0x15 */ GAMEMODE_DEATH_RACE,
+    /* 0x16 */ GAMEMODE_16,
 } GameMode;
 
 #define GET_MODE(gamemode) (gamemode & 0x1F)

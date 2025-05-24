@@ -70,6 +70,8 @@
       - [0x2260, c]
       - [0x2340, c]
       - [0x3250, c]
+      - [0x3A10, c]
+      - [0x6F40, pad]
       - [0x6F50, c]
       - [0x10AB0, c]
       - [0x10B20, c]
@@ -79,8 +81,8 @@
       - [0x15AB0, c]
       - [0x17490, c]
       - [0x1C8B0, c]
-      - [0x1C970, c]
-      - [0x1D580, c]
+      - [0x1C970, c, leo_fault]
+      - [0x1D580, c, sys_fault]
       - [0x1E970, c]
       - [0x1F320, c]
       - [0x27110, c]
@@ -285,9 +287,15 @@
       # Data
       - [0x775F0, data]
       - [0x79F60, .data, 60]
-      - [0x79FA0, data]
+      - [0x79FA0, .data, CE0]
       - [0x79FB0, .data, 2260]
-      - [0x79FC0, data]
+      - [0x79FC0, .data, 2340]
+      - [0x7A140, .data, 3A10]
+      - [0x7A150, .data, 6F50]
+      - [0x7A340, data]
+      - [0x7A810, .data, leo_fault]
+      - [0x7ACE0, .data, sys_fault]
+      - [0x7AEC0, data]
       - [0x7DB20, .data, audio/filter_data]
       - [0x7DD10, .data, audio/note_data]
       - [0x7F130, .data, audio/synthesis]
@@ -378,7 +386,7 @@
       - [0x80A80, .rodata, 60]
       - [0x80A90, .rodata, CE0]
       - [0x80AA0, .rodata, 2340]
-      - [0x80D70, .rodata, 3250]
+      - [0x80D70, .rodata, 3A10]
       - [0x80DF0, .rodata, 6F50]
       - [0x81210, .rodata, 10B20]
       - [0x81230, .rodata, 110B0]
@@ -386,8 +394,8 @@
       - [0x82EE0, .rodata, 15AB0]
       - [0x831E0, .rodata, 17490]
       - [0x83620, .rodata, 1C8B0]
-      - [0x83630, .rodata, 1C970]
-      - [0x83670, .rodata, 1D580]
+      - [0x83630, .rodata, leo_fault]
+      - [0x83670, .rodata, sys_fault]
       - [0x83BB0, .rodata, 1E970]
       - [0x83BD0, .rodata, 1F320]
       - [0x846F0, .rodata, 27110]
@@ -439,9 +447,16 @@
       - [0xA2970, data]
       - [0xA2B50, data] # audio tables?
       - { type: .bss, vram: 0x80795670, name: 60 }
-      - { type: bss, vram: 0x8079A350, name: 8079A350 }
+      - { type: .bss, vram: 0x8079A350, name: CE0 }
       - { type: .bss, vram: 0x8079A4A0, name: 2260 }
-      - { type: bss, vram: 0x8079A4B0, name: 8079A4B0 }
+      - { type: .bss, vram: 0x8079A4B0, name: 2340 }
+      - { type: .bss, vram: 0x8079A4E0, name: 3250 }
+      - { type: .bss, vram: 0x8079A8A0, name: 3A10 }
+      - { type: .bss, vram: 0x8079E920, name: 6F50 }
+      - { type: bss, vram: 0x8079F950, name: 8079F950 }
+      - { type: .bss, vram: 0x8079FC80, name: leo_fault }
+      - { type: .bss, vram: 0x8079FE80, name: sys_fault }
+      - { type: bss, vram: 0x807A0870, name: 807A0870 }
       - { type: .bss, vram: 0x807C1C00, name: libultra/io/sptask }
       - { type: .bss, vram: 0x807C1C40, name: libultra/io/motor }
       - { type: .bss, vram: 0x807C1D40, name: libultra/io/siacs }

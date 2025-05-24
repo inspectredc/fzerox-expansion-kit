@@ -1,10 +1,10 @@
 #include "common.h"
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i6/EB850/func_i6_8007C2B0.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i6/EB850/MainMenu_Init.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i6/EB850/func_i6_8007C4E0.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i6/EB850/MainMenu_Update.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i6/EB850/func_i6_8007CC68.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i6/EB850/MainMenu_Draw.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i6/EB850/func_i6_8007CC88.s")
 

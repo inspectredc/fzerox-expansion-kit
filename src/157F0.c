@@ -17,7 +17,7 @@ void func_80708058(u8* romAddr, u8* ramAddr, size_t size) {
     D_8079A308.devAddr = romAddr;
     D_8079A308.size = size;
     gCartRomHandle->transferInfo.cmdType = LEO_CMD_TYPE_2;
-    func_80768B88(gCartRomHandle, &D_8079A308, 0);
+    func_80768B88(gCartRomHandle, &D_8079A308, OS_READ);
     osRecvMesg(&gDmaMesgQueue, msgBuf, OS_MESG_BLOCK);
 }
 
@@ -30,7 +30,7 @@ void func_807080E8(u8* romAddr, u8* ramAddr, size_t size, u8* bssAddr, size_t bs
     D_8079A308.devAddr = romAddr;
     D_8079A308.size = size;
     gCartRomHandle->transferInfo.cmdType = LEO_CMD_TYPE_2;
-    func_80768B88(gCartRomHandle, &D_8079A308, 0);
+    func_80768B88(gCartRomHandle, &D_8079A308, OS_READ);
     bzero(bssAddr, bssSize);
     osRecvMesg(&gDmaMesgQueue, msgBuf, OS_MESG_BLOCK);
 }
