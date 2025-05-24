@@ -13,8 +13,8 @@
 #include "fzx_course.h"
 #include "fzx_save.h"
 
-void Game_ThreadEntry(void* arg0);
-void Audio_ThreadEntry(void* arg0);
+void Game_ThreadEntry(void* entry);
+void Audio_ThreadEntry(void* entry);
 
 void Controller_SetGlobalInputs(Controller* controller);
 
@@ -59,6 +59,7 @@ Gfx* func_806FC900(Gfx* gfx);
 Gfx* func_806FC9FC(Gfx* gfx);
 Gfx* func_806FCAF8(Gfx* gfx);
 void func_80701C04(void* romAddr, void* ramAddr, size_t size);
+void func_80701CAC(void* romAddr, void* ramAddr, size_t size);
 void func_80701D7C(u8* romAddr, u8* ramAddr, size_t size);
 void func_80701E90(s32 courseIndex);
 void func_80702A68(void);
@@ -88,6 +89,7 @@ void SLMFSNewDisk2(void);
 s32 func_80707780(void);
 s32 SLCheckDiskInsert(void);
 void func_80707B08(void);
+void func_80707E58(void);
 void func_8070818C(u8* romAddr, u8* ramAddr, size_t size);
 
 void func_807083D8(void);
@@ -136,6 +138,7 @@ void func_8070D358(void);
 void func_8070DA84(void);
 void func_8070DAD4(s32);
 void func_8070DAFC(void);
+void func_8070DD88(void);
 void func_8070F0D0(void);
 void func_80715F9C(void);
 void func_8071ED34(void);
@@ -150,6 +153,7 @@ s32 func_80766660(u16);
 void func_80767940(void);
 void func_8076852C(u16, u8*, u8*, void*, s32);
 void func_807684AC(u16, u8*, u8*, void*, s32, s32);
+void func_807680EC(u16, u8*, u8*, void*, s32, s32, s32, s32);
 
 Gfx* func_xk1_8002ED64(Gfx*);
 Gfx* func_xk1_8002F9DC(Gfx*);
