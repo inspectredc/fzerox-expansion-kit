@@ -105,7 +105,7 @@ extern CourseData D_i2_800D0130;
 
 void func_i2_800AA220(s32 courseIndex, s32 ghostIndex, Ghost* ghost) {
     GhostSave* ghostSave = (GhostSave*) gCourseCtx.saveBuffer + ghostIndex;
-    
+
     D_i2_800BF030[5] = (courseIndex / 10) + '0';
     D_i2_800BF030[6] = (courseIndex % 10) + '0';
     gCourseCtx.courseData = D_i2_800D0130;
@@ -136,7 +136,8 @@ void func_i2_800AA368(s32 courseIndex, s32 ghostIndex, Ghost* ghost) {
     *ghostSave = gSaveContext.ghostSave;
     if ((courseIndex >= COURSE_EDIT_1) && (courseIndex <= COURSE_EDIT_6)) {
         if (gEditCupTrackNames[courseIndex - COURSE_EDIT_1][0] != '\0') {
-            func_807680EC(0xFFFB, gEditCupTrackNames[courseIndex - COURSE_EDIT_1], "CRSD", &gCourseCtx, 0xC830, 0, 0xFF, 1);
+            func_807680EC(0xFFFB, gEditCupTrackNames[courseIndex - COURSE_EDIT_1], "CRSD", &gCourseCtx, 0xC830, 0, 0xFF,
+                          1);
             return;
         }
     }
@@ -149,7 +150,7 @@ void func_i2_800AA368(s32 courseIndex, s32 ghostIndex, Ghost* ghost) {
 
 void func_i2_800AA520(s32 courseIndex) {
     GhostSave* ghostSave;
-    
+
     D_i2_800BF030[5] = (courseIndex / 10) + '0';
     D_i2_800BF030[6] = (courseIndex % 10) + '0';
 
@@ -162,7 +163,8 @@ void func_i2_800AA520(s32 courseIndex) {
     if ((courseIndex >= COURSE_EDIT_1) && (courseIndex <= COURSE_EDIT_6)) {
         if (gEditCupTrackNames[courseIndex - COURSE_EDIT_1][0] != '\0') {
             gCourseCtx.courseData = D_i2_800D0130;
-            func_807680EC(0xFFFB, gEditCupTrackNames[courseIndex - COURSE_EDIT_1], "CRSD", &gCourseCtx, 0xC830, 0, 0xFF, 1);
+            func_807680EC(0xFFFB, gEditCupTrackNames[courseIndex - COURSE_EDIT_1], "CRSD", &gCourseCtx, 0xC830, 0, 0xFF,
+                          1);
             return;
         }
     }
@@ -171,7 +173,7 @@ void func_i2_800AA520(s32 courseIndex) {
 
 void func_i2_800AA694(s32 courseIndex) {
     SaveCourseRecords* courseRecords = (SaveCourseRecords*) (gCourseCtx.saveBuffer + 3 * sizeof(GhostSave));
-    
+
     D_i2_800BF030[5] = (courseIndex / 10) + '0';
     D_i2_800BF030[6] = (courseIndex % 10) + '0';
 
@@ -179,7 +181,8 @@ void func_i2_800AA694(s32 courseIndex) {
     if ((courseIndex >= COURSE_EDIT_1) && (courseIndex <= COURSE_EDIT_6)) {
         if (gEditCupTrackNames[courseIndex - COURSE_EDIT_1][0] != '\0') {
             gCourseCtx.courseData = D_i2_800D0130;
-            func_807680EC(0xFFFB, gEditCupTrackNames[courseIndex - COURSE_EDIT_1], "CRSD", &gCourseCtx, 0xC830, 0, 0xFF, 1);
+            func_807680EC(0xFFFB, gEditCupTrackNames[courseIndex - COURSE_EDIT_1], "CRSD", &gCourseCtx, 0xC830, 0, 0xFF,
+                          1);
             func_i2_800A8CE4(courseRecords, courseIndex);
             return;
         }
@@ -203,7 +206,7 @@ SaveCourseRecords* func_i2_800AA84C(void) {
 }
 
 GhostSave* func_i2_800AA858(void) {
-    return (GhostSave*)gCourseCtx.saveBuffer;
+    return (GhostSave*) gCourseCtx.saveBuffer;
 }
 
 void func_i2_800AA864(s32 courseIndex) {
@@ -215,7 +218,8 @@ void func_i2_800AA864(s32 courseIndex) {
 
     if ((courseIndex >= COURSE_EDIT_1) && (courseIndex <= COURSE_EDIT_6)) {
         if (gEditCupTrackNames[courseIndex - COURSE_EDIT_1][0] != '\0') {
-            func_807680EC(0xFFFB, gEditCupTrackNames[courseIndex - COURSE_EDIT_1], "CRSD", &gCourseCtx, 0xC830, 0, 0xFF, 1);
+            func_807680EC(0xFFFB, gEditCupTrackNames[courseIndex - COURSE_EDIT_1], "CRSD", &gCourseCtx, 0xC830, 0, 0xFF,
+                          1);
             return;
         }
     }
