@@ -80,7 +80,9 @@
       - [0x157F0, c]
       - [0x15AB0, c]
       - [0x17490, c]
+      - [0x1B6E0, c]
       - [0x1C8B0, c]
+      - [0x1C8F0, c]
       - [0x1C970, c, leo_fault]
       - [0x1D580, c, sys_fault]
       - [0x1E970, c]
@@ -293,9 +295,13 @@
       - [0x7A140, .data, 3A10]
       - [0x7A150, .data, 6F50]
       - [0x7A340, data]
+      - [0x7A450, .data, 17490]
+      - [0x7A620, .data, 1C8B0]
+      - [0x7A800, .data, 1C8F0]
       - [0x7A810, .data, leo_fault]
       - [0x7ACE0, .data, sys_fault]
-      - [0x7AEC0, data]
+      - [0x7AEC0, .data, 1F320]
+      - [0x7B0C0, data]
       - [0x7DB20, .data, audio/filter_data]
       - [0x7DD10, .data, audio/note_data]
       - [0x7F130, .data, audio/synthesis]
@@ -454,9 +460,13 @@
       - { type: .bss, vram: 0x8079A8A0, name: 3A10 }
       - { type: .bss, vram: 0x8079E920, name: 6F50 }
       - { type: bss, vram: 0x8079F950, name: 8079F950 }
+      - { type: .bss, vram: 0x8079FAA0, name: 17490 }
+      - { type: .bss, vram: 0x8079FC10, name: 1C8B0 }
       - { type: .bss, vram: 0x8079FC80, name: leo_fault }
       - { type: .bss, vram: 0x8079FE80, name: sys_fault }
-      - { type: bss, vram: 0x807A0870, name: 807A0870 }
+      - { type: .bss, vram: 0x807A0870, name: 1E970 }
+      - { type: .bss, vram: 0x807A0930, name: 1F320 }
+      - { type: bss, vram: 0x807A15D0, name: 807A15D0 }
       - { type: .bss, vram: 0x807C1C00, name: libultra/io/sptask }
       - { type: .bss, vram: 0x807C1C40, name: libultra/io/motor }
       - { type: .bss, vram: 0x807C1D40, name: libultra/io/siacs }
