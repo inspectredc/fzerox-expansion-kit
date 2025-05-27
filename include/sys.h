@@ -54,7 +54,13 @@ typedef union unk_Light {
 
 typedef struct GfxPool {
     Gfx gfxBuffer[1];
-    s8 pad_00008[0x36620];
+    s8 pad_00008[0x1A000];
+    Mtx unk_1A008[4];
+    Mtx unk_1A108[4];
+    Mtx unk_1A208[4];
+    s8 pad_1A308[0x1BFC0];
+    Vp unk_362C8[4];
+    s8 pad_36308[0x320];
     Mtx unk_36628[1];
     Mtx unk_36668[1];
     Mtx unk_366A8[1];

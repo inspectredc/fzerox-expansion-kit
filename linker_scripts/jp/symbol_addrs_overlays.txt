@@ -2,6 +2,8 @@ func_i3_8003F2E0 = 0x8003F2E0; //segment:ovl_i3
 func_i3_80059EC0 = 0x80059EC0; //segment:ovl_i3
 func_i3_ResetLivesChangeCounter = 0x8005F6A8; //segment:ovl_i3
 
+gFastestGhostTime = 0x8006D450; //segment:ovl_i3
+
 Save_ReadGhostRecord = 0x800A5D40; //segment:ovl_i2
 Save_ReadGhostData = 0x800A5D7C; //segment:ovl_i2
 Save_ReadCharacterSave = 0x800A5DB8; //segment:ovl_i2

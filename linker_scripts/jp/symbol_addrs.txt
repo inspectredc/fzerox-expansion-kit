@@ -90,8 +90,16 @@ gRandMask1 = 0x8076C944;
 gRandSeed2 = 0x8076C948;
 gRandMask2 = 0x8076C94C;
 
+gSelectedMode = 0x8076CC50;
+gPlayerSelectionLock = 0x8076CC78;
+gMachineSelectState = 0x8076CC80;
+gMachineSettingsState = 0x8076CC84;
 gSettingEverythingUnlocked = 0x8076CC98;
 gCurrentGhostType = 0x8076CC9C;
+gUnlockableLevel = 0x8076CC90;
+gModeSubOption = 0x8076CC58;
+sTrackNames = 0x8076CCA4; // size:0xB0
+gMachineNames = 0x8076CD54;
 
 sLeoErrorMessages = 0x8076D344; // size:0x98
 sLeoFontPallete = 0x8076D4BC;
@@ -100,6 +108,8 @@ sFaultCharIndex = 0x8076D4E0;
 sFaultCharPixelFlags = 0x8076D560;
 sFaultCauses = 0x8076D660;
 sFloatExceptions = 0x8076D6A8;
+
+sMaxCameraLookBackRotate = 0x8076D8B4;
 
 gSettingVsHandicap = 0x8076E2F0;
 gSettingVsCom = 0x8076E2F4;
@@ -141,9 +151,19 @@ gControllersConnected = 0x8079A898;
 gSinTable = 0x8079A8A0; // size:0x4000
 
 gSegments = 0x8079FA40;
+
 gCharacterLastEngine = 0x8079FAA0;
+gInputPressed = 0x8079FB1C;
 gInputButtonPressed = 0x8079FB1E;
+gStickPressed = 0x8079FB20;
 gCupNumDifficultiesCleared = 0x8079FB24;
+gCurrentTrackName = 0x8079FB2C;
+gTrackNames = 0x8079FB30; // size:0xDC
+
+gSkyboxType = 0x8079FC10;
+gVenueType = 0x8079FC14;
+gCupRaceStats = 0x8079FC18; // size:0x60
+gRecordNameEntered = 0x8079FC78; // size:0x4
 
 sLeoPrintFrameBuffer = 0x8079FC80;
 sLeoPrintCurPixel = 0x8079FC84;
@@ -232,7 +252,7 @@ __osPfsDeclearPage = 0x80748FA4;
 osPfsFreeBlocks = 0x807490F0;
 __osProbeTLB = 0x80749290;
 __d_to_ll = 0x80749350;
-__f_to_ll = 0x80749368;
+__f_to_ll = 0x8074936C;
 __d_to_ull = 0x80749388;
 __f_to_ull = 0x80749428;
 __ll_to_d = 0x807494C4;
@@ -830,3 +850,18 @@ gCourseInfos = 0x802BB140; //segment:unk_context size:0x3480
 gRacers = 0x802D2F20; //segment:unk_context size:0x6DB0
 
 D_807794F0 = 0x807794F0; // force_migration:True
+
+D_807763D0 = 0x807763D0; // size:0x78
+D_80776448 = 0x80776448; // size:0xAC
+D_807764F4 = 0x807764F4; // size:0xF4
+D_807765E8 = 0x807765E8; // size:0xC0
+D_807766A8 = 0x807766A8; // size:0xAC
+D_80776754 = 0x80776754; // size:0xAC
+D_80776800 = 0x80776800; // size:0xAC
+D_807768AC = 0x807768AC; // size:0x78
+D_80776924 = 0x80776924; // size:0x78
+D_8077699C = 0x8077699C; // size:0xAC
+D_80776A48 = 0x80776A48; // size:0x30
+D_80776A78 = 0x80776A78; // size:0x30
+D_80776AA8 = 0x80776AA8; // size:0xF4
+D_80776B9C = 0x80776B9C; // size:0xF4
