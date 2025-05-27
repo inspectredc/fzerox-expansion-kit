@@ -102,12 +102,14 @@ typedef enum Character {
 } Character;
 
 typedef enum Cup {
-    JACK_CUP,
-    QUEEN_CUP,
-    KING_CUP,
-    JOKER_CUP,
-    X_CUP,
-    EDIT_CUP,
+    /* 0 */ JACK_CUP,
+    /* 1 */ QUEEN_CUP,
+    /* 2 */ KING_CUP,
+    /* 3 */ JOKER_CUP,
+    /* 4 */ X_CUP,
+    /* 5 */ EDIT_CUP,
+    /* 6 */ CUP_6,
+    /* 7 */ CUP_7,
 } Cup;
 
 #endif // FZX_GAME_H

@@ -38,11 +38,18 @@ void Controller_Init(void);
 void Math_SinTableInit(void);
 void Math_Rand1Init(s32 seed, s32 mask);
 void Math_Rand2Init(s32 seed, s32 mask);
+u32 Math_Rand1(void);
+u32 Math_Rand2(void);
 s32 Math_Round(f32 num);
+Gfx* func_806F6360(Gfx*, s32);
+s32 func_806F6D8C(Mtx3F* mtx);
+s32 func_806F6F64(Mtx3F* mtx);
 void Matrix_ToMtx(MtxF* src, Mtx* dest2);
-void func_806F86C0(Mtx*, MtxF*, f32, s32, s32, s32, f32, f32, f32);
 void func_806F7FCC(Mtx*, MtxF*, f32, f32, f32, f32, f32, f32, f32, f32, f32, f32, f32, f32);
+void func_806F86C0(Mtx*, MtxF*, f32, s32, s32, s32, f32, f32, f32);
 void func_806F8868(Mtx*, MtxF*, f32, s32, f32, f32, f32, f32, f32, f32);
+void func_806F8FE0(Mtx*, MtxF*, f32, f32, f32, f32, f32, f32, f32, f32, f32);
+void func_806F9384(Mtx*, MtxF*, f32, f32, f32, f32, f32, f32, f32, u16*);
 
 Gfx* func_806FC340(Gfx* gfx);
 Gfx* func_806FC3AC(Gfx* gfx);
@@ -77,6 +84,7 @@ s32 func_80703CA4(s32 startLba, void* vram, s32 diskSize, s32 bssSize);
 s32 func_80703E08(s32 startLba, void* vram, s32 diskSize, s32 bssSize);
 
 void func_80704050(s32);
+void func_8070481C(void);
 s32 func_8070595C(void);
 void SLForceWritebackDCacheAll(void);
 s32 SLLeoReadWrite(LEOCmd* cmdBlock, s32 direction, s32 lba, u8* vAddr, u32 nLbas, OSMesgQueue* mq);
@@ -84,6 +92,8 @@ s32 SLLeoReadWrite_DATA(LEOCmd* cmdBlock, s32 direction, s32 lba, u8* vAddr, u32
 void SLMFSRecoverManageArea(void);
 void func_80706518(s32, s32, s32);
 void SLMFSDeleteFile(u16, u8*, u8*, s32);
+s32 SLMFSCreateManager(s32 region);
+void SLLeoModeSelectAsync(u32 standby, u32 sleep);
 void SLMFSNewDisk(void);
 void SLMFSNewDisk2(void);
 s32 func_80707780(void);
@@ -140,13 +150,49 @@ void func_8070DAD4(s32);
 void func_8070DAFC(void);
 void func_8070DD88(void);
 void func_8070F0D0(void);
+
+void func_80715768(unk_struct_20_2*, s32);
+void func_80715E1C(Vec3f*, unk_struct_20_2*, unk_struct_14*);
+void func_80715E60(Vec3f*, unk_struct_20_2*, unk_struct_14*);
+void func_80715EC0(unk_80085434_arg_0*, unk_struct_20_2*, unk_80085434_arg_2*);
+void func_80715F20(unk_80085494_arg_0*, unk_struct_20_2*, unk_80085494_arg_2*);
+void func_807166B8(Player*, unk_struct_F8*, unk_800E5D70*);
+void func_80716F38(Player* player);
+void func_80717354(Player*, unk_struct_F8*, unk_800E5D70*);
+void func_807176B4(Player*, unk_struct_F8*);
+void func_80717B20(void);
+void func_807181F8(Player*, unk_struct_F8*);
+void func_80718530(Player*, unk_struct_F8*, unk_800E5D70*);
+void func_80718908(Player*, unk_struct_F8*, unk_800E5D70*);
+void func_80718964(Player*, unk_struct_F8*);
+void func_80718AB0(Player*, unk_struct_F8*);
+void func_80718AFC(Player*, unk_struct_F8*, unk_800E5D70*);
+void func_80718F58(Vec3f*, CourseSegment*, f32, unk_800CD970*);
+void func_80719140(Player*, unk_struct_F8*, unk_800E5D70*);
+void func_807191B0(Player*, unk_struct_F8*, unk_800E5D70*);
+void func_80719420(Player*, unk_struct_F8*, unk_800E5D70*);
+void func_80719480(Player*, unk_struct_F8*, unk_800E5D70*);
+bool func_80719868(s32);
+
 void func_80715F9C(void);
 void func_8071ED34(void);
 
+
+void func_80740BD8(u8);
+void func_80741A0C(u8);
+void func_80741B84(void);
+void func_80741BCC(void);
+void func_80741CB4(u8);
+void func_80741DD4(void);
+void func_80741E64(void);
+void func_80742004(void);
+void func_807423F4(s32);
 s32 func_807424CC(void);
 s32 func_80742790(void);
 void func_8074279C(void);
 
+void func_80762330(LEODiskTime*);
+void func_80760F40(u8*, u8*);
 s32 func_80768B88(OSPiHandle*, OSIoMesg*, s32);
 u16 func_80766788(void);
 s32 func_80766660(u16);
@@ -160,7 +206,10 @@ Gfx* func_xk1_8002F9DC(Gfx*);
 void func_xk1_8002FFA0(void);
 void func_xk1_8002FFDC(void);
 
-s32 Save_UpdateCourseCharacterSave(s32);
+s32 Save_UpdateCourseCharacterSave(s32 courseIndex);
+s32 Save_SaveSettingsProfiles(void);
+s32 Save_LoadStaffGhostRecord(GhostInfo* ghostInfo, s32 courseIndex);
+
 void func_i2_800A20A0(void);
 Gfx* func_i2_800A2B0C(Gfx*);
 void func_i2_800A2CCC(void);
