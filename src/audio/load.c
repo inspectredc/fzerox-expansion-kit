@@ -1270,7 +1270,6 @@ s32 AudioLoad_SlowLoadSample(s32 fontId, s32 instId, s8* status) {
     return 0;
 }
 
-// #pragma GLOBAL_ASM("asm/jp/nonmatchings/audio/load/AudioLoad_GetFontSample.s")
 Sample* AudioLoad_GetFontSample(s32 fontId, s32 instId) {
     Sample* sample;
 
