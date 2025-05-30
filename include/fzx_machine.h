@@ -20,6 +20,24 @@ typedef struct CustomMachineInfo {
     /* 0xD */ u8 cockpitB;
 } CustomMachineInfo; // size = 0xE
 
+typedef struct Machine {
+    /* 0x00 */ s16 customType;
+    /* 0x02 */ u8 shadowType;
+    /* 0x03 */ u8 boostersType;
+    /* 0x04 */ u8 red[4];
+    /* 0x08 */ u8 green[4];
+    /* 0x0C */ u8 blue[4];
+    /* 0x10 */ u8 number;
+    /* 0x11 */ s8 machineStats[3];
+    /* 0x14 */ s16 weight;
+} Machine; // size = 0x16
+
+typedef struct BoosterInfo {
+    s32 count;
+    Vec3f pos[4];
+    f32 size[4];
+} BoosterInfo;
+
 typedef enum CustomMachineType {
     /* 0 */ CUSTOM_MACHINE_DEFAULT,
     /* 1 */ CUSTOM_MACHINE_EDITED,

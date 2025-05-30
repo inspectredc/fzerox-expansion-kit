@@ -22,6 +22,13 @@
     subsegments:
       - { type: .bss, vram: 0x80200000, name: framebuffer2 }
 
+  - name: unk_gfx_segment
+    type: code
+    vram: 0x80225800
+    bss_size: 0x818C0
+    subsegments:
+      - { type: .bss, vram: 0x80225800, name: unk_gfx_segment}
+
   - name: unk_context
     type: code
     vram: 0x802BB140
@@ -301,7 +308,8 @@
       - [0x7A810, .data, leo_fault]
       - [0x7ACE0, .data, sys_fault]
       - [0x7AEC0, .data, 1F320]
-      - [0x7B0C0, data]
+      - [0x7B0C0, .data, 27110]
+      - [0x7CB20, data]
       - [0x7DB20, .data, audio/filter_data]
       - [0x7DD10, .data, audio/note_data]
       - [0x7F130, .data, audio/synthesis]
@@ -466,7 +474,8 @@
       - { type: .bss, vram: 0x8079FE80, name: sys_fault }
       - { type: .bss, vram: 0x807A0870, name: 1E970 }
       - { type: .bss, vram: 0x807A0930, name: 1F320 }
-      - { type: bss, vram: 0x807A15D0, name: 807A15D0 }
+      - { type: .bss, vram: 0x807A15D0, name: 27110 }
+      - { type: bss, vram: 0x807B3C20, name: 807B3C20 }
       - { type: .bss, vram: 0x807C1C00, name: libultra/io/sptask }
       - { type: .bss, vram: 0x807C1C40, name: libultra/io/motor }
       - { type: .bss, vram: 0x807C1D40, name: libultra/io/siacs }
