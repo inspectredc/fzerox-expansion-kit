@@ -58,7 +58,15 @@ typedef struct GfxPool {
     Mtx unk_1A008[4];
     Mtx unk_1A108[4];
     Mtx unk_1A208[4];
-    s8 pad_1A308[0x1BFC0];
+    s8 pad_1A308[0x18000];
+    Mtx unk_32308[30];
+    Mtx unk_32A88[30];
+    Mtx unk_33208[30];
+    Mtx unk_33988[4];
+    Lights1 unk_33A88[4];
+    unk_Light unk_33AE8[4];
+    LookAt unk_33B28;
+    s8 pad_33B48[0x2780];
     Vp unk_362C8[4];
     s8 pad_36308[0x320];
     Mtx unk_36628[1];

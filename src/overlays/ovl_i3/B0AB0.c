@@ -38,4 +38,4 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i3/B0AB0/func_i3_80041278.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i3/B0AB0/func_i3_80041284.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i3/B0AB0/Cpu_GenerateInputs.s")
