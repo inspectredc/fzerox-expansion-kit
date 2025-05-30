@@ -1,6 +1,9 @@
 func_i3_8003F2E0 = 0x8003F2E0; //segment:ovl_i3
+Cpu_GenerateInputs = 0x80041284; //segment:ovl_i3
 func_i3_80059EC0 = 0x80059EC0; //segment:ovl_i3
 func_i3_ResetLivesChangeCounter = 0x8005F6A8; //segment:ovl_i3
+func_i3_TriggerLivesIncrease = 0x8005F6B4; //segment:ovl_i3
+func_i3_TriggerLivesDecrease = 0x8005F6D8; //segment:ovl_i3
 
 gFastestGhostTime = 0x8006D450; //segment:ovl_i3
 
@@ -104,8 +107,8 @@ Course_CalculateChecksum = 0x800BEA18; //segment:ovl_i2
 
 gSettingVsSlot = 0x800BF060; //segment:ovl_i2
 gPlayer1OverallPosition = 0x800BF068; //segment:ovl_i2
+gLastRandomCourseIndex = 0x800C1514; //segment:ovl_i2
 gCourseCtx = 0x800C3230; //segment:ovl_i2 size:0xC720
-// gSaveBuffer = 0x800C3A10; //segment:ovl_i2
 gEditCupTrackNames = 0x800D10F0; //segment:ovl_i2
 sSramIoMesg = 0x800D1270; //segment:ovl_i2
 sSramPiHandle = 0x800D1288; //segment:ovl_i2
@@ -113,6 +116,7 @@ gSramPiHandlePtr = 0x800D12FC; //segment:ovl_i2
 gSettingSoundMode = 0x800D1300; //segment:ovl_i2
 gCurrentCourseInfo = 0x800D65C0; //segment:ovl_i2
 gCourseIndex = 0x800D65C4; //segment:ovl_i2
+gRacerPositionsById = 0x800D5850; // segment:ovl_i2
 
 gSaveContext = 0x8008A7C0; //segment:ovl_i6
 

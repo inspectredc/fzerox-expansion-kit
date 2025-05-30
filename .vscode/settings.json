@@ -67,7 +67,9 @@
       "fzx_course.h": "c",
       "fzx_save.h": "c",
       "fzx_math.h": "c",
-      "ovl_i4.h": "c"
+      "ovl_i4.h": "c",
+      "fzx_machine.h": "c",
+      "unk_gfx.h": "c"
     },
     "C_Cpp_Runner.msvcBatchPath": "",
     "C_Cpp.errorSquiggles": "enabled"
