@@ -48,7 +48,7 @@ typedef struct SaveEditCup2 {
 typedef struct SaveSettings {
     u8 fileName[8];
     u8 settings;
-    u8 unk_09;
+    u8 customUnlocks;
     u8 cupDifficultiesCleared[4];
     u16 checksum;
 } SaveSettings; // size = 0x10

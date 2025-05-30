@@ -5,7 +5,13 @@
 
 #define TOTAL_RACER_COUNT 30
 
-extern Racer gRacers[TOTAL_RACER_COUNT];
+typedef struct RacerPairInfo {
+    Racer* leadRacer;
+    Racer* trailRacer;
+    f32 trailToLeadDistance;
+    f32 leadToTrailDistance;
+    s32 unk_10;
+} RacerPairInfo; // size = 0x14
 
 typedef enum CourseEffects {
     COURSE_EFFECT_NONE,
@@ -66,5 +72,7 @@ typedef enum MachineStatIndex {
     BOOST_STAT,
     GRIP_STAT,
 } MachineStatIndex;
+
+extern Racer gRacers[TOTAL_RACER_COUNT];
 
 #endif // FZX_RACER_H
