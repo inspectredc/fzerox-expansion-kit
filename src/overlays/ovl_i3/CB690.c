@@ -58,9 +58,9 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i3/CB690/func_i3_ResetLivesChangeCounter.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i3/CB690/func_i3_8005F6B4.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i3/CB690/func_i3_TriggerLivesIncrease.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i3/CB690/func_i3_8005F6D8.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i3/CB690/func_i3_TriggerLivesDecrease.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i3/CB690/func_i3_8005F6FC.s")
 

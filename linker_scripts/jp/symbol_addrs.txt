@@ -111,8 +111,24 @@ sFloatExceptions = 0x8076D6A8;
 
 sMaxCameraLookBackRotate = 0x8076D8B4;
 
+sPosition1PMarkerTexs = 0x8076D8C0;
+sPositionMPMarkerTexs = 0x8076D8CC;
+D_8076DBD0 = 0x8076DBD0; // size:0x5A0
+D_8076DEA0 = 0x8076DEA0;
+sMachineLoadTexturesFuncs = 0x8076DEB8;
+sMachineDrawFuncs = 0x8076DF3C;
+sCharacterVoices = 0x8076E1D0;
 gSettingVsHandicap = 0x8076E2F0;
 gSettingVsCom = 0x8076E2F4;
+gTotalLives = 0x8076E2FC;
+gRacePositionPoints = 0x8076E4E0;
+sInitialBoostTimer = 0x8076E594;
+sEnergyRefillScale = 0x8076E598;
+sBoosterInfos = 0x8076E5AC;
+D_8076EF98 = 0x8076EF98; // size:0x14
+sDefaultMachines = 0x8076EFD4; // size:0x2D6
+D_8076F2DC = 0x8076F2DC; // size:0x20
+
 
 // game bss
 
@@ -177,8 +193,42 @@ unkThreadCounter = 0x8079FE90;
 gFaultMgr = 0x8079FE98; // size:0x9D8
 
 gPlayers = 0x807A0930; // size:0x770
+gRaceIntroTimer = 0x807B15A8;
+gTotalRacers = 0x807A15D0;
+sLastRacer = 0x807A15D4;
+sRivalRacer = 0x807A15D8;
+gPlayerLives = 0x807A15E8;
 gPlayerEngine = 0x807A1600;
+D_807A1610 = 0x807A1610; // size:0x10
+D_807A1620 = 0x807A1620; // size:0x10
+gRacersByPosition = 0x807A1650;
+gRacersRetired = 0x807A16D2;
+gRacersFinished = 0x807A16D4;
+gCpuRacersRetired = 0x807A16D6;
+gPlayerRacersRetired = 0x807A16D8;
+gPlayerRacersFinished = 0x807A16DA;
+sLastMultiplayerTotalRacerCount = 0x807A16DC;
+sLastMultiplayerPlayerCount = 0x807A16DE;
+gRacersKOd = 0x807A16E2;
+sRaceFrameCount = 0x807A16E8;
+gPracticeBestLap = 0x807A16EC;
+gStartNewBestLap = 0x807A16F0;
 gGhosts = 0x807A1708;
+gFastestGhost = 0x807AD588;
+sGhostReplayRecordingBuffer = 0x807AD590;
+sGhostReplayRecordingSize = 0x807B14D8;
+sGhostReplayRecordingEnd = 0x807B14DC;
+sReplayRecordFrameCount = 0x807B14E0;
+sGhostReplayRecordingPtr = 0x807B14E4;
+sReplayRecordPosX = 0x807B14E8;
+sReplayRecordPosY = 0x807B14EC;
+sReplayRecordPosZ = 0x807B14F0;
+gGhostRacers = 0x807B1500; // size:0x9C
+gFastestGhostRacer = 0x807B15A0;
+sRacerPairInfo = 0x807B15B0;
+D_807B37B8 = 0x807B37B8; // size:0x10
+gMachines = 0x807B37D8; // size:0x294
+sCustomMachineInfo = 0x807B3A70;
 
 D_802259C0 = 0x802259C0;
 

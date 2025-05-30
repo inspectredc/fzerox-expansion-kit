@@ -732,7 +732,7 @@ void Save_CreateNew(SaveContext* saveContext, s32 arg1) {
     if ((arg1 != 0) && (arg1 == 1)) {
         Save_ReadProfileSaves(saveContext->profileSaves);
         Save_LoadSaveSettings(saveContext->profileSaves, false);
-        spB7 = saveContext->profileSaves[0].saveSettings.unk_09;
+        spB7 = saveContext->profileSaves[0].saveSettings.customUnlocks;
     }
 
     for (i = 0, ptr = (u64*) saveContext; i < (s32) (sizeof(SaveContext) / sizeof(u64)); i++, ptr++) {
@@ -759,7 +759,8 @@ void Save_CreateNew(SaveContext* saveContext, s32 arg1) {
 
     // Restore the n64dd related save data
     if ((arg1 != 0) && (arg1 == 1)) {
-        saveContext->profileSaves[0].saveSettings.unk_09 = saveContext->profileSaves[1].saveSettings.unk_09 = spB7;
+        saveContext->profileSaves[0].saveSettings.customUnlocks =
+            saveContext->profileSaves[1].saveSettings.customUnlocks = spB7;
     }
 }
 
@@ -782,7 +783,7 @@ void Save_InitSaveSettings(SaveSettings* saveSettings, bool shouldClear) {
 
     // vs com default on
     saveSettings->settings = 1;
-    saveSettings->unk_09 = 0;
+    saveSettings->customUnlocks = 0;
 }
 
 void Save_InitEditCup(SaveEditCup* editCup, bool shouldClear) {
@@ -1000,16 +1001,16 @@ void Save_SaveSettings(SaveSettings* saveSettings) {
         saveSettings->cupDifficultiesCleared[i] = gCupNumDifficultiesCleared[i];
     }
 
-    saveSettings->unk_09 = 0;
+    saveSettings->customUnlocks = 0;
 
-    if (D_800D1308[0] != 0) {
-        saveSettings->unk_09 |= 1;
+    if (D_800D1308[CAPTAIN_FALCON] != 0) {
+        saveSettings->customUnlocks |= 1;
     }
-    if (D_800D1308[3] != 0) {
-        saveSettings->unk_09 |= 2;
+    if (D_800D1308[SAMURAI_GOROH] != 0) {
+        saveSettings->customUnlocks |= 2;
     }
-    if (D_800D1308[4] != 0) {
-        saveSettings->unk_09 |= 4;
+    if (D_800D1308[JODY_SUMMER] != 0) {
+        saveSettings->customUnlocks |= 4;
     }
 }
 
@@ -1194,9 +1195,9 @@ void Save_Load(SaveContext* saveContext) {
 
     Save_LoadSaveSettings(saveContext->profileSaves, true);
 
-    D_800D1308[0] = 1;
-    D_800D1308[3] = 1;
-    D_800D1308[4] = 1;
+    D_800D1308[CAPTAIN_FALCON] = 1;
+    D_800D1308[SAMURAI_GOROH] = 1;
+    D_800D1308[JODY_SUMMER] = 1;
 
     Save_LoadEditCup2(saveContext->profileSaves, 0, &D_i2_800D1326);
     Save_LoadGhostData(&saveContext->ghostSave.record, &saveContext->ghostSave.data, gGhosts, true);
@@ -1282,14 +1283,14 @@ void Save_LoadSaveSettings(ProfileSave* profileSaves, bool arg1) {
     }
     // clang-format on
 
-    if (saveSettings->unk_09 & 1) {
-        D_800D1308[0] = 1;
+    if (saveSettings->customUnlocks & 1) {
+        D_800D1308[CAPTAIN_FALCON] = 1;
     }
-    if (saveSettings->unk_09 & 2) {
-        D_800D1308[3] = 1;
+    if (saveSettings->customUnlocks & 2) {
+        D_800D1308[SAMURAI_GOROH] = 1;
     }
-    if (saveSettings->unk_09 & 4) {
-        D_800D1308[4] = 1;
+    if (saveSettings->customUnlocks & 4) {
+        D_800D1308[JODY_SUMMER] = 1;
     }
 }
 
