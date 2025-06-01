@@ -14,75 +14,75 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/func_i4_8007021C.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/func_i4_8007025C.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/MachineSelect_HeaderInit.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/func_i4_80070288.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/func_i4_8007034C.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/MachineSettings_PortraitInit.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/func_i4_80070410.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/MachineSelect_PortraitInit.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/func_i4_80070440.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/MachineSelect_CursorNumInit.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/func_i4_80070478.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/MachineSelect_CursorInit.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/func_i4_800704A4.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/MachineSelect_MachineInit.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/func_i4_80070810.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/MachineSettings_MachineInit.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/func_i4_80070A5C.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/MachineSettings_EngineWeightInit.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/func_i4_80070ADC.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/MachineSettings_StatsInit.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/func_i4_80070B34.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/MachineSettings_NameCardInit.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/func_i4_80070B74.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/MachineSettings_SliderInit.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/func_i4_80070BA0.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/MachineSelect_DifficultyCupsInit.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/func_i4_80070C68.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/MachineSelect_StatsInit.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/func_i4_80070CB8.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/MachineSelect_OkInit.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/func_i4_80070CF4.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/MachineSettings_OkInit.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/func_i4_80070D30.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/MachineSelect_BackgroundDraw.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/func_i4_80070FE0.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/MachineSelect_HeaderDraw.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/func_i4_80071054.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/func_i4_80071194.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/MachineSettings_PortraitDraw.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/func_i4_8007133C.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/MachineSelect_StatsDraw.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/func_i4_800715A0.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/MachineSelect_PortraitDraw.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/func_i4_80071684.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/MachineSelect_CursorNumDraw.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/func_i4_800716E8.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/MachineSelect_CursorDraw.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/func_i4_80071940.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/MachineSelect_MachineDraw.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/func_i4_80071CBC.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/MachineSelect_OkDraw.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/func_i4_80071D50.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/MachineSettings_NameDraw.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/func_i4_80071F14.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/MachineSettings_MachineDraw.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/func_i4_800724C4.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/MachineSettings_EngineWeightDraw.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/func_i4_80072780.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/MachineSettings_StatsDraw.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/func_i4_800729D8.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/func_i4_80072B18.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/MachineSettings_NameCardDraw.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/func_i4_80072B9C.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/MachineSettings_SliderDraw.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/func_i4_80072DD4.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/MachineSettings_SplitscreenDraw.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/func_i4_80072E68.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/MachineSelect_DifficultyCupsDraw.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/D_i4_80076F40.s")
 
@@ -100,28 +100,28 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/D_i4_80076FA4.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/func_i4_80073114.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/MachineSelect_NameDraw.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/func_i4_80073230.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/MachineSettings_OkDraw.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/func_i4_800732A0.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/func_i4_800732A8.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/MachineSettings_PortraitUpdate.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/func_i4_80073368.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/MachineSelect_PortraitUpdate.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/func_i4_800733F4.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/MachineSelect_CursorNumUpdate.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/func_i4_8007346C.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/MachineSelect_CursorUpdate.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/func_i4_80073474.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/MachineSelect_MachineUpdate.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/func_i4_80073774.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/MachineSettings_MachineUpdate.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/func_i4_80073D88.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/MachineSelect_OkUpdate.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/func_i4_80073DD4.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/MachineSettings_OkUpdate.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/func_i4_80073E24.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/MachineSettings_NameCardUpdate.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/DE7C0/func_i4_80073EA0.s")

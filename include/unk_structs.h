@@ -706,4 +706,37 @@ typedef struct unk_80113140 {
     Racer* unk_54;
 } unk_80113140; // size = 0x58
 
+typedef struct unk_80077D50 {
+    /* 0x00 */ s16 unk_00;
+    /* 0x04 */ void* unk_04; // segmented address
+    /* 0x08 */ u16 width;
+    /* 0x0A */ u16 height;
+    /* 0x0C */ size_t compressedSize;
+} unk_80077D50; // size = 0x10
+
+typedef struct unk_800E33E0 {
+    void* unk_00; // segmented address
+    TexturePtr unk_04;
+} unk_800E33E0; // size = 0x8
+
+typedef struct unk_800792D8 {
+    unk_80077D50* unk_00;
+    s32 unk_04;
+} unk_800792D8;
+
+typedef struct unk_800E3F28 {
+    unk_800792D8* unk_00;
+    s16 unk_04;
+    s16 unk_06;
+    s16 unk_08;
+    s16 unk_0A;
+    TexturePtr unk_0C; // primary texture
+    TexturePtr unk_10; // alternate texture (defaults to primary)
+} unk_800E3F28; // size = 0x14
+
+typedef struct unk_800E4068 {
+    unk_80077D50* unk_00;
+    TexturePtr unk_04;
+} unk_800E4068; // size = 0x8
+
 #endif // UNK_STRUCTS_H

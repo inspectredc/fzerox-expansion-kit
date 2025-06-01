@@ -6,39 +6,39 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i6/EB850/MainMenu_Draw.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i6/EB850/func_i6_8007CC88.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i6/EB850/MainMenu_BackgroundInit.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i6/EB850/func_i6_8007CD70.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i6/EB850/MainMenu_SignInit.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i6/EB850/func_i6_8007CDCC.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i6/EB850/MainMenu_HeaderInit.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i6/EB850/func_i6_8007CE18.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i6/EB850/MainMenu_NumPlayersInit.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i6/EB850/func_i6_8007CE7C.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i6/EB850/MainMenu_DifficultyInit.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i6/EB850/func_i6_8007CEE0.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i6/EB850/MainMenu_TimeAttackModeInit.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i6/EB850/func_i6_8007CF44.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i6/EB850/MainMenu_OkInit.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i6/EB850/func_i6_8007CF80.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i6/EB850/MainMenu_UnlockEverythingInit.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i6/EB850/func_i6_8007CFA8.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i6/EB850/MainMenu_SignDraw.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i6/EB850/func_i6_8007D204.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i6/EB850/MainMenu_BackgroundDraw.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i6/EB850/func_i6_8007D9C8.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i6/EB850/MainMenu_HeaderDraw.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i6/EB850/func_i6_8007DAAC.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i6/EB850/MainMenu_NumPlayersDraw.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i6/EB850/func_i6_8007DD18.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i6/EB850/MainMenu_DifficultyDraw.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i6/EB850/func_i6_8007DFE8.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i6/EB850/MainMenu_TimeAttackModeDraw.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i6/EB850/func_i6_8007E230.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i6/EB850/MainMenu_OkDraw.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i6/EB850/func_i6_8007E32C.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i6/EB850/MainMenu_OkUpdate.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i6/EB850/func_i6_8007E3D0.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i6/EB850/MainMenu_UnlockEverythingUpdate.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i6/EB850/D_i6_80085040.s")
 
