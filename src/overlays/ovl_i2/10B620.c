@@ -4,9 +4,11 @@
 
 //! @bug (gCourseCtx.saveBuffer + 3 * sizeof(GhostSave)) starts to read into D_800CF950 which is used as CourseData
 //! elsewhere
-extern char D_i2_800BF030[]; // = "GHOST00";
-extern char D_i2_800D1018[][9];
+
+char D_i2_800BF030[] = "GHOST00";
+
 extern OSMesgQueue D_8079F998;
+extern u8 gEditCupTrackNames[][9];
 
 void func_i2_800A9CE0(s32 courseIndex, GhostRecord* ghostRecord) {
     s32 i;
@@ -20,7 +22,8 @@ void func_i2_800A9CE0(s32 courseIndex, GhostRecord* ghostRecord) {
 
     D_i2_800BF030[5] = (courseIndex / 10) + '0';
     D_i2_800BF030[6] = (courseIndex % 10) + '0';
-    if ((courseIndex >= COURSE_EDIT_1) && (courseIndex <= COURSE_EDIT_6) && D_i2_800D1018[courseIndex][0] != '\0') {
+    if ((courseIndex >= COURSE_EDIT_1) && (courseIndex <= COURSE_EDIT_6) &&
+        gEditCupTrackNames[courseIndex - COURSE_EDIT_1][0] != '\0') {
         for (i = 0; i < 3; i++, ghostRecord++, ghostSave++) {
             *ghostRecord = ghostSave->record;
         }
@@ -84,7 +87,8 @@ void func_i2_800AA024(s32 courseIndex, s32 ghostIndex, GhostData* ghostData) {
     PRINTF("Load Ghost Data\n");
     D_i2_800BF030[5] = (courseIndex / 10) + '0';
     D_i2_800BF030[6] = (courseIndex % 10) + '0';
-    if ((courseIndex >= COURSE_EDIT_1) && (courseIndex <= COURSE_EDIT_6) && D_i2_800D1018[courseIndex][0] != '\0') {
+    if ((courseIndex >= COURSE_EDIT_1) && (courseIndex <= COURSE_EDIT_6) &&
+        gEditCupTrackNames[courseIndex - COURSE_EDIT_1][0] != '\0') {
         *ghostData = ghostSave[ghostIndex].data;
         return;
     }
@@ -118,8 +122,6 @@ void func_i2_800AA220(s32 courseIndex, s32 ghostIndex, Ghost* ghost) {
 
     func_807680EC(0xFFFB, D_i2_800BF030, "GOST", &gCourseCtx, 0xC830, 0, 0xFF, 1);
 }
-
-extern u8 gEditCupTrackNames[][9];
 
 #ifdef IMPORT_DATA
 void func_i2_800AA368(s32 courseIndex, s32 ghostIndex, Ghost* ghost) {

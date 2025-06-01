@@ -14,6 +14,17 @@ s16 gSettingSoundMode;
 u8 D_800D1308[30];
 u16 D_i2_800D1326;
 
+uintptr_t D_i2_800BEE60[][3] = {
+    { 0x0, 0x40, 0x60 },           { 0x1B30, 0x1B70, 0x1B90 },    { 0x37B0, 0x37F0, 0x3810 },
+    { 0x5070, 0x50B0, 0x50D0 },    { 0x6B50, 0x6B90, 0x6BB0 },    { 0x8A30, 0x8A70, 0x8A90 },
+    { 0xA920, 0xA960, 0xA980 },    { 0xC410, 0xC450, 0xC470 },    { 0xDDC0, 0xDE00, 0xDE20 },
+    { 0xF920, 0xF960, 0xF980 },    { 0x11370, 0x113B0, 0x113D0 }, { 0x12980, 0x129C0, 0x129E0 },
+    { 0x149F0, 0x14A30, 0x14A50 }, { 0x16550, 0x16590, 0x165B0 }, { 0x18410, 0x18450, 0x18470 },
+    { 0x1A6B0, 0x1A6F0, 0x1A710 }, { 0x1C6E0, 0x1C720, 0x1C740 }, { 0x1DF00, 0x1DF40, 0x1DF60 },
+    { 0x20100, 0x20140, 0x20160 }, { 0x22B60, 0x22BA0, 0x22BC0 }, { 0x24580, 0x245C0, 0x245E0 },
+    { 0x26E10, 0x26E50, 0x26E70 }, { 0x28D00, 0x28D40, 0x28D60 }, { 0x2B130, 0x2B170, 0x2B190 },
+};
+
 void Save_ReadGhostRecord(GhostRecord* ghostRecord) {
     Sram_ReadWrite(OS_READ, (uintptr_t) &gSaveContext.ghostSave.record - (uintptr_t) &gSaveContext, ghostRecord,
                    sizeof(GhostRecord));
@@ -1690,7 +1701,11 @@ s32 Save_LoadStaffGhostRecord(GhostInfo* ghostInfo, s32 courseIndex) {
     return 0;
 }
 
-extern s32 D_i2_800BEF80[];
+s32 D_i2_800BEF80[] = {
+    -1, -1, -1,      -1,      -1,      -1,      -1,      -1,      -1,      -1,      -1,      -1,      -1,      -1,
+    -1, -1, -1,      -1,      -1,      -1,      -1,      -1,      -1,      -1,      -1,      -1,      -1,      -1,
+    -1, -1, 0x18559, 0x1C017, 0x1BA96, 0x1A8BC, 0x1B4B5, 0x1D70E, 0x163C7, 0x1634C, 0x180F9, 0x18440, 0x180BF, 0x17BAA,
+};
 
 s32 func_i2_800A9788(s32 courseIndex) {
     if (courseIndex < 0 || courseIndex >= 42) {
@@ -1729,7 +1744,6 @@ s32 func_i2_800A9820(s32* arg0, s32 courseIndex) {
 }
 
 extern s32 D_807C7108;
-extern uintptr_t D_i2_800BEE60[][3];
 
 void func_i2_800A9894(GhostRecord* ghostRecord, s32 courseIndex) {
     func_80701CAC(D_807C7108 + D_i2_800BEE60[courseIndex][0], ghostRecord, sizeof(GhostRecord));

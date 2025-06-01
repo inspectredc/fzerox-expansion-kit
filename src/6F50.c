@@ -2901,7 +2901,7 @@ void func_80701754(s32 courseIndex) {
 }
 
 extern CourseData D_800CF950;
-extern CourseData D_800D0130;
+extern CourseData D_i2_800D0130;
 extern s32 gCourseIndex;
 extern CourseSegment D_807B8E30[];
 extern CourseSegment D_802D0620[];
@@ -2912,7 +2912,7 @@ void func_8070183C(void) {
     s32 var_a3;
     s32 i;
 
-    D_800D0130 = gCourseCtx.courseData;
+    D_i2_800D0130 = gCourseCtx.courseData;
 
     courseInfo = &gCourseInfos[gCourseIndex];
     courseInfo->courseSegments = D_802D0620;
