@@ -18,33 +18,33 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/CourseSelect_Draw.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/func_i5_800791A4.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/CourseSelect_BackgroundInit.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/func_i5_80079280.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/CourseSelect_ModelInit.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/func_i5_800792BC.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/CourseSelect_CupInit.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/func_i5_800793B0.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/CourseSelect_HeaderInit.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/func_i5_80079414.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/CourseSelect_OkInit.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/func_i5_80079450.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/CourseSelect_ArrowsInit.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/func_i5_80079490.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/CourseSelect_GhostMarkerInit.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/func_i5_8007951C.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/CourseSelect_GhostOptionInit.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/func_i5_80079590.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/CourseSelect_BackgroundDraw.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/func_i5_800796F8.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/CourseSelect_ModelDraw.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/func_i5_80079760.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/CourseSelect_CupDraw.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/func_i5_80079C8C.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/CourseSelect_HeaderDraw.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/func_i5_80079DE4.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/CourseSelect_OkDraw.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/func_i5_80079E54.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/CourseSelect_ArrowsDraw.s")
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/D_i5_8007BEA0.s")
 
@@ -144,20 +144,20 @@
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/D_i5_8007C120.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/func_i5_80079FD8.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/CourseSelect_NameDraw.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/func_i5_8007A4C4.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/CourseSelect_GhostMarkerDraw.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/func_i5_8007A64C.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/CourseSelect_GhostOptionDraw.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/func_i5_8007A844.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/CourseSelect_ModelUpdate.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/func_i5_8007A984.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/CourseSelect_CupUpdate.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/func_i5_8007AD3C.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/CourseSelect_OkUpdate.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/func_i5_8007AD8C.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/CourseSelect_ArrowsUpdate.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/func_i5_8007AF1C.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/CourseSelect_GhostMarkerUpdate.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/func_i5_8007AF50.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_select/E7340/CourseSelect_GhostOptionUpdate.s")
