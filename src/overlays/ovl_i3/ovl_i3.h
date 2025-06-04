@@ -206,4 +206,7 @@ extern TexturePtr gCharacterPortraitTextures[];
 
 extern s32 gPlayerMinimapLapCounterToggle[];
 
+Gfx* func_i3_DrawRaceTimeInterval(Gfx* gfx, s32 time, s32 left, s32 top, f32 scale);
+Gfx* func_i3_DrawTimerScisThousandths(Gfx* gfx, s32 time, s32 left, s32 top, f32 scale);
+
 #endif // OVL_I3_H
