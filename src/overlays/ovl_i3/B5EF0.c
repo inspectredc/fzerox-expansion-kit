@@ -1,8 +1,17 @@
-#include "common.h"
+#include "global.h"
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i3/B5EF0/func_i3_80044720.s")
+extern s32 sMenuStateFlags;
+extern s32 D_i3_8006D0A8;
+extern s32 D_i3_8006D0A0;
+extern s32 D_i3_8006D098;
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i3/B5EF0/func_i3_80044738.s")
+void func_i3_80044720(void) {
+    sMenuStateFlags = D_i3_8006D0A8 = 0;
+}
+
+void func_i3_80044738(void) {
+    D_i3_8006D098 =D_i3_8006D0A0 = 0;
+}
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i3/B5EF0/func_i3_80044750.s")
 

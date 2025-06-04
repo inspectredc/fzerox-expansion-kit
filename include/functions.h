@@ -203,6 +203,7 @@ void func_807191B0(Player*, unk_struct_F8*, unk_800E5D70*);
 void func_80719420(Player*, unk_struct_F8*, unk_800E5D70*);
 void func_80719480(Player*, unk_struct_F8*, unk_800E5D70*);
 bool func_80719868(s32);
+f32 func_8071A2C8(f32);
 
 void func_8071ED34(void);
 void func_8071FDE4(Racer*);
@@ -292,6 +293,7 @@ void func_i2_800B079C(void);
 void func_i2_800B07F0(void);
 void func_i2_800B0D10(s32);
 void func_i2_800B0FAC(CourseSegment*, Mtx3F*);
+s32 func_i2_800B10A8(Racer_unk_C*, f32, f32, f32, Mtx3F*);
 f32 func_i2_800B1F68(Racer_unk_C*);
 void Course_GenerateRandomCourse(void);
 f32 func_i2_800B20D0(CourseSegment*, f32, f32*);
@@ -310,6 +312,7 @@ s32 func_i2_800BE8BC(CourseInfo*);
 s32 Course_CalculateChecksum(void);
 
 void func_i3_8003F364(void);
+void func_i3_80040C38(void);
 void Cpu_GenerateInputs(Racer* racer, Controller* controller);
 void func_i3_80040180(Racer*);
 void func_i3_ResetLivesChangeCounter(void);
@@ -328,6 +331,7 @@ void func_i3_InitCourseMinimap(void);
 void func_i3_800617A0(void);
 void func_i3_80061C2C(void);
 Gfx* func_i3_8006339C(Gfx*, s32, s32);
+
 void func_i4_80073EA0(void);
 
 Gfx* Machine_DrawLoadCustomTextures(Gfx* gfx, s32 logo, s32 number, s32 decal);
