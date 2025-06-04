@@ -72,7 +72,8 @@
       "unk_gfx.h": "c",
       "ovl_i2.h": "c",
       "segment_symbols.h": "c",
-      "fzx_object.h": "c"
+      "fzx_object.h": "c",
+      "ovl_i3.h": "c"
     },
     "C_Cpp_Runner.msvcBatchPath": "",
     "C_Cpp.errorSquiggles": "enabled"

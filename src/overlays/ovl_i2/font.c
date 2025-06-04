@@ -1,5 +1,6 @@
 #include "global.h"
 #include "ovl_i2.h"
+#include "fzx_font.h"
 #include "fzx_assets.h"
 
 unk_80077D50 sFont1ACompTexInfo[] = { { 17, aFont1ATex, TEX_WIDTH(aFont1ATex), TEX_HEIGHT(aFont1ATex),
