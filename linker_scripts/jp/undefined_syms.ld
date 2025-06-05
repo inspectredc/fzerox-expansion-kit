@@ -150,6 +150,11 @@ aFinishDL = 0x400FC08;
 aStartStopGuideTex = 0x4011778;
 aMenuTextTlutSetupDL = 0x4011D78;
 aHudTimeTex = 0x40131E0;
+aHudEnergyTex = 0x40134E0;
+aPositionDigitTexs = 0x4013DE0;
+aRacersLeftTex = 0x40183E0;
+aTotalRacerDigitsTex = 0x40187E0;
+aPositionOrdinalSuffixTexs = 0x4019020;
 aLapCounterSymbolsTex = 0x4019CA0;
 aCharacterPortraitHighlightBorderTex = 0x401A120;
 
