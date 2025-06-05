@@ -235,6 +235,7 @@ void func_8074184C(u8);
 void func_80741A0C(u8);
 void func_80741B84(void);
 void func_80741BCC(void);
+void func_80741BD4(u8);
 void func_80741CB4(u8);
 void func_80741DD4(void);
 void func_80741E64(void);
@@ -327,12 +328,22 @@ void func_i3_80053BE0(void);
 Gfx* func_i3_80057D90(Gfx*, s32);
 Gfx* func_i3_8005823C(Gfx*);
 void func_i3_8005A464(void);
+Gfx* func_i3_UpdateRaceIntervalInfo(Gfx* gfx, s32 numPlayersIndex, s32 playerIndex, f32 scale);
+Gfx* func_i3_DrawReverse(Gfx* gfx, s32 numPlayersIndex, s32 playerIndex);
 void func_i3_InitRacePortraits(void);
 void func_i3_8005FDB0(void);
+Gfx* func_i3_DrawKOStars(Gfx* gfx, s32 numPlayersIndex, s32 playerIndex);
+Gfx* func_i3_DrawPlayerLives(Gfx* gfx, s32 numPlayersIndex, s32 playerIndex);
+Gfx* func_i3_DrawPracticeBestLap(Gfx* gfx);
+Gfx* func_i3_DrawDeathRaceTimer(Gfx* gfx, s32 numPlayersIndex, s32 playerIndex);
+Gfx* func_i3_DrawDeathRaceBest(Gfx* gfx, s32 numPlayersIndex, s32 playerIndex);
+Gfx* func_i3_DrawDeathRaceBestTime(Gfx* gfx, s32 numPlayersIndex, s32 playerIndex);
 void func_i3_InitCourseMinimap(void);
 void func_i3_800617A0(void);
 void func_i3_80061C2C(void);
 Gfx* func_i3_8006339C(Gfx*, s32, s32);
+void func_i3_800651F4(void);
+
 
 void func_i4_80073EA0(void);
 
