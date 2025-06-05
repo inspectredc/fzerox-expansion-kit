@@ -202,6 +202,7 @@ extern s32 D_i3_8006D578;
 extern bool sSaveGhostMenuOpen;
 extern s32 D_i3_8006D58C;
 extern s32 sOverwriteGhostOption;
+extern s32 D_i3_8006D590;
 extern s32 D_i3_8006D594;
 extern s32 D_i3_8006D598;
 extern s32 D_i3_8006D59C;
@@ -262,7 +263,7 @@ void func_i3_80044DD0(void) {
         D_i3_8006D3D8[i] = 10.0f;
     }
 
-    sGhostSaveTimer = sOverwriteGhostOption = sSaveGhostMenuOpen = D_i3_8006D59C = D_i3_8006D594 = D_i3_8006D364 =
+    sGhostSaveTimer = D_i3_8006D590 = sSaveGhostMenuOpen = D_i3_8006D59C = D_i3_8006D594 = D_i3_8006D364 =
         D_i3_8006D374 = D_8006D544 = D_i3_8006D560 = D_i3_8006D564 = sRaceMenuOptionIndex = D_i3_8006D574 =
             sMenuIsBusy = sRaceFinishSaveTriggered = D_i3_8006D5A4 = sMenuOptionTriggered = D_i3_8006D096 =
                 D_i3_8006D0B0 = D_8006CFF0 = D_i3_8006D568 = 0;
@@ -1923,15 +1924,252 @@ s32 func_i3_8004C654(void) {
     return 0;
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i3/B5EF0/func_i3_8004C6F0.s")
+extern GhostRecord D_i3_8006D270[];
+extern GhostRecord* D_i3_8006D340[];
+extern GhostRecord* D_i3_8006D360;
+extern s32 D_i3_8006D368[];
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i3/B5EF0/func_i3_8004C8D4.s")
+void func_i3_8004C6F0(void) {
+    s32 temp_a0;
+    GhostRecord* temp_v1;
+    s32 i;
+    s32 j;
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i3/B5EF0/func_i3_8004CB04.s")
+    D_i3_8006D270[0].raceTime = D_i3_8006D270[1].raceTime = D_i3_8006D270[2].raceTime = MAX_TIMER;
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i3/B5EF0/func_i3_8004CCB4.s")
+    func_i2_800A9ED0(gCourseIndex, D_i3_8006D270);
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i3/B5EF0/func_i3_8004CE40.s")
+    for (i = 0; i < 3; i++) {
+        D_i3_8006D340[i] = &D_i3_8006D270[i];
+        D_i3_8006D368[i] = i;
+    }
+
+    for (i = 0; i < 2; i++) {
+        for (j = i + 1; j < 3; j++) {
+            if (D_i3_8006D340[i]->raceTime > D_i3_8006D340[j]->raceTime) {
+                D_i3_8006D360 = D_i3_8006D340[i];
+                D_i3_8006D340[i] = D_i3_8006D340[j];
+                D_i3_8006D340[j] = D_i3_8006D360;
+                temp_a0 = D_i3_8006D368[i];
+                D_i3_8006D368[i] = D_i3_8006D368[j];
+                D_i3_8006D368[j] = temp_a0;
+            }
+        }
+    }
+}
+
+extern s32 gCupType;
+
+s32 func_i3_8004C8D4(void) {
+    s32 sp1C;
+    s32 i;
+
+    sCannotSaveGhost = false;
+    if (gCourseIndex >= COURSE_X_1) {
+        sCannotSaveGhost = true;
+        return 0;
+    }
+    func_i3_8004C5A4();
+    if (sFastestGhostIndex == -1) {
+        sCannotSaveGhost = true;
+        sSaveGhostMenuOpen = false;
+        return -1;
+    }
+
+    sp1C = Save_LoadGhostInfo(&gSavedGhostInfo);
+    func_i3_8004C6F0();
+    if ((sp1C == 0) && (gSavedGhostInfo.courseIndex == gCourseIndex) && (sFastestGhostTime >= gSavedGhostInfo.raceTime)) {
+        sCannotSaveGhost = true;
+    }
+
+    for (i = 0; i < 3; i++) {
+        if ((sFastestGhostTime >= D_i3_8006D270[i].raceTime) && (D_i3_8006D270[i].encodedCourseIndex == gCourseInfos[gCourseIndex].encodedCourseIndex)) {
+            sCannotSaveGhost = true;
+        }
+    }
+    
+    if (gCupType == X_CUP) {
+        sCannotSaveGhost = true;
+    } else if ((gSavedGhostInfo.courseIndex == gCourseIndex) && (sFastestGhostTime == gSavedGhostInfo.raceTime) && (gSavedGhostInfo.replayChecksum == gFastestGhost->replayChecksum)) {
+        sCannotSaveGhost = true;
+    } else if ((sFastestGhostTime == D_i3_8006D270[0].raceTime) && (gFastestGhost->replayChecksum == D_i3_8006D270[0].replayChecksum)) {
+        sCannotSaveGhost = true;
+    } else if ((sFastestGhostTime == D_i3_8006D270[1].raceTime) && (gFastestGhost->replayChecksum == D_i3_8006D270[1].replayChecksum)) {
+        sCannotSaveGhost = true;
+    } else if ((sFastestGhostTime == D_i3_8006D270[2].raceTime) && (gFastestGhost->replayChecksum == D_i3_8006D270[2].replayChecksum)) {
+        sCannotSaveGhost = true;
+    }
+    return 0;
+}
+
+Gfx* func_i3_DrawSaved(Gfx* gfx) {
+
+    if (sGhostSaveTimer > 0) {
+        sGhostSaveTimer--;
+    } else {
+        sGhostSaveTimer = 0;
+    }
+
+    if (sGhostSaveTimer == 1) {
+        sCannotSaveGhost = true;
+        sRaceMenuOptionIndex = 0;
+        D_i3_8006D5A4 = 0;
+    }
+
+    gDPPipeSync(gfx++);
+    gDPSetScissor(gfx++, G_SC_NON_INTERLACE, 85, 105, 165, 135);
+
+    gfx = func_i3_DrawBeveledBox(gfx, 90, 110, 160, 130, 0, 0, 0, 255);
+    gSPDisplayList(gfx++, aMenuTextTlutSetupDL);
+    gDPLoadTLUT_pal256(gfx++, func_i2_800AEA90(aMenuTextTLUT));
+    gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, 255);
+    gfx = func_i3_DrawRaceMenuTexture(gfx, RACE_MENU_SAVED, 93, 112);
+    gDPPipeSync(gfx++);
+    gDPSetTextureLUT(gfx++, G_TT_NONE);
+
+    D_i3_8006D5A4 = 0;
+    return gfx;
+}
+
+Gfx* func_i3_DrawSaving(Gfx* gfx) {
+
+    if (sGhostSaveTimer == 1) {
+        sRaceMenuOptionIndex = 0;
+        D_i3_8006D5A4 = 0;
+    }
+
+    gDPPipeSync(gfx++);
+    gDPSetScissor(gfx++, G_SC_NON_INTERLACE, 80, 105, 170, 135);
+
+    gfx = func_i3_DrawBeveledBox(gfx, 90, 110, 160, 130, 0, 0, 0, 255);
+    gSPDisplayList(gfx++, aMenuTextTlutSetupDL);
+    gDPLoadTLUT_pal256(gfx++, func_i2_800AEA90(aMenuTextTLUT));
+    gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, 255);
+    gfx = func_i3_DrawRaceMenuTexture(gfx, RACE_MENU_SAVING, 95, 112);
+    gDPPipeSync(gfx++);
+    gDPSetTextureLUT(gfx++, G_TT_NONE);
+
+    D_i3_8006D5A4 = 0;
+    return gfx;
+}
+
+extern char* gCurrentTrackName;
+extern s32 D_i3_8006B49C;
+extern s32 D_i3_8006D370;
+extern char* D_i3_8006B4A0[];
+
+Gfx* func_i3_DrawGhostSave(Gfx* gfx) {
+    s32 i;
+
+    if (D_i3_8006B49C > 0) {
+        D_i3_8006B49C -= 8;
+    } else {
+        D_i3_8006B49C = 0;
+    }
+
+    gDPPipeSync(gfx++);
+    gDPSetScissor(gfx++, G_SC_NON_INTERLACE, D_i3_8006B49C + 20, D_i3_8006B49C + 40, 210 - D_i3_8006B49C,
+                  226 - D_i3_8006B49C);
+
+    gfx = func_i3_DrawBeveledBox(gfx, 25, 45, 205, 221, 0, 0, 0, 255);
+    
+    gSPDisplayList(gfx++, D_8014940);
+    
+    sOverwriteGhostOption = func_i3_8004C3D4(0, sOverwriteGhostOption, 1);
+
+    gDPPipeSync(gfx++);
+    gDPSetScissor(gfx++, G_SC_NON_INTERLACE, D_i3_8006B49C + 20, D_i3_8006B49C + 40, 210 - D_i3_8006B49C,
+                  226 - D_i3_8006B49C);
+
+    if (gControllers[gPlayerControlPorts[0]].buttonPressed & (BTN_A | BTN_START)) {
+        if (sOverwriteGhostOption == 1) {
+            sGhostSaveTimer = 60;
+            func_i2_800AA368(gCourseIndex, D_i3_8006D370, gFastestGhost);
+            sSaveGhostMenuOpen = false;
+            if (D_8076C7D8 == 0) {
+                func_8074122C(0x21);
+            }
+        } else {
+            sGhostSaveTimer = 0;
+            sSaveGhostMenuOpen = false;
+            sRaceMenuOptionIndex = 0;
+            D_i3_8006D5A4 = 0;
+            if (D_8076C7D8 == 0) {
+                func_8074122C(0x10);
+            }
+        }
+    } else if (gControllers[gPlayerControlPorts[0]].buttonPressed & BTN_B) {
+        sGhostSaveTimer = 0;
+        sSaveGhostMenuOpen = false;
+        sRaceMenuOptionIndex = 0;
+        D_i3_8006D5A4 = 0;
+        if (D_8076C7D8 == 0) {
+            func_8074122C(0x10);
+        }
+    }
+    
+    gSPDisplayList(gfx++, D_8014940);
+    gDPPipeSync(gfx++);
+    gDPSetScissor(gfx++, G_SC_NON_INTERLACE, D_i3_8006B49C + 20, D_i3_8006B49C + 40, 210 - D_i3_8006B49C,
+                  226 - D_i3_8006B49C);
+
+    gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, 255);
+    gDPSetTextureFilter(gfx++, G_TF_POINT);
+
+    gDPLoadTLUT_pal256(gfx++, func_i2_800AEA90(aMenuTextTLUT));
+    gDPSetTextureLUT(gfx++, G_TT_RGBA16);
+
+
+    gfx = func_i3_DrawRaceMenuTexture(gfx, RACE_MENU_NEW_GHOST, 83, 45);
+    gfx = func_i3_DrawRaceMenuTexture(gfx, RACE_MENU_OVERWRITE_DATA2, 51, 114);
+
+    gfx = func_8070D4A8(gfx, 0);
+    gfx = func_i3_DrawRaceMenuTexture(gfx, RACE_MENU_LEFT_ARROW, 70, 197);
+    gfx = func_i3_DrawRaceMenuTexture(gfx, RACE_MENU_RIGHT_ARROW, 144, 197);
+    if (sOverwriteGhostOption == 0) {
+        gfx = func_i3_DrawRaceMenuTexture(gfx, RACE_MENU_NO, 99, 197);
+    } else {
+        gfx = func_i3_DrawRaceMenuTexture(gfx, RACE_MENU_YES, 99, 197);
+    }
+
+    gSPDisplayList(gfx++, D_8014940);
+    gDPPipeSync(gfx++);
+    gDPSetScissor(gfx++, G_SC_NON_INTERLACE, D_i3_8006B49C + 20, D_i3_8006B49C + 40, 210 - D_i3_8006B49C,
+                  226 - D_i3_8006B49C);
+    
+    gDPLoadTextureBlock(gfx++, D_303C3F0, G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 224, 0, G_TX_NOMIRROR | G_TX_WRAP,
+                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+
+    gfx = func_i3_DrawTimerScisThousandths(gfx, gFastestGhost->raceTime, 115, 77, 1.0f);
+
+    for (i = 0; i < 3; i++) {
+        if (D_i3_8006D340[i]->raceTime != MAX_TIMER) {
+            gfx = func_i3_DrawTimerScisThousandths(gfx, D_i3_8006D340[i]->raceTime, 95, 139 + i * 16, 1.0f);
+        } else {
+            gfx = func_i3_800473AC(gfx, 0x57, 0x8b + i * 16);
+        }
+    }
+
+    gDPPipeSync(gfx++);
+    gDPSetPrimColor(gfx++, 0, 0, 128, 128, 128, 255);
+    gfx = Font_DrawString(gfx, 116 - (Font_GetStringWidth(gCurrentTrackName, FONT_SET_6, 1) / 2), 78, gCurrentTrackName,
+                          1, FONT_SET_6, 0);
+    gDPPipeSync(gfx++);
+    gDPSetPrimColor(gfx++, 0, 0, 250, 250, 0, 255);
+    gfx = Font_DrawString(gfx, 115 - (Font_GetStringWidth(gCurrentTrackName, FONT_SET_6, 1) / 2), 77, gCurrentTrackName,
+                          1, FONT_SET_6, 0);
+
+    for (i = 0; i < 3; i++) {
+        gDPPipeSync(gfx++);
+        gDPSetPrimColor(gfx++, 0, 0, 128, 128, 128, 255);
+        gfx = Font_DrawString(gfx, 0x2E, 0x9C + i * 16, D_i3_8006B4A0[i], 1, FONT_SET_6, 0);
+        gDPPipeSync(gfx++);
+        gDPSetPrimColor(gfx++, 0, 0, 250, 250, 0, 255);
+        gfx = Font_DrawString(gfx, 0x2D, 0x9B + i * 16, D_i3_8006B4A0[i], 1, FONT_SET_6, 0);
+    }
+    
+    return gfx;
+}
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i3/B5EF0/D_i3_8006C7A4.s")
 

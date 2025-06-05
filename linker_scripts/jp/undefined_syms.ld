@@ -148,6 +148,7 @@ aBoosterOkTex = 0x400F508;
 aBoosterOkPalette = 0x400FA08;
 aFinishDL = 0x400FC08;
 aStartStopGuideTex = 0x4011778;
+aMenuTextTlutSetupDL = 0x4011D78;
 aHudTimeTex = 0x40131E0;
 aLapCounterSymbolsTex = 0x4019CA0;
 aCharacterPortraitHighlightBorderTex = 0x401A120;
