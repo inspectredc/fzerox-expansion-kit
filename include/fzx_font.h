@@ -36,6 +36,7 @@ typedef enum FontChar {
     /* 48 ->, a-z/katakana */
 } FontChar;
 
+s32 Font_GetCharIndex(s8* str, s32 fontSetLowercase);
 s32 Font_GetCharacterWidth(s8* str, s32 fontSet);
 s32 Font_GetStringWidth(s8* str, s32 fontSet, s32 additionalSpacing);
 void Font_LoadString(s8* str, s32 fontSet);

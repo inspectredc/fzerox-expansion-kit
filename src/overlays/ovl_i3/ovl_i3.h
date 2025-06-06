@@ -208,5 +208,37 @@ extern s32 gPlayerMinimapLapCounterToggle[];
 
 Gfx* func_i3_DrawRaceTimeInterval(Gfx* gfx, s32 time, s32 left, s32 top, f32 scale);
 Gfx* func_i3_DrawTimerScisThousandths(Gfx* gfx, s32 time, s32 left, s32 top, f32 scale);
+Gfx* func_i3_DrawBlankTimeHundredths(Gfx* gfx, s32 left, s32 top);
+Gfx* func_i3_DrawBlankTimeThousandths(Gfx* gfx, s32 left, s32 top);
+
+Gfx* func_i3_80059D90(Gfx* gfx, s32 playerIndex);
+
+void func_i3_80061B34(Player*, unk_80141FF0*, CourseVenue*, f32, f32);
+void func_i3_80062034(Vtx*, unk_80141FF0*, Player*, f32);
+void func_i3_80062694(Vtx*, unk_80141FF0*, Player*, f32, f32, f32, f32, f32, f32, s32, s32);
+void func_i3_80062C84(Vtx*, unk_80141FF0*, Player*, unk_80141860*, f32, f32, f32, f32, f32, f32, s32, s32, bool);
+void func_i3_80063F88(void);
+u16 func_i3_80064280(void);
+Gfx* func_i3_8006436C(Gfx* gfx);
+void func_i3_80064AD4(s32, unk_80141FF0*, Player*);
+Gfx* func_i3_80064CB4(Gfx*, s32);
+
+void func_i3_80064F20(void);
+bool func_i3_80065204(void);
+Gfx* func_i3_80065560(Gfx* gfx, s32 courseIndex);
+Gfx* func_i3_DrawSpeed(Gfx*, s32, s32, f32, bool, bool);
+Gfx* func_i3_80066D80(Gfx*, s32, MachineInfo*);
+Gfx* func_i3_80066DF8(Gfx*, s32, s32, f32);
+void func_i3_80067118(s32);
+void func_i3_80067150(s32 courseIndex);
+void func_i3_80067208(void);
+void func_i3_80067280(void);
+void func_i3_8006735C(void);
+void func_i3_80067580(void);
+void func_i3_800675B4(s32);
+void func_i3_800678D8(void);
+s32 func_i3_800683B4(s8 character);
+void func_i3_80068414(CourseInfo* courseInfo);
+Gfx* func_i3_800684CC(Gfx* gfx);
 
 #endif // OVL_I3_H

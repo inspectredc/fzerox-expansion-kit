@@ -816,8 +816,8 @@ void func_8070D870(void) {
     switch (gCupType) {
         case EDIT_CUP:
             return;
-        case CUP_6:
-        case CUP_7:
+        case DD_1_CUP:
+        case DD_2_CUP:
             var_a1 = true;
             break;
         default:
@@ -847,8 +847,8 @@ void func_8070D870(void) {
         var_a0 = MASTER + 1;
     }
     if (var_a1) {
-        if (D_8079FB28[cupType - CUP_6] < var_a0) {
-            D_8079FB28[cupType - CUP_6] = var_a0;
+        if (D_8079FB28[cupType - DD_1_CUP] < var_a0) {
+            D_8079FB28[cupType - DD_1_CUP] = var_a0;
         }
         if (var_v1) {
             for (i = 0; i < 2; i++) {

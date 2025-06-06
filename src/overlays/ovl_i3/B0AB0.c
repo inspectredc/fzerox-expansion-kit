@@ -2,6 +2,340 @@
 #include "ovl_i3.h"
 #include "fzx_game.h"
 #include "fzx_racer.h"
+#include "fzx_assets.h"
+
+s32 D_8006CFF0;
+s32 D_i3_8006CFF4;
+s32 D_i3_8006CFF8;
+s32 D_i3_8006CFFC;
+Racer* sPlayerRacer;
+UNUSED s32 D_i3_8006D004;
+s32 sCaptainFalconRacerId;
+s32 sDrStewartRacerId;
+s32 sPicoRacerId;
+s32 sSamuraiGorohRacerId;
+s32 sJodySummerRacerId;
+s32 sMightyGazelleRacerId;
+s32 sMrEadRacerId;
+s32 sBabaRacerId;
+s32 sOctomanRacerId;
+s32 sGomarAndShiohRacerId;
+s32 sKateAlenRacerId;
+s32 sRogerBusterRacerId;
+s32 sJamesMcCloudRacerId;
+s32 sLeonRacerId;
+s32 sAntonioGusterRacerId;
+s32 sBlackShadowRacerId;
+s32 sMichaelChainRacerId;
+s32 sJackLevinRacerId;
+s32 sSuperArrowRacerId;
+s32 sMrsArrowRacerId;
+s32 sJohnTanakaRacerId;
+s32 sBeastmanRacerId;
+s32 sZodaRacerId;
+s32 sDrClashRacerId;
+s32 sSilverNeelsenRacerId;
+s32 sBioRexRacerId;
+s32 sDraqRacerId;
+s32 sBillyRacerId;
+s32 sTheSkullRacerId;
+s32 sBloodFalconRacerId;
+s32 D_i3_8006D080;
+s32 D_i3_8006D084;
+s32 D_i3_8006D088;
+
+s16 D_i3_80068D90[] = {
+    70, 1,   70, 1,   70, 1,   70, 1,   70, 1,   70, 1,   70, 31,  70, 81,  70, 121, 70, 151, 70, 181,
+    70, 201, 70, 220, 70, 240, 70, 200, 41, 150, 39, 120, 38, 130, 37, 130, 37, 140, 39, 140, 39, 101,
+    39, 100, 39, 100, 39, 120, 39, 130, 39, 130, 39, 140, 39, 141, 39, 100, 39, 50,  39, 0,   40, 0,
+    70, 0,   70, 1,   70, 0,   70, 60,  70, 120, 70, 120, 70, 160, 70, 240, 70, 330, 70, 380, 70, 420,
+    70, 420, 70, 330, 70, 241, 70, 131, 70, 31,  70, 1,   70, 1,   70, 1,   70, 1,   70, 1,
+};
+
+s16 D_i3_80068E68[] = {
+    70, -50, 70, 0,    70, 0,    70, 1,    70, 0,    70, 0,    70, 0,    50, 20,   48, 40,   46, 20,  70, 20,  70, 20,
+    70, -40, 70, -100, 42, -100, 42, -100, 42, -100, 42, -100, 42, -100, 42, -100, 42, -100, 42, -80, 42, -80, 42, -60,
+    42, -80, 42, -90,  42, -40,  42, 0,    42, -40,  42, -70,  42, -70,  42, -40,  42, 0,    42, 0,   42, 0,   42, 1,
+    70, 20,  70, 50,   70, 50,   42, 10,   42, 150,  42, 150,  42, 100,  42, 80,   42, 50,   42, 0,   42, 0,   42, 0,
+    42, -30, 42, -120, 42, -130, 70, -140, 70, 0,    70, 141,  70, 141,  70, 141,  70, 81,   70, 71,  70, 21,  70, 1,
+    70, -29, 70, -39,  70, -69,  70, -69,  70, -69,  70, -69,  70, -69,  70, -69,  70, -39,  70, 1,   70, 0,   70, -20,
+};
+
+s16 D_i3_80068F88[] = {
+    70, 300,  70, 300,  70, 200,  70, -500, 70, -100, 70, 500,  70, 100,  70, 200,  70, 300,  70, -500, 70, -500,
+    70, -200, 70, 0,    70, 300,  70, -100, 70, -500, 70, -500, 70, -100, 70, 0,    70, 300,  70, 0,    70, -300,
+    70, 100,  70, 300,  70, 500,  70, 301,  70, 0,    70, -250, 70, -150, 70, -150, 70, -200, 70, -300, 70, -100,
+    70, 400,  70, 0,    70, -200, 70, -200, 70, -250, 70, -350, 70, -400, 70, -450, 70, 151,  70, 300,  70, 300,
+    70, -100, 70, -250, 70, -350, 70, -149, 70, 1,    70, 1,    70, 1,    70, 1,    70, 1,    70, 1,    70, 1,
+    70, 1,    70, 1,    70, -49,  70, -99,  70, -100, 70, -150, 70, -180, 70, -200, 70, -200, 70, -200, 70, -250,
+    70, -99,  70, -49,  70, -49,  70, -49,  70, 1,    70, 1,    70, 1,    70, -19,  70, -49,  70, 1,    70, 1,
+    70, -49,  70, -49,  70, -149, 70, -199, 70, -199, 70, -299, 70, -600, 70, 250,  70, 350,  70, 200,  70, -300,
+    70, -300, 70, -300, 70, -100, 70, 200,  70, 300,  70, 150,  70, 151,  70, 151,  70, 151,  70, 201,
+};
+
+s16 D_i3_80069110[] = {
+    70, 200,  70, -100, 70, -200, 70, -350, 70, -250, 70, -150, 70, 250, 70, 300,  70, 250,  70, 150,  70, -250,
+    70, -300, 70, -250, 70, -150, 70, 250,  70, 300,  70, 250,  70, 150, 70, -250, 70, -300, 70, -250, 70, -150,
+    70, 250,  70, 300,  70, 250,  70, 151,  70, -199, 70, -250, 70, -50, 70, 150,  70, 250,  70, 250,  70, 151,
+    70, 1,    70, 51,   70, 71,   70, 71,   70, 51,   70, 51,   70, 51,  70, 81,   70, 111,  70, 111,  70, 111,
+    70, 91,   70, 71,   70, 71,   70, 71,   70, 31,   70, 1,    70, 1,   70, -49,  70, -99,  70, -99,  70, -149,
+    70, -199, 70, -99,  70, 0,    70, 300,  70, 200,  70, 200,  70, 180, 70, 151,  70, 150,  70, 150,  70, 150,
+    70, -150, 70, -200, 70, -100, 70, -100, 70, -50,  70, -50,  70, 0,   70, 0,    70, 51,   70, 100,  70, 0,
+    70, -250, 70, -300, 70, -200, 70, -150, 70, 50,   70, 250,  70, 200, 70, 100,  70, -50,  70, -150, 70, -50,
+    70, 150,  70, 300,  70, 201,  70, 1,    70, 31,   70, 71,   70, 100, 70, 130,  70, 170,  70, 250,  70, 0,
+    70, -300, 70, -250, 70, -200, 70, -100, 70, -50,  70, 1,    70, 1,   70, 0,    70, 0,    70, 0,    70, 0,
+    70, -100, 70, -250, 70, -250, 70, -250, 70, -200, 70, -100, 70, 1,   70, 1,    70, 1,    70, 1,    70, 1,
+    70, 1,    70, 1,    70, 101,  70, 201,  70, 201,
+};
+
+s16 D_i3_80069308[] = {
+    70, 200,  70, 200,  70, 200,  70, -250, 70, -199, 70, -19,  70, -19,  70, -19,  70, -199, 70, -150,
+    70, -180, 70, 300,  70, 251,  70, -149, 70, -150, 70, -180, 70, 300,  70, 251,  70, -99,  70, -159,
+    70, -179, 70, -99,  70, -19,  43, 151,  41, 150,  70, -300, 70, -249, 70, -49,  70, 1,    70, -129,
+    70, -129, 70, -129, 70, -99,  70, -100, 70, -130, 70, 300,  70, 251,  70, -150, 70, 300,  70, 250,
+    70, 150,  70, -200, 70, -299, 70, -149, 70, 1,    43, 151,  70, 150,  70, -250, 70, -199, 70, -49,
+    70, 1,    70, -140, 70, -199, 70, -129, 70, -130, 70, 250,  70, 251,  70, -149, 70, -150, 70, 300,
+    70, 250,  70, 201,  70, -49,  70, -149, 70, -199, 70, -99,  70, 1,    43, 151,  41, 150,  70, -300,
+    70, -300, 70, -249, 70, -149, 70, -159, 70, -179, 70, -130, 70, -150, 70, -150, 70, -180, 70, 300,
+    70, 251,  70, -150, 70, -180, 70, 300,  70, 250,  70, -249, 70, -99,  70, 1,    70, 51,   70, 201,
+};
+
+s16 D_i3_80069470[] = {
+    70, -200, 70, -230, 70, -230, 70, -220, 70, 0,    70, 201,  70, 201,  70, 110,  70, -10,  70, -80,  70, -120,
+    70, -120, 70, -180, 70, -150, 70, 50,   70, -150, 70, -150, 70, -100, 70, 0,    70, -179, 70, -40,  70, 100,
+    70, 50,   70, 20,   70, -29,  70, -60,  70, 0,    70, 160,  70, 150,  70, 250,  70, 200,  70, -129, 70, -140,
+    70, 0,    70, 200,  70, 200,  70, 250,  70, 200,  70, -100, 70, -250, 70, -250, 70, -149, 70, -30,  70, -90,
+    70, -30,  70, 110,  70, 60,   70, 70,   70, 0,    70, -100, 70, -40,  70, -30,  70, 0,    70, 61,   70, 40,
+    70, 40,   70, 40,   70, -30,  70, -80,  70, -250, 70, -250, 70, -250, 70, -200, 70, -100, 70, -30,  70, -60,
+    70, 10,   70, 140,  70, 50,   70, -50,  70, -50,  70, -100, 70, -100, 70, -100, 70, 151,  70, 0,    70, -200,
+    70, -250, 70, 250,  70, 250,  70, 250,  70, 0,    70, 80,   70, 80,   70, 140,  70, 201,  70, 241,  70, -139,
+    70, -39,  70, 21,   70, 61,   70, -49,  70, -199, 70, 61,   70, 61,   70, 0,    70, 0,    70, 1,    70, 161,
+    70, 171,  70, 101,  70, 30,   70, -50,  70, -120, 70, -100, 70, -150, 70, -150, 70, -50,  70, 50,   70, 100,
+    70, 100,  70, 100,  70, 100,  70, 150,  70, 150,  70, 181,  70, 151,  70, 100,  70, 100,  70, 100,
+};
+
+s16 D_i3_80069650[] = {
+    70, 101,  70, 101,  70, -100, 70, -200, 70, -250, 70, -199, 70, -119, 70, -79, 70, -29, 70, -49, 70, -29,
+    70, 1,    70, 31,   70, 80,   70, 0,    70, -130, 70, -40,  70, 100,  70, 81,  70, 31,  70, 1,   70, 1,
+    70, 1,    70, 1,    70, 51,   70, 70,   70, 100,  70, 150,  70, 100,  70, 70,  70, 51,  70, 50,  70, 50,
+    70, 50,   70, 50,   70, 0,    70, 50,   70, 100,  70, 71,   70, 51,   70, 31,  70, 1,   70, 1,   70, 0,
+    70, -70,  70, -100, 70, 1,    70, 100,  70, 100,  70, 100,  70, 100,  70, 150, 70, 50,  70, 0,   70, -300,
+    70, -250, 70, -200, 70, -180, 70, -199, 70, -49,  70, 1,    70, 51,   70, 101, 70, 101,
+};
+
+s16 D_i3_80069750[] = {
+    70, -99,  70, -99,  70, -100, 70, -100, 70, 250,  70, 250,  70, 250,  70, 200,  70, -149, 70, -200,
+    70, 150,  70, 151,  70, 50,   70, 101,  70, 90,   70, 251,  70, 200,  70, 21,   70, 70,   70, 1,
+    70, 1,    70, 0,    70, -50,  70, -49,  70, -99,  70, -170, 70, -150, 70, 250,  70, 251,  70, 1,
+    70, -119, 70, -149, 70, -149, 70, -149, 70, -149, 70, -149, 70, -149, 70, -149, 70, -99,  70, 1,
+    70, 51,   70, 120,  70, 100,  70, 200,  70, 0,    70, -200, 70, -30,  70, 200,  70, 150,  70, 71,
+    70, 0,    70, 0,    70, -200, 70, 200,  70, 150,  70, 51,   70, -49,  70, 1,    70, 1,    70, 1,
+    70, 1,    70, 1,    70, -19,  70, 1,    70, 31,   70, 1,    70, 1,    70, 1,    70, 1,    70, 1,
+    70, 0,    70, 80,   70, -160, 70, -300, 70, -200, 70, -160, 70, -149, 70, -99,
+};
+
+s16 D_i3_80069888[] = {
+    70, 0,    70, 0,   70, -30,  70, -220, 70, -290, 70, -250, 70, -230, 70, -200, 70, -150, 70, -99,  70, -69,
+    46, -49,  44, -40, 42, -20,  41, 0,    70, 0,    70, -50,  70, -199, 70, -400, 70, -400, 70, -399, 70, -249,
+    70, -199, 70, -50, 70, 1,    70, 0,    70, 30,   70, 70,   70, 70,   70, 70,   70, 51,   70, 20,   70, 20,
+    70, 100,  70, 150, 70, -200, 70, -200, 70, -200, 70, 0,    70, -149, 70, -150, 70, -180, 70, -120, 70, 180,
+    70, 250,  70, 250, 70, 200,  70, 141,  70, 100,  70, 100,  70, 100,  70, -250, 70, -200, 70, 250,  70, 201,
+    70, -59,  70, -59, 70, -119, 33, -300, 30, -300, 28, -300, 28, 0,    28, 350,  28, 300,  28, 0,    28, -250,
+    28, -200, 70, -50, 70, 300,  28, 100,  28, 0,    70, -300, 70, -300, 70, -250, 70, -250, 28, -200, 28, 350,
+    28, 300,  28, 250, 70, 250,  70, 0,    70, -159, 70, -149, 70, -139, 70, -119, 70, -79,  70, -39,  70, 1,
+};
+
+s16 D_i3_800699E8[] = {
+    70, -109, 70, -139, 70, -119, 70, -59,  70, -19,  70, 1,    70, 21,   70, 51,   70, 20,   70, 0,    70, 0,
+    70, 0,    70, -20,  70, -50,  70, -20,  70, 0,    70, 0,    70, 1,    70, -149, 70, -249, 70, 1,    70, 251,
+    70, 1,    70, -249, 70, -49,  70, 201,  70, 200,  70, -170, 70, -200, 70, -200, 70, -200, 70, -150, 70, -79,
+    70, -49,  70, 1,    70, 1,    70, 0,    70, 0,    70, 0,    70, 0,    70, 120,  70, 120,  70, 60,   70, 0,
+    70, -50,  70, -99,  70, -140, 70, -150, 70, -150, 70, -150, 70, -50,  70, 50,   70, 10,   70, 1,    70, 1,
+    70, 1,    43, 1,    70, 1,    70, 1,    70, 1,    70, 1,    70, 0,    70, 0,    70, 160,  70, 160,  70, 200,
+    70, 160,  70, 200,  70, 40,   70, -180, 70, -180, 70, -109, 70, -70,  70, -50,  70, -20,  70, 0,    70, 0,
+    70, 0,    70, 0,    70, 0,    70, 200,  70, -200, 70, -250, 70, -250, 70, -49,  70, -39,  70, -39,  70, -59,
+};
+
+s16 D_i3_80069B48[] = {
+    70, -99,  70, -99,  70, -99,  70, -150, 70, 250,  70, 250,  70, 200,  70, 50,   70, 130,  70, 131,  70, 131,
+    70, 101,  70, -109, 70, -139, 70, -140, 70, -109, 70, 1,    70, -99,  70, -100, 70, 250,  70, 250,  70, 150,
+    70, 0,    70, 50,   70, 151,  70, 100,  70, 101,  70, 1,    70, -99,  70, -100, 70, 0,    70, 51,   70, 51,
+    70, 50,   70, -80,  70, -79,  70, -100, 70, -100, 70, 200,  70, 250,  70, 200,  70, 100,  70, 51,   70, 1,
+    70, -100, 70, -150, 70, -150, 70, 0,    70, 0,    70, 1,    70, 0,    70, 0,    70, 0,    70, 0,    70, 0,
+    70, 1,    70, 30,   70, -170, 70, -150, 70, -80,  70, 100,  70, 250,  70, 250,  70, 151,  70, 50,   70, 0,
+    70, 0,    70, 0,    70, -50,  70, -50,  70, -39,  70, -39,  70, -59,  70, -80,  70, -100, 70, -100, 70, -69,
+    70, -50,  70, 0,    70, 0,    70, 0,    70, 0,    70, 0,    70, 0,    70, 0,    70, -150, 70, 150,  70, 200,
+    70, 150,  70, 50,   70, -69,  70, -160, 70, -140, 70, -130, 70, -129, 70, -109, 70, -99,  70, -99,
+};
+
+s16 D_i3_80069CD0[] = {
+    70, 1,    70, 1,    70, 1,    70, 1,    70, 0,    70, 250,  70, 250,  70, 250,  70, 250,  70, 250,  70, 151,
+    70, 150,  70, 180,  70, 250,  70, 250,  70, 130,  70, 51,   70, -100, 70, -100, 70, -100, 70, 250,  70, 250,
+    70, 150,  70, -100, 70, -99,  70, -200, 70, -250, 70, -250, 70, -249, 70, -100, 70, 250,  70, 250,  70, 200,
+    70, -80,  70, -99,  70, -180, 70, -250, 70, -250, 70, -149, 70, 200,  70, 200,  70, -80,  70, -79,  70, -180,
+    70, -250, 70, -250, 70, -149, 70, 150,  70, 200,  70, -100, 70, -99,  70, -150, 70, -250, 70, -250, 70, -150,
+    70, 250,  70, 250,  70, -80,  70, -99,  70, -120, 70, -99,  70, -79,  70, -59,  70, -29,  70, 1,    70, 1,
+};
+
+s16* D_i3_80069DD8[] = {
+    D_F264110, D_F264340, D_F264450, D_F2641D8, D_F264690, D_F264540, D_F264920, D_F264860,
+    D_F264740, D_F264C80, D_F264B40, D_F2652B0, D_F264DE0, D_F264F08, D_F2650B0, D_F2651C8,
+    D_F264A58, D_F2656C8, D_F265530, D_F2659E0, D_F2658D0, D_F265B70, D_F2653E8, D_F265D08,
+};
+
+s16* D_i3_80069E38[] = {
+    D_i3_80068D90, D_i3_80068E68, D_i3_80068F88, D_i3_80069110, D_i3_80069308, D_i3_80069470,
+    D_i3_80069650, D_i3_80069750, D_i3_80069888, D_i3_800699E8, D_i3_80069B48, D_i3_80069CD0,
+};
+
+UNUSED Gfx D_i3_80069E68[] = { gsSPEndDisplayList() };
+
+s16* D_i3_80069E70 = NULL;
+
+s32 D_i3_80069E74 = 0;
+
+f32 D_i3_80069E78[] = { 0.99f, 0.98f, 0.96f, 0.94f, 0.0f };
+
+f32 D_i3_80069E8C[] = { 0.99f, 0.98f, 0.96f, 0.94f, 0.0f };
+
+f32 D_i3_80069EA0[] = {
+    0.4f,  0.5f,  0.55f, 0.6f,  0.45f, 0.6f,  0.65f, 0.65f, 0.39f, 0.46f, 0.5f,  0.5f,  0.39f, 0.46f, 0.5f,  0.6f,
+    0.41f, 0.5f,  0.5f,  0.55f, 0.38f, 0.44f, 0.5f,  0.6f,  0.39f, 0.42f, 0.5f,  0.55f, 0.41f, 0.55f, 0.6f,  1.0f,
+    0.44f, 0.48f, 0.6f,  0.65f, 0.37f, 0.43f, 0.5f,  0.6f,  0.38f, 0.45f, 0.5f,  0.5f,  0.39f, 0.48f, 0.6f,  0.65f,
+    0.45f, 0.5f,  0.6f,  1.0f,  0.38f, 0.5f,  0.55f, 0.6f,  0.4f,  0.45f, 0.5f,  0.7f,  0.36f, 0.37f, 0.45f, 0.5f,
+    0.37f, 0.39f, 0.43f, 0.55f, 0.39f, 0.6f,  0.62f, 0.65f, 0.37f, 0.39f, 0.41f, 0.45f, 0.36f, 0.38f, 0.42f, 0.45f,
+    0.38f, 0.39f, 0.42f, 0.55f, 0.38f, 0.4f,  0.43f, 0.6f,  0.36f, 0.38f, 0.5f,  0.55f, 0.4f,  0.5f,  1.0f,  1.0f,
+    0.39f, 0.41f, 0.43f, 0.45f, 0.39f, 0.41f, 0.43f, 0.45f, 0.39f, 0.41f, 0.43f, 0.45f, 0.39f, 0.41f, 0.43f, 0.45f,
+    0.39f, 0.41f, 0.43f, 0.45f, 0.39f, 0.41f, 0.43f, 0.45f, 0.5f,  0.55f, 0.65f, 0.7f,  0.5f,  0.55f, 0.6f,  0.7f,
+    0.5f,  0.55f, 0.65f, 0.7f,  0.5f,  0.55f, 0.65f, 0.7f,  0.5f,  0.55f, 0.65f, 0.7f,  0.5f,  0.55f, 0.65f, 0.7f,
+    0.5f,  0.55f, 0.65f, 0.7f,  0.5f,  0.55f, 0.65f, 0.7f,  0.5f,  0.55f, 0.65f, 0.7f,  0.5f,  0.55f, 0.6f,  0.7f,
+    0.5f,  0.55f, 0.6f,  0.7f,  0.5f,  0.55f, 0.6f,  0.7f,  0.39f, 0.41f, 0.43f, 0.45f, 0.39f, 0.41f, 0.43f, 0.45f,
+    0.39f, 0.41f, 0.43f, 0.45f, 0.39f, 0.41f, 0.43f, 0.45f, 0.39f, 0.41f, 0.43f, 0.45f, 0.39f, 0.41f, 0.43f, 0.45f,
+    0.37f, 0.38f, 0.4f,  0.41f, 0.37f, 0.38f, 0.4f,  0.41f, 0.37f, 0.38f, 0.4f,  0.41f, 0.37f, 0.38f, 0.4f,  0.41f,
+    0.37f, 0.38f, 0.4f,  0.41f, 0.37f, 0.38f, 0.4f,  0.41f, 1.0f,  1.0f,  1.0f,  1.0f,  1.0f,  1.0f,  1.0f,  1.0f,
+    1.0f,  1.0f,
+};
+
+f32 D_i3_8006A228[] = {
+    0.0f,  0.0f,  0.25f, 0.68f, 0.0f,  0.02f, 0.35f, 0.73f, 0.0f,  0.02f, 0.10f, 0.35f, 0.0f,  0.0f,  0.20f, 0.55f,
+    0.0f,  0.20f, 0.75f, 1.0f,  0.0f,  0.0f,  0.10f, 0.30f, 0.0f,  0.0f,  0.0f,  0.30f, 0.0f,  0.15f, 0.70f, 1.60f,
+    0.0f,  0.0f,  0.20f, 0.75f, 0.0f,  0.0f,  0.10f, 0.60f, 0.0f,  0.20f, 0.5f,  0.60f, 0.0f,  0.10f, 0.5f,  0.90f,
+    0.0f,  0.30f, 1.0f,  1.60f, 0.0f,  0.20f, 0.35f, 0.80f, 0.0f,  0.05f, 0.15f, 0.53f, 0.0f,  0.10f, 0.10f, 0.60f,
+    0.0f,  0.10f, 0.10f, 0.33f, 0.0f,  0.20f, 0.5f,  1.40f, 0.0f,  0.15f, 0.20f, 0.24f, 0.0f,  0.10f, 0.30f, 0.55f,
+    0.0f,  0.10f, 0.10f, 0.45f, 0.0f,  0.10f, 0.30f, 0.80f, 0.0f,  0.10f, 0.30f, 0.62f, 0.0f,  0.30f, 0.60f, 1.20f,
+    0.05f, 0.15f, 0.22f, 0.30f, 0.05f, 0.15f, 0.22f, 0.30f, 0.05f, 0.15f, 0.22f, 0.30f, 0.05f, 0.15f, 0.22f, 0.30f,
+    0.05f, 0.15f, 0.22f, 0.30f, 0.05f, 0.15f, 0.22f, 0.30f, 0.40f, 0.5f,  0.55f, 0.70f, 0.40f, 0.60f, 0.80f, 1.0f,
+    0.5f,  0.70f, 1.0f,  1.20f, 0.60f, 0.80f, 1.0f,  1.20f, 0.60f, 0.80f, 1.0f,  1.20f, 0.60f, 0.80f, 1.0f,  1.20f,
+    0.40f, 0.5f,  0.55f, 0.70f, 0.5f,  0.70f, 1.0f,  1.20f, 0.5f,  0.70f, 1.0f,  1.20f, 0.20f, 0.40f, 0.60f, 0.70f,
+    0.20f, 0.40f, 0.60f, 0.70f, 0.20f, 0.40f, 0.60f, 0.70f, 0.05f, 0.15f, 0.22f, 0.30f, 0.05f, 0.15f, 0.22f, 0.30f,
+    0.05f, 0.15f, 0.22f, 0.30f, 0.05f, 0.15f, 0.22f, 0.30f, 0.05f, 0.15f, 0.22f, 0.30f, 0.05f, 0.15f, 0.22f, 0.30f,
+    0.0f,  0.10f, 0.20f, 0.25f, 0.0f,  0.10f, 0.20f, 0.25f, 0.0f,  0.10f, 0.20f, 0.25f, 0.0f,  0.10f, 0.20f, 0.25f,
+    0.0f,  0.10f, 0.20f, 0.25f, 0.0f,  0.10f, 0.20f, 0.25f, 0.0f,  0.0f,  0.0f,  0.0f,  0.0f,  0.0f,  0.0f,  0.0f,
+    0.0f,  0.0f,
+};
+
+u32 D_i3_8006A5B0[] = {
+    107000, 99000,  90000,  82000,  91000,  82000,  76000,  70500,  93000,  83000,  78000,  74000,  99000,  92000,
+    86000,  81500,  110000, 104000, 98500,  92000,  108000, 102000, 98000,  92500,  96000,  91000,  85000,  79500,
+    97000,  90000,  83000,  76000,  102000, 96000,  89000,  83000,  90000,  85000,  82000,  78500,  77000,  73000,
+    68500,  64500,  110000, 105000, 101000, 96500,  97000,  92000,  87000,  82500,  109000, 104000, 99500,  95500,
+    120000, 114000, 108500, 103500, 118000, 112000, 106500, 102000, 86000,  83000,  77000,  72000,  121000, 116000,
+    109000, 101000, 155000, 148000, 141000, 134500, 91000,  86000,  82500,  79000,  137000, 130000, 125000, 120500,
+    114000, 108000, 102500, 97500,  125000, 120000, 114000, 109000, 161000, 155000, 148500, 143000, 161000, 155000,
+    148500, 143000, 161000, 155000, 148500, 143000, 161000, 155000, 148500, 143000, 161000, 155000, 148500, 143000,
+    161000, 155000, 148500, 143000, 161000, 155000, 148500, 143000, 117000, 113000, 110000, 107000, 135000, 130000,
+    126000, 123000, 135000, 130000, 126000, 123000, 129000, 124000, 120000, 117000, 134000, 129000, 125000, 122000,
+    155000, 149000, 144000, 140000, 116000, 111000, 107000, 104000, 113000, 108000, 104000, 101000, 116000, 111000,
+    107000, 104000, 123000, 118000, 11400,  111000, 125000, 120000, 116000, 113000, 120000, 115000, 111000, 108000,
+};
+
+u32 D_i3_8006A850[] = {
+    35000, 33000, 32000, 30000, 31000, 29000, 27500, 26300, 28000, 27000, 26200, 24500, 29000, 28000, 26500, 26000,
+    35000, 33500, 32000, 31000, 34000, 33000, 32000, 31000, 31000, 29500, 29000, 28000, 30500, 29000, 27500, 27000,
+    33000, 32000, 29500, 28000, 30000, 28500, 27000, 26000, 23000, 22500, 21700, 21000, 35500, 34500, 34000, 33000,
+    30000, 29500, 28000, 27500, 35000, 34000, 33000, 31000, 38000, 37000, 36000, 35000, 37000, 36000, 34500, 33000,
+    25500, 24500, 23500, 22000, 40000, 38000, 36000, 34000, 51000, 49000, 47000, 45500, 31000, 29000, 27500, 26000,
+    44000, 42000, 40000, 39000, 35500, 34000, 32500, 31500, 40000, 39000, 38000, 37000, 51000, 49500, 48500, 47000,
+    51000, 49500, 48500, 47000, 51000, 49500, 48500, 47000, 51000, 49500, 48500, 47000, 51000, 49500, 48500, 47000,
+    51000, 49500, 48500, 47000, 51000, 49500, 48500, 47000, 41000, 39500, 38000, 37000, 46000, 44000, 42500, 41000,
+    47000, 46000, 44000, 43000, 44000, 42000, 40000, 39000, 47000, 45000, 43500, 42000, 52000, 50500, 49000, 48000,
+    40000, 38500, 37000, 36000, 38000, 36500, 35000, 34000, 40000, 38500, 37000, 36000, 43000, 40500, 39000, 38000,
+    43000, 40500, 39000, 38000, 40000, 38500, 37000, 36000,
+};
+
+u32 D_i3_8006AAF0[] = {
+    350, 300, 250, 200, 400, 350, 270, 200, 400, 350, 300, 300, 600, 500, 350, 300, 450, 350, 300, 250, 400,
+    300, 250, 200, 300, 280, 250, 230, 600, 500, 250, 150, 400, 350, 300, 250, 500, 350, 330, 300, 500, 400,
+    300, 250, 500, 400, 350, 250, 600, 500, 300, 250, 600, 500, 450, 350, 400, 350, 300, 280, 500, 500, 500,
+    500, 450, 400, 350, 350, 250, 240, 220, 200, 450, 400, 350, 300, 300, 290, 270, 250, 500, 450, 350, 300,
+    550, 450, 300, 250, 600, 500, 400, 300, 550, 400, 350, 300, 550, 400, 350, 300, 550, 400, 350, 300, 550,
+    400, 350, 300, 550, 400, 350, 300, 550, 400, 350, 300, 550, 400, 350, 300, 500, 400, 350, 300, 400, 300,
+    250, 200, 600, 500, 450, 400, 500, 400, 350, 350, 500, 400, 350, 350, 600, 550, 500, 500, 550, 450, 450,
+    400, 500, 400, 400, 350, 550, 500, 450, 400, 450, 350, 350, 300, 500, 400, 350, 300, 500, 400, 350, 300,
+};
+
+unk_8013E7A8 D_i3_8006AD90[] = {
+    // CAPTAIN_FALCON
+    { 61, 4, { BLACK_SHADOW, BLOOD_FALCON, -1 }, { DR_STEWART, PICO, ROGER_BUSTER, DRAQ, SAMURAI_GOROH, -1, -1, -1 } },
+    // DR_STEWART
+    { 63, 5, { -1, -1, -1 }, { BLACK_SHADOW, SAMURAI_GOROH, ROGER_BUSTER, DRAQ, PICO, -1, -1, -1 } },
+    // PICO
+    { 61, 3, { -1, -1, -1 }, { DR_STEWART, BLACK_SHADOW, MICHAEL_CHAIN, ROGER_BUSTER, DRAQ, ANTONIO_GUSTER, -1, -1 } },
+    // SAMURAI_GOROH
+    { 61, 1, { ANTONIO_GUSTER, -1, -1 }, { BLACK_SHADOW, BLOOD_FALCON, CAPTAIN_FALCON, PICO, -1, -1, -1, -1 } },
+    // JODY_SUMMER
+    { 6, 3, { OCTOMAN, -1, -1 }, { ZODA, MRS_ARROW, JACK_LEVIN, BABA, SUPER_ARROW, -1, -1, -1 } },
+    // MIGHTY_GAZELLE
+    { 7, 5, { -1, -1, -1 }, { MR_EAD, THE_SKULL, DR_CLASH, -1, -1, -1, -1, -1 } },
+    // MR_EAD
+    { 4, 1, { -1, -1, -1 }, { MIGHTY_GAZELLE, JAMES_MCCLOUD, DR_CLASH, SILVER_NEELSEN, LEON, THE_SKULL, BILLY, -1 } },
+    // BABA
+    { 4, 1, { -1, -1, -1 }, { JODY_SUMMER, MRS_ARROW, KATE_ALEN, JACK_LEVIN, -1, -1, -1, -1 } },
+    // OCTOMAN
+    { 4, 2, { JODY_SUMMER, -1, -1 }, { JOHN_TANAKA, BABA, KATE_ALEN, GOMAR_AND_SHIOH, SUPER_ARROW, -1, -1, -1 } },
+    // GOMAR_AND_SHIOH
+    { 6, 2, { -1, -1, -1 }, { SUPER_ARROW, MRS_ARROW, JOHN_TANAKA, JODY_SUMMER, OCTOMAN, JACK_LEVIN, -1, -1 } },
+    // KATE_ALEN
+    { 6, 3, { -1, -1, -1 }, { BABA, MRS_ARROW, JACK_LEVIN, -1, -1, -1, -1, -1 } },
+    // ROGER_BUSTER
+    { 6, 4, { -1, -1, -1 }, { DR_STEWART, MICHAEL_CHAIN, BLOOD_FALCON, ANTONIO_GUSTER, -1, -1, -1, -1 } },
+    // JAMES_MCCLOUD
+    { 29, 4, { -1, -1, -1 }, { BIO_REX, BILLY, LEON, SILVER_NEELSEN, THE_SKULL, MIGHTY_GAZELLE, MR_EAD, -1 } },
+    // LEON
+    { 5, 4, { -1, -1, -1 }, { BILLY, BEASTMAN, MIGHTY_GAZELLE, -1, -1, -1, -1, -1 } },
+    // ANTONIO_GUSTER
+    { 6, 4, { SAMURAI_GOROH, -1, -1 }, { DRAQ, ROGER_BUSTER, BLOOD_FALCON, MICHAEL_CHAIN, -1, -1, -1, -1 } },
+    // BLACK_SHADOW
+    { 61, 3, { -1, -1, -1 }, { CAPTAIN_FALCON, MICHAEL_CHAIN, PICO, DR_STEWART, -1, -1, -1, CAPTAIN_FALCON } },
+    // MICHAEL_CHAIN
+    { 4, 0, { -1, -1, -1 }, { PICO, BLACK_SHADOW, ANTONIO_GUSTER, -1, -1, -1, -1, -1 } },
+    // JACK_LEVIN
+    { 29, 5, { -1, -1, -1 }, { KATE_ALEN, JODY_SUMMER, JOHN_TANAKA, ZODA, GOMAR_AND_SHIOH, -1, -1, -1 } },
+    // SUPER_ARROW
+    { 63, 1, { ZODA, -1, -1 }, { GOMAR_AND_SHIOH, JOHN_TANAKA, -1, -1, -1, -1, -1, -1 } },
+    // MRS_ARROW
+    { 7, 4, { -1, -1, -1 }, { ZODA, GOMAR_AND_SHIOH, KATE_ALEN, OCTOMAN, BABA, -1, -1, -1 } },
+    // JOHN_TANAKA
+    { 6, 1, { -1, -1, -1 }, { OCTOMAN, SUPER_ARROW, ZODA, KATE_ALEN, BABA, JACK_LEVIN, GOMAR_AND_SHIOH, -1 } },
+    // BEASTMAN
+    { 6, 0, { LEON, BILLY, -1 }, { SILVER_NEELSEN, THE_SKULL, BIO_REX, -1, -1, -1, -1, -1 } },
+    // ZODA
+    { 29, 0, { SUPER_ARROW, -1, -1 }, { MRS_ARROW, OCTOMAN, JOHN_TANAKA, JODY_SUMMER, -1, -1, -1, -1 } },
+    // DR_CLASH
+    { 4, 1, { -1, -1, -1 }, { BIO_REX, BILLY, MR_EAD, SILVER_NEELSEN, -1, -1, -1, -1 } },
+    // SILVER_NEELSEN
+    { 6, 5, { -1, -1, -1 }, { DR_CLASH, LEON, BEASTMAN, BIO_REX, JAMES_MCCLOUD, MR_EAD, -1, -1 } },
+    // BIO_REX
+    { 36, 3, { -1, -1, -1 }, { THE_SKULL, BEASTMAN, DR_CLASH, SILVER_NEELSEN, -1, -1, -1, -1 } },
+    // DRAQ
+    { 6, 2, { -1, -1, -1 }, { MICHAEL_CHAIN, ANTONIO_GUSTER, DR_STEWART, BLOOD_FALCON, -1, -1, -1, -1 } },
+    // BILLY
+    { 4, 2, { -1, -1, -1 }, { LEON, BEASTMAN, JAMES_MCCLOUD, MIGHTY_GAZELLE, -1, -1, -1, -1 } },
+    // THE_SKULL
+    { 5, 3, { -1, -1, -1 }, { MIGHTY_GAZELLE, BIO_REX, BEASTMAN, DR_CLASH, JAMES_MCCLOUD, MR_EAD, -1, -1 } },
+    // BLOOD_FALCON
+    { 5, 0, { -1, -1, -1 }, { CAPTAIN_FALCON, SAMURAI_GOROH, DRAQ, ROGER_BUSTER, -1, -1, -1, -1 } },
+};
 
 // fabsf
 f32 func_i3_fabsf(f32 num) {
@@ -35,13 +369,12 @@ extern s32 gCourseIndex;
 extern s8 D_8076C7D8;
 extern s32 D_807A1700;
 extern s32 D_i3_80069E74;
-extern s32 D_i3_8006CFF8;
-extern s32 D_i3_8006CFFC;
-extern s32 D_i3_8006D088;
-extern Racer* sPlayerRacer;
-extern unk_8013E7A8 D_i3_8006AD90[];
 extern s16 D_800D5810[];
-extern s16 D_i3_8006AF34[];
+
+s16 D_i3_8006AF34[] = {
+    0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0,
+    0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2000,
+};
 
 void func_i3_8003F364(void) {
     s32 pad[44];
@@ -137,7 +470,7 @@ void func_i3_8003F364(void) {
                             gRacers[sp70[temp_hi]].unk_350 = 0;
                             gRacers[sp70[temp_hi]].unk_34D = 7;
                             m++;
-                         
+
                             // FAKE!
                             if (gRacers) {}
                         }
@@ -210,11 +543,12 @@ void func_i3_8003F364(void) {
         for (k = 0; k < 8; k++) {
             for (i = 1; i < gTotalRacers; i++) {
                 if (gRacers[i].unk_34D == k) {
-              
+
                     // FAKE!
                     (*(tempRacer + i)).position = D_800D5810[i] = n;
-                    if (1) {} if (1) {}
-                    
+                    if (1) {}
+                    if (1) {}
+
                     n++;
                 }
             }
@@ -279,9 +613,6 @@ void func_i3_8003F364(void) {
     }
 }
 
-extern s32 D_i3_8006A5B0[];
-extern s32 D_i3_8006D080;
-extern s32 D_i3_8006D084;
 extern s32 gCupType;
 
 void func_i3_8003FE64(void) {
@@ -290,7 +621,7 @@ void func_i3_8003FE64(void) {
     GhostInfo sp1C;
     s32 staffTime;
 
-    if ((gCupType < X_CUP) || (gCupType == CUP_6) || (gCupType == CUP_7)) {
+    if ((gCupType < X_CUP) || (gCupType == DD_1_CUP) || (gCupType == DD_2_CUP)) {
         staffTime = func_i2_800A9788(gCourseIndex);
         if (staffTime != -1) {
             sp1C.raceTime = staffTime;
@@ -310,10 +641,20 @@ void func_i3_8003FE64(void) {
     D_i3_8006D084 = D_i3_8006D080;
 }
 
-extern f32 D_i3_8006AFC8[];
-extern s32 D_i3_8006AFD8[];
-extern s32 D_i3_8006D080;
 extern s32 gTotalLapCount;
+
+f32 D_i3_8006AFC8[] = { 5000.0f, 2000.0f, 1000.0f, 1000.0f };
+
+s32 D_i3_8006AFD8[] = {
+    0,     860,   1780,  2760,  3800,  4900,  6060,  7280,  8560,  9900,  11300, 12760, 14280, 15860, 17500,
+    19200, 20960, 22780, 24660, 26600, 28600, 30660, 32780, 34960, 37200, 39500, 41860, 44280, 46760, 49300,
+    0,     680,   1440,  2280,  3200,  4200,  5280,  6440,  7680,  9000,  10400, 11880, 13440, 15080, 16800,
+    18600, 20480, 22440, 24480, 26600, 28800, 31080, 33440, 35880, 38400, 41000, 43680, 46440, 49280, 52200,
+    0,     560,   1180,  1860,  2600,  3400,  4260,  5180,  6160,  7200,  8300,  9460,  10680, 11960, 13300,
+    14700, 16160, 17680, 19260, 20900, 22600, 24360, 26180, 28060, 30000, 32000, 34060, 36180, 38360, 40600,
+    0,     560,   1180,  1860,  2600,  3400,  4260,  5180,  6160,  7200,  8300,  9460,  10680, 11960, 13300,
+    14700, 16160, 17680, 19260, 20900, 22600, 24360, 26180, 28060, 30000, 32000, 34060, 36180, 38360, 40600,
+};
 
 void func_i3_8003FF5C(Racer* arg0) {
     s32 var_s3;
@@ -353,48 +694,17 @@ void func_i3_80040158(void) {
     D_i3_80069E70 = func_807084E4(0, 0x200 * sizeof(s16));
 }
 
-extern s32 sCaptainFalconRacerId;
-extern s32 sDrStewartRacerId;
-extern s32 sPicoRacerId;
-extern s32 sSamuraiGorohRacerId;
-extern s32 sJodySummerRacerId;
-extern s32 sMightyGazelleRacerId;
-extern s32 sMrEadRacerId;
-extern s32 sBabaRacerId;
-extern s32 sOctomanRacerId;
-extern s32 sGomarAndShiohRacerId;
-extern s32 sKateAlenRacerId;
-extern s32 sRogerBusterRacerId;
-extern s32 sJamesMcCloudRacerId;
-extern s32 sLeonRacerId;
-extern s32 sAntonioGusterRacerId;
-extern s32 sBlackShadowRacerId;
-extern s32 sMichaelChainRacerId;
-extern s32 sJackLevinRacerId;
-extern s32 sSuperArrowRacerId;
-extern s32 sMrsArrowRacerId;
-extern s32 sJohnTanakaRacerId;
-extern s32 sBeastmanRacerId;
-extern s32 sZodaRacerId;
-extern s32 sDrClashRacerId;
-extern s32 sSilverNeelsenRacerId;
-extern s32 sBioRexRacerId;
-extern s32 sDraqRacerId;
-extern s32 sBillyRacerId;
-extern s32 sTheSkullRacerId;
-extern s32 sBloodFalconRacerId;
-extern s32 D_8006CFF0;
 extern s32 gCupType;
-extern s16* D_i3_80069DD8[];
-extern s16* D_i3_80069E70;
-extern s32 D_i3_8006CFF4;
-extern unk_8013E7A8 D_i3_8006AD90[];
-extern f32 D_i3_8006B1B8[];
-extern f32 D_i3_8006B218[];
-extern u32 D_i3_8006A850[];
-extern u32 D_i3_8006AAF0[];
-extern s16 D_i3_8006AF34[];
-extern s16* D_i3_80069E38[];
+
+f32 D_i3_8006B1B8[] = {
+    0.0f, 0.0f, 0.04f, 0.08f, 0.0f, 0.0f, 0.03f, 0.05f, 0.0f, 0.0f, 0.0f, 0.02f,
+    0.0f, 0.0f, 0.05f, 0.09f, 0.0f, 0.0f, 0.02f, 0.03f, 0.0f, 0.0f, 0.0f, 0.0f,
+};
+
+f32 D_i3_8006B218[] = {
+    0.0f, 0.0f, 0.02f, 0.01f, 0.0f, 0.0f, 0.02f, 0.01f,  0.0f, 0.0f, 0.03f, 0.03f,
+    0.0f, 0.0f, 0.0f,  0.0f,  0.0f, 0.0f, 0.01f, 0.005f, 0.0f, 0.0f, 0.0f,  0.0f,
+};
 
 void func_i3_80040180(Racer* arg0) {
     f32 var_fa0;
@@ -411,14 +721,14 @@ void func_i3_80040180(Racer* arg0) {
         func_i3_8003FE64();
         if (gCourseIndex < COURSE_EDIT_1) {
             func_i2_800AE100(D_i3_80069DD8[gCourseIndex], 0x200 * sizeof(s16), D_i3_80069E70);
-        } else if (gCourseIndex >= 30 && gCourseIndex < 42) {
+        } else if (gCourseIndex >= COURSE_SILENCE_3 && gCourseIndex <= COURSE_BIG_FOOT) {
             for (i = 0; i < 0x200; i += 2) {
-                D_i3_80069E70[i + 0] = D_i3_80069E38[gCourseIndex - 30][i + 0];
-                D_i3_80069E70[i + 1] = D_i3_80069E38[gCourseIndex - 30][i + 1];
+                D_i3_80069E70[i + 0] = D_i3_80069E38[gCourseIndex - COURSE_SILENCE_3][i + 0];
+                D_i3_80069E70[i + 1] = D_i3_80069E38[gCourseIndex - COURSE_SILENCE_3][i + 1];
             }
         } else {
             for (i = 0; i < 0x200; i += 2) {
-                D_i3_80069E70[i + 0] = 0x45;
+                D_i3_80069E70[i + 0] = 69;
                 D_i3_80069E70[i + 1] = 0;
             }
         }
@@ -527,7 +837,7 @@ void func_i3_80040180(Racer* arg0) {
 
     // If CPU racer
     if (arg0->id >= gNumPlayers) {
-        if ((gCupType < X_CUP) || (gCupType == CUP_6) || (gCupType == CUP_7)) {
+        if ((gCupType < X_CUP) || (gCupType == DD_1_CUP) || (gCupType == DD_2_CUP)) {
             if (gTotalRacers >= arg0->unk_368) {
                 arg0->unk_39C = D_i3_8006A850[gCourseIndex * 4 + gDifficulty] +
                                 D_i3_8006AAF0[gCourseIndex * 4 + gDifficulty] * (arg0->unk_368 - 1);
@@ -667,9 +977,6 @@ void func_i3_80040C38(void) {
     }
 }
 
-extern f32 D_i3_80069EA0[];
-extern f32 D_i3_8006A228[];
-
 f32 func_i3_80041070(Racer* arg0) {
     return D_i3_80069EA0[gCourseIndex * 4 + gDifficulty] * (2500.0f / 27.0f);
 }
@@ -724,18 +1031,49 @@ void Cpu_BehaviorMichaelChain(Racer* racer, Controller* controller) {
 void Cpu_BehaviorMrEad(Racer* racer, Controller* controller) {
 }
 
-extern s32 D_i3_8006CFF8;
-extern s32 D_i3_8006CFFC;
-extern s32 D_i3_8006D088;
 extern f32 D_i3_8006B304[];
 extern f32 D_i3_8006B2F8[];
 extern s32 D_807B37B8[];
 extern u32 gGameFrameCount;
 
-f32 func_i3_80041070(Racer*);
-f32 func_i3_800410B0(Racer*);
+void (*sCharacterBehaviorFuncs[])(Racer*, Controller*) = {
+    Cpu_BehaviorDoNothing,    // CAPTAIN_FALCON
+    Cpu_BehaviorDoNothing,    // DR_STEWART
+    Cpu_BehaviorDoNothing,    // PICO
+    Cpu_BehaviorDoNothing,    // SAMURAI_GOROH
+    Cpu_BehaviorDoNothing,    // JODY_SUMMER
+    Cpu_BehaviorDoNothing,    // MIGHTY_GAZELLE
+    Cpu_BehaviorMrEad,        // MR_EAD
+    Cpu_BehaviorDoNothing,    // BABA
+    Cpu_BehaviorDoNothing,    // OCTOMAN
+    Cpu_BehaviorDoNothing,    // GOMAR_AND_SHIOH
+    Cpu_BehaviorDoNothing,    // KATE_ALEN
+    Cpu_BehaviorDoNothing,    // ROGER_BUSTER
+    Cpu_BehaviorDoNothing,    // JAMES_MCCLOUD
+    Cpu_BehaviorDoNothing,    // LEON
+    Cpu_BehaviorDoNothing,    // ANTONIO_GUSTER
+    Cpu_BehaviorDoNothing,    // BLACK_SHADOW
+    Cpu_BehaviorMichaelChain, // MICHAEL_CHAIN
+    Cpu_BehaviorDoNothing,    // JACK_LEVIN
+    Cpu_BehaviorDoNothing,    // SUPER_ARROW
+    Cpu_BehaviorMrsArrow,     // MRS_ARROW
+    Cpu_BehaviorJohnTanaka,   // JOHN_TANAKA
+    Cpu_BehaviorDoNothing,    // BEASTMAN
+    Cpu_BehaviorDoNothing,    // ZODA
+    Cpu_BehaviorDoNothing,    // DR_CLASH
+    Cpu_BehaviorDoNothing,    // SILVER_NEELSEN
+    Cpu_BehaviorDoNothing,    // BIO_REX
+    Cpu_BehaviorDraq,         // DRAQ
+    Cpu_BehaviorBilly,        // BILLY
+    Cpu_BehaviorDoNothing,    // THE_SKULL
+    Cpu_BehaviorDoNothing,    // BLOOD_FALCON
+};
 
-void (*sCharacterBehaviorFuncs[])(Racer*, Controller*);
+UNUSED f32 D_i3_8006B2F0[] = { 0.05f, 3.5f };
+
+f32 D_i3_8006B2F8[] = { 0.0f, 138.0f, 138.0f };
+
+f32 D_i3_8006B304[] = { 0.0f, 2.0f, -2.0f };
 
 void Cpu_GenerateInputs(Racer* racer, Controller* controller) {
     f32 spBC;
@@ -1044,8 +1382,8 @@ void Cpu_GenerateInputs(Racer* racer, Controller* controller) {
     }
 
     if (func_i2_800B10A8(&racer->unk_0C, racer->unk_0C.unk_34.x + (racer->unk_330 * racer->velocity.x),
-                      racer->unk_0C.unk_34.y + (racer->unk_330 * racer->velocity.y),
-                      racer->unk_0C.unk_34.z + (racer->unk_330 * racer->velocity.z), &sp4C) == 0) {
+                         racer->unk_0C.unk_34.y + (racer->unk_330 * racer->velocity.y),
+                         racer->unk_0C.unk_34.z + (racer->unk_330 * racer->velocity.z), &sp4C) == 0) {
         if (((racer->unk_0C.courseSegment->trackSegmentInfo & TRACK_SHAPE_MASK) != TRACK_SHAPE_PIPE) &&
             ((racer->unk_0C.courseSegment->trackSegmentInfo & TRACK_SHAPE_MASK) != TRACK_SHAPE_CYLINDER)) {
             temp4 = racer->unk_C0.x.x;
@@ -1102,7 +1440,8 @@ void Cpu_GenerateInputs(Racer* racer, Controller* controller) {
                     var_a1 = (s32) ((var_a1 * 0.25f) - (racer->unk_A0 * 0.015f));
                     var_a3 *= 5;
                 }
-            } else if ((gCourseIndex == 0x21) || (gCourseIndex == 0x23) || (gCourseIndex == 0x25) || (gCourseIndex == 0x28)) {
+            } else if ((gCourseIndex == COURSE_PORT_TOWN_3) || (gCourseIndex == COURSE_BIG_BLUE_3) ||
+                       (gCourseIndex == COURSE_SPACE_PLANT_2) || (gCourseIndex == COURSE_WHITE_LAND_3)) {
                 var_a1 = 0;
             }
 
@@ -1115,7 +1454,7 @@ void Cpu_GenerateInputs(Racer* racer, Controller* controller) {
             if (((racer->unk_0C.courseSegment->trackSegmentInfo & TRACK_SHAPE_MASK) == TRACK_SHAPE_CYLINDER) ||
                 ((racer->unk_0C.courseSegment->next->trackSegmentInfo & TRACK_SHAPE_MASK) == TRACK_SHAPE_AIR) ||
                 ((racer->unk_0C.courseSegment->next->next->trackSegmentInfo & TRACK_SHAPE_MASK) == TRACK_SHAPE_AIR) ||
-                 racer->segmentLandmine != LANDMINE_NONE) {
+                racer->segmentLandmine != LANDMINE_NONE) {
                 var_a1 = 70;
                 controller->buttonCurrent &= (u16) (~BTN_A);
                 controller->buttonPressed &= (u16) (~BTN_A);
@@ -1232,7 +1571,7 @@ void Cpu_GenerateInputs(Racer* racer, Controller* controller) {
             if (racer->segmentPit != PIT_NONE) {
                 racer->obstaclePriorityState = 3;
             }
-            if (gCupType == 5) {
+            if (gCupType == EDIT_CUP) {
                 if (!(racer->id & 1)) {
                     if (racer->segmentJump == JUMP_LEFT) {
                         racer->obstaclePriorityState = 2;
@@ -1248,7 +1587,7 @@ void Cpu_GenerateInputs(Racer* racer, Controller* controller) {
                         racer->obstaclePriorityState = 2;
                     }
                 }
-            } else if (gCourseIndex != 0x25) {
+            } else if (gCourseIndex != COURSE_SPACE_PLANT_2) {
                 if (racer->segmentJump == JUMP_LEFT) {
                     racer->obstaclePriorityState = 2;
                 }
@@ -1317,10 +1656,11 @@ void Cpu_GenerateInputs(Racer* racer, Controller* controller) {
                 }
                 racer->unk_388 = var_a3;
             } else {
-                if ((gCourseIndex < COURSE_EDIT_1 || gCupType >= 6) && ((((racer->raceTime > 2000) &&
-                      (((racer->unk_368 % 6) < 2) ||
-                       (func_i3_fabsf(racer->raceDistance - sPlayerRacer->raceDistance) > 5000.0f))) ||
-                     (racer->id < gNumPlayers)))) {
+                if ((gCourseIndex < COURSE_EDIT_1 || gCupType >= DD_1_CUP) &&
+                    ((((racer->raceTime > 2000) &&
+                       (((racer->unk_368 % 6) < 2) ||
+                        (func_i3_fabsf(racer->raceDistance - sPlayerRacer->raceDistance) > 5000.0f))) ||
+                      (racer->id < gNumPlayers)))) {
                     var_a3 = racer->unk_0C.courseSegment->segmentIndex * 4;
                     if (racer->unk_0C.unk_08 >= 0.5f) {
                         var_a3 += 2;
@@ -1581,7 +1921,7 @@ void Cpu_GenerateInputs(Racer* racer, Controller* controller) {
                                     break;
                                 }
                                 if ((racer->nextSegmentLandmine == LANDMINE_LEFT) &&
-                                           (racer->unk_33C < (sp9C + 46.0f))) {
+                                    (racer->unk_33C < (sp9C + 46.0f))) {
                                     racer->unk_33C += racer->unk_354 * 3.0f;
                                     break;
                                 }
@@ -1594,8 +1934,7 @@ void Cpu_GenerateInputs(Racer* racer, Controller* controller) {
                                     break;
                                 }
                                 if ((racer->nextSegmentDash == DASH_LEFT) && (racer->unk_0C.unk_08 < 0.5f) &&
-                                    (func_i3_fabsf(racer->unk_33C - ((-1.0f * racer->unk_270) + 100.0f)) <
-                                     230.0f)) {
+                                    (func_i3_fabsf(racer->unk_33C - ((-1.0f * racer->unk_270) + 100.0f)) < 230.0f)) {
                                     racer->unk_33C = (racer->unk_270 * -1.0f) + 100.0f;
                                     break;
                                 }
@@ -1687,7 +2026,7 @@ void Cpu_GenerateInputs(Racer* racer, Controller* controller) {
         if (racer->unk_1EC < (625.0f / 27.0f)) {
             racer->unk_1EC = (625.0f / 27.0f);
         }
-        
+
         if ((racer->stateFlags & RACER_STATE_FLAGS_2000000) || (gGameMode == GAMEMODE_GP_END_CS)) {
             racer->awarenessFlags &= ~0xA00;
             if (racer->id < gNumPlayers) {

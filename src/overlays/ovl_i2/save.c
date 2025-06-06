@@ -1708,14 +1708,14 @@ s32 D_i2_800BEF80[] = {
 };
 
 s32 func_i2_800A9788(s32 courseIndex) {
-    if (courseIndex < 0 || courseIndex >= 42) {
+    if (!(courseIndex >= COURSE_MUTE_CITY && courseIndex <= COURSE_BIG_FOOT)) {
         return -1;
     }
     return D_i2_800BEF80[courseIndex];
 }
 
 s32 func_i2_800A97B4(GhostInfo* ghostInfo, s32 courseIndex) {
-    if ((courseIndex < 0x1E) || (courseIndex >= 0x2A)) {
+    if (!(courseIndex >= COURSE_SILENCE_3 && courseIndex <= COURSE_BIG_FOOT)) {
         return 2;
     }
     func_i2_800AAAC0(courseIndex);
@@ -1760,7 +1760,7 @@ s32 Save_LoadStaffGhost(s32 courseIndex, s32 encodedCourseIndex) {
     GhostData* ghostData = &gSaveContext.ghostSave.data;
     bool isEditCupCourse;
 
-    if ((courseIndex >= 0x1E) && (courseIndex < 0x2A)) {
+    if ((courseIndex >= COURSE_SILENCE_3) && (courseIndex <= COURSE_BIG_FOOT)) {
         isEditCupCourse = true;
     } else {
         isEditCupCourse = false;
@@ -1823,10 +1823,10 @@ s32 func_i2_800A9BA4(s32 courseIndex) {
     u16 checksum;
     s32 i;
 
-    if ((courseIndex < 0x1E) || (courseIndex >= 0x2A)) {
+    if (!(courseIndex >= COURSE_SILENCE_3 && courseIndex <= COURSE_BIG_FOOT)) {
         return 2;
     }
-    D_i2_800D1326 |= (1 << (courseIndex + 2)) & 0xFFFF;
+    D_i2_800D1326 |= (u16) (1 << (courseIndex + 2));
     Save_ReadProfileSaves(profileSaves);
     Save_LoadEditCup2(profileSaves, NULL, NULL);
     profileSaves[0].editCup2.unk_02 = D_i2_800D1326;

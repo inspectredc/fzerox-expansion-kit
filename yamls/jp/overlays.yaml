@@ -46,13 +46,23 @@
       - [0xD1F80, c]
       - [0xD2F70, c]
       - [0xD66F0, c]
-      - [0xDA560, data]
+      - [0xDA560, .data, B0AB0]
+      - [0xDCAE0, .data, B5EF0]
+      - [0xDCDB0, .data, CB690]
+      - [0xDD4F0, data, D1F80]
+      - [0xDD590, data, D2F70]
+      - [0xDDD40, data, D66F0]
       - [0xDDD80, .rodata, B0AB0]
       - [0xDDF30, .rodata, B5EF0]
       - [0xDE710, .rodata, CB690]
       - [0xDE720, .rodata, D2F70]
       - [0xDE790, .rodata, D66F0]
-      - { type: bss, vram: 0x8006CFF0 }
+      - { type: .bss, vram: 0x8006CFF0, name: B0AB0 }
+      - { type: .bss, vram: 0x8006D090, name: B5EF0 }
+      - { type: bss, vram: 0x8006D600, name: CB690 }
+      - { type: bss, vram: 0x8006D7C0, name: D1F80 }
+      - { type: bss, vram: 0x8006D7D0, name: D2F70 }
+      - { type: bss, vram: 0x8006EF60, name: D66F0 }
 
   - name: ovl_i4
     exclusive_ram_id: ovl_i4
