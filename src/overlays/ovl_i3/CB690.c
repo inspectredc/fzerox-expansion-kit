@@ -6,6 +6,11 @@
 #include "fzx_machine.h"
 #include "fzx_assets.h"
 
+f32 sPortraitTextureScale[TOTAL_RACER_COUNT];
+unk_80141EA8 D_i3_8006D678[4];
+s32 sPlayerLeadInterval[4];
+s32 sLeadRivalRaceTime[4];
+
 s32 sPracticeBestLapCounter = 0;
 bool sSecondLapStarted = false;
 bool sFinalLapStarted = false;
@@ -245,9 +250,8 @@ Gfx* func_i3_DrawTimerDigitScisRectangle(Gfx* gfx, s32 left, s32 top, s32 number
     return gfx;
 }
 
-extern unk_80141EA8 D_i3_8006D678[4];
+extern s32 gGameMode;
 
-#ifdef IMPORT_BSS
 void func_i3_8005A464(void) {
     s32 i;
 
@@ -273,9 +277,6 @@ void func_i3_8005A464(void) {
         gPlayerLapNumbers[i] = 1;
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i3/CB690/func_i3_8005A464.s")
-#endif
 
 void func_i3_8005A590(unk_8012F450* arg0) {
 
@@ -475,8 +476,6 @@ Gfx* func_i3_DrawPlayerTimer(Gfx* gfx, s32 time, s32 numPlayersIndex, s32 player
     }
     return gfx;
 }
-
-extern s32 gGameMode;
 
 Gfx* func_i3_DrawTimeRectangle(Gfx* gfx, s32 numPlayersIndex, s32 playerIndex) {
     s32 right;
@@ -1231,8 +1230,6 @@ Gfx* func_i3_DrawHUD(Gfx* gfx) {
     return gfx;
 }
 
-extern f32 sPortraitTextureScale[];
-
 void func_i3_UpdatePortraitScales(void) {
     s32 i;
 
@@ -1501,8 +1498,6 @@ Gfx* func_i3_DrawRaceTimeInterval(Gfx* gfx, s32 time, s32 left, s32 top, f32 sca
 }
 
 extern GhostRacer* gFastestGhostRacer;
-extern s32 sLeadRivalRaceTime[];
-extern s32 sPlayerLeadInterval[];
 
 Gfx* func_i3_UpdateRaceIntervalInfo(Gfx* gfx, s32 numPlayersIndex, s32 playerIndex, f32 scale) {
     Racer* leadRivalRacer;
@@ -1635,7 +1630,6 @@ Gfx* func_i3_DrawReverse(Gfx* gfx, s32 numPlayersIndex, s32 playerIndex) {
     return gfx;
 }
 
-#ifdef IMPORT_BSS
 void func_i3_InitRacePortraits(void) {
     s32 i;
 
@@ -1643,9 +1637,6 @@ void func_i3_InitRacePortraits(void) {
         sPortraitTextureScale[i] = 1.0f;
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i3/CB690/func_i3_InitRacePortraits.s")
-#endif
 
 extern s32 gLivesChangeCounter;
 

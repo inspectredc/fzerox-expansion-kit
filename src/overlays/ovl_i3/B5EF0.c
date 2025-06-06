@@ -617,11 +617,13 @@ Gfx* func_i3_80045BC4(Gfx* gfx, s32 playerIndex) {
                     func_80741014(playerIndex, 0x31);
                 }
             }
-            if ((D_i3_8006D160[playerIndex] == 3) &&
-                (((D_i3_8006D198[playerIndex].x + D_i3_8006D198[playerIndex].y) + D_i3_8006D198[playerIndex].z) == 0.0f)) {
+            if ((D_i3_8006D160[playerIndex] == 3) && (((D_i3_8006D198[playerIndex].x + D_i3_8006D198[playerIndex].y) +
+                                                       D_i3_8006D198[playerIndex].z) == 0.0f)) {
                 D_i3_8006D160[playerIndex]++;
-                if ((D_i3_8006D238[D_i3_8006D148[playerIndex][0]][0] == D_i3_8006D238[D_i3_8006D148[playerIndex][1]][1]) &&
-                    (D_i3_8006D238[D_i3_8006D148[playerIndex][0]][0] == D_i3_8006D238[D_i3_8006D148[playerIndex][2]][2])) {
+                if ((D_i3_8006D238[D_i3_8006D148[playerIndex][0]][0] ==
+                     D_i3_8006D238[D_i3_8006D148[playerIndex][1]][1]) &&
+                    (D_i3_8006D238[D_i3_8006D148[playerIndex][0]][0] ==
+                     D_i3_8006D238[D_i3_8006D148[playerIndex][2]][2])) {
                     func_80741014(playerIndex, 0x30);
                     D_i3_8006D268[playerIndex] = 0x78;
                     var_v1 = 0;
@@ -712,7 +714,8 @@ Gfx* func_i3_80045BC4(Gfx* gfx, s32 playerIndex) {
         gfx = func_i3_DrawBeveledBox(gfx, left, top, right, bottom, 255, 255, 255, 255);
         gSPDisplayList(gfx++, D_80149D0);
         if ((D_i3_8006D198[playerIndex].x + D_i3_8006D198[playerIndex].y) == 0.0f) {
-            if ((((D_i3_8006D238[D_i3_8006D148[playerIndex][0]][0]) == D_i3_8006D238[D_i3_8006D148[playerIndex][1]][1]) &&
+            if ((((D_i3_8006D238[D_i3_8006D148[playerIndex][0]][0]) ==
+                  D_i3_8006D238[D_i3_8006D148[playerIndex][1]][1]) &&
                  ((gGameFrameCount % 20) >= 5)) &&
                 ((D_i3_8006D160[playerIndex] == 2) ||
                  ((D_i3_8006D160[playerIndex] >= 3) && (D_i3_8006D198[playerIndex].z != 0.0f)))) {
@@ -730,7 +733,8 @@ Gfx* func_i3_80045BC4(Gfx* gfx, s32 playerIndex) {
         if ((((D_i3_8006D198[playerIndex].x + D_i3_8006D198[playerIndex].y) + D_i3_8006D198[playerIndex].z) == 0.0f) &&
             (D_i3_8006D160[playerIndex] >= 3)) {
             if (((D_i3_8006D238[D_i3_8006D148[playerIndex][0]][0] == D_i3_8006D238[D_i3_8006D148[playerIndex][1]][1]) &&
-                 (D_i3_8006D238[D_i3_8006D148[playerIndex][0]][0] == D_i3_8006D238[D_i3_8006D148[playerIndex][2]][2])) &&
+                 (D_i3_8006D238[D_i3_8006D148[playerIndex][0]][0] ==
+                  D_i3_8006D238[D_i3_8006D148[playerIndex][2]][2])) &&
                 ((gGameFrameCount % 20) >= 5)) {
                 gSPDisplayList(gfx++, D_80149D0);
                 gDPLoadTextureBlock(gfx++, aCharacterPortraitHighlightBorderTex, G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32, 0,
@@ -2158,9 +2162,7 @@ extern char* gCurrentTrackName;
 
 s32 D_i3_8006B498 = 0;
 s32 D_i3_8006B49C = 0;
-const char* D_i3_8006B4A0[] = {
-    "1ST", "2ND", "3RD"
-};
+const char* D_i3_8006B4A0[] = { "1ST", "2ND", "3RD" };
 
 Gfx* func_i3_8004CE40(Gfx* gfx) {
     s32 i;

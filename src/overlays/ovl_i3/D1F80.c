@@ -3,7 +3,20 @@
 #include "fzx_racer.h"
 #include "fzx_assets.h"
 
-extern u8* sCourseMinimapTex;
+u8* sCourseMinimapTex;
+
+u16 sCourseMinimapPalette[] = { GPACK_RGBA5551(0, 0, 0, 0), GPACK_RGBA5551(0, 0, 0, 1),
+                                GPACK_RGBA5551(255, 255, 255, 1), GPACK_RGBA5551(100, 100, 100, 1) };
+
+s32 sPlayerMinimapPositions[][4][2] = {
+    { { 232, 132 }, { 0, 0 }, { 0, 0 }, { 0, 0 } },
+    { { 246, 40 }, { 246, 152 }, { 0, 0 }, { 0, 0 } },
+    { { 106, 58 }, { 106, 170 }, { 248, 58 }, { 210, 152 } },
+    { { 106, 58 }, { 106, 170 }, { 248, 58 }, { 248, 170 } },
+};
+
+s32 gPlayerMinimapLapCounterToggle[] = { 0, 0, 0, 0 };
+
 extern s32 D_8076C954;
 extern s32 gNumPlayers;
 
@@ -134,10 +147,6 @@ extern s32 gTotalRacers;
 extern Racer* gRacersByPosition[];
 extern GhostRacer* gFastestGhostRacer;
 extern u32 gGameFrameCount;
-extern s32 gPlayerMinimapLapCounterToggle[];
-extern s32 sPlayerMinimapPositions[][4][2];
-extern u8* sCourseMinimapTex;
-extern u16 sCourseMinimapPalette[];
 
 Gfx* func_i3_DrawCourseMinimap(Gfx* gfx, s32 numPlayersIndex, s32 playerIndex) {
     Controller* controller = &gControllers[gPlayerControlPorts[playerIndex]];

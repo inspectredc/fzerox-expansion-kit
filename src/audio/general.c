@@ -177,10 +177,11 @@ void func_80740BE8(u8 arg0) {
 
 void func_80740BF8(u8 playerIndex, u8 arg1) {
 
-    if ((D_80771B6C[playerIndex] == 0) && (arg1 != D_80771D48[playerIndex][0]) && (arg1 != D_80771D48[playerIndex][1]) &&
-        (arg1 != D_80771D48[playerIndex][2]) && (arg1 != D_80771D48[playerIndex][3]) &&
-        (arg1 != D_80771D48[playerIndex][4]) && (arg1 != D_80771D48[playerIndex][5]) &&
-        (arg1 != D_80771D48[playerIndex][6]) && (arg1 != D_80771D48[playerIndex][7])) {
+    if ((D_80771B6C[playerIndex] == 0) && (arg1 != D_80771D48[playerIndex][0]) &&
+        (arg1 != D_80771D48[playerIndex][1]) && (arg1 != D_80771D48[playerIndex][2]) &&
+        (arg1 != D_80771D48[playerIndex][3]) && (arg1 != D_80771D48[playerIndex][4]) &&
+        (arg1 != D_80771D48[playerIndex][5]) && (arg1 != D_80771D48[playerIndex][6]) &&
+        (arg1 != D_80771D48[playerIndex][7])) {
         if (D_80771D38[playerIndex][0] != 0) {
             if (D_80771D38[playerIndex][1] != 0) {
                 if (D_80771D38[playerIndex][2] != 0) {

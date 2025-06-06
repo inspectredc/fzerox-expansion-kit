@@ -5,23 +5,35 @@
 #include "fzx_font.h"
 #include "fzx_assets.h"
 
+u16 D_i3_8006EF60;
+u16 D_i3_8006EF62;
+s32 D_i3_8006EF64;
+s32 D_i3_8006EF68;
+s32 D_i3_8006EF6C;
+s32 D_i3_8006EF70;
+int D_i3_8006EF74;
+s32 D_i3_8006EF78;
+s32 D_i3_8006EF7C;
+s32 D_i3_8006EF80;
+s32 D_i3_8006EF84;
+s16 D_i3_8006EF88;
+s16 D_i3_8006EF8A;
+s16 D_i3_8006EF8C;
+s16 D_i3_8006EF8E;
+s16 D_i3_8006EF90;
+s16 D_i3_8006EF92;
+s16 D_i3_8006EF94;
+s16 sKeyboardCursorX;
+s16 sKeyboardCursorY;
+s16 gRecordNameEnteredLength;
+s16 sEnterKeyboardIndex;
+unk_801437C0 D_i3_8006EFA0[50];
+s16 D_i3_8006F194[3];
+unk_80077D50* D_i3_8006F19C;
+u16 D_i3_8006F1A0;
+
 extern Mtx D_8024E200;
 extern Lights1 D_8024E240;
-extern u16 D_i3_8006EF60;
-extern u16 D_i3_8006EF62;
-extern s32 D_i3_8006EF64;
-extern s32 D_i3_8006EF68;
-extern s32 D_i3_8006EF6C;
-extern s32 D_i3_8006EF70;
-extern int D_i3_8006EF74;
-extern s32 D_i3_8006EF78;
-extern s32 D_i3_8006EF7C;
-extern s32 D_i3_8006EF80;
-extern s32 D_i3_8006EF84;
-extern s16 D_i3_8006EF88;
-extern s16 D_i3_8006EF8A;
-extern s16 D_i3_8006EF8C;
-extern s16 D_i3_8006EF8E;
 
 extern f32 D_8076E568;
 extern f32 D_8076E56C;
@@ -122,8 +134,8 @@ bool func_i3_80065204(void) {
     for (i = 0; i < 5; i++) {
         var_a2 = (i & 1) ? -D_i3_8006EF68 : D_i3_8006EF68;
 
-        v0->vp.vscale[0] = 640;
-        v0->vp.vscale[1] = 480;
+        v0->vp.vscale[0] = SCREEN_WIDTH * 2;
+        v0->vp.vscale[1] = SCREEN_HEIGHT * 2;
         v0->vp.vscale[2] = 0x1FF;
         v0->vp.vscale[3] = 0;
         v0->vp.vtrans[0] = (var_a2 + D_i3_8006EF70 + 45) << 2;
@@ -133,8 +145,8 @@ bool func_i3_80065204(void) {
         v0++;
     }
 
-    v0->vp.vscale[0] = 640;
-    v0->vp.vscale[1] = 480;
+    v0->vp.vscale[0] = SCREEN_WIDTH * 2;
+    v0->vp.vscale[1] = SCREEN_HEIGHT * 2;
     v0->vp.vscale[2] = 0x1FF;
     v0->vp.vscale[3] = 0;
     v0->vp.vtrans[0] = (D_i3_8006EF68 + D_i3_8006EF7C + 36) << 2;
@@ -570,12 +582,6 @@ void func_i3_80067208(void) {
 }
 
 extern s8 gRecordNameEntered[];
-extern s16 sKeyboardCursorX;
-extern s16 sKeyboardCursorY;
-extern s16 sEnterKeyboardIndex;
-extern s16 D_i3_8006EF90;
-extern s16 D_i3_8006EF94;
-extern s16 gRecordNameEnteredLength;
 
 void func_i3_80067280(void) {
     s32 i;
@@ -614,8 +620,7 @@ void func_i3_8006735C(void) {
     }
 }
 
-extern unk_801437C0 D_i3_8006EFA0[];
-extern signed char sNameKeyboardCharacters[];
+signed char sNameKeyboardCharacters[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ'!.,0123456789       >-<";
 
 void func_i3_8006740C(s32 arg0) {
     unk_801437C0* var_s0;
@@ -685,10 +690,6 @@ void func_i3_800675B4(s32 arg0) {
     }
 }
 
-extern s16 D_i3_8006F194[];
-extern s16 D_i3_8006EF90;
-extern unk_80077D50* D_i3_8006F19C;
-extern u16 D_i3_8006F1A0;
 extern unk_80077D50* sFont1CompTexInfos[];
 extern u16 gInputPressed;
 extern u16 gInputButtonPressed;
@@ -857,8 +858,8 @@ void func_i3_800678D8(void) {
         temp_fv0 = (s16) sp60 - spFC->height * 0.5f;
         spB8 = (s16) sp64 + 8.0f;
         vp = &gGfxPool->unk_362C8[1];
-        vp->vp.vscale[0] = 0x500;
-        vp->vp.vscale[1] = 0x3C0;
+        vp->vp.vscale[0] = SCREEN_WIDTH * 4;
+        vp->vp.vscale[1] = SCREEN_HEIGHT * 4;
         vp->vp.vscale[2] = 0x1FF;
         vp->vp.vscale[3] = 0;
         vp->vp.vtrans[0] = spB8 * 4.0f;
@@ -930,8 +931,7 @@ void func_i3_80068414(CourseInfo* courseInfo) {
     }
 }
 
-extern signed char D_i3_8006C5A4[];
-extern s16 D_i3_8006EF92;
+signed char D_i3_8006C5A4[] = "NAME ENTRY";
 
 Gfx* func_i3_800684CC(Gfx* gfx) {
     s32 i;
