@@ -108,8 +108,8 @@ typedef enum Cup {
     /* 3 */ JOKER_CUP,
     /* 4 */ X_CUP,
     /* 5 */ EDIT_CUP,
-    /* 6 */ CUP_6,
-    /* 7 */ CUP_7,
+    /* 6 */ DD_1_CUP,
+    /* 7 */ DD_2_CUP,
 } Cup;
 
 #endif // FZX_GAME_H

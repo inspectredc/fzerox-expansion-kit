@@ -1,5 +1,6 @@
 #include "global.h"
 #include "ovl_i2.h"
+#include "fzx_font.h"
 #include "fzx_assets.h"
 
 unk_80077D50 sFont1ACompTexInfo[] = { { 17, aFont1ATex, TEX_WIDTH(aFont1ATex), TEX_HEIGHT(aFont1ATex),
@@ -1504,9 +1505,9 @@ void Font_LoadString(s8* str, s32 fontSet) {
     }
     while (*str != 0) {
         if (fontSet == 4) {
-            fontChar = Font_GetCharIndex(str, 1);
+            fontChar = Font_GetCharIndex(str, FONT_SET_HAS_LOWERCASE);
         } else {
-            fontChar = Font_GetCharIndex(str, 0);
+            fontChar = Font_GetCharIndex(str, FONT_SET_UPPERCASE_ONLY);
         }
         if (fontChar >= 0) {
             func_i2_800AE17C(fontCharTexInfos[fontChar], 0, true);

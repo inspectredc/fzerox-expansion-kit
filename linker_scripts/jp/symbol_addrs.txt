@@ -113,7 +113,7 @@ sMaxCameraLookBackRotate = 0x8076D8B4;
 
 sPosition1PMarkerTexs = 0x8076D8C0;
 sPositionMPMarkerTexs = 0x8076D8CC;
-D_8076DBD0 = 0x8076DBD0; // size:0x5A0
+D_8076DBD0 = 0x8076DBD0; // size:0x2D0
 D_8076DEA0 = 0x8076DEA0;
 sMachineLoadTexturesFuncs = 0x8076DEB8;
 sMachineDrawFuncs = 0x8076DF3C;

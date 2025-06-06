@@ -1614,7 +1614,6 @@ void func_8071CE08(Racer* arg0) {
 extern OSMesgQueue D_8079A0F0;
 extern GfxPool D_8024E260[];
 extern s16 gRacerPositionsById[];
-extern s32 gPlayerControlPorts[];
 extern s16 gPlayer1OverallPosition;
 
 void func_8071D48C(void) {
