@@ -1108,13 +1108,305 @@ void func_i3_8005DEB8(void) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i3/CB690/func_i3_DrawRacePortraits.s")
+extern TexturePtr sPositionTextures[];
+extern s32 sPortraitPositionYPos[];
+extern s32 sPortraitYPosOffsets[];
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i3/CB690/func_i3_8005E70C.s")
+Gfx* func_i3_DrawRacePortraits(Gfx* gfx) {
+    s32 i;
+    s32 position;
+    s32 portraitWidth;
+    s32 portraitHeight;
+    s32 portraitBaseXPos;
+    s32 portraitBaseYPos;
+    f32 scale;
+    Racer* racer;
+    s32 character;
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i3/CB690/func_i3_DrawRaceTimeInterval.s")
+    gSPDisplayList(gfx++, D_8014940);
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i3/CB690/func_i3_UpdateRaceIntervalInfo.s")
+    func_i3_UpdatePortraitScales();
+
+    // Draw Top 6 Positions for GAMEMODE_GP_RACE, otherwise draw just the player
+    for (position = 0, i = 0; i < 6; i++, position++) {
+        if (gTotalRacers == i) {
+            break;
+        }
+
+        if ((gGameMode == GAMEMODE_PRACTICE) || (gGameMode == GAMEMODE_DEATH_RACE)) {
+            racer = gRacers;
+        } else {
+            racer = gRacersByPosition[position];
+        }
+        if (i < 3) {
+            scale = 1.0f;
+            scale *= sPortraitTextureScale[racer->id];
+
+            portraitWidth = Math_Round(32.0f * scale);
+            portraitHeight = Math_Round(32.0f * scale);
+            portraitBaseXPos = (32 - portraitWidth) / 2;
+            portraitBaseYPos = (32 - portraitHeight) / 2;
+        } else {
+            scale = 0.75f;
+            scale *= sPortraitTextureScale[racer->id];
+
+            portraitWidth = Math_Round(32.0f * scale);
+            portraitHeight = Math_Round(32.0f * scale);
+            portraitBaseXPos = (24.0f - portraitWidth) / 2;
+            portraitBaseYPos = (24.0f - portraitHeight) / 2;
+        }
+        character = racer->character;
+        gDPPipeSync(gfx++);
+        gDPLoadTextureBlock(gfx++, gCharacterPortraitTextures[character], G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32, 0,
+                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                            G_TX_NOLOD);
+
+        gSPTextureRectangle(gfx++, (portraitBaseXPos + 24) << 2, (portraitBaseYPos + sPortraitYPosOffsets[i]) << 2,
+                            Math_Round(portraitBaseXPos + 24 + portraitWidth) << 2,
+                            Math_Round(portraitBaseYPos + sPortraitYPosOffsets[i] + portraitHeight) << 2, 0, 0, 0,
+                            Math_Round(1024.0f / scale), Math_Round(1024.0f / scale));
+
+        if (gGameMode != GAMEMODE_GP_RACE) {
+            break;
+        }
+
+        gDPPipeSync(gfx++);
+
+        gDPLoadTextureBlock(gfx++, sPositionTextures[position], G_IM_FMT_RGBA, G_IM_SIZ_16b, 16, 6, 0,
+                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                            G_TX_NOLOD);
+        gSPTextureRectangle(gfx++, 24 << 2, sPortraitPositionYPos[i] << 2, (24 + 16) << 2,
+                            (sPortraitPositionYPos[i] + 6) << 2, 0, 0, 0, Math_Round(1024.0f), Math_Round(1024.0f));
+
+        // Flash effect around border of players character portrait
+        if ((gRacers[0].position - 1 == i) && ((gGameFrameCount % 20U) >= 5)) {
+            gDPPipeSync(gfx++);
+            gDPLoadTextureBlock(gfx++, aCharacterPortraitHighlightBorderTex, G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32, 0,
+                                G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
+                                G_TX_NOLOD, G_TX_NOLOD);
+
+            gSPTextureRectangle(gfx++, (portraitBaseXPos + 24) << 2, (portraitBaseYPos + sPortraitYPosOffsets[i]) << 2,
+                                Math_Round(portraitBaseXPos + 24 + portraitWidth) << 2,
+                                Math_Round(portraitBaseYPos + sPortraitYPosOffsets[i] + portraitHeight) << 2, 0, 0, 0,
+                                (s32) (1024.0f / scale), (s32) (1024.0f / scale));
+        }
+    }
+    return gfx;
+}
+
+Gfx* func_i3_DrawTimerWithPosition(Gfx* gfx, s32 time, s32 left, s32 top, f32 scale) {
+    s32 offset = 0;
+    UNUSED s32 pad;
+    s32 timeField;
+
+    gDPPipeSync(gfx++);
+    gDPSetCombineLERP(gfx++, PRIMITIVE, 0, TEXEL0, 0, PRIMITIVE, 0, TEXEL0, 0, PRIMITIVE, 0, TEXEL0, 0, PRIMITIVE, 0,
+                      TEXEL0, 0);
+    gDPSetPrimColor(gfx++, 0, 0, 255, 255, 0, 255);
+
+    if (time >= MAX_TIMER) {
+        time = MAX_TIMER;
+    }
+    timeField = time / 60000;
+
+    if (timeField < 10) {
+        gfx = func_i3_DrawTimerDigitRectangle(gfx, left + offset, top, 0, scale);
+        offset += 8;
+        gfx = func_i3_DrawTimerDigitRectangle(gfx, left + offset, top, timeField, scale);
+        offset += 8;
+    } else {
+        gfx = func_i3_DrawTimerDigitRectangle(gfx, left + offset, top, timeField / 10, scale);
+        offset += 8;
+        gfx = func_i3_DrawTimerDigitRectangle(gfx, left + offset, top, timeField % 10, scale);
+        offset += 8;
+    }
+    time -= (timeField * 60000);
+    timeField = time / 1000;
+
+    gfx = func_i3_DrawTimerDigitRectangle(gfx, left + offset, top, TIMER_DIGIT_PRIME, scale);
+    offset += 8;
+    if (timeField < 10) {
+        gfx = func_i3_DrawTimerDigitRectangle(gfx, left + offset, top, 0, scale);
+        offset += 8;
+        gfx = func_i3_DrawTimerDigitRectangle(gfx, left + offset, top, timeField, scale);
+        offset += 8;
+    } else {
+        gfx = func_i3_DrawTimerDigitRectangle(gfx, left + offset, top, timeField / 10, scale);
+        offset += 8;
+        gfx = func_i3_DrawTimerDigitRectangle(gfx, left + offset, top, timeField % 10, scale);
+        offset += 8;
+    }
+
+    time -= timeField * 1000;
+    timeField = time / 10;
+
+    gfx = func_i3_DrawTimerDigitRectangle(gfx, left + offset, top, TIMER_DIGIT_DOUBLE_PRIME, scale);
+    offset += 8;
+    if (timeField < 10) {
+        gfx = func_i3_DrawTimerDigitRectangle(gfx, left + offset, top, 0, scale);
+        offset += 8;
+        gfx = func_i3_DrawTimerDigitRectangle(gfx, left + offset, top, timeField, scale);
+    } else {
+        gfx = func_i3_DrawTimerDigitRectangle(gfx, left + offset, top, timeField / 10, scale);
+        offset += 8;
+        gfx = func_i3_DrawTimerDigitRectangle(gfx, left + offset, top, timeField % 10, scale);
+    }
+    return gfx;
+}
+
+Gfx* func_i3_DrawRaceTimeInterval(Gfx* gfx, s32 time, s32 left, s32 top, f32 scale) {
+    s32 offset = 0;
+    UNUSED s32 pad;
+    s32 timeField;
+
+    gDPPipeSync(gfx++);
+    gDPSetCycleType(gfx++, G_CYC_1CYCLE);
+    gDPSetAlphaCompare(gfx++, G_AC_NONE);
+    gDPSetRenderMode(gfx++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
+    gDPSetCombineLERP(gfx++, PRIMITIVE, 0, TEXEL0, 0, PRIMITIVE, 0, TEXEL0, 0, PRIMITIVE, 0, TEXEL0, 0, PRIMITIVE, 0,
+                      TEXEL0, 0);
+    gDPSetPrimColor(gfx++, 0, 0, 255, 255, 0, 255);
+
+    if (time >= MAX_TIMER) {
+        time = MAX_TIMER;
+    }
+    if (time <= -MAX_TIMER) {
+        time = -MAX_TIMER;
+    }
+    if (time < -4) {
+        gfx = func_i3_DrawTimerDigitRectangle(gfx, left + offset, top, TIMER_DIGIT_MINUS, scale);
+        time = -time;
+    } else {
+        gfx = func_i3_DrawTimerDigitRectangle(gfx, left + offset, top, TIMER_DIGIT_PLUS, scale);
+    }
+    if (time < 0) {
+        time = -time;
+    }
+
+    offset += 8;
+
+    timeField = time / 60000;
+
+    if (timeField < 10) {
+        gfx = func_i3_DrawTimerDigitRectangle(gfx, left + offset, top, 0, scale);
+        offset += 8;
+        gfx = func_i3_DrawTimerDigitRectangle(gfx, left + offset, top, timeField, scale);
+        offset += 8;
+    } else {
+        gfx = func_i3_DrawTimerDigitRectangle(gfx, left + offset, top, timeField / 10, scale);
+        offset += 8;
+        gfx = func_i3_DrawTimerDigitRectangle(gfx, left + offset, top, timeField % 10, scale);
+        offset += 8;
+    }
+
+    time -= timeField * 60000;
+    timeField = time / 1000;
+
+    gfx = func_i3_DrawTimerDigitRectangle(gfx, left + offset, top, TIMER_DIGIT_PRIME, scale);
+
+    offset += 8;
+
+    if (timeField < 10) {
+        gfx = func_i3_DrawTimerDigitRectangle(gfx, left + offset, top, 0, scale);
+        offset += 8;
+        gfx = func_i3_DrawTimerDigitRectangle(gfx, left + offset, top, timeField, scale);
+        offset += 8;
+    } else {
+        gfx = func_i3_DrawTimerDigitRectangle(gfx, left + offset, top, timeField / 10, scale);
+        offset += 8;
+        gfx = func_i3_DrawTimerDigitRectangle(gfx, left + offset, top, timeField % 10, scale);
+        offset += 8;
+    }
+
+    time -= timeField * 1000;
+    timeField = time / 10;
+
+    gfx = func_i3_DrawTimerDigitRectangle(gfx, left + offset, top, TIMER_DIGIT_DOUBLE_PRIME, scale);
+
+    offset += 8;
+
+    if (timeField < 10) {
+        gfx = func_i3_DrawTimerDigitRectangle(gfx, left + offset, top, 0, scale);
+        offset += 8;
+        gfx = func_i3_DrawTimerDigitRectangle(gfx, left + offset, top, timeField, scale);
+    } else {
+        gfx = func_i3_DrawTimerDigitRectangle(gfx, left + offset, top, timeField / 10, scale);
+        offset += 8;
+        gfx = func_i3_DrawTimerDigitRectangle(gfx, left + offset, top, timeField % 10, scale);
+    }
+    return gfx;
+}
+
+extern s32 sLeadRivalRaceTime[];
+extern s32 sPlayerLeadInterval[];
+extern s32 sIntervalPositions[][4][2];
+
+extern GhostRacer* gFastestGhostRacer;
+
+Gfx* func_i3_UpdateRaceIntervalInfo(Gfx* gfx, s32 numPlayersIndex, s32 playerIndex, f32 scale) {
+    Racer* leadRivalRacer;
+    s32 i;
+    s32 raceTime;
+    s32 completedLaps;
+
+    if (D_i3_8006D678[playerIndex].lapIntervalCounter != 0) {
+        D_i3_8006D678[playerIndex].lapIntervalCounter--;
+    } else {
+        return gfx;
+    }
+
+    if (gGameMode == GAMEMODE_PRACTICE) {
+        return gfx;
+    }
+    if ((gGameMode == GAMEMODE_TIME_ATTACK) && (gFastestGhostRacer == NULL)) {
+        return gfx;
+    }
+
+    // Update lap interval on first frame of new lap update
+    if (D_i3_8006D678[playerIndex].lapIntervalCounter == 89) {
+
+        completedLaps = gPlayerLapNumbers[playerIndex] - 1;
+
+        // Select leading racer that isn't this player
+        if (gRacers[playerIndex].position == 1) {
+            leadRivalRacer = gRacersByPosition[1];
+        } else {
+            leadRivalRacer = gRacersByPosition[0];
+        }
+
+        sLeadRivalRaceTime[playerIndex] = 0;
+
+        if (gGameMode == GAMEMODE_TIME_ATTACK) {
+            for (i = 0; i < completedLaps; i++) {
+                sLeadRivalRaceTime[playerIndex] += gFastestGhostRacer->ghost->lapTimes[i];
+            }
+        } else {
+            for (i = 0; i < completedLaps; i++) {
+                sLeadRivalRaceTime[playerIndex] += leadRivalRacer->lapTimes[i];
+            }
+        }
+
+        raceTime = 0;
+        for (i = 0; i < completedLaps; i++) {
+            raceTime += gRacers[playerIndex].lapTimes[i];
+        }
+
+        sPlayerLeadInterval[playerIndex] = raceTime - sLeadRivalRaceTime[playerIndex];
+
+        if (sPlayerLeadInterval[playerIndex] >= 0) {
+            sPlayerLeadInterval[playerIndex] += 5;
+        } else {
+            sPlayerLeadInterval[playerIndex] -= 5;
+        }
+    }
+    if ((D_i3_8006D678[playerIndex].lapIntervalCounter % 20) >= 5) {
+        gfx = func_i3_DrawRaceTimeInterval(gfx, sPlayerLeadInterval[playerIndex],
+                                           sIntervalPositions[numPlayersIndex][playerIndex][0],
+                                           sIntervalPositions[numPlayersIndex][playerIndex][1], scale);
+    }
+
+    return gfx;
+}
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i3/CB690/func_i3_DrawReverse.s")
 
