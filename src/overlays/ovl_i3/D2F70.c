@@ -3,24 +3,274 @@
 #include "fzx_game.h"
 #include "fzx_assets.h"
 
-extern s32 D_i3_8006D950;
-extern s16 D_i3_8006D954;
-extern s16 D_i3_8006D95A;
-extern s16 D_i3_8006D95C;
-extern s16 D_i3_8006D95E;
-extern unk_80142180 D_i3_8006D960;
-extern u16 D_i3_8006D968;
-extern s32 D_i3_8006D96C;
-extern TexturePtr sSkyboxTexture;
-extern TexturePtr sVenueTexture;
-extern TexturePtr sCloudTexture;
-extern s32 D_i3_8006D97C;
+unk_80141FF0 D_i3_8006D7D0[4];
+s32 D_i3_8006D950;
+s16 D_i3_8006D954;
+s16 D_i3_8006D956;
+s16 D_i3_8006D958;
+s16 D_i3_8006D95A;
+s16 D_i3_8006D95C;
+s16 D_i3_8006D95E;
+unk_80142180 D_i3_8006D960;
+u16 D_i3_8006D968;
+s32 D_i3_8006D96C;
+TexturePtr sSkyboxTexture;
+TexturePtr sVenueTexture;
+TexturePtr sCloudTexture;
+TexturePtr D_i3_8006D97C;
+unk_801421A0 D_i3_8006D980[6];
+unk_80142248 D_i3_8006DA28[6];
+unk_80142320 D_i3_8006DB00[100];
+s32 D_i3_8006EF50;
+
+f32 D_i3_8006BDC0 = 50.0f;
+f32 D_i3_8006BDC4 = 400.0f;
+f32 D_i3_8006BDC8 = 100.0f;
+
+/*
+    VENUE TEXTURES
+ */
+
+// MUTE CITY
+CourseVenue sVenueMuteCity = { aVenueMuteCityTex, 0.03f, 0.03f, 0.0f, 0.0f };
+
+// PORT TOWN
+CourseVenue sVenuePortTown = { aVenuePortTownTex, 0.03f, 0.03f, 0.0f, 0.0f };
+
+// BIG BLUE / RAINBOW ROAD
+CourseVenue sVenueBigBlue = { aVenueBigBlueTex, 0.03f, 0.03f, 0.01f, 0.01f };
+
+// SAND OCEAN
+CourseVenue sVenueSandOcean = { aVenueSandOceanTex, 0.03f, 0.03f, 0.0f, 0.0f };
+
+// DEVILS FOREST / BIG HAND
+CourseVenue sVenueDevilsForest = { aVenueDevilsForestTex, 0.03f, 0.03f, 0.0f, 0.0f };
+
+// WHITE LAND
+CourseVenue sVenueWhiteLand = { aVenueWhiteLandTex, 0.03f, 0.03f, 0.0f, 0.0f };
+
+// SECTORS / SPACE PLANT
+CourseVenue sVenueSector = { aVenueSectorTex, 0.03f, 0.03f, 0.0f, 0.0f };
+
+// RED CANYON
+CourseVenue sVenueRedCanyon = { aVenueRedCanyonTex, 0.03f, 0.03f, 0.0f, 0.0f };
+
+// FIRE FIELD
+CourseVenue sVenueFireField = { aVenueFireFieldTex, 0.03f, 0.03f, 0.005f, 0.005f };
+
+// SILENCE
+CourseVenue sVenueSilence = { aVenueSilenceTex, 0.03f, 0.03f, 0.0f, 0.0f };
+
+CourseVenue* D_i3_8006BE94[] = {
+    &sVenueMuteCity, &sVenuePortTown,  &sVenueBigBlue,   &sVenueSandOcean, &sVenueDevilsForest, &sVenueWhiteLand,
+    &sVenueSector,   &sVenueRedCanyon, &sVenueFireField, &sVenueSilence,   &sVenueMuteCity,
+};
+
+/*
+    BACKGROUND SKYBOXES
+ */
+
+// PURPLE SKIES
+// MUTE CITY / WHITE LAND
+CourseSkyboxes sSkyboxPurple = { aSkyboxPurpleTex, 252, 192, 253, 0, 0, 0, 200, 130, 240, 0, 2 };
+
+// TURQUOISE SKIES
+// SILENCE 2
+CourseSkyboxes sSkyboxTurquoise = { aSkyboxTurquoiseTex, 155, 247, 245, 210, 255, 230, 155, 247, 245, 0, 2 };
+
+// DESERT YELLOW
+// SAND OCEAN
+CourseSkyboxes sSkyboxDesert = { aSkyboxDesertTex, 224, 234, 210, 0, 0, 0, 225, 190, 160, 0, 2 };
+
+// BLUE
+CourseSkyboxes sSkyboxBlue = { aSkyboxBlueTex, 151, 194, 218, 210, 255, 230, 151, 194, 218, 0, 2 };
+
+// NIGHT
+// SILENCE / MUTE CITY 2
+CourseSkyboxes sSkyboxNight = { aSkyboxNightTex, 2, 2, 23, 245, 162, 99, 125, 155, 185, 0, 5 };
+
+// ORANGE DAY
+// DEVILS FOREST / SECTOR ALPHA
+CourseSkyboxes sSkyboxOrange = { aSkyboxOrangeTex, 255, 224, 144, 0, 0, 0, 255, 224, 204, 0, 2 };
+
+// SUNSET
+// PORT TOWN / DEVILS FOREST 2 / FIRE FIELD
+CourseSkyboxes sSkyboxSunset = { aSkyboxSunsetTex, 245, 162, 99, 0, 0, 0, 245, 162, 99, 0, 2 };
+
+// SKY BLUE
+// BIG BLUE 1 & 2 / RED CANYON
+CourseSkyboxes sSkyboxSkyBlue = { aSkyboxSkyBlueTex, 250, 255, 255, 0, 0, 0, 180, 200, 180, 0, 2 };
+
+CourseSkyboxes* D_i3_8006BF40[] = {
+    &sSkyboxPurple, &sSkyboxTurquoise, &sSkyboxDesert, &sSkyboxBlue,
+    &sSkyboxNight,  &sSkyboxOrange,    &sSkyboxSunset, &sSkyboxSkyBlue,
+};
+
+/*
+    BACKGROUND SPRITES AND PALETTES
+ */
+
+TexturePtr D_i3_8006BF60[][2] = {
+    { NULL, NULL },           { D_F220810, D_F221010 }, { D_F221210, D_F221A10 }, { D_F221C10, D_F222410 },
+    { D_F222610, D_F222E10 }, { D_F223010, D_F223810 }, { D_F223A10, D_F224210 }, { D_F224410, D_F224C10 },
+    { D_F224E10, D_F225610 }, { D_F225810, D_F226010 }, { D_F226210, D_F226A10 }, { D_F226C10, D_F227410 },
+    { D_F227610, D_F227E10 }, { D_F228010, D_F228810 }, { D_F228A10, D_F229210 }, { D_F229410, D_F229C10 },
+    { D_F229E10, D_F22A610 }, { D_F22A810, D_F22B010 }, { D_F22B210, D_F22BA10 }, { D_F22BC10, D_F22C410 },
+    { D_F22C610, D_F22CE10 }, { D_F22D010, D_F22D810 }, { D_F22DA10, D_F22E210 }, { D_F22E410, D_F22EC10 },
+    { D_F22EE10, D_F22F610 }, { D_F22F810, D_F230010 }, { D_F230210, D_F230A10 }, { D_F230C10, D_F231410 },
+    { D_F231610, D_F231E10 }, { D_F232010, D_F232810 }, { D_F232A10, D_F233210 }, { D_F233410, D_F233C10 },
+    { D_F233E10, D_F234610 }, { D_F234810, D_F235010 }, { D_F235210, D_F235A10 }, { D_F235C10, D_F236410 },
+    { D_F236610, D_F236E10 }, { D_F237010, D_F237810 }, { D_F237A10, D_F238210 }, { D_F238410, D_F238C10 },
+    { D_F238E10, D_F239610 }, { D_F239810, D_F23A010 }, { D_F23A210, D_F23AA10 }, { D_F23AC10, D_F23B410 },
+    { D_F23B610, D_F23BE10 }, { D_F23C010, D_F23C810 }, { D_F23CA10, D_F23D210 }, { D_F23D410, D_F23DC10 },
+    { D_F23DE10, D_F23E610 }, { D_F23E810, D_F23F010 }, { D_F23F210, D_F23FA10 }, { D_F23FC10, D_F240410 },
+    { D_F240610, D_F240E10 }, { D_F241010, D_F241810 }, { D_F241A10, D_F242210 }, { D_F242410, D_F242C10 },
+};
+
+unk_80140E58 D_i3_8006C120[] = {
+    { 1, 0.0f }, { 2, 60.0f }, { 3, 120.0f }, { 4, 150.0f }, { 1, 240.0f }, { 2, 300.0f }, { 0, 0.0f },
+};
+
+unk_80140E58 D_i3_8006C158[] = {
+    { 54, 0.0f },
+    { 55, 180.0f },
+    { 0, 0.0f },
+};
+
+unk_80140E58 D_i3_8006C170[] = {
+    { 5, 0.0f }, { 17, 60.0f }, { 5, 120.0f }, { 17, 180.0f }, { 5, 240.0f }, { 17, 300.0f }, { 0, 0.0f },
+};
+
+unk_80140E58 D_i3_8006C1A8[] = {
+    { 5, 0.0f }, { 6, 60.0f }, { 7, 120.0f }, { 8, 180.0f }, { 5, 240.0f }, { 6, 300.0f }, { 0, 0.0f },
+};
+
+unk_80140E58 D_i3_8006C1E0[] = {
+    { 33, 0.0f }, { 34, 60.0f }, { 35, 120.0f }, { 36, 180.0f }, { 33, 240.0f }, { 34, 300.0f }, { 0, 0.0f },
+};
+
+unk_80140E58 D_i3_8006C218[] = {
+    { 9, 0.0f },
+    { 10, 120.0f },
+    { 11, 240.0f },
+    { 0, 0.0f },
+};
+
+unk_80140E58 D_i3_8006C238[] = {
+    { 21, 0.0f },
+    { 22, 120.0f },
+    { 23, 240.0f },
+    { 0, 0.0f },
+};
+
+unk_80140E58 D_i3_8006C258[] = {
+    { 17, 0.0f }, { 18, 60.0f }, { 19, 120.0f }, { 20, 180.0f }, { 17, 240.0f }, { 18, 300.0f }, { 0, 0.0f },
+};
+
+unk_80140E58 D_i3_8006C290[] = {
+    { 5, 0.0f }, { 7, 60.0f }, { 7, 120.0f }, { 8, 180.0f }, { 5, 240.0f }, { 6, 300.0f }, { 0, 0.0f },
+};
+
+unk_80140E58 D_i3_8006C2C8[] = {
+    { 39, 0.0f }, { 40, 60.0f }, { 41, 120.0f }, { 42, 180.0f }, { 39, 240.0f }, { 40, 300.0f }, { 0, 0.0f },
+};
+
+unk_80140E58 D_i3_8006C300[] = {
+    { 33, 0.0f },
+    { 34, 120.0f },
+    { 35, 240.0f },
+    { 0, 0.0f },
+};
+
+unk_80140E58 D_i3_8006C320[] = {
+    { 29, 0.0f },
+    { 30, 120.0f },
+    { 31, 240.0f },
+    { 0, 0.0f },
+};
+
+unk_80140E58 D_i3_8006C340[] = {
+    { 0, 0.0f },
+};
+
+unk_80140E58 D_i3_8006C348[] = {
+    { 0, 0.0f },
+};
+
+unk_80140E58 D_i3_8006C350[] = {
+    { 21, 0.0f },
+    { 22, 120.0f },
+    { 23, 240.0f },
+    { 0, 0.0f },
+};
+
+unk_80140E58 D_i3_8006C370[] = {
+    { 0, 0.0f },
+};
+
+unk_80140E58 D_i3_8006C378[] = {
+    { 0, 0.0f },
+};
+
+unk_80140E58 D_i3_8006C380[] = {
+    { 1, 0.0f }, { 2, 60.0f }, { 3, 120.0f }, { 4, 150.0f }, { 1, 240.0f }, { 2, 300.0f }, { 0, 0.0f },
+};
+
+unk_80140E58 D_i3_8006C3B8[] = {
+    { 0, 0.0f },
+};
+
+unk_80140E58 D_i3_8006C3C0[] = {
+    { 0, 0.0f },
+};
+
+unk_80140E58 D_i3_8006C3C8[] = {
+    { 21, 0.0f },
+    { 22, 120.0f },
+    { 23, 240.0f },
+    { 0, 0.0f },
+};
+
+unk_80140E58 D_i3_8006C3E8[] = {
+    { 0, 0.0f },
+};
+
+unk_80140E58 D_i3_8006C3F0[] = {
+    { 13, 0.0f },
+    { 14, 120.0f },
+    { 15, 240.0f },
+    { 0, 0.0f },
+};
+
+unk_80140E58 D_i3_8006C410[] = {
+    { 25, 0.0f }, { 26, 60.0f }, { 27, 120.0f }, { 28, 180.0f }, { 26, 300.0f }, { 0, 0.0f },
+};
+
+unk_80140E58 D_i3_8006C440[] = {
+    { 44, 0.0f }, { 45, 60.0f }, { 46, 120.0f }, { 47, 180.0f }, { 44, 240.0f }, { 45, 300.0f }, { 0, 0.0f },
+};
+
+unk_80140E58* D_i3_8006C478[] = {
+    D_i3_8006C120, D_i3_8006C158, D_i3_8006C170, D_i3_8006C1A8, D_i3_8006C1E0, D_i3_8006C218,
+    D_i3_8006C238, D_i3_8006C258, D_i3_8006C290, D_i3_8006C2C8, D_i3_8006C300, D_i3_8006C320,
+    D_i3_8006C340, D_i3_8006C348, D_i3_8006C350, D_i3_8006C370, D_i3_8006C378, D_i3_8006C380,
+    D_i3_8006C3B8, D_i3_8006C3C0, D_i3_8006C3C8, D_i3_8006C3E8, D_i3_8006C3F0, D_i3_8006C410,
+};
+
+s16 D_i3_8006C4D8[] = { 1,  2,  3,  4,  5,  6,  7,  8,  9,  10, 11, 12, 17, 18, 19, 20, 21,
+                        22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38 };
+
+s16 D_i3_8006C51C[] = { 13, 14, 15, 16, 39, 40, 41, 42, 45, 46, 47, 51, 54, 55 };
+
+UNUSED s32 D_i3_8006C538[10] = { 0 };
+
+s8 D_i3_8006C560[][3] = {
+    { 31, 10, 0 }, { 0, 15, 31 }, { 31, 31, 10 }, { 0, 0, 0 }, { 0, 0, 0 },
+};
+
 extern s32 gSkyboxType;
 extern s32 gVenueType;
 extern bool D_8076CE20;
-extern CourseVenue* D_i3_8006BE94[];
-extern CourseSkyboxes* D_i3_8006BF40[];
-extern unk_80141FF0 D_i3_8006D7D0[];
 extern s32 gNumPlayers;
 extern s32 gCourseIndex;
 extern s32 gGameMode;
@@ -132,9 +382,6 @@ void func_i3_80061B34(Player* player, unk_80141FF0* arg1, CourseVenue* arg2, f32
     arg1->unk_3C.unk_1C = arg4;
     arg1->unk_5C = player->unk_AC / player->unk_A8;
 }
-
-extern f32 D_i3_8006BDC8;
-extern s16 D_i3_8006D956;
 
 extern GfxPool* gGfxPool;
 
@@ -625,16 +872,6 @@ Gfx* func_i3_8006339C(Gfx* gfx, s32 playerIndex, s32 arg2) {
     return gfx;
 }
 
-extern s16 D_i3_8006D956;
-extern unk_80140E58* D_i3_8006C478[];
-extern unk_80140E58 D_i3_8006C440[];
-extern s16 D_i3_8006C51C[];
-extern s16 D_i3_8006C4D8[];
-extern f32 D_i3_8006BDC4;
-extern unk_801421A0 D_i3_8006D980[];
-extern void* D_i3_8006BF60[][2];
-extern s16 D_i3_8006D958;
-extern unk_80142248 D_i3_8006DA28[];
 extern GfxPool D_8024E260[];
 extern s32 D_8076C950;
 extern s16 gPlayer1OverallPosition;
@@ -794,8 +1031,6 @@ void func_i3_800639E0(void) {
     }
 }
 
-extern f32 D_i3_8006BDC0;
-
 void func_i3_80063F88(void) {
     s32 i;
     s32 j;
@@ -847,8 +1082,6 @@ void func_i3_80063F88(void) {
         }
     }
 }
-
-extern s8 D_i3_8006C560[][3];
 
 #define PACK_5551(r, g, b, a) (((((r) << 11) | ((g) << 6)) | ((b) << 1)) | (a))
 
@@ -916,9 +1149,6 @@ Gfx* func_i3_8006436C(Gfx* gfx) {
     gDPSetTextureLUT(gfx++, G_TT_NONE);
     return gfx;
 }
-
-extern s32 D_i3_8006EF50;
-extern unk_80142320 D_i3_8006DB00[];
 
 void func_i3_80064754(void) {
     unk_80142320* var_s0;
