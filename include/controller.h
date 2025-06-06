@@ -67,5 +67,6 @@ typedef struct Controller {
 
 extern OSContStatus gControllerStatus[];
 extern Controller gControllers[];
+extern s32 gPlayerControlPorts[];
 
 #endif // CONTROLLER

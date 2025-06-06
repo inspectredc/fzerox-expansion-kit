@@ -39,20 +39,30 @@
     bss_size: 0x21C0
     symbol_name_format: i3_$VRAM
     subsegments:
-      - [0xB0AB0, c]
-      - [0xB5EF0, c]
+      - [0xB0AB0, c, cpu]
+      - [0xB5EF0, c, menus]
       - [0xCB560, c]
-      - [0xCB690, c]
-      - [0xD1F80, c]
-      - [0xD2F70, c]
-      - [0xD66F0, c]
-      - [0xDA560, data]
-      - [0xDDD80, .rodata, B0AB0]
-      - [0xDDF30, .rodata, B5EF0]
-      - [0xDE710, .rodata, CB690]
-      - [0xDE720, .rodata, D2F70]
-      - [0xDE790, .rodata, D66F0]
-      - { type: bss, vram: 0x8006CFF0 }
+      - [0xCB690, c, hud]
+      - [0xD1F80, c, minimap]
+      - [0xD2F70, c, background]
+      - [0xD66F0, c, records_entry]
+      - [0xDA560, .data, cpu]
+      - [0xDCAE0, .data, menus]
+      - [0xDCDB0, .data, hud]
+      - [0xDD4F0, .data, minimap]
+      - [0xDD590, .data, background]
+      - [0xDDD40, .data, records_entry]
+      - [0xDDD80, .rodata, cpu]
+      - [0xDDF30, .rodata, menus]
+      - [0xDE710, .rodata, hud]
+      - [0xDE720, .rodata, background]
+      - [0xDE790, .rodata, records_entry]
+      - { type: .bss, vram: 0x8006CFF0, name: cpu }
+      - { type: .bss, vram: 0x8006D090, name: menus }
+      - { type: .bss, vram: 0x8006D600, name: hud }
+      - { type: .bss, vram: 0x8006D7C0, name: minimap }
+      - { type: .bss, vram: 0x8006D7D0, name: background }
+      - { type: .bss, vram: 0x8006EF60, name: records_entry }
 
   - name: ovl_i4
     exclusive_ram_id: ovl_i4

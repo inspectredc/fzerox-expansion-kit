@@ -2527,7 +2527,6 @@ void func_807181F8(Player* player, unk_struct_F8* arg1) {
 }
 
 extern s16 D_807A16CC;
-extern s32 gPlayerControlPorts[];
 extern s32 gCurrentGhostType;
 extern s32 gFastestGhostTime;
 

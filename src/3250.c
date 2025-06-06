@@ -50,7 +50,6 @@ void Controller_ClearInputs(void) {
 }
 
 extern OSContPad gControllerPads[];
-extern s32 gPlayerControlPorts[];
 extern s32 gControllersConnected;
 extern OSMesgQueue gSerialEventQueue;
 extern OSMesg D_8079E920;

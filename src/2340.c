@@ -550,7 +550,7 @@ void func_806F5310(void) {
                 case GAMEMODE_VS_4P:
                 case GAMEMODE_TIME_ATTACK:
                 case GAMEMODE_DEATH_RACE:
-                    func_i3_8005FDB0();
+                    func_i3_UpdateCharacterPortraits();
                     if (D_8076C7D8 == 0) {
                         if (gCurrentCourseInfo->courseIndex < COURSE_EDIT_1) {
                             func_807419F0(D_800BF044[gCurrentCourseInfo->courseIndex]);
