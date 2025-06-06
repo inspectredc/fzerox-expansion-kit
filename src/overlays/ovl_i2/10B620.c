@@ -123,7 +123,6 @@ void func_i2_800AA220(s32 courseIndex, s32 ghostIndex, Ghost* ghost) {
     func_807680EC(0xFFFB, D_i2_800BF030, "GOST", &gCourseCtx, 0xC830, 0, 0xFF, 1);
 }
 
-#ifdef IMPORT_DATA
 void func_i2_800AA368(s32 courseIndex, s32 ghostIndex, Ghost* ghost) {
     GhostSave* ghostSave = (GhostSave*) gCourseCtx.saveBuffer + ghostIndex;
 
@@ -146,9 +145,6 @@ void func_i2_800AA368(s32 courseIndex, s32 ghostIndex, Ghost* ghost) {
     func_807680EC(0xFFFB, &D_i2_800BF030, "GOST", &gCourseCtx, 0xC830, 0, 0xFF, 1);
     PRINTF("ERASE DISK GHOST %d\n");
 }
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/10B620/func_i2_800AA368.s")
-#endif
 
 void func_i2_800AA520(s32 courseIndex) {
     GhostSave* ghostSave;

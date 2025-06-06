@@ -1,4 +1,5 @@
 #include "global.h"
+#include "ovl_i3.h"
 
 extern GfxPool* gGfxPool;
 extern s32 gNumPlayers;

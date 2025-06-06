@@ -3,9 +3,197 @@
 #include "fzx_game.h"
 #include "fzx_racer.h"
 #include "fzx_hud.h"
+#include "fzx_machine.h"
 #include "fzx_assets.h"
 
-extern s32 D_i3_8006B708[];
+s32 sPracticeBestLapCounter = 0;
+bool sSecondLapStarted = false;
+bool sFinalLapStarted = false;
+s32 D_i3_8006B5EC = 180;
+UNUSED s32 D_i3_8006B5F0 = 0;
+
+s32 gPlayerLapNumbers[] = { 1, 1, 1, 1 };
+
+UNUSED s32 D_i3_8006B604 = 0;
+UNUSED s32 D_i3_8006B608 = 0;
+
+s32 D_i3_8006B60C[6][3] = { 0 };
+
+f32 sPositionScales[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+
+bool D_i3_8006B664[] = { false, false, false, false };
+
+TexturePtr gCharacterPortraitTextures[] = {
+    aPortraitCaptainFalconTex, // CAPTAIN_FALCON
+    aPortraitDrStewartTex,     // DR_STEWART
+    aPortraitPicoTex,          // PICO
+    aPortraitSamuraiGorohTex,  // SAMURAI_GOROH
+    aPortraitJodySummerTex,    // JODY_SUMMER
+    aPortraitMightyGazelleTex, // MIGHTY_GAZELLE
+    aPortraitMrEadTex,         // MR_EAD
+    aPortraitBabaTex,          // BABA
+    aPortraitOctomanTex,       // OCTOMAN
+    aPortraitGomarAndShiohTex, // GOMAR_AND_SHIOH
+    aPortraitKateAlenTex,      // KATE_ALEN
+    aPortraitRogerBusterTex,   // ROGER_BUSTER
+    aPortraitJamesMcCloudTex,  // JAMES_MCCLOUD
+    aPortraitLeonTex,          // LEON
+    aPortraitAntonioGusterTex, // ANTONIO_GUSTER
+    aPortraitBlackShadowTex,   // BLACK_SHADOW
+    aPortraitMichaelChainTex,  // MICHAEL_CHAIN
+    aPortraitJackLevinTex,     // JACK_LEVIN
+    aPortraitSuperArrowTex,    // SUPER_ARROW
+    aPortraitMrsArrowTex,      // MRS_ARROW
+    aPortraitJohnTanakaTex,    // JOHN_TANAKA
+    aPortraitBeastmanTex,      // BEASTMAN
+    aPortraitZodaTex,          // ZODA
+    aPortraitDrClashTex,       // DR_CLASH
+    aPortraitSilverNeelsenTex, // SILVER_NEELSEN
+    aPortraitBioRexTex,        // BIO_REX
+    aPortraitDraqTex,          // DRAQ
+    aPortraitBillyTex,         // BILLY
+    aPortraitTheSkullTex,      // THE_SKULL
+    aPortraitBloodFalconTex,   // BLOOD_FALCON
+};
+
+UNUSED u32 D_8006B6EC = 0x2800;
+
+TexturePtr sPositionTextures[] = {
+    aPortraitPositionFirstTex,  aPortraitPositionSecondTex, aPortraitPositionThirdTex,
+    aPortraitPositionFourthTex, aPortraitPositionFifthTex,  aPortraitPositionSixthTex,
+};
+
+// clang-format off
+s32 D_i3_8006B708[] = {
+    255, 0,   0,
+    0,   255, 0,
+    255, 255, 100,
+    255, 0,   0,
+};
+// clang-format on
+
+s32 sPlayerTimerPositions[][4][2] = {
+    { { 230, 38 }, { 0, 0 }, { 0, 0 }, { 0, 0 } },
+    { { 24, 20 }, { 24, 132 }, { 0, 0 }, { 0, 0 } },
+    { { 24, 20 }, { 24, 132 }, { 168, 20 }, { 0, 0 } },
+    { { 24, 20 }, { 24, 132 }, { 168, 20 }, { 168, 132 } },
+};
+
+s32 sPlayerTimePositions[][4][2] = {
+    { { 198, 38 }, { 0, 0 }, { 0, 0 }, { 0, 0 } },
+    { { 100, 20 }, { 100, 132 }, { 0, 0 }, { 0, 0 } },
+    { { 26, 20 }, { 26, 132 }, { 164, 20 }, { 0, 0 } },
+    { { 26, 20 }, { 26, 132 }, { 164, 20 }, { 164, 132 } },
+};
+
+s32 sPreviousLapTimes[] = { 0, 0, 0, 0 };
+
+u32 sEnergyBarFillColors[] = {
+    (GPACK_RGBA5551(155, 0, 0, 1) << 16 | GPACK_RGBA5551(155, 0, 0, 1)),
+    (GPACK_RGBA5551(220, 0, 0, 1) << 16 | GPACK_RGBA5551(220, 0, 0, 1)),
+    (GPACK_RGBA5551(255, 0, 0, 1) << 16 | GPACK_RGBA5551(255, 0, 0, 1)),
+    (GPACK_RGBA5551(220, 0, 0, 1) << 16 | GPACK_RGBA5551(230, 0, 0, 1)),
+    (GPACK_RGBA5551(155, 0, 0, 1) << 16 | GPACK_RGBA5551(155, 0, 0, 1)),
+    (GPACK_RGBA5551(0, 255, 0, 1) << 16 | GPACK_RGBA5551(0, 255, 0, 1)),
+    (GPACK_RGBA5551(0, 255, 20, 1) << 16 | GPACK_RGBA5551(0, 255, 20, 1)),
+    (GPACK_RGBA5551(0, 195, 35, 1) << 16 | GPACK_RGBA5551(0, 195, 35, 1)),
+    (GPACK_RGBA5551(0, 160, 50, 1) << 16 | GPACK_RGBA5551(0, 160, 50, 1)),
+    (GPACK_RGBA5551(0, 135, 70, 1) << 16 | GPACK_RGBA5551(0, 135, 70, 1)),
+};
+
+s32 sEnergyOutlinePositions[][4][2] = {
+    { { 220, 20 }, { 0, 0 }, { 0, 0 }, { 0, 0 } },
+    { { 224, 20 }, { 224, 132 }, { 0, 0 }, { 0, 0 } },
+    { { 96, 20 }, { 96, 132 }, { 240, 20 }, { 0, 0 } },
+    { { 96, 20 }, { 96, 132 }, { 240, 20 }, { 240, 132 } },
+};
+
+s32 sEnergyBarPositions[][4][2] = {
+    { { 222, 28 }, { 0, 0 }, { 0, 0 }, { 0, 0 } },
+    { { 226, 28 }, { 226, 140 }, { 0, 0 }, { 0, 0 } },
+    { { 98, 26 }, { 98, 138 }, { 242, 26 }, { 0, 0 } },
+    { { 98, 26 }, { 98, 138 }, { 242, 26 }, { 242, 138 } },
+};
+
+s32 sSpeedPositions[][4][2] = {
+    { { 226, 204 }, { 0, 0 }, { 0, 0 }, { 0, 0 } },
+    { { 226, 92 }, { 226, 204 }, { 0, 0 }, { 0, 0 } },
+    { { 24, 20 }, { 24, 132 }, { 168, 20 }, { 0, 0 } },
+    { { 24, 20 }, { 24, 132 }, { 168, 20 }, { 168, 132 } },
+};
+
+s32 sPositionPositions[][4][2] = {
+    { { 118, 20 }, { 0, 0 }, { 0, 0 }, { 0, 0 } },
+    { { -4, 76 }, { -4, 188 }, { 0, 0 }, { 0, 0 } },
+    { { 4, 84 }, { 4, 196 }, { 146, 84 }, { 0, 0 } },
+    { { 4, 84 }, { 4, 196 }, { 146, 84 }, { 146, 196 } },
+};
+
+s32 sLapPositions[][4][2] = {
+    { { 66, 20 }, { 0, 0 }, { 0, 0 }, { 0, 0 } },
+    { { 24, 40 }, { 24, 152 }, { 0, 0 }, { 0, 0 } },
+    { { 130, 87 }, { 130, 199 }, { 272, 87 }, { 0, 0 } },
+    { { 130, 87 }, { 130, 199 }, { 272, 87 }, { 272, 199 } },
+};
+
+s32 sPortraitYPosOffsets[] = { 18, 56, 94, 132, 162, 192 };
+
+s32 sPortraitPositionYPos[] = { 50, 88, 126, 156, 186, 216 };
+
+s32 sIntervalPositions[][4][2] = {
+    { { 120, 72 }, { 0, 0 }, { 0, 0 }, { 0, 0 } },
+    { { 120, 20 }, { 120, 132 }, { 0, 0 }, { 0, 0 } },
+    { { 48, 40 }, { 48, 152 }, { 196, 40 }, { 0, 0 } },
+    { { 48, 40 }, { 48, 152 }, { 196, 40 }, { 196, 152 } },
+};
+
+s32 sReversePositions[][4][2] = {
+    { { 104, 64 }, { 0, 0 }, { 0, 0 }, { 0, 0 } },
+    { { 104, 20 }, { 104, 132 }, { 0, 0 }, { 0, 0 } },
+    { { 44, 40 }, { 44, 152 }, { 188, 40 }, { 0, 0 } },
+    { { 44, 40 }, { 44, 152 }, { 188, 40 }, { 188, 152 } },
+};
+
+s32 sLivesPositions[][4][2] = {
+    { { 68, 48 }, { 0, 0 }, { 0, 0 }, { 0, 0 } },
+    { { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 } },
+    { { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 } },
+    { { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 } },
+};
+
+s32 sPortraitReplacementIndexes[] = {
+    0, // CAPTAIN_FALCON
+    0, // DR_STEWART
+    0, // PICO
+    1, // SAMURAI_GOROH
+    2, // JODY_SUMMER
+    0, // MIGHTY_GAZELLE
+    0, // MR_EAD
+    0, // BABA
+    0, // OCTOMAN
+    0, // GOMAR_AND_SHIOH
+    0, // KATE_ALEN
+    0, // ROGER_BUSTER
+    0, // JAMES_MCCLOUD
+    0, // LEON
+    0, // ANTONIO_GUSTER
+    0, // BLACK_SHADOW
+    0, // MICHAEL_CHAIN
+    0, // JACK_LEVIN
+    0, // SUPER_ARROW
+    0, // MRS_ARROW
+    0, // JOHN_TANAKA
+    0, // BEASTMAN
+    0, // ZODA
+    0, // DR_CLASH
+    0, // SILVER_NEELSEN
+    0, // BIO_REX
+    0, // DRAQ
+    0, // BILLY
+    0, // THE_SKULL
+    0, // BLOOD_FALCON
+};
+
 extern u32 gGameFrameCount;
 
 Gfx* func_i3_80059EC0(Gfx* gfx, s32 arg1) {
@@ -26,7 +214,7 @@ Gfx* func_i3_80059EC0(Gfx* gfx, s32 arg1) {
     red = ((temp_a0[0] * temp_a3) + (temp_a0[3] * temp_a2)) / 100;
     green = ((temp_a0[1] * temp_a3) + (temp_a0[4] * temp_a2)) / 100;
     blue = ((temp_a0[2] * temp_a3) + (temp_a0[5] * temp_a2)) / 100;
-            
+
     gDPSetPrimColor(gfx++, 0, 0, red, green, blue, 255);
     gDPSetAlphaCompare(gfx++, G_AC_NONE);
     gDPSetTextureFilter(gfx++, G_TF_BILERP);
@@ -57,13 +245,7 @@ Gfx* func_i3_DrawTimerDigitScisRectangle(Gfx* gfx, s32 left, s32 top, s32 number
     return gfx;
 }
 
-extern s32 sPracticeBestLapCounter;
-extern bool sSecondLapStarted;
-extern bool sFinalLapStarted;
-extern s32 D_i3_8006B5EC;
-extern f32 sPositionScales[];
 extern unk_80141EA8 D_i3_8006D678[4];
-extern s32 gPlayerLapNumbers[];
 
 #ifdef IMPORT_BSS
 void func_i3_8005A464(void) {
@@ -214,8 +396,6 @@ Gfx* func_i3_DrawBlankTimeThousandths(Gfx* gfx, s32 left, s32 top) {
     return func_i3_DrawTimerDigitRectangle(gfx, left + offset, top, TIMER_DIGIT_MINUS, 1.0f);
 }
 
-extern s32 sPlayerTimerPositions[][4][2];
-
 Gfx* func_i3_DrawPlayerTimer(Gfx* gfx, s32 time, s32 numPlayersIndex, s32 playerIndex) {
     UNUSED s32 pad;
     s32 top;
@@ -297,7 +477,6 @@ Gfx* func_i3_DrawPlayerTimer(Gfx* gfx, s32 time, s32 numPlayersIndex, s32 player
 }
 
 extern s32 gGameMode;
-extern s32 sPlayerTimePositions[][4][2];
 
 Gfx* func_i3_DrawTimeRectangle(Gfx* gfx, s32 numPlayersIndex, s32 playerIndex) {
     s32 right;
@@ -322,7 +501,6 @@ extern s32 gTotalLapCount;
 extern s16 D_807A16CC;
 extern s16 D_807A16E0;
 extern s8 gGamePaused;
-extern s32 sPreviousLapTimes[];
 
 Gfx* func_i3_UpdatePlayerHudInfo(Gfx* gfx, s32 numPlayersIndex, s32 playerIndex) {
     UNUSED s32 pad[2];
@@ -395,9 +573,6 @@ Gfx* func_i3_UpdatePlayerHudInfo(Gfx* gfx, s32 numPlayersIndex, s32 playerIndex)
     return gfx;
 }
 
-extern s32 sEnergyBarPositions[][4][2];
-extern s32 sEnergyBarFillColors[];
-
 Gfx* func_i3_DrawEnergyBar(Gfx* gfx, s32 numPlayersIndex, s32 playerIndex) {
     s32 i;
     s32 energyWidth;
@@ -448,8 +623,6 @@ Gfx* func_i3_DrawEnergyBar(Gfx* gfx, s32 numPlayersIndex, s32 playerIndex) {
     return gfx;
 }
 
-extern s32 sEnergyOutlinePositions[][4][2];
-
 Gfx* func_i3_DrawEnergyOutlineRectangle(Gfx* gfx, s32 numPlayersIndex, s32 playerIndex) {
     UNUSED s32 pad;
     s32 top;
@@ -487,8 +660,6 @@ Gfx* func_i3_DrawEnergyOutlineRectangle(Gfx* gfx, s32 numPlayersIndex, s32 playe
 
     return gfx;
 }
-
-extern s32 sSpeedPositions[][4][2];
 
 Gfx* func_i3_DrawPlayerSpeed(Gfx* gfx, s32 numPlayersIndex, s32 playerIndex) {
     s32 i;
@@ -626,8 +797,6 @@ Gfx* func_i3_DrawPositionSuffixRectangle(Gfx* gfx, s32 left, s32 top, f32 scale)
     return gfx;
 }
 
-extern s32 sPositionPositions[][4][2];
-
 Gfx* func_i3_DrawPosition(Gfx* gfx, s32 numPlayersIndex, s32 playerIndex) {
     s32 i;
     u8* positionTexturePtr;
@@ -762,7 +931,6 @@ Gfx* func_i3_DrawPosition(Gfx* gfx, s32 numPlayersIndex, s32 playerIndex) {
     return gfx;
 }
 
-extern s32 sLapPositions[][4][2];
 extern s32 gPlayerMinimapLapCounterToggle[];
 
 Gfx* func_i3_DrawLapRectangle(Gfx* gfx, s32 numPlayersIndex, s32 playerIndex) {
@@ -1081,7 +1249,6 @@ void func_i3_UpdatePortraitScales(void) {
 }
 
 extern Racer* gRacersByPosition[];
-extern s32 D_i3_8006B60C[][3];
 
 void func_i3_8005DEB8(void) {
     s32 i;
@@ -1107,10 +1274,6 @@ void func_i3_8005DEB8(void) {
         }
     }
 }
-
-extern TexturePtr sPositionTextures[];
-extern s32 sPortraitPositionYPos[];
-extern s32 sPortraitYPosOffsets[];
 
 Gfx* func_i3_DrawRacePortraits(Gfx* gfx) {
     s32 i;
@@ -1337,11 +1500,9 @@ Gfx* func_i3_DrawRaceTimeInterval(Gfx* gfx, s32 time, s32 left, s32 top, f32 sca
     return gfx;
 }
 
+extern GhostRacer* gFastestGhostRacer;
 extern s32 sLeadRivalRaceTime[];
 extern s32 sPlayerLeadInterval[];
-extern s32 sIntervalPositions[][4][2];
-
-extern GhostRacer* gFastestGhostRacer;
 
 Gfx* func_i3_UpdateRaceIntervalInfo(Gfx* gfx, s32 numPlayersIndex, s32 playerIndex, f32 scale) {
     Racer* leadRivalRacer;
@@ -1408,28 +1569,394 @@ Gfx* func_i3_UpdateRaceIntervalInfo(Gfx* gfx, s32 numPlayersIndex, s32 playerInd
     return gfx;
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i3/CB690/func_i3_DrawReverse.s")
+extern s32 D_807B37B8[];
 
+Gfx* func_i3_DrawReverse(Gfx* gfx, s32 numPlayersIndex, s32 playerIndex) {
+    s32 i;
+    f32 scale;
+    s32 left;
+    s32 top;
+    s32 width;
+    UNUSED s32 pad[3];
+
+    if (D_807B37B8[playerIndex] < 100) {
+        if (D_i3_8006B664[playerIndex]) {
+            func_80740CE8(playerIndex, 3);
+            D_i3_8006B664[playerIndex] = false;
+        }
+        return gfx;
+    }
+    if (gGamePaused) {
+        return gfx;
+    }
+    switch (numPlayersIndex) {
+        case 0:
+        case 1:
+            scale = 1.0f;
+            width = 111;
+            break;
+        case 2:
+        case 3:
+            scale = 0.75f;
+            width = 112.0f * scale;
+            break;
+    }
+
+    if (!D_i3_8006B664[playerIndex]) {
+        func_80740BF8(playerIndex, 3);
+        D_i3_8006B664[playerIndex] = true;
+    }
+    if ((gGameFrameCount % 20U) >= 5) {
+        return gfx;
+    }
+
+    left = sReversePositions[numPlayersIndex][playerIndex][0];
+    top = sReversePositions[numPlayersIndex][playerIndex][1];
+
+    gSPDisplayList(gfx++, D_80149D0);
+    gDPLoadTLUT_pal256(gfx++, aReversePalette);
+    gDPSetTextureLUT(gfx++, G_TT_RGBA16);
+
+    for (i = 0; i < 23; i++) {
+        gDPPipeSync(gfx++);
+
+        gDPLoadTextureBlock(gfx++, (aReverseTex + i * 0xE0), G_IM_FMT_CI, G_IM_SIZ_8b, 112, 2, 0,
+                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                            G_TX_NOLOD);
+
+        gSPTextureRectangle(gfx++, left << 2, (s32) (top + (i * 2 * scale)) << 2, (left + width) << 2,
+                            (s32) (top + ((i * 2 + 1) * scale)) << 2, 0, 0, 0, (s32) (4096.0f / scale),
+                            (s32) (1024.0f / scale));
+    }
+
+    gDPPipeSync(gfx++);
+    gDPSetTextureLUT(gfx++, G_TT_NONE);
+
+    return gfx;
+}
+
+#ifdef IMPORT_BSS
+void func_i3_InitRacePortraits(void) {
+    s32 i;
+
+    for (i = 0; i < ARRAY_COUNT(sPortraitTextureScale); i++) {
+        sPortraitTextureScale[i] = 1.0f;
+    }
+}
+#else
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i3/CB690/func_i3_InitRacePortraits.s")
+#endif
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i3/CB690/func_i3_ResetLivesChangeCounter.s")
+extern s32 gLivesChangeCounter;
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i3/CB690/func_i3_TriggerLivesIncrease.s")
+void func_i3_ResetLivesChangeCounter(void) {
+    gLivesChangeCounter = 0;
+}
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i3/CB690/func_i3_TriggerLivesDecrease.s")
+extern s32 gPreviousLivesCount;
+extern s16 gPlayerLives[];
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i3/CB690/func_i3_DrawKOStars.s")
+void func_i3_TriggerLivesIncrease(void) {
+    gPreviousLivesCount = gPlayerLives[0] - 1;
+    gLivesChangeCounter = 90;
+}
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i3/CB690/func_i3_DrawPlayerLives.s")
+void func_i3_TriggerLivesDecrease(void) {
+    gPreviousLivesCount = gPlayerLives[0] + 1;
+    gLivesChangeCounter = 90;
+}
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i3/CB690/func_i3_8005FD34.s")
+extern s16 gRacersKOd;
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i3/CB690/func_i3_8005FDB0.s")
+Gfx* func_i3_DrawKOStars(Gfx* gfx, s32 numPlayersIndex, s32 playerIndex) {
+    s32 i;
+    s32 left;
+    s32 top;
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i3/CB690/func_i3_DrawPracticeBestLap.s")
+    if (!((gGameMode == GAMEMODE_GP_RACE) || (gGameMode == GAMEMODE_PRACTICE) || (gGameMode == GAMEMODE_DEATH_RACE))) {
+        return gfx;
+    }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i3/CB690/func_i3_DrawDeathRaceTimer.s")
+    gSPDisplayList(gfx++, D_80149D0);
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i3/CB690/func_i3_DrawDeathRaceBest.s")
+    gDPLoadTextureBlock(gfx++, aHudRacersKOdTex, G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 8, 0, G_TX_NOMIRROR | G_TX_WRAP,
+                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i3/CB690/func_i3_DrawDeathRaceBestTime.s")
+    top = 464;
+    i = gRacersKOd;
+    while (i != 0) {
+        left = 1140;
+        while (left > 940) {
+            gSPTextureRectangle(gfx++, left, top, left + 28, top + 28, 0, 0, 0, 1 << 12, 1 << 10);
+
+            left -= 40;
+            if (--i == 0) {
+                break;
+            }
+        }
+        top -= 36;
+    }
+
+    return gfx;
+}
+
+Gfx* func_i3_DrawPlayerLives(Gfx* gfx, s32 numPlayersIndex, s32 playerIndex) {
+    s32 i;
+    s32 numLives;
+    s32 left;
+    s32 top;
+
+    if (gGameMode != GAMEMODE_GP_RACE) {
+        return gfx;
+    }
+
+    if (gLivesChangeCounter > 0) {
+        gLivesChangeCounter--;
+    }
+    if (gLivesChangeCounter != 0) {
+        if (gPlayerLives[playerIndex] < gPreviousLivesCount) {
+            numLives = gPlayerLives[playerIndex];
+        } else {
+            numLives = gPreviousLivesCount;
+        }
+    } else {
+        numLives = gPlayerLives[playerIndex];
+    }
+
+    left = sLivesPositions[numPlayersIndex][playerIndex][0];
+    top = sLivesPositions[numPlayersIndex][playerIndex][1];
+
+    gSPDisplayList(gfx++, D_80149D0);
+    gDPPipeSync(gfx++);
+    gDPLoadTextureBlock(gfx++, aHudLivesLeftIconTex, G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 8, 0, G_TX_NOMIRROR | G_TX_WRAP,
+                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+
+    for (i = 0; i < numLives; i++) {
+        gSPTextureRectangle(gfx++, left << 2, top << 2, (left + 7) << 2, (top + 7) << 2, 0, 0, 0, 1 << 12, 1 << 10);
+        left += 10;
+        // Start New Row
+        if ((i % 5) == 4) {
+            left -= 50;
+            top += 9;
+        }
+    }
+
+    // Flash Change In Life Icon
+    if ((gLivesChangeCounter != 0) && ((gGameFrameCount % 20) >= 5)) {
+        gSPTextureRectangle(gfx++, left << 2, top << 2, (left + 7) << 2, (top + 7) << 2, 0, 0, 0, 1 << 12, 1 << 10);
+    }
+
+    return gfx;
+}
+
+extern u8 D_276FF0[];
+extern s32 D_807C70D0;
+
+// Replaces Falcon/Summer/Goroh Portrait Textures With Alternate Texture
+void func_i3_ReplaceCharacterPortrait(s32 character) {
+    size_t textureOffset;
+    s32 textureIndex;
+    void* vramOffset;
+    s32 romOffset;
+
+    textureIndex = sPortraitReplacementIndexes[character];
+
+    textureOffset = textureIndex * 0x800;
+    vramOffset = (Segment_GetAddress(4) + SEGMENT_OFFSET(aPortraitCaptainFalconTex)) + textureOffset;
+
+    textureOffset = textureIndex * 0x800;
+    romOffset = D_807C70D0;
+    romOffset = (romOffset + SEGMENT_OFFSET(D_276FF0)) + textureOffset;
+
+    func_80701D7C(romOffset, vramOffset, 0x800);
+}
+
+void func_i3_UpdateCharacterPortraits(void) {
+    s32 i;
+
+    for (i = 0; i < gTotalRacers; i++) {
+        if (IS_SUPER_MACHINE(gRacers[i].customType)) {
+            func_i3_ReplaceCharacterPortrait(gRacers[i].character);
+        }
+    }
+}
+
+extern s32 gPracticeBestLap;
+extern s16 gStartNewBestLap;
+
+Gfx* func_i3_DrawPracticeBestLap(Gfx* gfx) {
+    s32 left;
+    s32 top;
+
+    if (gGameMode != GAMEMODE_PRACTICE) {
+        return gfx;
+    }
+
+    if (gStartNewBestLap) {
+        func_8074122C(0x38);
+        gStartNewBestLap = false;
+        sPracticeBestLapCounter = 180;
+    }
+
+    if (sPracticeBestLapCounter != 0) {
+        if (!gGamePaused) {
+            sPracticeBestLapCounter--;
+        }
+        if ((sPracticeBestLapCounter % 20) >= 5) {
+            gfx = func_i3_DrawTimerWithPosition(gfx, gPracticeBestLap + 5, 128, 36, 1.0f);
+        }
+    } else {
+        if (gPracticeBestLap == (600000 - 1)) {
+            gDPPipeSync(gfx++);
+            gDPSetPrimColor(gfx++, 0, 0, 255, 255, 0, 255);
+            gfx = func_i3_DrawBlankTimeHundredths(gfx, 128, 36);
+        } else {
+            gfx = func_i3_DrawTimerWithPosition(gfx, gPracticeBestLap + 5, 128, 36, 1.0f);
+        }
+    }
+
+    left = 128;
+    top = 20;
+
+    // Best
+    gDPLoadTextureBlock(gfx++, func_i2_800AEA90(aBestTex), G_IM_FMT_RGBA, G_IM_SIZ_16b, 16, 12, 0,
+                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                        G_TX_NOLOD);
+
+    gSPTextureRectangle(gfx++, left << 2, top << 2, (left + 16) << 2, (top + 12) << 2, 0, 0, 0, 1 << 10, 1 << 10);
+
+    left = 144;
+    top = 20;
+
+    // Lap
+    gDPLoadTextureBlock(gfx++, D_303D1F0, G_IM_FMT_RGBA, G_IM_SIZ_16b, 16, 12, 0, G_TX_NOMIRROR | G_TX_WRAP,
+                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+
+    gSPTextureRectangle(gfx++, left << 2, top << 2, (left + 16) << 2, (top + 12) << 2, 0, 0, 0, 1 << 10, 1 << 10);
+
+    return gfx;
+}
+
+Gfx* func_i3_DrawDeathRaceTimer(Gfx* gfx, s32 numPlayersIndex, s32 playerIndex) {
+    s32 offset = 0;
+    s32 top;
+    s32 left;
+    UNUSED s32 pad[2];
+    s32 timeField;
+    s32 time;
+
+    if (gGameMode != GAMEMODE_DEATH_RACE) {
+        return gfx;
+    }
+
+    time = gRacers[playerIndex].raceTime + 5;
+    left = sPlayerTimerPositions[numPlayersIndex][playerIndex][0];
+    top = sPlayerTimerPositions[numPlayersIndex][playerIndex][1];
+
+    gDPPipeSync(gfx++);
+    gDPSetCombineMode(gfx++, G_CC_DECALRGBA, G_CC_DECALRGBA);
+    gDPSetPrimColor(gfx++, 0, 0, 255, 255, 0, 255);
+
+    if (time >= MAX_TIMER) {
+        time = MAX_TIMER;
+    }
+    timeField = time / 60000;
+
+    if (timeField < 10) {
+        gfx = func_i3_DrawTimerDigitRectangle(gfx, left + offset, top, 0, 1.0f);
+        offset += 8;
+        gfx = func_i3_DrawTimerDigitRectangle(gfx, left + offset, top, timeField, 1.0f);
+        offset += 8;
+    } else {
+        gfx = func_i3_DrawTimerDigitRectangle(gfx, left + offset, top, timeField / 10, 1.0f);
+        offset += 8;
+        gfx = func_i3_DrawTimerDigitRectangle(gfx, left + offset, top, timeField % 10, 1.0f);
+        offset += 8;
+    }
+
+    time -= timeField * 60000;
+    timeField = time / 1000;
+
+    gfx = func_i3_DrawTimerDigitRectangle(gfx, left + offset, top, TIMER_DIGIT_PRIME, 1.0f);
+    offset += 8;
+    if (timeField < 10) {
+        gfx = func_i3_DrawTimerDigitRectangle(gfx, left + offset, top, 0, 1.0f);
+        offset += 8;
+        gfx = func_i3_DrawTimerDigitRectangle(gfx, left + offset, top, timeField, 1.0f);
+        offset += 8;
+    } else {
+        gfx = func_i3_DrawTimerDigitRectangle(gfx, left + offset, top, timeField / 10, 1.0f);
+        offset += 8;
+        gfx = func_i3_DrawTimerDigitRectangle(gfx, left + offset, top, timeField % 10, 1.0f);
+        offset += 8;
+    }
+    time -= timeField * 1000;
+    timeField = time / 10;
+    gfx = func_i3_DrawTimerDigitRectangle(gfx, left + offset, top, TIMER_DIGIT_DOUBLE_PRIME, 1.0f);
+    offset += 8;
+
+    if (timeField < 10) {
+        gfx = func_i3_DrawTimerDigitRectangle(gfx, left + offset, top, 0, 1.0f);
+        offset += 8;
+        gfx = func_i3_DrawTimerDigitRectangle(gfx, left + offset, top, timeField, 1.0f);
+    } else {
+        gfx = func_i3_DrawTimerDigitRectangle(gfx, left + offset, top, timeField / 10, 1.0f);
+        offset += 8;
+        gfx = func_i3_DrawTimerDigitRectangle(gfx, left + offset, top, timeField % 10, 1.0f);
+    }
+
+    return gfx;
+}
+
+Gfx* func_i3_DrawDeathRaceBest(Gfx* gfx, s32 numPlayersIndex, s32 playerIndex) {
+    s32 left;
+    s32 top;
+
+    if (gGameMode != GAMEMODE_DEATH_RACE) {
+        return gfx;
+    }
+
+    left = sPlayerTimePositions[numPlayersIndex][playerIndex][0];
+    top = sPlayerTimePositions[numPlayersIndex][playerIndex][1];
+    top += 16;
+
+    gSPDisplayList(gfx++, D_8014940);
+    gDPSetCombineLERP(gfx++, PRIMITIVE, 0, TEXEL0, 0, PRIMITIVE, 0, TEXEL0, 0, PRIMITIVE, 0, TEXEL0, 0, PRIMITIVE, 0,
+                      TEXEL0, 0);
+    gDPSetPrimColor(gfx++, 0, 0, 255, 255, 0, 255);
+
+    // Best
+    gDPLoadTextureBlock(gfx++, func_i2_800AEA90(aBestTex), G_IM_FMT_RGBA, G_IM_SIZ_16b, 16, 12, 0,
+                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                        G_TX_NOLOD);
+
+    gSPTextureRectangle(gfx++, left << 2, top << 2, (left + 16) << 2, (top + 12) << 2, 0, 0, 0, 1 << 10, 1 << 10);
+
+    return gfx;
+}
+
+extern CourseInfo* gCurrentCourseInfo;
+
+Gfx* func_i3_DrawDeathRaceBestTime(Gfx* gfx, s32 numPlayersIndex, s32 playerIndex) {
+    s32 left;
+    s32 top;
+
+    if (gGameMode != GAMEMODE_DEATH_RACE) {
+        return gfx;
+    }
+
+    left = sPlayerTimePositions[numPlayersIndex][playerIndex][0] + 32;
+    top = sPlayerTimePositions[numPlayersIndex][playerIndex][1] + 16;
+
+    if (gCurrentCourseInfo->timeRecord[0] == MAX_TIMER) {
+        gDPPipeSync(gfx++);
+        gDPSetCombineLERP(gfx++, PRIMITIVE, 0, TEXEL0, 0, PRIMITIVE, 0, TEXEL0, 0, PRIMITIVE, 0, TEXEL0, 0, PRIMITIVE,
+                          0, TEXEL0, 0);
+        gDPSetPrimColor(gfx++, 0, 0, 255, 255, 0, 255);
+        gfx = func_i3_DrawBlankTimeHundredths(gfx, left, top);
+    } else {
+        gfx = func_i3_DrawTimerWithPosition(gfx, gCurrentCourseInfo->timeRecord[0] + 5, left, top, 1.0f);
+    }
+
+    return gfx;
+}
