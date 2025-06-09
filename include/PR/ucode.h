@@ -157,6 +157,9 @@ extern long long int  gspL3DEX_fifoDataStart[],     gspL3DEX_fifoDataEnd[];
 extern long long int  gspF3DFLX_Rej_fifoTextStart[], gspF3DFLX_Rej_fifoTextEnd[];
 extern long long int  gspF3DFLX_Rej_fifoDataStart[], gspF3DFLX_Rej_fifoDataEnd[];
 
+extern long long int  gspF3DEX_Rej_fifoTextStart[], gspF3DEX_Rej_fifoTextEnd[];
+extern long long int  gspF3DEX_Rej_fifoDataStart[], gspF3DEX_Rej_fifoDataEnd[];
+
 /*========== F3DEX2/F3DLX2/F3DLP2/L3DEX2 ==========*/
 /* FIFO version */
 extern long long int gspF3DEX2_fifoTextStart[],    gspF3DEX2_fifoTextEnd[];

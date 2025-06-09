@@ -1864,45 +1864,6 @@ void func_8071D48C(void) {
     }
 }
 
-typedef struct unk_806F2400_unk_00 {
-    u8 body;
-    u8 boost;
-    u8 grip;
-    u8 frontType;
-    u8 rearType;
-    u8 wingType;
-    u8 logo;
-    u8 unk_07;
-    u8 decal;
-    u8 red;
-    u8 green;
-    u8 blue;
-    u8 numberR;
-    u8 numberG;
-    u8 numberB;
-    u8 decalR;
-    u8 decalG;
-    u8 decalB;
-    u8 cockpitR;
-    u8 cockpitG;
-    u8 cockpitB;
-    u8 unk_15;
-    u8 unk_16;
-    u8 unk_17;
-    u8 unk_18;
-    u8 unk_19;
-    u8 unk_1A;
-    u8 unk_1B;
-    u8 unk_1C;
-    u8 unk_1D;
-    u8 unk_1E;
-    u8 unk_1F;
-} unk_806F2400_unk_00;
-
-typedef struct unk_806F2400 {
-    unk_806F2400_unk_00 unk_00[30];
-    s8 unk_3C0[30];
-} unk_806F2400; // size = 0x3DE
 extern unk_806F2400 D_806F2400;
 
 extern u8 D_800D1308[];

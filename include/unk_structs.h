@@ -739,4 +739,34 @@ typedef struct unk_800E4068 {
     TexturePtr unk_04;
 } unk_800E4068; // size = 0x8
 
+typedef struct unk_806F2400_unk_00 {
+    u8 body;
+    u8 boost;
+    u8 grip;
+    u8 frontType;
+    u8 rearType;
+    u8 wingType;
+    u8 logo;
+    u8 unk_07;
+    u8 decal;
+    u8 red;
+    u8 green;
+    u8 blue;
+    u8 numberR;
+    u8 numberG;
+    u8 numberB;
+    u8 decalR;
+    u8 decalG;
+    u8 decalB;
+    u8 cockpitR;
+    u8 cockpitG;
+    u8 cockpitB;
+    u8 machineName[11];
+} unk_806F2400_unk_00;
+
+typedef struct unk_806F2400 {
+    unk_806F2400_unk_00 unk_00[30];
+    s8 unk_3C0[30];
+} unk_806F2400; // size = 0x3DE
+
 #endif // UNK_STRUCTS_H
