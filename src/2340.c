@@ -27,7 +27,7 @@ s32 gQueuedGameMode;
 UNUSED s32 D_8079A4BC;
 UNUSED s32 D_8079A4C0;
 UNUSED s32 D_8079A4C4;
-UNUSED s32 gAntiPiracyAddedDifficulty;
+s32 gAntiPiracyAddedDifficulty;
 s8 gGamePaused;
 UNUSED s32 D_8079A4D0;
 

@@ -156,6 +156,7 @@ gMasterDisp = 0x8079A358;
 
 gGameMode = 0x8079A4B4;
 gQueuedGameMode = 0x8079A4B8;
+gAntiPiracyAddedDifficulty = 0x8079A4C8;
 gGamePaused = 0x8079A4CC;
 
 gControllerPads = 0x8079A4F0;
@@ -898,6 +899,8 @@ gAudioCustomUpdateFunction = 0x806F2320; // segment:audio_context
 
 gCourseInfos = 0x802BB140; //segment:unk_context size:0x3480
 gRacers = 0x802D2F20; //segment:unk_context size:0x6DB0
+
+D_806F2400 = 0x806F2400; //segment:unk_custom size:0x3DE
 
 D_807794F0 = 0x807794F0; // force_migration:True
 

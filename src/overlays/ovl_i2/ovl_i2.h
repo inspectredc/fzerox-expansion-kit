@@ -87,7 +87,4 @@ void func_i2_800A5BD0(unk_8010D778*);
 bool func_i2_800A5C70(unk_8010D778*);
 Gfx* func_i2_800A5CD4(Gfx*, unk_8010D778*);
 
-u8* func_i2_800AE17C(unk_80077D50*, s32, s32);
-Gfx* func_i2_800AF584(Gfx*, unk_80077D50*, s32, s32, u32, s32, s32, f32, f32, bool);
-
 #endif // OVL_I2_H
