@@ -373,6 +373,9 @@ MachineSettings_NameCardUpdate = 0x80073E24; //segment:ovl_i4
 MachineSelect_OkUpdate = 0x80073D88; //segment:ovl_i4
 MachineSettings_OkUpdate = 0x80073DD4; //segment:ovl_i4
 
+sMachinesUnlocked = 0x80077054; //segment:ovl_i4
+sMachineSelectIndex = 0x80077060; //segment:ovl_i4
+
 CourseSelect_BackgroundInit = 0x800791A4; //segment:course_select
 CourseSelect_ModelInit = 0x80079280; //segment:course_select
 CourseSelect_CupInit = 0x800792BC; //segment:course_select
