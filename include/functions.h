@@ -314,6 +314,7 @@ s32 func_i2_800ACB74(f32, Racer*);
 void func_i2_800AE100(s32 segAddr, size_t size, u8* startAddr);
 void* func_i2_800AE7C4(void*, s32, s32, s32, bool);
 TexturePtr func_i2_800AEA90(void*);
+void Object_Init(s32 cmdId, s32 left, s32 top, s8 priority);
 void func_i2_800B079C(void);
 void func_i2_800B07F0(void);
 void func_i2_800B0D10(s32);
