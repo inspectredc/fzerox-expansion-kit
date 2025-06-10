@@ -54,11 +54,13 @@ unk_80077D50* sTitleWarningCompTexInfos[] = {
 };
 
 unk_80077D50 sCopyrightCompTexInfo[] = { { 17, aCopyrightDDTex, TEX_WIDTH(aCopyrightDDTex), TEX_HEIGHT(aCopyrightDDTex),
-                                           TEX_COMPRESSED_SIZE(aCopyrightDDTex) }, { 0 } };
+                                           TEX_COMPRESSED_SIZE(aCopyrightDDTex) },
+                                         { 0 } };
 
 //! @bug Compressed size listed does not match the actual compressed texture size
-unk_80077D50 sN64DDLogoCompTexInfo[] = { { 17, aN64DDLogoTex, TEX_WIDTH(aN64DDLogoTex), TEX_HEIGHT(aN64DDLogoTex),
-                                           0x2E7 }, { 0 } };
+unk_80077D50 sN64DDLogoCompTexInfo[] = {
+    { 17, aN64DDLogoTex, TEX_WIDTH(aN64DDLogoTex), TEX_HEIGHT(aN64DDLogoTex), 0x2E7 }, { 0 }
+};
 
 UNUSED s32 D_i4_80076F08[] = { 85, 21, 120, 150 };
 
@@ -381,7 +383,8 @@ Gfx* func_i4_80074A20(Gfx* gfx, Object* arg1) {
 }
 
 Gfx* Title_LogoDraw(Gfx* gfx, Object* logoObj) {
-    return func_i2_800AF584(gfx, sTitleLogoCompTexInfo, OBJECT_LEFT(logoObj), OBJECT_TOP(logoObj), 0, 0, 0, 1.0f, 1.0f, true);
+    return func_i2_800AF584(gfx, sTitleLogoCompTexInfo, OBJECT_LEFT(logoObj), OBJECT_TOP(logoObj), 0, 0, 0, 1.0f, 1.0f,
+                            true);
 }
 
 Gfx* func_i4_80074A84(Gfx* gfx, Object* arg1) {
@@ -398,8 +401,8 @@ Gfx* Title_StartDraw(Gfx* gfx, Object* startObj) {
             return gfx;
         }
         gfx = func_8070D4A8(gfx, 0);
-        gfx = func_i2_800AF584(gfx, sTitlePushStartCompTexInfo, OBJECT_LEFT(startObj), OBJECT_TOP(startObj), 1, 0, 0, 1.0f,
-                            1.0f, true);
+        gfx = func_i2_800AF584(gfx, sTitlePushStartCompTexInfo, OBJECT_LEFT(startObj), OBJECT_TOP(startObj), 1, 0, 0,
+                               1.0f, 1.0f, true);
     } else {
         OBJECT_LEFT(startObj) = 80;
 
@@ -430,7 +433,7 @@ Gfx* Title_StartDraw(Gfx* gfx, Object* startObj) {
         }
 
         gfx = func_i2_800AF584(gfx, sTitleNoControllerCompTexInfo, OBJECT_LEFT(startObj), OBJECT_TOP(startObj), 0, 0, 0,
-                            1.0f, 1.0f, true);
+                               1.0f, 1.0f, true);
     }
     return gfx;
 }
@@ -440,8 +443,8 @@ Gfx* func_i4_80074CC4(Gfx* gfx, Object* arg1) {
 }
 
 Gfx* Title_CopyrightDraw(Gfx* gfx, Object* copyrightObj) {
-    return func_i2_800AF584(gfx, sCopyrightCompTexInfo, OBJECT_LEFT(copyrightObj), OBJECT_TOP(copyrightObj), 0, 0, 0, 1.0f,
-                         1.0f, true);
+    return func_i2_800AF584(gfx, sCopyrightCompTexInfo, OBJECT_LEFT(copyrightObj), OBJECT_TOP(copyrightObj), 0, 0, 0,
+                            1.0f, 1.0f, true);
 }
 
 Gfx* Title_DiskDriveDraw(Gfx* gfx, Object* diskDriveObj) {
@@ -471,21 +474,19 @@ Gfx* Title_DiskDriveDraw(Gfx* gfx, Object* diskDriveObj) {
         } else {
             gDPSetPrimColor(gfx++, 0, 0, ((40 - var_v1) * 255) / 40, 0, 0, 255);
         }
-        gfx = func_i2_800AF584(gfx, sTitleWarningCompTexInfos[var_t0], OBJECT_LEFT(diskDriveObj), OBJECT_TOP(diskDriveObj),
-                               0, 0, 0, 1.0f, 1.0f, true);
+        gfx = func_i2_800AF584(gfx, sTitleWarningCompTexInfos[var_t0], OBJECT_LEFT(diskDriveObj),
+                               OBJECT_TOP(diskDriveObj), 0, 0, 0, 1.0f, 1.0f, true);
     }
     return gfx;
 }
 
 Gfx* func_i4_80074EE0(Gfx* gfx, Object* arg1) {
-    return func_i2_800AF584(gfx, sN64DDLogoCompTexInfo, OBJECT_LEFT(arg1), OBJECT_TOP(arg1), 0, 0, 0, 1.0f,
-                         1.0f, false);
+    return func_i2_800AF584(gfx, sN64DDLogoCompTexInfo, OBJECT_LEFT(arg1), OBJECT_TOP(arg1), 0, 0, 0, 1.0f, 1.0f,
+                            false);
 }
 
 extern s8 D_8076C7D8;
 
 void Title_DiskDriveUpdate(Object* arg0) {
-    if (gRamDDCompatible != 0 && (D_i4_80077070 != -1) && (D_8076C7D8 == 0)) {
-
-    }
+    if (gRamDDCompatible != 0 && (D_i4_80077070 != -1) && (D_8076C7D8 == 0)) {}
 }
