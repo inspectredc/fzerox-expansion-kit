@@ -374,27 +374,13 @@ MachineSettings_NameCardUpdate = 0x80073E24; //segment:ovl_i4
 MachineSelect_OkUpdate = 0x80073D88; //segment:ovl_i4
 MachineSettings_OkUpdate = 0x80073DD4; //segment:ovl_i4
 
-sPortraitBackgroundCompTexInfo = 0x800753FC; //segment:ovl_i4
-sPortraitCompTexInfos = 0x8007540C; //segment:ovl_i4
-sSmallPortraitCompTexInfos = 0x80075944; //segment:ovl_i4
-sPlayerNumIconCompTexInfos = 0x80076178; //segment:ovl_i4
-sSelectMachineCompTexInfo = 0x80076128; //segment:ovl_i4
-sMachineSelectCursorCompTexInfo = 0x80076188; //segment:ovl_i4
-sMachineInfoGraphCompTexInfo = 0x80076198; //segment:ovl_i4
-sMachineAccelerationMaxSpeedCompTexInfo = 0x800761A8; //segment:ovl_i4
-sMachineBodyBoostGripCompTexInfo = 0x800761B8; //segment:ovl_i4
-sMachineInfoGraphSmallCompTexInfo = 0x800761C8; //segment:ovl_i4
-sMachineAccelerationMaxSpeedSmallCompTexInfo = 0x800761D8; //segment:ovl_i4
-sMachineBodyBoostGripSmallCompTexInfo = 0x800761E8; //segment:ovl_i4
-sEngineSliderCompTexInfo = 0x800761F8; //segment:ovl_i4
-sTrophyCompTexInfos = 0x80076528; //segment:ovl_i4
-sDifficultyCompTexInfos = 0x800765CC; //segment:ovl_i4
-sMachineStatCompTexInfos = 0x8007660C; //segment:ovl_i4
-sOKCompTexInfo = 0x80076618; //segment:ovl_i4
-sMachineStatValues = 0x80076628; //segment:ovl_i4
-
-sMachinesUnlocked = 0x80077054; //segment:ovl_i4
-sMachineSelectIndex = 0x80077060; //segment:ovl_i4
+sTitleBackgroundCompTexInfos = 0x80076E60; //segment:ovl_i4
+sTitleLogoCompTexInfo = 0x80076E6C; //segment:ovl_i4
+sTitlePushStartCompTexInfo = 0x80076E7C; //segment:ovl_i4
+sTitleNoControllerCompTexInfo = 0x80076E8C; //segment:ovl_i4
+sTitleWarningCompTexInfos = 0x80076EBC; //segment:ovl_i4
+sCopyrightCompTexInfo = 0x80076EC8; //segment:ovl_i4
+sTitleBackgroundEffectFuncs = 0x80076F1C; //segment:ovl_i4
 
 CourseSelect_BackgroundInit = 0x800791A4; //segment:course_select
 CourseSelect_ModelInit = 0x80079280; //segment:course_select

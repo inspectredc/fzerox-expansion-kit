@@ -17,10 +17,11 @@ RECOMP_DIR := ido-recomp/$(DETECTED_OS)
 
 default: all
 
-all: recomp
+all: recomp torch
 
 clean:
 	$(RM) -rf $(RECOMP_DIR)
+	$(RM) -rf Torch/cmake-build-release
 
 distclean: clean
 
@@ -35,4 +36,8 @@ recomp:
 	tar xf ido-7.1-recomp-${DETECTED_OS}.tar.gz -C $(RECOMP_DIR)/7.1
 	$(RM) ido-7.1-recomp-${DETECTED_OS}.tar.gz
 
-.PHONY: all clean distclean default
+torch:
+	@echo "Building torch..."
+	$(MAKE) -C Torch type=release -j$(N_THREADS)
+
+.PHONY: all clean distclean default torch
