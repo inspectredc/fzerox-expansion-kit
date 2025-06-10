@@ -22,7 +22,7 @@ void func_i2_800AE170(void) {
 
 extern u8* D_8079FA80;
 
-u8* func_i2_800AE17C(unk_80077D50* arg0, s32 arg1, s32 arg2) {
+u8* func_i2_800AE17C(unk_80077D50* arg0, s32 arg1, bool arg2) {
     bool var_a0;
     s32 var_s0;
     s32 alignedWidth;
