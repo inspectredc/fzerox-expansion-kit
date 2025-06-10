@@ -203,6 +203,13 @@ aPortraitPositionSixthTex = 0x4029DE0;
 D_276FF0 = 0x2800;
 
 aTitleBackgroundMainTex = 0xF000004;
+aTitleBackgroundComicTex = 0xF014A68;
+aTitleBackgroundFalconTex = 0xF026348;
+aTitleLogoTex = 0xF030158;
+aTitleNoControllerTex = 0xF032A78;
+aTitleExpansionPakWarningTex = 0xF032F80;
+aTitleDiskWarningTex = 0xF033484;
+aTitlePushStartTex = 0xF033998;
 aFullPortraitDrStewartTex = 0xF034124;
 aFullPortraitCaptainFalconTex = 0xF038C1C;
 aFullPortraitJodySummerTex = 0xF03F224;
