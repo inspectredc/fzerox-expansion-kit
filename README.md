@@ -1,5 +1,10 @@
 [![Discord Channel][discord-badge]][discord]
 
+[![Jp Bytes Progress]](https://decomp.dev/inspectredc/fzerox-expansion-kit/jp) [![Jp Functions Progress]](https://decomp.dev/inspectredc/fzerox-expansion-kit/jp)
+
+[JP Bytes Progress]: https://decomp.dev/inspectredc/fzerox-expansion-kit/jp.svg?mode=shield&label=Bytes%20Progress&measure=matched_code_percent
+[JP Functions Progress]: https://decomp.dev/inspectredc/fzerox-expansion-kit/jp.svg?mode=shield&label=Functions%20Progress&measure=matched_functions
+
 # F-Zero X Expansion Kit
 
 This is a WIP Matching Decompilation for the F-Zero X Expansion Kit.
