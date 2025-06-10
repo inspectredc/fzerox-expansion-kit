@@ -329,6 +329,7 @@ Title_CopyrightDraw = 0x80074CD0; //segment:ovl_i4
 Title_DiskDriveDraw = 0x80074D28; //segment:ovl_i4
 Title_DiskDriveUpdate = 0x80074F34; //segment:ovl_i4
 
+MachineSettings_GetCharacter = 0x8007021C; //segment:ovl_i4
 MachineSelect_HeaderInit = 0x8007025C; //segment:ovl_i4
 MachineSettings_PortraitInit = 0x8007034C; //segment:ovl_i4
 MachineSelect_PortraitInit = 0x80070410; //segment:ovl_i4
@@ -372,6 +373,16 @@ MachineSettings_MachineUpdate = 0x80073774; //segment:ovl_i4
 MachineSettings_NameCardUpdate = 0x80073E24; //segment:ovl_i4
 MachineSelect_OkUpdate = 0x80073D88; //segment:ovl_i4
 MachineSettings_OkUpdate = 0x80073DD4; //segment:ovl_i4
+
+sTitleBackgroundCompTexInfos = 0x80076E60; //segment:ovl_i4
+sTitleLogoCompTexInfo = 0x80076E6C; //segment:ovl_i4
+sTitlePushStartCompTexInfo = 0x80076E7C; //segment:ovl_i4
+sTitleNoControllerCompTexInfo = 0x80076E8C; //segment:ovl_i4
+sTitleWarningCompTexInfos = 0x80076EBC; //segment:ovl_i4
+sCopyrightCompTexInfo = 0x80076EC8; //segment:ovl_i4
+sTitleBackgroundEffectFuncs = 0x80076F1C; //segment:ovl_i4
+
+aCopyrightDDTex = 0x80076958; //segment:ovl_i4
 
 CourseSelect_BackgroundInit = 0x800791A4; //segment:course_select
 CourseSelect_ModelInit = 0x80079280; //segment:course_select

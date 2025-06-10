@@ -73,11 +73,13 @@
     bss_size: 0x30
     symbol_name_format: i4_$VRAM
     subsegments:
-      - [0xDE7C0, c]
-      - [0xE3560, c]
-      - [0xE4560, data]
-      - [0xE6550, .rodata, DE7C0]
-      - { type: bss, vram: 0x80077050 }
+      - [0xDE7C0, c, machine]
+      - [0xE3560, c, title]
+      - [0xE4560, .data, machine]
+      - [0xE5CA0, .data, title]
+      - [0xE6550, .rodata, machine]
+      - { type: .bss, vram: 0x80077050, name: machine }
+      - { type: .bss, vram: 0x80077070, name: title }
 
   - name: course_select
     exclusive_ram_id: course_select

@@ -50,6 +50,7 @@ VERSION ?= jp
 DISK_EXT ?= ndd
 
 BASEROM              := baserom.$(VERSION).$(DISK_EXT)
+BASEROM_E            := baserom.$(VERSION).z64dd
 TARGET               := fzerox-expansion
 
 ### Output ###
@@ -201,6 +202,7 @@ OBJDUMP         := $(MIPS_BINUTILS_PREFIX)objdump
 ICONV           := iconv
 ASM_PROC        := $(PYTHON) $(TOOLS)/asm-processor/build.py
 CAT             := cat
+TORCH           := $(TOOLS)/Torch/cmake-build-release/torch
 
 # Prefer clang as C preprocessor if installed on the system
 ifneq (,$(call find-command,clang))
@@ -375,12 +377,17 @@ all: compressed
 toolchain:
 	@$(MAKE) -s -C $(TOOLS)
 
+torch:
+	@$(MAKE) -s -C $(TOOLS) torch
+	rm -f torch.hash.yml
+
 setup:
 	@$(PYTHON) $(TOOLS)/extract_baserom.py --file $(BASEROM) --version $(VERSION)
 
 init:
 	@$(MAKE) clean
 	@$(MAKE) extract -j $(N_THREADS)
+	@$(MAKE) assets -j $(N_THREADS)
 	@$(MAKE) compressed -j $(N_THREADS)
 
 FZERO :=$(PURPLE)________        _______    _______    ______      ____         ___   ___\n|  ____/        |___   |   |  ____|   |  __ \    / __ \        \  \ /  /\n| |____    ___     /  /    | |___     | |_/ /   | |  | |        \  V  /\n|  ____|  |___|   /  /     |  ___|    |  _ |    | |  | |         |   |\n| |              /  /__    | |____    | | \ \   | |__| |        /  .  \ \n|_|             |______|   |______|   |_|  \_|   \____/        /__/ \__\ \n$(NO_COL)
@@ -398,14 +405,26 @@ endif
 extract:
 	@$(RM) -r asm/$(VERSION) bin/$(VERSION)
 	@echo "Unifying yamls..."
-	@$(CAT) yamls/$(VERSION)/header.yaml yamls/$(VERSION)/main.yaml yamls/$(VERSION)/overlays.yaml > $(SPLAT_YAML)
+	@$(CAT) yamls/$(VERSION)/header.yaml yamls/$(VERSION)/main.yaml yamls/$(VERSION)/overlays.yaml yamls/$(VERSION)/$(REV)/assets.yaml > $(SPLAT_YAML)
 	@echo "Extracting..."
 	@$(SPLAT) $(SPLAT_YAML)
 
+assets:
+	@echo "Extracting assets from ROM..."
+	@$(TORCH) code $(BASEROM_E)
+	@$(TORCH) header $(BASEROM_E)
+	@$(TORCH) modding export $(BASEROM_E)
+
+mod:
+	@$(TORCH) modding import code $(BASEROM_E)
+
 clean:
+	rm -f torch.hash.yml
 	@git clean -fdx asm/$(VERSION)
 	@git clean -fdx bin/$(VERSION)
 	@git clean -fdx $(BUILD_DIR)/
+	@git clean -fdx src/assets/
+	@git clean -fdx include/assets/
 	@git clean -fdx linker_scripts/$(VERSION)/*.ld
 
 format:
@@ -427,7 +446,7 @@ context:
 disasm:
 	@$(RM) -r asm/$(VERSION) bin/$(VERSION)
 	@echo "Unifying yamls..."
-	@$(CAT) yamls/$(VERSION)/header.yaml yamls/$(VERSION)/main.yaml yamls/$(VERSION)/overlays.yaml > $(SPLAT_YAML)
+	@$(CAT) yamls/$(VERSION)/header.yaml yamls/$(VERSION)/main.yaml yamls/$(VERSION)/overlays.yaml yamls/$(VERSION)/$(REV)/assets.yaml > $(SPLAT_YAML)
 	@echo "Extracting..."
 	@$(SPLAT) $(SPLAT_YAML) --disassemble-all
 
@@ -498,4 +517,4 @@ $(BUILD_DIR)/src/libultra/libc/llcvt.o: src/libultra/libc/llcvt.c
 # Print target for debugging
 print-% : ; $(info $* is a $(flavor $*) variable set to [$($*)]) @true
 
-.PHONY: all compressed clean init extract expected format checkformat context disasm toolchain
+.PHONY: all compressed clean init extract expected format checkformat assets context disasm toolchain
