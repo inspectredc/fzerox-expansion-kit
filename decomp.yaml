@@ -1,0 +1,128 @@
+name: F-Zero X Expansion Kit
+repo: https://github.com/inspectredc/fzerox-expansion-kit
+platform: n64
+build_system: make
+versions:
+  - name: jp
+    fullname: jp
+    sha1: 5ea096d61cc1a6e4374c3251638c67399f25dda1
+    paths:
+      target: "baserom.jp.z64dd"
+
+      build_dir: "build"
+      map: "build/fzerox-expansion.jp.map"
+      compiled_target: "build/fzerox-expansion.jp.z64dd"
+      elf: "build/fzerox-expansion.jp.elf"
+
+      expected_dir: "expected/"
+
+      asm: "asm/jp"
+      nonmatchings: "asm/jp/nonmatchings"
+
+tools:
+  mapfile_parser:
+    progress_report:
+      check_asm_paths: True
+      prefixes_to_trim:
+        - build/lib/
+        - build/src/
+        - build/asm/jp/data/
+        - build/asm/jp
+        - build/
+      categories:
+        # Categories by segment
+        - id: main
+          name: main
+          paths:
+            - "60"
+            - CE0
+            - "2260"
+            - "2340"
+            - "3250"
+            - "3A10"
+            - "6F50"
+            - "10AB0"
+            - "10B20"
+            - "110B0"
+            - "11850"
+            - "157F0"
+            - "15AB0"
+            - "17490"
+            - "1B6E0"
+            - "1C8B0"
+            - "1C8F0"
+            - leo_fault
+            - sys_fault
+            - "1E970"
+            - "1F320"
+            - "27110"
+            - audio
+            - libultra
+            - leo
+            - game
+            - leo_bootdisk
+            - "75000"
+        - id: main.game
+          name: main.game
+          paths:
+            - game
+        - id: main.audio
+          name: main.audio
+          paths:
+            - audio
+        - id: main.libultra
+          name: main.libultra
+          paths:
+            - libultra
+        - id: ovl_xk1
+          name: ovl_xk1
+          paths:
+            - overlays/ovl_xk1
+        - id: ovl_i3
+          name: ovl_i3
+          paths:
+            - overlays/ovl_i3
+        - id: ovl_i4
+          name: ovl_i4
+          paths:
+            - overlays/ovl_i4
+        - id: course_select
+          name: course_select
+          paths:
+            - overlays/course_select
+        - id: ovl_i6
+          name: ovl_i6
+          paths:
+            - overlays/ovl_i6
+        - id: ovl_i7
+          name: ovl_i7
+          paths:
+            - overlays/ovl_i7
+        - id: ovl_i8
+          name: ovl_i8
+          paths:
+            - overlays/ovl_i8
+        - id: ovl_i2
+          name: ovl_i2
+          paths:
+            - overlays/ovl_i2
+        - id: ovl_i9
+          name: ovl_i9
+          paths:
+            - overlays/ovl_i9/machine_draw
+        - id: ovl_i10
+          name: ovl_i10
+          paths:
+            - overlays/ovl_i10
+        - id: course_edit
+          name: course_edit
+          paths:
+            - overlays/course_edit
+        - id: machine_create
+          name: machine_create
+          paths:
+            - overlays/machine_create
+        - id: ovl_xk4
+          name: ovl_xk4
+          paths:
+            - overlays/ovl_xk4
