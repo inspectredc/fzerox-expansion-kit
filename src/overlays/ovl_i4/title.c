@@ -4,6 +4,65 @@
 #include "fzx_object.h"
 #include "fzx_course.h"
 #include "fzx_assets.h"
+#include "assets/overlays/ovl_i4/title.h"
+
+s32 D_i4_80077070;
+s32 D_i4_80077074;
+
+UNUSED s32 D_i4_80076690 = 0;
+#include "src/assets/overlays/ovl_i4/title/title.c"
+
+static unk_80077D50 sTitleBackgroundMainCompTexInfo[] = {
+    { 17, aTitleBackgroundMainTex, TEX_WIDTH(aTitleBackgroundMainTex), TEX_HEIGHT(aTitleBackgroundMainTex),
+      TEX_COMPRESSED_SIZE(aTitleBackgroundMainTex) }
+};
+static unk_80077D50 sTitleBackgroundComicCompTexInfo[] = {
+    { 17, aTitleBackgroundComicTex, TEX_WIDTH(aTitleBackgroundComicTex), TEX_HEIGHT(aTitleBackgroundComicTex),
+      TEX_COMPRESSED_SIZE(aTitleBackgroundComicTex) }
+};
+static unk_80077D50 sTitleBackgroundFalconCompTexInfo[] = {
+    { 17, aTitleBackgroundFalconTex, TEX_WIDTH(aTitleBackgroundFalconTex), TEX_HEIGHT(aTitleBackgroundFalconTex),
+      TEX_COMPRESSED_SIZE(aTitleBackgroundFalconTex) }
+};
+
+static unk_80077D50* sTitleBackgroundCompTexInfos[] = {
+    sTitleBackgroundMainCompTexInfo,
+    sTitleBackgroundComicCompTexInfo,
+    sTitleBackgroundFalconCompTexInfo,
+};
+
+unk_80077D50 sTitleLogoCompTexInfo[] = { { 18, aTitleLogoTex, TEX_WIDTH(aTitleLogoTex), TEX_HEIGHT(aTitleLogoTex),
+                                           TEX_COMPRESSED_SIZE(aTitleLogoTex) } };
+unk_80077D50 sTitlePushStartCompTexInfo[] = { { 18, aTitlePushStartTex, TEX_WIDTH(aTitlePushStartTex),
+                                                TEX_HEIGHT(aTitlePushStartTex),
+                                                TEX_COMPRESSED_SIZE(aTitlePushStartTex) } };
+unk_80077D50 sTitleNoControllerCompTexInfo[] = { { 20, aTitleNoControllerTex, TEX_WIDTH(aTitleNoControllerTex),
+                                                   TEX_HEIGHT(aTitleNoControllerTex),
+                                                   TEX_COMPRESSED_SIZE(aTitleNoControllerTex) } };
+unk_80077D50 sTitleExpansionPakWarningCompTexInfo[] = {
+    { 20, aTitleExpansionPakWarningTex, TEX_WIDTH(aTitleExpansionPakWarningTex),
+      TEX_HEIGHT(aTitleExpansionPakWarningTex), TEX_COMPRESSED_SIZE(aTitleExpansionPakWarningTex) }
+};
+unk_80077D50 sTitleDiskWarningCompTexInfo[] = { { 20, aTitleDiskWarningTex, TEX_WIDTH(aTitleDiskWarningTex),
+                                                  TEX_HEIGHT(aTitleDiskWarningTex),
+                                                  TEX_COMPRESSED_SIZE(aTitleDiskWarningTex) } };
+
+unk_80077D50* sTitleWarningCompTexInfos[] = {
+    sTitleNoControllerCompTexInfo,
+    sTitleExpansionPakWarningCompTexInfo,
+    sTitleDiskWarningCompTexInfo,
+};
+
+unk_80077D50 sCopyrightCompTexInfo[] = { { 17, aCopyrightDDTex, TEX_WIDTH(aCopyrightDDTex), TEX_HEIGHT(aCopyrightDDTex),
+                                           TEX_COMPRESSED_SIZE(aCopyrightDDTex) }, { 0 } };
+
+//! @bug Compressed size listed does not match the actual compressed texture size
+unk_80077D50 sN64DDLogoCompTexInfo[] = { { 17, aN64DDLogoTex, TEX_WIDTH(aN64DDLogoTex), TEX_HEIGHT(aN64DDLogoTex),
+                                           0x2E7 }, { 0 } };
+
+UNUSED s32 D_i4_80076F08[] = { 85, 21, 120, 150 };
+
+s32 D_i4_80076F18 = 0;
 
 void func_i4_80073F50(u16* arg0) {
 }
@@ -130,9 +189,6 @@ void func_i4_80074314(u16* texture) {
 
 extern s16 D_8076C7A8;
 extern s32 D_8079A32C;
-extern s32 D_i4_80076F18;
-extern s32 D_i4_80077070;
-extern s32 D_i4_80077074;
 extern s32 gCourseIndex;
 
 void Title_Init(void) {
@@ -200,7 +256,6 @@ Gfx* Title_Draw(Gfx* gfx) {
 }
 
 extern s8 D_8076CC94;
-extern unk_80077D50* sTitleBackgroundCompTexInfos[];
 
 void Title_BackgroundInit(Object* backgroundObj) {
     OBJECT_STATE(backgroundObj) = D_8076CC94;
@@ -212,8 +267,6 @@ void Title_BackgroundInit(Object* backgroundObj) {
 
 void func_i4_80074708(void) {
 }
-
-extern unk_80077D50 sTitleLogoCompTexInfo[];
 
 void Title_LogoInit(Object* logoObj) {
     OBJECT_STATE(logoObj) = D_8076CC94;
@@ -234,9 +287,6 @@ void Title_LogoInit(Object* logoObj) {
 
 void func_i4_80074778(void) {
 }
-
-extern unk_80077D50 sTitleNoControllerCompTexInfo[];
-extern unk_80077D50 sTitlePushStartCompTexInfo[];
 
 void Title_StartInit(Object* startObj) {
 
@@ -261,13 +311,10 @@ void Title_StartInit(Object* startObj) {
 void func_i4_8007483C(void) {
 }
 
-extern unk_80077D50 sCopyrightCompTexInfo[];
-
 void Title_CopyrightInit(void) {
     func_i2_800AE578(sCopyrightCompTexInfo, false);
 }
 
-extern unk_80077D50* sTitleWarningCompTexInfos[];
 extern s32 gRamDDCompatible;
 
 void Title_DiskDriveInit(Object* diskDriveObj) {
@@ -294,14 +341,13 @@ void Title_DiskDriveInit(Object* diskDriveObj) {
     func_i2_800AE17C(sTitleWarningCompTexInfos[var_v0], 0, true);
 }
 
-extern unk_80077D50 D_i4_80076EE8[];
-
 void func_i4_800748F4(void) {
-    func_i2_800AE578(D_i4_80076EE8, 0);
+    func_i2_800AE578(sN64DDLogoCompTexInfo, 0);
 }
 
-extern s32 D_i4_80076F18;
-extern void (*sTitleBackgroundEffectFuncs[])(u16*);
+void (*sTitleBackgroundEffectFuncs[])(u16*) = {
+    func_i4_80073F50, func_i4_80073F50, func_i4_80073F58, func_i4_8007407C, func_i4_800741C8, func_i4_80074314,
+};
 
 void Title_BackgroundUpdate(Object* backgroundObj) {
     void (*backgroundEffect)(u16*);
@@ -432,7 +478,7 @@ Gfx* Title_DiskDriveDraw(Gfx* gfx, Object* diskDriveObj) {
 }
 
 Gfx* func_i4_80074EE0(Gfx* gfx, Object* arg1) {
-    return func_i2_800AF584(gfx, D_i4_80076EE8, OBJECT_LEFT(arg1), OBJECT_TOP(arg1), 0, 0, 0, 1.0f,
+    return func_i2_800AF584(gfx, sN64DDLogoCompTexInfo, OBJECT_LEFT(arg1), OBJECT_TOP(arg1), 0, 0, 0, 1.0f,
                          1.0f, false);
 }
 

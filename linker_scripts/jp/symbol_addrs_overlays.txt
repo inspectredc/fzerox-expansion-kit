@@ -382,6 +382,8 @@ sTitleWarningCompTexInfos = 0x80076EBC; //segment:ovl_i4
 sCopyrightCompTexInfo = 0x80076EC8; //segment:ovl_i4
 sTitleBackgroundEffectFuncs = 0x80076F1C; //segment:ovl_i4
 
+aCopyrightDDTex = 0x80076958; //segment:ovl_i4
+
 CourseSelect_BackgroundInit = 0x800791A4; //segment:course_select
 CourseSelect_ModelInit = 0x80079280; //segment:course_select
 CourseSelect_CupInit = 0x800792BC; //segment:course_select
