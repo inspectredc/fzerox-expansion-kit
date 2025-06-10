@@ -254,6 +254,7 @@ void func_80741EB4(void);
 void func_80741EC4(void);
 void func_80742004(void);
 void func_8074204C(u8);
+void func_807423C4(void);
 void func_807423F4(s32);
 void func_8074241C(u8, f32);
 s32 func_807424CC(void);
@@ -319,6 +320,7 @@ Gfx* func_i2_800AF584(Gfx*, unk_80077D50*, s32, s32, u32, s32, s32, f32, f32, bo
 Gfx* func_i2_800AF678(Gfx*, unk_800E3F28*, s32, s32, u32, s32, s32, f32, f32, bool);
 void Object_Init(s32 cmdId, s32 left, s32 top, s8 priority);
 Object* Object_Get(s32 cmdId);
+Gfx* Object_UpdateAndDrawAll(Gfx* gfx);
 void func_i2_800B079C(void);
 void func_i2_800B07F0(void);
 void func_i2_800B0D10(s32);
