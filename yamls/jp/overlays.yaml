@@ -113,7 +113,7 @@
       - [0xF1C10, c]
       - [0xF3800, c]
       - [0xF3870, data]
-      - [0xF45E0, .rodata, EB850]
+      - [0xF45A0, .rodata, EB850]
       - [0xF47B0, .rodata, EDA70]
       - [0xF5060, .rodata, F1C10]
       - { type: bss, vram: 0x80085AE0 }
