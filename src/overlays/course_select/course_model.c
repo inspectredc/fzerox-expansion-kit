@@ -43,7 +43,9 @@ void func_i5_800770B4(void) {
         func_80702BC4(gCourseModelCupType * 6 + gCourseModelCupCourseNo);
         func_80702E0C(&gCourseInfos[gCourseModelCupType * 6 + gCourseModelCupCourseNo]);
         func_i2_800B3640(&gCourseInfos[gCourseModelCupType * 6 + gCourseModelCupCourseNo]);
-        D_8007C270[gCourseModelCupCourseNo] = func_i2_800B71B0(&gCourseInfos[gCourseModelCupType * 6 + gCourseModelCupCourseNo], &D_i5_8007C290[gCourseModelCupCourseNo * 0x900]);
+        D_8007C270[gCourseModelCupCourseNo] =
+            func_i2_800B71B0(&gCourseInfos[gCourseModelCupType * 6 + gCourseModelCupCourseNo],
+                             &D_i5_8007C290[gCourseModelCupCourseNo * 0x900]);
         gCourseModelCupCourseNo++;
         D_i5_8007B074--;
     }
@@ -51,7 +53,8 @@ void func_i5_800770B4(void) {
         var_a3 = false;
         if (D_80794E14 == 0) {
             for (i = 0; i < 3; i++) {
-                if ((ghostSave[i].record.encodedCourseIndex != gCourseInfos[gCourseModelCupType * 6 + gCourseModelCupCourseNo].encodedCourseIndex)) {
+                if ((ghostSave[i].record.encodedCourseIndex !=
+                     gCourseInfos[gCourseModelCupType * 6 + gCourseModelCupCourseNo].encodedCourseIndex)) {
                     continue;
                 }
 
@@ -69,7 +72,9 @@ void func_i5_800770B4(void) {
             func_80702BC4(gCourseModelCupType * 6 + gCourseModelCupCourseNo);
             func_80702E0C(&gCourseInfos[gCourseModelCupType * 6 + gCourseModelCupCourseNo]);
             func_i2_800B3640(&gCourseInfos[gCourseModelCupType * 6 + gCourseModelCupCourseNo]);
-            D_8007C270[gCourseModelCupCourseNo] = func_i2_800B71B0(&gCourseInfos[gCourseModelCupType * 6 + gCourseModelCupCourseNo], &D_i5_8007C290[gCourseModelCupCourseNo * 0x900]);
+            D_8007C270[gCourseModelCupCourseNo] =
+                func_i2_800B71B0(&gCourseInfos[gCourseModelCupType * 6 + gCourseModelCupCourseNo],
+                                 &D_i5_8007C290[gCourseModelCupCourseNo * 0x900]);
             gCourseModelCupCourseNo++;
             D_i5_8007B074--;
         }
@@ -159,7 +164,7 @@ void func_i5_800778E8(void) {
     }
 }
 
-void func_i5_80077B8C(s32 arg0) {
+void func_i5_80077B8C(s32 left) {
     s32 i;
 
     for (i = 0; i < 6; i++) {
@@ -169,7 +174,7 @@ void func_i5_80077B8C(s32 arg0) {
         vp->vp.vscale[1] = (SCREEN_HEIGHT / 4) << 2;
         vp->vp.vscale[2] = 0x1FF;
         vp->vp.vscale[3] = 0;
-        vp->vp.vtrans[0] = 640 + (arg0 + i * 0x500);
+        vp->vp.vtrans[0] = 640 + (left + i * 0x500);
         vp->vp.vtrans[1] = 600;
         vp->vp.vtrans[2] = 0x1FF;
         vp->vp.vtrans[3] = 0;

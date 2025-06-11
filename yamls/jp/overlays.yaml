@@ -94,10 +94,10 @@
       - [0xE7340, c, course_select]
       - [0xEA590, .data, course_view]
       - [0xEA650, .data, course_model]
-      - [0xEA660, data, course_select]
-      - [0xEB480, .rodata, course_select]
+      - [0xEA660, .data, course_select]
+      - [0xEB400, .rodata, course_select]
       - { type: .bss, vram: 0x8007C270, name: course_model }
-      - { type: bss, vram: 0x8007C2A0, name: course_select }
+      - { type: .bss, vram: 0x8007C2A0, name: course_select }
 
   - name: ovl_i6
     exclusive_ram_id: ovl_i6

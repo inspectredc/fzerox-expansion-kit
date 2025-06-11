@@ -174,6 +174,7 @@ void SLLeo_mfs_newdisk(void);
 
 void func_80708430(void);
 Gfx* func_80709C90(Gfx* gfx, s32 left, s32 top, s32 right, s32 bottom, s32 red, s32 green, s32 blue, s32 alpha);
+void func_8070A078(u16*, size_t, s32, s32, s32);
 Gfx* func_8070A594(Gfx* gfx, u16 red, u16 green, u16 blue, s32 left, s32 top, s32 right, s32 bottom);
 void func_8070D358(void);
 Gfx* func_8070D4A8(Gfx*, s32);
@@ -267,6 +268,7 @@ void func_807423C4(void);
 void func_807423F4(s32);
 void func_8074241C(u8, f32);
 s32 func_807424CC(void);
+u8 func_80742510(void);
 s32 func_80742790(void);
 void func_8074279C(void);
 
@@ -336,6 +338,8 @@ void func_i2_800AFB1C(s32, s32, unk_800792D8*);
 void Object_Init(s32 cmdId, s32 left, s32 top, s8 priority);
 Object* Object_Get(s32 cmdId);
 Gfx* Object_UpdateAndDrawAll(Gfx* gfx);
+void Object_LerpPosXToTarget(Object* object, s32 target, s32 stepScale);
+void Object_LerpPosYToTarget(Object* object, s32 target);
 void Object_LerpPosYToClampedTarget(Object* object, s32 target);
 void Object_LerpPosXToClampedTargetMaxStep(Object* object, s32 target, s32 maxStep);
 void func_i2_800B079C(void);
