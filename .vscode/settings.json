@@ -75,7 +75,8 @@
       "fzx_object.h": "c",
       "ovl_i3.h": "c",
       "fzx_font.h": "c",
-      "machine.h": "c"
+      "machine.h": "c",
+      "course_select.h": "c"
     },
     "C_Cpp_Runner.msvcBatchPath": "",
     "C_Cpp.errorSquiggles": "enabled"
