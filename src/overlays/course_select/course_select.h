@@ -1,5 +1,5 @@
-#ifndef OVL_I5_H
-#define OVL_I5_H
+#ifndef COURSE_SELECT_H
+#define COURSE_SELECT_H
 
 #include "libultra/ultra64.h"
 
@@ -28,4 +28,4 @@ typedef enum CourseSelectState {
     /* 11 */ COURSE_SELECT_NEXT_COURSE_CONTINUE,
 } CourseSelectState;
 
-#endif // OVL_I5_H
+#endif // COURSE_SELECT_H
