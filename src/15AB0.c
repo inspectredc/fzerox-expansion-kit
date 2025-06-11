@@ -63,8 +63,8 @@ void func_80708430(void) {
 }
 
 // Add to memory start and return start of newly allocated block
-u8* func_80708474(s32 arg0, size_t arg1) {
-    u8* ret = D_8079FA80[arg0];
+void* func_80708474(s32 arg0, size_t arg1) {
+    void* ret = D_8079FA80[arg0];
 
     arg1 = ALIGN16(arg1);
     D_8079FA80[arg0] += arg1;
@@ -73,14 +73,14 @@ u8* func_80708474(s32 arg0, size_t arg1) {
 }
 
 // Get memory block (non-allocating mode, used for compressed blocks)
-u8* func_807084A0(s32 arg0, size_t arg1) {
-    u8* ret = D_8079FA80[arg0];
+void* func_807084A0(s32 arg0, size_t arg1) {
+    void* ret = D_8079FA80[arg0];
 
     return ret;
 }
 
 // Take from memory end and return new memory end
-u8* func_807084B8(s32 arg0, size_t arg1) {
+void* func_807084B8(s32 arg0, size_t arg1) {
 
     arg1 = ALIGN16(arg1);
     D_8079FA90[arg0] -= arg1;
@@ -88,7 +88,7 @@ u8* func_807084B8(s32 arg0, size_t arg1) {
     return (u8*) D_8079FA90[arg0];
 }
 
-u8* func_807084E4(s32 arg0, size_t arg1) {
+void* func_807084E4(s32 arg0, size_t arg1) {
     size_t sp54[4];
     s8 sp50[4];
     u8* sp4C;
