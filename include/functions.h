@@ -264,6 +264,7 @@ void func_80741EB4(void);
 void func_80741EC4(void);
 void func_80742004(void);
 void func_8074204C(u8);
+void func_80742360(u8);
 void func_807423C4(void);
 void func_807423F4(s32);
 void func_8074241C(u8, f32);
