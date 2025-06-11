@@ -1594,7 +1594,7 @@ void Save_LoadEditCup2(ProfileSave* profileSaves, u8* arg1, u16* arg2) {
             for (i = 0; i < 30; i++) {
                 for (j = 0; j < 2; j++) {
                     temp_v0 = (editCup2->unk_04[i * 2 + j] >> k * 2) & 3;
-                    arg1[k * 0xD2 + i * 7 + j + 5] = temp_v0;
+                    arg1[k * 30 * 7 + i * 7 + j + 5] = temp_v0;
                 }
             }
         }

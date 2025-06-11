@@ -374,16 +374,10 @@ MachineSettings_NameCardUpdate = 0x80073E24; //segment:ovl_i4
 MachineSelect_OkUpdate = 0x80073D88; //segment:ovl_i4
 MachineSettings_OkUpdate = 0x80073DD4; //segment:ovl_i4
 
-sTitleBackgroundCompTexInfos = 0x80076E60; //segment:ovl_i4
-sTitleLogoCompTexInfo = 0x80076E6C; //segment:ovl_i4
-sTitlePushStartCompTexInfo = 0x80076E7C; //segment:ovl_i4
-sTitleNoControllerCompTexInfo = 0x80076E8C; //segment:ovl_i4
-sTitleWarningCompTexInfos = 0x80076EBC; //segment:ovl_i4
-sCopyrightCompTexInfo = 0x80076EC8; //segment:ovl_i4
-sTitleBackgroundEffectFuncs = 0x80076F1C; //segment:ovl_i4
-
 aCopyrightDDTex = 0x80076958; //segment:ovl_i4
 
+CourseModel_Init = 0x80077D3C; //segment:course_select
+CourseSelect_UpdateUnlockedGhosts = 0x80077DF0; //segment:course_select
 CourseSelect_BackgroundInit = 0x800791A4; //segment:course_select
 CourseSelect_ModelInit = 0x80079280; //segment:course_select
 CourseSelect_CupInit = 0x800792BC; //segment:course_select
@@ -407,6 +401,31 @@ CourseSelect_OkUpdate = 0x8007AD3C; //segment:course_select
 CourseSelect_ArrowsUpdate = 0x8007AD8C; //segment:course_select
 CourseSelect_GhostMarkerUpdate = 0x8007AF1C; //segment:course_select
 CourseSelect_GhostOptionUpdate = 0x8007AF50; //segment:course_select
+
+gCourseModelCupType = 0x8007B070; //segment:course_select
+gCourseModelCupCourseNo = 0x8007B078; //segment:course_select
+sCourseSelectState = 0x8007B9CC; //segment:course_select
+gCupSelectOption = 0x8007B9D4; //segment:course_select
+sCourseSelectTrackNo = 0x8007B9D8; //segment:course_select
+sSelectedGhostOption = 0x8007B9E0; //segment:course_select
+sUnlockedGhosts = 0x8007B9E4; //segment:course_select
+sStaffGhostTimeBeaten = 0x8007B9E8; //segment:course_select
+sCupSelectCompTexInfos = 0x8007BB4C; //segment:course_select
+sSelectCourseCompTexInfo = 0x8007BB70; //segment:course_select
+sRecordsCompTexInfo = 0x8007BB80; //segment:course_select
+sOKCompTexInfo = 0x8007BB90; //segment:course_select
+sYellowArrowCompTexInfo = 0x8007BBA0; //segment:course_select
+sOptionsFalconHelmetCompTexInfo = 0x8007BBB0; //segment:course_select
+sTitleBackgroundCompTexInfos = 0x8007BBF0; //segment:course_select
+sCupClearedDifficultyCompTexInfos = 0x8007BC3C; //segment:course_select
+sHasGhostMarkerCompTexInfo = 0x8007BC4C; //segment:course_select
+sStaffGhostBeatenCompTexInfo = 0x8007BC5C; //segment:course_select
+sTimeAttackGhostOptionCompTexInfos = 0x8007BCBC; //segment:course_select
+sCourseSelectCupColors = 0x8007BCD0; //segment:course_select
+sTrackSubtitles = 0x8007BD24; //segment:course_select
+sGhostOptionTypeMap = 0x8007BDE8; //segment:course_select
+sCourseSelectCup = 0x8007C2A0; //segment:course_select
+sLastCourseIndex = 0x8007C2A4; //segment:course_select
 
 MainMenu_BackgroundInit = 0x8007CC88; //segment:ovl_i6
 MainMenu_SignInit = 0x8007CD70; //segment:ovl_i6
