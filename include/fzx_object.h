@@ -222,6 +222,9 @@ typedef enum ObjectIds {
     OBJECT_CREDITS_NAME_33,
     OBJECT_CREDITS_NAME_34,
     OBJECT_CREDITS_NAME_35,
+    OBJECT_CREDITS_NAME_36,
 } ObjectIds;
+
+extern Object gObjects[32];
 
 #endif // FZX_OBJECT_H
