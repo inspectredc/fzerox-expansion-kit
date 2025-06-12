@@ -416,7 +416,6 @@ sRecordsCompTexInfo = 0x8007BB80; //segment:course_select
 sOKCompTexInfo = 0x8007BB90; //segment:course_select
 sYellowArrowCompTexInfo = 0x8007BBA0; //segment:course_select
 sOptionsFalconHelmetCompTexInfo = 0x8007BBB0; //segment:course_select
-sTitleBackgroundCompTexInfos = 0x8007BBF0; //segment:course_select
 sCupClearedDifficultyCompTexInfos = 0x8007BC3C; //segment:course_select
 sHasGhostMarkerCompTexInfo = 0x8007BC4C; //segment:course_select
 sStaffGhostBeatenCompTexInfo = 0x8007BC5C; //segment:course_select
@@ -444,6 +443,15 @@ MainMenu_TimeAttackModeDraw = 0x8007DFE8; //segment:ovl_i6
 MainMenu_OkDraw = 0x8007E230; //segment:ovl_i6
 MainMenu_OkUpdate = 0x8007E32C; //segment:ovl_i6
 MainMenu_UnlockEverythingUpdate = 0x8007E3D0; //segment:ovl_i6
+
+sTitleBackgroundCompTexInfos = 0x800843B0; //segment:ovl_i6
+sMenuSignCompTexInfos = 0x80084360; //segment:ovl_i6
+sSelectModeCompTexInfo = 0x800843BC; //segment:ovl_i6
+sSelectModeOptionFlamesCompTexInfo = 0x800843CC; //segment:ovl_i6
+sDifficultyCompTexInfos = 0x8008446C; //segment:ovl_i6
+sNumPlayersCompTexInfos = 0x8008447C; //segment:ovl_i6
+sTimeAttackModeCompTexInfos = 0x80084488; //segment:ovl_i6
+sOkCompTexInfo = 0x80084490; //segment:ovl_i6
 
 gSaveContext = 0x8008A7C0; //segment:ovl_i6
 
