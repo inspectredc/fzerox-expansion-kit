@@ -1,8 +1,68 @@
-#include "common.h"
+#include "global.h"
+#include "fzx_game.h"
+#include "fzx_machine.h"
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i7/F5080/func_i7_800927C0.s")
+s32 func_i7_GetEndScreenIndex(s32 difficulty, s16 character, s8 customType) {
+    s32 endScreenCharacterIndex;
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i7/F5080/func_i7_80092880.s")
+    switch (character) {
+        case CAPTAIN_FALCON:
+            if (IS_SUPER_MACHINE(customType)) {
+                endScreenCharacterIndex = 30;
+            } else {
+                switch (difficulty) {
+                    case STANDARD:
+                    case EXPERT:
+                        endScreenCharacterIndex = 31;
+                        break;
+                    case MASTER:
+                        endScreenCharacterIndex = character;
+                        break;
+                }
+            }
+            break;
+        case SAMURAI_GOROH:
+            if (IS_SUPER_MACHINE(customType)) {
+                endScreenCharacterIndex = 32;
+            } else {
+                endScreenCharacterIndex = character;
+            }
+            break;
+        case JODY_SUMMER:
+            if (IS_SUPER_MACHINE(customType)) {
+                endScreenCharacterIndex = 33;
+            } else {
+                endScreenCharacterIndex = character;
+            }
+            break;
+        default:
+            endScreenCharacterIndex = character;
+            break;
+    }
+    return endScreenCharacterIndex;
+}
+
+bool func_i7_80092880(void) {
+    s8* sp1C;
+    s32 i;
+    bool var_a1;
+
+    sp1C = func_807084E4(0, 4 * 30 * 7);
+    Save_UpdateCupSave(sp1C);
+
+    var_a1 = false;
+    sp1C += 3 * 30 * 7;
+    for (i = 0; i < 30 * 7; i++, sp1C++) {
+        if (*sp1C == 0) {
+            break;
+        }
+    }
+    if (i == 30 * 7) {
+        var_a1 = true;
+    }
+
+    return var_a1;
+}
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i7/F5080/EndingCutscene_Init.s")
 
