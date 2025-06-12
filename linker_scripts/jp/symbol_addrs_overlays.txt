@@ -506,6 +506,8 @@ sOptionsDataAlreadyCleared = 0x8008A784; //segment:ovl_i6
 sOptionsSelectionState = 0x8008A788; //segment:ovl_i6
 gSaveContext = 0x8008A7C0; //segment:ovl_i6
 
+func_i7_GetEndScreenIndex = 0x800927C0; //segment:ovl_i7
+
 func_xk1_80025C00 = 0x80025C00; //segment:ovl_xk1
 func_xk1_8002FFDC = 0x8002FFDC; //segment:ovl_xk1
 
