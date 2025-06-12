@@ -15,17 +15,6 @@ typedef enum OptionsRow {
 #define OPTIONS_DATA_CLEAR_MENU_CLOSED 0
 #define OPTIONS_DATA_CLEAR_MENU_OPEN 1
 
-typedef struct unk_8011DC40 {
-    f32 unk_00;
-    f32 unk_04;
-    s32 unk_08;
-    s32 unk_0C;
-    s32 unk_10;
-    s32 unk_14;
-    s32 unk_18;
-    s32 unk_1C;
-} unk_8011DC40; // UNUSED?
-
 typedef struct OptionsTextureInfo {
     /* 0x00 */ void* textureOffset;
     /* 0x04 */ s16 width;
