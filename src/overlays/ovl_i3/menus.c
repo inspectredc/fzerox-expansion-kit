@@ -3725,7 +3725,7 @@ Gfx* func_i3_80052CDC(Gfx* gfx, s32 arg1, s32 arg2, s32 arg3) {
     return gfx;
 }
 
-const char* sDifficultyNames[] = { "NOVICE", "STANDARD", "EXPERT", "MASTER" };
+const char* gDifficultyNames[] = { "NOVICE", "STANDARD", "EXPERT", "MASTER" };
 
 extern s32 gDifficulty;
 
@@ -3741,10 +3741,10 @@ Gfx* func_i3_80053008(Gfx* gfx, s32 arg1, s32 arg2, s32 arg3) {
 
     if (gGameMode == GAMEMODE_GP_RACE) {
         sp38 = Font_GetStringWidth("GP RACE", FONT_SET_3, 1);
-        sp3C = Font_GetStringWidth(sDifficultyNames[gDifficulty], 3, 1);
+        sp3C = Font_GetStringWidth(gDifficultyNames[gDifficulty], 3, 1);
     } else if (gGameMode == GAMEMODE_PRACTICE) {
         sp38 = Font_GetStringWidth("PRACTICE", FONT_SET_3, 1);
-        sp3C = Font_GetStringWidth(sDifficultyNames[gDifficulty], 3, 1);
+        sp3C = Font_GetStringWidth(gDifficultyNames[gDifficulty], 3, 1);
     } else if (gGameMode == GAMEMODE_DEATH_RACE) {
         sp38 = Font_GetStringWidth("DEATH RACE", FONT_SET_3, 1);
         sp3C = 0;
@@ -3820,12 +3820,12 @@ Gfx* func_i3_80053008(Gfx* gfx, s32 arg1, s32 arg2, s32 arg3) {
     if (gGameMode != GAMEMODE_DEATH_RACE) {
         gDPPipeSync(gfx++);
         gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, 255);
-        gfx = Font_DrawString(gfx, (arg1 - (Font_GetStringWidth(sDifficultyNames[gDifficulty], FONT_SET_3, 1) / 2)) + 2,
-                              arg2 + 2, sDifficultyNames[gDifficulty], 1, FONT_SET_3, 0);
+        gfx = Font_DrawString(gfx, (arg1 - (Font_GetStringWidth(gDifficultyNames[gDifficulty], FONT_SET_3, 1) / 2)) + 2,
+                              arg2 + 2, gDifficultyNames[gDifficulty], 1, FONT_SET_3, 0);
         gDPPipeSync(gfx++);
         gDPSetPrimColor(gfx++, 0, 0, 250, 250, 0, 255);
-        gfx = Font_DrawString(gfx, arg1 - (Font_GetStringWidth(sDifficultyNames[gDifficulty], FONT_SET_3, 1) / 2), arg2,
-                              sDifficultyNames[gDifficulty], 1, FONT_SET_3, 0);
+        gfx = Font_DrawString(gfx, arg1 - (Font_GetStringWidth(gDifficultyNames[gDifficulty], FONT_SET_3, 1) / 2), arg2,
+                              gDifficultyNames[gDifficulty], 1, FONT_SET_3, 0);
     }
     gDPPipeSync(gfx++);
     gDPSetScissor(gfx++, G_SC_NON_INTERLACE, 12, 16, 308, 224);
