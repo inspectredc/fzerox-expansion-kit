@@ -89,7 +89,8 @@ s16 D_i7_80098EDC[] = { 1, 3, 4, 4, 4, 4, 4, 4, 5, -1 };
 
 char sTotalRankingStr[] = "TOTAL RANKING";
 
-const char* sCupNames[] = { "JACK CUP", "QUEEN CUP", "KING CUP", "JOKER CUP", "EDIT CUP", "X CUP", "DD-1 CUP", "DD-2 CUP" };
+const char* sCupNames[] = { "JACK CUP", "QUEEN CUP", "KING CUP", "JOKER CUP",
+                            "EDIT CUP", "X CUP",     "DD-1 CUP", "DD-2 CUP" };
 
 char sThanksForPlayingStr[] = "THANKS FOR PLAYING!!";
 
@@ -769,8 +770,8 @@ Gfx* func_i7_DrawFinalResultsPosition(Gfx* gfx, s32 xPos, s32 yPos, s32 position
             xOffset = 8;
             width = 8;
         }
-        gfx = func_8070A99C(gfx, func_i2_800AEA90(sFinalResultPositionDigitTexs[digit]), xPos + xOffset, yPos, width, 16,
-                            G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, 0, 0, 0);
+        gfx = func_8070A99C(gfx, func_i2_800AEA90(sFinalResultPositionDigitTexs[digit]), xPos + xOffset, yPos, width,
+                            16, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, 0, 0, 0);
         xPos += 16;
     }
 
