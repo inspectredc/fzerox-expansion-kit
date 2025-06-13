@@ -132,12 +132,17 @@
     bss_size: 0xDD0
     symbol_name_format: i7_$VRAM
     subsegments:
-      - [0xF5080, c]
+      - [0xF5080, c, ending]
       - [0xF8970, c]
-      - [0xFB640, data]
-      - [0xFCB00, .rodata, F5080]
+      - [0xFB640, .data, ending]
+      - [0xFB810, .data, ovl_i7_data_2]
+      - [0xFC3C0, .data, F8970]
+      - [0xFC760, .data, ovl_i7_data_3]
+      - [0xFCB00, .rodata, ending]
       - [0xFCBD0, .rodata, F8970]
-      - { type: bss, vram: 0x8009A3A0 }
+      - { type: .bss, vram: 0x8009A3A0, name: ovl_i7_data }
+      - { type: .bss, vram: 0x8009AD00, name: ending }
+      - { type: .bss, vram: 0x8009AEB0, name: F8970 }
 
   - name: ovl_i8
     exclusive_ram_id: ovl_i8
