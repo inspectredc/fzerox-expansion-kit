@@ -147,7 +147,7 @@ s32 func_80703E08(s32 startLba, void* vram, s32 diskSize, s32 bssSize) {
     void* bssStart;
     s32 sp70;
     s32 lbaCount;
-    s32 var_a0;
+    s32 progress;
     LEOCmd sp4C;
     OSMesg sp48;
     s32 pad[2];
@@ -171,11 +171,11 @@ s32 func_80703E08(s32 startLba, void* vram, s32 diskSize, s32 bssSize) {
     while (osRecvMesg(&gDmaMesgQueue, &sp48, 0) == -1) {
         if (D_8076CB40 != -1) {
             osWritebackDCacheAll();
-            var_a0 = (D_8076C770 - D_8076CB40) / 6 + 160;
-            if (var_a0 > 192) {
-                var_a0 = 192;
+            progress = (D_8076C770 - D_8076CB40) / 6 + 160;
+            if (progress > 192) {
+                progress = 192;
             }
-            func_i10_8012B894(var_a0);
+            func_i10_8012B894(progress);
             osWritebackDCacheAll();
         }
     }
