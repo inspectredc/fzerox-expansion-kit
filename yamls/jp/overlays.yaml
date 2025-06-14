@@ -217,14 +217,12 @@
     dir: overlays/ovl_i10
     start: 0x1872B0
     vram: 0x8012B520
-    bss_size: 0x0
     symbol_name_format: i10_$VRAM
     subsegments:
       - [0x1872B0, c]
       - [0x187510, c]
-      - [0x187830, data]
+      - [0x187830, .data, 187510]
       - [0x188830, .rodata, 187510]
-      - { type: bss, vram: 0x8012CAC0 }
 
   - name: course_edit
     exclusive_ram_id: overlay_800D6D90

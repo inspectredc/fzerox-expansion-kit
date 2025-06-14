@@ -674,7 +674,10 @@ Gfx* Machine_DrawLoadWildGooseTextures(Gfx* gfx);
 Gfx* Machine_DrawLoadGoldenFoxTextures(Gfx* gfx);
 Gfx* Machine_DrawLoadBlueFalconTextures(Gfx* gfx);
 
-void func_i10_8012B520(void);
+s32 func_i10_8012B520(void);
+void func_i10_8012B580(void);
+void func_i10_8012B5E8(SaveContext* saveContext);
+void func_i10_8012B6E4(SaveContext*, s32);
 void func_i10_8012B854(void);
 void func_i10_8012B894(s32);
 void func_i10_8012B904(void);
