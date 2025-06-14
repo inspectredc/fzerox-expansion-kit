@@ -222,12 +222,8 @@ Gfx* func_i3_8006436C(Gfx* gfx);
 void func_i3_80064AD4(s32, unk_80141FF0*, Player*);
 Gfx* func_i3_80064CB4(Gfx*, s32);
 
-void func_i3_80064F20(void);
-bool func_i3_80065204(void);
-Gfx* func_i3_80065560(Gfx* gfx, s32 courseIndex);
 Gfx* func_i3_80066D80(Gfx*, s32, MachineInfo*);
 Gfx* func_i3_80066DF8(Gfx*, s32, s32, f32);
-void func_i3_80067118(s32);
 void func_i3_80067150(s32 courseIndex);
 void func_i3_80067208(void);
 void func_i3_80067280(void);
