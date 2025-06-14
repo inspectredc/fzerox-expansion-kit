@@ -261,7 +261,7 @@
       - [0x67CA0, c, leo/lib/leomotor]
       - [0x67D90, c, leo_bootdisk]
       - [0x68210, hasm, leo_bootstrap]
-      - [0x68260, c, leo/lib/drivexist]
+      - [0x68260, c, leo/lib/driveexist]
       - [0x68330, c, leo/lib/leomode_sel]
       - [0x683E0, c, leo/lib/leord_capa]
       - [0x68480, c, leo/lib/leoutil]
