@@ -66,6 +66,10 @@ tools:
           name: main.game
           paths:
             - game
+        - id: main.leo
+          name: main.leo
+          paths:
+            - leo
         - id: main.audio
           name: main.audio
           paths:
