@@ -536,6 +536,8 @@ sThanksForPlayingFade = 0x8009AD3E; //segment:ovl_i7
 sEndingTex = 0x8009AD18; //segment:ovl_i7
 sEndingTextTex = 0x8009AD1C; //segment:ovl_i7
 
+sUnlockedCourseCount = 0x800A1EF4; //segment:ovl_i8
+
 func_xk1_80025C00 = 0x80025C00; //segment:ovl_xk1
 func_xk1_8002FFDC = 0x8002FFDC; //segment:ovl_xk1
 
