@@ -769,4 +769,28 @@ typedef struct unk_806F2400 {
     s8 unk_3C0[30];
 } unk_806F2400; // size = 0x3DE
 
+typedef struct unk_80144F74 {
+    void* unk_00;
+    s16 width;
+    s16 height;
+} unk_80144F74; // size = 0x8
+
+typedef struct unk_80144F44 {
+    s32 unk_00;
+    unk_80144F74 unk_04;
+    s32 tlut;
+} unk_80144F44; // size = 0x10
+
+typedef struct unk_80144FE0 {
+    Mtx unk_00;
+    Vtx unk_40[4];
+} unk_80144FE0; // size = 0x80
+
+typedef struct unk_8009E224 {
+    void* texture;
+    void* tlut;
+    s16 width;
+    s16 height;
+} unk_8009E224;
+
 #endif // UNK_STRUCTS_H

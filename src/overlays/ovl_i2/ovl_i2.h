@@ -50,7 +50,6 @@ typedef struct unk_8010D778 {
 } unk_8010D778; // size = 0x30
 
 s32 func_i2_800A250C(s32, s32);
-void func_i2_800A26C0(s32, s32);
 s32 func_i2_800A26D4(s32, s32);
 s32 func_i2_800A27C4(void);
 void func_i2_800A28D0(unk_8010D778*);
