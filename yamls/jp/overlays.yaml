@@ -153,10 +153,10 @@
     bss_size: 0x1B0
     symbol_name_format: i8_$VRAM
     subsegments:
-      - [0xFCC60, c]
-      - [0xFFCA0, data]
-      - [0x1038B0, .rodata, FCC60]
-      - { type: bss, vram: 0x800A1EF0 }
+      - [0xFCC60, c, records]
+      - [0xFFCA0, .data, records]
+      - [0x1038B0, .rodata, records]
+      - { type: .bss, vram: 0x800A1EF0, name: records}
 
   - name: ovl_i2
     exclusive_ram_id: ovl_i2
