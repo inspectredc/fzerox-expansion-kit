@@ -270,6 +270,7 @@ void func_80741538(u8);
 void func_80741550(u8);
 void func_8074184C(u8);
 void func_80741A0C(u8);
+void func_80741AF4(u8);
 void func_80741B84(void);
 void func_80741BCC(void);
 void func_80741BD4(u8);
@@ -682,6 +683,7 @@ void func_i10_8012B854(void);
 void func_i10_8012B894(s32);
 void func_i10_8012B904(void);
 
+void func_xk1_800267C4(u16*);
 void func_xk1_8002FC70(void);
 
 void func_xk2_800F1330(s32, s32);
