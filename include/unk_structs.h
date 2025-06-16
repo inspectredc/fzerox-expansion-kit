@@ -793,4 +793,16 @@ typedef struct unk_8009E224 {
     s16 height;
 } unk_8009E224;
 
+typedef struct unk_8003A5D8 {
+    char unk_00[0x1];
+    s8 unk_01[0xF];
+    s32 unk_10;
+    s8 unk_14[0x9];
+    char unk_1D[3];
+    u8 unk_20;
+    s8 unk_21[0x1];
+    u8 unk_22;
+    s8 unk_23;
+} unk_8003A5D8; //size = 0x24
+
 #endif // UNK_STRUCTS_H

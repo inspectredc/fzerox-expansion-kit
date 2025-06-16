@@ -13,7 +13,6 @@ void func_xk1_80026830(u8* arg0, s8* arg1) {
         *arg1++ = temp_t9 >> 8;
         *arg1++ = temp_t9 & 0xFF;
         arg0++;
-
     }
     *arg1 = 0;
 }
