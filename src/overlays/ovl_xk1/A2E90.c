@@ -81,15 +81,13 @@ s32 func_xk1_80025DE4(void) {
     s32 i;
 
     D_xk1_80030084 = 0;
-    for (i = 0; i < D_xk1_80030080; i++) {
-
-    }
+    for (i = 0; i < D_xk1_80030080; i++) {}
     D_xk1_8003A494 = 0;
 
     for (i = 0; i < 31; i++) {
         func_xk1_80025D2C(D_xk1_800331F0[i]);
     }
-    
+
     for (i = 0; i < 12; i++) {
         func_xk1_80025D2C(D_xk1_8003339C[i]);
     }
@@ -177,9 +175,8 @@ Gfx* func_xk1_800260F0(Gfx* gfx, s32 arg1, s32 arg2, s32 code) {
     func_80768B88(gDriveRomHandle, &D_xk1_8003A470, OS_READ);
     osRecvMesg(&gDmaMesgQueue, NULL, OS_MESG_BLOCK);
 
-    gDPLoadTextureBlock_4b(gfx++, D_xk1_8003A488 + D_xk1_8003A490, G_IM_FMT_I, 16, 16, 0,
-                            G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK,
-                            G_TX_NOLOD, G_TX_NOLOD);
+    gDPLoadTextureBlock_4b(gfx++, D_xk1_8003A488 + D_xk1_8003A490, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_CLAMP,
+                           G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
     gSPTextureRectangle(gfx++, arg1 << 2, arg2 << 2, (arg1 + 16) << 2, (arg2 + 16) << 2, 0, 0, 0, 1 << 10, 1 << 10);
 
@@ -211,9 +208,8 @@ Gfx* func_xk1_800262F4(Gfx* gfx, s32 arg1, s32 arg2, u8* arg3) {
 
 Gfx* func_xk1_800263B0(Gfx* gfx, s32 arg1, s32 arg2, s32 arg3) {
 
-    gDPLoadTextureBlock_4b(gfx++, arg3, G_IM_FMT_I, 16, 16, 0,
-                        G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK,
-                        G_TX_NOLOD, G_TX_NOLOD);
+    gDPLoadTextureBlock_4b(gfx++, arg3, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
+                           G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
     gSPTextureRectangle(gfx++, arg1 << 2, arg2 << 2, (arg1 + 16) << 2, (arg2 + 16) << 2, 0, 0, 0, 1 << 10, 1 << 10);
 
@@ -282,7 +278,7 @@ Gfx* func_xk1_80026670(Gfx* gfx, s32 arg1, s32 arg2, s32 arg3) {
 
     var_s1 = D_xk1_8003A518[arg3];
     var_s0 = D_xk1_8003339C[arg3];
-    
+
     while (*var_s0 != 0) {
         if (*var_s0 == 0xA) {
             break;
