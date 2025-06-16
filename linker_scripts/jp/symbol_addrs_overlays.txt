@@ -843,6 +843,39 @@ sFrontMachineDrawFuncs = 0x8012B360; //segment:ovl_i9
 sRearMachineDrawFuncs = 0x8012B3EC; //segment:ovl_i9
 sWingMachineDrawFuncs = 0x8012B478; //segment:ovl_i9
 
+D_xk1_80031C28 = 0x80031C28; //segment:ovl_xk1 size:0x34
+D_xk1_80031E50 = 0x80031E50; //segment:ovl_xk1 size:0x34
+D_xk1_80032880 = 0x80032880; //segment:ovl_xk1 size:0x34
+D_xk1_800314C0 = 0x800314C0; //segment:ovl_xk1 size:0x34
+D_xk1_80032160 = 0x80032160; //segment:ovl_xk1 size:0x34
+D_xk1_80032354 = 0x80032354; //segment:ovl_xk1 size:0x34
+D_xk1_80031140 = 0x80031140; //segment:ovl_xk1 size:0x34
+D_xk1_80031294 = 0x80031294; //segment:ovl_xk1 size:0x34
+D_xk1_8003226C = 0x8003226C; //segment:ovl_xk1 size:0x34
+D_xk1_80032484 = 0x80032484; //segment:ovl_xk1 size:0x34
+D_xk1_800325FC = 0x800325FC; //segment:ovl_xk1 size:0x34
+D_xk1_80032774 = 0x80032774; //segment:ovl_xk1 size:0x34
+D_xk1_800328EC = 0x800328EC; //segment:ovl_xk1 size:0x34
+D_xk1_80032934 = 0x80032934; //segment:ovl_xk1 size:0x34
+D_xk1_80031584 = 0x80031584; //segment:ovl_xk1 size:0x34
+D_xk1_80031648 = 0x80031648; //segment:ovl_xk1 size:0x34
+D_xk1_8003170C = 0x8003170C; //segment:ovl_xk1 size:0x34
+D_xk1_800317D0 = 0x800317D0; //segment:ovl_xk1 size:0x34
+D_xk1_80031F38 = 0x80031F38; //segment:ovl_xk1 size:0x34
+D_xk1_80031FD8 = 0x80031FD8; //segment:ovl_xk1 size:0x34
+D_xk1_80032078 = 0x80032078; //segment:ovl_xk1 size:0x34
+D_xk1_80030744 = 0x80030744; //segment:ovl_xk1 size:0x34
+D_xk1_80030808 = 0x80030808; //segment:ovl_xk1 size:0x34
+D_xk1_800308F0 = 0x800308F0; //segment:ovl_xk1 size:0x34
+D_xk1_800309D8 = 0x800309D8; //segment:ovl_xk1 size:0x34
+D_xk1_80030A9C = 0x80030A9C; //segment:ovl_xk1 size:0x34
+D_xk1_80030B60 = 0x80030B60; //segment:ovl_xk1 size:0x34
+D_xk1_80030C24 = 0x80030C24; //segment:ovl_xk1 size:0x34
+D_xk1_80030E98 = 0x80030E98; //segment:ovl_xk1 size:0x34
+D_xk1_80030FA4 = 0x80030FA4; //segment:ovl_xk1 size:0x34
+
+D_xk2_80119744 = 0x80119744; //segment:course_edit
+
 // misc mix
 
 Title_Init = 0x80074450; //segment:ovl_i4
