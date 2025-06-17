@@ -345,46 +345,69 @@ s32 func_xk1_8002BFA4(void) {
     return D_xk1_8003A5D0;
 }
 
-extern Gfx D_3000540[];
 extern u8 D_7004100[];
 extern u16 D_7004900[];
 
-#ifdef NON_MATCHING
+// FAKE! -- requires some very specific permutation of temps for matching
 void func_xk1_8002BFB0(Gfx** gfxP) {
     Gfx* gfx = *gfxP;
+    s32 x = 136;
+    s32 y = 120;
+    int new_var = 1 << 10;
 
     gSPDisplayList(gfx++, D_3000510);
     gDPSetPrimColor(gfx++, 0, 0, 128, 128, 255, 255);
-    gSPTextureRectangle(gfx++, 134 << 2, 118 << 2, 186 << 2, 120 << 2, 0, 0, 0, 1 << 10, 1 << 10);
-    gSPTextureRectangle(gfx++, 134 << 2, 152 << 2, 186 << 2, 154 << 2, 0, 0, 0, 1 << 10, 1 << 10);
-    gSPTextureRectangle(gfx++, 134 << 2, 120 << 2, 136 << 2, 152 << 2, 0, 0, 0, 1 << 10, 1 << 10);
-    gSPTextureRectangle(gfx++, 184 << 2, 120 << 2, 186 << 2, 152 << 2, 0, 0, 0, 1 << 10, 1 << 10);
+    gSPTextureRectangle(gfx++, (x - 2) << 2, (y - 2) << 2, (x + 50) << 2, y << 2, 0, 0, 0, new_var, 1 << 10);
+    gSPTextureRectangle(gfx++, (x - 2) << 2, (y + 32) << 2, (x + 50) << 2, (y + 34) << 2, 0, 0, 0, 1 << 10, new_var);
+    gSPTextureRectangle(gfx++, (x - 2) << 2, y << 2, 136 << 2, (y + 32) << 2, 0, 0, 0, new_var, new_var);
+    gSPTextureRectangle(gfx++, (x + 48) << 2, y << 2, (x + 50) << 2, (y + 32) << 2, 0, 0, 0, new_var, 1 << 10);
     gDPPipeSync(gfx++);
     gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, 160);
-    gSPTextureRectangle(gfx++, 136 << 2, 120 << 2, 184 << 2, 152 << 2, 0, 0, 0, 1 << 10, 1 << 10);
+    gSPTextureRectangle(gfx++, x << 2, y << 2, (x + 48) << 2, (y + 32) << 2, 0, 0, 0, new_var, 1 << 10);
     gSPDisplayList(gfx++, D_3000540);
     gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, 255);
-    gDPLoadTextureBlock_4b(gfx++, D_7004100, G_IM_FMT_I, 32, 32, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                           G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-
-    gSPTextureRectangle(gfx++, 136 << 2, 120 << 2, 168 << 2, 136 << 2, 0, 0, 16 << 5, 1 << 10, 1 << 10);
-    gSPTextureRectangle(gfx++, 136 << 2, 136 << 2, 168 << 2, 152 << 2, 0, 0, 0, 1 << 10, 1 << 10);
+    gDPLoadTextureBlock_4b(gfx++, D_7004100, G_IM_FMT_I, 32, 32, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    gSPTextureRectangle(gfx++, x << 2, y << 2, (x + 32) << 2, x << 2, 0, 0, 16 << 5, 1 << 10, 1 << 10);
+    gSPTextureRectangle(gfx++, x << 2, x << 2, (x + 32) << 2, (y + 32) << 2, 0, 0, 0, 1 << 10, 1 << 10);
     gDPPipeSync(gfx++);
     gDPSetCombineMode(gfx++, G_CC_DECALRGBA, G_CC_DECALRGBA);
-
-    gDPLoadTextureBlock(gfx++, D_7004900, G_IM_FMT_RGBA, G_IM_SIZ_16b, 16, 32, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-
-    gSPTextureRectangle(gfx++, 168 << 2, 120 << 2, 184 << 2, 136 << 2, 0, 0, 16 << 5, 1 << 10, 1 << 10);
-    gSPTextureRectangle(gfx++, 168 << 2, 136 << 2, 184 << 2, 152 << 2, 0, 0, 0, 1 << 10, 1 << 10);
-
+    gDPLoadTextureBlock(gfx++, D_7004900, G_IM_FMT_RGBA, G_IM_SIZ_16b, 16, 32, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    gSPTextureRectangle(gfx++, (x + 32) << 2, y << 2, (x + 48) << 2, (y + 16) << 2, 0, 0, 16 << 5, new_var, 1 << 10);
+    gSPTextureRectangle(gfx++, (x + 32) << 2, (y + 16) << 2, (x + 48) << 2, (y + 32) << 2, 0, 0, 0, 1 << 10, 1 << 10);
     *gfxP = gfx;
 }
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_xk1/A8140/func_xk1_8002BFB0.s")
-#endif
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_xk1/A8140/func_xk1_8002C420.s")
+Gfx* func_xk1_8002C420(Gfx* gfx, s32 arg1, s32 arg2) {
+    s32 var_a3;
+
+    if (D_xk1_80032BD4 == 0) {
+        return gfx;
+    } 
+    if ((D_80119880 != 7) && (D_80119880 != 8)) {
+        var_a3 = 0xB0;
+    } else {
+        var_a3 = 0x100;
+    }
+    gSPDisplayList(gfx++, D_3000510);
+    gDPSetPrimColor(gfx++, 0, 0, 128, 128, 255, 255);
+
+    gSPTextureRectangle(gfx++, (arg1 - 2) << 2, (arg2 - 2) << 2, (arg1 + var_a3 + 2) << 2, arg2 << 2, 0, 0, 0, 1 << 10, 1 << 10);
+    gSPTextureRectangle(gfx++, (arg1 - 2) << 2, (arg2 + 16) << 2, (arg1 + var_a3 + 2) << 2, (arg2 + 16 + 2) << 2, 0, 0, 0, 1 << 10, 1 << 10);
+    gSPTextureRectangle(gfx++, (arg1 - 2) << 2, arg2 << 2, arg1 << 2, (arg2 + 16) << 2, 0, 0, 0, 1 << 10, 1 << 10);
+    gSPTextureRectangle(gfx++, (arg1 + var_a3) << 2, arg2 << 2, (arg1 + var_a3 + 2) << 2, (arg2 + 16) << 2, 0, 0, 0, 1 << 10, 1 << 10);
+    gDPPipeSync(gfx++);
+    gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, 160);
+    gSPTextureRectangle(gfx++, arg1 << 2, arg2 << 2, (arg1 + var_a3) << 2, (arg2 + 16) << 2, 0, 0, 0, 1 << 10, 1 << 10);
+    gSPDisplayList(gfx++, D_3000540);
+    gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, 255);
+    if ((D_80119880 == 7) || (D_80119880 == 8)) {
+        gfx = func_xk1_800264C0(gfx, arg1, arg2, 0xF);
+    } else {
+        gfx = func_xk1_800264C0(gfx, arg1, arg2, 0);
+    }
+
+    return gfx;
+}
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_xk1/A8140/func_xk1_8002C720.s")
 

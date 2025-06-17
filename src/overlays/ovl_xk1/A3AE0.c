@@ -294,8 +294,10 @@ void func_xk1_800276B0(Gfx** gfxP, unk_80026914* arg1, s32 arg2, s32 arg3) {
         D_xk1_80030604 = -4;
     }
     if (D_xk1_80030600 < 100) {
-        D_xk1_80030600 = 100;
+        // clang-format off
+        D_xk1_80030600 = 100; \
         D_xk1_80030604 = 4;
+        // clang-format on
     }
     func_xk1_80026B44(&gfx, arg1, arg2, arg3);
 
