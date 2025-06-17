@@ -685,6 +685,7 @@ void func_i10_8012B904(void);
 
 void func_xk1_800267C4(u16*);
 void func_xk1_8002FC70(void);
+void func_xk1_8002CEF8(s8* arg0, s32 arg1, s32 arg2, s32 (*arg3)(u8*, u8*));
 
 void func_xk2_800F1330(s32, s32);
 

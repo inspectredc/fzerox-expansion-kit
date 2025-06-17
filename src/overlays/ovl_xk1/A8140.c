@@ -8,6 +8,11 @@ extern unk_8003A5D8 D_xk1_8003A5D8[];
 void func_xk1_8002AED0(void) {
     s32 i;
 
+    // TODO: Move to appropriate place
+    PRINTF("CURSOR POINTER IS NOT INITIALIZED !!\n");
+    PRINTF("FILELISTc\n");
+    PRINTF("FILE LISTS %d\n");
+
     for (i = 0; i < 102; i++) {
         D_xk1_8003A5D8[i].unk_20 = 0;
     }
@@ -366,12 +371,14 @@ void func_xk1_8002BFB0(Gfx** gfxP) {
     gSPTextureRectangle(gfx++, x << 2, y << 2, (x + 48) << 2, (y + 32) << 2, 0, 0, 0, new_var, 1 << 10);
     gSPDisplayList(gfx++, D_3000540);
     gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, 255);
-    gDPLoadTextureBlock_4b(gfx++, D_7004100, G_IM_FMT_I, 32, 32, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    gDPLoadTextureBlock_4b(gfx++, D_7004100, G_IM_FMT_I, 32, 32, 0, G_TX_NOMIRROR | G_TX_WRAP,
+                           G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
     gSPTextureRectangle(gfx++, x << 2, y << 2, (x + 32) << 2, x << 2, 0, 0, 16 << 5, 1 << 10, 1 << 10);
     gSPTextureRectangle(gfx++, x << 2, x << 2, (x + 32) << 2, (y + 32) << 2, 0, 0, 0, 1 << 10, 1 << 10);
     gDPPipeSync(gfx++);
     gDPSetCombineMode(gfx++, G_CC_DECALRGBA, G_CC_DECALRGBA);
-    gDPLoadTextureBlock(gfx++, D_7004900, G_IM_FMT_RGBA, G_IM_SIZ_16b, 16, 32, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    gDPLoadTextureBlock(gfx++, D_7004900, G_IM_FMT_RGBA, G_IM_SIZ_16b, 16, 32, 0, G_TX_NOMIRROR | G_TX_WRAP,
+                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
     gSPTextureRectangle(gfx++, (x + 32) << 2, y << 2, (x + 48) << 2, (y + 16) << 2, 0, 0, 16 << 5, new_var, 1 << 10);
     gSPTextureRectangle(gfx++, (x + 32) << 2, (y + 16) << 2, (x + 48) << 2, (y + 32) << 2, 0, 0, 0, 1 << 10, 1 << 10);
     *gfxP = gfx;
@@ -382,7 +389,7 @@ Gfx* func_xk1_8002C420(Gfx* gfx, s32 arg1, s32 arg2) {
 
     if (D_xk1_80032BD4 == 0) {
         return gfx;
-    } 
+    }
     if ((D_80119880 != 7) && (D_80119880 != 8)) {
         var_a3 = 0xB0;
     } else {
@@ -391,10 +398,13 @@ Gfx* func_xk1_8002C420(Gfx* gfx, s32 arg1, s32 arg2) {
     gSPDisplayList(gfx++, D_3000510);
     gDPSetPrimColor(gfx++, 0, 0, 128, 128, 255, 255);
 
-    gSPTextureRectangle(gfx++, (arg1 - 2) << 2, (arg2 - 2) << 2, (arg1 + var_a3 + 2) << 2, arg2 << 2, 0, 0, 0, 1 << 10, 1 << 10);
-    gSPTextureRectangle(gfx++, (arg1 - 2) << 2, (arg2 + 16) << 2, (arg1 + var_a3 + 2) << 2, (arg2 + 16 + 2) << 2, 0, 0, 0, 1 << 10, 1 << 10);
+    gSPTextureRectangle(gfx++, (arg1 - 2) << 2, (arg2 - 2) << 2, (arg1 + var_a3 + 2) << 2, arg2 << 2, 0, 0, 0, 1 << 10,
+                        1 << 10);
+    gSPTextureRectangle(gfx++, (arg1 - 2) << 2, (arg2 + 16) << 2, (arg1 + var_a3 + 2) << 2, (arg2 + 16 + 2) << 2, 0, 0,
+                        0, 1 << 10, 1 << 10);
     gSPTextureRectangle(gfx++, (arg1 - 2) << 2, arg2 << 2, arg1 << 2, (arg2 + 16) << 2, 0, 0, 0, 1 << 10, 1 << 10);
-    gSPTextureRectangle(gfx++, (arg1 + var_a3) << 2, arg2 << 2, (arg1 + var_a3 + 2) << 2, (arg2 + 16) << 2, 0, 0, 0, 1 << 10, 1 << 10);
+    gSPTextureRectangle(gfx++, (arg1 + var_a3) << 2, arg2 << 2, (arg1 + var_a3 + 2) << 2, (arg2 + 16) << 2, 0, 0, 0,
+                        1 << 10, 1 << 10);
     gDPPipeSync(gfx++);
     gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, 160);
     gSPTextureRectangle(gfx++, arg1 << 2, arg2 << 2, (arg1 + var_a3) << 2, (arg2 + 16) << 2, 0, 0, 0, 1 << 10, 1 << 10);
@@ -409,56 +419,308 @@ Gfx* func_xk1_8002C420(Gfx* gfx, s32 arg1, s32 arg2) {
     return gfx;
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_xk1/A8140/func_xk1_8002C720.s")
+extern const char* D_xk1_800331F0[];
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_xk1/A8140/func_xk1_8002CA80.s")
+void func_xk1_8002C720(Gfx** gfxP, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
+    Gfx* gfx;
+    s32 temp_a0;
+    s32 temp_t4;
+    u8 sp1B4[0x100];
+    u8 spB4[0x100];
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_xk1/A8140/func_xk1_8002CA8C.s")
+    gfx = *gfxP;
+    if (D_xk1_80032BD8 == 0) {
+        return;
+    }
+    func_xk1_80026830(arg3, sp1B4);
+    Leo_strcpy(spB4, D_xk1_800331F0[arg4 + 1]);
+    temp_a0 = Leo_strlen(sp1B4) + Leo_strlen(spB4);
+    temp_t4 = temp_a0 * 8;
+    arg1 = (((34 - temp_a0) / 2) * 8) + 24;
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_xk1/A8140/func_xk1_8002CA98.s")
+    gSPDisplayList(gfx++, D_3000510);
+    gDPSetPrimColor(gfx++, 0, 0, 128, 128, 255, 255);
+    gSPTextureRectangle(gfx++, (arg1 - 2) << 2, (arg2 - 2) << 2, (arg1 + temp_t4 + 2) << 2, arg2 << 2, 0, 0, 0, 1 << 10,
+                        1 << 10);
+    gSPTextureRectangle(gfx++, (arg1 - 2) << 2, (arg2 + 16) << 2, (arg1 + temp_t4 + 2) << 2, (arg2 + 16 + 2) << 2, 0, 0,
+                        0, 1 << 10, 1 << 10);
+    gSPTextureRectangle(gfx++, (arg1 - 2) << 2, arg2 << 2, arg1 << 2, (arg2 + 16) << 2, 0, 0, 0, 1 << 10, 1 << 10);
+    gSPTextureRectangle(gfx++, (arg1 + temp_t4) << 2, arg2 << 2, (arg1 + temp_t4 + 2) << 2, (arg2 + 16) << 2, 0, 0, 0,
+                        1 << 10, 1 << 10);
+    gDPPipeSync(gfx++);
+    gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, 160);
+    gSPTextureRectangle(gfx++, arg1 << 2, arg2 << 2, (arg1 + temp_t4) << 2, (arg2 + 16) << 2, 0, 0, 0, 1 << 10,
+                        1 << 10);
+    gSPDisplayList(gfx++, D_3000540);
+    gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, 255);
+    gDPPipeSync(gfx++);
+    gDPSetPrimColor(gfx++, 0, 0, 255, 64, 64, 255);
+    gfx = func_xk1_800262F4(gfx, arg1, arg2, sp1B4);
+    arg1 += Leo_strlen(sp1B4) * 8;
+    gDPPipeSync(gfx++);
+    gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, 255);
+    gfx = func_xk1_800264C0(gfx, arg1, arg2, arg4 + 1);
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_xk1/A8140/func_xk1_8002CB30.s")
+    *gfxP = gfx;
+}
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_xk1/A8140/func_xk1_8002CEF8.s")
+s32 func_xk1_8002CA80(void) {
+    return D_xk1_80032BD8;
+}
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_xk1/A8140/D_xk1_80032BD0.s")
+void func_xk1_8002CA8C(void) {
+    D_xk1_80032BD8 = 0;
+}
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_xk1/A8140/D_xk1_80032BD4.s")
+s32 func_xk1_8002CA98(u8* arg0, u8* arg1) {
+    s32 i;
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_xk1/A8140/D_xk1_80032BD8.s")
+    for (i = 0; i < 8; i++, arg0++, arg1++) {
+        if (*arg0 != *arg1) {
+            return *arg0 - *arg1;
+        }
+    }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_xk1/A8140/D_xk1_80032BDC.s")
+    return 0;
+}
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_xk1/A8140/D_xk1_80032BE4.s")
+extern s32 D_xk1_8003BB38;
+extern s32 (*D_xk1_8003BB3C)(s8*, s8*);
+extern s32 D_xk1_8003BB40;
+extern s32 D_xk1_8003BB44;
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_xk1/A8140/D_xk1_80032BE8.s")
+void func_xk1_8002CB30(s8* arg0, s8* arg1) {
+    s32 temp_v0;
+    s32 var_a0;
+    s32 var_s1;
+    s8* var_s0;
+    s8* var_s1_2;
+    s8* var_s2;
+    s8* var_s5;
+    s8* var_v1;
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_xk1/A8140/D_xk1_80032BEC.s")
+    var_s1 = arg1 - arg0;
+    do {
+        var_s0 = (((var_s1 / D_xk1_8003BB38) >> 1) * D_xk1_8003BB38) + arg0;
+        var_s2 = var_s0;
+        if (var_s1 >= D_xk1_8003BB44) {
+            if (D_xk1_8003BB3C(arg0, var_s0) > 0) {
+                var_s1_2 = arg0;
+            } else {
+                var_s1_2 = var_s0;
+            }
+            var_s5 = arg1 - D_xk1_8003BB38;
+            if (D_xk1_8003BB3C(var_s1_2, var_s5) > 0) {
+                if (var_s1_2 == arg0) {
+                    var_s1_2 = var_s0;
+                } else {
+                    var_s1_2 = arg0;
+                }
+                if (D_xk1_8003BB3C(var_s1_2, var_s5) < 0) {
+                    var_s1_2 = var_s5;
+                }
+            }
+            if (var_s1_2 != var_s0) {
+                var_a0 = D_xk1_8003BB38;
+                do {
+                    temp_v0 = *var_s0;
+                    *var_s0 = *var_s1_2;
+                    *var_s1_2 = temp_v0;
+                    var_a0--;
+                    var_s0++;
+                    var_s1_2++;
+                } while (var_a0 != 0);
+            }
+        }
+        var_s0 = arg0;
+        var_s1_2 = arg1 - D_xk1_8003BB38;
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_xk1/A8140/D_xk1_80032BF0.s")
+        while (true) {
+            while ((var_s0 < var_s2) && (D_xk1_8003BB3C(var_s0, var_s2) <= 0)) {
+                var_s0 += D_xk1_8003BB38;
+            }
+            while (var_s2 < var_s1_2) {
+                if (D_xk1_8003BB3C(var_s2, var_s1_2) <= 0) {
+                    var_s1_2 -= D_xk1_8003BB38;
+                } else {
+                    var_s5 = var_s0 + D_xk1_8003BB38;
+                    if (var_s0 == var_s2) {
+                        var_v1 = var_s1_2;
+                        var_s2 = var_s1_2;
+                    } else {
+                        var_v1 = var_s1_2;
+                        var_s1_2 -= D_xk1_8003BB38;
+                    }
+                    goto block_x;
+                }
+            }
+            if (var_s0 == var_s2) {
+                break;
+            }
+            var_v1 = var_s2;
+            var_s2 = var_s0;
+            var_s5 = var_s0;
+            var_s1_2 -= D_xk1_8003BB38;
+        block_x:
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_xk1/A8140/D_xk1_80032BF4.s")
+            var_a0 = D_xk1_8003BB38;
+            do {
+                temp_v0 = *var_s0;
+                *var_s0 = *var_v1;
+                *var_v1 = temp_v0;
+                var_a0--;
+                var_s0++;
+                var_v1++;
+            } while (var_a0 != 0);
+            var_s0 = var_s5;
+        }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_xk1/A8140/D_xk1_80032BF8.s")
+        var_s0 = var_s2 + D_xk1_8003BB38;
+        if ((var_s1 = (var_s2 - arg0)) <= arg1 - var_s0) {
+            if ((var_s2 - arg0) >= D_xk1_8003BB40) {
+                func_xk1_8002CB30(arg0, var_s2);
+            }
+            arg0 = var_s0;
+            var_s1 = arg1 - var_s0;
+        } else {
+            if (arg1 - var_s0 >= D_xk1_8003BB40) {
+                func_xk1_8002CB30(var_s0, arg1);
+            }
+            arg1 = var_s2;
+        }
+    } while (var_s1 >= D_xk1_8003BB40);
+}
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_xk1/A8140/D_xk1_80032BFC.s")
+void func_xk1_8002CEF8(s8* arg0, s32 arg1, s32 arg2, s32 (*arg3)(u8*, u8*)) {
+    s32 temp_v1;
+    s8* temp_s7;
+    s8* var_s0;
+    s8* var_s1;
+    s8* var_s2;
+    s8* var_s4;
+    s8* var_v0;
+    s32 i;
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_xk1/A8140/D_xk1_80032C20.s")
+    if (arg1 < 2) {
+        return;
+    }
+    D_xk1_8003BB38 = arg2;
+    D_xk1_8003BB3C = arg3;
+    D_xk1_8003BB40 = D_xk1_8003BB38 * 4;
+    D_xk1_8003BB44 = D_xk1_8003BB38 * 6;
+    temp_s7 = arg0 + (arg1 * D_xk1_8003BB38);
+    if (arg1 >= 4) {
+        func_xk1_8002CB30(arg0, temp_s7);
+        var_s2 = arg0 + D_xk1_8003BB40;
+    } else {
+        var_s2 = temp_s7;
+    }
+    var_s1 = arg0 + D_xk1_8003BB38;
+    var_s0 = arg0;
+    while (var_s1 < var_s2) {
+        if (D_xk1_8003BB3C(var_s0, var_s1) > 0) {
+            var_s0 = var_s1;
+        }
+        var_s1 += D_xk1_8003BB38;
+    }
 
+    var_s2 = arg0;
+    var_s2 += D_xk1_8003BB38;
+
+    if (var_s0 != arg0) {
+        for (var_v0 = arg0; var_v0 < var_s2; var_v0++, var_s0++) {
+            temp_v1 = *var_s0;
+            *var_s0 = *var_v0;
+            *var_v0 = temp_v1;
+        }
+    }
+    var_s4 = arg0 + D_xk1_8003BB38;
+    while (var_s4 < temp_s7) {
+        var_s2 = var_s4 - D_xk1_8003BB38;
+        while (D_xk1_8003BB3C(var_s2, var_s4) > 0) {
+            var_s2 -= D_xk1_8003BB38;
+        }
+
+        var_s2 += D_xk1_8003BB38;
+        if (var_s2 != var_s4) {
+            var_s1 = (var_s4 + D_xk1_8003BB38) - 1;
+            while (var_s1 >= var_s4) {
+                var_v0 = var_s1;
+                temp_v1 = *var_s1;
+                var_s0 = var_s1 - D_xk1_8003BB38;
+                var_s1--;
+                while (var_s0 >= var_s2) {
+                    *var_v0 = *var_s0;
+                    var_v0 = var_s0;
+                    var_s0 -= D_xk1_8003BB38;
+                }
+                *var_v0 = temp_v1;
+            }
+        }
+        var_s4 += D_xk1_8003BB38;
+    }
+}
+
+#ifdef IMPORT_DATA
+void func_xk1_8002D16C(void) {
+    s32 i;
+    s32 j;
+    s32 k;
+    char sp48[][6] = { "JACK", "QUEEN", "KING", "JOKER", "DD1-", "DD2-" };
+    unk_8003A5D8* var_s0;
+
+    D_xk1_80032BD4 = 1;
+    k = 0;
+    for (i = 0, var_s0 = D_xk1_8003A5D8; i < 6; i++) {
+        for (j = 0; j < 6; j++, k++, var_s0++) {
+            var_s0->unk_10 = 0;
+            var_s0->unk_22 = 0;
+            var_s0->unk_20 = 0;
+            sprintf(var_s0->unk_00, "%s%d", sp48[i], j + 1);
+        }
+    }
+    D_xk1_8003A5D0 = k;
+}
+#else
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_xk1/A8140/func_xk1_8002D16C.s")
+#endif
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_xk1/A8140/func_xk1_8002D26C.s")
+s32 func_xk1_8002D26C(void) {
+    return D_xk1_80032BEC;
+}
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_xk1/A8140/func_xk1_8002D278.s")
+void func_xk1_8002D278(s32 arg0) {
+    D_xk1_80032BEC = arg0;
+}
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_xk1/A8140/func_xk1_8002D284.s")
+void func_xk1_8002D284(s32 arg0) {
+    D_xk1_8003A5D0 = arg0;
+}
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_xk1/A8140/func_xk1_8002D290.s")
+void func_xk1_8002D290(void) {
+    D_xk1_80032BD4 = 1;
+}
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_xk1/A8140/func_xk1_8002D2A0.s")
+s32 func_xk1_8002D2A0(void) {
+    if ((D_xk1_8003A5D0 > 13) && (D_xk1_80032BEC < ((D_xk1_8003A5D0 - 13) * 8))) {
+        return 1;
+    }
+    return 0;
+}
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_xk1/A8140/func_xk1_8002D2E4.s")
+void func_xk1_8002D2E4(s32 arg0) {
+    D_xk1_80032BDC = arg0;
+}
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_xk1/A8140/func_xk1_8002D2F0.s")
+extern s32 D_xk1_80032C20;
+
+void func_xk1_8002D2F0(void) {
+    s32 sp1C = D_xk1_80032C20;
+
+    func_xk1_8002DBD4(&D_xk1_80032C20, 1, 1);
+    if (sp1C != D_xk1_80032C20) {
+        func_8074122C(0x23);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_xk1/A8140/func_xk1_8002D340.s")
