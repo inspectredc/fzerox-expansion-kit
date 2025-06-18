@@ -217,7 +217,8 @@ void func_xk1_8002DDC4(s32* arg0, s32 arg1, s32 arg2) {
     } else if (stickY < -D_xk1_80032C80) {
         var_v0 = 1;
     }
-    if (((D_xk1_80032C8C == 1) || (D_xk1_80032C8C == D_xk1_80032C84) || (D_xk1_80032C8C == D_xk1_80032C84 + 3)) && (arg0 != NULL)) {
+    if (((D_xk1_80032C8C == 1) || (D_xk1_80032C8C == D_xk1_80032C84) || (D_xk1_80032C8C == D_xk1_80032C84 + 3)) &&
+        (arg0 != NULL)) {
         *arg0 += var_v0;
         if (arg2 == 1) {
             if (*arg0 < 0) {

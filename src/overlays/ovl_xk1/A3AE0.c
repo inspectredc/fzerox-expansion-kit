@@ -1,10 +1,653 @@
 #include "global.h"
+#include "fzx_segmentA.h"
+#include "assets/overlays/ovl_xk1/aA3AE0.h"
+
+typedef struct unk_80026914_unk_1C {
+    void* unk_00;
+    void* unk_04;
+    void* unk_08;
+    void* unk_0C;
+    struct unk_80026914* unk_10;
+    void (*unk_14)(void);
+    u16 unk_18;
+    u16 unk_1A;
+    void* unk_1C;
+    void* unk_20;
+} unk_80026914_unk_1C; // size = 0x24
+
+typedef struct unk_80026914 {
+    s32 unk_00;
+    s32 unk_04;
+    s32 unk_08;
+    s32 unk_0C;
+    s32 unk_10;
+    s32 unk_14;
+    s32 unk_18;
+    unk_80026914_unk_1C* unk_1C;
+    s32 unk_20;
+    s32 unk_24;
+    s32 unk_28;
+    s32 unk_2C;
+    s32* unk_30;
+} unk_80026914;
 
 extern s32 D_xk1_8003A550;
 extern s32 D_xk1_8003A554;
 extern s32 D_80119890;
 
+#include "src/assets/overlays/ovl_xk1/aA3AE0/aA3AE0.c"
+
+s32 D_xk1_800305F0 = 1;
+s32 D_xk1_800305F4 = -1;
+s32 D_xk1_800305F8 = 0;
+s32 D_xk1_800305FC = 0;
+s32 D_xk1_80030600 = 0;
+s32 D_xk1_80030604 = 8;
+s32 D_xk1_80030608 = 500;
+s32 D_xk1_8003060C = 0;
+s32 D_xk1_80030610 = -1;
+s32 D_xk1_80030614 = 0;
+s32 D_xk1_80030618 = 0;
+s32 D_xk1_8003061C = 0;
+s32 D_xk1_80030620 = 0;
+s32 D_xk1_80030624 = 0;
+s32 D_xk1_80030628 = 0;
+s32 D_xk1_8003062C = 0;
+s32 D_xk1_80030630 = 0;
+s32 D_xk1_80030634 = 0;
+s32 D_xk1_80030638 = 0;
+s32 D_xk1_8003063C = 0;
+s32 D_xk1_80030640 = 0;
+s32 D_xk1_80030644 = 0;
+s32 D_xk1_80030648 = 0;
+s32 D_xk1_8003064C = 0;
+s32 D_xk1_80030650 = 0;
+s32 D_xk1_80030654 = 0;
+s32 D_xk1_80030658 = 0;
+s32 D_xk1_8003065C = 0;
+s32 D_xk1_80030660 = 0;
+s32 D_xk1_80030664 = 0;
+s32 D_xk1_80030668 = 0;
+s32 D_xk1_8003066C = 0;
+s32 D_xk1_80030670 = 0;
+s32 D_xk1_80030674 = 0;
+s32 D_xk1_80030678 = -1;
+s32* D_xk1_8003067C[] = {
+    &D_xk1_80030614, &D_xk1_8003061C, NULL, &D_xk1_80030610, &D_xk1_80030678,
+};
+
+extern u16 D_7006380[];
+extern u16 D_7005780[];
+extern u16 D_7006980[];
+extern u16 D_7005D80[];
+extern u16 D_7006F80[];
+extern u16 D_7007580[];
+extern u8 D_7008900[];
+extern u8 D_7008980[];
+extern u8 D_7008A00[];
+extern u8 D_7008A80[];
+extern u8 D_7008B00[];
+extern u8 D_7008B80[];
+extern u8 D_7008C00[];
+extern u8 D_7008C80[];
+extern u8 D_7008D00[];
+extern u8 D_7008D80[];
+extern u8 D_7008E00[];
+extern u8 D_7008E80[];
+extern u8 D_7008F00[];
+extern u8 D_7008F80[];
+extern u8 D_7009000[];
+extern u16 D_7007B80[];
+extern u16 D_7008180[];
+extern u8 D_701F2A0[];
+extern u8 D_701F420[];
+extern u8 D_9003808[];
+extern u16 D_900D408[];
+extern u16 D_900D648[];
+extern u16 D_900D888[];
+extern u16 D_900DAC8[];
+extern u16 D_900DD08[];
+extern u16 D_900DF48[];
+extern u16 D_900E188[];
+extern u16 D_900E3C8[];
+extern u16 D_900E608[];
+extern u16 D_900E848[];
+extern u16 D_900EA88[];
+extern u16 D_900ECC8[];
+extern u16 D_900EF08[];
+extern u16 D_900F148[];
+extern u16 D_900F388[];
+extern u16 D_900F5C8[];
+extern u16 D_900F808[];
+extern u16 D_900FA48[];
+extern u16 D_900FC88[];
+extern u16 D_900FEC8[];
+extern u16 D_9010108[];
+extern u16 D_9010348[];
+extern u16 D_9010588[];
+extern u16 D_90107C8[];
+extern u16 D_9010A08[];
+extern u16 D_9010C48[];
+extern u16 D_9010E88[];
+extern u16 D_90110C8[];
+extern u16 D_9011308[];
+extern u16 D_9011548[];
+extern u16 D_9011788[];
+extern u16 D_90119C8[];
+extern u16 D_9011C08[];
+extern u16 D_9011E48[];
+extern u16 D_9012088[];
+extern u16 D_90122C8[];
+extern u16 D_9012508[];
+extern u16 D_9012748[];
+extern u16 D_9012988[];
+extern u16 D_9012BC8[];
+extern u16 D_9012E08[];
+extern u16 D_9013048[];
+extern u16 D_9013288[];
+extern u16 D_90134C8[];
+extern u16 D_9013708[];
+extern u16 D_9013948[];
+extern u16 D_9013B88[];
+extern u16 D_9013DC8[];
+extern u16 D_9014008[];
+extern u16 D_9014248[];
+extern u16 D_9014488[];
+extern u16 D_90146C8[];
+
+extern u16 D_9009088[];
+extern u16 D_90092C8[];
+extern u16 D_9009508[];
+extern u16 D_9009748[];
+extern u16 D_9009988[];
+extern u16 D_9009BC8[];
+extern u16 D_9009E08[];
+extern u16 D_900A048[];
+extern u16 D_900A288[];
+extern u16 D_900A4C8[];
+extern u16 D_900A708[];
+extern u16 D_900A948[];
+extern u16 D_900AB88[];
+extern u16 D_900ADC8[];
+extern u16 D_900B008[];
+extern u16 D_900B248[];
+extern u16 D_900B488[];
+extern u16 D_900B6C8[];
+extern u16 D_900B908[];
+extern u16 D_900BB48[];
+extern u16 D_900BD88[];
+extern u16 D_900BFC8[];
+extern u16 D_900C208[];
+extern u16 D_900C448[];
+extern u16 D_900C688[];
+extern u16 D_900C8C8[];
+
+extern u16 D_900CB08[];
+extern u16 D_900CD48[];
+extern u16 D_900CF88[];
+extern u16 D_900D1C8[];
+
+extern u16 D_4001B00[];
+extern u16 D_4001D40[];
+extern u16 D_4001F80[];
+extern u16 D_40021C0[];
+extern u16 D_4002400[];
+extern u16 D_4002640[];
+extern u16 D_4002880[];
+extern u16 D_4002AC0[];
+extern u16 D_4002D00[];
+extern u16 D_4002F40[];
+extern u16 D_4003180[];
+extern u16 D_40033C0[];
+extern u16 D_4003600[];
+
+extern u8 D_4000A80[];
+extern u8 D_4000C00[];
+extern u8 D_4000D80[];
+extern u8 D_4000F00[];
+extern u8 D_4001080[];
+extern u8 D_4001200[];
+
+extern u8 D_4001500[];
+extern u8 D_xk3_80138B30[];
+extern u8 D_xk3_80138CB0[];
+
+extern u8 D_4001800[];
+extern u8 D_4001980[];
+extern u8 D_7008780[];
+
+extern u8 D_4000000[];
+extern u8 D_4000180[];
+extern u8 D_4000300[];
+
+extern u16 D_7005180[];
+extern u16 D_xk3_80138E30[];
+extern u16 D_7004300[];
+
+extern u16 D_9003988[];
+extern u8 D_9003F88[];
+extern u8 D_9004108[];
+extern u8 D_9004288[];
+extern u8 D_9004408[];
+extern u8 D_9004708[];
+extern u8 D_9004888[];
+extern u8 D_9005188[];
+extern u8 D_9005308[];
+extern u8 D_9005488[];
+extern u8 D_9005608[];
+extern u8 D_9005788[];
+extern u8 D_9005908[];
+extern u8 D_9005A88[];
+extern u8 D_9005C08[];
+extern u8 D_9005D88[];
+extern u8 D_9005F08[];
+extern u8 D_9006088[];
+extern u8 D_9006208[];
+extern u8 D_9006388[];
+extern u8 D_9006508[];
+extern u8 D_9006688[];
+extern u8 D_9006808[];
+extern u8 D_9006988[];
+extern u8 D_9006B08[];
+extern u8 D_9006C88[];
+extern u8 D_9006E08[];
+extern u8 D_9006F88[];
+extern u8 D_9007108[];
+extern u8 D_9007288[];
+extern u8 D_9007408[];
+extern u8 D_9007588[];
+extern u8 D_9007708[];
+extern u8 D_9007888[];
+extern u8 D_9007A08[];
+extern u8 D_9007B88[];
+extern u8 D_9007D08[];
+extern u8 D_9007E88[];
+extern u8 D_9008008[];
+
+extern u8 D_7008780[];
+extern u8 D_701EFA0[];
+extern u8 D_701F120[];
+
+unk_80026914_unk_1C D_xk1_80030690[] = {
+    { D_7006380, D_7006980, D_7008900, D_900D408, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008980, D_900D648, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008A00, D_900D888, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008A80, D_900DAC8, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7005780, D_7005D80, D_9003808, NULL, NULL, NULL, 48, 16, NULL, NULL },
+};
+
+unk_80026914 D_xk1_80030744 = { 5, -1, -1, 120, 36, 0, 16, D_xk1_80030690, 160, 48, 160, 112, &D_xk1_80030648 };
+
+unk_80026914_unk_1C D_xk1_80030778[] = {
+    { D_7006380, D_7006980, D_7008900, D_900DD08, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008980, D_900DF48, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008A00, D_900E188, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7005780, D_7005D80, D_9003808, NULL, NULL, NULL, 48, 16, NULL, NULL },
+};
+
+unk_80026914 D_xk1_80030808 = { 4, -1, -1, 120, 36, 0, 16, D_xk1_80030778, 160, 48, 160, 96, &D_xk1_8003064C };
+
+unk_80026914_unk_1C D_xk1_8003083C[] = {
+    { D_7006380, D_7006980, D_7008900, D_900E3C8, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008980, D_900E608, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008A00, D_900E848, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008A80, D_900EA88, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7005780, D_7005D80, D_9003808, NULL, NULL, NULL, 48, 16, NULL, NULL },
+};
+
+unk_80026914 D_xk1_800308F0 = { 5, -1, -1, 120, 36, 0, 16, D_xk1_8003083C, 160, 48, 160, 112, &D_xk1_80030650 };
+
+unk_80026914_unk_1C D_xk1_80030924[] = {
+    { D_7006380, D_7006980, D_7008900, D_900ECC8, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008980, D_900EF08, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008A00, D_900F148, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008A80, D_900F388, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7005780, D_7005D80, D_9003808, NULL, NULL, NULL, 48, 16, NULL, NULL },
+};
+
+unk_80026914 D_xk1_800309D8 = { 5, -1, -1, 120, 36, 0, 16, D_xk1_80030924, 160, 48, 160, 112, &D_xk1_80030654 };
+
+unk_80026914_unk_1C D_xk1_80030A0C[] = {
+    { D_7006380, D_7006980, D_7008900, D_900F5C8, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008980, D_900F808, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008A00, D_900FA48, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7005780, D_7005D80, D_9003808, NULL, NULL, NULL, 48, 16, NULL, NULL },
+};
+
+unk_80026914 D_xk1_80030A9C = { 4, -1, -1, 120, 36, 0, 16, D_xk1_80030A0C, 160, 48, 160, 96, &D_xk1_80030658 };
+
+unk_80026914_unk_1C D_xk1_80030AD0[] = {
+    { D_7006380, D_7006980, D_7008900, D_900FC88, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008980, D_900FEC8, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008A00, D_9010108, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7005780, D_7005D80, D_9003808, NULL, NULL, NULL, 48, 16, NULL, NULL },
+};
+
+unk_80026914 D_xk1_80030B60 = { 4, -1, -1, 120, 36, 0, 16, D_xk1_80030AD0, 160, 48, 160, 96, &D_xk1_8003065C };
+
+unk_80026914_unk_1C D_xk1_80030B94[] = {
+    { D_7006380, D_7006980, D_7008900, D_9010348, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008980, D_9010588, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008A00, D_90107C8, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7005780, D_7005D80, D_9003808, NULL, NULL, NULL, 48, 16, NULL, NULL },
+};
+
+unk_80026914 D_xk1_80030C24 = { 4, -1, -1, 120, 36, 0, 16, D_xk1_80030B94, 160, 48, 160, 96, &D_xk1_80030660 };
+
+unk_80026914_unk_1C D_xk1_80030C58[] = {
+    { D_7006380, D_7006980, D_7008900, D_9010A08, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008980, D_9010C48, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008A00, D_9010E88, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008A80, D_90110C8, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008B00, D_9011308, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008B80, D_9011548, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008C00, D_9011788, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008C80, D_90119C8, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008D00, D_9011C08, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008D80, D_9011E48, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008E00, D_9012088, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008E80, D_90122C8, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008F00, D_9012508, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008F80, D_9012748, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7009000, D_9012988, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7005780, D_7005D80, D_9003808, NULL, NULL, NULL, 48, 16, NULL, NULL },
+};
+
+unk_80026914 D_xk1_80030E98 = { 16, -1, -1, 120, 36, 0, 16, D_xk1_80030C58, 160, 48, 160, 288, &D_xk1_80030664 };
+
+unk_80026914_unk_1C D_xk1_80030ECC[] = {
+    { D_7006380, D_7006980, D_7008900, D_9012BC8, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008980, D_9012E08, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008A00, D_9013048, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008A80, D_9013288, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008B00, D_90134C8, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7005780, D_7005D80, D_9003808, NULL, NULL, NULL, 48, 16, NULL, NULL },
+};
+
+unk_80026914 D_xk1_80030FA4 = { 6, -1, -1, 120, 36, 0, 16, D_xk1_80030ECC, 160, 48, 160, 128, &D_xk1_80030668 };
+
+unk_80026914_unk_1C D_xk1_80030FD8[] = {
+    { D_7006380, D_7006980, D_7008900, D_9009088, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008980, D_90092C8, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008A00, D_9009508, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008A80, D_9009748, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008B00, D_9009988, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008B80, D_9009BC8, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008C00, D_9009E08, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008C80, D_900A048, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008D00, D_900A288, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008D80, D_900A4C8, NULL, NULL, 16, 16, NULL, NULL },
+};
+
+unk_80026914 D_xk1_80031140 = { 10, -1, -1, 72, 36, 0, 16, D_xk1_80030FD8, 112, 48, 112, 192, &D_xk1_8003066C };
+
+unk_80026914_unk_1C D_xk1_80031174[] = {
+    { D_7006380, D_7006980, D_7008900, D_9013708, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008980, D_9013948, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008A00, D_9013B88, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008A80, D_9013DC8, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008B00, D_9014008, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008B80, D_9014248, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008C00, D_9014488, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008C80, D_90146C8, NULL, NULL, 16, 16, NULL, NULL },
+};
+
+unk_80026914 D_xk1_80031294 = { 8, -1, -1, 120, 36, 0, 16, D_xk1_80031174, 160, 48, 160, 160, &D_xk1_80030670 };
+
+unk_80026914_unk_1C D_xk1_800312C8[] = {
+    { D_7005780, D_7005D80, D_xk1_80030470, NULL, NULL, NULL, 48, 16, NULL, D_7008900 },
+    { D_7005780, D_7005D80, D_xk1_80030470, NULL, NULL, NULL, 48, 16, NULL, D_7008980 },
+    { D_7005780, D_7005D80, D_xk1_80030470, NULL, NULL, NULL, 48, 16, NULL, D_7008A00 },
+    { D_7005780, D_7005D80, D_xk1_80030470, NULL, NULL, NULL, 48, 16, NULL, D_7008A80 },
+    { D_7005780, D_7005D80, D_xk1_80030470, NULL, NULL, NULL, 48, 16, NULL, D_7008B00 },
+    { D_7005780, D_7005D80, D_xk1_80030470, NULL, NULL, NULL, 48, 16, NULL, D_7008B80 },
+    { D_7005780, D_7005D80, D_xk1_80030470, NULL, NULL, NULL, 48, 16, NULL, D_7008C00 },
+    { D_7005780, D_7005D80, D_xk1_80030470, NULL, NULL, NULL, 48, 16, NULL, D_7008C80 },
+    { D_7005780, D_7005D80, D_xk1_80030470, NULL, NULL, NULL, 48, 16, NULL, D_7008D00 },
+    { D_7005780, D_7005D80, D_xk1_80030470, NULL, NULL, NULL, 48, 16, NULL, D_7008D80 },
+    { D_7005780, D_7005D80, D_xk1_80030470, NULL, NULL, NULL, 48, 16, NULL, D_7008E00 },
+    { D_7005780, D_7005D80, D_xk1_80030470, NULL, NULL, NULL, 48, 16, NULL, D_7008E80 },
+    { D_7005780, D_7005D80, D_xk1_80030470, NULL, NULL, NULL, 48, 16, NULL, D_7008F00 },
+    { D_7005780, D_7005D80, D_xk1_80030470, NULL, NULL, NULL, 48, 16, NULL, D_7008F80 },
+};
+
+unk_80026914 D_xk1_800314C0 = { 14, -1, -1, 72, 36, 0, 16, D_xk1_800312C8, 112, 48, 112, 256, &D_xk1_80030674 };
+
+unk_80026914_unk_1C D_xk1_800314F4[] = {
+    { D_7006380, D_7006980, D_7008900, D_900B008, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008980, D_900B248, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008A00, D_900B488, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008A80, D_900B6C8, NULL, NULL, 16, 16, NULL, NULL },
+};
+
+unk_80026914 D_xk1_80031584 = { 4, -1, -1, 120, 36, 0, 16, D_xk1_800314F4, 160, 48, 160, 96, &D_xk1_80030638 };
+
+unk_80026914_unk_1C D_xk1_800315B8[] = {
+    { D_7006380, D_7006980, D_7008900, D_900B908, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008980, D_900BB48, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008A00, D_900BD88, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008A80, D_900BFC8, NULL, NULL, 16, 16, NULL, NULL },
+};
+
+unk_80026914 D_xk1_80031648 = { 4, -1, -1, 120, 36, 0, 16, D_xk1_800315B8, 160, 48, 160, 96, &D_xk1_8003063C };
+
+unk_80026914_unk_1C D_xk1_8003167C[] = {
+    { D_7006380, D_7006980, D_7008900, D_900C208, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008980, D_900C448, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008A00, D_900C688, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008A80, D_900C8C8, NULL, NULL, 16, 16, NULL, NULL },
+};
+
+unk_80026914 D_xk1_8003170C = { 4, -1, -1, 120, 36, 0, 16, D_xk1_8003167C, 160, 48, 160, 96, &D_xk1_80030640 };
+
+unk_80026914_unk_1C D_xk1_80031740[] = {
+    { D_7006380, D_7006980, D_7008900, D_900CB08, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008980, D_900CD48, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008A00, D_900CF88, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008A80, D_900D1C8, NULL, NULL, 16, 16, NULL, NULL },
+};
+
+unk_80026914 D_xk1_800317D0 = { 4, -1, -1, 120, 36, 0, 16, D_xk1_80031740, 160, 48, 160, 96, &D_xk1_80030644 };
+
+unk_80026914_unk_1C D_xk1_80031804[] = {
+    { D_7007B80, D_7008180, D_701F2A0, NULL, NULL, func_xk1_80026870, 48, 16, NULL, NULL },
+    { D_7007B80, D_7008180, D_701F420, NULL, NULL, func_xk1_800268A8, 48, 16, NULL, NULL },
+    { D_7007B80, D_7008180, D_7008780, NULL, NULL, func_xk1_800268E4, 48, 16, NULL, NULL },
+};
+
+unk_80026914 D_xk1_80031870 = { 3, -1, -1, 216, 36, 0, 16, D_xk1_80031804, 256, 48, 256, 80, &D_xk1_80030678 };
+
+s32 D_xk1_800318A4 = -1;
+s32 D_xk1_800318A8 = -1;
+s32 D_xk1_800318AC = -1;
+s32 D_xk1_800318B0 = -1;
+s32 D_xk1_800318B4 = -1;
+s32 D_xk1_800318B8 = -1;
+
+unk_80026914_unk_1C D_xk1_800318BC[] = {
+    { D_7006380, D_7006980, D_7008900, D_4001B00, NULL, func_xk3_8013298C, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008980, D_4001D40, NULL, func_xk3_801329A4, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008A00, D_4001F80, NULL, func_xk3_801329BC, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008A80, D_40021C0, NULL, func_xk3_801329D4, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008B00, D_4002400, NULL, func_xk3_801329EC, 16, 16, NULL, NULL },
+};
+
+unk_80026914 D_xk1_80031970 = { 5, -1, -1, 72, 52, 0, 16, D_xk1_800318BC, 104, 56, 104, 120, &D_xk1_800318A8 };
+
+unk_80026914_unk_1C D_xk1_800319A4[] = {
+    { D_7006380, D_7006980, D_7008900, D_4002640, NULL, func_xk3_80132A80, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008980, D_4002880, NULL, func_xk3_80132A98, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008A00, D_4002AC0, NULL, func_xk3_80132AB0, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008A80, D_4002D00, NULL, func_xk3_80132AC8, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008B00, D_4002F40, NULL, func_xk3_80132AE0, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008B80, D_4003180, NULL, func_xk3_80132AF8, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008C00, D_40033C0, NULL, func_xk3_80132B10, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008C80, D_4003600, NULL, func_xk3_80132B28, 16, 16, NULL, NULL },
+};
+
+unk_80026914 D_xk1_80031AC4 = { 8, -1, -1, 72, 52, 0, 16, D_xk1_800319A4, 104, 56, 104, 168, &D_xk1_800318AC };
+
+unk_80026914_unk_1C D_xk1_80031AF8[] = {
+    { D_7005780, D_7005D80, D_4000D80, NULL, NULL, func_xk3_80132B40, 48, 16, NULL, NULL },
+    { D_7005780, D_7005D80, D_4000F00, NULL, NULL, func_xk3_80132BB0, 48, 16, NULL, NULL },
+    { D_7005780, D_7005D80, D_4001080, NULL, NULL, func_xk3_80132C20, 48, 16, NULL, NULL },
+    { D_7005780, D_7005D80, D_4001200, NULL, NULL, func_xk3_80132C90, 48, 16, NULL, NULL },
+};
+
+unk_80026914 D_xk1_80031B88 = { 4, -1, -1, 72, 52, 0, 16, D_xk1_80031AF8, 104, 56, 104, 104, &D_xk1_800318B0 };
+
+unk_80026914_unk_1C D_xk1_80031BBC[] = {
+    { D_7005780, D_7005D80, D_4000F00, NULL, &D_xk1_80031970, func_xk3_80132910, 48, 16, NULL, NULL },
+    { D_7005780, D_7005D80, D_4000A80, NULL, &D_xk1_80031AC4, func_xk3_80132A04, 48, 16, NULL, NULL },
+    { D_7005180, D_7005180, D_4000C00, NULL, &D_xk1_80031B88, func_xk3_801326F0, 48, 16, NULL, NULL },
+};
+
+unk_80026914 D_xk1_80031C28 = { 3, -1, -1, 72, 36, 0, 16, D_xk1_80031BBC, 104, 48, 104, 80, &D_xk1_800318A4 };
+
+unk_80026914_unk_1C D_xk1_80031C5C[] = {
+    { D_7006F80, D_7007580, D_4001500, NULL, NULL, func_xk3_80132828, 48, 16, NULL, NULL },
+    { D_7006F80, D_7007580, D_xk3_80138B30, NULL, NULL, func_xk3_80132DDC, 48, 16, NULL, NULL },
+    { D_7006F80, D_7007580, D_xk3_80138CB0, NULL, NULL, func_xk3_80132850, 48, 16, NULL, NULL },
+};
+
+unk_80026914 D_xk1_80031CC8 = { 3, -1, -1, 168, 36, 0, 16, D_xk1_80031C5C, 200, 48, 200, 80, &D_xk1_800318B4 };
+
+unk_80026914_unk_1C D_xk1_80031CFC[] = {
+    { D_7007B80, D_7008180, D_4001800, NULL, NULL, func_xk3_8013277C, 48, 16, NULL, NULL },
+    { D_7007B80, D_7008180, D_4001980, NULL, NULL, func_xk3_801327A4, 48, 16, NULL, NULL },
+    { D_7007B80, D_7008180, D_7008780, NULL, NULL, func_xk3_80132808, 48, 16, NULL, NULL },
+};
+
+unk_80026914 D_xk1_80031D68 = { 3, -1, -1, 216, 36, 0, 16, D_xk1_80031CFC, 248, 48, 248, 80, &D_xk1_800318B8 };
+
+unk_80026914_unk_1C D_xk1_80031D9C[] = {
+    { D_7005180, D_7005180, D_4000000, NULL, NULL, func_xk3_80132884, 48, 16, NULL, NULL },
+    { D_7005180, D_7005180, D_4000180, NULL, &D_xk1_80031C28, func_xk3_801326D8, 48, 16, NULL, NULL },
+    { D_7005180, D_7005180, D_4000300, NULL, NULL, func_xk3_80132E84, 48, 16, NULL, NULL },
+    { D_xk3_80138E30, D_xk3_80138E30, NULL, NULL, &D_xk1_80031CC8, func_xk3_801326C0, 48, 16, NULL, NULL },
+    { D_7004300, D_7004300, NULL, NULL, &D_xk1_80031D68, func_xk3_80132764, 48, 16, NULL, NULL },
+};
+
+unk_80026914 D_xk1_80031E50 = { 5, -1, -1, 24, 20, 48, 0, D_xk1_80031D9C, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, NULL };
+
+unk_80026914_unk_1C D_xk1_80031E84[] = {
+    { D_7006380, D_7006980, D_7008900, D_A00B000, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008980, D_A00B240, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008A00, D_A00B480, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008A80, D_A00B6C0, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008B00, D_A00B900, NULL, NULL, 16, 16, NULL, NULL },
+};
+
+unk_80026914 D_xk1_80031F38 = { 5, -1, -1, 120, 36, 0, 16, D_xk1_80031E84, 160, 48, 160, 112, &D_xk1_8003062C };
+
+unk_80026914_unk_1C D_xk1_80031F6C[] = {
+    { D_7006380, D_7006980, D_7008900, D_A00BB40, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008980, D_900A708, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008A00, D_900A948, NULL, NULL, 16, 16, NULL, NULL },
+};
+
+unk_80026914 D_xk1_80031FD8 = { 3, -1, -1, 120, 36, 0, 16, D_xk1_80031F6C, 160, 48, 160, 80, &D_xk1_80030630 };
+
+unk_80026914_unk_1C D_xk1_8003200C[] = {
+    { D_7006380, D_7006980, D_7008900, D_A00BD80, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008980, D_900AB88, NULL, NULL, 16, 16, NULL, NULL },
+    { D_7006380, D_7006980, D_7008A00, D_900ADC8, NULL, NULL, 16, 16, NULL, NULL },
+};
+
+unk_80026914 D_xk1_80032078 = { 3, -1, -1, 120, 36, 0, 16, D_xk1_8003200C, 160, 48, 160, 80, &D_xk1_80030634 };
+
+unk_80026914_unk_1C D_xk1_800320AC[] = {
+    { D_7006F80, D_7007580, D_9003F88, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { D_7006F80, D_7007580, D_9004108, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { D_7006F80, D_7007580, D_9004288, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { D_7006F80, D_7007580, D_9004408, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { D_7006F80, D_7007580, D_701EFA0, NULL, NULL, NULL, 48, 16, NULL, NULL },
+};
+
+unk_80026914 D_xk1_80032160 = { 5, -1, -1, 168, 36, 0, 16, D_xk1_800320AC, 208, 48, 208, 112, &D_xk1_80030610 };
+
+unk_80026914_unk_1C D_xk1_80032194[] = {
+    { D_7005780, D_7005D80, D_9005188, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { D_7005780, D_7005D80, D_9005308, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { D_7005780, D_7005D80, D_9005488, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { D_7005780, D_7005D80, D_9005608, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { D_7005780, D_7005D80, D_9005788, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { D_7005780, D_7005D80, D_xk1_800302F0, NULL, NULL, NULL, 48, 16, NULL, NULL },
+};
+
+unk_80026914 D_xk1_8003226C = { 6, -1, -1, 24, 36, 0, 16, D_xk1_80032194, 64, 48, 64, 128, &D_xk1_80030614 };
+
+unk_80026914_unk_1C D_xk1_800322A0[] = {
+    { D_7005780, D_7005D80, D_9005908, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { D_7005780, D_7005D80, D_9005A88, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { D_7005780, D_7005D80, D_9005C08, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { D_7005780, D_7005D80, D_701F120, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { D_7005780, D_7005D80, D_7008780, NULL, NULL, NULL, 48, 16, NULL, NULL },
+};
+
+unk_80026914 D_xk1_80032354 = { 5, -1, -1, 72, 36, 0, 16, D_xk1_800322A0, 112, 48, 112, 112, &D_xk1_8003061C };
+
+unk_80026914_unk_1C D_xk1_80032388[] = {
+    { D_7005780, D_7005D80, D_9005D88, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { D_7005780, D_7005D80, D_9005F08, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { D_7005780, D_7005D80, D_9006088, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { D_7005780, D_7005D80, D_9006208, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { D_7005780, D_7005D80, D_9006388, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { D_7005780, D_7005D80, D_9003808, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { D_7005780, D_7005D80, D_9006508, NULL, NULL, NULL, 48, 16, NULL, NULL },
+};
+
+unk_80026914 D_xk1_80032484 = { 7, -1, -1, 72, 36, 0, 16, D_xk1_80032388, 112, 48, 112, 144, &D_xk1_80030620 };
+
+unk_80026914_unk_1C D_xk1_800324B8[] = {
+    { D_7005780, D_7005D80, D_9006688, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { D_7005780, D_7005D80, D_9006808, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { D_7005780, D_7005D80, D_9006988, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { D_7005780, D_7005D80, D_9006B08, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { D_7005780, D_7005D80, D_9006C88, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { D_7005780, D_7005D80, D_9006E08, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { D_7005780, D_7005D80, D_9006F88, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { D_7005780, D_7005D80, D_9007108, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { D_7005780, D_7005D80, D_9007288, NULL, NULL, NULL, 48, 16, NULL, NULL },
+};
+
+unk_80026914 D_xk1_800325FC = { 9, -1, -1, 72, 36, 0, 16, D_xk1_800324B8, 112, 48, 112, 176, &D_xk1_80030624 };
+
+unk_80026914_unk_1C D_xk1_80032630[] = {
+    { D_7005780, D_7005D80, D_9007408, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { D_7005780, D_7005D80, D_9007588, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { D_7005780, D_7005D80, D_9007708, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { D_7005780, D_7005D80, D_9007888, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { D_7005780, D_7005D80, D_9007A08, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { D_7005780, D_7005D80, D_9007B88, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { D_7005780, D_7005D80, D_9007D08, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { D_7005780, D_7005D80, D_9007E88, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { D_7005780, D_7005D80, D_9008008, NULL, NULL, NULL, 48, 16, NULL, NULL },
+};
+
+unk_80026914 D_xk1_80032774 = { 9, -1, -1, 72, 36, 0, 16, D_xk1_80032630, 112, 48, 112, 176, &D_xk1_80030628 };
+
+unk_80026914_unk_1C D_xk1_800327A8[] = {
+    { D_7005180, D_7005180, D_9004708, NULL, &D_xk1_8003226C, NULL, 48, 16, NULL, NULL },
+    { D_7005180, D_7005180, D_9004888, NULL, &D_xk1_80032354, NULL, 48, 16, NULL, NULL },
+    { D_7005180, D_7005180, NULL, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { D_9003988, D_9003988, NULL, NULL, &D_xk1_80032160, NULL, 48, 16, NULL, NULL },
+    { D_7004300, D_7004300, NULL, NULL, &D_xk1_80031870, NULL, 48, 16, NULL, NULL },
+    { NULL, NULL, NULL, NULL, NULL, NULL, 48, 16, NULL, NULL },
+};
+
+unk_80026914 D_xk1_80032880 = { 6, -1, -1, 24, 20, 48, 0, D_xk1_800327A8, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, NULL };
+
+s32 D_xk1_800328B4[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 12, 11, 10, 13 };
+
 void func_xk1_80026870(void) {
+
+    // TODO: move to appropriate place
+    PRINTF("DEBUG\n");
+    PRINTF("EDIT_MODE_COURSE **\n");
+    PRINTF("VIRTUAL SCROLL %d\n");
+    PRINTF("x,y %d, %d\n");
+
     D_80119890 = 0;
     func_xk2_800EB9E0();
     D_xk1_8003A550 = 0x110;
@@ -32,35 +675,6 @@ extern s32 D_xk1_800305F0;
 void func_xk1_80026908(s32 arg0) {
     D_xk1_800305F0 = arg0;
 }
-
-typedef struct unk_80026914_unk_1C {
-    void* unk_00;
-    void* unk_04;
-    void* unk_08;
-    void* unk_0C;
-    struct unk_80026914* unk_10;
-    void (*unk_14)(void);
-    u16 unk_18;
-    u16 unk_1A;
-    s8 unk_1C[0x4];
-    void* unk_20;
-} unk_80026914_unk_1C; // size = 0x24
-
-typedef struct unk_80026914 {
-    s32 unk_00;
-    s32 unk_04;
-    s32 unk_08;
-    s32 unk_0C;
-    s32 unk_10;
-    s32 unk_14;
-    s32 unk_18;
-    unk_80026914_unk_1C* unk_1C;
-    s32 unk_20;
-    s32 unk_24;
-    s32 unk_28;
-    s32 unk_2C;
-    s32* unk_30;
-} unk_80026914;
 
 unk_80026914* func_xk1_80026914(unk_80026914* arg0) {
     unk_80026914* temp_a0;
@@ -225,7 +839,7 @@ void func_xk1_80026B44(Gfx** gfxP, unk_80026914* arg1, s32 arg2, s32 arg3) {
             gSPTextureRectangle(gfx++, (temp_ra + 19) << 2, (temp_s0 + 2) << 2, (temp_ra + 45) << 2,
                                 (temp_s0 + 14) << 2, 0, 0, 0, 1 << 10, 1 << 10);
         }
-        if (arg1->unk_1C[i].unk_08 != 0) {
+        if (arg1->unk_1C[i].unk_08 != NULL) {
             width = var_t5->unk_18;
             height = var_t5->unk_1A;
             gDPPipeSync(gfx++);
@@ -238,7 +852,7 @@ void func_xk1_80026B44(Gfx** gfxP, unk_80026914* arg1, s32 arg2, s32 arg3) {
             gSPTextureRectangle(gfx++, temp_ra << 2, temp_s0 << 2, (temp_ra + width) << 2, (temp_s0 + height) << 2, 0,
                                 0, 0, 1 << 10, 1 << 10);
         }
-        if (arg1->unk_1C[i].unk_20 != 0) {
+        if (arg1->unk_1C[i].unk_20 != NULL) {
             width = 16;
             height = 16;
             gDPPipeSync(gfx++);
@@ -585,18 +1199,16 @@ void func_xk1_80028064(void) {
     }
 }
 
-extern s32 D_80030614;
-extern u8 D_9004888[];
+extern s32 D_xk1_80030614;
 extern s32 D_xk1_8003061C;
-extern s32* D_xk1_80030680;
 extern unk_80026914 D_xk1_80032354;
 extern unk_80026914_unk_1C D_xk1_800327A8[];
 
 void func_xk1_8002820C(void) {
-    D_80030614 = 0;
+    D_xk1_80030614 = 0;
     D_xk1_800327A8[1].unk_08 = &D_9004888;
     D_xk1_800327A8[1].unk_10 = &D_xk1_80032354;
-    D_xk1_80030680 = &D_xk1_8003061C;
+    D_xk1_8003067C[1] = &D_xk1_8003061C;
     D_xk1_800327A8[2].unk_08 = NULL;
     D_xk1_800327A8[2].unk_10 = NULL;
 }
@@ -606,54 +1218,45 @@ extern u8 D_9004B88[];
 extern u8 D_9004D08[];
 extern u8 D_9004E88[];
 extern u8 D_9005008[];
-extern s32 D_xk1_80030620;
-extern s32 D_xk1_80030624;
-extern s32 D_xk1_80030628;
-extern s32 D_xk1_8003062C;
-extern s32 D_xk1_80030630;
-extern s32 D_xk1_80030634;
-extern s32 D_xk1_80030638;
-extern s32 D_xk1_8003063C;
-extern s32 D_xk1_80030640;
-extern s32 D_xk1_80030644;
-extern s32 D_xk1_80030648;
-extern s32 D_xk1_8003064C;
-extern s32 D_xk1_80030650;
-extern s32 D_xk1_80030654;
-extern s32 D_xk1_80030658;
-extern s32 D_xk1_8003065C;
-extern s32 D_xk1_80030660;
-extern s32 D_xk1_80030664;
-extern s32 D_xk1_80030668;
-extern s32 D_xk1_8003066C;
-extern s32 D_xk1_80030670;
-extern s32 D_xk1_80030674;
-extern s32* D_xk1_8003067C[];
-extern unk_80026914 D_xk1_80031140;
-extern unk_80026914 D_xk1_80031294;
-extern unk_80026914 D_xk1_8003226C;
-extern unk_80026914 D_xk1_80032484;
-extern unk_80026914 D_xk1_800325FC;
-extern unk_80026914 D_xk1_80032774;
 
-extern unk_80026914* D_xk1_800328EC[9];
-extern s32* D_xk1_80032910[9];
-extern unk_80026914* D_xk1_80032934[9];
-extern s32* D_xk1_80032958[9];
-
-#ifdef IMPORT_DATA
 void func_xk1_80028250(void) {
-    unk_80026914* sp94[9] = D_xk1_800328EC;
-    s32* sp70[9] = D_xk1_80032910;
-    unk_80026914* sp4C[9] = D_xk1_80032934;
-    s32* sp28[9] = D_xk1_80032958;
+    unk_80026914* sp94[] = {
+        &D_xk1_80031F38,
+        &D_xk1_80031FD8,
+        &D_xk1_80032078,
+        &D_xk1_80031584,
+        &D_xk1_80031648,
+        &D_xk1_8003170C,
+        &D_xk1_800317D0,
+        NULL,
+        NULL,
+    };
+    s32* sp70[9] = {
+        &D_xk1_8003062C,
+        &D_xk1_80030630,
+        &D_xk1_80030634,
+        &D_xk1_80030638,
+        &D_xk1_8003063C,
+        &D_xk1_80030640,
+        &D_xk1_80030644,
+        NULL,
+        NULL,
+    };
+    unk_80026914* sp4C[9] = {
+        &D_xk1_80030744, &D_xk1_80030808, &D_xk1_800308F0, &D_xk1_800309D8, &D_xk1_80030A9C,
+        &D_xk1_80030B60, &D_xk1_80030C24, &D_xk1_80030E98, &D_xk1_80030FA4,
+    };
+    s32* sp28[9] = {
+        &D_xk1_80030648, &D_xk1_8003064C, &D_xk1_80030650, &D_xk1_80030654, &D_xk1_80030658,
+        &D_xk1_8003065C, &D_xk1_80030660, &D_xk1_80030664, &D_xk1_80030668,
+    };
 
     if (D_xk1_8003226C.unk_04 == -1) {
         return;
     }
 
     func_xk1_80027C80(&D_xk1_80032880);
-    switch (D_80030614) {
+    switch (D_xk1_80030614) {
         case 0:
             D_xk1_800327A8[1].unk_08 = D_9004888;
             D_xk1_800327A8[1].unk_10 = &D_xk1_80032354;
@@ -732,11 +1335,8 @@ void func_xk1_80028250(void) {
             break;
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_xk1/A3AE0/func_xk1_80028250.s")
-#endif
 
-extern s8 D_80030060;
+extern u8 D_80030060;
 extern u8 D_xk2_80104CA0[];
 extern s32 D_xk2_80104CB0;
 extern s32 D_xk2_80104CB8;
@@ -828,14 +1428,6 @@ void func_xk1_800287BC(void) {
     }
 }
 
-extern s32* D_xk1_80030684;
-extern unk_80026914 D_xk1_80031584;
-extern unk_80026914 D_xk1_80031648;
-extern unk_80026914 D_xk1_8003170C;
-extern unk_80026914 D_xk1_800317D0;
-extern unk_80026914 D_xk1_80031F38;
-extern unk_80026914 D_xk1_80031FD8;
-extern unk_80026914 D_xk1_80032078;
 
 void func_xk1_80028818(void) {
     if (D_xk1_800325FC.unk_04 == -1) {
@@ -846,37 +1438,37 @@ void func_xk1_80028818(void) {
         case 0:
             D_xk1_800327A8[2].unk_08 = D_9004E88;
             D_xk1_800327A8[2].unk_10 = &D_xk1_80031F38;
-            D_xk1_80030684 = &D_xk1_8003062C;
+            D_xk1_8003067C[2] = &D_xk1_8003062C;
             break;
         case 1:
             D_xk1_800327A8[2].unk_08 = D_9004E88;
             D_xk1_800327A8[2].unk_10 = &D_xk1_80031FD8;
-            D_xk1_80030684 = &D_xk1_80030630;
+            D_xk1_8003067C[2] = &D_xk1_80030630;
             break;
         case 2:
             D_xk1_800327A8[2].unk_08 = D_9004E88;
             D_xk1_800327A8[2].unk_10 = &D_xk1_80032078;
-            D_xk1_80030684 = &D_xk1_80030634;
+            D_xk1_8003067C[2] = &D_xk1_80030634;
             break;
         case 4:
             D_xk1_800327A8[2].unk_08 = D_9004E88;
             D_xk1_800327A8[2].unk_10 = &D_xk1_80031648;
-            D_xk1_80030684 = &D_xk1_8003063C;
+            D_xk1_8003067C[2] = &D_xk1_8003063C;
             break;
         case 3:
             D_xk1_800327A8[2].unk_08 = D_9004E88;
             D_xk1_800327A8[2].unk_10 = &D_xk1_80031584;
-            D_xk1_80030684 = &D_xk1_80030638;
+            D_xk1_8003067C[2] = &D_xk1_80030638;
             break;
         case 5:
             D_xk1_800327A8[2].unk_08 = D_9004E88;
             D_xk1_800327A8[2].unk_10 = &D_xk1_8003170C;
-            D_xk1_80030684 = &D_xk1_80030640;
+            D_xk1_8003067C[2] = &D_xk1_80030640;
             break;
         case 6:
             D_xk1_800327A8[2].unk_08 = D_9004E88;
             D_xk1_800327A8[2].unk_10 = &D_xk1_800317D0;
-            D_xk1_80030684 = &D_xk1_80030644;
+            D_xk1_8003067C[2] = &D_xk1_80030644;
             break;
         case 7:
             D_xk1_800327A8[2].unk_08 = NULL;
@@ -890,15 +1482,6 @@ void func_xk1_80028818(void) {
 }
 
 extern s32 D_xk1_80032778;
-extern unk_80026914 D_xk1_80030744;
-extern unk_80026914 D_xk1_80030808;
-extern unk_80026914 D_xk1_800308F0;
-extern unk_80026914 D_xk1_800309D8;
-extern unk_80026914 D_xk1_80030A9C;
-extern unk_80026914 D_xk1_80030B60;
-extern unk_80026914 D_xk1_80030C24;
-extern unk_80026914 D_xk1_80030E98;
-extern unk_80026914 D_xk1_80030FA4;
 
 void func_xk1_80028A04(void) {
 
@@ -909,39 +1492,39 @@ void func_xk1_80028A04(void) {
     switch (D_xk1_80030628) {
         case 0:
             D_xk1_800327A8[2].unk_10 = &D_xk1_80030744;
-            D_xk1_80030684 = &D_xk1_80030648;
+            D_xk1_8003067C[2] = &D_xk1_80030648;
             break;
         case 1:
             D_xk1_800327A8[2].unk_10 = &D_xk1_80030808;
-            D_xk1_80030684 = &D_xk1_8003064C;
+            D_xk1_8003067C[2] = &D_xk1_8003064C;
             break;
         case 2:
             D_xk1_800327A8[2].unk_10 = &D_xk1_800308F0;
-            D_xk1_80030684 = &D_xk1_80030650;
+            D_xk1_8003067C[2] = &D_xk1_80030650;
             break;
         case 3:
             D_xk1_800327A8[2].unk_10 = &D_xk1_800309D8;
-            D_xk1_80030684 = &D_xk1_80030654;
+            D_xk1_8003067C[2] = &D_xk1_80030654;
             break;
         case 4:
             D_xk1_800327A8[2].unk_10 = &D_xk1_80030A9C;
-            D_xk1_80030684 = &D_xk1_80030658;
+            D_xk1_8003067C[2] = &D_xk1_80030658;
             break;
         case 5:
             D_xk1_800327A8[2].unk_10 = &D_xk1_80030B60;
-            D_xk1_80030684 = &D_xk1_8003065C;
+            D_xk1_8003067C[2] = &D_xk1_8003065C;
             break;
         case 6:
             D_xk1_800327A8[2].unk_10 = &D_xk1_80030C24;
-            D_xk1_80030684 = &D_xk1_80030660;
+            D_xk1_8003067C[2] = &D_xk1_80030660;
             break;
         case 7:
             D_xk1_800327A8[2].unk_10 = &D_xk1_80030E98;
-            D_xk1_80030684 = &D_xk1_80030664;
+            D_xk1_8003067C[2] = &D_xk1_80030664;
             break;
         case 8:
             D_xk1_800327A8[2].unk_10 = &D_xk1_80030FA4;
-            D_xk1_80030684 = &D_xk1_80030668;
+            D_xk1_8003067C[2] = &D_xk1_80030668;
             break;
     }
 }
@@ -1067,7 +1650,6 @@ void func_xk1_80028F50(void) {
 
 extern s32 D_800D11D4;
 extern s32 D_xk1_800305F4;
-extern s32 D_xk1_800328B4[];
 
 void func_xk1_80028F94(void) {
 
@@ -1085,10 +1667,10 @@ void func_xk1_80028F94(void) {
 }
 
 void func_xk1_80029070(void) {
-    D_80030614 = 0;
+    D_xk1_80030614 = 0;
     D_xk1_800327A8[1].unk_08 = D_9004888;
     D_xk1_800327A8[1].unk_10 = &D_xk1_80032354;
-    D_xk1_80030680 = &D_xk1_8003061C;
+    D_xk1_8003067C[1] = &D_xk1_8003061C;
     D_xk1_800327A8[2].unk_08 = NULL;
     D_xk1_800327A8[2].unk_10 = NULL;
 }

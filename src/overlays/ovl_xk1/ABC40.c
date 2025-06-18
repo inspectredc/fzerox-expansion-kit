@@ -71,7 +71,8 @@ Gfx* func_xk1_8002EAF0(Gfx* gfx, u16 arg1, u8 arg2, u16 arg3) {
                 break;
         }
     }
-    gfx = func_xk1_8002EA10(gfx, D_xk1_8003BBA0 - 6, D_xk1_8003BBA8[0] - 3, D_xk1_8003BBA0 + arg1 + 6, D_xk1_8003BBA8[arg2 - 1] + 19, arg3);
+    gfx = func_xk1_8002EA10(gfx, D_xk1_8003BBA0 - 6, D_xk1_8003BBA8[0] - 3, D_xk1_8003BBA0 + arg1 + 6,
+                            D_xk1_8003BBA8[arg2 - 1] + 19, arg3);
 
     return gfx;
 }
@@ -87,7 +88,7 @@ Gfx* func_xk1_8002ECE8(Gfx* gfx, u16 arg1, u16 arg2, s32 arg3, u16 arg4) {
 u16 D_xk1_80033504 = 0;
 u16 D_xk1_80033508 = 0;
 
-extern u8* D_xk2_80136FB8[];
+extern u8* D_xk3_801372B8[];
 extern u8* sLeoErrorMessages[];
 extern u8 D_80794E1C;
 extern u8 D_80794E24;
@@ -225,7 +226,9 @@ Gfx* func_xk1_8002ED64(Gfx* gfx) {
                 D_80794E24 = 0;
             }
             if (D_xk1_80033504 < D_xk1_80033500) {
-                if (((D_xk1_80033500 / 4) < D_xk1_80033504) && ((gControllers[gPlayerControlPorts[0]].buttonPressed & BTN_A) || (gControllers[gPlayerControlPorts[0]].buttonPressed & BTN_B))) {
+                if (((D_xk1_80033500 / 4) < D_xk1_80033504) &&
+                    ((gControllers[gPlayerControlPorts[0]].buttonPressed & BTN_A) ||
+                     (gControllers[gPlayerControlPorts[0]].buttonPressed & BTN_B))) {
                     D_807C6EA8.unk_08 = 0;
                 } else {
                     gfx = func_xk1_8002EAF0(gfx, 168, 1, GPACK_RGBA5551(130, 130, 255, 1));
@@ -253,18 +256,20 @@ Gfx* func_xk1_8002ED64(Gfx* gfx) {
             }
 
             if (D_xk1_80033504 < D_xk1_80033500) {
-                if (((D_xk1_80033500 / 4) < D_xk1_80033504) && ((gControllers[gPlayerControlPorts[0]].buttonPressed & BTN_A) || (gControllers[gPlayerControlPorts[0]].buttonPressed & BTN_B))) {
+                if (((D_xk1_80033500 / 4) < D_xk1_80033504) &&
+                    ((gControllers[gPlayerControlPorts[0]].buttonPressed & BTN_A) ||
+                     (gControllers[gPlayerControlPorts[0]].buttonPressed & BTN_B))) {
                     D_807C6EA8.unk_08 = 0;
                 } else {
                     switch (D_807C6EA8.unk_08) {
-                    case 16:
-                        gfx = func_xk1_8002EAF0(gfx, 216, 1, GPACK_RGBA5551(255, 0, 0, 1));
-                        LeoFault_DrawErrorMessage(&gfx, D_xk1_8003BBA0, D_xk1_8003BBA8[0], D_xk1_800337F0);
-                        break;
-                    case 27:
-                        gfx = func_xk1_8002EAF0(gfx, 184, 1, GPACK_RGBA5551(130, 130, 255, 1));
-                        LeoFault_DrawErrorMessage(&gfx, D_xk1_8003BBA0, D_xk1_8003BBA8[0], D_xk1_80033804);
-                        break;
+                        case 16:
+                            gfx = func_xk1_8002EAF0(gfx, 216, 1, GPACK_RGBA5551(255, 0, 0, 1));
+                            LeoFault_DrawErrorMessage(&gfx, D_xk1_8003BBA0, D_xk1_8003BBA8[0], D_xk1_800337F0);
+                            break;
+                        case 27:
+                            gfx = func_xk1_8002EAF0(gfx, 184, 1, GPACK_RGBA5551(130, 130, 255, 1));
+                            LeoFault_DrawErrorMessage(&gfx, D_xk1_8003BBA0, D_xk1_8003BBA8[0], D_xk1_80033804);
+                            break;
                     }
                     D_xk1_80033504++;
                 }
@@ -273,19 +278,19 @@ Gfx* func_xk1_8002ED64(Gfx* gfx) {
             }
             break;
         case 17:
-            gfx = func_xk1_8002ECE8(gfx, 54, 192, D_xk2_80136FB8[192], GPACK_RGBA5551(130, 130, 255, 1));
+            gfx = func_xk1_8002ECE8(gfx, 54, 192, D_xk3_801372B8[0], GPACK_RGBA5551(130, 130, 255, 1));
             break;
         case 18:
-            gfx = func_xk1_8002ECE8(gfx, 54, 256, D_xk2_80136FB8[194], GPACK_RGBA5551(130, 130, 255, 1));
+            gfx = func_xk1_8002ECE8(gfx, 54, 256, D_xk3_801372B8[2], GPACK_RGBA5551(130, 130, 255, 1));
             func_xk1_8002D340(&gfx);
             break;
         case 19:
             gfx = func_xk1_8002EA10(gfx, 40, 40, 280, 72, GPACK_RGBA5551(255, 0, 0, 1));
-            gfx = func_xk1_800262F4(gfx, 40, 40, D_xk2_80136FB8[195]);
-            gfx = func_xk1_800262F4(gfx, 40, 56, D_xk2_80136FB8[196]);
+            gfx = func_xk1_800262F4(gfx, 40, 40, D_xk3_801372B8[3]);
+            gfx = func_xk1_800262F4(gfx, 40, 56, D_xk3_801372B8[4]);
             break;
         case 20:
-            gfx = func_xk1_8002ECE8(gfx, 54, 272, D_xk2_80136FB8[197], GPACK_RGBA5551(130, 130, 255, 1));
+            gfx = func_xk1_8002ECE8(gfx, 54, 272, D_xk3_801372B8[5], GPACK_RGBA5551(130, 130, 255, 1));
             func_xk1_8002D340(&gfx);
             break;
         case 21:
@@ -294,13 +299,13 @@ Gfx* func_xk1_8002ED64(Gfx* gfx) {
             LeoFault_DrawErrorMessage(&gfx, 48, 56, sLeoErrorMessages[26]);
             break;
         case 22:
-            gfx = func_xk1_8002ECE8(gfx, 54, 112, D_xk2_80136FB8[198], GPACK_RGBA5551(255, 0, 0, 1));
+            gfx = func_xk1_8002ECE8(gfx, 54, 112, D_xk3_801372B8[6], GPACK_RGBA5551(255, 0, 0, 1));
             break;
         case 23:
-            gfx = func_xk1_8002ECE8(gfx, 54, 128, D_xk2_80136FB8[199], GPACK_RGBA5551(255, 0, 0, 1));
+            gfx = func_xk1_8002ECE8(gfx, 54, 128, D_xk3_801372B8[7], GPACK_RGBA5551(255, 0, 0, 1));
             break;
         case 24:
-            gfx = func_xk1_8002ECE8(gfx, 54, 272, D_xk2_80136FB8[201], GPACK_RGBA5551(130, 130, 255, 1));
+            gfx = func_xk1_8002ECE8(gfx, 54, 272, D_xk3_801372B8[9], GPACK_RGBA5551(130, 130, 255, 1));
             break;
         case 25:
             gfx = func_xk1_8002EAF0(gfx, 136, 1, GPACK_RGBA5551(130, 130, 255, 1));

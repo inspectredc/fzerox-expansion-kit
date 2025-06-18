@@ -1,6 +1,18 @@
 #include "global.h"
 #include "leo/leo_internal.h"
 
+u8 D_80030060 = 0;
+UNUSED s32 D_80030064 = 0;
+UNUSED s32 D_80030068 = 0;
+u8 D_8003006C = 0;
+UNUSED s32 D_80030070 = 0;
+UNUSED s32 D_80030074 = 0;
+UNUSED s32 D_80030078 = 0;
+UNUSED s32 D_8003007C = 0;
+
+s32 D_xk1_80030080 = 0;
+s32 D_xk1_80030084 = 0;
+
 s32 func_xk1_80025C20(s8* arg0) {
     s32 var_v1;
 
@@ -73,9 +85,6 @@ void func_xk1_80025D2C(char* arg0) {
         }
     }
 }
-
-extern s32 D_xk1_80030080;
-extern s32 D_xk1_80030084;
 
 s32 func_xk1_80025DE4(void) {
     s32 i;
@@ -165,6 +174,14 @@ extern OSPiHandle* gDriveRomHandle;
 
 Gfx* func_xk1_800260F0(Gfx* gfx, s32 arg1, s32 arg2, s32 code) {
     s32 fontAddr = LeoGetKAdr(code) + DDROM_FONT_START;
+
+    // TODO: move to appropriate place
+    PRINTF("KANJI NUM COUNT START\n");
+    PRINTF("KANJI NUM IS %d\n");
+    PRINTF("FONT NUM IS %d\n");
+    PRINTF("\nDMA OK\n");
+    PRINTF("KANJI READY OK %d\n");
+    PRINTF("*");
 
     D_xk1_8003A470.hdr.pri = 0;
     D_xk1_8003A470.hdr.retQueue = &gDmaMesgQueue;

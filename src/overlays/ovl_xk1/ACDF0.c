@@ -48,11 +48,12 @@ Gfx* func_xk1_8002FCA0(Gfx* gfx, u16 arg1, u16 arg2, u16 arg3, u16 arg4, u16 arg
     gDPFillRectangle(gfx++, arg1, arg2, arg3, arg2 + arg7 - 1);
     gDPFillRectangle(gfx++, arg1, arg4 - arg7 + 1, arg3, arg4);
     gDPFillRectangle(gfx++, arg3 - arg6 + 1, arg2, arg3, arg4);
-    
+
     return gfx;
 }
 
-Gfx* func_xk1_8002FDF8(Gfx* gfx, u16 arg1, u16 arg2, u16 arg3, u16 arg4, u8 red, u8 green, u8 blue, u8 alpha, u8 arg9, u8 argA) {
+Gfx* func_xk1_8002FDF8(Gfx* gfx, u16 arg1, u16 arg2, u16 arg3, u16 arg4, u8 red, u8 green, u8 blue, u8 alpha, u8 arg9,
+                       u8 argA) {
 
     gDPPipeSync(gfx++);
     gDPSetCycleType(gfx++, G_CYC_1CYCLE);
@@ -63,6 +64,6 @@ Gfx* func_xk1_8002FDF8(Gfx* gfx, u16 arg1, u16 arg2, u16 arg3, u16 arg4, u8 red,
     gDPFillRectangle(gfx++, arg1, arg2, arg3 + 1, arg2 + argA);
     gDPFillRectangle(gfx++, arg1, arg4 - argA + 1, arg3 + 1, arg4 + 1);
     gDPFillRectangle(gfx++, arg3 - arg9 + 1, arg2, arg3 + 1, arg4 + 1);
-    
+
     return gfx;
 }
