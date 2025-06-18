@@ -1,5 +1,11 @@
-#include "common.h"
+#include "global.h"
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_xk1/A2E70/func_xk1_80025C00.s")
+s32 D_xk1_80030050 = 1;
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_xk1/A2E70/func_xk1_80025C0C.s")
+void func_xk1_80025C00(s32 arg0) {
+    D_xk1_80030050 = arg0;
+}
+
+s32 func_xk1_80025C0C(void) {
+    return D_xk1_80030050;
+}

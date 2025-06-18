@@ -707,15 +707,15 @@ void func_80709914(void) {
 
 extern s8 D_8076CBE0;
 
-void func_80709A38(s32 arg0) {
-    if ((arg0 >= 0) && (arg0 < 10) && (D_8076CBE0 < 0)) {
-        D_8076CBE0 = arg0;
+void func_80709A38(s32 venue) {
+    if ((venue >= VENUE_MUTE_CITY) && (venue <= VENUE_SILENCE) && (D_8076CBE0 < 0)) {
+        D_8076CBE0 = venue;
     }
 }
 
 void func_80709A64(void) {
     s32 pad;
-    s32 sp28;
+    s32 venue;
     s32 pad2;
     RomOffset romOffset;
     size_t ramSize;
@@ -724,12 +724,12 @@ void func_80709A64(void) {
     if (D_8076CBE0 < 0) {
         return;
     }
-    sp28 = D_8076CBE0;
+    venue = D_8076CBE0;
 
     switch (gGameMode) {
         case GAMEMODE_COURSE_EDIT:
-            romOffset = D_807C7120[sp28][0];
-            ramSize = D_8076CC14[sp28] - D_8076CBE8[sp28];
+            romOffset = D_807C7120[venue][0];
+            ramSize = D_8076CC14[venue] - D_8076CBE8[venue];
             break;
         default:
             return;
@@ -743,7 +743,7 @@ void func_80709A64(void) {
         mio0Decode(sp18, osPhysicalToVirtual(D_8079A44C));
     }
     D_8076CBE0 = -1;
-    func_i2_800B0D10(sp28);
+    func_i2_800B0D10(venue);
 }
 
 extern s32 D_807C7178;

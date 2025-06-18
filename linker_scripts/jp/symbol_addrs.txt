@@ -231,6 +231,8 @@ D_807B37B8 = 0x807B37B8; // size:0x10
 gMachines = 0x807B37D8; // size:0x294
 sCustomMachineInfo = 0x807B3A70;
 
+D_807C6F0C = 0x807C6F0C;
+
 D_802259C0 = 0x802259C0;
 
 // libultra
