@@ -33,10 +33,10 @@ typedef struct unk_807C6EA8 {
     s32 unk_30;
     s32 unk_34;
     void* unk_38;
-    s32 unk_3C;
-    s32 unk_40;
-    s32 unk_44;
-    s32 unk_48;
+    u8* unk_3C;
+    u8* unk_40;
+    u8* unk_44;
+    u8* unk_48;
     s32 unk_4C;
     s32 unk_50;
     u8 unk_54;
@@ -762,7 +762,7 @@ typedef struct unk_806F2400_unk_00 {
     u8 cockpitG;
     u8 cockpitB;
     u8 machineName[11];
-} unk_806F2400_unk_00;
+} unk_806F2400_unk_00; // size = 0x20
 
 typedef struct unk_806F2400 {
     unk_806F2400_unk_00 unk_00[30];

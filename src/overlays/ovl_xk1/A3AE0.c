@@ -2,80 +2,6 @@
 #include "fzx_segmentA.h"
 #include "assets/overlays/ovl_xk1/aA3AE0.h"
 
-typedef struct unk_80026914_unk_1C {
-    void* unk_00;
-    void* unk_04;
-    void* unk_08;
-    void* unk_0C;
-    struct unk_80026914* unk_10;
-    void (*unk_14)(void);
-    u16 unk_18;
-    u16 unk_1A;
-    void* unk_1C;
-    void* unk_20;
-} unk_80026914_unk_1C; // size = 0x24
-
-typedef struct unk_80026914 {
-    s32 unk_00;
-    s32 unk_04;
-    s32 unk_08;
-    s32 unk_0C;
-    s32 unk_10;
-    s32 unk_14;
-    s32 unk_18;
-    unk_80026914_unk_1C* unk_1C;
-    s32 unk_20;
-    s32 unk_24;
-    s32 unk_28;
-    s32 unk_2C;
-    s32* unk_30;
-} unk_80026914;
-
-extern s32 D_xk1_8003A550;
-extern s32 D_xk1_8003A554;
-extern s32 D_80119890;
-
-#include "src/assets/overlays/ovl_xk1/aA3AE0/aA3AE0.c"
-
-s32 D_xk1_800305F0 = 1;
-s32 D_xk1_800305F4 = -1;
-s32 D_xk1_800305F8 = 0;
-s32 D_xk1_800305FC = 0;
-s32 D_xk1_80030600 = 0;
-s32 D_xk1_80030604 = 8;
-s32 D_xk1_80030608 = 500;
-s32 D_xk1_8003060C = 0;
-s32 D_xk1_80030610 = -1;
-s32 D_xk1_80030614 = 0;
-s32 D_xk1_80030618 = 0;
-s32 D_xk1_8003061C = 0;
-s32 D_xk1_80030620 = 0;
-s32 D_xk1_80030624 = 0;
-s32 D_xk1_80030628 = 0;
-s32 D_xk1_8003062C = 0;
-s32 D_xk1_80030630 = 0;
-s32 D_xk1_80030634 = 0;
-s32 D_xk1_80030638 = 0;
-s32 D_xk1_8003063C = 0;
-s32 D_xk1_80030640 = 0;
-s32 D_xk1_80030644 = 0;
-s32 D_xk1_80030648 = 0;
-s32 D_xk1_8003064C = 0;
-s32 D_xk1_80030650 = 0;
-s32 D_xk1_80030654 = 0;
-s32 D_xk1_80030658 = 0;
-s32 D_xk1_8003065C = 0;
-s32 D_xk1_80030660 = 0;
-s32 D_xk1_80030664 = 0;
-s32 D_xk1_80030668 = 0;
-s32 D_xk1_8003066C = 0;
-s32 D_xk1_80030670 = 0;
-s32 D_xk1_80030674 = 0;
-s32 D_xk1_80030678 = -1;
-s32* D_xk1_8003067C[] = {
-    &D_xk1_80030614, &D_xk1_8003061C, NULL, &D_xk1_80030610, &D_xk1_80030678,
-};
-
 extern u16 D_7006380[];
 extern u16 D_7005780[];
 extern u16 D_7006980[];
@@ -267,6 +193,80 @@ extern u8 D_9008008[];
 extern u8 D_7008780[];
 extern u8 D_701EFA0[];
 extern u8 D_701F120[];
+
+typedef struct unk_80026914_unk_1C {
+    void* unk_00;
+    void* unk_04;
+    void* unk_08;
+    void* unk_0C;
+    struct unk_80026914* unk_10;
+    void (*unk_14)(void);
+    u16 unk_18;
+    u16 unk_1A;
+    void* unk_1C;
+    void* unk_20;
+} unk_80026914_unk_1C; // size = 0x24
+
+typedef struct unk_80026914 {
+    s32 unk_00;
+    s32 unk_04;
+    s32 unk_08;
+    s32 unk_0C;
+    s32 unk_10;
+    s32 unk_14;
+    s32 unk_18;
+    unk_80026914_unk_1C* unk_1C;
+    s32 unk_20;
+    s32 unk_24;
+    s32 unk_28;
+    s32 unk_2C;
+    s32* unk_30;
+} unk_80026914;
+
+extern s32 D_xk1_8003A550;
+extern s32 D_xk1_8003A554;
+extern s32 D_80119890;
+
+#include "src/assets/overlays/ovl_xk1/aA3AE0/aA3AE0.c"
+
+s32 D_xk1_800305F0 = 1;
+s32 D_xk1_800305F4 = -1;
+s32 D_xk1_800305F8 = 0;
+s32 D_xk1_800305FC = 0;
+s32 D_xk1_80030600 = 0;
+s32 D_xk1_80030604 = 8;
+s32 D_xk1_80030608 = 500;
+s32 D_xk1_8003060C = 0;
+s32 D_xk1_80030610 = -1;
+s32 D_xk1_80030614 = 0;
+s32 D_xk1_80030618 = 0;
+s32 D_xk1_8003061C = 0;
+s32 D_xk1_80030620 = 0;
+s32 D_xk1_80030624 = 0;
+s32 D_xk1_80030628 = 0;
+s32 D_xk1_8003062C = 0;
+s32 D_xk1_80030630 = 0;
+s32 D_xk1_80030634 = 0;
+s32 D_xk1_80030638 = 0;
+s32 D_xk1_8003063C = 0;
+s32 D_xk1_80030640 = 0;
+s32 D_xk1_80030644 = 0;
+s32 D_xk1_80030648 = 0;
+s32 D_xk1_8003064C = 0;
+s32 D_xk1_80030650 = 0;
+s32 D_xk1_80030654 = 0;
+s32 D_xk1_80030658 = 0;
+s32 D_xk1_8003065C = 0;
+s32 D_xk1_80030660 = 0;
+s32 D_xk1_80030664 = 0;
+s32 D_xk1_80030668 = 0;
+s32 D_xk1_8003066C = 0;
+s32 D_xk1_80030670 = 0;
+s32 D_xk1_80030674 = 0;
+s32 D_xk1_80030678 = -1;
+s32* D_xk1_8003067C[] = {
+    &D_xk1_80030614, &D_xk1_8003061C, NULL, &D_xk1_80030610, &D_xk1_80030678,
+};
 
 unk_80026914_unk_1C D_xk1_80030690[] = {
     { D_7006380, D_7006980, D_7008900, D_900D408, NULL, NULL, 16, 16, NULL, NULL },
@@ -1427,7 +1427,6 @@ void func_xk1_800287BC(void) {
             break;
     }
 }
-
 
 void func_xk1_80028818(void) {
     if (D_xk1_800325FC.unk_04 == -1) {
