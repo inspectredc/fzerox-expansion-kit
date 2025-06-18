@@ -1,5 +1,7 @@
 #include "global.h"
 
+Controller* D_xk1_8003BB50;
+
 s32 D_xk1_80032C80 = 12;
 s32 D_xk1_80032C84 = 9;
 s32 D_xk1_80032C88 = 2;
@@ -67,8 +69,6 @@ void func_xk1_8002D88C(s32* arg0, s32 arg1, s32 arg2) {
         }
     }
 }
-
-extern Controller* D_xk1_8003BB50;
 
 void func_xk1_8002D974(void) {
     static s32 sLastStickX = 0;

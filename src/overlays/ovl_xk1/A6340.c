@@ -3,6 +3,14 @@
 #include "fzx_game.h"
 #include "fzx_assets.h"
 
+// TODO: Unsure on sizes
+u8 D_xk1_8003A560[16];
+u8 D_xk1_8003A570[40];
+u8 D_xk1_8003A598[36];
+s32 D_xk1_8003A5BC;
+s32 D_xk1_8003A5C0;
+void (*D_xk1_8003A5C4)(void);
+
 s32 D_xk1_80032AC0 = 0;
 s32 D_xk1_80032AC4 = 1;
 s32 D_xk1_80032AC8 = 0;
@@ -136,8 +144,6 @@ void func_xk1_8002935C(u8 arg0, s32* arg1, s32* arg2) {
     *arg2 = sp0;
 }
 
-extern u8 D_xk1_8003A560[];
-
 void func_xk1_800294AC(void) {
     s32 i;
 
@@ -150,9 +156,6 @@ void func_xk1_800294AC(void) {
 
 extern s32 D_xk1_8003A550;
 extern s32 D_xk1_8003A554;
-extern s32 D_xk1_8003A5BC;
-extern s32 D_xk1_8003A5C0;
-extern void (*D_xk1_8003A5C4)(void);
 
 void func_xk1_800294EC(void (*arg0)(void)) {
     D_xk1_8003A5BC = 0;
@@ -332,19 +335,6 @@ void func_xk1_80029AB4(s32 arg0, s32 arg1) {
     }
 }
 
-typedef struct unk_80128C94 {
-    s8 unk_0000[0x53A0];
-    Vtx unk_53A0[0x30];
-    Vtx unk_56A0[0x30];
-    s8 unk_59A0[0xC00];
-    Vtx unk_65A0[0x800];
-    Vtx unk_E5A0[0x80];
-    s8 unk_EDA0[0x400];
-    Mtx unk_F1A0[0x1];
-    s8 pad_F1E0[0x1EE8];
-    Gfx unk_110C8[1];
-} unk_80128C94;
-
 extern unk_80128C94* D_80128C94;
 
 extern Gfx D_3000510[];
@@ -492,9 +482,6 @@ void func_xk1_8002AC24(void) {
     }
 }
 
-extern u8 D_xk1_8003A570[];
-extern u8 D_xk1_8003A598[];
-extern u8 D_xk1_8003A5B5[];
 extern s32 D_xk1_80032C20;
 extern s32 D_xk2_80104378;
 
@@ -558,7 +545,7 @@ void func_xk1_8002AC70(void) {
             return;
         case 3:
             func_xk2_800EBFE8(D_xk1_8003A598);
-            func_80768844(0xFFFB, D_xk1_8003A598, D_xk1_8003A5B5, D_xk1_8003A560, D_xk1_8003A5B5, 1);
+            func_80768844(0xFFFB, D_xk1_8003A598, &D_xk1_8003A598[29], D_xk1_8003A560, &D_xk1_8003A598[29], 1);
             D_xk1_80030610 = -1;
             D_800D6CA0[2] = 0x22;
             return;

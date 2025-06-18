@@ -1,6 +1,10 @@
 #include "global.h"
 #include "assets/overlays/ovl_xk1/dd_fault.h"
 
+u16 D_xk1_8003BBA0;
+u16 D_xk1_8003BBA8[4];
+s32* D_8003BBB0;
+
 u16 D_xk1_80033500 = 180;
 
 void func_xk1_8002E9D0(s32 arg0) {
@@ -16,9 +20,6 @@ Gfx* func_xk1_8002EA10(Gfx* gfx, u16 arg1, u16 arg2, u16 arg3, u16 arg4, u16 arg
     gSPDisplayList(gfx++, D_xk1_80033630);
     return gfx;
 }
-
-extern u16 D_xk1_8003BBA0;
-extern u16 D_xk1_8003BBA8[];
 
 extern volatile unk_807C6EA8 D_807C6EA8;
 
@@ -328,7 +329,6 @@ Gfx* func_xk1_8002F9DC(Gfx* gfx) {
     return gfx;
 }
 
-extern s32* D_8003BBB0;
 extern u8* D_8003BBC0;
 extern u8 D_xk1_80033808[];
 

@@ -2,6 +2,9 @@
 #include "fzx_game.h"
 #include "leo/leo_functions.h"
 
+LEODiskID D_xk1_8003BB60;
+LEODiskID D_xk1_8003BB80;
+
 void func_xk1_8002DEE0(s32 arg0) {
     func_8070F8A4(arg0, 0);
     while (true) {}
@@ -66,10 +69,7 @@ void func_xk1_8002DFB4(s32* arg0, s32* arg1) {
     }
 }
 
-extern LEODiskID D_8076CB50;
 extern s32 gGameMode;
-extern LEODiskID D_xk1_8003BB60;
-extern LEODiskID D_xk1_8003BB80;
 
 s32 func_xk1_8002E0A8(void) {
     s32 sp2C;

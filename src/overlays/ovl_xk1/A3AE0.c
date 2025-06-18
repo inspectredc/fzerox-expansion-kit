@@ -223,9 +223,10 @@ typedef struct unk_80026914 {
     s32* unk_30;
 } unk_80026914;
 
-extern s32 D_xk1_8003A550;
-extern s32 D_xk1_8003A554;
 extern s32 D_80119890;
+
+s32 D_xk1_8003A550;
+s32 D_xk1_8003A554;
 
 #include "src/assets/overlays/ovl_xk1/aA3AE0/aA3AE0.c"
 
@@ -670,8 +671,6 @@ void func_xk1_800268E4(void) {
     D_800D6CA0[2] = 0x23;
 }
 
-extern s32 D_xk1_800305F0;
-
 void func_xk1_80026908(s32 arg0) {
     D_xk1_800305F0 = arg0;
 }
@@ -693,8 +692,6 @@ unk_80026914* func_xk1_80026914(unk_80026914* arg0) {
 
     return var_v1;
 }
-
-extern s32 D_xk1_8003060C;
 
 s32 func_xk1_80026958(unk_80026914* arg0, s32 arg1, s32 arg2) {
     s32 i;
@@ -770,10 +767,6 @@ void func_xk1_800269F4(unk_80026914* arg0, s32* arg1, s32* arg2) {
     }
 }
 
-extern s32 D_xk1_80030600;
-extern unk_80026914 D_xk1_80031C28;
-extern unk_80026914 D_xk1_80031E50;
-extern unk_80026914 D_xk1_80032880;
 extern u8 D_70201A0[];
 
 void func_xk1_80026B44(Gfx** gfxP, unk_80026914* arg1, s32 arg2, s32 arg3) {
@@ -887,8 +880,6 @@ void func_xk1_80026B44(Gfx** gfxP, unk_80026914* arg1, s32 arg2, s32 arg3) {
 extern u16 D_701F5A0[];
 extern u32 gGameFrameCount;
 
-extern s32 D_xk1_80030604;
-
 void func_xk1_800276B0(Gfx** gfxP, unk_80026914* arg1, s32 arg2, s32 arg3) {
     Gfx* gfx;
     unk_80026914* temp_v1;
@@ -951,11 +942,6 @@ void func_xk1_800276B0(Gfx** gfxP, unk_80026914* arg1, s32 arg2, s32 arg3) {
     }
     *gfxP = gfx;
 }
-
-extern s32 D_xk1_800305F8;
-extern s32 D_xk1_80030610;
-extern s32 D_xk1_80030678;
-extern unk_80026914 D_xk1_800314C0;
 
 void func_xk1_80027B74(unk_80026914* arg0) {
     unk_80026914* temp_v1;
@@ -1068,8 +1054,6 @@ void func_xk1_80027CFC(unk_80026914* arg0, s32* arg1, s32* arg2) {
     var_a3->unk_08 = var_a1;
 }
 
-extern s32 D_xk1_800305FC;
-
 void func_xk1_80027DC8(unk_80026914* arg0, s32* arg1, s32* arg2) {
     unk_80026914* temp_v1;
     unk_80026914* var_a3;
@@ -1145,7 +1129,6 @@ extern u8 D_xk2_800F7400;
 extern s32 D_xk2_80104378;
 extern s32 D_807B6520;
 extern s32 D_xk1_80032BF8;
-extern unk_80026914 D_xk1_80032160;
 
 void func_xk1_80028064(void) {
     if (D_xk1_80032160.unk_04 == -1) {
@@ -1198,11 +1181,6 @@ void func_xk1_80028064(void) {
             break;
     }
 }
-
-extern s32 D_xk1_80030614;
-extern s32 D_xk1_8003061C;
-extern unk_80026914 D_xk1_80032354;
-extern unk_80026914_unk_1C D_xk1_800327A8[];
 
 void func_xk1_8002820C(void) {
     D_xk1_80030614 = 0;
@@ -1379,7 +1357,6 @@ void func_xk1_8002860C(void) {
     D_807BCB58.unk_08 = 0;
 }
 
-extern s32 D_xk1_80032358;
 extern s32 D_xk2_800F7040;
 
 void func_xk1_80028708(void) {
@@ -1408,8 +1385,6 @@ void func_xk1_80028708(void) {
             break;
     }
 }
-
-extern s32 D_xk1_80032488;
 
 void func_xk1_800287BC(void) {
     if (D_xk1_80032484.unk_04 == -1) {
@@ -1479,8 +1454,6 @@ void func_xk1_80028818(void) {
             break;
     }
 }
-
-extern s32 D_xk1_80032778;
 
 void func_xk1_80028A04(void) {
 
@@ -1648,7 +1621,6 @@ void func_xk1_80028F50(void) {
 }
 
 extern s32 D_800D11D4;
-extern s32 D_xk1_800305F4;
 
 void func_xk1_80028F94(void) {
 

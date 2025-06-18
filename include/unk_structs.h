@@ -805,4 +805,17 @@ typedef struct unk_8003A5D8 {
     s8 unk_23;
 } unk_8003A5D8; //size = 0x24
 
+typedef struct unk_80128C94 {
+    s8 unk_0000[0x53A0];
+    Vtx unk_53A0[0x30];
+    Vtx unk_56A0[0x30];
+    s8 unk_59A0[0xC00];
+    Vtx unk_65A0[0x800];
+    Vtx unk_E5A0[0x80];
+    s8 unk_EDA0[0x400];
+    Mtx unk_F1A0[0x1];
+    s8 pad_F1E0[0x1EE8];
+    Gfx unk_110C8[1];
+} unk_80128C94;
+
 #endif // UNK_STRUCTS_H
