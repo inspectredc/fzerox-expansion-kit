@@ -1,6 +1,6 @@
 #include "global.h"
 #include "fzx_game.h"
-#include "leo/unk_leo.h"
+#include "leo/leo_functions.h"
 
 void func_xk1_8002DEE0(s32 arg0) {
     func_8070F8A4(arg0, 0);

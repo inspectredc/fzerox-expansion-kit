@@ -31,12 +31,13 @@
       - [0xAFE40, .data, A8140]
       - [0xAFEA0, .rodata, A8140]
       - [0xAFEF0, .data, AAA80]
-      - [0xAFF10, data]
+      - [0xAFF10, .data, ovl_xk1_text]
+      - [0xB0640, .data, ovl_xk1_data]
       - [0xB0670, .data, AB150]
       - [0xB0680, .rodata, AB150]
       - [0xB0770, .data, ABC40]
       - [0xB0790, .rodata, ABC40]
-      - [0xB0860, data]
+      - [0xB0860, .data, ovl_xk1_disk_data]
       - { type: bss, vram: 0x80033840 }
 
   - name: ovl_i3

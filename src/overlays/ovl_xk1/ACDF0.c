@@ -30,11 +30,11 @@ void func_xk1_8002FBC8(void) {
     func_8071E0C0();
 }
 
-extern s8 D_xk1_800333D7;
+extern unk_806F2400_unk_00 D_xk1_800333D0;
 
 void func_xk1_8002FC70(void) {
     func_xk1_8002FFA0();
-    D_xk1_800333D7 = 0x1F;
+    D_xk1_800333D0.unk_07 = 0x1F;
     func_8071E0C0();
 }
 

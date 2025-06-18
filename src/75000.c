@@ -292,7 +292,7 @@ void func_807687E0(u8 arg0, u8* arg1) {
     }
 }
 
-void func_80768844(u16 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
+void func_80768844(u16 arg0, u8* arg1, u8* arg2, u8* arg3, u8* arg4, s32 arg5) {
     if (func_80767E30() == 0) {
         D_807C6EA8.unk_00 = 15;
         D_807C6EA8.unk_08 = 11;
