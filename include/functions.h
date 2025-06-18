@@ -713,6 +713,7 @@ void func_xk1_800268E4(void);
 Gfx* func_xk1_8002924C(Gfx* gfx, s32 xPos, s32 yPos, const char* fmt, ...);
 s32 func_xk1_8002BD64(u8, s32);
 s32 func_xk1_8002BFA4(void);
+s32 func_xk1_8002CA98(u8*, u8*);
 void func_xk1_8002CEF8(s8*, s32, s32, s32 (*)(u8*, u8*));
 void func_xk1_8002D340(Gfx** gfxP);
 void func_xk1_8002DAE0(s32*, s32, s32);

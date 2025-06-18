@@ -3,6 +3,14 @@
 #include "fzx_game.h"
 #include "fzx_assets.h"
 
+s32 D_xk1_8003A5D0;
+unk_8003A5D8 D_xk1_8003A5D8[102];
+u16 D_xk1_8003B430[900];
+s32 D_xk1_8003BB38;
+s32 (*D_xk1_8003BB3C)(u8*, u8*);
+s32 D_xk1_8003BB40;
+s32 D_xk1_8003BB44;
+
 s32 D_xk1_80032BD0 = 4;
 s32 D_xk1_80032BD4 = 0;
 s32 D_xk1_80032BD8 = 0;
@@ -14,8 +22,6 @@ s32 D_xk1_80032BEC = 0;
 s32 D_xk1_80032BF0 = 0;
 s32 D_xk1_80032BF4 = 0;
 s32 D_xk1_80032BF8 = 0;
-
-extern unk_8003A5D8 D_xk1_8003A5D8[];
 
 void func_xk1_8002AED0(void) {
     s32 i;
@@ -82,7 +88,6 @@ void func_xk1_8002B150(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
 
 extern Gfx D_7020808[];
 extern u16 D_701F5A0[];
-extern s32 D_xk1_8003A5D0;
 
 extern u32 gGameFrameCount;
 extern s32 gGameMode;
@@ -284,9 +289,7 @@ void func_xk1_8002BD58(void) {
     D_xk1_80032BD4 = 0;
 }
 
-extern u16 D_xk1_8003B430[];
 extern unk_leo_80419EA0 D_80784EF0;
-s32 func_xk1_8002CA98(u8* arg0, u8* arg1);
 
 s32 func_xk1_8002BD64(u8 arg0, s32 arg1) {
     s32 i;
@@ -418,7 +421,7 @@ Gfx* func_xk1_8002C420(Gfx* gfx, s32 arg1, s32 arg2) {
     return gfx;
 }
 
-extern const char* D_xk1_800331F0[];
+extern u8* D_xk1_800331F0[];
 
 void func_xk1_8002C720(Gfx** gfxP, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     Gfx* gfx;
@@ -482,11 +485,6 @@ s32 func_xk1_8002CA98(u8* arg0, u8* arg1) {
 
     return 0;
 }
-
-extern s32 D_xk1_8003BB38;
-extern s32 (*D_xk1_8003BB3C)(u8*, u8*);
-extern s32 D_xk1_8003BB40;
-extern s32 D_xk1_8003BB44;
 
 void func_xk1_8002CB30(s8* arg0, s8* arg1) {
     s32 temp_v0;

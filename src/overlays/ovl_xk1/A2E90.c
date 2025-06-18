@@ -1,6 +1,16 @@
 #include "global.h"
 #include "leo/leo_internal.h"
 
+OSIoMesg D_xk1_8003A470;
+s32 D_xk1_8003A488;
+UNUSED s32 D_xk1_8003A48C;
+s32 D_xk1_8003A490;
+s32 D_xk1_8003A494;
+s32* D_xk1_8003A498[31];
+s32* D_xk1_8003A518[12];
+s32* D_xk1_8003A548;
+u16* D_xk1_8003A54C;
+
 u8 D_80030060 = 0;
 UNUSED s32 D_80030064 = 0;
 UNUSED s32 D_80030068 = 0;
@@ -50,9 +60,6 @@ s32 func_xk1_80025C58(void) {
 
     return var_s1;
 }
-
-extern s32 D_xk1_8003A494;
-extern u16* D_xk1_8003A54C;
 
 s32 func_xk1_80025CD8(u16 arg0) {
     s32 i;
@@ -115,9 +122,6 @@ s32 func_xk1_80025E8C(u16 arg0) {
     return i;
 }
 
-extern s32* D_xk1_8003A548;
-extern s32 D_xk1_8003A488;
-
 void func_xk1_80025ED4(char* arg0) {
     u16 temp_s1;
 
@@ -136,10 +140,6 @@ void func_xk1_80025ED4(char* arg0) {
         }
     }
 }
-
-extern s32 D_xk1_8003A490;
-extern s32* D_xk1_8003A498[];
-extern s32* D_xk1_8003A518[];
 
 void func_xk1_80025F98(void) {
     s32 i;
@@ -168,7 +168,6 @@ void func_xk1_800260E4(void) {
     D_xk1_8003A490 = 0;
 }
 
-extern OSIoMesg D_xk1_8003A470;
 extern OSMesgQueue gDmaMesgQueue;
 extern OSPiHandle* gDriveRomHandle;
 
