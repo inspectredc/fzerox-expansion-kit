@@ -52,7 +52,7 @@ s32 func_80762768(u32, u8*, u32);
 s32 Leo_bcmp(u8*, u8*, size_t);
 s32 Leo_bcopy(u8*, u8*, size_t);
 s32 Leo_strcpy(u8* dest, u8* src);
-s32 Leo_strcmp(u8* s1, u8* s32);
+s32 Leo_strcmp(u8* s1, u8* s2);
 s32 Leo_DecodeTime(s32);
 s32 Leo_EncodeTime(s32);
 s32 Leo_strlen(u8*);
