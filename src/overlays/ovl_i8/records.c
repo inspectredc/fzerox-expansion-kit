@@ -1197,7 +1197,7 @@ Gfx* func_i8_8009D9D8(Gfx* gfx, s32 arg1, s32 arg2) {
     return gfx;
 }
 
-extern u8 D_80794E14;
+extern volatile u8 D_80794E14;
 
 void func_i8_8009DCC8(void) {
     s32 i;
@@ -1212,7 +1212,7 @@ void func_i8_8009DCC8(void) {
                     D_i8_800A2056++;
                 }
 
-                if (*(vu8*) &D_80794E14) {
+                if (D_80794E14) {
                     break;
                 }
 

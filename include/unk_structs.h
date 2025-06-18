@@ -18,11 +18,11 @@ typedef struct unk_807C6F10 {
 
 typedef struct unk_807C6EA8 {
     s32 unk_00;
-    s8 unk_04;
+    u8 unk_04;
     s32 unk_08;
     s32 unk_0C;
     s32 unk_10;
-    s8 unk_14[0x2];
+    s16 unk_14;
     u16 unk_16;
     u8* unk_18;
     u8* unk_1C;

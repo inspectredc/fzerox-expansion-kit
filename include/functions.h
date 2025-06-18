@@ -104,6 +104,7 @@ s32 func_80703CA4(s32 startLba, void* vram, s32 diskSize, s32 bssSize);
 s32 func_80703E08(s32 startLba, void* vram, s32 diskSize, s32 bssSize);
 
 void func_80704050(s32);
+void func_80704068(void);
 void func_80704810(s32);
 void func_8070481C(void);
 void func_80704AA8(void);
@@ -686,6 +687,7 @@ void func_i10_8012B904(void);
 void func_xk1_800267C4(u16*);
 void func_xk1_8002FC70(void);
 void func_xk1_8002CEF8(s8* arg0, s32 arg1, s32 arg2, s32 (*arg3)(u8*, u8*));
+Gfx* func_xk1_8002FCA0(Gfx*, u16, u16, u16, u16, u16, u8, u8);
 
 void func_xk2_800F1330(s32, s32);
 

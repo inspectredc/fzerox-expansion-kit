@@ -184,7 +184,7 @@ Gfx* func_xk1_800260F0(Gfx* gfx, s32 arg1, s32 arg2, s32 code) {
     return gfx;
 }
 
-extern vu8 D_80794E14;
+extern volatile u8 D_80794E14;
 
 Gfx* func_xk1_800262F4(Gfx* gfx, s32 arg1, s32 arg2, u8* arg3) {
     u8* var_s0;
