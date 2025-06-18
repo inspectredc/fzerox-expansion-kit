@@ -1505,7 +1505,7 @@ s32 func_80707780(void) {
                 return 0;
             case LEO_ERROR_MEDIUM_MAY_HAVE_CHANGED:
                 return 0;
-            case LEO_ERROR_COMMAND_CLEARED_BY_HOST:
+            case LEO_ERROR_COMMAND_TERMINATED:
             default:
                 func_8070F8A4(D_8079F9B8, 0);
                 while (true) {}

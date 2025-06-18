@@ -18,11 +18,11 @@ typedef struct unk_807C6F10 {
 
 typedef struct unk_807C6EA8 {
     s32 unk_00;
-    s8 unk_04;
+    u8 unk_04;
     s32 unk_08;
     s32 unk_0C;
     s32 unk_10;
-    s8 unk_14[0x2];
+    s16 unk_14;
     u16 unk_16;
     u8* unk_18;
     u8* unk_1C;
@@ -33,10 +33,10 @@ typedef struct unk_807C6EA8 {
     s32 unk_30;
     s32 unk_34;
     void* unk_38;
-    s32 unk_3C;
-    s32 unk_40;
-    s32 unk_44;
-    s32 unk_48;
+    u8* unk_3C;
+    u8* unk_40;
+    u8* unk_44;
+    u8* unk_48;
     s32 unk_4C;
     s32 unk_50;
     u8 unk_54;
@@ -762,7 +762,7 @@ typedef struct unk_806F2400_unk_00 {
     u8 cockpitG;
     u8 cockpitB;
     u8 machineName[11];
-} unk_806F2400_unk_00;
+} unk_806F2400_unk_00; // size = 0x20
 
 typedef struct unk_806F2400 {
     unk_806F2400_unk_00 unk_00[30];
@@ -792,5 +792,30 @@ typedef struct unk_8009E224 {
     s16 width;
     s16 height;
 } unk_8009E224;
+
+typedef struct unk_8003A5D8 {
+    char unk_00[0x1];
+    s8 unk_01[0xF];
+    s32 unk_10;
+    s8 unk_14[0x9];
+    char unk_1D[3];
+    u8 unk_20;
+    s8 unk_21[0x1];
+    u8 unk_22;
+    s8 unk_23;
+} unk_8003A5D8; //size = 0x24
+
+typedef struct unk_80128C94 {
+    s8 unk_0000[0x53A0];
+    Vtx unk_53A0[0x30];
+    Vtx unk_56A0[0x30];
+    s8 unk_59A0[0xC00];
+    Vtx unk_65A0[0x800];
+    Vtx unk_E5A0[0x80];
+    s8 unk_EDA0[0x400];
+    Mtx unk_F1A0[0x1];
+    s8 pad_F1E0[0x1EE8];
+    Gfx unk_110C8[1];
+} unk_80128C94;
 
 #endif // UNK_STRUCTS_H

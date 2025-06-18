@@ -14,21 +14,38 @@
       - [0xA6340, c]
       - [0xA8140, c]
       - [0xAAA80, c]
+      - [0xAB140, pad]
       - [0xAB150, c]
       - [0xABC40, c]
       - [0xACDA0, c]
       - [0xACDF0, c]
       - [0xAD210, c]
-      - [0xAD2C0, data]
-      - [0xAFC30, .rodata, A3AE0]
-      - [0xAFD30, .rodata, A6340]
-      - [0xAFE40, .rodata, A8140]
-      - [0xAFEF0, .rodata, AAA80]
-      - [0xB0460, data]
-      - [0xB0670, .rodata, AB150]
-      - [0xB0770, .rodata, ABC40]
-      - [0xB0860, data]
-      - { type: bss, vram: 0x80033840 }
+      - [0xAD2C0, .data, A2E70]
+      - [0xAD2D0, .data, A2E90]
+      - [0xAD300, .rodata, A2E90]
+      - [0xAD360, .data, A3AA0]
+      - [0xAD560, .data, A3AE0]
+      - [0xAFBF0, .rodata, A3AE0]
+      - [0xAFD30, .data, A6340]
+      - [0xAFD80, .rodata, A6340]
+      - [0xAFE40, .data, A8140]
+      - [0xAFEA0, .rodata, A8140]
+      - [0xAFEF0, .data, AAA80]
+      - [0xAFF10, .data, ovl_xk1_text]
+      - [0xB0640, .data, ovl_xk1_data]
+      - [0xB0670, .data, AB150]
+      - [0xB0680, .rodata, AB150]
+      - [0xB0770, .data, ABC40]
+      - [0xB0790, .rodata, ABC40]
+      - [0xB0860, .data, ovl_xk1_disk_data]
+      - { type: .bss, vram: 0x80033840, name: ovl_xk1_bss }
+      - { type: .bss, vram: 0x8003A470, name: A2E90 }
+      - { type: .bss, vram: 0x8003A550, name: A3AE0 }
+      - { type: .bss, vram: 0x8003A560, name: A6340 }
+      - { type: .bss, vram: 0x8003A5D0, name: A8140 }
+      - { type: .bss, vram: 0x8003BB50, name: AAA80 }
+      - { type: .bss, vram: 0x8003BB60, name: AB150 }
+      - { type: .bss, vram: 0x8003BBA0, name: ABC40 }
 
   - name: ovl_i3
     exclusive_ram_id: ovl_i3

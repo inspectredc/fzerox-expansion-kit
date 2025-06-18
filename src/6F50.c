@@ -35,17 +35,6 @@ s32 D_8076C96C = 0;
 
 extern unk_802D3978 D_807BF570[];
 
-typedef struct unk_80128C94 {
-    s8 unk_0000[0x53A0];
-    Vtx unk_53A0[0x30];
-    Vtx unk_56A0[0x30];
-    s8 unk_59A0[0xC00];
-    Vtx unk_65A0[0x800];
-    Vtx unk_E5A0[0x80];
-    s8 unk_EDA0[0x400];
-    Mtx unk_F1A0[0x1];
-} unk_80128C94;
-
 extern unk_80128C94* D_80128C94;
 
 void func_806F9774(void) {
@@ -3337,7 +3326,7 @@ void func_80702A68(void) {
     gCourseCtx.courseData.skybox = SKYBOX_PURPLE;
 }
 
-extern s8 D_80030060;
+extern u8 D_80030060;
 extern s32 D_807B6520;
 extern CourseData D_800D0910;
 extern unk_802D1B60_unk_00 D_807BBE38[];
