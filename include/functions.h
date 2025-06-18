@@ -685,11 +685,47 @@ void func_i10_8012B894(s32);
 void func_i10_8012B904(void);
 
 void func_xk1_800267C4(u16*);
+void func_xk1_80026870(void);
+void func_xk1_800268A8(void);
+void func_xk1_800268E4(void);
 void func_xk1_8002FC70(void);
 void func_xk1_8002CEF8(s8* arg0, s32 arg1, s32 arg2, s32 (*arg3)(u8*, u8*));
 Gfx* func_xk1_8002FCA0(Gfx*, u16, u16, u16, u16, u16, u8, u8);
 
 void func_xk2_800F1330(s32, s32);
+
+void func_xk3_801326C0(void);
+void func_xk3_801326D8(void);
+void func_xk3_801326F0(void);
+void func_xk3_80132764(void);
+void func_xk3_8013277C(void);
+void func_xk3_801327A4(void);
+void func_xk3_80132808(void);
+void func_xk3_80132828(void);
+void func_xk3_80132850(void);
+void func_xk3_80132884(void);
+void func_xk3_80132910(void);
+void func_xk3_8013298C(void);
+void func_xk3_801329A4(void);
+void func_xk3_801329BC(void);
+void func_xk3_801329D4(void);
+void func_xk3_801329EC(void);
+void func_xk3_80132A04(void);
+void func_xk3_80132A80(void);
+void func_xk3_80132A98(void);
+void func_xk3_80132AB0(void);
+void func_xk3_80132AC8(void);
+void func_xk3_80132AE0(void);
+void func_xk3_80132AF8(void);
+void func_xk3_80132B10(void);
+void func_xk3_80132B28(void);
+void func_xk3_80132B40(void);
+void func_xk3_80132BB0(void);
+void func_xk3_80132C20(void);
+void func_xk3_80132C90(void);
+void func_xk3_80132DDC(void);
+void func_xk3_80132E84(void);
+
 
 void Title_BackgroundInit(Object*);
 void func_i4_80074708(void);

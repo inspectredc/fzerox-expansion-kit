@@ -843,6 +843,8 @@ sFrontMachineDrawFuncs = 0x8012B360; //segment:ovl_i9
 sRearMachineDrawFuncs = 0x8012B3EC; //segment:ovl_i9
 sWingMachineDrawFuncs = 0x8012B478; //segment:ovl_i9
 
+D_xk1_80030614 = 0x80030614; //segment:ovl_xk1
+D_xk1_8003067C = 0x8003067C; //segment:ovl_xk1 size:0x14
 D_xk1_80031C28 = 0x80031C28; //segment:ovl_xk1 size:0x34
 D_xk1_80031E50 = 0x80031E50; //segment:ovl_xk1 size:0x34
 D_xk1_80032880 = 0x80032880; //segment:ovl_xk1 size:0x34
@@ -875,8 +877,10 @@ D_xk1_80030E98 = 0x80030E98; //segment:ovl_xk1 size:0x34
 D_xk1_80030FA4 = 0x80030FA4; //segment:ovl_xk1 size:0x34
 D_xk1_8003A5D8 = 0x8003A5D8; //segment:ovl_xk1 size:0xE58
 
-
 D_xk2_80119744 = 0x80119744; //segment:course_edit
+
+D_xk3_801372B8 = 0x801372B8; //segment:machine_create
+D_xk3_80138E30 = 0x80138E30; //segment:machine_create
 
 // misc mix
 

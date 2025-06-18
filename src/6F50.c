@@ -3337,7 +3337,7 @@ void func_80702A68(void) {
     gCourseCtx.courseData.skybox = SKYBOX_PURPLE;
 }
 
-extern s8 D_80030060;
+extern u8 D_80030060;
 extern s32 D_807B6520;
 extern CourseData D_800D0910;
 extern unk_802D1B60_unk_00 D_807BBE38[];
