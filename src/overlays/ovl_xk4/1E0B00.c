@@ -3,8 +3,6 @@
 #include "assets/overlays/ovl_xk4/a1E0B00.h"
 #include "assets/overlays/ovl_xk4/ending_dd_congratulations.h"
 
-#define PHYSICAL_TO_VIRTUAL(x) (((uintptr_t) x) + 0x80000000)
-
 typedef struct unk_800D7AB4 {
     Gfx* unk_00;
     Vec3f unk_04;
@@ -528,7 +526,7 @@ Gfx* func_xk4_800D7530(Gfx* gfx, FrameBuffer* arg1, s32 arg2, s32 arg3, s32 arg4
 
     gDPPipeSync(gfx++);
     gDPSetCycleType(gfx++, G_CYC_FILL);
-    gDPSetColorImage(gfx++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 320, PHYSICAL_TO_VIRTUAL(arg1));
+    gDPSetColorImage(gfx++, G_IM_FMT_RGBA, G_IM_SIZ_16b, SCREEN_WIDTH, PHYSICAL_TO_VIRTUAL(arg1));
     gDPSetScissor(gfx++, G_SC_NON_INTERLACE, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
     for (i = 8; i < 232; i++) {

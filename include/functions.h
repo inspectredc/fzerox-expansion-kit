@@ -740,6 +740,7 @@ void func_xk2_800F1330(s32, s32);
 void func_xk2_800F27DC(CourseInfo*);
 void func_xk2_800F5C50(void);
 
+Gfx* func_xk3_8012F2F4(Gfx*, s32, s32, s32, s32, f32, f32, f32, f32, f32, f32);
 void func_xk3_801326C0(void);
 void func_xk3_801326D8(void);
 void func_xk3_801326F0(void);
