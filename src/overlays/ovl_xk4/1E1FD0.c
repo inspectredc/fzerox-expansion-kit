@@ -4,8 +4,7 @@
 Lights1 D_xk4_800F1A90 = gdSPDefLights1(50, 50, 30, 255, 200, 160, 0, 84, 84);
 
 Vp D_xk4_800F1AA8 = {
-    640, 480, 511, 0,
-    640, 480, 511, 0,
+    640, 480, 511, 0, 640, 480, 511, 0,
 };
 
 extern s32 D_8076C77C;
@@ -66,8 +65,9 @@ Gfx* func_xk4_800D8348(Gfx* gfx) {
     gSPDisplayList(gfx++, D_8014940);
 
     for (i = 0; i < 64; i++) {
-        gDPLoadTextureBlock(gfx++, D_xk4_800ECA78 + i * SCREEN_WIDTH, G_IM_FMT_RGBA, G_IM_SIZ_16b, 160, 1, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+        gDPLoadTextureBlock(gfx++, D_xk4_800ECA78 + i * SCREEN_WIDTH, G_IM_FMT_RGBA, G_IM_SIZ_16b, 160, 1, 0,
+                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                            G_TX_NOLOD);
 
         gSPTextureRectangle(gfx++, 24 << 2, (i + 32) << 2, 184 << 2, ((i + 1) + 32) << 2, 0, 0, 0, 1 << 10, 1 << 10);
     }
@@ -79,7 +79,8 @@ Gfx* func_xk4_800D8348(Gfx* gfx) {
         D_xk4_800F1AC0 = 0;
     }
     temp_lo = (s32) (D_xk4_800F1AC0 << 0xC) / 360;
-    func_806F7FCC(gGfxPool->unk_36628, NULL, 1.0f, 1.0f, 1.0f, SIN(temp_lo), 0.0f, COS(temp_lo), 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+    func_806F7FCC(gGfxPool->unk_36628, NULL, 1.0f, 1.0f, 1.0f, SIN(temp_lo), 0.0f, COS(temp_lo), 0.0f, 1.0f, 0.0f, 0.0f,
+                  0.0f, 0.0f);
 
     if (gControllers[gPlayerControlPorts[0]].buttonCurrent & BTN_L) {
         D_xk4_800F1AB8 += 50;
@@ -104,7 +105,8 @@ Gfx* func_xk4_800D8348(Gfx* gfx) {
 
     gSPMatrix(gfx++, D_1000000.unk_1A008, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
 
-    func_806F8FE0(gGfxPool->unk_1A108, NULL, 500.0f, D_xk4_800F1ABC, D_xk4_800F1AB8, 500.0f, D_xk4_800F1ABC, 0, 0, 1, 0);
+    func_806F8FE0(gGfxPool->unk_1A108, NULL, 500.0f, D_xk4_800F1ABC, D_xk4_800F1AB8, 500.0f, D_xk4_800F1ABC, 0, 0, 1,
+                  0);
 
     gSPMatrix(gfx++, D_1000000.unk_1A108, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_PROJECTION);
 
@@ -113,7 +115,7 @@ Gfx* func_xk4_800D8348(Gfx* gfx) {
     gSPDisplayList(gfx++, D_3000400);
 
     gSPTexture(gfx++, 0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON);
-    
+
     gSPNumLights(gfx++, NUMLIGHTS_1);
     gSPSetLights1(gfx++, D_xk4_800F1A90);
 
