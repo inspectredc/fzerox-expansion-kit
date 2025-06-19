@@ -329,8 +329,10 @@
     symbol_name_format: xk4_$VRAM
     subsegments:
       - [0x1E0B00, c]
-      - [0x1E27D0, data]
-      - [0x1FB840, .rodata, 1E0B00]
-      - { type: bss, vram: 0x800F1AE0 }
+      - [0x1E1FD0, c]
+      - [0x1E27D0, .data, 1E0B00]
+      - [0x1FB800, .data, 1E1FD0]
+      - [0x1FB840, .rodata, 1E1FD0]
+      - { type: .bss, vram: 0x800F1AE0, name: 1E0B00 }
 
   - [0x1FB850]
