@@ -31,6 +31,7 @@
 #define TEX_SIZE_4B(tex) (TEX_WIDTH(tex) * TEX_HEIGHT(tex) / 2)
 
 #define PHYS_TO_K1ROM(x) (((u32) (x) | 0xB0000000))
+#define PHYSICAL_TO_VIRTUAL(x) (((uintptr_t) x) + 0x80000000)
 #define ROM_READ(addr) (*(vu32*) PHYS_TO_K1ROM(addr))
 
 
