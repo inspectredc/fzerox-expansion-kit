@@ -3,7 +3,7 @@
 #include "assets/overlays/ovl_xk4/a1E0B00.h"
 #include "assets/overlays/ovl_xk4/ending_dd_congratulations.h"
 
-#define PHYSICAL_TO_VIRTUAL(x) (((uintptr_t)x)+0x80000000)
+#define PHYSICAL_TO_VIRTUAL(x) (((uintptr_t) x) + 0x80000000)
 
 typedef struct unk_800D7AB4 {
     Gfx* unk_00;
@@ -99,13 +99,7 @@ UNUSED Mtx D_xk4_800D8A60 = {
 #include "src/assets/overlays/ovl_xk4/ending_dd_animation/ending_dd_animation.c"
 
 unk_800D80E8 D_xk4_800DA22C = {
-    40, 42,
-    D_xk4_800D8AA0,
-    D_xk4_800D963C,
-    D_xk4_800D8AAC,
-    D_xk4_800D9A2C,
-    D_xk4_800D9564,
-    D_xk4_800D9E1C,
+    40, 42, D_xk4_800D8AA0, D_xk4_800D963C, D_xk4_800D8AAC, D_xk4_800D9A2C, D_xk4_800D9564, D_xk4_800D9E1C,
 };
 
 UNUSED s32 D_xk4_800DA248 = 0;
@@ -115,51 +109,22 @@ UNUSED s32 D_xk4_800DA24C = 0;
 
 // TODO: Extract via Torch
 unk_800D7AB4 D_xk4_800EC0A0 = {
-    D_xk4_800EBC00,
-    { 1.0f, 1.0f, 1.0f },
-    { 0.0f, 0.0f, 0.0f },
-    { 0, 0, 0 },
-    NULL,
-    NULL,
-    &D_xk4_800EC420,
-    D_xk4_800EBBE0,
-    41,
+    D_xk4_800EBC00, { 1.0f, 1.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 0, 0, 0 }, NULL,
+    NULL,           &D_xk4_800EC420,      D_xk4_800EBBE0,       41,
 };
 
 unk_800D7AB4 D_xk4_800EC0D8 = {
-    D_xk4_800EBC68,
-    { 1.0f, 1.0f, 1.0f },
-    { 0.0f, 0.0f, 0.0f },
-    { 0, 0, 0 },
-    NULL,
-    NULL,
-    &D_xk4_800EC0A0,
-    D_xk4_800EBC48,
-    40,
+    D_xk4_800EBC68, { 1.0f, 1.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 0, 0, 0 }, NULL,
+    NULL,           &D_xk4_800EC0A0,      D_xk4_800EBC48,       40,
 };
 
 unk_800D7AB4 D_xk4_800EC110 = {
-    D_xk4_800EBCB8,
-    { 1.0f, 1.0f, 1.0f },
-    { 0.0f, 0.0f, 0.0f },
-    { 0, 0, 0 },
-    NULL,
-    NULL,
-    &D_xk4_800EC0D8,
-    D_xk4_800EBCA0,
-    39,
+    D_xk4_800EBCB8, { 1.0f, 1.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 0, 0, 0 }, NULL,
+    NULL,           &D_xk4_800EC0D8,      D_xk4_800EBCA0,       39,
 };
 
 unk_800D7AB4 D_xk4_800EC148 = {
-    NULL,
-    { 1.0f, 1.0f, 1.0f },
-    { 450.0f, 0.0f, 0.0f },
-    { 0, 0, 0 },
-    &D_xk4_800EC110,
-    NULL,
-    NULL,
-    NULL,
-    38,
+    NULL, { 1.0f, 1.0f, 1.0f }, { 450.0f, 0.0f, 0.0f }, { 0, 0, 0 }, &D_xk4_800EC110, NULL, NULL, NULL, 38,
 };
 
 unk_800D7AB4 D_xk4_800EC180 = {
@@ -187,75 +152,30 @@ unk_800D7AB4 D_xk4_800EC1B8 = {
 };
 
 unk_800D7AB4 D_xk4_800EC1F0 = {
-    NULL,
-    { 1.0f, 1.0f, 1.0f },
-    { 0.0f, 0.0f, 0.0f },
-    { 0, 0xD5F4, 0xA515 },
-    NULL,
-    &D_xk4_800EC1B8,
-    NULL,
-    NULL,
-    35,
+    NULL, { 1.0f, 1.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 0, 0xD5F4, 0xA515 }, NULL, &D_xk4_800EC1B8, NULL, NULL, 35,
 };
 
 unk_800D7AB4 D_xk4_800EC228 = {
-    NULL,
-    { 1.0f, 1.0f, 1.0f },
-    { 667.0f, 374.0f, 0.0f },
-    { 0, 0, 0xBFBD },
-    NULL,
-    &D_xk4_800EC1F0,
-    NULL,
-    NULL,
-    34,
+    NULL, { 1.0f, 1.0f, 1.0f }, { 667.0f, 374.0f, 0.0f }, { 0, 0, 0xBFBD }, NULL, &D_xk4_800EC1F0, NULL, NULL, 34,
 };
 
 unk_800D7AB4 D_xk4_800EC260 = {
-    D_xk4_800EBCF8,
-    { 1.0f, 1.0f, 1.0f },
-    { 0.0f, 0.0f, 0.0f },
-    { 0, 0, 0 },
-    NULL,
-    NULL,
-    &D_xk4_800EC420,
-    D_xk4_800EBCD8,
-    33,
+    D_xk4_800EBCF8, { 1.0f, 1.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 0, 0, 0 }, NULL,
+    NULL,           &D_xk4_800EC420,      D_xk4_800EBCD8,       33,
 };
 
 unk_800D7AB4 D_xk4_800EC298 = {
-    D_xk4_800EBD60,
-    { 1.0f, 1.0f, 1.0f },
-    { 0.0f, 0.0f, 0.0f },
-    { 0, 0, 0 },
-    NULL,
-    NULL,
-    &D_xk4_800EC260,
-    D_xk4_800EBD40,
-    32,
+    D_xk4_800EBD60, { 1.0f, 1.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 0, 0, 0 }, NULL,
+    NULL,           &D_xk4_800EC260,      D_xk4_800EBD40,       32,
 };
 
 unk_800D7AB4 D_xk4_800EC2D0 = {
-    D_xk4_800EBDB0,
-    { 1.0f, 1.0f, 1.0f },
-    { 0.0f, 0.0f, 0.0f },
-    { 0, 0, 0 },
-    NULL,
-    NULL,
-    &D_xk4_800EC298,
-    D_xk4_800EBD98,
-    31,
+    D_xk4_800EBDB0, { 1.0f, 1.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 0, 0, 0 }, NULL,
+    NULL,           &D_xk4_800EC298,      D_xk4_800EBD98,       31,
 };
 
 unk_800D7AB4 D_xk4_800EC308 = {
-    NULL,
-    { 1.0f, 1.0f, 1.0f },
-    { 450.0f, 0.0f, 0.0f },
-    { 0, 0, 0 },
-    &D_xk4_800EC2D0,
-    NULL,
-    NULL,
-    NULL,
-    30,
+    NULL, { 1.0f, 1.0f, 1.0f }, { 450.0f, 0.0f, 0.0f }, { 0, 0, 0 }, &D_xk4_800EC2D0, NULL, NULL, NULL, 30,
 };
 
 unk_800D7AB4 D_xk4_800EC340 = {
@@ -283,15 +203,7 @@ unk_800D7AB4 D_xk4_800EC378 = {
 };
 
 unk_800D7AB4 D_xk4_800EC3B0 = {
-    NULL,
-    { 1.0f, 1.0f, 1.0f },
-    { 0.0f, 0.0f, 0.0f },
-    { 0x8001, 0x8689, 0x235C },
-    NULL,
-    &D_xk4_800EC378,
-    NULL,
-    NULL,
-    27,
+    NULL, { 1.0f, 1.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 0x8001, 0x8689, 0x235C }, NULL, &D_xk4_800EC378, NULL, NULL, 27,
 };
 
 unk_800D7AB4 D_xk4_800EC3E8 = {
@@ -307,39 +219,17 @@ unk_800D7AB4 D_xk4_800EC3E8 = {
 };
 
 unk_800D7AB4 D_xk4_800EC420 = {
-    D_xk4_800EBDE8,
-    { 1.0f, 1.0f, 1.0f },
-    { 0.0f, 0.0f, 0.0f },
-    { 0, 0, 0 },
-    &D_xk4_800EC3E8,
-    NULL,
-    &D_xk4_800EC8F0,
-    D_xk4_800EBDD0,
-    25,
+    D_xk4_800EBDE8, { 1.0f, 1.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 0, 0, 0 }, &D_xk4_800EC3E8,
+    NULL,           &D_xk4_800EC8F0,      D_xk4_800EBDD0,       25,
 };
 
 unk_800D7AB4 D_xk4_800EC458 = {
-    D_xk4_800EBE40,
-    { 1.0f, 1.0f, 1.0f },
-    { 0.0f, 0.0f, 0.0f },
-    { 0, 0, 0 },
-    NULL,
-    NULL,
-    &D_xk4_800EC420,
-    D_xk4_800EBE28,
-    24,
+    D_xk4_800EBE40, { 1.0f, 1.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 0, 0, 0 }, NULL,
+    NULL,           &D_xk4_800EC420,      D_xk4_800EBE28,       24,
 };
 
 unk_800D7AB4 D_xk4_800EC490 = {
-    NULL,
-    { 1.0f, 1.0f, 1.0f },
-    { 522.0f, 0.0f, 0.0f },
-    { 0, 0, 0 },
-    &D_xk4_800EC458,
-    NULL,
-    NULL,
-    NULL,
-    23,
+    NULL, { 1.0f, 1.0f, 1.0f }, { 522.0f, 0.0f, 0.0f }, { 0, 0, 0 }, &D_xk4_800EC458, NULL, NULL, NULL, 23,
 };
 
 unk_800D7AB4 D_xk4_800EC4C8 = {
@@ -355,75 +245,30 @@ unk_800D7AB4 D_xk4_800EC4C8 = {
 };
 
 unk_800D7AB4 D_xk4_800EC500 = {
-    NULL,
-    { 1.0f, 1.0f, 1.0f },
-    { 0.0f, 0.0f, 0.0f },
-    { 0xFAEE, 0, 0x42EB },
-    NULL,
-    &D_xk4_800EC4C8,
-    NULL,
-    NULL,
-    21,
+    NULL, { 1.0f, 1.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 0xFAEE, 0, 0x42EB }, NULL, &D_xk4_800EC4C8, NULL, NULL, 21,
 };
 
 unk_800D7AB4 D_xk4_800EC538 = {
-    NULL,
-    { 1.0f, 1.0f, 1.0f },
-    { -93.0f, -1.0f, 0.0f },
-    { 0, 0, 0x407A },
-    NULL,
-    &D_xk4_800EC500,
-    NULL,
-    NULL,
-    20,
+    NULL, { 1.0f, 1.0f, 1.0f }, { -93.0f, -1.0f, 0.0f }, { 0, 0, 0x407A }, NULL, &D_xk4_800EC500, NULL, NULL, 20,
 };
 
 unk_800D7AB4 D_xk4_800EC570 = {
-    D_xk4_800EBEC0,
-    { 1.0f, 1.0f, 1.0f },
-    { 0.0f, 0.0f, 0.0f },
-    { 0, 0, 0 },
-    NULL,
-    NULL,
-    &D_xk4_800EC8F0,
-    D_xk4_800EBEA8,
-    19,
+    D_xk4_800EBEC0, { 1.0f, 1.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 0, 0, 0 }, NULL,
+    NULL,           &D_xk4_800EC8F0,      D_xk4_800EBEA8,       19,
 };
 
 unk_800D7AB4 D_xk4_800EC5A8 = {
-    D_xk4_800EBF28,
-    { 1.0f, 1.0f, 1.0f },
-    { 0.0f, 0.0f, 0.0f },
-    { 0, 0, 0 },
-    NULL,
-    NULL,
-    &D_xk4_800EC570,
-    D_xk4_800EBF10,
-    18,
+    D_xk4_800EBF28, { 1.0f, 1.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 0, 0, 0 }, NULL,
+    NULL,           &D_xk4_800EC570,      D_xk4_800EBF10,       18,
 };
 
 unk_800D7AB4 D_xk4_800EC5E0 = {
-    D_xk4_800EBF78,
-    { 1.0f, 1.0f, 1.0f },
-    { 0.0f, 0.0f, 0.0f },
-    { 0, 0, 0 },
-    NULL,
-    NULL,
-    &D_xk4_800EC5A8,
-    D_xk4_800EBF68,
-    17,
+    D_xk4_800EBF78, { 1.0f, 1.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 0, 0, 0 }, NULL,
+    NULL,           &D_xk4_800EC5A8,      D_xk4_800EBF68,       17,
 };
 
 unk_800D7AB4 D_xk4_800EC618 = {
-    NULL,
-    { 1.0f, 1.0f, 1.0f },
-    { 543.0f, 0.0f, 0.0f },
-    { 0, 0, 0 },
-    &D_xk4_800EC5E0,
-    NULL,
-    NULL,
-    NULL,
-    16,
+    NULL, { 1.0f, 1.0f, 1.0f }, { 543.0f, 0.0f, 0.0f }, { 0, 0, 0 }, &D_xk4_800EC5E0, NULL, NULL, NULL, 16,
 };
 
 unk_800D7AB4 D_xk4_800EC650 = {
@@ -439,27 +284,12 @@ unk_800D7AB4 D_xk4_800EC650 = {
 };
 
 unk_800D7AB4 D_xk4_800EC688 = {
-    NULL,
-    { 1.0f, 1.0f, 1.0f },
-    { 631.0f, 0.0f, 0.0f },
-    { 0, 0, 0x1CFF },
-    &D_xk4_800EC570,
-    &D_xk4_800EC650,
-    NULL,
-    NULL,
+    NULL, { 1.0f, 1.0f, 1.0f }, { 631.0f, 0.0f, 0.0f }, { 0, 0, 0x1CFF }, &D_xk4_800EC570, &D_xk4_800EC650, NULL, NULL,
     14,
 };
 
 unk_800D7AB4 D_xk4_800EC6C0 = {
-    NULL,
-    { 1.0f, 1.0f, 1.0f },
-    { 0.0f, 0.0f, 0.0f },
-    { 0xFFB9, 0x00A5, 0xAD43 },
-    NULL,
-    &D_xk4_800EC688,
-    NULL,
-    NULL,
-    13,
+    NULL, { 1.0f, 1.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 0xFFB9, 0x00A5, 0xAD43 }, NULL, &D_xk4_800EC688, NULL, NULL, 13,
 };
 
 unk_800D7AB4 D_xk4_800EC6F8 = {
@@ -475,51 +305,22 @@ unk_800D7AB4 D_xk4_800EC6F8 = {
 };
 
 unk_800D7AB4 D_xk4_800EC730 = {
-    D_xk4_800EBFA8,
-    { 1.0f, 1.0f, 1.0f },
-    { 0.0f, 0.0f, 0.0f },
-    { 0, 0, 0 },
-    NULL,
-    NULL,
-    &D_xk4_800EC8F0,
-    D_xk4_800EBF90,
-    11,
+    D_xk4_800EBFA8, { 1.0f, 1.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 0, 0, 0 }, NULL,
+    NULL,           &D_xk4_800EC8F0,      D_xk4_800EBF90,       11,
 };
 
 unk_800D7AB4 D_xk4_800EC768 = {
-    D_xk4_800EC010,
-    { 1.0f, 1.0f, 1.0f },
-    { 0.0f, 0.0f, 0.0f },
-    { 0, 0, 0 },
-    NULL,
-    NULL,
-    &D_xk4_800EC730,
-    D_xk4_800EBFF8,
-    10,
+    D_xk4_800EC010, { 1.0f, 1.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 0, 0, 0 }, NULL,
+    NULL,           &D_xk4_800EC730,      D_xk4_800EBFF8,       10,
 };
 
 unk_800D7AB4 D_xk4_800EC7A0 = {
-    D_xk4_800EC060,
-    { 1.0f, 1.0f, 1.0f },
-    { 0.0f, 0.0f, 0.0f },
-    { 0, 0, 0 },
-    NULL,
-    NULL,
-    &D_xk4_800EC768,
-    D_xk4_800EC050,
-    9,
+    D_xk4_800EC060, { 1.0f, 1.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 0, 0, 0 }, NULL,
+    NULL,           &D_xk4_800EC768,      D_xk4_800EC050,       9,
 };
 
 unk_800D7AB4 D_xk4_800EC7D8 = {
-    NULL,
-    { 1.0f, 1.0f, 1.0f },
-    { 543.0f, 0.0f, 0.0f },
-    { 0, 0, 0 },
-    &D_xk4_800EC7A0,
-    NULL,
-    NULL,
-    NULL,
-    8,
+    NULL, { 1.0f, 1.0f, 1.0f }, { 543.0f, 0.0f, 0.0f }, { 0, 0, 0 }, &D_xk4_800EC7A0, NULL, NULL, NULL, 8,
 };
 
 unk_800D7AB4 D_xk4_800EC810 = {
@@ -535,27 +336,12 @@ unk_800D7AB4 D_xk4_800EC810 = {
 };
 
 unk_800D7AB4 D_xk4_800EC848 = {
-    NULL,
-    { 1.0f, 1.0f, 1.0f },
-    { 631.0f, 0.0f, 0.0f },
-    { 0, 0, 0x0037 },
-    &D_xk4_800EC730,
-    &D_xk4_800EC810,
-    NULL,
-    NULL,
+    NULL, { 1.0f, 1.0f, 1.0f }, { 631.0f, 0.0f, 0.0f }, { 0, 0, 0x0037 }, &D_xk4_800EC730, &D_xk4_800EC810, NULL, NULL,
     6,
 };
 
 unk_800D7AB4 D_xk4_800EC880 = {
-    NULL,
-    { 1.0f, 1.0f, 1.0f },
-    { 0.0f, 0.0f, 0.0f },
-    { 0x0002, 0xFCA1, 0xBE6D },
-    NULL,
-    &D_xk4_800EC848,
-    NULL,
-    NULL,
-    5,
+    NULL, { 1.0f, 1.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 0x0002, 0xFCA1, 0xBE6D }, NULL, &D_xk4_800EC848, NULL, NULL, 5,
 };
 
 unk_800D7AB4 D_xk4_800EC8B8 = {
@@ -571,96 +357,29 @@ unk_800D7AB4 D_xk4_800EC8B8 = {
 };
 
 unk_800D7AB4 D_xk4_800EC8F0 = {
-    D_xk4_800EC078,
-    { 1.0f, 1.0f, 1.0f },
-    { 0.0f, 0.0f, 0.0f },
-    { 0, 0, 0 },
-    &D_xk4_800EC8B8,
-    NULL,
-    NULL,
-    NULL,
-    3,
+    D_xk4_800EC078, { 1.0f, 1.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 0, 0, 0 }, &D_xk4_800EC8B8, NULL, NULL, NULL, 3,
 };
 
 unk_800D7AB4 D_xk4_800EC928 = {
-    NULL,
-    { 1.0f, 1.0f, 1.0f },
-    { 379.0f, 0.0f, 0.0f },
-    { 0, 0, 0 },
-    &D_xk4_800EC8F0,
-    NULL,
-    NULL,
-    NULL,
-    2,
+    NULL, { 1.0f, 1.0f, 1.0f }, { 379.0f, 0.0f, 0.0f }, { 0, 0, 0 }, &D_xk4_800EC8F0, NULL, NULL, NULL, 2,
 };
 
 unk_800D7AB4 D_xk4_800EC960 = {
-    NULL,
-    { 1.0f, 1.0f, 1.0f },
-    { 0.0f, 0.0f, 0.0f },
-    { 0, 0, 0xBF86 },
-    NULL,
-    &D_xk4_800EC928,
-    NULL,
-    NULL,
-    1,
+    NULL, { 1.0f, 1.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 0, 0, 0xBF86 }, NULL, &D_xk4_800EC928, NULL, NULL, 1,
 };
 
 unk_800D7AB4 D_xk4_800EC998 = {
-    NULL,
-    { 1.0f, 1.0f, 1.0f },
-    { 843.0f, -279.0f, 0.0f },
-    { 0, 0, 0 },
-    NULL,
-    &D_xk4_800EC960,
-    NULL,
-    NULL,
-    0,
+    NULL, { 1.0f, 1.0f, 1.0f }, { 843.0f, -279.0f, 0.0f }, { 0, 0, 0 }, NULL, &D_xk4_800EC960, NULL, NULL, 0,
 };
 
 unk_800D7AB4* D_xk4_800EC9D0[] = {
-    &D_xk4_800EC998,
-    &D_xk4_800EC960,
-    &D_xk4_800EC928,
-    &D_xk4_800EC8F0,
-    &D_xk4_800EC8B8,
-    &D_xk4_800EC880,
-    &D_xk4_800EC848,
-    &D_xk4_800EC810,
-    &D_xk4_800EC7D8,
-    &D_xk4_800EC7A0,
-    &D_xk4_800EC768,
-    &D_xk4_800EC730,
-    &D_xk4_800EC6F8,
-    &D_xk4_800EC6C0,
-    &D_xk4_800EC688,
-    &D_xk4_800EC650,
-    &D_xk4_800EC618,
-    &D_xk4_800EC5E0,
-    &D_xk4_800EC5A8,
-    &D_xk4_800EC570,
-    &D_xk4_800EC538,
-    &D_xk4_800EC500,
-    &D_xk4_800EC4C8,
-    &D_xk4_800EC490,
-    &D_xk4_800EC458,
-    &D_xk4_800EC420,
-    &D_xk4_800EC3E8,
-    &D_xk4_800EC3B0,
-    &D_xk4_800EC378,
-    &D_xk4_800EC340,
-    &D_xk4_800EC308,
-    &D_xk4_800EC2D0,
-    &D_xk4_800EC298,
-    &D_xk4_800EC260,
-    &D_xk4_800EC228,
-    &D_xk4_800EC1F0,
-    &D_xk4_800EC1B8,
-    &D_xk4_800EC180,
-    &D_xk4_800EC148,
-    &D_xk4_800EC110,
-    &D_xk4_800EC0D8,
-    &D_xk4_800EC0A0,
+    &D_xk4_800EC998, &D_xk4_800EC960, &D_xk4_800EC928, &D_xk4_800EC8F0, &D_xk4_800EC8B8, &D_xk4_800EC880,
+    &D_xk4_800EC848, &D_xk4_800EC810, &D_xk4_800EC7D8, &D_xk4_800EC7A0, &D_xk4_800EC768, &D_xk4_800EC730,
+    &D_xk4_800EC6F8, &D_xk4_800EC6C0, &D_xk4_800EC688, &D_xk4_800EC650, &D_xk4_800EC618, &D_xk4_800EC5E0,
+    &D_xk4_800EC5A8, &D_xk4_800EC570, &D_xk4_800EC538, &D_xk4_800EC500, &D_xk4_800EC4C8, &D_xk4_800EC490,
+    &D_xk4_800EC458, &D_xk4_800EC420, &D_xk4_800EC3E8, &D_xk4_800EC3B0, &D_xk4_800EC378, &D_xk4_800EC340,
+    &D_xk4_800EC308, &D_xk4_800EC2D0, &D_xk4_800EC298, &D_xk4_800EC260, &D_xk4_800EC228, &D_xk4_800EC1F0,
+    &D_xk4_800EC1B8, &D_xk4_800EC180, &D_xk4_800EC148, &D_xk4_800EC110, &D_xk4_800EC0D8, &D_xk4_800EC0A0,
 };
 
 #include "src/assets/overlays/ovl_xk4/ending_dd_congratulations/ending_dd_congratulations.c"
@@ -686,7 +405,7 @@ void func_xk4_800D6F38(void) {
     s32 i;
 
     for (i = 0; i < 0x1400; i++) {
-        D_800F1AE0[i] = func_xk4_800D6D90(2.0f * (((f32)i / 4096) * 3.1415927f));
+        D_800F1AE0[i] = func_xk4_800D6D90(2.0f * (((f32) i / 4096) * 3.1415927f));
     }
     D_xk4_800F6AE0 = &D_800F1AE0[0x400];
 }
@@ -748,15 +467,18 @@ void func_xk4_800D71DC(MtxF* arg0, MtxF* arg1, MtxF* arg2) {
     arg0->m[0][0] = (arg1->m[0][0] * arg2->m[0][0]) + (arg1->m[0][1] * arg2->m[1][0]) + (arg1->m[0][2] * arg2->m[2][0]);
     arg0->m[0][1] = (arg1->m[0][0] * arg2->m[0][1]) + (arg1->m[0][1] * arg2->m[1][1]) + (arg1->m[0][2] * arg2->m[2][1]);
     arg0->m[0][2] = (arg1->m[0][0] * arg2->m[0][2]) + (arg1->m[0][1] * arg2->m[1][2]) + (arg1->m[0][2] * arg2->m[2][2]);
-    arg0->m[0][3] = (arg1->m[0][0] * arg2->m[0][3]) + (arg1->m[0][1] * arg2->m[1][3]) + (arg1->m[0][2] * arg2->m[2][3]) + arg1->m[0][3];
+    arg0->m[0][3] = (arg1->m[0][0] * arg2->m[0][3]) + (arg1->m[0][1] * arg2->m[1][3]) +
+                    (arg1->m[0][2] * arg2->m[2][3]) + arg1->m[0][3];
     arg0->m[1][0] = (arg1->m[1][0] * arg2->m[0][0]) + (arg1->m[1][1] * arg2->m[1][0]) + (arg1->m[1][2] * arg2->m[2][0]);
     arg0->m[1][1] = (arg1->m[1][0] * arg2->m[0][1]) + (arg1->m[1][1] * arg2->m[1][1]) + (arg1->m[1][2] * arg2->m[2][1]);
     arg0->m[1][2] = (arg1->m[1][0] * arg2->m[0][2]) + (arg1->m[1][1] * arg2->m[1][2]) + (arg1->m[1][2] * arg2->m[2][2]);
-    arg0->m[1][3] = (arg1->m[1][0] * arg2->m[0][3]) + (arg1->m[1][1] * arg2->m[1][3]) + (arg1->m[1][2] * arg2->m[2][3]) + arg1->m[1][3];
+    arg0->m[1][3] = (arg1->m[1][0] * arg2->m[0][3]) + (arg1->m[1][1] * arg2->m[1][3]) +
+                    (arg1->m[1][2] * arg2->m[2][3]) + arg1->m[1][3];
     arg0->m[2][0] = (arg1->m[2][0] * arg2->m[0][0]) + (arg1->m[2][1] * arg2->m[1][0]) + (arg1->m[2][2] * arg2->m[2][0]);
     arg0->m[2][1] = (arg1->m[2][0] * arg2->m[0][1]) + (arg1->m[2][1] * arg2->m[1][1]) + (arg1->m[2][2] * arg2->m[2][1]);
     arg0->m[2][2] = (arg1->m[2][0] * arg2->m[0][2]) + (arg1->m[2][1] * arg2->m[1][2]) + (arg1->m[2][2] * arg2->m[2][2]);
-    arg0->m[2][3] = (arg1->m[2][0] * arg2->m[0][3]) + (arg1->m[2][1] * arg2->m[1][3]) + (arg1->m[2][2] * arg2->m[2][3]) + arg1->m[2][3];
+    arg0->m[2][3] = (arg1->m[2][0] * arg2->m[0][3]) + (arg1->m[2][1] * arg2->m[1][3]) +
+                    (arg1->m[2][2] * arg2->m[2][3]) + arg1->m[2][3];
     arg0->m[3][0] = 0.0f;
     arg0->m[3][1] = 0.0f;
     arg0->m[3][2] = 0.0f;
@@ -765,7 +487,8 @@ void func_xk4_800D71DC(MtxF* arg0, MtxF* arg1, MtxF* arg2) {
 
 void func_xk4_800D7454(MtxF* arg0) {
     arg0->m[0][0] = arg0->m[1][1] = arg0->m[2][2] = arg0->m[3][3] = 1.0f;
-    arg0->m[0][1] = arg0->m[0][2] = arg0->m[0][3] = arg0->m[1][0] = arg0->m[1][2] = arg0->m[1][3] = arg0->m[2][0] = arg0->m[2][1] = arg0->m[2][3] = arg0->m[3][0] = arg0->m[3][1] = arg0->m[3][2] = 0.0f;
+    arg0->m[0][1] = arg0->m[0][2] = arg0->m[0][3] = arg0->m[1][0] = arg0->m[1][2] = arg0->m[1][3] = arg0->m[2][0] =
+        arg0->m[2][1] = arg0->m[2][3] = arg0->m[3][0] = arg0->m[3][1] = arg0->m[3][2] = 0.0f;
 }
 
 void func_xk4_800D74A4(MtxF* arg0, f32 arg1, f32 arg2, f32 arg3) {
@@ -835,8 +558,8 @@ void func_xk4_800D7894(s32* arg0, s32 arg1) {
     s16 temp_a0;
 
     sp1C = arg0[0];
-    temp = (s32*)func_xk4_SegmentedToVirtual(arg0[3]);
-    temp_a0 = *(s16*)func_xk4_SegmentedToVirtual(temp[sp1C]);
+    temp = (s32*) func_xk4_SegmentedToVirtual(arg0[3]);
+    temp_a0 = *(s16*) func_xk4_SegmentedToVirtual(temp[sp1C]);
 
     arg0[1] += arg1;
     if (arg0[1] >= temp_a0) {
@@ -978,10 +701,10 @@ void func_xk4_800D7AB4(unk_800D7AB4* arg0, s32 arg1) {
     }
 }
 
-void func_xk4_800D7E58 (void) {
+void func_xk4_800D7E58(void) {
 }
 
-void func_xk4_800D7E60 (void) {
+void func_xk4_800D7E60(void) {
 }
 
 void func_xk4_800D7E68(unk_800D7AB4* arg0, MtxF* arg1, Vec3f* arg2, s32 arg3) {
@@ -993,10 +716,10 @@ void func_xk4_800D7E68(unk_800D7AB4* arg0, MtxF* arg1, Vec3f* arg2, s32 arg3) {
     Vec3f sp74;
 
     while (arg0 != 0) {
-        temp_v0 = (unk_800D7AB4*)func_xk4_SegmentedToVirtual(arg0);
+        temp_v0 = (unk_800D7AB4*) func_xk4_SegmentedToVirtual(arg0);
         if ((temp_v0->unk_2C != NULL) && (temp_v0->unk_30 != NULL)) {
-            temp_s3 = ((unk_800D7AB4*)func_xk4_SegmentedToVirtual(temp_v0->unk_2C))->unk_34;
-            
+            temp_s3 = ((unk_800D7AB4*) func_xk4_SegmentedToVirtual(temp_v0->unk_2C))->unk_34;
+
             gSPMatrix(D_xk4_800F6AE4++, &D_xk4_800F6B4C[temp_s3], G_MTX_PUSH | G_MTX_MUL | G_MTX_MODELVIEW);
 
             gSPDisplayList(D_xk4_800F6AE4++, temp_v0->unk_30);
@@ -1004,7 +727,8 @@ void func_xk4_800D7E68(unk_800D7AB4* arg0, MtxF* arg1, Vec3f* arg2, s32 arg3) {
         }
         temp_s3 = temp_v0->unk_34;
         func_xk4_800D7AB4(temp_v0, arg3);
-        func_xk4_800D7918(&sp104, temp_v0->unk_1C.x, temp_v0->unk_1C.y, temp_v0->unk_1C.z, temp_v0->unk_10.x * arg2->x, temp_v0->unk_10.y * arg2->y, temp_v0->unk_10.z * arg2->z);
+        func_xk4_800D7918(&sp104, temp_v0->unk_1C.x, temp_v0->unk_1C.y, temp_v0->unk_1C.z, temp_v0->unk_10.x * arg2->x,
+                          temp_v0->unk_10.y * arg2->y, temp_v0->unk_10.z * arg2->z);
         sp74.x = arg2->x * temp_v0->unk_04.x;
         sp74.y = arg2->y * temp_v0->unk_04.y;
         sp74.z = arg2->z * temp_v0->unk_04.z;
