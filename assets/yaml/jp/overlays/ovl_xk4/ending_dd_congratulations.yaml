@@ -1,0 +1,15 @@
+:config:
+  header:
+    code:
+      - '#include "assets/overlays/ovl_xk4/ending_dd_congratulations.h"'
+    header:
+      - '#include "libultra/ultra64.h"'
+
+D_xk4_800ECA78:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 160
+  height: 64
+  offset: 0x1F67E8
+  symbol: D_xk4_800ECA78
