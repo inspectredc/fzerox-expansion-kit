@@ -22,9 +22,9 @@ void func_xk1_8002FFDC(void) {
     D_xk1_800333D0.frontType = FRONT_0;
     D_xk1_800333D0.rearType = REAR_0;
     D_xk1_800333D0.wingType = WING_NONE;
-    D_xk1_800333D0.logo = LOGO_ARROW_PLANE;
+    D_xk1_800333D0.logo = MACHINE_LOGO(LOGO_SHIELD);
     D_xk1_800333D0.unk_07 = 0x1F;
-    D_xk1_800333D0.decal = DECAL_THIN_STRIPE;
+    D_xk1_800333D0.decal = MACHINE_DECAL(DECAL_STRIPE);
     D_xk1_800333D0.red = 0;
     D_xk1_800333D0.green = 255;
     D_xk1_800333D0.blue = 0;
