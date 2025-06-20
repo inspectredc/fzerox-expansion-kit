@@ -761,13 +761,15 @@ typedef struct unk_806F2400_unk_00 {
     u8 cockpitR;
     u8 cockpitG;
     u8 cockpitB;
-    u8 machineName[11];
+    u8 machineName[9];
+    u16 checksum;
 } unk_806F2400_unk_00; // size = 0x20
 
 typedef struct unk_806F2400 {
     unk_806F2400_unk_00 unk_00[30];
     s8 unk_3C0[30];
-} unk_806F2400; // size = 0x3DE
+    u16 unk_3DE;
+} unk_806F2400; // size = 0x3E0
 
 typedef struct unk_80144F74 {
     void* unk_00;
@@ -846,5 +848,14 @@ typedef struct unk_80026914 {
     s32 unk_2C;
     s32* unk_30;
 } unk_80026914;
+
+typedef struct unk_80140E60 {
+    s32 unk_00; // type
+    s32 unk_04; // value
+} unk_80140E60;
+
+typedef struct unk_801413F0 {
+    LookAt unk_00[3];
+} unk_801413F0;
 
 #endif // UNK_STRUCTS_H

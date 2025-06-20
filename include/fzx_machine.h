@@ -106,6 +106,8 @@ typedef enum Decal {
 } Decal;
 
 #define MACHINE_NUMBER(x) ((x) - 1)
+#define MACHINE_DECAL(x) ((x) + 1)
+#define MACHINE_LOGO(x) ((x) + 1)
 
 typedef enum CustomMachineTile {
     MACHINE_TILE_CUSTOM_LOGO = 1,

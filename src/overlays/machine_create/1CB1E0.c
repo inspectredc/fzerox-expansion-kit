@@ -68,10 +68,6 @@ void MachineCreate_Init(void) {
     D_8076C954 = 1;
 }
 
-typedef struct unk_801413F0 {
-    LookAt unk_00[3];
-} unk_801413F0;
-
 extern s16 D_8076C810;
 extern s8 D_80794E10;
 extern s32 D_8079A35C;
