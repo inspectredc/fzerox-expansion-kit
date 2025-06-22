@@ -747,7 +747,7 @@ typedef struct unk_806F2400_unk_00 {
     u8 rearType;
     u8 wingType;
     u8 logo;
-    u8 unk_07;
+    u8 number;
     u8 decal;
     u8 red;
     u8 green;
@@ -761,13 +761,15 @@ typedef struct unk_806F2400_unk_00 {
     u8 cockpitR;
     u8 cockpitG;
     u8 cockpitB;
-    u8 machineName[11];
+    u8 machineName[9];
+    u16 checksum;
 } unk_806F2400_unk_00; // size = 0x20
 
 typedef struct unk_806F2400 {
     unk_806F2400_unk_00 unk_00[30];
     s8 unk_3C0[30];
-} unk_806F2400; // size = 0x3DE
+    u16 unk_3DE;
+} unk_806F2400; // size = 0x3E0
 
 typedef struct unk_80144F74 {
     void* unk_00;
@@ -817,5 +819,44 @@ typedef struct unk_80128C94 {
     s8 pad_F1E0[0x1EE8];
     Gfx unk_110C8[1];
 } unk_80128C94;
+
+typedef struct unk_80026914_unk_1C {
+    void* unk_00;
+    void* unk_04;
+    void* unk_08;
+    void* unk_0C;
+    struct unk_80026914* unk_10;
+    void (*unk_14)(void);
+    u16 unk_18;
+    u16 unk_1A;
+    void* unk_1C;
+    void* unk_20;
+} unk_80026914_unk_1C; // size = 0x24
+
+typedef struct unk_80026914 {
+    s32 unk_00;
+    s32 unk_04;
+    s32 unk_08;
+    s32 unk_0C;
+    s32 unk_10;
+    s32 unk_14;
+    s32 unk_18;
+    unk_80026914_unk_1C* unk_1C;
+    s32 unk_20;
+    s32 unk_24;
+    s32 unk_28;
+    s32 unk_2C;
+    s32* unk_30;
+} unk_80026914;
+
+typedef struct unk_80140E60 {
+    s32 unk_00; // type
+    s32 unk_04; // value
+} unk_80140E60;
+
+typedef struct unk_801413F0 {
+    Mtx unk_00;
+    LookAt unk_40;
+} unk_801413F0;
 
 #endif // UNK_STRUCTS_H

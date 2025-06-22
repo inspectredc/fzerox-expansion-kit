@@ -23,7 +23,7 @@ void func_xk1_8002FBC8(void) {
 
     for (i = 0; i < 30; i++) {
         if ((D_806F2400.unk_3C0[i] < 0) && (D_800D1308[func_8070DBE0(i)] == 0)) {
-            D_806F2400.unk_00[i].unk_07 = 0x1F;
+            D_806F2400.unk_00[i].number = 31;
             D_806F2400.unk_3C0[i] = 0;
         }
     }
@@ -34,7 +34,7 @@ extern unk_806F2400_unk_00 D_xk1_800333D0;
 
 void func_xk1_8002FC70(void) {
     func_xk1_8002FFA0();
-    D_xk1_800333D0.unk_07 = 0x1F;
+    D_xk1_800333D0.number = 31;
     func_8071E0C0();
 }
 

@@ -56,6 +56,12 @@ typedef enum MachineLod {
     /* 6 */ MACHINE_LOD_6,
 } MachineLod;
 
+typedef enum MachinePart {
+    /* 0 */ MACHINE_PART_FRONT,
+    /* 1 */ MACHINE_PART_REAR,
+    /* 2 */ MACHINE_PART_WING,
+} MachinePart;
+
 typedef enum FrontType {
     /* 0 */ FRONT_0,
     /* 1 */ FRONT_1,
@@ -106,6 +112,8 @@ typedef enum Decal {
 } Decal;
 
 #define MACHINE_NUMBER(x) ((x) - 1)
+#define MACHINE_DECAL(x) ((x) + 1)
+#define MACHINE_LOGO(x) ((x) + 1)
 
 typedef enum CustomMachineTile {
     MACHINE_TILE_CUSTOM_LOGO = 1,
@@ -117,5 +125,9 @@ typedef enum CustomMachineTile {
 } CustomMachineTile;
 
 #define IS_SUPER_MACHINE(customType) ((customType) >= CUSTOM_MACHINE_SUPER_FALCON)
+
+typedef Gfx* (*FrontMachineDraw)(Gfx*, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32);
+typedef Gfx* (*RearMachineDraw)(Gfx*, s32, s32, s32, s32, s32, s32);
+typedef Gfx* (*WingMachineDraw)(Gfx*, s32, s32, s32, s32, s32, s32);
 
 #endif // FZX_MACHINE_H
