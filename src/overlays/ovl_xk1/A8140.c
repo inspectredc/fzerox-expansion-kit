@@ -19,8 +19,8 @@ UNUSED s32 D_xk1_80032BE0 = 8;
 s32 D_xk1_80032BE4 = 24;
 s32 D_xk1_80032BE8 = 52;
 s32 D_xk1_80032BEC = 0;
-s32 D_xk1_80032BF0 = 0;
-s32 D_xk1_80032BF4 = 0;
+s32* D_xk1_80032BF0 = NULL;
+s32* D_xk1_80032BF4 = NULL;
 s32 D_xk1_80032BF8 = 0;
 
 void func_xk1_8002AED0(void) {
@@ -78,7 +78,7 @@ void func_xk1_8002AF1C(Gfx** gfxP, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     *gfxP = gfx;
 }
 
-void func_xk1_8002B150(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
+void func_xk1_8002B150(s32 arg0, s32 arg1, s32* arg2, s32* arg3) {
     D_xk1_80032BDC = 0;
     D_xk1_80032BE4 = arg0;
     D_xk1_80032BE8 = arg1;
@@ -102,10 +102,10 @@ Gfx* func_xk1_8002B17C(Gfx* gfx, s32 arg1) {
     s32 sp4C;
     s32 i;
 
-    if (D_xk1_80032BF0 == 0) {
+    if (D_xk1_80032BF0 == NULL) {
         return gfx;
     }
-    if (D_xk1_80032BD4 == 0) {
+    if (D_xk1_80032BD4 == NULL) {
         return gfx;
     }
 
@@ -258,7 +258,7 @@ void func_xk1_8002BBA4(void) {
     }
 }
 
-void* func_xk1_8002BCC4(void) {
+u8* func_xk1_8002BCC4(void) {
     s32 var_v1;
 
     D_xk1_80032BD4 = 0;
@@ -268,7 +268,7 @@ void* func_xk1_8002BCC4(void) {
     if (var_v1 > D_xk1_8003A5D0 - 1) {
         var_v1 = D_xk1_8003A5D0 - 1;
     }
-    return &D_xk1_8003A5D8[var_v1];
+    return D_xk1_8003A5D8[var_v1].unk_00;
 }
 
 s32 func_xk1_8002BD14(void) {
