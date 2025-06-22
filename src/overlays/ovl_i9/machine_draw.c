@@ -4,10 +4,6 @@
 
 UNUSED s32 D_i9_8012B510; // some unused bss exists in the file
 
-typedef Gfx* (*FrontMachineDraw)(Gfx*, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32);
-typedef Gfx* (*RearMachineDraw)(Gfx*, s32, s32, s32, s32, s32, s32);
-typedef Gfx* (*WingMachineDraw)(Gfx*, s32, s32, s32, s32, s32, s32);
-
 TexturePtr sLogoTextures[] = {
     aCustomLogoShieldTex,      aCustomLogoBoostArrowPlaneTex, aCustomLogoCircleTex, aCustomLogoAnimalSkullTex,
     aCustomLogoYellowGreenTex, aCustomLogoKanjiTex,           aCustomLogoXTex,      aCustomLogoN64Tex,

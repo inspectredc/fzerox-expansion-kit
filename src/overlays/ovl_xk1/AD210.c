@@ -8,7 +8,7 @@ void func_xk1_8002FFA0(void) {
     u8 i;
 
     for (i = 0; i < 30; i++) {
-        D_806F2400.unk_00[i].unk_07 = 0x1F;
+        D_806F2400.unk_00[i].number = 31;
         D_806F2400.unk_3C0[i] = 0;
     }
 }
@@ -23,7 +23,7 @@ void func_xk1_8002FFDC(void) {
     D_xk1_800333D0.rearType = REAR_0;
     D_xk1_800333D0.wingType = WING_NONE;
     D_xk1_800333D0.logo = MACHINE_LOGO(LOGO_SHIELD);
-    D_xk1_800333D0.unk_07 = 0x1F;
+    D_xk1_800333D0.number = 31;
     D_xk1_800333D0.decal = MACHINE_DECAL(DECAL_STRIPE);
     D_xk1_800333D0.red = 0;
     D_xk1_800333D0.green = 255;

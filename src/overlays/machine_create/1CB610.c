@@ -1,9 +1,35 @@
 #include "global.h"
+#include "leo/leo_functions.h"
 #include "fzx_machine.h"
 
-extern s32 D_xk3_80140E50;
-extern s32 D_xk3_80140E54;
-extern f32 D_xk3_80140E58;
+s32 D_xk3_80140E50;
+s32 D_xk3_80140E54;
+f32 D_xk3_80140E58;
+
+unk_80140E60 D_xk3_80140E60;
+unk_80140E60 D_xk3_80140E68;
+unk_80140E60 D_xk3_80140E70;
+
+f32 D_xk3_80140E78;
+f32 D_xk3_80140E7C;
+f32 D_xk3_80140E80;
+f32 D_xk3_80140E84;
+f32 D_xk3_80140E88;
+f32 D_xk3_80140E8C;
+unk_806F2400 D_xk3_80140E90;
+unk_806F2400_unk_00 D_xk3_80141270;
+
+u8 D_xk3_80141290;
+u8 D_xk3_80141291;
+s32 D_xk3_80141294;
+u8* D_xk3_80141298;
+
+f32 D_xk3_80136540 = -7000.0f;
+s8 D_xk3_80136544 = -1;
+u8 D_xk3_80136548 = 0;
+u8 D_xk3_8013654C = 0;
+s32 D_xk3_80136550 = 0;
+s32 D_xk3_80136554 = 0;
 
 void func_xk3_8012B950(void) {
     D_xk3_80140E54 = 0x57;
@@ -11,10 +37,6 @@ void func_xk3_8012B950(void) {
     func_xk1_8002B150(0xA8, 0x57, &D_xk3_80140E50, &D_xk3_80140E54);
 }
 
-extern f32 D_xk3_80140E80;
-extern f32 D_xk3_80140E84;
-extern f32 D_xk3_80140E88;
-extern f32 D_xk3_80140E8C;
 extern GfxPool* gGfxPool;
 
 void func_xk3_8012B99C(void) {
@@ -27,9 +49,6 @@ void func_xk3_8012B99C(void) {
     gGfxPool->unk_362C8[1].vp.vtrans[2] = 0x1FF;
     gGfxPool->unk_362C8[1].vp.vtrans[3] = 0;
 }
-
-extern f32 D_xk3_80140E78;
-extern f32 D_xk3_80140E7C;
 
 void func_xk3_8012BABC(void) {
     D_xk3_80140E80 = 1.0f;
@@ -66,7 +85,7 @@ void func_xk3_8012BB48(void) {
         if (D_806F2400.unk_3C0[i] > 0) {
             if (Leo_strcmp(&D_806F2400.unk_00[i].machineName, &D_xk1_800333D0.machineName) == 0) {
                 D_806F2400.unk_00[i] = D_xk1_800333D0;
-                D_806F2400.unk_00[i].unk_07 = D_xk3_80140750[i];
+                D_806F2400.unk_00[i].number = D_xk3_80140750[i];
                 break;
             }
         }
@@ -79,7 +98,7 @@ void func_xk3_8012BB48(void) {
 }
 
 extern s32 D_xk3_80136820;
-extern s32 D_xk3_80140E44;
+extern unk_800E51B8* D_xk3_80140E44;
 extern s32 D_xk3_80140E50;
 extern s32 D_xk3_80140E54;
 extern f32 D_xk3_80140E58;
@@ -112,14 +131,8 @@ void func_xk3_8012BC98(void) {
 }
 
 extern s32 D_xk1_80032C20;
-extern s32 D_xk3_80136550;
-extern s32 D_xk3_80136554;
 extern s32 D_xk3_80140E50;
 extern s32 D_xk3_80140E54;
-
-extern unk_80140E60 D_xk3_80140E60;
-extern unk_80140E60 D_xk3_80140E68;
-extern unk_80140E60 D_xk3_80140E70;
 
 void func_xk3_8012BD84(void) {
 
@@ -230,10 +243,7 @@ void func_xk3_8012BD84(void) {
 }
 
 extern u8 D_xk3_80136548;
-extern f32 D_xk3_80140E80;
-extern f32 D_xk3_80140E84;
 
-#ifdef IMPORT_DATA
 void func_xk3_8012C1C8(void) {
     static u8 D_xk3_80136558 = 0;
     static u8 D_xk3_8013655C = 0;
@@ -293,15 +303,6 @@ void func_xk3_8012C1C8(void) {
         D_xk3_80140E80 = D_xk3_80140E84 = 0.2f;
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/machine_create/1CB610/func_xk3_8012C1C8.s")
-#endif
-
-#ifdef IMPORT_DATA
-extern f32 D_xk3_80140E80;
-extern f32 D_xk3_80140E84;
-extern f32 D_xk3_80140E88;
-extern f32 D_xk3_80140E8C;
 
 void func_xk3_8012C408(void) {
     static u8 D_xk3_80136560 = 0;
@@ -375,14 +376,8 @@ void func_xk3_8012C408(void) {
     D_xk3_80136570 = D_xk3_80140E80;
     D_xk3_80136574 = D_xk3_80140E84;
 }
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/machine_create/1CB610/func_xk3_8012C408.s")
-#endif
 
-#ifdef IMPORT_DATA
 extern u8 D_xk3_80136548;
-extern f32 D_xk3_80140E78;
-extern f32 D_xk3_80140E7C;
 
 void func_xk3_8012C744(void) {
     static u8 D_xk3_80136578 = 0;
@@ -474,29 +469,20 @@ void func_xk3_8012C744(void) {
         D_xk3_80140E7C += 360.0f;
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/machine_create/1CB610/func_xk3_8012C744.s")
-#endif
 
-extern s32 D_80140E40;
-extern s8 D_xk3_80136544;
-extern u8 D_xk3_80136548;
+extern unk_800E51B8* D_80140E40;
 extern s32 D_xk3_80136820;
-extern s32 D_xk3_80140E44;
-extern s32 D_xk3_80140E64;
-extern s32 D_xk3_80140E6C;
-extern s32 D_xk3_80140E74;
 
 void func_xk3_8012CAC8(void) {
     if (gControllers[gPlayerControlPorts[0]].buttonPressed & BTN_START) {
         switch (D_xk3_80136820) {
             case 17:
-                D_xk3_80140E64 = 3;
+                D_xk3_80140E60.unk_04 = 3;
                 D_xk3_80136544 = 20;
                 break;
             case 35:
                 if (func_80711AC0(D_80140E40, 1) != 0) {
-                    D_xk3_80140E74 = 3;
+                    D_xk3_80140E70.unk_04 = 3;
                     D_xk3_80136544 = 20;
                 }
                 break;
@@ -505,7 +491,7 @@ void func_xk3_8012CAC8(void) {
             case 22:
             case 23:
                 if (func_80711AC0(D_xk3_80140E44, 1) != 0) {
-                    D_xk3_80140E6C = 8;
+                    D_xk3_80140E68.unk_04 = 8;
                     D_xk3_80136544 = 20;
                 }
                 break;
@@ -599,13 +585,9 @@ void func_xk3_8012CC10(void) {
     }
 }
 
-extern unk_806F2400_unk_00 D_xk3_80141270;
 extern const char* D_xk3_801366F4[];
 extern u8 D_xk1_800333F0;
 extern u8 D_xk3_80137160;
-extern u8 D_xk3_80141290;
-extern u8 D_xk3_80141291;
-extern u8* D_xk3_80141298;
 extern u8 D_800333F4;
 
 void func_xk3_8012CE44(void) {
@@ -726,13 +708,13 @@ void func_xk3_8012CE44(void) {
                 u8 i;
                 func_8074122C(0x27);
                 if (Leo_strcmp(D_xk3_80141298, &D_xk1_800333D0.machineName) == 0) {
-                    D_xk1_800333D0.unk_07 = 0x1F;
+                    D_xk1_800333D0.number = 31;
                 }
                 for (i = 0; i < 30; i++) {
                     if ((D_806F2400.unk_3C0[i] > 0) &&
                         (Leo_strcmp(&D_806F2400.unk_00[i].machineName, D_xk3_80141298) == 0)) {
                         D_806F2400.unk_3C0[i] = 0;
-                        D_806F2400.unk_00[i].unk_07 = 0x1F;
+                        D_806F2400.unk_00[i].number = 31;
                         func_8071E0C0();
                         break;
                     }
@@ -754,7 +736,7 @@ void func_xk3_8012CE44(void) {
                 for (i = 0; i < 30; i++) {
                     if ((D_806F2400.unk_3C0[i] == -1) && (Leo_strcmp(D_xk3_80141298, D_xk3_801366F4[i]) == 0)) {
                         D_806F2400.unk_3C0[i] = 0;
-                        D_806F2400.unk_00[i].unk_07 = 0x1F;
+                        D_806F2400.unk_00[i].number = 31;
                         func_8071E0C0();
                         break;
                     }
@@ -824,14 +806,14 @@ void func_xk3_8012CE44(void) {
             case 37: {
                 u8 i;
                 if (Leo_strcmp(D_xk3_80141298, &D_xk1_800333D0.machineName) == 0) {
-                    D_xk1_800333D0.unk_07 = 0x1F;
+                    D_xk1_800333D0.number = 31;
                 }
 
                 for (i = 0; i < 30; i++) {
                     if ((D_806F2400.unk_3C0[i] > 0) &&
                         (Leo_strcmp(D_806F2400.unk_00[i].machineName, D_xk3_80141298) == 0)) {
                         D_806F2400.unk_3C0[i] = 0;
-                        D_806F2400.unk_00[i].unk_07 = 0x1F;
+                        D_806F2400.unk_00[i].number = 31;
                         func_8071E0C0();
                         break;
                     }
@@ -874,16 +856,15 @@ void func_xk3_8012D700(void) {
     for (i = 0; i < 30; i++) {
         if ((D_806F2400.unk_3C0[i] > 0) &&
             (Leo_strcmp(D_806F2400.unk_00[i].machineName, D_xk1_800333D0.machineName) == 0)) {
-            D_xk1_800333D0.unk_07 = D_xk3_80140750[i];
+            D_xk1_800333D0.number = D_xk3_80140750[i];
             return;
         }
     }
-    D_xk1_800333D0.unk_07 = 0x1F;
+    D_xk1_800333D0.number = 31;
 }
 
 extern volatile u8 D_80794E20;
 extern volatile s32 D_807C6F0C;
-extern unk_806F2400 D_xk3_80140E90;
 
 void func_xk3_8012D79C(void) {
     u16 checksum;
@@ -996,10 +977,11 @@ void func_xk3_8012D79C(void) {
     }
 }
 
-extern f32 D_xk3_80136540;
-extern u8 D_xk3_8013654C;
-extern s32 D_xk3_80136588[];
-extern s32 D_xk3_80141294;
+s32 D_xk3_80136588[] = {
+    270, 290, 320, 350, 420, 580, 630,  // MACHINE_PART_FRONT
+    510, 560, 630, 720, 890, 930, 1170, // MACHINE_PART_REAR
+    0,   100, 120, 140, 190, 250, 420,  // MACHINE_PART_WING
+};
 
 void func_xk3_8012DBFC(void) {
 
@@ -1032,7 +1014,7 @@ void func_xk3_8012DBFC(void) {
     }
     switch (D_xk3_80136820) {
         case 17:
-            if ((D_xk3_80140E64 == 3) && (D_xk3_80136544 >= 0)) {
+            if ((D_xk3_80140E60.unk_04 == 3) && (D_xk3_80136544 >= 0)) {
                 if (D_xk3_80136544 == 0) {
                     D_xk3_80136544 = -1;
                     PRINTF("WORKS MACHINE MODE : 0\n");
@@ -1046,7 +1028,7 @@ void func_xk3_8012DBFC(void) {
             }
             break;
         case 35:
-            if ((D_xk3_80140E74 == 3) && (D_xk3_80136544 >= 0)) {
+            if ((D_xk3_80140E70.unk_04 == 3) && (D_xk3_80136544 >= 0)) {
                 if (D_xk3_80136544 == 0) {
                     D_xk3_80136544 = -1;
                     PRINTF("WORKS MACHINE MODE : 0\n");
@@ -1064,7 +1046,7 @@ void func_xk3_8012DBFC(void) {
         case 21:
         case 22:
         case 23:
-            if ((D_xk3_80140E6C == 8) && (D_xk3_80136544 >= 0)) {
+            if ((D_xk3_80140E68.unk_04 == 8) && (D_xk3_80136544 >= 0)) {
                 if (D_xk3_80136544 == 0) {
                     D_xk3_80136544 = -1;
                     func_xk3_8012BC98();

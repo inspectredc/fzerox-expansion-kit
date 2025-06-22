@@ -747,7 +747,7 @@ typedef struct unk_806F2400_unk_00 {
     u8 rearType;
     u8 wingType;
     u8 logo;
-    u8 unk_07;
+    u8 number;
     u8 decal;
     u8 red;
     u8 green;
@@ -855,7 +855,8 @@ typedef struct unk_80140E60 {
 } unk_80140E60;
 
 typedef struct unk_801413F0 {
-    LookAt unk_00[3];
+    Mtx unk_00;
+    LookAt unk_40;
 } unk_801413F0;
 
 #endif // UNK_STRUCTS_H

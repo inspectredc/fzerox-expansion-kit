@@ -1,11 +1,12 @@
 #include "global.h"
 #include "fzx_game.h"
 
+unk_800E51B8* D_80140E40;
+unk_800E51B8* D_xk3_80140E44;
+
 extern unk_806F2400 D_806F2400;
 extern s16 D_8076C7A8;
-extern unk_800E51B8* D_80140E40;
 extern s32 D_xk3_80136820;
-extern unk_800E51B8* D_xk3_80140E44;
 extern s32 D_xk3_80140E50;
 extern s32 D_xk3_80140E54;
 extern Vp D_xk3_801412A0[][7];
