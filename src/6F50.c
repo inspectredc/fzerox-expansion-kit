@@ -1043,7 +1043,7 @@ Vtx* func_806FDA64(CourseSegment* arg0, f32 arg1, unk_8006FF90_arg_1* arg2, Vtx*
     return arg3;
 }
 
-extern s32 D_80128690[][3];
+extern unk_80128690 D_80128690[];
 typedef struct unk_8011C220 {
     s8 unk_00[0x4];
     f32 unk_04;
@@ -1075,7 +1075,7 @@ Vtx* func_806FE174(CourseSegment* arg0, unk_8006FF90_arg_1* arg1, Vtx* arg2, f32
 
     var_s2 = 0;
 
-    i = D_80128690[arg0->segmentIndex][0];
+    i = D_80128690[arg0->segmentIndex].unk_00;
 
     if (i >= 0x10000) {
         return arg2;

@@ -902,7 +902,10 @@ gAudioCustomUpdateFunction = 0x806F2320; // segment:audio_context
 gCourseInfos = 0x802BB140; //segment:unk_context size:0x3480
 gRacers = 0x802D2F20; //segment:unk_context size:0x6DB0
 
-D_806F2400 = 0x806F2400; //segment:unk_custom size:0x3DE
+D_806F2400 = 0x806F2400; //segment:unk_custom size:0x3E0
+
+D_807B3C20 = 0x807B3C20; // size:0x2904
+D_807B6528 = 0x807B6528; // size:0x2904
 
 D_807794F0 = 0x807794F0; // force_migration:True
 
