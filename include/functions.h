@@ -782,6 +782,7 @@ s32 func_xk2_800EAC28(u8*);
 void func_xk2_800EB9E0(void);
 s32 func_xk2_800EBFE8(u8*);
 s32 func_xk2_800EC234(unk_8003A5D8*);
+f32 func_xk2_800EF5E8(f32, f32);
 void func_xk2_800EF78C(void);
 void func_xk2_800F0FF4(void);
 void func_xk2_800F12B0(void);

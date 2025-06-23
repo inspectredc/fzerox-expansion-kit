@@ -1098,7 +1098,7 @@ void func_xk1_80027DC8(unk_80026914* arg0, s32* arg1, s32* arg2) {
 extern s32 D_80119880;
 extern u8 D_xk2_800F7400;
 extern s32 D_xk2_80104378;
-extern s32 D_807B6520;
+extern unk_807B3C20 D_807B3C20;
 extern s32 D_xk1_80032BF8;
 
 void func_xk1_80028064(void) {
@@ -1118,7 +1118,7 @@ void func_xk1_80028064(void) {
         case 1:
             D_80119880 = 1;
             func_xk2_800F27DC(gCurrentCourseInfo);
-            if (D_807B6520 < 4) {
+            if (D_807B3C20.unk_2900 < 4) {
                 D_xk1_80032C20 = 0;
                 D_800D6CA0[2] = 16;
                 D_xk2_80104378 = 9;
@@ -1306,7 +1306,7 @@ void func_xk1_8002860C(void) {
     D_xk2_80104CB0 = 90;
     D_800D6CA0[5] = 0;
     D_xk2_800F7044 = 0;
-    D_807B6520 = 0;
+    D_807B3C20.unk_2900 = 0;
     gCurrentCourseInfo->segmentCount = 0;
     gCourseCtx.courseData.controlPointCount = 0;
     D_800D6CA0[3] = -1;

@@ -2847,11 +2847,11 @@ void func_80701360(s32 courseIndex) {
     D_807BCB58.unk_0C = temp_v1;
 }
 
-extern s32 D_807B6520;
+extern unk_807B3C20 D_807B3C20;
 
 void func_807016AC(s32 courseIndex) {
     if ((D_8076C954 != 0) && (D_8076C950 == 0)) {
-        if (D_807B6520 < 4) {
+        if (D_807B3C20.unk_2900 < 4) {
             return;
         }
     } else if (gCourseCtx.courseData.controlPointCount < 4) {
@@ -2872,7 +2872,7 @@ void func_80701754(s32 courseIndex) {
     s32 i;
 
     if ((D_8076C954 != 0) && (D_8076C950 == 0)) {
-        if (D_807B6520 < 4) {
+        if (D_807B3C20.unk_2900 < 4) {
             return;
         }
     } else if (gCourseCtx.courseData.controlPointCount < 4) {
@@ -3327,7 +3327,6 @@ void func_80702A68(void) {
 }
 
 extern u8 D_80030060;
-extern s32 D_807B6520;
 extern CourseData D_800D0910;
 extern unk_802D1B60_unk_00 D_807BBE38[];
 
@@ -3337,7 +3336,7 @@ void func_80702A94(void) {
     bzero(SEGMENT_VRAM_START(unk_context), SEGMENT_BSS_SIZE(unk_context));
     D_80030060 = 0;
     func_8070299C();
-    D_807B6520 = 0;
+    D_807B3C20.unk_2900 = 0;
     gCourseCtx.courseData.creatorId = CREATOR_NINTENDO;
     gCourseCtx.courseData.controlPointCount = 0;
     gCourseCtx.courseData.venue = VENUE_MUTE_CITY;
@@ -3353,7 +3352,7 @@ void func_80702A94(void) {
     func_8070299C();
     D_800D0910 = gCourseCtx.courseData;
     gCourseCtx.courseData.controlPointCount = 0;
-    D_807B6520 = 0;
+    D_807B3C20.unk_2900 = 0;
 }
 
 void func_80702BC4(s32 courseIndex) {
@@ -3401,19 +3400,17 @@ void func_80702BC4(s32 courseIndex) {
     }
 }
 
-extern CourseSegment D_807B3C20[];
-
 void func_80702D6C(void) {
     s32 i;
     CourseData* courseData = &gCourseCtx.courseData;
 
-    courseData->controlPointCount = D_807B6520;
+    courseData->controlPointCount = D_807B3C20.unk_2900;
 
     for (i = 0; i < courseData->controlPointCount; i++) {
-        courseData->controlPoint[i].pos = D_807B3C20[i].pos;
-        courseData->controlPoint[i].radiusLeft = D_807B3C20[i].radiusLeft;
-        courseData->controlPoint[i].radiusRight = D_807B3C20[i].radiusRight;
-        courseData->controlPoint[i].trackSegmentInfo = D_807B3C20[i].trackSegmentInfo;
+        courseData->controlPoint[i].pos = D_807B3C20.unk_0000[i].pos;
+        courseData->controlPoint[i].radiusLeft = D_807B3C20.unk_0000[i].radiusLeft;
+        courseData->controlPoint[i].radiusRight = D_807B3C20.unk_0000[i].radiusRight;
+        courseData->controlPoint[i].trackSegmentInfo = D_807B3C20.unk_0000[i].trackSegmentInfo;
     }
 }
 
@@ -3459,8 +3456,8 @@ void func_80702F1C(void) {
     s32 i;
     s32 trackShape;
 
-    for (i = 0; i < D_807B6520; i++) {
-        segment = &D_807B3C20[i];
+    for (i = 0; i < D_807B3C20.unk_2900; i++) {
+        segment = &D_807B3C20.unk_0000[i];
         trackShape = segment->trackSegmentInfo & TRACK_SHAPE_MASK;
         switch (trackShape) {
             case TRACK_SHAPE_PIPE:
@@ -3570,7 +3567,7 @@ void func_80703234(void) {
     D_807BCB58.unk_08 = 0;
     D_807BCB58.unk_0C = 0;
 
-    for (i = 0; i < D_807B6520; i++) {
+    for (i = 0; i < D_807B3C20.unk_2900; i++) {
 
         if (gCourseCtx.courseData.landmine[i] != -1) {
             D_807BCB58.unk_08 += 6;
