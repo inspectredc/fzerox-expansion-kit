@@ -859,4 +859,13 @@ typedef struct unk_801413F0 {
     LookAt unk_40;
 } unk_801413F0;
 
+typedef struct unk_807B3C20 {
+    CourseSegment unk_0000[64];
+    s32 unk_2900;
+    s32 unk_2904;
+    s32 unk_2908;
+    s32 unk_290C;
+    CourseSegment unk_2910[64];
+} unk_807B3C20;
+
 #endif // UNK_STRUCTS_H
