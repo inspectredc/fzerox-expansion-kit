@@ -866,8 +866,15 @@ typedef struct unk_807B3C20 {
 
 typedef struct unk_80128690 {
     s32 unk_00;
-    s8 unk_04[0x4];
+    s32 unk_04;
     s32 unk_08;
 } unk_80128690;
+
+typedef struct unk_8011C220 {
+    s8 unk_00[0x4];
+    f32 unk_04;
+    Vec3f unk_08;
+    Mtx3F unk_14;
+} unk_8011C220;
 
 #endif // UNK_STRUCTS_H
