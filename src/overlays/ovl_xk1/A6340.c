@@ -471,13 +471,13 @@ Gfx* func_xk1_80029B48(Gfx* gfx, s32 arg1, s32 arg2) {
     return gfx;
 }
 
-extern s32 D_800D6CA0[];
+extern unk_800D6CA0 D_800D6CA0;
 
 void func_xk1_8002AC24(void) {
     if (D_xk1_80032AC0 == 0) {
-        D_800D6CA0[2] = 0;
+        D_800D6CA0.unk_08 = 0;
     } else {
-        D_800D6CA0[2] = 0x34;
+        D_800D6CA0.unk_08 = 0x34;
         func_8076877C(1, "CRSD");
     }
 }
@@ -498,7 +498,7 @@ void func_xk1_8002AC70(void) {
             case 9:
                 D_xk2_80104378 = 4;
                 D_xk1_80032C20 = 0;
-                D_800D6CA0[2] = 0x10;
+                D_800D6CA0.unk_08 = 0x10;
                 D_xk1_80030610 = -1;
                 return;
             case 1:
@@ -506,7 +506,7 @@ void func_xk1_8002AC70(void) {
             default:
                 D_xk2_80104378 = 5;
                 D_xk1_80032C20 = 0;
-                D_800D6CA0[2] = 0x10;
+                D_800D6CA0.unk_08 = 0x10;
                 D_xk1_80030610 = -1;
                 return;
         }
@@ -526,7 +526,7 @@ void func_xk1_8002AC70(void) {
                 D_80119880 = -2;
                 D_xk2_80104378 = 6;
                 D_xk1_80032C20 = 0;
-                D_800D6CA0[2] = 0x10;
+                D_800D6CA0.unk_08 = 0x10;
             } else if (func_xk2_800EAA1C(D_xk1_8003A570) != 0) {
                 D_xk1_80030610 = -1;
             } else {
@@ -537,7 +537,7 @@ void func_xk1_8002AC70(void) {
             if ((func_xk1_8002BFA4() - 1) >= 100) {
                 D_xk2_80104378 = 6;
                 D_xk1_80032C20 = 0;
-                D_800D6CA0[2] = 0x10;
+                D_800D6CA0.unk_08 = 0x10;
             } else {
                 func_xk2_800EAC28(D_xk1_8003A560);
                 D_xk1_80030610 = -1;
@@ -547,10 +547,10 @@ void func_xk1_8002AC70(void) {
             func_xk2_800EBFE8(D_xk1_8003A598);
             func_80768844(0xFFFB, D_xk1_8003A598, &D_xk1_8003A598[29], D_xk1_8003A560, &D_xk1_8003A598[29], 1);
             D_xk1_80030610 = -1;
-            D_800D6CA0[2] = 0x22;
+            D_800D6CA0.unk_08 = 0x22;
             return;
     }
-    D_800D6CA0[2] = 0;
+    D_800D6CA0.unk_08 = 0;
 }
 
 void func_xk1_8002AEB4(s32 arg0, s32 arg1) {

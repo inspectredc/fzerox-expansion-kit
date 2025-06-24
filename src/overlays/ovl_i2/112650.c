@@ -4444,7 +4444,7 @@ block_68:
     return D_i2_800D6C74;
 }
 
-extern s32 D_i2_800D6CC0;
+extern unk_800D6CA0 D_800D6CA0;
 
 s32 func_i2_800BE8BC(CourseInfo* arg0) {
     s32 var_s3 = -1;
@@ -4463,7 +4463,7 @@ s32 func_i2_800BE8BC(CourseInfo* arg0) {
         var_s0 = var_s0->next;
     } while (var_s0 != arg0->courseSegments);
 
-    D_i2_800D6CC0 = var_s3;
+    D_800D6CA0.unk_20 = var_s3;
     return var_s3;
 }
 

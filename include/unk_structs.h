@@ -808,7 +808,10 @@ typedef struct unk_8003A5D8 {
 } unk_8003A5D8; //size = 0x24
 
 typedef struct unk_80128C94 {
-    s8 unk_0000[0x53A0];
+    s8 unk_0000[0x180];
+    Vtx unk_0180[64][6];
+    Vtx unk_1980[898];
+    s8 unk_51A0[0x200];
     Vtx unk_53A0[0x30];
     Vtx unk_56A0[0x30];
     s8 unk_59A0[0xC00];
@@ -871,10 +874,22 @@ typedef struct unk_80128690 {
 } unk_80128690;
 
 typedef struct unk_8011C220 {
-    s8 unk_00[0x4];
+    s32 unk_00;
     f32 unk_04;
     Vec3f unk_08;
     Mtx3F unk_14;
 } unk_8011C220;
+
+typedef struct unk_800D6CA0 {
+    s32 unk_00;
+    s32 unk_04;
+    s32 unk_08;
+    s32 unk_0C;
+    s8 unk_10[0x4];
+    s32 unk_14;
+    s8 unk_18[0x4];
+    s32 unk_1C;
+    s32 unk_20;
+} unk_800D6CA0;
 
 #endif // UNK_STRUCTS_H
