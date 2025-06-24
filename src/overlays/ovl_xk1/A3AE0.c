@@ -633,13 +633,13 @@ void func_xk1_800268A8(void) {
     D_xk1_8003A554 = 0x38;
 }
 
-extern s32 D_800D6CA0[];
+extern unk_800D6CA0 D_800D6CA0;
 extern s32 D_xk1_80032C20;
 
 void func_xk1_800268E4(void) {
     D_80119890 = 2;
     D_xk1_80032C20 = 0;
-    D_800D6CA0[2] = 0x23;
+    D_800D6CA0.unk_08 = 0x23;
 }
 
 void func_xk1_80026908(s32 arg0) {
@@ -829,7 +829,7 @@ void func_xk1_80026B44(Gfx** gfxP, unk_80026914* arg1, s32 arg2, s32 arg3) {
             gSPTextureRectangle(gfx++, (temp_ra + 28) << 2, temp_s0 << 2, (temp_ra + 44) << 2, (temp_s0 + 16) << 2, 0,
                                 0, 0, 1 << 10, 1 << 10);
         }
-        if ((i == temp_v0) && (D_800D6CA0[2] != 3) && ((arg1 != &D_xk1_80032880) || (temp_v0 != 5))) {
+        if ((i == temp_v0) && (D_800D6CA0.unk_08 != 3) && ((arg1 != &D_xk1_80032880) || (temp_v0 != 5))) {
             gDPPipeSync(gfx++);
             gDPSetCombineLERP(gfx++, PRIMITIVE, 0, TEXEL0, 0, PRIMITIVE, 0, TEXEL0, 0, PRIMITIVE, 0, TEXEL0, 0,
                               PRIMITIVE, 0, TEXEL0, 0);
@@ -972,7 +972,7 @@ void func_xk1_80027C80(unk_80026914* arg0) {
     unk_80026914* temp_v1;
     s32 temp_v0;
 
-    if (D_800D6CA0[2] != 1 || D_xk1_800305F8 == 0) {
+    if (D_800D6CA0.unk_08 != 1 || D_xk1_800305F8 == 0) {
         return;
     }
     while (true) {
@@ -991,7 +991,7 @@ void func_xk1_80027C80(unk_80026914* arg0) {
     arg0->unk_08 = -1;
     D_xk1_800305F8 = 0;
     D_xk1_8003060C = 0;
-    D_800D6CA0[2] = 0;
+    D_800D6CA0.unk_08 = 0;
 }
 
 extern s32 D_xk2_800F7048;
@@ -1113,21 +1113,21 @@ void func_xk1_80028064(void) {
             func_8076877C(1, "CRSD");
             PRINTF("LESS POINT\n");
             D_80119880 = 0;
-            D_800D6CA0[2] = 50;
+            D_800D6CA0.unk_08 = 50;
             break;
         case 1:
             D_80119880 = 1;
             func_xk2_800F27DC(gCurrentCourseInfo);
             if (D_807B3C20.unk_2900 < 4) {
                 D_xk1_80032C20 = 0;
-                D_800D6CA0[2] = 16;
+                D_800D6CA0.unk_08 = 16;
                 D_xk2_80104378 = 9;
                 D_80119880 = -2;
             } else {
                 D_xk1_80032BF8 = 0;
                 func_8076877C(1, "CRSD");
                 PRINTF("NAME\n");
-                D_800D6CA0[2] = 50;
+                D_800D6CA0.unk_08 = 50;
             }
             break;
         case 2:
@@ -1135,20 +1135,20 @@ void func_xk1_80028064(void) {
             func_8076877C(0, "CRSD");
             PRINTF("DELETE\n");
             D_80119880 = 3;
-            D_800D6CA0[2] = 50;
+            D_800D6CA0.unk_08 = 50;
             break;
         case 3:
             D_xk1_80032BF8 = 0;
             func_8076877C(0, "CRSD");
             D_80119880 = 2;
-            D_800D6CA0[2] = 50;
+            D_800D6CA0.unk_08 = 50;
             break;
         case 4:
             D_xk1_80032BF8 = 0;
             func_8076877C(0, "CRSD");
             PRINTF("BGM NO. SET %d\n");
             D_80119880 = 7;
-            D_800D6CA0[2] = 50;
+            D_800D6CA0.unk_08 = 50;
             break;
     }
 }
@@ -1304,15 +1304,15 @@ void func_xk1_8002860C(void) {
     D_xk2_80104CB8 = 0;
     D_xk2_80104CC0 = 0;
     D_xk2_80104CB0 = 90;
-    D_800D6CA0[5] = 0;
+    D_800D6CA0.unk_14 = 0;
     D_xk2_800F7044 = 0;
     D_807B3C20.unk_2900 = 0;
     gCurrentCourseInfo->segmentCount = 0;
     gCourseCtx.courseData.controlPointCount = 0;
-    D_800D6CA0[3] = -1;
-    D_800D6CA0[1] = 0;
-    D_800D6CA0[7] = -1;
-    if (D_800D6CA0[2] != 0x10) {
+    D_800D6CA0.unk_0C = -1;
+    D_800D6CA0.unk_04 = 0;
+    D_800D6CA0.unk_1C = -1;
+    if (D_800D6CA0.unk_08 != 0x10) {
         func_xk2_800F12B0();
     }
     D_xk2_80104CA0[3] = 0;
@@ -1349,7 +1349,7 @@ void func_xk1_80028708(void) {
             return;
         case 4:
             D_xk1_80032C20 = 0;
-            D_800D6CA0[2] = 0x11;
+            D_800D6CA0.unk_08 = 0x11;
             break;
         case 0:
         case 1:
