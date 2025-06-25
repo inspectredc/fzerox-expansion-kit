@@ -814,6 +814,7 @@ Gfx* func_xk2_800E5058(Gfx* gfx);
 Gfx* func_xk2_800E5214(Gfx* gfx);
 Gfx* func_xk2_800E54A4(Gfx* gfx);
 Gfx* func_xk2_800E5870(Gfx* gfx);
+void func_xk2_800E5D90(CourseInfo* courseInfo);
 s32 func_xk2_800E6B3C(void);
 void func_xk2_800E72BC(void);
 Gfx* func_xk2_800E7518(Gfx* gfx);
