@@ -158,7 +158,7 @@ Gfx* Race_Draw(Gfx* gfx) {
             break;
     }
 
-    gSPLoadUcodeL(gfx++, gspF3DFLX_Rej_fifo);
+    gSPLoadUcodeL(gfx++, gspF3DFLX2_Rej_fifo);
     gfx = Segment_SetTableAddresses(gfx);
     gSPClipRatio(gfx++, FRUSTRATIO_3);
     gDPPipeSync(gfx++);

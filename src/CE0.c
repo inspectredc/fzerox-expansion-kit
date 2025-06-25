@@ -141,16 +141,16 @@ void Gfx_SetTask(OSTask* task) {
 
     switch (gGameMode & GAMEMODE_F3D_MASK) {
         case GFXMODE_F3DEX:
-            task->t.ucode = (u64*) gspF3DEX_fifoTextStart;
-            task->t.ucode_data = (u64*) gspF3DEX_fifoDataStart;
+            task->t.ucode = (u64*) gspF3DEX2_fifoTextStart;
+            task->t.ucode_data = (u64*) gspF3DEX2_fifoDataStart;
             break;
         case GFXMODE_F3DLX:
-            task->t.ucode = (u64*) gspF3DLX_Rej_fifoTextStart;
-            task->t.ucode_data = (u64*) gspF3DLX_Rej_fifoDataStart;
+            task->t.ucode = (u64*) gspF3DLX2_Rej_fifoTextStart;
+            task->t.ucode_data = (u64*) gspF3DLX2_Rej_fifoDataStart;
             break;
         case GFXMODE_F3DFLX:
-            task->t.ucode = (u64*) gspF3DFLX_Rej_fifoTextStart;
-            task->t.ucode_data = (u64*) gspF3DFLX_Rej_fifoDataStart;
+            task->t.ucode = (u64*) gspF3DFLX2_Rej_fifoTextStart;
+            task->t.ucode_data = (u64*) gspF3DFLX2_Rej_fifoDataStart;
             break;
     }
 
