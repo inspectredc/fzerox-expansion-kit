@@ -107,10 +107,10 @@ void Gfx_InitBuffer(void) {
     gMasterDisp = gGfxPool->gfxBuffer;
 }
 
-extern s32 D_80128C90;
+extern unk_80128C94* D_80128C90;
 
 void Gfx_LoadSegments(void) {
-    Segment_SetPhysicalAddress(6, (D_8079A35C * 0x1AF08) + D_80128C90);
+    Segment_SetPhysicalAddress(6, &D_80128C90[D_8079A35C]);
     gMasterDisp = Segment_SetTableAddresses(gMasterDisp);
 }
 
@@ -334,7 +334,7 @@ void Game_ThreadEntry(void* entry) {
     Segment_SetAddress(2, gUnkBssVramStart);
     Segment_SetAddress(8, gSegment16C8A0VramStart);
     Segment_SetAddress(3, gSegment17B1E0VramStart);
-    Segment_SetPhysicalAddress(6, (D_8079A35C * 0x1AF08) + D_80128C90);
+    Segment_SetPhysicalAddress(6, &D_80128C90[D_8079A35C]);
 
     Controller_Init();
     func_807083D8();

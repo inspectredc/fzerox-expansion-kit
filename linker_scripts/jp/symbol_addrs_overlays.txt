@@ -312,8 +312,7 @@ sRandomCourseInitSeed1 = 0x800D6BEC; //segment:ovl_i2
 sRandomCourseInitMask1 = 0x800D6BF0; //segment:ovl_i2
 sRandomCourseInitSeed2 = 0x800D6BF4; //segment:ovl_i2
 sRandomCourseInitMask2 = 0x800D6BF8; //segment:ovl_i2
-D_800D6CA0 = 0x800D6CA0; //segment:ovl_i2 size:0x24
-D_i2_800D6CC8 = 0x800D6CC8; //segment:ovl_i2 size:0xA4
+D_800D6CA0 = 0x800D6CA0; //segment:ovl_i2 size:0xCC
 
 Title_BackgroundInit = 0x800746A8; //segment:ovl_i4
 func_i4_80074708 = 0x80074708; //segment:ovl_i4

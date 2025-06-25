@@ -2031,7 +2031,6 @@ void func_xk2_800DC58C(void) {
     }
 }
 
-extern CourseSegment D_i2_800D6CC8;
 extern u8 D_xk2_80104CA0[];
 extern s32 D_80030608;
 extern s32 D_8076C968;
@@ -2066,7 +2065,7 @@ void func_xk2_800DC67C(void) {
         func_8074122C(0x24);
         D_xk2_800F704C = D_xk2_800F703C;
         if ((D_xk1_80030614 == 0) && (D_xk2_80104CA0[1] == 0) && (D_xk2_80104CA0[10] == 0)) {
-            spC0 = D_i2_800D6CC8;
+            spC0 = D_800D6CA0.unk_28;
             if ((spC0.pos.x < -15000.0f) || (spC0.pos.x > 15000.0f) || (spC0.pos.y < 0.0f) || (spC0.pos.y > 5000.0f) || (spC0.pos.z < -15000.0f) || (spC0.pos.z > 15000.0f)) {
                 func_8074122C(0x20);
                 return;
@@ -2131,7 +2130,7 @@ void func_xk2_800DC67C(void) {
 }
 
 void func_xk2_800DCCD8(void) {
-    CourseSegment* temp_at = &D_i2_800D6CC8;
+    CourseSegment* temp_at = &D_800D6CA0.unk_28;
     CourseSegment* temp_v0_2;
 
     if ((D_xk1_80030614 != 1) || (D_800D6CA0.unk_00 != 1)) {

@@ -174,7 +174,7 @@ Gfx* Segment_SetTableAddresses(Gfx* gfx) {
     return gfx;
 }
 
-extern s32 D_80128C90;
+extern unk_80128C94* D_80128C90;
 extern u16 D_8076CBD0;
 extern s32 gSegment1B8550VramStart;
 extern s32 gSegment1B8550VramEnd;
@@ -200,7 +200,7 @@ void func_807088A8(void) {
         case GAMEMODE_COURSE_EDIT:
             D_8076CBD0 = 2;
             segmentSize = SEGMENT_VRAM_SIZE(segment_1B8550);
-            D_80128C90 = func_80708474(1, 0x35E10);
+            D_80128C90 = func_80708474(1, 2 * sizeof(unk_80128C94));
             break;
         case GAMEMODE_RECORDS:
         case GAMEMODE_LX_MACHINE_SETTINGS:
