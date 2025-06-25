@@ -763,7 +763,7 @@ Gfx* func_xk3_80131494(Gfx* gfx) {
     spD0[4] = ((1.0f - D_xk3_8013680C) * (180.0f - 180.0f)) + (D_xk3_8013680C * 180.0f);
     spD0[5] = ((1.0f - D_xk3_8013680C) * (200.0f - 100.0f)) + (D_xk3_8013680C * 200.0f);
 
-    gSPLoadUcodeL(gfx++, gspF3DEX_Rej_fifo);
+    gSPLoadUcodeL(gfx++, gspF3DEX2_Rej_fifo);
     gSPClipRatio(gfx++, FRUSTRATIO_5);
     gSPDisplayList(gfx++, D_xk3_80137378);
     gDPLoadTextureBlock(gfx++, D_xk3_80137590, G_IM_FMT_RGBA, G_IM_SIZ_16b, 64, 28, 0, G_TX_NOMIRROR | G_TX_WRAP,

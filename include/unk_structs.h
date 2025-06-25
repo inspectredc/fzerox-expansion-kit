@@ -809,7 +809,7 @@ typedef struct unk_8003A5D8 {
 
 typedef struct unk_80128C94 {
     s8 unk_0000[0x180];
-    Vtx unk_0180[64][6];
+    Vtx unk_0180[64 * 6];
     Vtx unk_1980[898];
     s8 unk_51A0[0x200];
     Vtx unk_53A0[0x30];

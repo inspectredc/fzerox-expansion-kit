@@ -597,7 +597,7 @@ Gfx* EndingCutscene_Draw(Gfx* gfx) {
     gfx = func_806F9DB4(gfx, 0);
     gfx = func_i7_80095D14(gfx);
 
-    gSPLoadUcodeL(gfx++, gspF3DLX_Rej_fifo);
+    gSPLoadUcodeL(gfx++, gspF3DLX2_Rej_fifo);
     gfx = Segment_SetTableAddresses(gfx);
     gSPClipRatio(gfx++, FRUSTRATIO_3);
     gDPPipeSync(gfx++);
