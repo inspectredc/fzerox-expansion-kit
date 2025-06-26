@@ -819,7 +819,9 @@ typedef struct unk_80128C94 {
     Vtx unk_E5A0[0x80];
     s8 unk_EDA0[0x400];
     Mtx unk_F1A0[0x1];
-    s8 pad_F1E0[0x1EE8];
+    s8 pad_F1E0[0x7C0];
+    Gfx unk_F9A0[1];
+    s8 pad_F9A8[0x1720];
     Gfx unk_110C8[0x13C8];
 } unk_80128C94; // size = 0x1AF08
 
@@ -885,12 +887,12 @@ typedef struct unk_800D6CA0 {
     s32 unk_04;
     s32 unk_08;
     s32 unk_0C;
-    s8 unk_10[0x4];
+    s32 unk_10;
     s32 unk_14;
     s8 unk_18[0x4];
     s32 unk_1C;
     s32 unk_20;
-    s8 unk_24[0x4];
+    s32 unk_24;
     CourseSegment unk_28;
 } unk_800D6CA0; // size >= 0xCC
 
