@@ -149,7 +149,7 @@ void Records_Init(void) {
     func_i3_80040158();
     func_8071D48C();
     func_807160A0();
-    func_8070F0B0(gCourseCtx.courseData.venue, gCourseCtx.courseData.skybox);
+    func_8070F0B0(COURSE_CONTEXT()->courseData.venue, COURSE_CONTEXT()->courseData.skybox);
     func_i3_800617A0();
     func_806F9774();
     func_806FB3AC();

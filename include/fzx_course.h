@@ -17,7 +17,7 @@ typedef struct CourseData {
     /* 0x002 */ s8 venue;
     /* 0x003 */ s8 skybox;
     /* 0x004 */ u32 checksum;
-    /* 0x008 */ s8 flag;
+    /* 0x008 */ u8 flag;
     /* 0x009 */ char fileName[23];
     /* 0x020 */ ControlPoint controlPoint[64];
     /* 0x520 */ s16 bankAngle[64];
@@ -32,10 +32,16 @@ typedef struct CourseData {
     /* 0x7A0 */ s8 sign[64];
 } CourseData; // size = 0x7E0
 
-typedef struct CourseContext {
+typedef struct CourseBuffer {
     /* 0x0000 */ CourseData courseData;
     /* 0x07E0 */ u8 saveBuffer[0xBF40];
-} CourseContext; // size >= 0xC720
+} CourseBuffer; // size = 0xC720
+
+typedef struct CourseContext {
+    /* 0x0000 */ CourseData courseData;
+    /* 0x07E0 */ GhostSave ghostSave[3];
+    /* 0xC720 */ SaveCourseRecords saveCourseRecord;
+} CourseContext; // size = 0xC830
 
 typedef enum Courses {
     /*  0 */ COURSE_MUTE_CITY,
@@ -329,8 +335,10 @@ typedef enum BorderlessRoad {
 #define TRACK_FLAG_CONTINUOUS 0x40000000
 #define TRACK_FLAG_80000000 0x80000000
 
-extern CourseContext gCourseCtx;
+extern CourseBuffer gCourseCtx;
 extern CourseInfo* gCurrentCourseInfo;
 extern CourseInfo gCourseInfos[56];
+
+#define COURSE_CONTEXT() ((CourseContext*)&gCourseCtx)
 
 #endif // FZX_COURSE_H

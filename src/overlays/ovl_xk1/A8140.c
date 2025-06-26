@@ -32,7 +32,7 @@ void func_xk1_8002AED0(void) {
     PRINTF("FILE LISTS %d\n");
 
     for (i = 0; i < 102; i++) {
-        D_xk1_8003A5D8[i].unk_20 = 0;
+        D_xk1_8003A5D8[i].unk_1D[3] = '\0';
     }
 }
 
@@ -185,7 +185,7 @@ Gfx* func_xk1_8002B17C(Gfx* gfx, s32 arg1) {
         }
 
         gfx = func_xk1_8002924C(gfx, D_xk1_80032BE4, temp_s4, &D_xk1_8003A5D8[i]);
-        if ((D_xk1_8003A5D8[i].unk_20 == 0x45) && ((gGameFrameCount % 16) < 8)) {
+        if ((D_xk1_8003A5D8[i].unk_1D[3] == 'E') && ((gGameFrameCount % 16) < 8)) {
             gSPDisplayList(gfx++, D_7020808);
             gSPTextureRectangle(gfx++, (D_xk1_80032BE4 + 0x1C) << 2, temp_s4 << 2, (D_xk1_80032BE4 + 0x24) << 2,
                                 (temp_s4 + 8) << 2, 0, 0, 0, 1 << 10, 1 << 10);
@@ -671,7 +671,7 @@ void func_xk1_8002D16C(void) {
         for (j = 0; j < 6; j++, k++, var_s0++) {
             var_s0->unk_10 = 0;
             var_s0->unk_22 = 0;
-            var_s0->unk_20 = 0;
+            var_s0->unk_1D[3] = '\0';
             sprintf(var_s0->unk_00, "%s%d", sp48[i], j + 1);
         }
     }

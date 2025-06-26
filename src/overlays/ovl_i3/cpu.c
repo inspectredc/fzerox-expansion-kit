@@ -1540,14 +1540,14 @@ void Cpu_GenerateInputs(Racer* racer, Controller* controller) {
 
         var_a3 = racer->unk_0C.courseSegment->segmentIndex;
         if (var_a3 != racer->lastSegmentIndex) {
-            racer->segmentLandmine = gCourseCtx.courseData.landmine[var_a3];
-            racer->segmentJump = gCourseCtx.courseData.jump[var_a3];
-            racer->segmentDirt = gCourseCtx.courseData.dirt[var_a3];
-            racer->segmentIce = gCourseCtx.courseData.ice[var_a3];
-            racer->segmentPit = gCourseCtx.courseData.pit[var_a3];
+            racer->segmentLandmine = COURSE_CONTEXT()->courseData.landmine[var_a3];
+            racer->segmentJump = COURSE_CONTEXT()->courseData.jump[var_a3];
+            racer->segmentDirt = COURSE_CONTEXT()->courseData.dirt[var_a3];
+            racer->segmentIce = COURSE_CONTEXT()->courseData.ice[var_a3];
+            racer->segmentPit = COURSE_CONTEXT()->courseData.pit[var_a3];
             // Look for dash pads in expert and master only
             if (gDifficulty >= EXPERT) {
-                racer->segmentDash = gCourseCtx.courseData.dash[var_a3];
+                racer->segmentDash = COURSE_CONTEXT()->courseData.dash[var_a3];
             } else {
                 racer->segmentDash = DASH_NONE;
             }
@@ -1558,9 +1558,9 @@ void Cpu_GenerateInputs(Racer* racer, Controller* controller) {
             if (++var_a3 >= gCurrentCourseInfo->segmentCount) {
                 var_a3 = 0;
             }
-            racer->nextSegmentLandmine = gCourseCtx.courseData.landmine[var_a3];
-            racer->nextSegmentDirt = gCourseCtx.courseData.dirt[var_a3];
-            racer->nextSegmentDash = gCourseCtx.courseData.dash[var_a3];
+            racer->nextSegmentLandmine = COURSE_CONTEXT()->courseData.landmine[var_a3];
+            racer->nextSegmentDirt = COURSE_CONTEXT()->courseData.dirt[var_a3];
+            racer->nextSegmentDash = COURSE_CONTEXT()->courseData.dash[var_a3];
             racer->obstaclePriorityState = 6;
             if (racer->segmentLandmine != LANDMINE_NONE) {
                 racer->obstaclePriorityState = 5;

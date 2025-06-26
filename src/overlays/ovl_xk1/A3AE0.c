@@ -1285,7 +1285,7 @@ void func_xk1_80028250(void) {
     }
 }
 
-extern u8 D_80030060;
+extern u8 D_80030060[];
 extern u8 D_xk2_80104CA0[];
 extern s32 D_xk2_80104CB0;
 extern s32 D_xk2_80104CB8;
@@ -1300,7 +1300,7 @@ extern s32 D_800D65C8;
 void func_xk1_8002860C(void) {
     func_xk2_800EF78C();
     func_xk2_800F5C50();
-    D_80030060 = 0;
+    D_80030060[0] = '\0';
     D_xk2_80104CB8 = 0;
     D_xk2_80104CC0 = 0;
     D_xk2_80104CB0 = 90;
@@ -1308,7 +1308,7 @@ void func_xk1_8002860C(void) {
     D_xk2_800F7044 = 0;
     D_807B3C20.unk_2900 = 0;
     gCurrentCourseInfo->segmentCount = 0;
-    gCourseCtx.courseData.controlPointCount = 0;
+    COURSE_CONTEXT()->courseData.controlPointCount = 0;
     D_800D6CA0.unk_0C = -1;
     D_800D6CA0.unk_04 = 0;
     D_800D6CA0.unk_1C = -1;
@@ -1577,7 +1577,7 @@ void func_xk1_80028EBC(void) {
 void func_xk1_80028EF0(void) {
     if (D_xk1_80031140.unk_04 != -1) {
         func_xk1_80027C80(&D_xk1_80032880);
-        gCourseCtx.courseData.venue = D_xk1_8003066C;
+        COURSE_CONTEXT()->courseData.venue = D_xk1_8003066C;
         func_80702FF4(D_xk1_8003066C);
         func_80709A38(D_xk1_8003066C);
         D_xk2_800F7040 = 3;
@@ -1587,7 +1587,7 @@ void func_xk1_80028EF0(void) {
 void func_xk1_80028F50(void) {
     if (D_xk1_80031294.unk_04 != -1) {
         func_xk1_80027C80(&D_xk1_80032880);
-        gCourseCtx.courseData.skybox = D_xk1_80030670;
+        COURSE_CONTEXT()->courseData.skybox = D_xk1_80030670;
     }
 }
 
@@ -1603,7 +1603,7 @@ void func_xk1_80028F94(void) {
             D_xk1_800305F4 = D_xk1_800328B4[D_xk1_80030674];
             func_80741AF4(D_xk1_800328B4[D_xk1_800314C0.unk_04]);
             D_xk1_800314C0.unk_04 = -1;
-            gCourseCtx.courseData.fileName[0x16] = D_xk1_800328B4[D_xk1_80030674];
+            COURSE_CONTEXT()->courseData.fileName[0x16] = D_xk1_800328B4[D_xk1_80030674];
         }
     }
 }
