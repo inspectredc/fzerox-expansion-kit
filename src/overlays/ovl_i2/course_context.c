@@ -2,7 +2,8 @@
 #include "fzx_course.h"
 #include "macros.h"
 
-CourseContext gCourseCtx = {
+//! @bug gCourseCtx is treated as though it is size 0xC830 which overlaps with D_800CF950
+CourseBuffer gCourseCtx = {
     { CREATOR_NINTENDO, 0, 0, 0, { 0 }, { 0 }, { 0 }, { 0 }, { 0 }, { 0 }, { 0 }, { 0 }, { 0 }, { 0 }, { 0 }, { 0 } },
     { 0 }
 };

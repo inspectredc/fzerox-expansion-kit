@@ -223,8 +223,6 @@ extern u8 D_800D6D90[];
 extern u8 D_8013A7F0[];
 extern u8 D_8012B520[];
 extern u8 D_801414E0[];
-extern u8 D_7000000_VRAM[];
-extern u8 D_7000000_VRAM_END[];
 
 extern s32 D_8076CB40;
 extern s32 D_8076C770;
@@ -324,7 +322,7 @@ void Game_ThreadEntry(void* entry) {
     D_8079A3D8 = osVirtualToPhysical(D_8013A7F0);
 
     D_8079A42C = D_8079A3D8;
-    D_8079A430 = D_8079A42C + (size_t) SEGMENT_VRAM_SIZE(D_7000000);
+    D_8079A430 = D_8079A42C + (size_t) SEGMENT_VRAM_SIZE(segment_145B70);
 
     D_8079A3DC = osVirtualToPhysical(D_8012B520);
     D_8079A3E0 = osVirtualToPhysical(D_801414E0);

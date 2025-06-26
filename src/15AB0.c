@@ -686,7 +686,7 @@ void func_80709914(void) {
         case GAMEMODE_TIME_ATTACK:
         case GAMEMODE_GP_END_CS:
         case GAMEMODE_DEATH_RACE:
-            venue = gCourseCtx.courseData.venue;
+            venue = COURSE_CONTEXT()->courseData.venue;
             romOffset = D_807C7120[venue][0];
             ramSize = D_8076CC14[venue] - D_8076CBE8[venue];
             break;

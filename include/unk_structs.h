@@ -796,19 +796,19 @@ typedef struct unk_8009E224 {
 } unk_8009E224; // size = 0x10
 
 typedef struct unk_8003A5D8 {
-    char unk_00[0x1];
-    s8 unk_01[0xF];
+    char unk_00[16];
     s32 unk_10;
-    s8 unk_14[0x9];
-    char unk_1D[3];
-    u8 unk_20;
-    s8 unk_21[0x1];
+    s8 unk_14[0x8];
+    char unk_1C;
+    char unk_1D[5];
     u8 unk_22;
     s8 unk_23;
 } unk_8003A5D8; //size = 0x24
 
 typedef struct unk_80128C94 {
-    s8 unk_0000[0x180];
+    s8 unk_0000[0x100];
+    Mtx unk_0100;
+    s8 unk_0140[0x40];
     Vtx unk_0180[64 * 6];
     Vtx unk_1980[898];
     s8 unk_51A0[0x200];

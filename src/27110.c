@@ -1626,8 +1626,8 @@ void func_8071D48C(void) {
     MachineInfo sp6C;
     OSMesg sp68;
 
-    D_807A16F8 = &D_8076E300[gCourseCtx.courseData.venue * 4];
-    D_807A16FC = &D_8076E3F0[gCourseCtx.courseData.venue * 4];
+    D_807A16F8 = &D_8076E300[COURSE_CONTEXT()->courseData.venue * 4];
+    D_807A16FC = &D_8076E3F0[COURSE_CONTEXT()->courseData.venue * 4];
     gPracticeBestLap = 600000 - 1;
     D_807B37AC = D_807B37B0 = 0.0f;
     sRaceFrameCount = gStartNewBestLap = gRacersKOd = D_807B37D4 = D_807B37C8 = D_807A16CC = D_807A16CE = D_807A16D0 =
@@ -5715,7 +5715,7 @@ block_115:
         gDPSetTile(gfx++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0x0000, G_TX_RENDERTILE, 0, G_TX_MIRROR | G_TX_WRAP, 5,
                    G_TX_NOLOD, G_TX_MIRROR | G_TX_WRAP, 5, G_TX_NOLOD);
 
-        if (gCourseCtx.courseData.skybox == SKYBOX_BLUE) {
+        if (COURSE_CONTEXT()->courseData.skybox == SKYBOX_BLUE) {
             var_s2 = D_9000A10;
         } else {
             var_s2 = D_9000208;

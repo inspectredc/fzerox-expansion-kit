@@ -6,7 +6,7 @@
 // TODO: Unsure on sizes
 u8 D_xk1_8003A560[16];
 u8 D_xk1_8003A570[40];
-u8 D_xk1_8003A598[36];
+unk_8003A5D8 D_xk1_8003A598;
 s32 D_xk1_8003A5BC;
 s32 D_xk1_8003A5C0;
 void (*D_xk1_8003A5C4)(void);
@@ -544,8 +544,8 @@ void func_xk1_8002AC70(void) {
             }
             return;
         case 3:
-            func_xk2_800EBFE8(D_xk1_8003A598);
-            func_80768844(0xFFFB, D_xk1_8003A598, &D_xk1_8003A598[29], D_xk1_8003A560, &D_xk1_8003A598[29], 1);
+            func_xk2_800EBFE8(D_xk1_8003A598.unk_00);
+            func_80768844(0xFFFB, D_xk1_8003A598.unk_00, D_xk1_8003A598.unk_1D, D_xk1_8003A560, D_xk1_8003A598.unk_1D, 1);
             D_xk1_80030610 = -1;
             D_800D6CA0.unk_08 = 0x22;
             return;
