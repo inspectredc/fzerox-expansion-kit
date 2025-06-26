@@ -9,13 +9,13 @@ void func_xk2_800D6D90(s32 arg0, s32 arg1, f32* arg2, f32* arg3) {
     f32 temp_fv1;
     s32 temp_ft3;
 
-    temp_fv1 = sqrtf(SQ((f32)arg0) + SQ((f32)arg1));
+    temp_fv1 = sqrtf(SQ((f32) arg0) + SQ((f32) arg1));
     if (temp_fv1 <= 16.970562f) {
         var_v0 = 0;
         var_v1 = 0;
     } else {
         temp_fv1 -= 16.970562f;
-        temp_ft3 = (func_xk2_800EF5E8((f32)arg1, (f32)arg0) * 4096.0f) / 360.0f;
+        temp_ft3 = (func_xk2_800EF5E8((f32) arg1, (f32) arg0) * 4096.0f) / 360.0f;
         if (arg0) {}
         if (arg1) {}
         var_v0 = COS(temp_ft3) * temp_fv1;
@@ -58,10 +58,12 @@ extern Player gPlayers[];
 
 void func_xk2_800D7058(void) {
 
-    if ((gControllers[gPlayerControlPorts[0]].buttonCurrent & BTN_L) || ((D_xk2_80119918 != 0) && (gControllers[gPlayerControlPorts[0]].buttonCurrent & BTN_B))) {
+    if ((gControllers[gPlayerControlPorts[0]].buttonCurrent & BTN_L) ||
+        ((D_xk2_80119918 != 0) && (gControllers[gPlayerControlPorts[0]].buttonCurrent & BTN_B))) {
         D_xk2_80104CB4 += 300;
     }
-    if ((gControllers[gPlayerControlPorts[0]].buttonCurrent & BTN_R) || ((D_xk2_80119918 != 0) && (gControllers[gPlayerControlPorts[0]].buttonCurrent & BTN_A))) {
+    if ((gControllers[gPlayerControlPorts[0]].buttonCurrent & BTN_R) ||
+        ((D_xk2_80119918 != 0) && (gControllers[gPlayerControlPorts[0]].buttonCurrent & BTN_A))) {
         if (D_xk2_80104CB4 > 300) {
             D_xk2_80104CB4 -= 300;
         } else if (D_xk2_80104CBC > 300) {
@@ -90,7 +92,8 @@ void func_xk2_800D71E8(void) {
     f32 temp_fv0;
     f32 temp_fv1;
 
-    D_xk2_8011972C = gControllers[gPlayerControlPorts[0]].buttonCurrent & (BTN_CUP | BTN_CDOWN | BTN_CLEFT | BTN_CRIGHT);
+    D_xk2_8011972C =
+        gControllers[gPlayerControlPorts[0]].buttonCurrent & (BTN_CUP | BTN_CDOWN | BTN_CLEFT | BTN_CRIGHT);
 
     temp_fv0 = (D_xk2_80104CB4 * 0.04) + 15.0;
     switch (D_xk2_8011972C) {
@@ -129,7 +132,7 @@ void func_xk2_800D71E8(void) {
             D_xk2_80104CBC -= temp_fv0 * gPlayers->unk_5C.y.y;
             D_xk2_80104CC0 -= temp_fv0 * gPlayers->unk_5C.y.z;
             break;
-            case (BTN_CUP | BTN_CRIGHT):
+        case (BTN_CUP | BTN_CRIGHT):
             D_xk2_80104CB8 += temp_fv0 * D_xk2_80128D44;
             D_xk2_80104CC0 += temp_fv0 * D_xk2_80128D40;
             D_xk2_80104CB8 += temp_fv0 * gPlayers->unk_5C.y.x;
@@ -174,7 +177,7 @@ extern unk_800D6CA0 D_800D6CA0;
 void func_xk2_800D78A0(void) {
     u16 var_v0;
 
-    var_v0 = gControllers[gPlayerControlPorts[0]].buttonCurrent & (BTN_UP | BTN_DOWN | BTN_LEFT| BTN_RIGHT);
+    var_v0 = gControllers[gPlayerControlPorts[0]].buttonCurrent & (BTN_UP | BTN_DOWN | BTN_LEFT | BTN_RIGHT);
     if (D_xk2_80119918 != 0) {
         if (ABS(D_80119720->stickX) > ABS(D_80119720->stickY)) {
             if (D_80119720->stickX < -60) {
@@ -192,7 +195,7 @@ void func_xk2_800D78A0(void) {
             }
         }
     }
-    
+
     switch (var_v0) {
         case BTN_UP:
             D_xk2_80104CB0 += 6;
@@ -234,6 +237,8 @@ extern s32 D_xk1_80030648;
 extern s32 D_xk1_8003064C;
 extern s32 D_xk1_80030650;
 extern s32 D_xk1_80030654;
+
+extern u8 D_xk2_80104CA0[];
 
 void func_xk2_800D7A4C(s32 arg0) {
     s32 var_v0;
@@ -311,7 +316,6 @@ void func_xk2_800D7A4C(s32 arg0) {
 
 extern s32 D_xk2_800F7040;
 extern unk_807B3C20 D_807B3C20;
-extern u8 D_xk2_80104CA7;
 
 void func_xk2_800D7D80(void) {
 
@@ -328,7 +332,7 @@ void func_xk2_800D7D80(void) {
             return;
     }
 
-    if ((D_xk2_80104CA7 != 0) && (D_xk1_80030648 != 4)) {
+    if ((D_xk2_80104CA0[7] != 0) && (D_xk1_80030648 != 4)) {
         func_8074122C(0x20);
         return;
     }
@@ -399,7 +403,7 @@ void func_xk2_800D8018(void) {
             return;
     }
 
-    if ((D_xk2_80104CA7 != 0) && (D_xk1_80030650 != 4)) {
+    if ((D_xk2_80104CA0[7] != 0) && (D_xk1_80030650 != 4)) {
         func_8074122C(0x20);
         return;
     }
@@ -430,7 +434,7 @@ void func_xk2_800D8154(void) {
             return;
     }
 
-    if ((D_xk2_80104CA7 != 0) && (D_xk1_80030654 != 4)) {
+    if ((D_xk2_80104CA0[7] != 0) && (D_xk1_80030654 != 4)) {
         func_8074122C(0x20);
         return;
     }
@@ -691,7 +695,6 @@ void func_xk2_800D88D8(void) {
 }
 
 void func_xk2_800D8AB0(void) {
-
 }
 
 extern s32 D_xk1_80030614;
@@ -703,9 +706,11 @@ void func_xk2_800D8AB8(void) {
     s32 temp_a1;
     s32 temp_v1;
     CourseSegment* temp_v0;
-    s32 sp2C[] = { TRACK_SHAPE_ROAD, TRACK_SHAPE_WALLED_ROAD, TRACK_SHAPE_BORDERLESS_ROAD, TRACK_SHAPE_TUNNEL, TRACK_SHAPE_PIPE, TRACK_SHAPE_HALF_PIPE, TRACK_SHAPE_CYLINDER, TRACK_SHAPE_AIR };
+    s32 sp2C[] = { TRACK_SHAPE_ROAD, TRACK_SHAPE_WALLED_ROAD, TRACK_SHAPE_BORDERLESS_ROAD, TRACK_SHAPE_TUNNEL,
+                   TRACK_SHAPE_PIPE, TRACK_SHAPE_HALF_PIPE,   TRACK_SHAPE_CYLINDER,        TRACK_SHAPE_AIR };
 
-    if ((D_80119720->buttonPressed & BTN_A) && (D_xk2_800F6828 >= 0x38) && (D_800D6CA0.unk_08 != 3) && (D_xk1_80030614 == 2)) {
+    if ((D_80119720->buttonPressed & BTN_A) && (D_xk2_800F6828 >= 0x38) && (D_800D6CA0.unk_08 != 3) &&
+        (D_xk1_80030614 == 2)) {
         if (D_807B3C20.unk_2900 < 4) {
             func_8074122C(0x20);
             return;
@@ -720,7 +725,8 @@ void func_xk2_800D8AB8(void) {
 
             temp_a1 = D_xk1_80030624;
             temp_v1 = sp2C[temp_a1];
-            if (((temp_v0->prev->trackSegmentInfo & TRACK_SHAPE_MASK) != sp2C[temp_a1]) && ((temp_v0->next->trackSegmentInfo & TRACK_SHAPE_MASK) == sp2C[temp_a1])) {
+            if (((temp_v0->prev->trackSegmentInfo & TRACK_SHAPE_MASK) != sp2C[temp_a1]) &&
+                ((temp_v0->next->trackSegmentInfo & TRACK_SHAPE_MASK) == sp2C[temp_a1])) {
                 switch (temp_v0->prev->trackSegmentInfo & TRACK_SHAPE_MASK) {
                     case TRACK_SHAPE_ROAD:
                     case TRACK_SHAPE_BORDERLESS_ROAD:
@@ -761,10 +767,10 @@ void func_xk2_800D8CC4(void) {
 
     if (!(D_80119720->buttonPressed & BTN_A)) {
         return;
-    } 
+    }
     if (D_xk2_800F6828 < 0x38) {
         return;
-    } 
+    }
     if (D_800D6CA0.unk_08 == 2 || D_800D6CA0.unk_08 == 1 || D_800D6CA0.unk_08 == 3 || D_800D6CA0.unk_08 == 16) {
         return;
     }
@@ -869,8 +875,10 @@ void func_xk2_800D8F04(void) {
     func_xk2_800D8AB0();
     D_xk2_80119728 = gControllers[gPlayerControlPorts[0]].buttonCurrent & (BTN_UP | BTN_DOWN | BTN_LEFT | BTN_RIGHT);
     D_xk2_8011972A = gControllers[gPlayerControlPorts[0]].buttonPressed & (BTN_UP | BTN_DOWN | BTN_LEFT | BTN_RIGHT);
-    D_xk2_8011972C = gControllers[gPlayerControlPorts[0]].buttonCurrent & (BTN_CUP | BTN_CDOWN | BTN_CLEFT | BTN_CRIGHT);
-    D_xk2_8011972E = gControllers[gPlayerControlPorts[0]].buttonPressed & (BTN_CUP | BTN_CDOWN | BTN_CLEFT | BTN_CRIGHT);
+    D_xk2_8011972C =
+        gControllers[gPlayerControlPorts[0]].buttonCurrent & (BTN_CUP | BTN_CDOWN | BTN_CLEFT | BTN_CRIGHT);
+    D_xk2_8011972E =
+        gControllers[gPlayerControlPorts[0]].buttonPressed & (BTN_CUP | BTN_CDOWN | BTN_CLEFT | BTN_CRIGHT);
     D_xk2_801197EC = &D_807B3C20.unk_0000[D_xk2_800F704C];
     D_xk2_80128D40 = SIN((D_800D6CA0.unk_14 << 12) / 360);
     D_xk2_80128D44 = COS((D_800D6CA0.unk_14 << 12) / 360);
@@ -893,7 +901,7 @@ void func_xk2_800D8F04(void) {
     func_xk2_800DEC1C();
     func_xk2_800DE8D0();
     func_xk2_800DECF0();
-    if (func_xk2_800E6B3C() == 0) {
+    if (!func_xk2_800E6B3C()) {
         if (D_8076C964 == 1) {
             D_xk2_800F7044 = 1;
         } else {
@@ -1002,7 +1010,7 @@ void func_xk2_800D950C(void) {
     if (D_xk2_800F6824 > 295) {
         D_xk2_800F6824 = 295;
     }
-    
+
     if (D_xk2_800F6828 < 56) {
         D_xk2_800F6828 = 57;
     }
@@ -1089,7 +1097,7 @@ void func_xk2_800D9670(void) {
             }
         }
 
-        if ( (D_xk2_80128D40 * var_s2) >= (D_xk2_80128D44 * var_s3)) {
+        if ((D_xk2_80128D40 * var_s2) >= (D_xk2_80128D44 * var_s3)) {
             var_fa0 = (D_xk2_80128D40 * var_s2) - (D_xk2_80128D44 * var_s3);
         } else {
             var_fa0 = -((D_xk2_80128D40 * var_s2) - (D_xk2_80128D44 * var_s3));
@@ -1326,7 +1334,6 @@ void func_xk2_800DA288(void) {
             temp_s0_2->pos.y = Math_Round(D_xk2_80119734) + temp_s1->pos.y;
             temp_s0_2->pos.y = ((s32) temp_s0_2->pos.y / 10) * 10;
         }
-
     }
     sp64 = 10000;
     sp60 = 0;
@@ -1505,7 +1512,8 @@ void func_xk2_800DADEC(void) {
                 continue;
             }
 
-            gCourseCtx.courseData.bankAngle[i] = (gCourseCtx.courseData.bankAngle[i] + Math_Round((temp_s3 * D_xk2_800F6834) / 6) + 360) % 360;
+            gCourseCtx.courseData.bankAngle[i] =
+                (gCourseCtx.courseData.bankAngle[i] + Math_Round((temp_s3 * D_xk2_800F6834) / 6) + 360) % 360;
             gCourseCtx.courseData.bankAngle[i] = (gCourseCtx.courseData.bankAngle[i] / 3) * 3;
         }
     }
@@ -1537,7 +1545,6 @@ void func_xk2_800DB154(void) {
     if ((SQ(temp_s1) + SQ(temp_v1)) < 100) {
         return;
     }
-    
 
     if (func_xk1_8002DAD4() == 1) {
         if (temp_s1 < 0) {
@@ -1565,7 +1572,6 @@ void func_xk2_800DB154(void) {
             var_s3 = temp_fv0;
         }
     }
-    
 
     if (D_xk2_80119740 > var_s0) {
         D_xk2_80119740 = var_s0;
@@ -1633,14 +1639,14 @@ void func_xk2_800DB550(void) {
         D_800CF950.gate[j] = gCourseCtx.courseData.gate[i];
         D_800CF950.building[j] = gCourseCtx.courseData.building[i];
         D_800CF950.sign[j] = gCourseCtx.courseData.sign[i];
-      
+
         D_xk2_80119920[j] = *var_s0;
         j++;
     }
     D_807B3C20.unk_2900 = j;
     for (i = 0; i < j; i++) {
         D_807B3C20.unk_0000[i] = D_xk2_80119920[i];
-        
+
         gCourseCtx.courseData.bankAngle[i] = D_800CF950.bankAngle[i];
         gCourseCtx.courseData.pit[i] = D_800CF950.pit[i];
         gCourseCtx.courseData.dash[i] = D_800CF950.dash[i];
@@ -1652,7 +1658,7 @@ void func_xk2_800DB550(void) {
         gCourseCtx.courseData.building[i] = D_800CF950.building[i];
         gCourseCtx.courseData.sign[i] = D_800CF950.sign[i];
     }
-    
+
     func_xk2_800E6F9C();
 
     for (i = 0; i < D_807B3C20.unk_2900; i++) {
@@ -1695,18 +1701,18 @@ void func_xk2_800DB924(void) {
         D_800CF950.gate[j] = gCourseCtx.courseData.gate[i];
         D_800CF950.building[j] = gCourseCtx.courseData.building[i];
         D_800CF950.sign[j] = gCourseCtx.courseData.sign[i];
-      
+
         D_xk2_80119920[j] = D_807B3C20.unk_0000[i];
         j++;
     }
-    
+
     if (D_807B3C20.unk_2900 - j != 0) {
         func_8074122C(0x27);
     }
     D_807B3C20.unk_2900 = j;
     for (i = 0; i < j; i++) {
         D_807B3C20.unk_0000[i] = D_xk2_80119920[i];
-        
+
         gCourseCtx.courseData.bankAngle[i] = D_800CF950.bankAngle[i];
         gCourseCtx.courseData.pit[i] = D_800CF950.pit[i];
         gCourseCtx.courseData.dash[i] = D_800CF950.dash[i];
@@ -1742,7 +1748,7 @@ void func_xk2_800DB924(void) {
     func_xk2_800E6F9C();
     func_xk2_800DC3F8();
     D_807B3C20.unk_0000[0].trackSegmentInfo = (TRACK_FLAG_JOINABLE | TRACK_FLAG_8000000);
-    if (func_xk2_800E6B3C() != 0) {
+    if (func_xk2_800E6B3C()) {
         D_xk2_800F7044 = 0;
     }
 }
@@ -1756,7 +1762,8 @@ s32 func_xk2_800DBC68(void) {
             continue;
         }
         previousSegmentIndex = D_807B3C20.unk_0000[i].prev->segmentIndex;
-        if ((D_807B3C20.unk_0000[i].trackSegmentInfo & TRACK_FLAG_8000000) && (D_807B3C20.unk_0000[previousSegmentIndex].trackSegmentInfo & TRACK_FLAG_8000000)) {
+        if ((D_807B3C20.unk_0000[i].trackSegmentInfo & TRACK_FLAG_8000000) &&
+            (D_807B3C20.unk_0000[previousSegmentIndex].trackSegmentInfo & TRACK_FLAG_8000000)) {
             return 0;
         }
     }
@@ -1873,8 +1880,9 @@ extern s32 D_xk2_800F6844;
 void func_xk2_800DC018(void) {
     if (D_800D6CA0.unk_00 == 1) {
         return;
-    } 
-    if ((D_xk2_800F6828 < 56) || ((D_xk2_800F6824 >= 232) && (D_xk2_800F6824 <= 295) && (D_xk2_800F6828 >= 204) && (D_xk2_800F6828 < 220))) {
+    }
+    if ((D_xk2_800F6828 < 56) ||
+        ((D_xk2_800F6824 >= 232) && (D_xk2_800F6824 <= 295) && (D_xk2_800F6828 >= 204) && (D_xk2_800F6828 < 220))) {
         return;
     }
 
@@ -1927,7 +1935,7 @@ s32 func_xk2_800DC0F8(void) {
     for (i = 0; i < D_807B3C20.unk_2900; i++) {
         if (func_xk2_800EF090(D_807B3C20.unk_0000[i].pos, &sp70, &sp6C) != 0) {
             continue;
-        } 
+        }
         if ((sp70 >= sp68) && (sp60 >= sp70) && (sp6C >= sp64) && (sp5C >= sp6C)) {
             j++;
             D_80128690[i].unk_08 = 1;
@@ -2004,7 +2012,8 @@ void func_xk2_800DC428(void) {
 }
 
 void func_xk2_800DC4E4(void) {
-    if ((D_80119720->buttonPressed & BTN_A) && (D_800D6CA0.unk_08 == 0) && (D_xk1_8003061C == 1) && (D_xk1_80030614 == 0) && (D_xk2_800F6828 >= 0x38) && (func_xk2_800DEFCC() == 0)) {
+    if ((D_80119720->buttonPressed & BTN_A) && (D_800D6CA0.unk_08 == 0) && (D_xk1_8003061C == 1) &&
+        (D_xk1_80030614 == 0) && (D_xk2_800F6828 >= 0x38) && (func_xk2_800DEFCC() == 0)) {
         D_xk2_800F7040 = 3;
         D_800D6CA0.unk_0C = 1;
         func_xk2_800DEB38();
@@ -2031,7 +2040,6 @@ void func_xk2_800DC58C(void) {
     }
 }
 
-extern u8 D_xk2_80104CA0[];
 extern s32 D_80030608;
 extern s32 D_8076C968;
 
@@ -2044,7 +2052,8 @@ void func_xk2_800DC67C(void) {
     s32 temp_a1;
     s32 var_v1;
 
-    if ((D_800D6CA0.unk_08 != 0) || (D_xk1_8003061C != 0) || (D_xk1_80030614 != 0) || (D_xk2_800F6828 < 0x38) || (D_800D6CA0.unk_00 != 0)) {
+    if ((D_800D6CA0.unk_08 != 0) || (D_xk1_8003061C != 0) || (D_xk1_80030614 != 0) || (D_xk2_800F6828 < 0x38) ||
+        (D_800D6CA0.unk_00 != 0)) {
         return;
     }
     if (D_800D11C8[0] == 1) {
@@ -2066,7 +2075,8 @@ void func_xk2_800DC67C(void) {
         D_xk2_800F704C = D_xk2_800F703C;
         if ((D_xk1_80030614 == 0) && (D_xk2_80104CA0[1] == 0) && (D_xk2_80104CA0[10] == 0)) {
             spC0 = D_800D6CA0.unk_28;
-            if ((spC0.pos.x < -15000.0f) || (spC0.pos.x > 15000.0f) || (spC0.pos.y < 0.0f) || (spC0.pos.y > 5000.0f) || (spC0.pos.z < -15000.0f) || (spC0.pos.z > 15000.0f)) {
+            if ((spC0.pos.x < -15000.0f) || (spC0.pos.x > 15000.0f) || (spC0.pos.y < 0.0f) || (spC0.pos.y > 5000.0f) ||
+                (spC0.pos.z < -15000.0f) || (spC0.pos.z > 15000.0f)) {
                 func_8074122C(0x20);
                 return;
             }
@@ -2168,7 +2178,8 @@ void func_xk2_800DCDD0(void) {
     // FAKE
     if (var_v1) {}
 
-    if (((D_xk1_80030614 == 0) || (D_xk1_80030614 == 2) || (D_xk1_80030614 == 3)) && (gControllers[gPlayerControlPorts[0]].buttonPressed & BTN_Z) && (D_807B3C20.unk_2900 != 0)) {
+    if (((D_xk1_80030614 == 0) || (D_xk1_80030614 == 2) || (D_xk1_80030614 == 3)) &&
+        (gControllers[gPlayerControlPorts[0]].buttonPressed & BTN_Z) && (D_807B3C20.unk_2900 != 0)) {
         sp18 = func_xk2_800DD76C(400.0f);
         if (sp18 != -1) {
             func_8074122C(0x45);
@@ -2201,7 +2212,8 @@ void func_xk2_800DCF2C(void) {
     }
 
     sp1C = &D_807B3C20.unk_0000[D_800D6CA0.unk_0C];
-    if ((sp1C->trackSegmentInfo & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK)) != (D_xk2_800F6950[D_xk1_8003062C] & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK))) {
+    if ((sp1C->trackSegmentInfo & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK)) !=
+        (D_xk2_800F6950[D_xk1_8003062C] & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK))) {
         func_xk2_800EF78C();
         func_8074122C(0x27);
         sp1C->trackSegmentInfo = D_xk2_800F6950[D_xk1_8003062C];
@@ -2220,7 +2232,9 @@ void func_xk2_800DCFE0(void) {
     }
 
     sp1C = &D_807B3C20.unk_0000[D_800D6CA0.unk_0C];
-    if (!func_xk2_800DD688(TRACK_SHAPE_WALLED_ROAD) && (sp1C->trackSegmentInfo & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK)) != (D_xk2_800F6964[D_xk1_80030630] & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK))) {
+    if (!func_xk2_800DD688(TRACK_SHAPE_WALLED_ROAD) &&
+        (sp1C->trackSegmentInfo & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK)) !=
+            (D_xk2_800F6964[D_xk1_80030630] & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK))) {
         func_8074122C(0x27);
         func_xk2_800EF78C();
         sp1C->trackSegmentInfo = D_xk2_800F6964[D_xk1_80030630];
@@ -2239,7 +2253,9 @@ void func_xk2_800DD0AC(void) {
     }
 
     sp1C = &D_807B3C20.unk_0000[D_800D6CA0.unk_0C];
-    if (!func_xk2_800DD688(TRACK_SHAPE_BORDERLESS_ROAD) && (sp1C->trackSegmentInfo & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK)) != (D_xk2_800F6970[D_xk1_80030634] & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK))) {
+    if (!func_xk2_800DD688(TRACK_SHAPE_BORDERLESS_ROAD) &&
+        (sp1C->trackSegmentInfo & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK)) !=
+            (D_xk2_800F6970[D_xk1_80030634] & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK))) {
         func_8074122C(0x27);
         func_xk2_800EF78C();
         sp1C->trackSegmentInfo = D_xk2_800F6970[D_xk1_80030634];
@@ -2258,7 +2274,9 @@ void func_xk2_800DD178(void) {
     }
 
     sp1C = &D_807B3C20.unk_0000[D_800D6CA0.unk_0C];
-    if (!func_xk2_800DD688(TRACK_SHAPE_TUNNEL) && (sp1C->trackSegmentInfo & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK)) != (D_xk2_800F697C[D_xk1_80030638] & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK))) {
+    if (!func_xk2_800DD688(TRACK_SHAPE_TUNNEL) &&
+        (sp1C->trackSegmentInfo & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK)) !=
+            (D_xk2_800F697C[D_xk1_80030638] & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK))) {
         func_8074122C(0x27);
         func_xk2_800EF78C();
         sp1C->trackSegmentInfo = D_xk2_800F697C[D_xk1_80030638];
@@ -2278,7 +2296,9 @@ void func_xk2_800DD244(void) {
     }
 
     sp1C = &D_807B3C20.unk_0000[D_800D6CA0.unk_0C];
-    if (!func_xk2_800DD688(TRACK_SHAPE_PIPE) && (sp1C->trackSegmentInfo & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK)) != (D_xk2_800F698C[D_xk1_8003063C] & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK))) {
+    if (!func_xk2_800DD688(TRACK_SHAPE_PIPE) &&
+        (sp1C->trackSegmentInfo & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK)) !=
+            (D_xk2_800F698C[D_xk1_8003063C] & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK))) {
         func_8074122C(0x27);
         func_xk2_800EF78C();
         sp1C->trackSegmentInfo = D_xk2_800F698C[D_xk1_8003063C];
@@ -2289,7 +2309,7 @@ void func_xk2_800DD244(void) {
         temp_fv0 = (sp1C->radiusLeft + sp1C->radiusRight) * 0.5f;
         sp1C->radiusLeft = temp_fv0;
         sp1C->radiusRight = temp_fv0;
-        
+
         D_xk2_800F7040 = 3;
     }
 }
@@ -2306,7 +2326,9 @@ void func_xk2_800DD350(void) {
     }
 
     sp1C = &D_807B3C20.unk_0000[D_800D6CA0.unk_0C];
-    if (!func_xk2_800DD688(TRACK_SHAPE_HALF_PIPE) && (sp1C->trackSegmentInfo & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK)) != (D_xk2_800F699C[D_xk1_80030640] & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK))) {
+    if (!func_xk2_800DD688(TRACK_SHAPE_HALF_PIPE) &&
+        (sp1C->trackSegmentInfo & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK)) !=
+            (D_xk2_800F699C[D_xk1_80030640] & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK))) {
         func_8074122C(0x27);
         func_xk2_800EF78C();
         sp1C->trackSegmentInfo = D_xk2_800F699C[D_xk1_80030640];
@@ -2317,7 +2339,7 @@ void func_xk2_800DD350(void) {
         temp_fv0 = (sp1C->radiusLeft + sp1C->radiusRight) * 0.5f;
         sp1C->radiusLeft = temp_fv0;
         sp1C->radiusRight = temp_fv0;
-        
+
         D_xk2_800F7040 = 3;
     }
 }
@@ -2334,7 +2356,9 @@ void func_xk2_800DD45C(void) {
     }
 
     sp1C = &D_807B3C20.unk_0000[D_800D6CA0.unk_0C];
-    if (!func_xk2_800DD688(TRACK_SHAPE_CYLINDER) && (sp1C->trackSegmentInfo & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK)) != (D_xk2_800F69AC[D_xk1_80030644] & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK))) {
+    if (!func_xk2_800DD688(TRACK_SHAPE_CYLINDER) &&
+        (sp1C->trackSegmentInfo & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK)) !=
+            (D_xk2_800F69AC[D_xk1_80030644] & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK))) {
         func_8074122C(0x27);
         func_xk2_800EF78C();
         sp1C->trackSegmentInfo = D_xk2_800F69AC[D_xk1_80030644];
@@ -2345,7 +2369,7 @@ void func_xk2_800DD45C(void) {
         temp_fv0 = (sp1C->radiusLeft + sp1C->radiusRight) * 0.5f;
         sp1C->radiusLeft = temp_fv0;
         sp1C->radiusRight = temp_fv0;
-        
+
         D_xk2_800F7040 = 3;
     }
 }
@@ -2402,7 +2426,8 @@ bool func_xk2_800DD688(s32 arg0) {
         func_xk2_800EE664(0x11);
         func_8074122C(0x20);
     } else {
-        if ((arg0 == (temp_v0->prev->trackSegmentInfo & TRACK_SHAPE_MASK)) && (arg0 == (temp_v0->next->trackSegmentInfo & TRACK_SHAPE_MASK))) {
+        if ((arg0 == (temp_v0->prev->trackSegmentInfo & TRACK_SHAPE_MASK)) &&
+            (arg0 == (temp_v0->next->trackSegmentInfo & TRACK_SHAPE_MASK))) {
             return false;
         }
         func_xk2_800EE664(0x11);
@@ -2671,7 +2696,7 @@ void func_xk2_800DDC2C(Vec3f* arg0) {
         case 0:
             var_a0 = ABS(sp1C);
             temp_a1 = D_80030608 / 2;
-    
+
             if (var_a0 < temp_a1) {
                 sp1C = 0;
             } else if (sp1C > 0) {
@@ -2679,7 +2704,7 @@ void func_xk2_800DDC2C(Vec3f* arg0) {
             } else {
                 sp1C = ((sp1C - temp_a1) / D_80030608) * D_80030608;
             }
-    
+
             if (ABS(sp14) < temp_a1) {
                 sp14 = 0;
             } else if (sp14 > 0) {
@@ -2733,7 +2758,8 @@ void func_xk2_800DDEF4(Vec3f* arg0, Vec3f arg1, Vec3f arg2, Vec3f arg3) {
         spAC.z = (sp6C[i].z * var_fs1 * 500.0f) + arg2.z;
         temp_fs0 = func_807032B0(spAC, arg1);
         temp_fv0 = func_807032B0(spAC, arg3);
-        if ((temp_fs0 > 498.0f) && (temp_fv0 > 498.0f) && (spAC.x >= -15000.0f) && (spAC.x <= 15000.0f) && (spAC.z >= -15000.0f) && (spAC.z <= 15000.0f)) {
+        if ((temp_fs0 > 498.0f) && (temp_fv0 > 498.0f) && (spAC.x >= -15000.0f) && (spAC.x <= 15000.0f) &&
+            (spAC.z >= -15000.0f) && (spAC.z <= 15000.0f)) {
             break;
         }
 
@@ -2911,7 +2937,8 @@ s32 func_xk2_800DE980(void) {
     if (D_800D6CA0.unk_08 != 0) {
         return 0;
     }
-    if ((D_xk2_800F6824 >= 264) && (D_xk2_800F6824 < 296) && (D_xk2_800F6828 >= 20) && (D_xk2_800F6828 < 36) && (D_80119720->buttonPressed & BTN_A)) {
+    if ((D_xk2_800F6824 >= 264) && (D_xk2_800F6824 < 296) && (D_xk2_800F6828 >= 20) && (D_xk2_800F6828 < 36) &&
+        (D_80119720->buttonPressed & BTN_A)) {
         return 1;
     }
     return 0;
@@ -2967,7 +2994,6 @@ void func_xk2_800DEB38(void) {
 extern Gfx* D_8076C974;
 extern Gfx D_9002388[];
 extern Gfx D_9002588[];
-extern u8 D_xk2_80104CA2;
 
 void func_xk2_800DEC1C(void) {
     if (gControllers[gPlayerControlPorts[0]].buttonPressed & BTN_A) {
@@ -2980,7 +3006,7 @@ void func_xk2_800DEC1C(void) {
             D_8076C974 = D_9002588;
             return;
         }
-        if (D_xk2_80104CA2 != 0) {
+        if (D_xk2_80104CA0[2] != 0) {
             func_8074122C(0x20);
             return;
         }
@@ -3092,10 +3118,11 @@ s32 func_xk2_800DEFCC(void) {
         D_800CF950.gate[i] = gCourseCtx.courseData.gate[var_a3];
         D_800CF950.building[i] = gCourseCtx.courseData.building[var_a3];
         D_800CF950.sign[i] = gCourseCtx.courseData.sign[var_a3];
-        
+
         D_xk2_80119920[i] = D_807B3C20.unk_0000[var_a3];
 
-        if (!(D_xk2_80119920[i].trackSegmentInfo & TRACK_TYPE_MASK) && !(D_xk2_80119920[i].trackSegmentInfo & TRACK_SHAPE_MASK)) {
+        if (!(D_xk2_80119920[i].trackSegmentInfo & TRACK_TYPE_MASK) &&
+            !(D_xk2_80119920[i].trackSegmentInfo & TRACK_SHAPE_MASK)) {
             D_xk2_80119920[i].trackSegmentInfo = (TRACK_FLAG_JOINABLE | TRACK_FLAG_8000000 | TRACK_SHAPE_ROAD | ROAD_2);
         }
         var_a3 = (var_a3 + 1) % D_807B3C20.unk_2900;
@@ -3116,7 +3143,8 @@ s32 func_xk2_800DEFCC(void) {
         gCourseCtx.courseData.sign[i] = D_800CF950.sign[i];
     }
 
-    D_807B3C20.unk_0000[0].trackSegmentInfo = (TRACK_FLAG_JOINABLE | TRACK_FLAG_8000000 | TRACK_SHAPE_ROAD | ROAD_START_LINE);
+    D_807B3C20.unk_0000[0].trackSegmentInfo =
+        (TRACK_FLAG_JOINABLE | TRACK_FLAG_8000000 | TRACK_SHAPE_ROAD | ROAD_START_LINE);
     D_800D6CA0.unk_0C = 0;
 
     for (i = 0; i < D_807B3C20.unk_2900; i++) {
@@ -3131,7 +3159,8 @@ s32 func_xk2_800DEFCC(void) {
 }
 
 void func_xk2_800DF2EC(void) {
-    if ((D_xk2_800F6828 < 0x34) && (D_xk2_800F6828 >= 0x24) && (D_xk2_800F6824 >= 0x108) && (D_80119720->buttonPressed & BTN_A) && (D_800D6CA0.unk_08 != 4)) {
+    if ((D_xk2_800F6828 < 0x34) && (D_xk2_800F6828 >= 0x24) && (D_xk2_800F6824 >= 0x108) &&
+        (D_80119720->buttonPressed & BTN_A) && (D_800D6CA0.unk_08 != 4)) {
         func_8074122C(0x24);
         D_800D6CA0.unk_08 = 4;
     }

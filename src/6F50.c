@@ -926,7 +926,7 @@ void func_806FD3C0(s32 arg0, unk_8006FF90_arg_1* arg1, Vtx** arg2) {
 
 s32 D_8076C9E4 = 0;
 
-extern u8 D_xk2_80104CA7;
+extern u8 D_xk2_80104CA0[];
 
 Vtx* func_806FDA64(CourseSegment* arg0, f32 arg1, unk_8006FF90_arg_1* arg2, Vtx* arg3, f32 arg4, f32 arg5) {
     bool sp114 = false;
@@ -1013,7 +1013,7 @@ Vtx* func_806FDA64(CourseSegment* arg0, f32 arg1, unk_8006FF90_arg_1* arg2, Vtx*
         var_s2++;
 
         if (D_8076C9E4 >= D_8079F940) {
-            D_xk2_80104CA7 = 1;
+            D_xk2_80104CA0[7] = 1;
             return arg3;
         }
 
@@ -1147,7 +1147,7 @@ Vtx* func_806FE174(CourseSegment* arg0, unk_8006FF90_arg_1* arg1, Vtx* arg2, f32
         var_s2++;
 
         if (D_8076C9E4 >= D_8079F940) {
-            D_xk2_80104CA7 = 1;
+            D_xk2_80104CA0[7] = 1;
             return arg2;
         }
 
