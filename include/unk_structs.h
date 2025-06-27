@@ -806,7 +806,9 @@ typedef struct unk_8003A5D8 {
 } unk_8003A5D8; //size = 0x24
 
 typedef struct unk_80128C94 {
-    s8 unk_0000[0x100];
+    Mtx unk_0000;
+    Mtx unk_0040;
+    s8 unk_0080[0x80];
     Mtx unk_0100;
     s8 unk_0140[0x40];
     Vtx unk_0180[64 * 6];

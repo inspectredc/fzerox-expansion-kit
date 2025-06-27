@@ -1,6 +1,14 @@
 #include "global.h"
 #include "fzx_course.h"
 
+u8 D_xk2_800F7400 = 255;
+s32 D_xk2_800F7404 = 0;
+CourseContext D_xk2_800F7408 = {
+    { CREATOR_NINTENDO, 0, 0, 0, { 0 }, { 0 }, { 0 }, { 0 }, { 0 }, { 0 }, { 0 }, { 0 }, { 0 }, { 0 }, { 0 }, { 0 } },
+    { 0 },
+    { 0 }
+};
+
 void func_xk2_800EA9B0(s8* arg0, s8* arg1) {
     arg0[0] = arg1[0];
     arg0[1] = arg1[1];
@@ -110,10 +118,8 @@ s32 func_xk2_800EAA1C(u8* arg0) {
     return 0;
 }
 
-extern u8 D_xk2_800F7410;
-
 s32 func_xk2_800EAC28(u8* arg0) {
-    if (D_xk2_800F7410 != 0) {
+    if (D_xk2_800F7408.courseData.flag != 0) {
         Leo_strcpy(&D_xk1_8003A598, arg0);
         func_xk2_800EA9B0(D_xk1_8003A598.unk_1D, "CRSD");
         D_800D6CA0.unk_08 = 0x14;
@@ -135,9 +141,6 @@ extern s32 D_80119880;
 extern volatile u8 D_80794E10;
 extern s32 D_xk2_800F7060;
 extern s32 D_xk2_800F7064;
-extern u8 D_xk2_800F7400;
-extern s32 D_xk2_800F7404;
-extern CourseContext D_xk2_800F7408;
 extern CourseSegment D_802D0620[];
 extern s32 D_xk1_8003066C;
 extern s32 D_xk1_80030670;
@@ -219,10 +222,9 @@ extern s32 D_xk2_800F684C;
 extern s32 D_xk1_8003A550;
 extern s32 D_xk1_8003A554;
 
-#ifdef IMPORT_DATA
 void func_xk2_800EB018(void) {
     s32 pad;
-    u8 sp20[9] = { 0 }; // TODO: IMPORT CORRECT DATA
+    u8 sp20[9] = { 0x20, 0x8E, 0xCC, 0xAB, 0xD9, 0xC4, 0x00, 0x00, 0x00 };
 
     if ((D_xk1_80032BF8 != 0) && (D_xk2_800F7400 == 1)) {
         D_xk1_80032BF8 = 0;
@@ -266,9 +268,6 @@ void func_xk2_800EB018(void) {
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_edit/19C470/func_xk2_800EB018.s")
-#endif
 
 void func_xk2_800EB20C(void) {
     s32 i;
