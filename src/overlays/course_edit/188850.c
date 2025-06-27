@@ -16,38 +16,21 @@ s32 D_xk2_800F6844 = 0;
 s32 D_xk2_800F6848 = 0;
 s32 D_xk2_800F684C = 0;
 
-s32 D_xk2_800F6850[] = {
-    0, 1, 2, 4
-};
+s32 D_xk2_800F6850[] = { 0, 1, 2, 4 };
 
-s32 D_xk2_800F6860[] = {
-    0, 6, 2, 4, 1
-};
+s32 D_xk2_800F6860[] = { 0, 6, 2, 4, 1 };
 
-s32 D_xk2_800F6874[] = {
-    0, 6, 2, 4, 1
-};
+s32 D_xk2_800F6874[] = { 0, 6, 2, 4, 1 };
 
-s32 D_xk2_800F6888[] = {
-    0, 6, 2, 4, 1
-};
+s32 D_xk2_800F6888[] = { 0, 6, 2, 4, 1 };
 
-s32 D_xk2_800F689C[] = {
-    -1, 3, 1, -1, 2, -1, 0
-};
+s32 D_xk2_800F689C[] = { -1, 3, 1, -1, 2, -1, 0 };
 
-s32 D_xk2_800F68B8[] = {
-    -1, 0, 1, -1, 2, -1, -1
-};
+s32 D_xk2_800F68B8[] = { -1, 0, 1, -1, 2, -1, -1 };
 
-s32 D_xk2_800F68D4[] = {
-    -1, 3, 1, -1, 2, -1, 0
-};
+s32 D_xk2_800F68D4[] = { -1, 3, 1, -1, 2, -1, 0 };
 
-s32 D_xk2_800F68F0[] = {
-    -1, 3, 1, -1, 2, -1, 0
-};
-
+s32 D_xk2_800F68F0[] = { -1, 3, 1, -1, 2, -1, 0 };
 
 void func_xk2_800D6D90(s32 arg0, s32 arg1, f32* arg2, f32* arg3) {
     s32 var_v0;
@@ -968,9 +951,7 @@ void func_xk2_800D8F04(void) {
 
 extern s32 D_800D11C8[];
 
-f32 D_xk2_800F692C[] = {
-    0.5f, 0.6f, 0.7f, 0.8f, 1.0f, 1.5f, 2.0f, 2.5f, 3.0f
-};
+f32 D_xk2_800F692C[] = { 0.5f, 0.6f, 0.7f, 0.8f, 1.0f, 1.5f, 2.0f, 2.5f, 3.0f };
 
 void func_xk2_800D934C(void) {
     f32 temp_fv0;
@@ -1526,7 +1507,8 @@ void func_xk2_800DADEC(void) {
                     continue;
                 }
 
-                COURSE_CONTEXT()->courseData.bankAngle[i] = (COURSE_CONTEXT()->courseData.bankAngle[i] + 357 + 360) % 360;
+                COURSE_CONTEXT()->courseData.bankAngle[i] =
+                    (COURSE_CONTEXT()->courseData.bankAngle[i] + 357 + 360) % 360;
                 COURSE_CONTEXT()->courseData.bankAngle[i] = (COURSE_CONTEXT()->courseData.bankAngle[i] / 3) * 3;
             }
         } else {

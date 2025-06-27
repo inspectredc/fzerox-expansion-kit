@@ -2805,9 +2805,11 @@ void Course_GenerateRandomCourse(void) {
                 TRACK_FLAG_JOINABLE | TRACK_FLAG_8000000 | TRACK_SHAPE_ROAD | ROAD_START_LINE;
             COURSE_CONTEXT()->courseData.gate[1] = GATE_START;
             COURSE_CONTEXT()->courseData.controlPoint[1].trackSegmentInfo =
-                COURSE_CONTEXT()->courseData.controlPoint[gCurrentCourseInfo->segmentCount - 1].trackSegmentInfo = spB4[1];
+                COURSE_CONTEXT()->courseData.controlPoint[gCurrentCourseInfo->segmentCount - 1].trackSegmentInfo =
+                    spB4[1];
             COURSE_CONTEXT()->courseData.controlPoint[3].trackSegmentInfo =
-                COURSE_CONTEXT()->courseData.controlPoint[gCurrentCourseInfo->segmentCount - 3].trackSegmentInfo = spB4[0];
+                COURSE_CONTEXT()->courseData.controlPoint[gCurrentCourseInfo->segmentCount - 3].trackSegmentInfo =
+                    spB4[0];
 
             if (((sp108 == 0) || (sp108 == 3)) && ((Math_Rand1() & 0x1FFFF) >= 0x8000)) {
                 temp_a0 = Math_Rand2() & 3;
@@ -2844,7 +2846,8 @@ void Course_GenerateRandomCourse(void) {
                     }
                     if ((temp_fs2 * spCC.z) < (spCC.x * temp_fs3)) {
                         if (var_s6 != 0) {
-                            COURSE_CONTEXT()->courseData.bankAngle[var_s4] = 360 - (s32) ((1.0f - SQ(var_fs0)) * var_fs1);
+                            COURSE_CONTEXT()->courseData.bankAngle[var_s4] =
+                                360 - (s32) ((1.0f - SQ(var_fs0)) * var_fs1);
                         } else {
                             COURSE_CONTEXT()->courseData.bankAngle[var_s4] = (s32) ((1.0f - SQ(var_fs0)) * var_fs1);
                         }
@@ -2885,10 +2888,12 @@ void Course_GenerateRandomCourse(void) {
 
                 if ((Math_Rand2() & 0x1FFFF) < 0xFFFF) {
                     var_s1_2 =
-                        &COURSE_CONTEXT()->courseData
+                        &COURSE_CONTEXT()
+                             ->courseData
                              .controlPoint[((Math_Rand1() & 0x1FFFF) % (gCurrentCourseInfo->segmentCount - 1)) + 1];
                     var_s0_4 =
-                        &COURSE_CONTEXT()->courseData
+                        &COURSE_CONTEXT()
+                             ->courseData
                              .controlPoint[((Math_Rand2() & 0x1FFFF) % (gCurrentCourseInfo->segmentCount - 1)) + 1];
                     if ((var_s1_2 < var_s0_4) && ((var_s1_2 - 1)->trackSegmentInfo & 0x10000000) &&
                         ((var_s0_4 + 1)->trackSegmentInfo & 0x10000000)) {
@@ -2950,10 +2955,12 @@ void Course_GenerateRandomCourse(void) {
                     }
                     var_s6 = (var_s6 + temp_s3) & 3;
                     var_s1_2 =
-                        &COURSE_CONTEXT()->courseData
+                        &COURSE_CONTEXT()
+                             ->courseData
                              .controlPoint[((Math_Rand1() & 0x1FFFF) % (gCurrentCourseInfo->segmentCount - 6)) + 2];
                     var_s0_4 =
-                        &COURSE_CONTEXT()->courseData
+                        &COURSE_CONTEXT()
+                             ->courseData
                              .controlPoint[((Math_Rand2() & 0x1FFFF) % (gCurrentCourseInfo->segmentCount - 6)) + 2];
                     var_s4--;
                 } while (var_s4 > 0);
@@ -2968,11 +2975,13 @@ void Course_GenerateRandomCourse(void) {
                     if (COURSE_CONTEXT()->courseData.controlPoint[var_s4].trackSegmentInfo & 0x08000000) {
                         break;
                     }
-                } while (COURSE_CONTEXT()->courseData
+                } while (COURSE_CONTEXT()
+                             ->courseData
                              .controlPoint[((var_s4 + gCurrentCourseInfo->segmentCount) - 1) %
                                            gCurrentCourseInfo->segmentCount]
                              .trackSegmentInfo !=
-                         COURSE_CONTEXT()->courseData.controlPoint[(var_s4 + 1) % gCurrentCourseInfo->segmentCount]
+                         COURSE_CONTEXT()
+                             ->courseData.controlPoint[(var_s4 + 1) % gCurrentCourseInfo->segmentCount]
                              .trackSegmentInfo);
 
                 COURSE_CONTEXT()->courseData.dash[var_s4] = (Math_Rand1() & 0x1FFFF) % 3;
@@ -4526,7 +4535,8 @@ s32 Course_CalculateChecksum(void) {
         var_v1 += (s32) ((controlPoint->pos.x + ((1.1f + (0.7f * i)) * controlPoint->pos.y)) +
                          ((2.2f + (1.2f * i)) * controlPoint->pos.z * (4.4f + (0.9f * i))) + controlPoint->radiusLeft +
                          ((5.5f + (0.8f * i)) * controlPoint->radiusRight * 4.8f)) +
-                  controlPoint->trackSegmentInfo * (0xFE - i) + COURSE_CONTEXT()->courseData.bankAngle[i] * (0x93DE - i * 2);
+                  controlPoint->trackSegmentInfo * (0xFE - i) +
+                  COURSE_CONTEXT()->courseData.bankAngle[i] * (0x93DE - i * 2);
     }
 
     for (i = 0; i < COURSE_CONTEXT()->courseData.controlPointCount; i++) {
