@@ -90,8 +90,7 @@ void func_i2_800AA024(s32 courseIndex, s32 ghostIndex, GhostData* ghostData) {
         return;
     }
     func_i2_800AA80C();
-    func_807684AC(0xFFFB, D_i2_800BF030, "GOST", COURSE_CONTEXT()->ghostSave, 0x7E0,
-                  3 * sizeof(GhostSave));
+    func_807684AC(0xFFFB, D_i2_800BF030, "GOST", COURSE_CONTEXT()->ghostSave, 0x7E0, 3 * sizeof(GhostSave));
     osRecvMesg(&D_8079F998, NULL, OS_MESG_BLOCK);
     *ghostData = ghostSave[ghostIndex].data;
 }
@@ -134,8 +133,8 @@ void func_i2_800AA368(s32 courseIndex, s32 ghostIndex, Ghost* ghost) {
     *ghostSave = gSaveContext.ghostSave;
     if ((courseIndex >= COURSE_EDIT_1) && (courseIndex <= COURSE_EDIT_6)) {
         if (gEditCupTrackNames[courseIndex - COURSE_EDIT_1][0] != '\0') {
-            func_807680EC(0xFFFB, gEditCupTrackNames[courseIndex - COURSE_EDIT_1], "CRSD", COURSE_CONTEXT(), 0xC830, 0, 0xFF,
-                          1);
+            func_807680EC(0xFFFB, gEditCupTrackNames[courseIndex - COURSE_EDIT_1], "CRSD", COURSE_CONTEXT(), 0xC830, 0,
+                          0xFF, 1);
             return;
         }
     }
@@ -158,8 +157,8 @@ void func_i2_800AA520(s32 courseIndex) {
     if ((courseIndex >= COURSE_EDIT_1) && (courseIndex <= COURSE_EDIT_6)) {
         if (gEditCupTrackNames[courseIndex - COURSE_EDIT_1][0] != '\0') {
             COURSE_CONTEXT()->courseData = D_i2_800D0130;
-            func_807680EC(0xFFFB, gEditCupTrackNames[courseIndex - COURSE_EDIT_1], "CRSD", COURSE_CONTEXT(), 0xC830, 0, 0xFF,
-                          1);
+            func_807680EC(0xFFFB, gEditCupTrackNames[courseIndex - COURSE_EDIT_1], "CRSD", COURSE_CONTEXT(), 0xC830, 0,
+                          0xFF, 1);
             return;
         }
     }
@@ -176,8 +175,8 @@ void func_i2_800AA694(s32 courseIndex) {
     if ((courseIndex >= COURSE_EDIT_1) && (courseIndex <= COURSE_EDIT_6)) {
         if (gEditCupTrackNames[courseIndex - COURSE_EDIT_1][0] != '\0') {
             COURSE_CONTEXT()->courseData = D_i2_800D0130;
-            func_807680EC(0xFFFB, gEditCupTrackNames[courseIndex - COURSE_EDIT_1], "CRSD", COURSE_CONTEXT(), 0xC830, 0, 0xFF,
-                          1);
+            func_807680EC(0xFFFB, gEditCupTrackNames[courseIndex - COURSE_EDIT_1], "CRSD", COURSE_CONTEXT(), 0xC830, 0,
+                          0xFF, 1);
             func_i2_800A8CE4(courseRecords, courseIndex);
             return;
         }
@@ -213,8 +212,8 @@ void func_i2_800AA864(s32 courseIndex) {
 
     if ((courseIndex >= COURSE_EDIT_1) && (courseIndex <= COURSE_EDIT_6)) {
         if (gEditCupTrackNames[courseIndex - COURSE_EDIT_1][0] != '\0') {
-            func_807680EC(0xFFFB, gEditCupTrackNames[courseIndex - COURSE_EDIT_1], "CRSD", COURSE_CONTEXT(), 0xC830, 0, 0xFF,
-                          1);
+            func_807680EC(0xFFFB, gEditCupTrackNames[courseIndex - COURSE_EDIT_1], "CRSD", COURSE_CONTEXT(), 0xC830, 0,
+                          0xFF, 1);
             return;
         }
     }

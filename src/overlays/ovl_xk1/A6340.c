@@ -545,7 +545,8 @@ void func_xk1_8002AC70(void) {
             return;
         case 3:
             func_xk2_800EBFE8(D_xk1_8003A598.unk_00);
-            func_80768844(0xFFFB, D_xk1_8003A598.unk_00, D_xk1_8003A598.unk_1D, D_xk1_8003A560, D_xk1_8003A598.unk_1D, 1);
+            func_80768844(0xFFFB, D_xk1_8003A598.unk_00, D_xk1_8003A598.unk_1D, D_xk1_8003A560, D_xk1_8003A598.unk_1D,
+                          1);
             D_xk1_80030610 = -1;
             D_800D6CA0.unk_08 = 0x22;
             return;
