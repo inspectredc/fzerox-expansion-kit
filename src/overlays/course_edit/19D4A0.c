@@ -1,6 +1,9 @@
 #include "global.h"
 #include "leo/leo_functions.h"
 
+s32 D_xk2_80103F10 = 0;
+s32 D_xk2_80103F14 = 0;
+
 extern u8 gEditCupTrackNames[][9];
 extern unk_800D6CA0 D_800D6CA0;
 
@@ -10,8 +13,6 @@ void func_xk2_800EB9E0(void) {
     }
     D_800D6CA0.unk_08 = 0x36;
 }
-
-extern s32 D_xk2_80103F14;
 
 void func_xk2_800EBA34(void) {
     s32 i;
@@ -117,7 +118,6 @@ extern s32 D_80119880;
 extern s32 D_80119890;
 extern s32 D_xk1_80032C20;
 extern u8 D_xk2_800F7400;
-extern s32 D_xk2_80103F10;
 
 void func_xk2_800EBEF4(void) {
     if ((gControllers[gPlayerControlPorts[0]].buttonPressed & 0x8000) && (D_800D6CA0.unk_08 == 0x20)) {

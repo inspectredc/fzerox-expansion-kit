@@ -742,6 +742,7 @@ s32 func_xk1_8002BD14(void);
 void func_xk1_8002BD34(void);
 Gfx* func_xk1_8002C420(Gfx*, s32, s32);
 void func_xk1_8002C720(Gfx**, s32, s32, s32, s32);
+s32 func_xk1_8002CA80(void);
 void func_xk1_8002D278(s32);
 void func_xk1_8002D284(s32);
 void func_xk1_8002D290(void);
@@ -853,14 +854,21 @@ void func_xk2_800EA948(Gfx** gfxP);
 s32 func_xk2_800EAA1C(u8*);
 s32 func_xk2_800EAC28(u8*);
 void func_xk2_800EB400(void);
+
 void func_xk2_800EB9E0(void);
 void func_xk2_800EBFE8(u8*);
 s32 func_xk2_800EC234(unk_8003A5D8*);
-void func_xk2_800EDAD0(Gfx**, s32, s32, u8*);
+
+void func_xk2_800EDAD0(Gfx** gfxP, s32 xPos, s32 yPos, const char* fmt, ...);
+
 Gfx* func_xk2_800EDF90(Gfx* gfx);
+Gfx* func_xk2_800EE158(Gfx* gfx);
+Gfx* func_xk2_800EE268(Gfx* gfx);
+s32 func_xk2_800EE578(s32);
 void func_xk2_800EE67C(Gfx** gfxP);
 void func_xk2_800EE8A0(Gfx** gfxP);
-void func_xk2_800EECD4(Gfx**, s32, s32, s32, s32);
+void func_xk2_800EECD4(Gfx**, s32, s32, s8*, s32);
+
 f32 func_xk2_800EF5E8(f32, f32);
 void func_xk2_800EF78C(void);
 s32 func_xk2_800EFDE4(f32);
@@ -872,6 +880,7 @@ void func_xk2_800F2B48(Gfx** gfxP);
 void func_xk2_800F3164(Gfx** gfxP);
 void func_xk2_800F3548(Gfx** gfxP);
 void func_xk2_800F3600(Gfx** gfxP);
+f32 func_xk2_800EF52C(f32);
 void func_xk2_800F5C50(void);
 void func_xk2_800F61DC(Gfx** gfxP);
 

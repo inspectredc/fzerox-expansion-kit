@@ -3,13 +3,17 @@
 #include "fzx_racer.h"
 #include "fzx_course.h"
 
+s32 D_xk2_80103FF0 = 0;
+s32 D_xk2_80103FF4 = 0;
+s32 D_xk2_80103FF8 = 0;
+s32 D_xk2_80103FFC = 0;
+
 const u16 D_xk2_80104010[] = { BTN_L, BTN_R, BTN_L, BTN_R, BTN_UP, BTN_DOWN, BTN_LEFT, BTN_RIGHT, BTN_DOWN, BTN_UP };
 
 extern volatile u8 D_80794E14;
 extern unk_800D6CA0 D_800D6CA0;
 extern s32 D_xk1_80032C20;
 
-#ifdef IMPORT_DATA
 void func_xk2_800EC2A0(void) {
     static s32 D_xk2_80104000 = 0;
     u16 temp_a0;
@@ -40,9 +44,6 @@ void func_xk2_800EC2A0(void) {
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_edit/19DD60/func_xk2_800EC2A0.s")
-#endif
 
 extern s32 D_8076C77C;
 extern s32 D_8076C954;
@@ -191,9 +192,9 @@ void CourseEdit_Init(void) {
     func_xk2_800E77F0();
     COURSE_CONTEXT()->courseData = D_800D0910;
     ;
-    D_xk1_8003066C = gCourseCtx.courseData.venue;
-    D_xk1_80030670 = gCourseCtx.courseData.skybox;
-    D_xk1_80030674 = D_xk1_800328B4[(s8) gCourseCtx.courseData.fileName[0x16]];
+    D_xk1_8003066C = COURSE_CONTEXT()->courseData.venue;
+    D_xk1_80030670 = COURSE_CONTEXT()->courseData.skybox;
+    D_xk1_80030674 = D_xk1_800328B4[(s8) COURSE_CONTEXT()->courseData.fileName[0x16]];
     func_80702FF4(D_xk1_8003066C);
     func_xk2_800E7028(D_80030608);
     func_xk2_800F5C5C();
@@ -215,9 +216,6 @@ void CourseEdit_Init(void) {
     D_800D6CA0.unk_08 = 0;
 }
 
-extern s32 D_xk2_80103FF0;
-extern s32 D_xk2_80103FF4;
-extern s32 D_xk2_80103FF8;
 extern s8 gGamePaused;
 
 void func_xk2_800EC8AC(void) {
@@ -377,8 +375,6 @@ extern unk_80128C94* D_80128C90;
 extern unk_80128C94* D_80128C94;
 extern s32 D_xk1_80030678;
 extern s32 D_xk1_80032BF8;
-extern u8 D_xk2_800F7410;
-extern s32 D_xk2_80103FFC;
 extern s32 D_xk2_80119918;
 extern unk_8003A5D8 D_xk1_8003A598;
 extern s32 D_8079A35C;
@@ -443,7 +439,7 @@ s32 CourseEdit_Update(void) {
             switch (D_80119880) {
                 case -1:
                 case 1:
-                    func_8076814C(0xFFFB, D_xk1_8003A598.unk_00, &D_xk1_8003A598.unk_1D, &gCourseCtx, 0xC830, 0, 0xFF,
+                    func_8076814C(0xFFFB, D_xk1_8003A598.unk_00, &D_xk1_8003A598.unk_1D, COURSE_CONTEXT(), 0xC830, 0, 0xFF,
                                   1);
                     D_800D6CA0.unk_08 = 0x12;
                     break;
@@ -461,7 +457,7 @@ s32 CourseEdit_Update(void) {
             switch (D_80119880) {
                 case -1:
                 case 1:
-                    if (gCourseCtx.courseData.flag == 0) {
+                    if (COURSE_CONTEXT()->courseData.flag == 0) {
                         func_xk2_800EBFE8(D_xk1_8003A598.unk_00);
                         D_800D6CA0.unk_08 = 0x22;
                     } else {
@@ -469,7 +465,7 @@ s32 CourseEdit_Update(void) {
                     }
                     break;
                 case 9:
-                    if (D_xk2_800F7410 == 0) {
+                    if (D_xk2_800F7408.courseData.flag == 0) {
                         func_xk2_800EBFE8(D_xk1_8003A598.unk_00);
                         D_800D6CA0.unk_08 = 0x22;
                     } else {
@@ -641,10 +637,14 @@ void func_xk2_800ED6A4(Gfx** gfxP) {
 
 extern Gfx D_8076CAF8[];
 extern Gfx D_9014A38[];
-extern Gfx* D_xk2_80104004[];
+extern Gfx D_9014D78[];
+extern Gfx D_9014DB8[];
+extern Gfx D_9014DF8[];
 extern Vp D_80146A8;
 extern s32 D_8079A364;
 extern FrameBuffer* gFrameBuffers[];
+
+Gfx* D_xk2_80104004[] = { D_9014D78, D_9014DB8, D_9014DF8 };
 
 Gfx* CourseEdit_Draw(Gfx* gfx) {
 
