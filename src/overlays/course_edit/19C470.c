@@ -1,4 +1,5 @@
 #include "global.h"
+#include "leo/leo_functions.h"
 #include "fzx_course.h"
 
 u8 D_xk2_800F7400 = 255;

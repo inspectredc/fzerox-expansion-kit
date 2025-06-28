@@ -3,6 +3,43 @@
 #include "fzx_racer.h"
 #include "fzx_course.h"
 
+Controller* D_80119720;
+UNUSED s32 D_xk2_80119724;
+u16 D_xk2_80119728;
+u16 D_xk2_8011972A;
+u16 D_xk2_8011972C;
+u16 D_xk2_8011972E;
+f32 D_xk2_80119730;
+f32 D_xk2_80119734;
+f32 D_xk2_80119738;
+s32 D_xk2_8011973C;
+s32 D_xk2_80119740;
+f32 D_xk2_80119744;
+CourseSegment D_xk2_80119748;
+CourseSegment* D_xk2_801197EC;
+UNUSED s32 D_xk2_801197F0[4];
+s32 D_xk2_80119800;
+UNUSED s32 D_xk2_80119808[4];
+/* new file? */
+Vec3f D_xk2_80119818;
+UNUSED s32 D_xk2_8011981C;
+Vec3f D_xk2_80119828;
+UNUSED s32 D_xk2_8011982C;
+Mtx D_xk2_80119838;
+UNUSED s32 D_xk2_80119878[2];
+/* new file? */
+s32 D_80119880;
+s32 D_xk2_80119884;
+UNUSED s32 D_xk2_80119888[2];
+/* new file? */
+s32 D_80119890;
+UNUSED s32 D_xk2_80119898[32];
+s32 D_xk2_80119918;
+CourseSegment D_xk2_80119920[64];
+unk_8011C220 D_8011C220[898];
+unk_80128690 D_80128690[64];
+unk_80128690 D_xk2_80128990[64];
+
 s32 D_xk2_800F6820 = 1;
 s32 D_xk2_800F6824 = 160;
 s32 D_xk2_800F6828 = 120;
@@ -70,8 +107,6 @@ void func_xk2_800D6D90(s32 arg0, s32 arg1, f32* arg2, f32* arg3) {
     *arg3 = var_v1 / 49.0f;
 }
 
-extern s32 D_xk2_80119918;
-
 void func_xk2_800D6FF0(void) {
     if (gControllers[gPlayerControlPorts[0]].buttonPressed & BTN_START) {
         func_8074122C(0x44);
@@ -113,7 +148,6 @@ void func_xk2_800D7058(void) {
     }
 }
 
-extern u16 D_xk2_8011972C;
 extern f32 D_xk2_80128D40;
 extern f32 D_xk2_80128D44;
 
@@ -199,7 +233,6 @@ void func_xk2_800D71E8(void) {
     }
 }
 
-extern Controller* D_80119720;
 extern s32 D_xk2_80104CB0;
 extern unk_800D6CA0 D_800D6CA0;
 
@@ -833,7 +866,7 @@ void func_xk2_800D8DAC(void) {
         if (D_8076C958 > 4) {
             D_8076C958 -= 4;
         }
-        func_xk2_800EE640(temp_a0, temp_a1, temp_a2);
+        func_xk2_800EE640();
     }
     if (temp_a2 > 1600) {
         if (D_xk2_800F6834 < 0.5f) {
@@ -854,11 +887,6 @@ extern s32 D_xk2_800F703C;
 extern s32 D_xk2_800F7044;
 extern s32 D_xk2_800F704C;
 extern s32 D_xk2_800F705C;
-extern s16 D_xk2_80119728;
-extern s16 D_xk2_8011972A;
-extern s16 D_xk2_8011972E;
-extern CourseSegment D_xk2_80119748;
-extern CourseSegment* D_xk2_801197EC;
 extern unk_80026914 D_xk1_80032880;
 
 void func_xk2_800D8F04(void) {
@@ -1033,9 +1061,6 @@ void func_xk2_800D950C(void) {
     }
 }
 
-extern unk_80128690 D_80128690[];
-extern f32 D_xk2_80119730;
-extern f32 D_xk2_80119738;
 extern unk_807B3C20 D_807B6528;
 
 void func_xk2_800D9670(void) {
@@ -1257,8 +1282,6 @@ void func_xk2_800D9670(void) {
     D_xk2_800F7040 = 3;
 }
 
-extern f32 D_xk2_80119734;
-
 void func_xk2_800DA288(void) {
     CourseSegment* temp_s0_2;
     CourseSegment* temp_s1;
@@ -1296,7 +1319,7 @@ void func_xk2_800DA288(void) {
     }
 
     sp54 = D_xk2_80119734;
-    if (func_xk1_8002DAD4(D_80119720) == 1) {
+    if (func_xk1_8002DAD4() == 1) {
         if (temp_s0 < 0) {
             D_xk2_80119734 -= 10.0f;
         } else {
@@ -1389,10 +1412,6 @@ void func_xk2_800DA288(void) {
     }
     D_xk2_800F7040 = 3;
 }
-
-extern s32 D_xk2_8011973C;
-
-extern s32 D_xk2_8011973C;
 
 void func_xk2_800DA984(void) {
     f32 temp_fa0;
@@ -1536,8 +1555,6 @@ void func_xk2_800DADEC(void) {
     D_xk2_800F7040 = 3;
 }
 
-extern s32 D_xk2_80119740;
-
 void func_xk2_800DB154(void) {
     CourseSegment* temp_s0;
     CourseSegment* temp_v1_2;
@@ -1620,7 +1637,6 @@ void func_xk2_800DB154(void) {
 }
 
 extern CourseData D_800CF950;
-extern CourseSegment D_xk2_80119920[64];
 
 void func_xk2_800DB550(void) {
     s32 i;
@@ -2003,8 +2019,6 @@ void func_xk2_800DC3F8(void) {
         D_80128690[i].unk_08 = 0;
     }
 }
-
-extern s32 D_xk2_80119800;
 
 void func_xk2_800DC428(void) {
     if ((D_xk1_80030614 != 1) || (D_800D6CA0.unk_00 != 1)) {
@@ -2488,9 +2502,6 @@ bool func_xk2_800DD688(s32 arg0) {
     return true;
 }
 
-extern s32 D_xk2_800F7058;
-extern unk_8011C220 D_8011C220[];
-
 s32 func_xk2_800DD76C(f32 arg0) {
     s32 i;
     s32 sp78;
@@ -2619,8 +2630,6 @@ extern s32 D_xk2_800F7064;
 extern s32 D_xk2_80104364;
 extern s32 D_xk2_80104368;
 extern s32 D_xk2_80104378;
-extern s32 D_80119880;
-extern s32 D_xk2_80119884;
 
 void func_xk2_800DD938(void) {
     unk_8003A5D8* sp1C;
@@ -3231,7 +3240,6 @@ void func_xk2_800DF370(void) {
 
 extern u8 gEditCupTrackNames[][9];
 extern s32 D_xk2_80103F10;
-extern s32 D_80119890;
 
 void func_xk2_800DF42C(void) {
     s32 i;

@@ -2,6 +2,9 @@
 #include "fzx_font.h"
 #include "fzx_assets.h"
 
+s32 D_xk2_8013A7E0;
+s32 D_xk2_8013A7E4;
+
 void func_xk2_800F6290(void) {
     func_i2_800AE7C4(aMenuTextTLUT, 0x200, 0, 0, 0);
     func_i2_800AE7C4(aMenuQuitTex, 0x200, 0, 1, 0);
@@ -11,8 +14,6 @@ void func_xk2_800F6290(void) {
     Font_LoadString("ABCDEFGHIJKLMNOPQRSTUVWXYZ", 3);
 }
 
-extern s32 D_xk2_8013A7E0;
-extern s32 D_xk2_8013A7E4;
 extern s16 sMenuIsBusy;
 
 void func_xk2_800F632C(void) {

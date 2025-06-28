@@ -1083,8 +1083,8 @@ s32 func_i2_800B2C00(Racer_unk_C* arg0, f32 arg1, f32 arg2, f32 arg3, s32 i, f32
     return 0;
 }
 
-s32 func_i2_800B3360(CourseInfo* arg0) {
-    CourseSegment* var_s0 = arg0->courseSegments;
+s32 func_i2_800B3360(CourseInfo* courseInfo) {
+    CourseSegment* var_s0 = courseInfo->courseSegments;
     Mtx3F sp30;
 
     do {
@@ -1099,16 +1099,16 @@ s32 func_i2_800B3360(CourseInfo* arg0) {
         var_s0->unk_0C.y = sp30.y.y;
         var_s0->unk_0C.z = sp30.y.z;
         var_s0 = var_s0->next;
-    } while (var_s0 != arg0->courseSegments);
+    } while (var_s0 != courseInfo->courseSegments);
 
     return 0;
 }
 
 extern s32 D_8076C954;
 
-s32 func_i2_800B340C(CourseInfo* arg0) {
+s32 func_i2_800B340C(CourseInfo* courseInfo) {
     s32 var_v1 = 0;
-    CourseSegment* var_v0 = arg0->courseSegments;
+    CourseSegment* var_v0 = courseInfo->courseSegments;
 
     do {
         var_v0->trackSegmentInfo &= ~TRACK_JOIN_MASK;
@@ -1131,7 +1131,7 @@ s32 func_i2_800B340C(CourseInfo* arg0) {
                     (D_i2_800C18F8[TRACK_SHAPE_INDEX((u32) var_v0->trackSegmentInfo & TRACK_SHAPE_MASK)] + 100.0f)) {
                     var_v1 = -1;
                     if (D_8076C954 != 0) {
-                        func_xk2_800F1330(var_v0 - arg0->courseSegments, 2);
+                        func_xk2_800F1330(var_v0 - courseInfo->courseSegments, 2);
                     }
                 }
                 break;
@@ -1141,7 +1141,7 @@ s32 func_i2_800B340C(CourseInfo* arg0) {
                      100.0f)) {
                     var_v1 = -1;
                     if (D_8076C954 != 0) {
-                        func_xk2_800F1330(var_v0 - arg0->courseSegments, 2);
+                        func_xk2_800F1330(var_v0 - courseInfo->courseSegments, 2);
                     }
                 }
                 break;
@@ -1149,7 +1149,7 @@ s32 func_i2_800B340C(CourseInfo* arg0) {
                 break;
         }
 
-    } while ((var_v0 = var_v0->next) != arg0->courseSegments);
+    } while ((var_v0 = var_v0->next) != courseInfo->courseSegments);
 
     return var_v1;
 }
@@ -1348,8 +1348,8 @@ dummy_label:;
     return (sqrtf(SQ_SUM(&sp74)) + sqrtf(SQ_SUM(&sp68))) / 2.0f;
 }
 
-void func_i2_800B3F54(CourseInfo* arg0) {
-    CourseSegment* var_s0 = arg0->courseSegments;
+void func_i2_800B3F54(CourseInfo* courseInfo) {
+    CourseSegment* var_s0 = courseInfo->courseSegments;
     Mtx3F sp110;
     Mtx3F spEC;
     Mtx3F spC8;
@@ -1420,11 +1420,11 @@ void func_i2_800B3F54(CourseInfo* arg0) {
             var_s0->trackSegmentInfo |= TRACK_FORM_STRAIGHT;
         }
         var_s0 = var_s0->next;
-    } while (var_s0 != arg0->courseSegments);
+    } while (var_s0 != courseInfo->courseSegments);
 }
 
-void func_i2_800B42E0(CourseInfo* arg0) {
-    CourseSegment* var_v0 = arg0->courseSegments;
+void func_i2_800B42E0(CourseInfo* courseInfo) {
+    CourseSegment* var_v0 = courseInfo->courseSegments;
     CourseSegment* var_v1 = var_v0->prev;
 
     do {
@@ -1436,7 +1436,7 @@ void func_i2_800B42E0(CourseInfo* arg0) {
         }
         var_v1 = var_v0;
         var_v0 = var_v0->next;
-    } while (var_v0 != arg0->courseSegments);
+    } while (var_v0 != courseInfo->courseSegments);
 }
 
 void func_i2_800B4338(unk_36ED0* arg0, f32 arg1, f32 arg2, Mtx3F* arg3, Vec3f* arg4, Vec3f* arg5, Vec3f* arg6,
@@ -1882,7 +1882,7 @@ extern unk_36ED0 D_802BE5C0[];
 extern Mtx3F D_80033840[];
 
 #ifdef NON_EQUIVALENT
-s32 func_i2_800B5CD8(CourseInfo* arg0) {
+s32 func_i2_800B5CD8(CourseInfo* courseInfo) {
     CourseSegment* sp294;
     f32 sp284;
     f32 sp280;
@@ -1938,7 +1938,7 @@ s32 func_i2_800B5CD8(CourseInfo* arg0) {
     unk_800CF528* temp_a3;
     s32 var_v1;
 
-    var_s1 = arg0->courseSegments;
+    var_s1 = courseInfo->courseSegments;
     spB4 = 0;
 
     while (var_s1->trackSegmentInfo & TRACK_FLAG_CONTINUOUS) {
@@ -1984,7 +1984,7 @@ s32 func_i2_800B5CD8(CourseInfo* arg0) {
 
     D_802BE5C0[0].unk_5C = D_802BE5C0[0].unk_5E = D_802BE5C0[0].unk_58 = D_802BE5C0[0].unk_5A = -0x8000;
 
-    D_802BE5C0[0].unk_04 = (s32) (var_s1 - arg0->courseSegments);
+    D_802BE5C0[0].unk_04 = (s32) (var_s1 - courseInfo->courseSegments);
     var_s1->unk_3C = D_802BE5C0;
     D_802BE5C0[0].unk_08 = 0.0f;
     spE8 = 0.0f;
@@ -2177,7 +2177,7 @@ s32 func_i2_800B5CD8(CourseInfo* arg0) {
             }
             var_s0->trackSegmentInfo = var_s1->trackSegmentInfo & ~0x7E00;
             var_s0->unk_08 = var_fs1;
-            var_s0->unk_04 = (s32) (var_s1 - arg0->courseSegments);
+            var_s0->unk_04 = (s32) (var_s1 - courseInfo->courseSegments);
 
             if ((var_s1->unk_68 <= var_fs1) && (var_fs1 <= var_s1->unk_6C)) {
                 if (var_fs1 == var_s1->unk_68) {
@@ -2300,7 +2300,7 @@ s32 func_i2_800B5CD8(CourseInfo* arg0) {
     return spB4;
 }
 #else
-s32 func_i2_800B5CD8(CourseInfo* arg0);
+s32 func_i2_800B5CD8(CourseInfo* courseInfo);
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/112650/func_i2_800B5CD8.s")
 #endif
 

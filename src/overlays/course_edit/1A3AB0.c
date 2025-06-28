@@ -1,5 +1,28 @@
 #include "global.h"
 
+// clang-format off
+UNUSED Mtx D_xk2_80104D10 = gdSPDefMtx(
+    1.0f, 0.0f, 0.0f, 0.0f,
+    0.0f, 1.0f, 0.0f, 0.0f,
+    0.0f, 0.0f, 1.0f, 0.0f,
+    0.0f, 0.0f, 0.0f, 1.0f
+);
+
+UNUSED Mtx D_xk2_80104D50 = gdSPDefMtx(
+    -1.0f, 0.0f, 0.0f, 0.0f,
+    0.0f, 1.0f, 0.0f, 0.0f,
+    0.0f, 0.0f, 1.0f, 0.0f,
+    0.0f, 0.0f, 0.0f, 1.0f
+);
+
+UNUSED Mtx D_xk2_80104D90 = gdSPDefMtx(
+    0.1f, 0.0f, 0.0f, 0.0f,
+    0.0f, 0.1f, 0.0f, 0.0f,
+    0.0f, 0.0f, 0.1f, 0.0f,
+    0.0f, 0.0f, 0.0f, 1.0f
+);
+// clang-format on
+
 void func_xk2_800F1FF0(MtxF* arg0, MtxF* arg1, MtxF* arg2) {
     MtxF* var_a3;
     s32 i;
@@ -167,6 +190,20 @@ void func_xk2_800F249C(MtxF* arg0, f32 arg1) {
     arg0->m[3][0] = 0.0f;
     arg0->m[3][1] = 0.0f;
     arg0->m[3][2] = 0.0f;
-}
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_edit/1A3AB0/D_xk2_80104DD0.s")
+    // TODO: Figure out what file this is from
+    PRINTF("LAST RACE CHECK!\n");
+    PRINTF("LESS POINT in last check\n");
+    PRINTF("USIALLY ERROR\n");
+    PRINTF("TENSION ERROR\n");
+    PRINTF("NOTHING TENSION ERROR\n");
+    PRINTF("CRS LENGTH ERROR\n");
+    PRINTF("ERROR BY MAKE_COURSE_VERTEX\n");
+    PRINTF("INIT GADGET 2\n");
+    PRINTF("DIRT OVER\n");
+    PRINTF("CRS LENGTH ERROR\n");
+    PRINTF("ERROR BY MAKE_COURSE_VERTEX\n");
+    PRINTF("INIT GADGET 1\n");
+    PRINTF("DIRT OVER\n");
+    PRINTF("YOU CAN RUN\n");
+}
