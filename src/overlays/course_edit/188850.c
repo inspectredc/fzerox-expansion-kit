@@ -1926,7 +1926,6 @@ void func_xk2_800DC0D4(void) {
     D_xk2_800F6844 = D_xk2_800F6828;
 }
 
-#ifdef NON_MATCHING
 s32 func_xk2_800DC0F8(void) {
     s32 i;
     s32 j;
@@ -1976,9 +1975,6 @@ s32 func_xk2_800DC0F8(void) {
     }
     return j;
 }
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_edit/188850/func_xk2_800DC0F8.s")
-#endif
 
 void func_xk2_800DC2D0(void) {
     s32 temp_v0;
