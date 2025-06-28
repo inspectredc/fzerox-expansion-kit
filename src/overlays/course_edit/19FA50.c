@@ -223,8 +223,6 @@ void func_xk2_800EE67C(Gfx** gfxP) {
 }
 
 extern u16 D_7004900[];
-extern s32 D_80033220;
-extern s32 D_80033224;
 
 void func_xk2_800EE8A0(Gfx** gfxP) {
     Gfx* gfx;
@@ -238,7 +236,7 @@ void func_xk2_800EE8A0(Gfx** gfxP) {
         return;
     }
 
-    temp_v0 = Leo_strlen(D_80033220);
+    temp_v0 = Leo_strlen(D_xk1_800331F0[12]);
     width = temp_v0 * 8;
 
     left = 0x22 - temp_v0;
@@ -263,18 +261,18 @@ void func_xk2_800EE8A0(Gfx** gfxP) {
     gSPDisplayList(gfx++, D_3000540);
     gDPSetPrimColor(gfx++, 0, 0, 255, 0, 0, 255);
 
-    gfx = func_xk1_800264C0(gfx, left, top, 0xC);
-    left = 0x22 - Leo_strlen(D_80033224);
+    gfx = func_xk1_800264C0(gfx, left, top, 12);
+    left = 0x22 - Leo_strlen(D_xk1_800331F0[13]);
     left = ((left / 2) * 8) + 0x18;
     top = 104;
 
     gSPDisplayList(gfx++, D_3000540);
 
     gDPSetPrimColor(gfx++, 0, 0, 255, 0, 0, 255);
-    gfx = func_xk1_800264C0(gfx, left, top, 0xD);
+    gfx = func_xk1_800264C0(gfx, left, top, 13);
     gDPPipeSync(gfx++);
     gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, 255);
-    gfx = func_xk1_800264C0(gfx, left + 72, top + 24, 0xE);
+    gfx = func_xk1_800264C0(gfx, left + 72, top + 24, 14);
     gDPPipeSync(gfx++);
     gDPSetCombineMode(gfx++, G_CC_DECALRGBA, G_CC_DECALRGBA);
 

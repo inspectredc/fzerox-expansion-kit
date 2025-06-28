@@ -286,9 +286,9 @@
       - [0x1B6890, .rodata, 1A3AB0]
       - [0x1B69B0, data, 1A4210]
       - [0x1B6F50, .rodata, 1A4210]
-      - [0x1B7000, data, 1A5B70]
+      - [0x1B7000, .data, 1A5B70]
       - [0x1CB120, .rodata, 1A5B70]
-      - [0x1CB140, data, 1A7710]
+      - [0x1CB140, .data, 1A7710]
       - [0x1CB160, .rodata, 1A7710]
       - [0x1CB170, .rodata, 1A7D50]
       - { type: bss, vram: 0x80119720 }

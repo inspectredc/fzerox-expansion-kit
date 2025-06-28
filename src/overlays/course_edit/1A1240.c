@@ -42,7 +42,8 @@ extern s32 D_xk1_80030670;
 void func_xk2_800EF8B0(void) {
     s32 i;
 
-    if ((D_800D6CA0.unk_08 == 1) || (D_800D6CA0.unk_08 == 3) || (D_800D6CA0.unk_08 == 2) || (D_800D6CA0.unk_08 == 0x10) || (D_800D6CA0.unk_08 == 0x20) || (D_xk2_80104BC0 == 0)) {
+    if ((D_800D6CA0.unk_08 == 1) || (D_800D6CA0.unk_08 == 3) || (D_800D6CA0.unk_08 == 2) ||
+        (D_800D6CA0.unk_08 == 0x10) || (D_800D6CA0.unk_08 == 0x20) || (D_xk2_80104BC0 == 0)) {
         return;
     }
     D_xk2_80104BC0 = 0;
@@ -303,7 +304,6 @@ s32 func_xk2_800F01C4(Vec3f arg0, Mtx3F arg3) {
     temp_fa1 = D_xk2_80128CB4 + 150.0f;
     temp_fv1 = temp_fa1 * D_xk2_80128CB0;
 
-
     sp84 = temp_fv1 * arg3.z.x;
     D_xk2_80128CB8[0].x = arg0.x - sp84;
     sp80 = temp_fv1 * arg3.z.y;
@@ -379,8 +379,10 @@ void func_xk2_800F07A4(void) {
     Vec3f spF0;
     Mtx3F spCC;
 
-    if ((D_xk2_800F6828 < 0x38) || (D_800D6CA0.unk_08 == 1) || (D_800D6CA0.unk_08 == 3) || (D_800D6CA0.unk_08 == 2) || (D_800D6CA0.unk_08 == 0x10) || (D_xk1_80030614 != 2) || (D_xk1_80030624 != 8) || !(gControllers[gPlayerControlPorts[0]].buttonPressed & BTN_A) || (D_800D6CA0.unk_0C == 0)) {
-        return; 
+    if ((D_xk2_800F6828 < 0x38) || (D_800D6CA0.unk_08 == 1) || (D_800D6CA0.unk_08 == 3) || (D_800D6CA0.unk_08 == 2) ||
+        (D_800D6CA0.unk_08 == 0x10) || (D_xk1_80030614 != 2) || (D_xk1_80030624 != 8) ||
+        !(gControllers[gPlayerControlPorts[0]].buttonPressed & BTN_A) || (D_800D6CA0.unk_0C == 0)) {
+        return;
     }
     if (D_807B3C20.unk_2900 < 4) {
         return;
@@ -519,7 +521,7 @@ void func_xk2_800F0FF4(void) {
     for (i = 0; i < D_807B3C20.unk_2900; i++) {
         temp_a0 = var_v1->segmentIndex;
         D_800CF950.bankAngle[i] = 360 - gCourseCtx.courseData.bankAngle[temp_a0];
-            
+
         temp_a2 = var_v1->prev->segmentIndex;
         D_800CF950.pit[i] = gCourseCtx.courseData.pit[temp_a2];
         D_800CF950.dash[i] = gCourseCtx.courseData.dash[temp_a2];
@@ -537,7 +539,7 @@ void func_xk2_800F0FF4(void) {
     }
     for (i = 0; i < D_807B3C20.unk_2900; i++) {
         D_807B3C20.unk_0000[i] = D_xk2_80119920[i];
-            
+
         gCourseCtx.courseData.bankAngle[i] = D_800CF950.bankAngle[i];
         gCourseCtx.courseData.pit[i] = D_800CF950.pit[i];
         gCourseCtx.courseData.dash[i] = D_800CF950.dash[i];
@@ -554,7 +556,6 @@ void func_xk2_800F0FF4(void) {
         D_807B3C20.unk_0000[i].segmentIndex = i;
         D_807B3C20.unk_0000[i].next = &D_807B3C20.unk_0000[i + 1];
         D_807B3C20.unk_0000[i].prev = &D_807B3C20.unk_0000[i - 1];
-
     }
     D_807B3C20.unk_0000[0].prev = &D_807B3C20.unk_0000[D_807B3C20.unk_2900 - 1];
     D_807B3C20.unk_0000[D_807B3C20.unk_2900 - 1].next = &D_807B3C20.unk_0000[0];
