@@ -1,13 +1,164 @@
-#include "common.h"
+#include "global.h"
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_edit/1A7710/func_xk2_800F5C50.s")
+s32 D_xk2_80119680 = 0;
+s32 D_xk2_80119684 = -1;
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_edit/1A7710/func_xk2_800F5C5C.s")
+void func_xk2_800F5C50(void) {
+    D_xk2_80119680 = 0;
+}
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_edit/1A7710/func_xk2_800F5D10.s")
+extern Mtx D_xk2_8013A758;
+extern Mtx D_xk2_8013A798;
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_edit/1A7710/func_xk2_800F5D1C.s")
+void func_xk2_800F5C5C(void) {
+    func_806F9628(&D_xk2_8013A758, NULL, 1.0f, -160.0f, 160.0f, -120.0f, 120.0f, 16.0f, 256.0f);
+    func_806F8FE0(&D_xk2_8013A798, NULL, 0.0f, 0.0f, 128.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+}
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_edit/1A7710/func_xk2_800F5F2C.s")
+s32 func_xk2_800F5D10(void) {
+    return D_xk2_80119680;
+}
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_edit/1A7710/func_xk2_800F61DC.s")
+extern GfxPool* gGfxPool;
+extern Player gPlayers[];
+
+void func_xk2_800F5D1C(void) {
+    static s32 D_xk2_80119688 = 0;
+    s32 spB4;
+    Vtx* vtx;
+    MtxF sp70;
+    s32 pad[8];
+    f32 temp_ft4;
+    f32 temp_ft5;
+    f32 temp_fv1;
+    f32 temp_ft2;
+    f32 temp_ft2_2;
+    f32 sp38;
+
+    D_xk2_80119688 = (D_xk2_80119688 + 8) % 360;
+    spB4 = (D_xk2_80119688 * 0x1000) / 360;
+
+    func_806F8868(NULL, &sp70, 1.0f, spB4, gPlayers->unk_5C.x.x, gPlayers->unk_5C.x.y, gPlayers->unk_5C.x.z, 0.0f, 0.0f,
+                  0.0f);
+
+    vtx = gGfxPool->unk_365E8;
+    temp_fv1 = COS(spB4) * 24.0f;
+    temp_ft4 = SIN(spB4) * -24.0f;
+    temp_ft5 = SIN(spB4) * 24.0f;
+    sp38 = COS(spB4) * 24.0f;
+    temp_ft2 = 0.0f;
+    temp_ft2_2 = 0.0f;
+
+    // clang-format off
+    vtx->v.ob[0] = temp_ft5; \
+    vtx->v.ob[1] = sp38;     \
+    vtx->v.ob[2] = temp_ft2; \
+    vtx->v.tc[0] = 0;        \
+    vtx->v.tc[1] = 0;
+    vtx++;
+    vtx->v.ob[0] = temp_fv1;   \
+    vtx->v.ob[1] = temp_ft4;   \
+    vtx->v.ob[2] = temp_ft2_2; \
+    vtx->v.tc[0] = 0x800;      \
+    vtx->v.tc[1] = 0;
+    vtx++;
+    vtx->v.ob[0] = 0.0f - temp_ft5; \
+    vtx->v.ob[1] = 0.0f - sp38;     \
+    vtx->v.ob[2] = 0.0f - temp_ft2; \
+    vtx->v.tc[0] = 0x800;           \
+    vtx->v.tc[1] = 0x800;
+    vtx++;
+
+    vtx->v.ob[0] = 0.0f - temp_fv1;   \
+    vtx->v.ob[1] = 0.0f - temp_ft4;   \
+    vtx->v.ob[2] = 0.0f - temp_ft2_2; \
+    vtx->v.tc[0] = 0;                 \
+    vtx->v.tc[1] = 0x800;
+    vtx++;
+    // clang-format on
+}
+
+extern s32 D_8076C968;
+extern s32 D_xk2_80104CB4;
+extern s32 D_xk2_80104CB8;
+extern s32 D_xk2_80104CBC;
+extern s32 D_xk2_80104CC0;
+extern Vec3f D_xk2_8013A740;
+extern unk_807B3C20 D_807B3C20;
+extern unk_800D6CA0 D_800D6CA0;
+extern s32 D_xk2_800F6824;
+extern s32 D_xk2_800F6828;
+extern s32 D_xk2_800F7040;
+
+void func_xk2_800F5F2C(void) {
+    static s32 D_xk2_8011968C = 0;
+    static s32 D_xk2_80119690 = 0;
+
+    if (D_xk2_80119680 != 0) {
+        func_xk2_800F5D1C();
+    }
+    if (D_xk2_8011968C != 0) {
+        D_xk2_8011968C--;
+    }
+
+    if (gControllers[gPlayerControlPorts[0]].buttonCurrent & (BTN_CUP | BTN_CDOWN | BTN_CLEFT | BTN_CRIGHT)) {
+        D_xk2_80119680 = 0;
+    }
+    if (D_800D6CA0.unk_00 == 1) {
+        D_xk2_80119680 = 0;
+    }
+    if ((D_xk2_80119690 == 0) || (gControllers[gPlayerControlPorts[0]].buttonCurrent & BTN_Z)) {
+        D_xk2_80119690 = gControllers[gPlayerControlPorts[0]].buttonCurrent & BTN_Z;
+        return;
+    }
+    if (D_xk2_800F6828 < 0x38) {
+        D_xk2_80119690 = gControllers[gPlayerControlPorts[0]].buttonCurrent & BTN_Z;
+        return;
+    }
+    if (D_xk2_8011968C != 0) {
+        D_xk2_80119684 = func_xk2_800EFDE4(4000.0f);
+        if (D_xk2_80119684 == -1) {
+            return;
+        }
+        D_xk2_80119680 = 1;
+        D_xk2_800F6824 = 160;
+        D_xk2_800F6828 = 120;
+        if (D_8076C968 != 0) {
+            func_xk2_800DE4F8();
+        }
+        D_xk2_800F7040 = 3;
+        if (D_800D6CA0.unk_00 == 1) {
+            D_800D6CA0.unk_00 = 0;
+        }
+        func_xk2_800DC3F8();
+        D_xk2_8013A740 = D_807B3C20.unk_0000[D_xk2_80119684].pos;
+        D_xk2_80104CB8 = D_807B3C20.unk_0000[D_xk2_80119684].pos.x * 0.3f;
+        D_xk2_80104CBC = D_807B3C20.unk_0000[D_xk2_80119684].pos.y * 0.3f;
+        D_xk2_80104CC0 = D_807B3C20.unk_0000[D_xk2_80119684].pos.z * 0.3f;
+        gPlayers->unk_50.x = D_xk2_80104CB8;
+        gPlayers->unk_50.y = D_xk2_80104CBC + D_xk2_80104CB4;
+        gPlayers->unk_50.z = D_xk2_80104CC0;
+    } else {
+        D_xk2_8011968C = 8;
+    }
+    D_xk2_80119690 = gControllers[gPlayerControlPorts[0]].buttonCurrent & BTN_Z;
+}
+
+extern Gfx D_9014D18[];
+extern GfxPool D_1000000;
+
+void func_xk2_800F61DC(Gfx** gfxP) {
+    Gfx* gfx;
+
+    if ((D_xk2_80119680 == 0) || (D_800D6CA0.unk_08 != 0)) {
+        return;
+    }
+    gfx = *gfxP;
+
+    gSPMatrix(gfx++, &D_xk2_8013A758, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
+    gSPMatrix(gfx++, &D_xk2_8013A798, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(gfx++, D_9014D18);
+    gSPVertex(gfx++, D_1000000.unk_365E8, 4, 0);
+    gSP2Triangles(gfx++, 0, 3, 1, 0, 1, 3, 2, 0);
+    *gfxP = gfx;
+}

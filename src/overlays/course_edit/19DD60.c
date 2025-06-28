@@ -439,8 +439,8 @@ s32 CourseEdit_Update(void) {
             switch (D_80119880) {
                 case -1:
                 case 1:
-                    func_8076814C(0xFFFB, D_xk1_8003A598.unk_00, &D_xk1_8003A598.unk_1D, COURSE_CONTEXT(), 0xC830, 0, 0xFF,
-                                  1);
+                    func_8076814C(0xFFFB, D_xk1_8003A598.unk_00, &D_xk1_8003A598.unk_1D, COURSE_CONTEXT(), 0xC830, 0,
+                                  0xFF, 1);
                     D_800D6CA0.unk_08 = 0x12;
                     break;
                 case 9:

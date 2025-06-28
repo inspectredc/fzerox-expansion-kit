@@ -307,6 +307,7 @@ s32 func_80742790(void);
 void func_8074279C(void);
 void func_80742D50(void);
 void func_80742F04(void);
+void func_80742F68(void);
 
 void func_80762330(LEODiskTime*);
 void func_80760F40(u8*, u8*);
