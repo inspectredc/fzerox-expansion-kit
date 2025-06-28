@@ -595,7 +595,7 @@ Gfx* func_xk3_80134408(Gfx* gfx, Object* arg1) {
     if (D_xk3_80136820 != 0x1C) {
         return gfx;
     }
-    gSPLoadUcodeL(gfx++, gspF3DEX_Rej_fifo);
+    gSPLoadUcodeL(gfx++, gspF3DEX2_Rej_fifo);
     gfx = Segment_SetTableAddresses(gfx);
     gSPClipRatio(gfx++, FRUSTRATIO_3);
 

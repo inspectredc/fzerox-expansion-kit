@@ -21,8 +21,8 @@ extern s8 D_i5_8007B9EC[];
 
 void func_i5_800770B4(void) {
     static s32 D_i5_8007B07C = 0;
-    GhostSave* ghostSave = (GhostSave*) gCourseCtx.saveBuffer;
-    SaveCourseRecords* courseRecords = (SaveCourseRecords*) (gCourseCtx.saveBuffer + 3 * sizeof(GhostSave));
+    GhostSave* ghostSave = COURSE_CONTEXT()->ghostSave;
+    SaveCourseRecords* courseRecords = &COURSE_CONTEXT()->saveCourseRecord;
     s32 i;
     bool var_a3;
 

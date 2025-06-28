@@ -793,22 +793,27 @@ typedef struct unk_8009E224 {
     void* tlut;
     s16 width;
     s16 height;
-} unk_8009E224;
+} unk_8009E224; // size = 0x10
 
 typedef struct unk_8003A5D8 {
-    char unk_00[0x1];
-    s8 unk_01[0xF];
+    char unk_00[16];
     s32 unk_10;
-    s8 unk_14[0x9];
-    char unk_1D[3];
-    u8 unk_20;
-    s8 unk_21[0x1];
+    s8 unk_14[0x8];
+    char unk_1C;
+    char unk_1D[5];
     u8 unk_22;
     s8 unk_23;
 } unk_8003A5D8; //size = 0x24
 
 typedef struct unk_80128C94 {
-    s8 unk_0000[0x53A0];
+    Mtx unk_0000;
+    Mtx unk_0040;
+    s8 unk_0080[0x80];
+    Mtx unk_0100;
+    s8 unk_0140[0x40];
+    Vtx unk_0180[64 * 6];
+    Vtx unk_1980[898];
+    s8 unk_51A0[0x200];
     Vtx unk_53A0[0x30];
     Vtx unk_56A0[0x30];
     s8 unk_59A0[0xC00];
@@ -816,9 +821,11 @@ typedef struct unk_80128C94 {
     Vtx unk_E5A0[0x80];
     s8 unk_EDA0[0x400];
     Mtx unk_F1A0[0x1];
-    s8 pad_F1E0[0x1EE8];
-    Gfx unk_110C8[1];
-} unk_80128C94;
+    s8 pad_F1E0[0x7C0];
+    Gfx unk_F9A0[1];
+    s8 pad_F9A8[0x1720];
+    Gfx unk_110C8[0x13C8];
+} unk_80128C94; // size = 0x1AF08
 
 typedef struct unk_80026914_unk_1C {
     void* unk_00;
@@ -847,16 +854,48 @@ typedef struct unk_80026914 {
     s32 unk_28;
     s32 unk_2C;
     s32* unk_30;
-} unk_80026914;
+} unk_80026914; // size = 0x34
 
 typedef struct unk_80140E60 {
     s32 unk_00; // type
     s32 unk_04; // value
-} unk_80140E60;
+} unk_80140E60; // size = 0x8
 
 typedef struct unk_801413F0 {
     Mtx unk_00;
     LookAt unk_40;
-} unk_801413F0;
+} unk_801413F0; // size = 0x60
+
+typedef struct unk_807B3C20 {
+    CourseSegment unk_0000[64];
+    s32 unk_2900;
+} unk_807B3C20; // size 0x2904
+
+typedef struct unk_80128690 {
+    s32 unk_00;
+    s32 unk_04;
+    s32 unk_08;
+} unk_80128690; // size = 0xC
+
+typedef struct unk_8011C220 {
+    s32 unk_00;
+    f32 unk_04;
+    Vec3f unk_08;
+    Mtx3F unk_14;
+} unk_8011C220; // size = 0x38
+
+typedef struct unk_800D6CA0 {
+    s32 unk_00;
+    s32 unk_04;
+    s32 unk_08;
+    s32 unk_0C;
+    s32 unk_10;
+    s32 unk_14;
+    s8 unk_18[0x4];
+    s32 unk_1C;
+    s32 unk_20;
+    s32 unk_24;
+    CourseSegment unk_28;
+} unk_800D6CA0; // size >= 0xCC
 
 #endif // UNK_STRUCTS_H

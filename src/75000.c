@@ -44,19 +44,6 @@ extern void* D_807C7030;
 extern OSMesgQueue D_807C7058;
 extern unk_807C6F10* D_807C7050;
 
-// void SLLeoReadWrite(LEOCmd*, s32, s32, s32, s32, OSMesgQueue*);
-// void SLLeoReadWrite_DATA(LEOCmd*, s32, s32, s32, s32, OSMesgQueue*);
-// void SLMFSSave(s32, s32, s32, s32, s32, s32, s32, s32);
-// void func_800EB938(s32, s32, s32, s32, s32, s32, s32, s32);
-// void SLMFSLoad(s32, s32, s32, s32, s32);
-// void SLMFSLoadHalfway(s32, s32, s32, s32, s32, s32);
-// void func_807039D4(s32, s32, s32, s32);
-// void func_80706518(s32, s32, s32);
-// void SLMFSFlushManageArea(void);
-// void SLMFSNewDisk(void);
-// s32 func_8002E368(void);
-// void func_8070F8A4(s32, s32);
-
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/75000/func_80767958.s")
 
 s32 func_80767E30(void) {
@@ -427,6 +414,6 @@ void func_80768D30(void) {
         SLLeo_mfs_newdisk();
         D_807C7080 = D_8076CB50;
     }
-}
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/75000/D_80794E30.s")
+    PRINTF("[ERROR] RING-BUFFER EMPTY\n");
+}

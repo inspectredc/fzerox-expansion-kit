@@ -86,12 +86,12 @@ Mtx* D_xk4_800F6B4C;
 UNUSED s32 D_xk4_800F6B50;
 
 // clang-format off
-UNUSED Mtx D_xk4_800D8A60 = {
-    1, 0, 0, 0,
-    0, 1, 0, 0,
-    0, 0, 1, 0,
-    0, 0, 0, 1,
-};
+UNUSED Mtx D_xk4_800D8A60 = gdSPDefMtx(
+    1.0f, 0.0f, 0.0f, 0.0f,
+    0.0f, 1.0f, 0.0f, 0.0f,
+    0.0f, 0.0f, 1.0f, 0.0f,
+    0.0f, 0.0f, 0.0f, 1.0f
+);
 // clang-format on
 
 #include "src/assets/overlays/ovl_xk4/ending_dd_animation/ending_dd_animation.c"
