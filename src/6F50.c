@@ -7,7 +7,9 @@
 #include "leo/leo_internal.h"
 
 OSMesg D_8079E920;
-UNUSED s8 D_8079E928[0x10];
+UNUSED s8 D_8079E928[0x8];
+unk_802D2D70* D_8079E930;
+UNUSED s8 D_8079E934[0x4];
 s16 D_8079E938[0x800];
 s32 D_8079F938;
 s32 D_8079F93C;
@@ -148,15 +150,17 @@ void func_806F9774(void) {
     }
 }
 
-extern Gfx D_9002188[];
-extern Gfx D_9002388[];
-extern Gfx D_9002B88[];
-extern Gfx D_9002788[];
+extern u16 D_9002188[];
+extern u16 D_9002388[];
+extern u16 D_9002B88[];
+extern u16 D_9002788[];
 
-Gfx* D_8076C970 = D_9002188;
-Gfx* D_8076C974 = D_9002388;
-Gfx* D_8076C978 = D_9002B88;
-Gfx* D_8076C97C = D_9002788;
+u16* D_8076C970[] = {
+    D_9002188,
+    D_9002388,
+    D_9002B88,
+    D_9002788,
+};
 
 Gfx* (*D_8076C980[])(Gfx*) = {
     func_806FC340, func_806FC3AC, func_806FC3E0, func_806FC44C, func_806FC44C, func_806FC47C,
@@ -926,7 +930,7 @@ void func_806FD3C0(s32 arg0, unk_8006FF90_arg_1* arg1, Vtx** arg2) {
 
 s32 D_8076C9E4 = 0;
 
-extern u8 D_xk2_80104CA7;
+extern u8 D_xk2_80104CA0[];
 
 Vtx* func_806FDA64(CourseSegment* arg0, f32 arg1, unk_8006FF90_arg_1* arg2, Vtx* arg3, f32 arg4, f32 arg5) {
     bool sp114 = false;
@@ -1013,7 +1017,7 @@ Vtx* func_806FDA64(CourseSegment* arg0, f32 arg1, unk_8006FF90_arg_1* arg2, Vtx*
         var_s2++;
 
         if (D_8076C9E4 >= D_8079F940) {
-            D_xk2_80104CA7 = 1;
+            D_xk2_80104CA0[7] = 1;
             return arg3;
         }
 
@@ -1043,14 +1047,7 @@ Vtx* func_806FDA64(CourseSegment* arg0, f32 arg1, unk_8006FF90_arg_1* arg2, Vtx*
     return arg3;
 }
 
-extern s32 D_80128690[][3];
-typedef struct unk_8011C220 {
-    s8 unk_00[0x4];
-    f32 unk_04;
-    Vec3f unk_08;
-    Mtx3F unk_14;
-} unk_8011C220;
-
+extern unk_80128690 D_80128690[];
 extern unk_8011C220 D_8011C220[];
 
 Vtx* func_806FE174(CourseSegment* arg0, unk_8006FF90_arg_1* arg1, Vtx* arg2, f32 arg3, f32 arg4) {
@@ -1075,7 +1072,7 @@ Vtx* func_806FE174(CourseSegment* arg0, unk_8006FF90_arg_1* arg1, Vtx* arg2, f32
 
     var_s2 = 0;
 
-    i = D_80128690[arg0->segmentIndex][0];
+    i = D_80128690[arg0->segmentIndex].unk_00;
 
     if (i >= 0x10000) {
         return arg2;
@@ -1154,7 +1151,7 @@ Vtx* func_806FE174(CourseSegment* arg0, unk_8006FF90_arg_1* arg1, Vtx* arg2, f32
         var_s2++;
 
         if (D_8076C9E4 >= D_8079F940) {
-            D_xk2_80104CA7 = 1;
+            D_xk2_80104CA0[7] = 1;
             return arg2;
         }
 
@@ -1354,7 +1351,7 @@ void func_806FEEEC(s32 courseIndex, s32 segmentIndex) {
     }
 
     // clang-format off
-    switch (gCourseCtx.courseData.pit[segmentIndex]) {
+    switch (COURSE_CONTEXT()->courseData.pit[segmentIndex]) {
         case PIT_LEFT:
             var_v1->segmentIndex = segmentIndex;
             var_v1->effectType = COURSE_EFFECT_PIT;
@@ -1445,7 +1442,7 @@ void func_806FF12C(s32 courseIndex, s32 segmentIndex) {
     }
 
     // clang-format off
-    switch (gCourseCtx.courseData.dirt[segmentIndex]) {
+    switch (COURSE_CONTEXT()->courseData.dirt[segmentIndex]) {
         case DIRT_LEFT:
             var_v1->segmentIndex = segmentIndex;
             var_v1->effectType = COURSE_EFFECT_DIRT;
@@ -1533,7 +1530,7 @@ void func_806FF364(s32 courseIndex, s32 segmentIndex) {
     }
 
     // clang-format off
-    switch (gCourseCtx.courseData.ice[segmentIndex]) {
+    switch (COURSE_CONTEXT()->courseData.ice[segmentIndex]) {
         case ICE_LEFT:
             var_v1->effectType = COURSE_EFFECT_ICE;
             var_v1->segmentIndex = segmentIndex;
@@ -1634,7 +1631,7 @@ void func_806FF630(s32 courseIndex) {
 
         var_fs0 = 0.0f;
 
-        switch (gCourseCtx.courseData.landmine[i]) {
+        switch (COURSE_CONTEXT()->courseData.landmine[i]) {
             case LANDMINE_MIDDLE:
                 if (temp_fs3) {}
                 temp_fs2 /= 5.0f;
@@ -2072,7 +2069,7 @@ void func_80700254(s32 courseIndex) {
 
         temp_fv1 = 0.0f;
 
-        switch (gCourseCtx.courseData.jump[i]) {
+        switch (COURSE_CONTEXT()->courseData.jump[i]) {
             case JUMP_ALL:
                 temp_fv1 -= 100.0f / func_i2_800B2500(temp_a0, 1.0f, &sp88);
                 temp_fv1 += 1.0f;
@@ -2152,7 +2149,7 @@ void func_80700570(s32 courseIndex, s32 segmentIndex) {
 
     var_fs0 = 0;
 
-    switch (gCourseCtx.courseData.dash[segmentIndex]) {
+    switch (COURSE_CONTEXT()->courseData.dash[segmentIndex]) {
         case DASH_MIDDLE:
             sp58 /= 2;
             temp = func_i2_800B2500(sp3C, 0, &sp2C);
@@ -2272,8 +2269,8 @@ void func_807009C8(s32 courseIndex) {
             temp_fs0 -= temp_fs2;
             temp_fs1 -= temp_fs3;
 
-            if (i == gCourseCtx.courseData.gate[j]) {
-                switch (gCourseCtx.courseData.gate[j]) {
+            if (i == COURSE_CONTEXT()->courseData.gate[j]) {
+                switch (COURSE_CONTEXT()->courseData.gate[j]) {
                     case GATE_SQUARE:
                         var_a2->featureType = COURSE_FEATURE_GATE_SQUARE;
                         break;
@@ -2326,7 +2323,7 @@ void func_80700B18(s32 courseIndex) {
         temp_fs0 -= temp_fs2;
         temp_fs1 -= temp_fs3;
 
-        switch (gCourseCtx.courseData.building[i]) {
+        switch (COURSE_CONTEXT()->courseData.building[i]) {
             case BUILDING_TALL_LEFT:
                 var_a2->featureType = COURSE_FEATURE_BUILDING_TALL_LEFT;
                 var_a2->segmentIndex = i;
@@ -2411,7 +2408,7 @@ void func_80700CE4(s32 courseIndex) {
         temp_fs0 -= temp_fs2;
         temp_fs1 -= temp_fs3;
 
-        switch (gCourseCtx.courseData.building[i]) {
+        switch (COURSE_CONTEXT()->courseData.building[i]) {
             case BUILDING_SHORT_LEFT:
                 var_a2->featureType = COURSE_FEATURE_BUILDING_SHORT_LEFT;
                 var_a2->segmentIndex = i;
@@ -2496,7 +2493,7 @@ void func_80700EBC(s32 courseIndex) {
         temp_fs0 -= temp_fs2;
         temp_fs1 -= temp_fs3;
 
-        switch (gCourseCtx.courseData.building[i]) {
+        switch (COURSE_CONTEXT()->courseData.building[i]) {
             case BUILDING_SPIRE_LEFT:
                 var_a2->featureType = COURSE_FEATURE_BUILDING_SPIRE_LEFT;
                 var_a2->segmentIndex = i;
@@ -2582,7 +2579,7 @@ void func_80701094(s32 courseIndex) {
         temp_fs0 -= temp_fs2;
         temp_fs1 -= temp_fs3;
 
-        switch (gCourseCtx.courseData.building[i]) {
+        switch (COURSE_CONTEXT()->courseData.building[i]) {
             case BUILDING_MOUNTAIN_BOTH:
                 var_a2->featureType = COURSE_FEATURE_BUILDING_MOUNTAIN_LEFT;
                 var_a2->segmentIndex = i;
@@ -2726,8 +2723,8 @@ void func_80701360(s32 courseIndex) {
             temp_fs0 -= temp_fs2;
             temp_fs1 -= temp_fs3;
 
-            if (i == gCourseCtx.courseData.sign[j]) {
-                switch (gCourseCtx.courseData.sign[j]) {
+            if (i == COURSE_CONTEXT()->courseData.sign[j]) {
+                switch (COURSE_CONTEXT()->courseData.sign[j]) {
                     case SIGN_TV:
                         var_a2->featureType = COURSE_FEATURE_SIGN_TV_RIGHT;
                         var_a2->segmentIndex = j;
@@ -2847,14 +2844,14 @@ void func_80701360(s32 courseIndex) {
     D_807BCB58.unk_0C = temp_v1;
 }
 
-extern s32 D_807B6520;
+extern unk_807B3C20 D_807B3C20;
 
 void func_807016AC(s32 courseIndex) {
     if ((D_8076C954 != 0) && (D_8076C950 == 0)) {
-        if (D_807B6520 < 4) {
+        if (D_807B3C20.unk_2900 < 4) {
             return;
         }
-    } else if (gCourseCtx.courseData.controlPointCount < 4) {
+    } else if (COURSE_CONTEXT()->courseData.controlPointCount < 4) {
         return;
     }
 
@@ -2872,10 +2869,10 @@ void func_80701754(s32 courseIndex) {
     s32 i;
 
     if ((D_8076C954 != 0) && (D_8076C950 == 0)) {
-        if (D_807B6520 < 4) {
+        if (D_807B3C20.unk_2900 < 4) {
             return;
         }
-    } else if (gCourseCtx.courseData.controlPointCount < 4) {
+    } else if (COURSE_CONTEXT()->courseData.controlPointCount < 4) {
         return;
     }
 
@@ -2901,7 +2898,7 @@ void func_8070183C(void) {
     s32 var_a3;
     s32 i;
 
-    D_i2_800D0130 = gCourseCtx.courseData;
+    D_i2_800D0130 = COURSE_CONTEXT()->courseData;
 
     courseInfo = &gCourseInfos[gCourseIndex];
     courseInfo->courseSegments = D_802D0620;
@@ -2941,32 +2938,32 @@ void func_8070183C(void) {
         var_a3 = segment->segmentIndex;
         D_807B8E30[i] = *segment;
 
-        D_800CF950.bankAngle[i] = gCourseCtx.courseData.bankAngle[var_a3];
-        D_800CF950.pit[i] = gCourseCtx.courseData.pit[var_a3];
-        D_800CF950.dash[i] = gCourseCtx.courseData.dash[var_a3];
-        D_800CF950.dirt[i] = gCourseCtx.courseData.dirt[var_a3];
-        D_800CF950.ice[i] = gCourseCtx.courseData.ice[var_a3];
-        D_800CF950.jump[i] = gCourseCtx.courseData.jump[var_a3];
-        D_800CF950.landmine[i] = gCourseCtx.courseData.landmine[var_a3];
-        D_800CF950.gate[i] = gCourseCtx.courseData.gate[var_a3];
-        D_800CF950.building[i] = gCourseCtx.courseData.building[var_a3];
-        D_800CF950.sign[i] = gCourseCtx.courseData.sign[var_a3];
+        D_800CF950.bankAngle[i] = COURSE_CONTEXT()->courseData.bankAngle[var_a3];
+        D_800CF950.pit[i] = COURSE_CONTEXT()->courseData.pit[var_a3];
+        D_800CF950.dash[i] = COURSE_CONTEXT()->courseData.dash[var_a3];
+        D_800CF950.dirt[i] = COURSE_CONTEXT()->courseData.dirt[var_a3];
+        D_800CF950.ice[i] = COURSE_CONTEXT()->courseData.ice[var_a3];
+        D_800CF950.jump[i] = COURSE_CONTEXT()->courseData.jump[var_a3];
+        D_800CF950.landmine[i] = COURSE_CONTEXT()->courseData.landmine[var_a3];
+        D_800CF950.gate[i] = COURSE_CONTEXT()->courseData.gate[var_a3];
+        D_800CF950.building[i] = COURSE_CONTEXT()->courseData.building[var_a3];
+        D_800CF950.sign[i] = COURSE_CONTEXT()->courseData.sign[var_a3];
         segment = segment->next;
     }
 
     for (i = 0; i < courseInfo->segmentCount; i++) {
         courseInfo->courseSegments[i] = D_807B8E30[i];
 
-        gCourseCtx.courseData.bankAngle[i] = D_800CF950.bankAngle[i];
-        gCourseCtx.courseData.pit[i] = D_800CF950.pit[i];
-        gCourseCtx.courseData.dash[i] = D_800CF950.dash[i];
-        gCourseCtx.courseData.dirt[i] = D_800CF950.dirt[i];
-        gCourseCtx.courseData.ice[i] = D_800CF950.ice[i];
-        gCourseCtx.courseData.jump[i] = D_800CF950.jump[i];
-        gCourseCtx.courseData.landmine[i] = D_800CF950.landmine[i];
-        gCourseCtx.courseData.gate[i] = D_800CF950.gate[i];
-        gCourseCtx.courseData.building[i] = D_800CF950.building[i];
-        gCourseCtx.courseData.sign[i] = D_800CF950.sign[i];
+        COURSE_CONTEXT()->courseData.bankAngle[i] = D_800CF950.bankAngle[i];
+        COURSE_CONTEXT()->courseData.pit[i] = D_800CF950.pit[i];
+        COURSE_CONTEXT()->courseData.dash[i] = D_800CF950.dash[i];
+        COURSE_CONTEXT()->courseData.dirt[i] = D_800CF950.dirt[i];
+        COURSE_CONTEXT()->courseData.ice[i] = D_800CF950.ice[i];
+        COURSE_CONTEXT()->courseData.jump[i] = D_800CF950.jump[i];
+        COURSE_CONTEXT()->courseData.landmine[i] = D_800CF950.landmine[i];
+        COURSE_CONTEXT()->courseData.gate[i] = D_800CF950.gate[i];
+        COURSE_CONTEXT()->courseData.building[i] = D_800CF950.building[i];
+        COURSE_CONTEXT()->courseData.sign[i] = D_800CF950.sign[i];
     }
 
     segment = courseInfo->courseSegments;
@@ -3085,10 +3082,10 @@ void func_80701E90(s32 courseIndex) {
     func_i2_800AA80C();
     if (courseIndex >= COURSE_DEATH_RACE) {
         sp48 = D_807C70C8 + (courseIndex - 30) * sizeof(CourseData);
-        func_80701D7C(sp48, osVirtualToPhysical(&gCourseCtx.courseData), sizeof(CourseData));
+        func_80701D7C(sp48, osVirtualToPhysical(&COURSE_CONTEXT()->courseData), sizeof(CourseData));
         PRINTF("ENTRY CHECK\n");
         if ((gPlayer1OverallPosition >= 4) && (courseIndex == COURSE_ENDING)) {
-            gCourseCtx.courseData.skybox = SKYBOX_BLUE;
+            COURSE_CONTEXT()->courseData.skybox = SKYBOX_BLUE;
         }
     } else if (courseIndex >= COURSE_X_1) {
         Course_GenerateRandomCourse();
@@ -3103,7 +3100,7 @@ void func_80701E90(s32 courseIndex) {
             sp38[5] = (courseIndex / 10) + '0';
             sp38[6] = (courseIndex % 10) + '0';
             func_i2_800A7CB8(func_i2_800AA84C());
-            func_8076852C(0xFFFB, sp38, "GOST", &gCourseCtx,
+            func_8076852C(0xFFFB, sp38, "GOST", COURSE_CONTEXT(),
                           sizeof(CourseData) + 3 * sizeof(GhostSave) + sizeof(SaveCourseRecords));
             osRecvMesg(&D_8079F998, NULL, OS_MESG_BLOCK);
             Course_CalculateChecksum();
@@ -3114,15 +3111,15 @@ void func_80701E90(s32 courseIndex) {
             }
             PRINTF("DEF LOAD OK\n");
             func_i2_800A8CE4(func_i2_800AA84C(), courseIndex);
-            func_80703B40(D_320 + sp50, &gCourseCtx.courseData, sizeof(CourseData), 0);
-            if ((Course_CalculateChecksum() != gCourseCtx.courseData.checksum) ||
-                (gCourseCtx.courseData.creatorId != CREATOR_NINTENDO) ||
-                ((s8) gCourseCtx.courseData.fileName[0x16] >= 0xE)) {
+            func_80703B40(D_320 + sp50, &COURSE_CONTEXT()->courseData, sizeof(CourseData), 0);
+            if ((Course_CalculateChecksum() != COURSE_CONTEXT()->courseData.checksum) ||
+                (COURSE_CONTEXT()->courseData.creatorId != CREATOR_NINTENDO) ||
+                ((s8) COURSE_CONTEXT()->courseData.fileName[0x16] >= 0xE)) {
                 func_8070F8A4(-1, 9);
                 while (true) {}
             }
         } else {
-            func_8076852C(0xFFFB, gEditCupTrackNames[sp50], "CRSD", &gCourseCtx,
+            func_8076852C(0xFFFB, gEditCupTrackNames[sp50], "CRSD", COURSE_CONTEXT(),
                           sizeof(CourseData) + 3 * sizeof(GhostSave) + sizeof(SaveCourseRecords));
             osRecvMesg(&D_8079F998, NULL, OS_MESG_BLOCK);
             PRINTF("ENTRY CHECK BUT NONE %s (DEFAULT COURSE)\n");
@@ -3134,7 +3131,7 @@ void func_80701E90(s32 courseIndex) {
                         sp30[5] = (courseIndex / 10) + '0';
                         sp30[6] = (courseIndex % 10) + '0';
                         func_i2_800A7CB8(func_i2_800AA84C());
-                        func_8076852C(0xFFFB, sp30, "GOST", &gCourseCtx,
+                        func_8076852C(0xFFFB, sp30, "GOST", COURSE_CONTEXT(),
                                       sizeof(CourseData) + 3 * sizeof(GhostSave) + sizeof(SaveCourseRecords));
                         osRecvMesg(&D_8079F998, NULL, OS_MESG_BLOCK);
                         Course_CalculateChecksum();
@@ -3145,10 +3142,10 @@ void func_80701E90(s32 courseIndex) {
                         }
                         PRINTF("DEF LOAD OK\n");
                         func_i2_800A8CE4(func_i2_800AA84C(), courseIndex);
-                        func_80703B40(D_320 + sp50, &gCourseCtx.courseData, sizeof(CourseData), 0);
-                        if ((Course_CalculateChecksum() != gCourseCtx.courseData.checksum) ||
-                            (gCourseCtx.courseData.creatorId != CREATOR_NINTENDO) ||
-                            ((s8) gCourseCtx.courseData.fileName[0x16] >= 0xE)) {
+                        func_80703B40(D_320 + sp50, &COURSE_CONTEXT()->courseData, sizeof(CourseData), 0);
+                        if ((Course_CalculateChecksum() != COURSE_CONTEXT()->courseData.checksum) ||
+                            (COURSE_CONTEXT()->courseData.creatorId != CREATOR_NINTENDO) ||
+                            ((s8) COURSE_CONTEXT()->courseData.fileName[0x16] >= 0xE)) {
                             func_8070F8A4(-1, 9);
                             while (true) {}
                         }
@@ -3167,18 +3164,18 @@ void func_80701E90(s32 courseIndex) {
         sp28[6] = (courseIndex % 10) + '0';
         func_i2_800A7CB8(func_i2_800AA84C());
         if (D_8076C7D8 == 0) {
-            func_8076852C(0xFFFB, sp28, "GOST", &gCourseCtx,
+            func_8076852C(0xFFFB, sp28, "GOST", COURSE_CONTEXT(),
                           sizeof(CourseData) + 3 * sizeof(GhostSave) + sizeof(SaveCourseRecords));
             osRecvMesg(&D_8079F998, NULL, OS_MESG_BLOCK);
         }
         sp48 = D_807C70C8 + courseIndex * sizeof(CourseData);
         PRINTF("UNPACK\n");
-        func_80701D7C(sp48, osVirtualToPhysical(&gCourseCtx.courseData), sizeof(CourseData));
+        func_80701D7C(sp48, osVirtualToPhysical(&COURSE_CONTEXT()->courseData), sizeof(CourseData));
         PRINTF("UNPACK OK\n");
-        gCourseCtx.courseData.fileName[0x16] = D_800BF044[courseIndex];
+        COURSE_CONTEXT()->courseData.fileName[0x16] = D_800BF044[courseIndex];
         if ((D_8076C954 != 0) && (courseIndex == COURSE_RED_CANYON_2)) {
-            gCourseCtx.courseData.dirt[21] = DIRT_NONE;
-            gCourseCtx.courseData.checksum = Course_CalculateChecksum();
+            COURSE_CONTEXT()->courseData.dirt[21] = DIRT_NONE;
+            COURSE_CONTEXT()->courseData.checksum = Course_CalculateChecksum();
         }
     }
 
@@ -3199,9 +3196,9 @@ void func_80702448(s32 courseIndex) {
         PRINTF("ENTRY CHECK\n");
         PRINTF("INDEX %d\n");
         sp48 = D_807C70C8 + (courseIndex - 30) * sizeof(CourseData);
-        func_80701D7C(sp48, osVirtualToPhysical(&gCourseCtx.courseData), sizeof(CourseData));
+        func_80701D7C(sp48, osVirtualToPhysical(&COURSE_CONTEXT()->courseData), sizeof(CourseData));
         if ((gPlayer1OverallPosition >= 4) && (courseIndex == COURSE_ENDING)) {
-            gCourseCtx.courseData.skybox = SKYBOX_BLUE;
+            COURSE_CONTEXT()->courseData.skybox = SKYBOX_BLUE;
         }
     } else if (courseIndex >= COURSE_X_1) {
         Course_GenerateRandomCourse();
@@ -3227,7 +3224,7 @@ void func_80702448(s32 courseIndex) {
             sp38[5] = (courseIndex / 10) + '0';
             sp38[6] = (courseIndex % 10) + '0';
             func_i2_800A7CB8(func_i2_800AA84C());
-            func_8076852C(0xFFFB, sp38, "GOST", &gCourseCtx,
+            func_8076852C(0xFFFB, sp38, "GOST", COURSE_CONTEXT(),
                           sizeof(CourseData) + 3 * sizeof(GhostSave) + sizeof(SaveCourseRecords));
             osRecvMesg(&D_8079F998, NULL, OS_MESG_BLOCK);
             Course_CalculateChecksum();
@@ -3238,15 +3235,15 @@ void func_80702448(s32 courseIndex) {
             PRINTF("course index is %d\n", courseIndex);
             PRINTF("DEF LOAD OK\n");
             func_i2_800A8CE4(func_i2_800AA84C(), courseIndex);
-            func_80703B40(D_320 + sp4C, &gCourseCtx.courseData, sizeof(CourseData), 0);
-            if ((Course_CalculateChecksum() != gCourseCtx.courseData.checksum) ||
-                (gCourseCtx.courseData.creatorId != CREATOR_NINTENDO) ||
-                ((s8) gCourseCtx.courseData.fileName[0x16] >= 0xE)) {
+            func_80703B40(D_320 + sp4C, &COURSE_CONTEXT()->courseData, sizeof(CourseData), 0);
+            if ((Course_CalculateChecksum() != COURSE_CONTEXT()->courseData.checksum) ||
+                (COURSE_CONTEXT()->courseData.creatorId != CREATOR_NINTENDO) ||
+                ((s8) COURSE_CONTEXT()->courseData.fileName[0x16] >= 0xE)) {
                 func_8070F8A4(-1, 9);
                 while (true) {}
             }
         } else {
-            func_8076852C(0xFFFB, gEditCupTrackNames[sp4C], "CRSD", &gCourseCtx,
+            func_8076852C(0xFFFB, gEditCupTrackNames[sp4C], "CRSD", COURSE_CONTEXT(),
                           sizeof(CourseData) + 3 * sizeof(GhostSave) + sizeof(SaveCourseRecords));
             osRecvMesg(&D_8079F998, NULL, OS_MESG_BLOCK);
             PRINTF("ENTRY CHECK BUT NONE %s (DEFAULT COURSE)\n");
@@ -3260,7 +3257,7 @@ void func_80702448(s32 courseIndex) {
                         sp30[5] = (courseIndex / 10) + '0';
                         sp30[6] = (courseIndex % 10) + '0';
                         func_i2_800A7CB8(func_i2_800AA84C());
-                        func_8076852C(0xFFFB, sp30, "GOST", &gCourseCtx,
+                        func_8076852C(0xFFFB, sp30, "GOST", COURSE_CONTEXT(),
                                       sizeof(CourseData) + 3 * sizeof(GhostSave) + sizeof(SaveCourseRecords));
                         osRecvMesg(&D_8079F998, NULL, OS_MESG_BLOCK);
                         Course_CalculateChecksum();
@@ -3271,10 +3268,10 @@ void func_80702448(s32 courseIndex) {
                         PRINTF("course index is %d\n", courseIndex);
                         PRINTF("DEF LOAD OK\n");
                         func_i2_800A8CE4(func_i2_800AA84C(), courseIndex);
-                        func_80703B40(D_320 + sp4C, &gCourseCtx.courseData, sizeof(CourseData), 0);
-                        if ((Course_CalculateChecksum() != gCourseCtx.courseData.checksum) ||
-                            (gCourseCtx.courseData.creatorId != CREATOR_NINTENDO) ||
-                            ((s8) gCourseCtx.courseData.fileName[0x16] >= 0xE)) {
+                        func_80703B40(D_320 + sp4C, &COURSE_CONTEXT()->courseData, sizeof(CourseData), 0);
+                        if ((Course_CalculateChecksum() != COURSE_CONTEXT()->courseData.checksum) ||
+                            (COURSE_CONTEXT()->courseData.creatorId != CREATOR_NINTENDO) ||
+                            ((s8) COURSE_CONTEXT()->courseData.fileName[0x16] >= 0xE)) {
                             func_8070F8A4(-1, 9);
                             while (true) {}
                         }
@@ -3290,10 +3287,10 @@ void func_80702448(s32 courseIndex) {
     } else {
         sp48 = D_807C70C8 + courseIndex * sizeof(CourseData);
 
-        func_80701D7C(sp48, osVirtualToPhysical(&gCourseCtx.courseData), sizeof(CourseData));
+        func_80701D7C(sp48, osVirtualToPhysical(&COURSE_CONTEXT()->courseData), sizeof(CourseData));
         if (D_8076C954 != 0 && courseIndex == COURSE_RED_CANYON_2) {
-            gCourseCtx.courseData.dirt[21] = DIRT_NONE;
-            gCourseCtx.courseData.checksum = Course_CalculateChecksum();
+            COURSE_CONTEXT()->courseData.dirt[21] = DIRT_NONE;
+            COURSE_CONTEXT()->courseData.checksum = Course_CalculateChecksum();
         }
     }
 }
@@ -3307,27 +3304,26 @@ void func_8070299C(void) {
     s32 i;
 
     for (i = 0; i < 64; i++) {
-        gCourseCtx.courseData.bankAngle[i] = 0;
-        gCourseCtx.courseData.pit[i] = PIT_NONE;
-        gCourseCtx.courseData.dash[i] = DASH_NONE;
-        gCourseCtx.courseData.dirt[i] = DIRT_NONE;
-        gCourseCtx.courseData.ice[i] = ICE_NONE;
-        gCourseCtx.courseData.jump[i] = JUMP_NONE;
-        gCourseCtx.courseData.landmine[i] = LANDMINE_NONE;
-        gCourseCtx.courseData.gate[i] = GATE_NONE;
-        gCourseCtx.courseData.building[i] = BUILDING_NONE;
-        gCourseCtx.courseData.sign[i] = SIGN_NONE;
+        COURSE_CONTEXT()->courseData.bankAngle[i] = 0;
+        COURSE_CONTEXT()->courseData.pit[i] = PIT_NONE;
+        COURSE_CONTEXT()->courseData.dash[i] = DASH_NONE;
+        COURSE_CONTEXT()->courseData.dirt[i] = DIRT_NONE;
+        COURSE_CONTEXT()->courseData.ice[i] = ICE_NONE;
+        COURSE_CONTEXT()->courseData.jump[i] = JUMP_NONE;
+        COURSE_CONTEXT()->courseData.landmine[i] = LANDMINE_NONE;
+        COURSE_CONTEXT()->courseData.gate[i] = GATE_NONE;
+        COURSE_CONTEXT()->courseData.building[i] = BUILDING_NONE;
+        COURSE_CONTEXT()->courseData.sign[i] = SIGN_NONE;
     }
 }
 
 void func_80702A68(void) {
     func_8070299C();
-    gCourseCtx.courseData.venue = VENUE_MUTE_CITY;
-    gCourseCtx.courseData.skybox = SKYBOX_PURPLE;
+    COURSE_CONTEXT()->courseData.venue = VENUE_MUTE_CITY;
+    COURSE_CONTEXT()->courseData.skybox = SKYBOX_PURPLE;
 }
 
-extern u8 D_80030060;
-extern s32 D_807B6520;
+extern u8 D_80030060[];
 extern CourseData D_800D0910;
 extern unk_802D1B60_unk_00 D_807BBE38[];
 
@@ -3335,14 +3331,14 @@ void func_80702A94(void) {
     s32 i;
 
     bzero(SEGMENT_VRAM_START(unk_context), SEGMENT_BSS_SIZE(unk_context));
-    D_80030060 = 0;
+    D_80030060[0] = '\0';
     func_8070299C();
-    D_807B6520 = 0;
-    gCourseCtx.courseData.creatorId = CREATOR_NINTENDO;
-    gCourseCtx.courseData.controlPointCount = 0;
-    gCourseCtx.courseData.venue = VENUE_MUTE_CITY;
-    gCourseCtx.courseData.skybox = SKYBOX_PURPLE;
-    D_800D0910 = gCourseCtx.courseData;
+    D_807B3C20.unk_2900 = 0;
+    COURSE_CONTEXT()->courseData.creatorId = CREATOR_NINTENDO;
+    COURSE_CONTEXT()->courseData.controlPointCount = 0;
+    COURSE_CONTEXT()->courseData.venue = VENUE_MUTE_CITY;
+    COURSE_CONTEXT()->courseData.skybox = SKYBOX_PURPLE;
+    D_800D0910 = COURSE_CONTEXT()->courseData;
     D_807BCB58.unk_00 = D_807BBE38;
     gCourseInfos[0].courseSegments = D_802D0620;
     D_807BDD68.unk_00 = D_807BCB68;
@@ -3351,16 +3347,16 @@ void func_80702A94(void) {
 
     func_80701E90(0);
     func_8070299C();
-    D_800D0910 = gCourseCtx.courseData;
-    gCourseCtx.courseData.controlPointCount = 0;
-    D_807B6520 = 0;
+    D_800D0910 = COURSE_CONTEXT()->courseData;
+    COURSE_CONTEXT()->courseData.controlPointCount = 0;
+    D_807B3C20.unk_2900 = 0;
 }
 
 void func_80702BC4(s32 courseIndex) {
     s32 i;
     s32 sp20;
     CourseSegment* var_v0;
-    CourseData* courseData = &gCourseCtx.courseData;
+    CourseData* courseData = &COURSE_CONTEXT()->courseData;
 
     if (courseData->controlPointCount == 0) {
         return;
@@ -3401,19 +3397,17 @@ void func_80702BC4(s32 courseIndex) {
     }
 }
 
-extern CourseSegment D_807B3C20[];
-
 void func_80702D6C(void) {
     s32 i;
-    CourseData* courseData = &gCourseCtx.courseData;
+    CourseData* courseData = &COURSE_CONTEXT()->courseData;
 
-    courseData->controlPointCount = D_807B6520;
+    courseData->controlPointCount = D_807B3C20.unk_2900;
 
     for (i = 0; i < courseData->controlPointCount; i++) {
-        courseData->controlPoint[i].pos = D_807B3C20[i].pos;
-        courseData->controlPoint[i].radiusLeft = D_807B3C20[i].radiusLeft;
-        courseData->controlPoint[i].radiusRight = D_807B3C20[i].radiusRight;
-        courseData->controlPoint[i].trackSegmentInfo = D_807B3C20[i].trackSegmentInfo;
+        courseData->controlPoint[i].pos = D_807B3C20.unk_0000[i].pos;
+        courseData->controlPoint[i].radiusLeft = D_807B3C20.unk_0000[i].radiusLeft;
+        courseData->controlPoint[i].radiusRight = D_807B3C20.unk_0000[i].radiusRight;
+        courseData->controlPoint[i].trackSegmentInfo = D_807B3C20.unk_0000[i].trackSegmentInfo;
     }
 }
 
@@ -3459,19 +3453,19 @@ void func_80702F1C(void) {
     s32 i;
     s32 trackShape;
 
-    for (i = 0; i < D_807B6520; i++) {
-        segment = &D_807B3C20[i];
+    for (i = 0; i < D_807B3C20.unk_2900; i++) {
+        segment = &D_807B3C20.unk_0000[i];
         trackShape = segment->trackSegmentInfo & TRACK_SHAPE_MASK;
         switch (trackShape) {
             case TRACK_SHAPE_PIPE:
             case TRACK_SHAPE_CYLINDER:
             case TRACK_SHAPE_HALF_PIPE:
             case TRACK_SHAPE_AIR:
-                gCourseCtx.courseData.pit[i] = PIT_NONE;
-                gCourseCtx.courseData.dirt[i] = DIRT_NONE;
-                gCourseCtx.courseData.ice[i] = ICE_NONE;
-                gCourseCtx.courseData.jump[i] = JUMP_NONE;
-                gCourseCtx.courseData.landmine[i] = LANDMINE_NONE;
+                COURSE_CONTEXT()->courseData.pit[i] = PIT_NONE;
+                COURSE_CONTEXT()->courseData.dirt[i] = DIRT_NONE;
+                COURSE_CONTEXT()->courseData.ice[i] = ICE_NONE;
+                COURSE_CONTEXT()->courseData.jump[i] = JUMP_NONE;
+                COURSE_CONTEXT()->courseData.landmine[i] = LANDMINE_NONE;
                 break;
         }
         switch (trackShape) {
@@ -3485,14 +3479,14 @@ void func_80702F1C(void) {
                     case TRACK_SHAPE_BORDERLESS_ROAD:
                         break;
                     default:
-                        gCourseCtx.courseData.gate[i] = GATE_NONE;
-                        gCourseCtx.courseData.sign[i] = SIGN_NONE;
+                        COURSE_CONTEXT()->courseData.gate[i] = GATE_NONE;
+                        COURSE_CONTEXT()->courseData.sign[i] = SIGN_NONE;
                         break;
                 }
                 break;
             default:
-                gCourseCtx.courseData.gate[i] = GATE_NONE;
-                gCourseCtx.courseData.sign[i] = SIGN_NONE;
+                COURSE_CONTEXT()->courseData.gate[i] = GATE_NONE;
+                COURSE_CONTEXT()->courseData.sign[i] = SIGN_NONE;
                 break;
         }
     }
@@ -3561,7 +3555,7 @@ Gfx D_8076CAF8[] = {
 };
 
 s32 func_80703228(void) {
-    return (s8) gCourseCtx.courseData.fileName[0x16];
+    return (s8) COURSE_CONTEXT()->courseData.fileName[0x16];
 }
 
 void func_80703234(void) {
@@ -3570,13 +3564,13 @@ void func_80703234(void) {
     D_807BCB58.unk_08 = 0;
     D_807BCB58.unk_0C = 0;
 
-    for (i = 0; i < D_807B6520; i++) {
+    for (i = 0; i < D_807B3C20.unk_2900; i++) {
 
-        if (gCourseCtx.courseData.landmine[i] != -1) {
+        if (COURSE_CONTEXT()->courseData.landmine[i] != -1) {
             D_807BCB58.unk_08 += 6;
         }
 
-        if (gCourseCtx.courseData.jump[i] != -1) {
+        if (COURSE_CONTEXT()->courseData.jump[i] != -1) {
             D_807BCB58.unk_0C++;
         }
     }

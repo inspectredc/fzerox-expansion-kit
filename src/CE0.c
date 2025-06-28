@@ -107,10 +107,10 @@ void Gfx_InitBuffer(void) {
     gMasterDisp = gGfxPool->gfxBuffer;
 }
 
-extern s32 D_80128C90;
+extern unk_80128C94* D_80128C90;
 
 void Gfx_LoadSegments(void) {
-    Segment_SetPhysicalAddress(6, (D_8079A35C * 0x1AF08) + D_80128C90);
+    Segment_SetPhysicalAddress(6, &D_80128C90[D_8079A35C]);
     gMasterDisp = Segment_SetTableAddresses(gMasterDisp);
 }
 
@@ -141,16 +141,16 @@ void Gfx_SetTask(OSTask* task) {
 
     switch (gGameMode & GAMEMODE_F3D_MASK) {
         case GFXMODE_F3DEX:
-            task->t.ucode = (u64*) gspF3DEX_fifoTextStart;
-            task->t.ucode_data = (u64*) gspF3DEX_fifoDataStart;
+            task->t.ucode = (u64*) gspF3DEX2_fifoTextStart;
+            task->t.ucode_data = (u64*) gspF3DEX2_fifoDataStart;
             break;
         case GFXMODE_F3DLX:
-            task->t.ucode = (u64*) gspF3DLX_Rej_fifoTextStart;
-            task->t.ucode_data = (u64*) gspF3DLX_Rej_fifoDataStart;
+            task->t.ucode = (u64*) gspF3DLX2_Rej_fifoTextStart;
+            task->t.ucode_data = (u64*) gspF3DLX2_Rej_fifoDataStart;
             break;
         case GFXMODE_F3DFLX:
-            task->t.ucode = (u64*) gspF3DFLX_Rej_fifoTextStart;
-            task->t.ucode_data = (u64*) gspF3DFLX_Rej_fifoDataStart;
+            task->t.ucode = (u64*) gspF3DFLX2_Rej_fifoTextStart;
+            task->t.ucode_data = (u64*) gspF3DFLX2_Rej_fifoDataStart;
             break;
     }
 
@@ -223,8 +223,6 @@ extern u8 D_800D6D90[];
 extern u8 D_8013A7F0[];
 extern u8 D_8012B520[];
 extern u8 D_801414E0[];
-extern u8 D_7000000_VRAM[];
-extern u8 D_7000000_VRAM_END[];
 
 extern s32 D_8076CB40;
 extern s32 D_8076C770;
@@ -324,7 +322,7 @@ void Game_ThreadEntry(void* entry) {
     D_8079A3D8 = osVirtualToPhysical(D_8013A7F0);
 
     D_8079A42C = D_8079A3D8;
-    D_8079A430 = D_8079A42C + (size_t) SEGMENT_VRAM_SIZE(D_7000000);
+    D_8079A430 = D_8079A42C + (size_t) SEGMENT_VRAM_SIZE(segment_145B70);
 
     D_8079A3DC = osVirtualToPhysical(D_8012B520);
     D_8079A3E0 = osVirtualToPhysical(D_801414E0);
@@ -334,7 +332,7 @@ void Game_ThreadEntry(void* entry) {
     Segment_SetAddress(2, gUnkBssVramStart);
     Segment_SetAddress(8, gSegment16C8A0VramStart);
     Segment_SetAddress(3, gSegment17B1E0VramStart);
-    Segment_SetPhysicalAddress(6, (D_8079A35C * 0x1AF08) + D_80128C90);
+    Segment_SetPhysicalAddress(6, &D_80128C90[D_8079A35C]);
 
     Controller_Init();
     func_807083D8();

@@ -421,7 +421,7 @@ Gfx* func_i3_80065560(Gfx* gfx, s32 courseIndex) {
     }
 
     gfx = func_i3_DrawSpeed(gfx, D_i3_8006EF68 + D_i3_8006EF7C, D_i3_8006EF80, var_s2->maxSpeed, var_v0, true);
-    gSPLoadUcodeL(gfx++, gspF3DFLX_Rej_fifo);
+    gSPLoadUcodeL(gfx++, gspF3DFLX2_Rej_fifo);
     gfx = Segment_SetTableAddresses(gfx);
     gSPClipRatio(gfx++, FRUSTRATIO_3);
     gSPPerspNormalize(gfx++, gPlayers[1].unk_118);

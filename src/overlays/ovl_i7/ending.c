@@ -196,7 +196,7 @@ void EndingCutscene_Init(void) {
     func_i3_80040158();
     func_8071D48C();
     func_807160A0();
-    func_8070F0B0(gCourseCtx.courseData.venue, gCourseCtx.courseData.skybox);
+    func_8070F0B0(COURSE_CONTEXT()->courseData.venue, COURSE_CONTEXT()->courseData.skybox);
     func_i3_800617A0();
     func_i2_800AB6B0();
     func_806F9774();
@@ -597,7 +597,7 @@ Gfx* EndingCutscene_Draw(Gfx* gfx) {
     gfx = func_806F9DB4(gfx, 0);
     gfx = func_i7_80095D14(gfx);
 
-    gSPLoadUcodeL(gfx++, gspF3DLX_Rej_fifo);
+    gSPLoadUcodeL(gfx++, gspF3DLX2_Rej_fifo);
     gfx = Segment_SetTableAddresses(gfx);
     gSPClipRatio(gfx++, FRUSTRATIO_3);
     gDPPipeSync(gfx++);

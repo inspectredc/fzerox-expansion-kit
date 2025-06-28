@@ -79,7 +79,7 @@ typedef struct GfxPool {
     Mtx unk_36368[6];
     Vtx unk_364E8[4];
     u16 unk_36528[6][16];
-    s8 pad_365E8[0x40];
+    Vtx unk_365E8[4];
     Mtx unk_36628[1];
     Mtx unk_36668[1];
     Mtx unk_366A8[1];

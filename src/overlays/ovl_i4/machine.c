@@ -1610,7 +1610,7 @@ Gfx* MachineSelect_MachineDraw(Gfx* gfx, Object* machineObj) {
     s32 i;
     s32 j;
 
-    gSPLoadUcodeL(gfx++, gspF3DEX_Rej_fifo);
+    gSPLoadUcodeL(gfx++, gspF3DEX2_Rej_fifo);
     gSPPerspNormalize(gfx++, gPlayers[0].unk_118);
 
     gSPMatrix(gfx++, D_1000000.unk_1A208, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);

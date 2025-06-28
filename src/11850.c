@@ -2,15 +2,28 @@
 #include "leo/leo_internal.h"
 #include "leo/leo_functions.h"
 
+s32 D_8079F950;
+LEOStatus D_8079F954;
+LEOCmd D_8079F958;
+OSMesgQueue D_8079F978;
+OSMesg D_8079F990[1];
+OSMesgQueue D_8079F998;
+OSMesg D_8079F9B0[1];
+s32 D_8079F9B4;
+s32 D_8079F9B8;
+s32 D_8079F9BC;
+UNUSED s32 D_8079F9C0;
+u8 D_8079F9C4[2];
+u8 D_8079F9C8[4];
+s32 D_8079F9CC;
+OSMesg D_8079F9D0[16];
+LEODiskID D_8079FA10;
+
 extern s32 D_8076CBB0;
 extern s32 D_8076CBBC;
 extern s32 D_8076CBC8;
 extern s32 D_8076CBCC;
 extern OSMesg D_80794CD4;
-extern s32 D_8079F9B4;
-extern s32 D_8079F9B8;
-extern s32 D_8079F9BC;
-extern OSMesgQueue D_8079F978;
 
 void func_80704050(s32 arg0) {
     D_8076CBCC = arg0;
@@ -36,9 +49,6 @@ void func_807040C8(void) {
         osStartThread(D_8076CBC0);
     }
 }
-
-extern u8 D_8079F9C4[];
-extern u8 D_8079F9C8[];
 
 s32 func_80704120(LEODiskID diskId) {
     s32 i;
@@ -277,7 +287,6 @@ extern s32 D_8076CBB4;
 extern LEODiskID D_8076CB50;
 extern LEODiskID D_8076CB70;
 extern LEODiskID D_8076CB90;
-extern LEODiskID D_8079FA10;
 
 void func_80704810(s32 arg0) {
     D_8076CBB4 = arg0;
@@ -338,11 +347,10 @@ void SLForceWritebackDCacheAll(void) {
     osSetIntMask(prevMask);
 }
 
-#ifdef IMPORT_BSS
 void func_80704DB0(char* arg0, char* arg1) {
     s32 i;
 
-    for (i = 0; i < 4; i++) {
+    for (i = 0; i < 2; i++) {
         D_8079F9C4[i] = *arg0++;
     }
 
@@ -350,11 +358,6 @@ void func_80704DB0(char* arg0, char* arg1) {
         D_8079F9C8[i] = *arg1++;
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/11850/func_80704DB0.s")
-#endif
-
-extern LEOStatus D_8079F954;
 
 s32 SLCheckDiskChange(void) {
 
@@ -413,8 +416,6 @@ bool func_80704F44(LEODiskID diskId1, LEODiskID diskId2) {
 
     return false;
 }
-
-extern LEOCmd D_8079F958;
 
 s32 SLLeoReadDiskID(LEODiskID* diskId) {
     PRINTF("SLLeoReadDiskID LOOP\n");
@@ -514,8 +515,6 @@ s32 func_80705270(void) {
         return 0;
     }
 }
-
-extern s32 D_8079F950;
 
 s32 SLLeoReadWrite_DATA(LEOCmd* cmdBlock, s32 direction, s32 lba, u8* vAddr, u32 nLbas, OSMesgQueue* mq) {
     PRINTF("hoge10\n");
@@ -658,7 +657,7 @@ s32 SLLeoReadWrite(LEOCmd* cmdBlock, s32 direction, s32 lba, u8* vAddr, u32 nLba
 }
 
 extern s32 D_8076CBB8;
-#ifdef IMPORT_BSS
+
 s32 func_8070595C(void) {
     static s32 D_8079FA30;
 
@@ -677,37 +676,28 @@ s32 func_8070595C(void) {
 
     return 0;
 }
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/11850/func_8070595C.s")
-#endif
 
 void func_80705A38(LEODiskID arg0) {
     D_8076CB50 = arg0;
 }
-
-extern OSMesgQueue D_8079F998;
-extern OSMesg D_8079F990[];
-extern OSMesg D_8079F9B0[];
 
 void func_80705A98(void) {
     osCreateMesgQueue(&D_8079F978, D_8079F990, 1);
     osCreateMesgQueue(&D_8079F998, D_8079F9B0, 1);
 }
 
-extern OSMesg D_8079F9D0[];
-
 s32 SLLeoCreateManager(s32 arg0) {
 
     func_80705A98();
     switch (arg0) {
         case 0:
-            D_8079F9B8 = LeoCreateLeoManager(0x95, 0x96, D_8079F9D0, 0x10);
+            D_8079F9B8 = LeoCreateLeoManager(0x95, 0x96, D_8079F9D0, ARRAY_COUNT(D_8079F9D0));
             break;
         case 1:
-            D_8079F9B8 = LeoCJCreateLeoManager(0x95, 0x96, D_8079F9D0, 0x10);
+            D_8079F9B8 = LeoCJCreateLeoManager(0x95, 0x96, D_8079F9D0, ARRAY_COUNT(D_8079F9D0));
             break;
         case 2:
-            D_8079F9B8 = LeoCACreateLeoManager(0x95, 0x96, D_8079F9D0, 0x10);
+            D_8079F9B8 = LeoCACreateLeoManager(0x95, 0x96, D_8079F9D0, ARRAY_COUNT(D_8079F9D0));
             break;
     }
     if (D_8079F9B8 == LEO_ERROR_DEVICE_COMMUNICATION_FAILURE) {
@@ -942,7 +932,6 @@ void SLMFSGetFilesPreparation(u16 arg0) {
 extern u8 D_34E[];
 extern u8 D_391[];
 extern u8 D_8077B4D0[];
-extern s32 D_8079F9CC;
 extern OSMesgQueue gDmaMesgQueue;
 
 void func_80706518(s32 arg0, s32 arg1, s32 arg2) {

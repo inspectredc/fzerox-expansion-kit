@@ -3016,9 +3016,9 @@ bool func_80719868(s32 arg0) {
     return var_v1;
 }
 
-void func_80719890(Gfx* gfx) {
+Gfx* func_80719890(Gfx* gfx) {
 
     gSPPerspNormalize(gfx++, gPlayers[0].unk_118);
     gSPMatrix(gfx++, &D_1000000.unk_1A208[gPlayers[0].id], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
-    func_80713E38(gfx, 0, gPlayers->id);
+    return func_80713E38(gfx, 0, gPlayers->id);
 }
