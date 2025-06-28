@@ -1,7 +1,11 @@
 #include "global.h"
+#include "leo/leo_functions.h"
 #include "fzx_game.h"
 #include "fzx_racer.h"
 #include "fzx_course.h"
+
+unk_80128C94* D_80128C90;
+unk_80128C94* D_80128C94;
 
 s32 D_xk2_80103FF0 = 0;
 s32 D_xk2_80103FF4 = 0;
@@ -371,8 +375,6 @@ void func_xk2_800ECD90(void) {
     }
 }
 
-extern unk_80128C94* D_80128C90;
-extern unk_80128C94* D_80128C94;
 extern s32 D_xk1_80030678;
 extern s32 D_xk1_80032BF8;
 extern s32 D_xk2_80119918;

@@ -1,9 +1,20 @@
 #include "global.h"
 #include "leo/leo_functions.h"
 
-extern s32 D_xk2_80104360;
+s32 D_xk2_80128CA0;
+s32 D_xk2_80128CA4;
+
+s32 D_xk2_80104360 = 1;
+s32 D_xk2_80104364 = 0;
+s32 D_xk2_80104368 = 0;
+UNUSED s32 D_xk2_8010436C = 0;
+UNUSED s32 D_xk2_80104370 = 0;
+UNUSED s32 D_xk2_80104374 = 0;
+s32 D_xk2_80104378 = 0;
+s32 D_xk2_8010437C = 0;
+s32 D_xk2_80104380 = 0;
+
 extern s32 D_xk2_80104378;
-extern s32 D_xk2_80128CA4;
 
 extern unk_800D6CA0 D_800D6CA0;
 extern s32 D_80119880;
@@ -148,7 +159,6 @@ Gfx* func_xk2_800EE268(Gfx* gfx) {
 
 extern s32 D_xk2_800F6824;
 extern s32 D_xk2_800F703C;
-extern s32 D_xk2_80128CA0;
 
 s32 func_xk2_800EE578(s32 arg0) {
     s32 var_a1;
@@ -172,15 +182,11 @@ s32 func_xk2_800EE578(s32 arg0) {
     return var_a1;
 }
 
-extern s32 D_xk2_8010437C;
-
 void func_xk2_800EE640(void) {
     if (D_xk2_8010437C > 4) {
         D_xk2_8010437C -= 4;
     }
 }
-
-extern s32 D_xk2_80104380;
 
 void func_xk2_800EE664(s32 arg0) {
     D_xk2_80104380 = arg0;

@@ -1,14 +1,16 @@
 #include "global.h"
 
+Vec3f D_xk2_8013A740;
+UNUSED s32 D_xk2_8013A750[2];
+Mtx D_xk2_8013A758;
+Mtx D_xk2_8013A798;
+
 s32 D_xk2_80119680 = 0;
 s32 D_xk2_80119684 = -1;
 
 void func_xk2_800F5C50(void) {
     D_xk2_80119680 = 0;
 }
-
-extern Mtx D_xk2_8013A758;
-extern Mtx D_xk2_8013A798;
 
 void func_xk2_800F5C5C(void) {
     func_806F9628(&D_xk2_8013A758, NULL, 1.0f, -160.0f, 160.0f, -120.0f, 120.0f, 16.0f, 256.0f);
@@ -83,7 +85,6 @@ extern s32 D_xk2_80104CB4;
 extern s32 D_xk2_80104CB8;
 extern s32 D_xk2_80104CBC;
 extern s32 D_xk2_80104CC0;
-extern Vec3f D_xk2_8013A740;
 extern unk_807B3C20 D_807B3C20;
 extern unk_800D6CA0 D_800D6CA0;
 extern s32 D_xk2_800F6824;

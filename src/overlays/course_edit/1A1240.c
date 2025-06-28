@@ -1,6 +1,11 @@
 #include "global.h"
 
-extern s32 D_xk2_80104BC0;
+f32 D_xk2_80128CB0;
+f32 D_xk2_80128CB4;
+Vec3f D_xk2_80128CB8[5];
+s32 D_xk2_80128CF4;
+
+s32 D_xk2_80104BC0 = 0;
 
 s32 func_xk2_800EF780(void) {
     return D_xk2_80104BC0;
@@ -8,7 +13,6 @@ s32 func_xk2_800EF780(void) {
 
 extern u8 D_80030060[];
 extern u8 D_8003006C[];
-extern s32 D_xk2_80104BC0;
 extern s32 D_xk2_80119800;
 extern unk_80128690 D_80128690[];
 extern unk_80128690 D_xk2_80128990[];
@@ -215,8 +219,6 @@ void func_xk2_800EFF40(void) {
     }
 }
 
-extern Vec3f D_xk2_80128CB8[];
-
 s32 func_xk2_800EFFF0(void) {
     s32 i;
 
@@ -233,10 +235,6 @@ s32 func_xk2_800EFFF0(void) {
     }
     return 0;
 }
-
-extern f32 D_xk2_80128CB0;
-extern f32 D_xk2_80128CB4;
-extern s32 D_xk2_80128CF4;
 
 #ifdef NON_MATCHING
 s32 func_xk2_800F01C4(Vec3f arg0, Mtx3F arg3) {

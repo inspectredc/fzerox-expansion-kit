@@ -833,11 +833,11 @@ void func_xk2_800E2238(Gfx** gfxP) {
             break;
         default:
             sp280 = D_xk2_801197EC->trackSegmentInfo & TRACK_TYPE_MASK;
-            func_xk2_800EDE68(sp290, sp280 + 1, 2, sp280);
+            func_xk2_800EDE68(sp290, sp280 + 1, 2);
             break;
     }
 
-    func_xk2_800EDE68(sp290, sp280 + 1, 2, sp280);
+    func_xk2_800EDE68(sp290, sp280 + 1, 2);
     if (sp280 != -1) {
         var_a1 = TRACK_SHAPE_INDEX((u32) (D_xk2_801197EC->trackSegmentInfo & TRACK_SHAPE_MASK));
         if (var_a1 == 6) {

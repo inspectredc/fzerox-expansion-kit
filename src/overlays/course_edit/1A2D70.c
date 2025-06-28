@@ -1,7 +1,21 @@
 #include "global.h"
 
-extern u8 D_xk2_80128D00[];
-extern u8 D_xk2_80104CA0[];
+u8 D_xk2_80128D00[64];
+f32 D_xk2_80128D40;
+f32 D_xk2_80128D44;
+s32 D_xk2_80128D48;
+s32 D_xk2_80128D4C;
+s32 D_xk2_80128D50;
+s32 D_xk2_80128D54;
+s32 D_xk2_80128D58;
+s32 D_xk2_80128D5C;
+f32 D_xk2_80128D60;
+f32 D_xk2_80128D64;
+f32 D_xk2_80128D68;
+s32 D_xk2_80128D6C;
+
+u8 D_xk2_80104CA0[12] = { 0 };
+
 extern unk_800D6CA0 D_800D6CA0;
 
 void func_xk2_800F12B0(void) {
@@ -29,17 +43,12 @@ u8 func_xk2_800F1350(s32 arg0) {
     return D_xk2_80128D00[arg0];
 }
 
-extern s32 D_xk2_80104CB0;
-extern s32 D_xk2_80104CB4;
-extern s32 D_xk2_80104CB8;
-extern s32 D_xk2_80104CBC;
-extern s32 D_xk2_80104CC0;
-extern s32 D_xk2_80128D48;
-extern s32 D_xk2_80128D4C;
-extern s32 D_xk2_80128D50;
-extern s32 D_xk2_80128D54;
-extern s32 D_xk2_80128D58;
-extern s32 D_xk2_80128D5C;
+UNUSED s32 D_xk2_80104CAC = 0;
+s32 D_xk2_80104CB0 = 90;
+s32 D_xk2_80104CB4 = 15000;
+s32 D_xk2_80104CB8 = 0;
+s32 D_xk2_80104CBC = 0;
+s32 D_xk2_80104CC0 = 0;
 
 void func_xk2_800F1360(void) {
     D_xk2_80128D48 = D_xk2_80104CB0;
@@ -64,13 +73,6 @@ extern Player gPlayers[];
 extern s32 D_8076C950;
 extern unk_80128C94 D_6000000;
 extern unk_80128C94* D_80128C94;
-
-extern f32 D_xk2_80128D60;
-extern f32 D_xk2_80128D64;
-extern f32 D_xk2_80128D68;
-
-extern f32 D_xk2_80128D40;
-extern f32 D_xk2_80128D44;
 
 #ifdef NON_MATCHING
 // stack
@@ -139,7 +141,6 @@ Gfx* func_xk2_800F1428(Gfx* gfx) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_edit/1A2D70/func_xk2_800F1428.s")
 #endif
 
-extern s32 D_xk2_80128D6C;
 extern s32 D_xk2_800F6824;
 extern s32 D_xk2_800F6828;
 extern unk_807B3C20 D_807B3C20;

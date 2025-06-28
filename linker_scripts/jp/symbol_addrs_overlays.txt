@@ -884,6 +884,9 @@ D_xk1_8003A5D8 = 0x8003A5D8; //segment:ovl_xk1 size:0xE58
 D_xk2_80104CA0 = 0x80104CA0; //segment:course_edit size:0xC
 
 D_xk2_80119744 = 0x80119744; //segment:course_edit
+D_xk2_80128CB8 = 0x80128CB8; //segment:course_edit size:0x3C
+D_xk2_80128DF8 = 0x80128DF8; //segment:course_edit size:0xE100
+D_xk2_80136EF8 = 0x80136EF8; //segment:course_edit size:0x3840
 
 D_xk3_801372B8 = 0x801372B8; //segment:machine_create
 D_xk3_80138E30 = 0x80138E30; //segment:machine_create

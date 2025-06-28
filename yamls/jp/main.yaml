@@ -474,7 +474,8 @@
       - { type: .bss, vram: 0x8079A4E0, name: 3250 }
       - { type: .bss, vram: 0x8079A8A0, name: 3A10 }
       - { type: .bss, vram: 0x8079E920, name: 6F50 }
-      - { type: bss, vram: 0x8079F950, name: 8079F950 }
+      - { type: .bss, vram: 0x8079F950, name: 11850 }
+      - { type: bss, vram: 0x8079FA40, name: 15AB0 }
       - { type: .bss, vram: 0x8079FAA0, name: 17490 }
       - { type: .bss, vram: 0x8079FC10, name: 1C8B0 }
       - { type: .bss, vram: 0x8079FC80, name: leo_fault }
