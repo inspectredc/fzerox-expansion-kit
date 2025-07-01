@@ -5,7 +5,7 @@ build_system: make
 versions:
   - name: jp
     fullname: jp
-    sha1: 103ca1f2fbd6ef515dedeb0b433c550dd7f3057f
+    sha1: 9b8387ce7c47c23237c4373fae2a8761931a0989
     paths:
       target: "baserom.jp.z64dd"
 

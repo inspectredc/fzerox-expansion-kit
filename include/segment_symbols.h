@@ -113,4 +113,17 @@ DECLARE_SEGMENT(fire_field_2);
 DECLARE_SEGMENT(white_land_3);
 DECLARE_SEGMENT(big_foot);
 
+DECLARE_SEGMENT(silence_3_staff_ghost);
+DECLARE_SEGMENT(sand_ocean_3_staff_ghost);
+DECLARE_SEGMENT(devils_forest_4_staff_ghost);
+DECLARE_SEGMENT(port_town_3_staff_ghost);
+DECLARE_SEGMENT(devils_forest_5_staff_ghost);
+DECLARE_SEGMENT(big_blue_3_staff_ghost);
+DECLARE_SEGMENT(mute_city_4_staff_ghost);
+DECLARE_SEGMENT(space_plant_2_staff_ghost);
+DECLARE_SEGMENT(port_town_4_staff_ghost);
+DECLARE_SEGMENT(fire_field_2_staff_ghost);
+DECLARE_SEGMENT(white_land_3_staff_ghost);
+DECLARE_SEGMENT(big_foot_staff_ghost);
+
 #endif

@@ -1,6 +1,7 @@
 #include "global.h"
 #include "fzx_course.h"
 #include "fzx_save.h"
+#include "segment_symbols.h"
 
 char D_i2_800BF030[] = "GHOST00";
 
@@ -253,15 +254,13 @@ void func_i2_800AAA64(s32 ghostIndex, GhostData* ghostData) {
     *ghostData = ghostSave[ghostIndex].data;
 }
 
-extern u8 D_342[];
-
 void func_i2_800AAAC0(s32 courseIndex) {
 
-    courseIndex -= COURSE_EDIT_6 + 1;
+    courseIndex -= COURSE_SILENCE_3;
     if (courseIndex < 0) {
         courseIndex = 0;
     }
-    func_80703B40(D_342 + courseIndex, COURSE_CONTEXT()->ghostSave, 0xBF40, 0);
+    func_80703B40(SEGMENT_DISK_START(silence_3_staff_ghost) + courseIndex, COURSE_CONTEXT()->ghostSave, 0xBF40, 0);
 }
 
 void func_i2_800AAB0C(s32 courseIndex) {

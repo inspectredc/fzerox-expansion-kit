@@ -124,4 +124,112 @@
     subsegments:
       - [0x236650, .data, big_foot/big_foot]
 
-  - [0x236E30]
+  - name: silence_3_staff_ghost
+    exclusive_ram_id: course
+    type: code
+    dir: assets/ghosts
+    vram: 0x0
+    start: 0x236E30
+    subsegments:
+      - [0x236E30, .data, silence_3_staff_ghost/silence_3_staff_ghost]
+
+  - name: sand_ocean_3_staff_ghost
+    exclusive_ram_id: course
+    type: code
+    dir: assets/ghosts
+    vram: 0x0
+    start: 0x23ADF0
+    subsegments:
+      - [0x23ADF0, .data, sand_ocean_3_staff_ghost/sand_ocean_3_staff_ghost]
+
+  - name: devils_forest_4_staff_ghost
+    exclusive_ram_id: course
+    type: code
+    dir: assets/ghosts
+    vram: 0x0
+    start: 0x23EDB0
+    subsegments:
+      - [0x23EDB0, .data, devils_forest_4_staff_ghost/devils_forest_4_staff_ghost]
+
+  - name: port_town_3_staff_ghost
+    exclusive_ram_id: course
+    type: code
+    dir: assets/ghosts
+    vram: 0x0
+    start: 0x242D70
+    subsegments:
+      - [0x242D70, .data, port_town_3_staff_ghost/port_town_3_staff_ghost]
+
+  - name: devils_forest_5_staff_ghost
+    exclusive_ram_id: course
+    type: code
+    dir: assets/ghosts
+    vram: 0x0
+    start: 0x246D30
+    subsegments:
+      - [0x246D30, .data, devils_forest_5_staff_ghost/devils_forest_5_staff_ghost]
+
+  - name: big_blue_3_staff_ghost
+    exclusive_ram_id: course
+    type: code
+    dir: assets/ghosts
+    vram: 0x0
+    start: 0x24ACF0
+    subsegments:
+      - [0x24ACF0, .data, big_blue_3_staff_ghost/big_blue_3_staff_ghost]
+
+  - name: mute_city_4_staff_ghost
+    exclusive_ram_id: course
+    type: code
+    dir: assets/ghosts
+    vram: 0x0
+    start: 0x24ECB0
+    subsegments:
+      - [0x24ECB0, .data, mute_city_4_staff_ghost/mute_city_4_staff_ghost]
+
+  - name: space_plant_2_staff_ghost
+    exclusive_ram_id: course
+    type: code
+    dir: assets/ghosts
+    vram: 0x0
+    start: 0x252C70
+    subsegments:
+      - [0x252C70, .data, space_plant_2_staff_ghost/space_plant_2_staff_ghost]
+
+  - name: port_town_4_staff_ghost
+    exclusive_ram_id: course
+    type: code
+    dir: assets/ghosts
+    vram: 0x0
+    start: 0x256C30
+    subsegments:
+      - [0x256C30, .data, port_town_4_staff_ghost/port_town_4_staff_ghost]
+
+  - name: fire_field_2_staff_ghost
+    exclusive_ram_id: course
+    type: code
+    dir: assets/ghosts
+    vram: 0x0
+    start: 0x25ABF0
+    subsegments:
+      - [0x25ABF0, .data, fire_field_2_staff_ghost/fire_field_2_staff_ghost]
+
+  - name: white_land_3_staff_ghost
+    exclusive_ram_id: course
+    type: code
+    dir: assets/ghosts
+    vram: 0x0
+    start: 0x25EBB0
+    subsegments:
+      - [0x25EBB0, .data, white_land_3_staff_ghost/white_land_3_staff_ghost]
+
+  - name: big_foot_staff_ghost
+    exclusive_ram_id: course
+    type: code
+    dir: assets/ghosts
+    vram: 0x0
+    start: 0x262B70
+    subsegments:
+      - [0x262B70, .data, big_foot_staff_ghost/big_foot_staff_ghost]
+
+  - [0x266B30]
