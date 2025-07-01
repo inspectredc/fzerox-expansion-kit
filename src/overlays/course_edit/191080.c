@@ -1,4 +1,6 @@
 #include "global.h"
+#include "assets/segment_1FB850.h"
+#include "assets/segment_21C170.h"
 
 extern unk_80026914_unk_1C D_xk1_80031E84;
 extern unk_80026914_unk_1C D_xk1_80031F6C;
@@ -109,12 +111,6 @@ extern Gfx D_3000540[];
 extern u8* D_xk1_800331F0[];
 extern s32 D_80119880;
 extern u16* D_8076C970[];
-extern Gfx D_9000858[];
-extern u16 D_9002588[];
-extern Gfx D_9014AA0[];
-extern Gfx D_9014B68[];
-extern Gfx D_9014BA0[];
-extern Gfx D_9014BC0[];
 extern Gfx D_3000510[];
 extern u8 D_80794E14;
 extern s32 D_8076C964;
@@ -307,7 +303,6 @@ void func_xk2_800DFFF8(void) {
 }
 
 extern Gfx D_8014940[];
-extern u16 D_90005A0[];
 extern s32 D_xk1_8003A550;
 extern s32 D_xk1_8003A554;
 
@@ -351,7 +346,6 @@ Gfx* func_xk2_800E0320(Gfx* gfx) {
     return gfx;
 }
 
-extern Gfx D_9014C60[];
 extern u32 gGameFrameCount;
 extern s32 D_8079A35C;
 extern unk_80128690 D_80128690[];
@@ -687,8 +681,6 @@ Gfx* func_xk2_800E1E5C(Gfx* gfx) {
     return gfx;
 }
 
-extern Gfx D_70207A0[];
-
 void func_xk2_800E1F40(Gfx** gfxP) {
     Gfx* gfx;
     s32 i;
@@ -752,11 +744,6 @@ Gfx* func_xk2_800E2104(Gfx* gfx) {
 }
 
 extern Gfx D_3000540[];
-extern u16 D_7006980[];
-extern u8 D_9000988[];
-extern u16 D_9000A08[];
-extern u16 D_9000C48[];
-extern u16 D_9001788[];
 extern s32 D_xk1_80032AD0;
 extern CourseSegment* D_xk2_801197EC;
 extern s32 D_xk2_80119918;
@@ -1418,35 +1405,6 @@ Gfx* func_xk2_800E5058(Gfx* gfx) {
 
     return gfx;
 }
-
-extern u8 D_9008488[];
-extern u8 D_9008988[];
-extern u8 D_9008788[];
-extern u8 D_9008588[];
-extern u8 D_9008188[];
-extern u8 D_9008388[];
-extern u8 D_9008688[];
-extern u8 D_9008888[];
-extern u8 D_9008A88[];
-extern u8 D_9008B88[];
-extern u8 D_9008C88[];
-extern u8 D_9008D88[];
-extern u8 D_9008E88[];
-extern u8 D_9008F88[];
-extern u8 D_9008488[];
-extern u8 D_9008988[];
-extern u8 D_9008788[];
-extern u8 D_9008588[];
-extern u8 D_9008188[];
-extern u8 D_9008388[];
-extern u8 D_9008688[];
-extern u8 D_9008888[];
-extern u8 D_9008A88[];
-extern u8 D_9008B88[];
-extern u8 D_9008C88[];
-extern u8 D_9008D88[];
-extern u8 D_9008E88[];
-extern u8 D_9008F88[];
 
 u8* D_xk2_800F7180[] = {
     D_9008488, D_9008988, D_9008788, D_9008588, D_9008188, D_9008388, D_9008688, D_9008888, D_9008A88, D_9008B88,
@@ -2410,14 +2368,8 @@ void func_xk2_800E7BA8(void) {
 }
 
 extern Gfx D_3000540[];
-extern Gfx D_600F9A0[];
-extern u16 D_7010580[];
-extern u16 D_7010980[];
 extern Gfx D_9014908[];
 extern unk_80026914 D_xk1_8003226C;
-
-extern u16 D_7010180[];
-extern u16 D_701F9A0[];
 extern unk_80026914 D_xk1_80032880;
 extern s32* D_xk1_8003067C[];
 

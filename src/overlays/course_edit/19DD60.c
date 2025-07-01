@@ -3,6 +3,7 @@
 #include "fzx_game.h"
 #include "fzx_racer.h"
 #include "fzx_course.h"
+#include "assets/segment_21C170.h"
 
 unk_80128C94* D_80128C90;
 unk_80128C94* D_80128C94;
@@ -638,10 +639,6 @@ void func_xk2_800ED6A4(Gfx** gfxP) {
 }
 
 extern Gfx D_8076CAF8[];
-extern Gfx D_9014A38[];
-extern Gfx D_9014D78[];
-extern Gfx D_9014DB8[];
-extern Gfx D_9014DF8[];
 extern Vp D_80146A8;
 extern s32 D_8079A364;
 extern FrameBuffer* gFrameBuffers[];

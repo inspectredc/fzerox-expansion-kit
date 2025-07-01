@@ -312,7 +312,7 @@ void Game_ThreadEntry(void* entry) {
     D_8079A470 = D_8079A46C + 0x35E10;
 
     gCourseEditTexturesVramStart = D_8079A470;
-    gCourseEditTexturesVramEnd = gCourseEditTexturesVramStart + (size_t) SEGMENT_VRAM_SIZE(course_edit_textures);
+    gCourseEditTexturesVramEnd = gCourseEditTexturesVramStart + (size_t) SEGMENT_VRAM_SIZE(segment_21C170);
 
     gCreateMachineTexturesVramStart = D_8079A470;
     gCreateMachineTexturesVramEnd =
@@ -322,7 +322,7 @@ void Game_ThreadEntry(void* entry) {
     D_8079A3D8 = osVirtualToPhysical(D_8013A7F0);
 
     D_8079A42C = D_8079A3D8;
-    D_8079A430 = D_8079A42C + (size_t) SEGMENT_VRAM_SIZE(segment_145B70);
+    D_8079A430 = D_8079A42C + (size_t) SEGMENT_VRAM_SIZE(segment_1FB850);
 
     D_8079A3DC = osVirtualToPhysical(D_8012B520);
     D_8079A3E0 = osVirtualToPhysical(D_801414E0);

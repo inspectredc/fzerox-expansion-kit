@@ -1,0 +1,1590 @@
+:config:
+  segments:
+    - [0x09,  0x21C170]
+  external_files:
+    - "assets/yaml/jp/segment_1FB850.yaml"
+  header:
+    code:
+      - '#include "assets/segment_21C170.h"'
+      - '#include "assets/segment_1FB850.h"'
+    header:
+      - '#include "gfx.h"'
+
+D_9000000:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 112
+  height: 24
+  offset: 0x0
+  symbol: D_9000000
+
+D_9000540:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 16
+  height: 12
+  offset: 0x540
+  symbol: D_9000540
+
+D_90005A0:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 16
+  height: 16
+  offset: 0x5A0
+  symbol: D_90005A0
+
+D_90007A0:
+  type: GFX
+  offset: 0x7A0
+  symbol: D_90007A0
+
+D_9000858:
+  type: GFX
+  offset: 0x858
+  symbol: D_9000858
+
+D_9000868:
+  type: VTX
+  count: 6
+  offset: 0x868
+  symbol: D_9000868
+
+D_90008C8:
+  type: VTX
+  count: 6
+  offset: 0x8C8
+  symbol: D_90008C8
+
+D_9000928:
+  type: VTX
+  count: 6
+  offset: 0x928
+  symbol: D_9000928
+
+D_9000988:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 16
+  height: 16
+  offset: 0x988
+  symbol: D_9000988
+
+D_9000A08:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0xA08
+  symbol: D_9000A08
+
+D_9000C48:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 12
+  height: 120
+  offset: 0xC48
+  symbol: D_9000C48
+
+D_9001788:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0x1788
+  symbol: D_9001788
+
+D_90019C8:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 8
+  height: 8
+  offset: 0x19C8
+  symbol: D_90019C8
+
+D_9001A48:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0x1A48
+  symbol: D_9001A48
+
+D_9001C88:
+  type: TEXTURE
+  ctype: u8
+  format: IA8
+  width: 16
+  height: 16
+  offset: 0x1C88
+  symbol: D_9001C88
+
+D_9001D88:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 16
+  height: 16
+  offset: 0x1D88
+  symbol: D_9001D88
+
+D_9001F88:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 16
+  height: 16
+  offset: 0x1F88
+  symbol: D_9001F88
+
+D_9002188:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 16
+  height: 16
+  offset: 0x2188
+  symbol: D_9002188
+
+D_9002388:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 16
+  height: 16
+  offset: 0x2388
+  symbol: D_9002388
+
+D_9002588:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 16
+  height: 16
+  offset: 0x2588
+  symbol: D_9002588
+
+D_9002788:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 16
+  height: 16
+  offset: 0x2788
+  symbol: D_9002788
+
+D_9002988:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 16
+  height: 16
+  offset: 0x2988
+  symbol: D_9002988
+
+D_9002B88:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 16
+  height: 16
+  offset: 0x2B88
+  symbol: D_9002B88
+
+D_9002D88:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 16
+  height: 16
+  offset: 0x2D88
+  symbol: D_9002D88
+
+D_9002F88:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 24
+  offset: 0x2F88
+  symbol: D_9002F88
+
+D_9003408:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 64
+  height: 32
+  offset: 0x3408
+  symbol: D_9003408
+
+D_9003808:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 48
+  height: 16
+  offset: 0x3808
+  symbol: D_9003808
+
+D_9003988:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 48
+  height: 16
+  offset: 0x3988
+  symbol: D_9003988
+
+D_9003F88:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 48
+  height: 16
+  offset: 0x3F88
+  symbol: D_9003F88
+
+D_9004108:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 48
+  height: 16
+  offset: 0x4108
+  symbol: D_9004108
+
+D_9004288:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 48
+  height: 16
+  offset: 0x4288
+  symbol: D_9004288
+
+D_9004408:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 48
+  height: 16
+  offset: 0x4408
+  symbol: D_9004408
+
+D_9004588:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 48
+  height: 16
+  offset: 0x4588
+  symbol: D_9004588
+
+D_9004708:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 48
+  height: 16
+  offset: 0x4708
+  symbol: D_9004708
+
+D_9004888:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 48
+  height: 16
+  offset: 0x4888
+  symbol: D_9004888
+
+D_9004A08:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 48
+  height: 16
+  offset: 0x4A08
+  symbol: D_9004A08
+
+D_9004B88:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 48
+  height: 16
+  offset: 0x4B88
+  symbol: D_9004B88
+
+D_9004D08:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 48
+  height: 16
+  offset: 0x4D08
+  symbol: D_9004D08
+
+D_9004E88:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 48
+  height: 16
+  offset: 0x4E88
+  symbol: D_9004E88
+
+D_9005008:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 48
+  height: 16
+  offset: 0x5008
+  symbol: D_9005008
+
+D_9005188:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 48
+  height: 16
+  offset: 0x5188
+  symbol: D_9005188
+
+D_9005308:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 48
+  height: 16
+  offset: 0x5308
+  symbol: D_9005308
+
+D_9005488:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 48
+  height: 16
+  offset: 0x5488
+  symbol: D_9005488
+
+D_9005608:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 48
+  height: 16
+  offset: 0x5608
+  symbol: D_9005608
+
+D_9005788:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 48
+  height: 16
+  offset: 0x5788
+  symbol: D_9005788
+
+D_9005908:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 48
+  height: 16
+  offset: 0x5908
+  symbol: D_9005908
+
+D_9005A88:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 48
+  height: 16
+  offset: 0x5A88
+  symbol: D_9005A88
+
+D_9005C08:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 48
+  height: 16
+  offset: 0x5C08
+  symbol: D_9005C08
+
+D_9005D88:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 48
+  height: 16
+  offset: 0x5D88
+  symbol: D_9005D88
+
+D_9005F08:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 48
+  height: 16
+  offset: 0x5F08
+  symbol: D_9005F08
+
+D_9006088:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 48
+  height: 16
+  offset: 0x6088
+  symbol: D_9006088
+
+D_9006208:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 48
+  height: 16
+  offset: 0x6208
+  symbol: D_9006208
+
+D_9006388:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 48
+  height: 16
+  offset: 0x6388
+  symbol: D_9006388
+
+D_9006508:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 48
+  height: 16
+  offset: 0x6508
+  symbol: D_9006508
+
+D_9006688:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 48
+  height: 16
+  offset: 0x6688
+  symbol: D_9006688
+
+D_9006808:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 48
+  height: 16
+  offset: 0x6808
+  symbol: D_9006808
+
+D_9006988:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 48
+  height: 16
+  offset: 0x6988
+  symbol: D_9006988
+
+D_9006B08:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 48
+  height: 16
+  offset: 0x6B08
+  symbol: D_9006B08
+
+D_9006C88:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 48
+  height: 16
+  offset: 0x6C88
+  symbol: D_9006C88
+
+D_9006E08:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 48
+  height: 16
+  offset: 0x6E08
+  symbol: D_9006E08
+
+D_9006F88:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 48
+  height: 16
+  offset: 0x6F88
+  symbol: D_9006F88
+
+D_9007108:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 48
+  height: 16
+  offset: 0x7108
+  symbol: D_9007108
+
+D_9007288:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 48
+  height: 16
+  offset: 0x7288
+  symbol: D_9007288
+
+D_9007408:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 48
+  height: 16
+  offset: 0x7408
+  symbol: D_9007408
+
+D_9007588:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 48
+  height: 16
+  offset: 0x7588
+  symbol: D_9007588
+
+D_9007708:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 48
+  height: 16
+  offset: 0x7708
+  symbol: D_9007708
+
+D_9007888:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 48
+  height: 16
+  offset: 0x7888
+  symbol: D_9007888
+
+D_9007A08:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 48
+  height: 16
+  offset: 0x7A08
+  symbol: D_9007A08
+
+D_9007B88:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 48
+  height: 16
+  offset: 0x7B88
+  symbol: D_9007B88
+
+D_9007D08:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 48
+  height: 16
+  offset: 0x7D08
+  symbol: D_9007D08
+
+D_9007E88:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 48
+  height: 16
+  offset: 0x7E88
+  symbol: D_9007E88
+
+D_9008008:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 48
+  height: 16
+  offset: 0x8008
+  symbol: D_9008008
+
+D_9008188:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 64
+  height: 8
+  offset: 0x8188
+  symbol: D_9008188
+
+D_9008288:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 64
+  height: 8
+  offset: 0x8288
+  symbol: D_9008288
+
+D_9008388:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 64
+  height: 8
+  offset: 0x8388
+  symbol: D_9008388
+
+D_9008488:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 64
+  height: 8
+  offset: 0x8488
+  symbol: D_9008488
+
+D_9008588:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 64
+  height: 8
+  offset: 0x8588
+  symbol: D_9008588
+
+D_9008688:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 64
+  height: 8
+  offset: 0x8688
+  symbol: D_9008688
+
+D_9008788:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 64
+  height: 8
+  offset: 0x8788
+  symbol: D_9008788
+
+D_9008888:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 64
+  height: 8
+  offset: 0x8888
+  symbol: D_9008888
+
+D_9008988:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 64
+  height: 8
+  offset: 0x8988
+  symbol: D_9008988
+
+D_9008A88:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 64
+  height: 8
+  offset: 0x8A88
+  symbol: D_9008A88
+
+D_9008B88:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 64
+  height: 8
+  offset: 0x8B88
+  symbol: D_9008B88
+
+D_9008C88:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 64
+  height: 8
+  offset: 0x8C88
+  symbol: D_9008C88
+
+D_9008D88:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 64
+  height: 8
+  offset: 0x8D88
+  symbol: D_9008D88
+
+D_9008E88:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 64
+  height: 8
+  offset: 0x8E88
+  symbol: D_9008E88
+
+D_9008F88:
+  type: TEXTURE
+  ctype: u8
+  format: I4
+  width: 64
+  height: 8
+  offset: 0x8F88
+  symbol: D_9008F88
+
+D_9009088:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0x9088
+  symbol: D_9009088
+
+D_90092C8:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0x92C8
+  symbol: D_90092C8
+
+D_9009508:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0x9508
+  symbol: D_9009508
+
+D_9009748:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0x9748
+  symbol: D_9009748
+
+D_9009988:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0x9988
+  symbol: D_9009988
+
+D_9009BC8:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0x9BC8
+  symbol: D_9009BC8
+
+D_9009E08:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0x9E08
+  symbol: D_9009E08
+
+D_900A048:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0xA048
+  symbol: D_900A048
+
+D_900A288:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0xA288
+  symbol: D_900A288
+
+D_900A4C8:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0xA4C8
+  symbol: D_900A4C8
+
+D_900A708:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0xA708
+  symbol: D_900A708
+
+D_900A948:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0xA948
+  symbol: D_900A948
+
+D_900AB88:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0xAB88
+  symbol: D_900AB88
+
+D_900ADC8:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0xADC8
+  symbol: D_900ADC8
+
+D_900B008:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0xB008
+  symbol: D_900B008
+
+D_900B248:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0xB248
+  symbol: D_900B248
+
+D_900B488:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0xB488
+  symbol: D_900B488
+
+D_900B6C8:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0xB6C8
+  symbol: D_900B6C8
+
+D_900B908:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0xB908
+  symbol: D_900B908
+
+D_900BB48:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0xBB48
+  symbol: D_900BB48
+
+D_900BD88:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0xBD88
+  symbol: D_900BD88
+
+D_900BFC8:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0xBFC8
+  symbol: D_900BFC8
+
+D_900C208:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0xC208
+  symbol: D_900C208
+
+D_900C448:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0xC448
+  symbol: D_900C448
+
+D_900C688:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0xC688
+  symbol: D_900C688
+
+D_900C8C8:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0xC8C8
+  symbol: D_900C8C8
+
+D_900CB08:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0xCB08
+  symbol: D_900CB08
+
+D_900CD48:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0xCD48
+  symbol: D_900CD48
+
+D_900CF88:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0xCF88
+  symbol: D_900CF88
+
+D_900D1C8:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0xD1C8
+  symbol: D_900D1C8
+
+D_900D408:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0xD408
+  symbol: D_900D408
+
+D_900D648:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0xD648
+  symbol: D_900D648
+
+D_900D888:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0xD888
+  symbol: D_900D888
+
+D_900DAC8:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0xDAC8
+  symbol: D_900DAC8
+
+D_900DD08:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0xDD08
+  symbol: D_900DD08
+
+D_900DF48:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0xDF48
+  symbol: D_900DF48
+
+D_900E188:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0xE188
+  symbol: D_900E188
+
+D_900E3C8:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0xE3C8
+  symbol: D_900E3C8
+
+D_900E608:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0xE608
+  symbol: D_900E608
+
+D_900E848:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0xE848
+  symbol: D_900E848
+
+D_900EA88:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0xEA88
+  symbol: D_900EA88
+
+D_900ECC8:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0xECC8
+  symbol: D_900ECC8
+
+D_900EF08:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0xEF08
+  symbol: D_900EF08
+
+D_900F148:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0xF148
+  symbol: D_900F148
+
+D_900F388:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0xF388
+  symbol: D_900F388
+
+D_900F5C8:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0xF5C8
+  symbol: D_900F5C8
+
+D_900F808:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0xF808
+  symbol: D_900F808
+
+D_900FA48:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0xFA48
+  symbol: D_900FA48
+
+D_900FC88:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0xFC88
+  symbol: D_900FC88
+
+D_900FEC8:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0xFEC8
+  symbol: D_900FEC8
+
+D_9010108:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0x10108
+  symbol: D_9010108
+
+D_9010348:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0x10348
+  symbol: D_9010348
+
+D_9010588:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0x10588
+  symbol: D_9010588
+
+D_90107C8:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0x107C8
+  symbol: D_90107C8
+
+D_9010A08:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0x10A08
+  symbol: D_9010A08
+
+D_9010C48:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0x10C48
+  symbol: D_9010C48
+
+D_9010E88:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0x10E88
+  symbol: D_9010E88
+
+D_90110C8:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0x110C8
+  symbol: D_90110C8
+
+D_9011308:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0x11308
+  symbol: D_9011308
+
+D_9011548:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0x11548
+  symbol: D_9011548
+
+D_9011788:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0x11788
+  symbol: D_9011788
+
+D_90119C8:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0x119C8
+  symbol: D_90119C8
+
+D_9011C08:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0x11C08
+  symbol: D_9011C08
+
+D_9011E48:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0x11E48
+  symbol: D_9011E48
+
+D_9012088:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0x12088
+  symbol: D_9012088
+
+D_90122C8:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0x122C8
+  symbol: D_90122C8
+
+D_9012508:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0x12508
+  symbol: D_9012508
+
+D_9012748:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0x12748
+  symbol: D_9012748
+
+D_9012988:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0x12988
+  symbol: D_9012988
+
+D_9012BC8:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0x12BC8
+  symbol: D_9012BC8
+
+D_9012E08:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0x12E08
+  symbol: D_9012E08
+
+D_9013048:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0x13048
+  symbol: D_9013048
+
+D_9013288:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0x13288
+  symbol: D_9013288
+
+D_90134C8:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0x134C8
+  symbol: D_90134C8
+
+D_9013708:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0x13708
+  symbol: D_9013708
+
+D_9013948:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0x13948
+  symbol: D_9013948
+
+D_9013B88:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0x13B88
+  symbol: D_9013B88
+
+D_9013DC8:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0x13DC8
+  symbol: D_9013DC8
+
+D_9014008:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0x14008
+  symbol: D_9014008
+
+D_9014248:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0x14248
+  symbol: D_9014248
+
+D_9014488:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0x14488
+  symbol: D_9014488
+
+D_90146C8:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 24
+  height: 12
+  offset: 0x146C8
+  symbol: D_90146C8
+
+D_9014908:
+  type: GFX
+  offset: 0x14908
+  symbol: D_9014908
+
+D_9014A38:
+  type: GFX
+  offset: 0x14A38
+  symbol: D_9014A38
+
+D_9014AA0:
+  type: GFX
+  offset: 0x14AA0
+  symbol: D_9014AA0
+
+D_9014AE8:
+  type: GFX
+  offset: 0x14AE8
+  symbol: D_9014AE8
+
+D_9014B68:
+  type: GFX
+  offset: 0x14B68
+  symbol: D_9014B68
+
+D_9014BA0:
+  type: GFX
+  offset: 0x14BA0
+  symbol: D_9014BA0
+
+D_9014BC0:
+  type: GFX
+  offset: 0x14BC0
+  symbol: D_9014BC0
+
+D_9014C20:
+  type: GFX
+  offset: 0x14C20
+  symbol: D_9014C20
+
+D_9014C40:
+  type: GFX
+  offset: 0x14C40
+  symbol: D_9014C40
+
+D_9014C60:
+  type: GFX
+  offset: 0x14C60
+  symbol: D_9014C60
+
+D_9014CB8:
+  type: GFX
+  offset: 0x14CB8
+  symbol: D_9014CB8
+
+D_9014D18:
+  type: GFX
+  offset: 0x14D18
+  symbol: D_9014D18
+
+D_9014D78:
+  type: GFX
+  offset: 0x14D78
+  symbol: D_9014D78
+
+D_9014DB8:
+  type: GFX
+  offset: 0x14DB8
+  symbol: D_9014DB8
+
+D_9014DF8:
+  type: GFX
+  offset: 0x14DF8
+  symbol: D_9014DF8

@@ -849,7 +849,6 @@ extern u16 D_303D1F0[];
 #define _D_303D1F0_WIDTH 0x10
 #define _D_303D1F0_HEIGHT 0xc
 
-extern Gfx D_7000000[];
 extern Vtx D_7000008[];
 extern Vtx D_70000C8[];
 extern Vtx D_70002C8[];

@@ -4,6 +4,7 @@
 #include "fzx_font.h"
 #include "fzx_machine.h"
 #include "fzx_assets.h"
+#include "assets/segment_1FB850.h"
 
 s32 D_xk3_801414C0;
 s32 D_xk3_801414C4;
@@ -404,7 +405,6 @@ void func_xk3_801337A0(void) {
     }
 }
 
-extern u16 D_7004900[];
 extern u8 D_xk3_80139430[];
 extern u8 D_xk3_801395F0[];
 extern u16 D_xk3_8013A180[];

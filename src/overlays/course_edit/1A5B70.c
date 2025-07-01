@@ -1,4 +1,6 @@
 #include "global.h"
+#include "assets/segment_1FB850.h"
+#include "assets/segment_21C170.h"
 
 u16 D_xk2_80105540[228 * 180] = { 0 };
 
@@ -13,9 +15,6 @@ s32 D_xk2_801195EC[][2] = {
 s32 D_xk2_8011961C[][2] = {
     { 2, 17 }, { 19, 30 }, { 49, 17 }, { 66, 16 }, { 82, 17 }, { 99, 16 },
 };
-
-extern u8 D_7014B14[];
-extern u8 D_7019D74[];
 
 extern s32 D_800D11C8[];
 extern unk_800D6CA0 D_800D6CA0;
@@ -143,7 +142,6 @@ void func_xk2_800F40B0(void) {
     }
 }
 
-extern u8 D_7013990[];
 extern Gfx D_8014940[];
 extern Gfx D_80149A0[];
 
@@ -231,8 +229,6 @@ void func_xk2_800F47FC(Gfx** gfxP) {
     *gfxP = gfx;
 }
 
-extern u8 D_7013060[];
-
 void func_xk2_800F4AF8(Gfx** gfxP) {
     Gfx* gfx;
     s32 left;
@@ -282,8 +278,6 @@ void func_xk2_800F4AF8(Gfx** gfxP) {
 }
 
 extern s32 D_800D11C8[];
-extern u8 D_9000000[];
-extern u8 D_9000540[];
 extern s32 D_xk2_801195E0;
 
 void func_xk2_800F4EB8(Gfx** gfxP) {
@@ -341,9 +335,6 @@ void func_xk2_800F4EB8(Gfx** gfxP) {
     *gfxP = gfx;
 }
 
-extern u8 D_7010D80[];
-extern u8 D_7012E20[];
-extern u8 D_7012F40[];
 extern Gfx D_3000540[];
 
 void func_xk2_800F5250(Gfx** gfxP) {

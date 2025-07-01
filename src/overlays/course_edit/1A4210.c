@@ -1,4 +1,6 @@
 #include "global.h"
+#include "assets/segment_1FB850.h"
+#include "assets/segment_21C170.h"
 #include "leo/leo_functions.h"
 
 UNUSED s32 D_xk2_80104EF0 = 0;
@@ -440,7 +442,6 @@ s32 func_xk2_800F2AF4(s8* arg0) {
     return var_v1;
 }
 
-extern u16 D_7004B00[];
 extern Gfx D_3000510[];
 extern Gfx D_3000540[];
 extern Gfx D_8014940[];
@@ -563,7 +564,6 @@ void func_xk2_800F2E4C(Gfx** gfxP) {
 }
 
 extern s32 D_xk2_80119918;
-extern u16 D_7000000[];
 
 void func_xk2_800F3164(Gfx** gfxP) {
     Gfx* gfx;
@@ -863,7 +863,6 @@ void func_xk2_800F3600(Gfx** gfxP) {
 }
 
 extern u16* D_8076C970[];
-extern u16 D_9002988[];
 extern s32 D_8076C95C;
 extern s32 D_8076C960;
 
@@ -884,8 +883,6 @@ void func_xk2_800F3D10(void) {
 }
 
 extern s32 D_8076C958;
-extern u8 D_9001C88[];
-extern u16 D_9002788[];
 
 void func_xk2_800F3DAC(Gfx** gfxP) {
     s32 left;

@@ -2,6 +2,7 @@
 #include "leo/leo_functions.h"
 #include "fzx_game.h"
 #include "fzx_assets.h"
+#include "assets/segment_1FB850.h"
 
 s32 D_xk1_8003A5D0;
 unk_8003A5D8 D_xk1_8003A5D8[102];
@@ -39,8 +40,6 @@ void func_xk1_8002AED0(void) {
 void func_xk1_8002AF10(s32 arg0) {
     D_xk1_80032BD0 = arg0;
 }
-
-extern u16 D_7004D00[];
 
 void func_xk1_8002AF1C(Gfx** gfxP, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     s32 var_a0;
@@ -85,9 +84,6 @@ void func_xk1_8002B150(s32 arg0, s32 arg1, s32* arg2, s32* arg3) {
     D_xk1_80032BF0 = arg2;
     D_xk1_80032BF4 = arg3;
 }
-
-extern Gfx D_7020808[];
-extern u16 D_701F5A0[];
 
 extern u32 gGameFrameCount;
 extern s32 gGameMode;
@@ -351,9 +347,6 @@ s32 func_xk1_8002BD64(u8 arg0, s32 arg1) {
 s32 func_xk1_8002BFA4(void) {
     return D_xk1_8003A5D0;
 }
-
-extern u8 D_7004100[];
-extern u16 D_7004900[];
 
 // FAKE! -- requires some very specific permutation of temps for matching
 void func_xk1_8002BFB0(Gfx** gfxP) {

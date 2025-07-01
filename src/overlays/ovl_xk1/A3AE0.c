@@ -1,117 +1,11 @@
 #include "global.h"
 #include "fzx_segmentA.h"
+#include "assets/segment_1FB850.h"
+#include "assets/segment_21C170.h"
 #include "assets/overlays/ovl_xk1/aA3AE0.h"
+#include "assets/overlays/machine_create/machine_create_assets.h"
 
-extern u16 D_7006380[];
-extern u16 D_7005780[];
-extern u16 D_7006980[];
-extern u16 D_7005D80[];
-extern u16 D_7006F80[];
-extern u16 D_7007580[];
-extern u8 D_7008900[];
-extern u8 D_7008980[];
-extern u8 D_7008A00[];
-extern u8 D_7008A80[];
-extern u8 D_7008B00[];
-extern u8 D_7008B80[];
-extern u8 D_7008C00[];
-extern u8 D_7008C80[];
-extern u8 D_7008D00[];
-extern u8 D_7008D80[];
-extern u8 D_7008E00[];
-extern u8 D_7008E80[];
-extern u8 D_7008F00[];
-extern u8 D_7008F80[];
-extern u8 D_7009000[];
-extern u16 D_7007B80[];
-extern u16 D_7008180[];
-extern u8 D_701F2A0[];
-extern u8 D_701F420[];
-extern u8 D_9003808[];
-extern u16 D_900D408[];
-extern u16 D_900D648[];
-extern u16 D_900D888[];
-extern u16 D_900DAC8[];
-extern u16 D_900DD08[];
-extern u16 D_900DF48[];
-extern u16 D_900E188[];
-extern u16 D_900E3C8[];
-extern u16 D_900E608[];
-extern u16 D_900E848[];
-extern u16 D_900EA88[];
-extern u16 D_900ECC8[];
-extern u16 D_900EF08[];
-extern u16 D_900F148[];
-extern u16 D_900F388[];
-extern u16 D_900F5C8[];
-extern u16 D_900F808[];
-extern u16 D_900FA48[];
-extern u16 D_900FC88[];
-extern u16 D_900FEC8[];
-extern u16 D_9010108[];
-extern u16 D_9010348[];
-extern u16 D_9010588[];
-extern u16 D_90107C8[];
-extern u16 D_9010A08[];
-extern u16 D_9010C48[];
-extern u16 D_9010E88[];
-extern u16 D_90110C8[];
-extern u16 D_9011308[];
-extern u16 D_9011548[];
-extern u16 D_9011788[];
-extern u16 D_90119C8[];
-extern u16 D_9011C08[];
-extern u16 D_9011E48[];
-extern u16 D_9012088[];
-extern u16 D_90122C8[];
-extern u16 D_9012508[];
-extern u16 D_9012748[];
-extern u16 D_9012988[];
-extern u16 D_9012BC8[];
-extern u16 D_9012E08[];
-extern u16 D_9013048[];
-extern u16 D_9013288[];
-extern u16 D_90134C8[];
-extern u16 D_9013708[];
-extern u16 D_9013948[];
-extern u16 D_9013B88[];
-extern u16 D_9013DC8[];
-extern u16 D_9014008[];
-extern u16 D_9014248[];
-extern u16 D_9014488[];
-extern u16 D_90146C8[];
-
-extern u16 D_9009088[];
-extern u16 D_90092C8[];
-extern u16 D_9009508[];
-extern u16 D_9009748[];
-extern u16 D_9009988[];
-extern u16 D_9009BC8[];
-extern u16 D_9009E08[];
-extern u16 D_900A048[];
-extern u16 D_900A288[];
-extern u16 D_900A4C8[];
-extern u16 D_900A708[];
-extern u16 D_900A948[];
-extern u16 D_900AB88[];
-extern u16 D_900ADC8[];
-extern u16 D_900B008[];
-extern u16 D_900B248[];
-extern u16 D_900B488[];
-extern u16 D_900B6C8[];
-extern u16 D_900B908[];
-extern u16 D_900BB48[];
-extern u16 D_900BD88[];
-extern u16 D_900BFC8[];
-extern u16 D_900C208[];
-extern u16 D_900C448[];
-extern u16 D_900C688[];
-extern u16 D_900C8C8[];
-
-extern u16 D_900CB08[];
-extern u16 D_900CD48[];
-extern u16 D_900CF88[];
-extern u16 D_900D1C8[];
+extern s32 D_80119890;
 
 extern u16 D_4001B00[];
 extern u16 D_4001D40[];
@@ -126,75 +20,19 @@ extern u16 D_4002F40[];
 extern u16 D_4003180[];
 extern u16 D_40033C0[];
 extern u16 D_4003600[];
-
-extern u8 D_4000A80[];
-extern u8 D_4000C00[];
-extern u8 D_4000D80[];
-extern u8 D_4000F00[];
-extern u8 D_4001080[];
-extern u8 D_4001200[];
-
-extern u8 D_4001500[];
-extern u8 D_xk3_80138B30[];
-extern u8 D_xk3_80138CB0[];
-
-extern u8 D_4001800[];
-extern u8 D_4001980[];
-extern u8 D_7008780[];
-
-extern u8 D_4000000[];
-extern u8 D_4000180[];
-extern u8 D_4000300[];
-
-extern u16 D_7005180[];
-extern u16 D_xk3_80138E30[];
-extern u16 D_7004300[];
-
-extern u16 D_9003988[];
-extern u8 D_9003F88[];
-extern u8 D_9004108[];
-extern u8 D_9004288[];
-extern u8 D_9004408[];
-extern u8 D_9004708[];
-extern u8 D_9004888[];
-extern u8 D_9005188[];
-extern u8 D_9005308[];
-extern u8 D_9005488[];
-extern u8 D_9005608[];
-extern u8 D_9005788[];
-extern u8 D_9005908[];
-extern u8 D_9005A88[];
-extern u8 D_9005C08[];
-extern u8 D_9005D88[];
-extern u8 D_9005F08[];
-extern u8 D_9006088[];
-extern u8 D_9006208[];
-extern u8 D_9006388[];
-extern u8 D_9006508[];
-extern u8 D_9006688[];
-extern u8 D_9006808[];
-extern u8 D_9006988[];
-extern u8 D_9006B08[];
-extern u8 D_9006C88[];
-extern u8 D_9006E08[];
-extern u8 D_9006F88[];
-extern u8 D_9007108[];
-extern u8 D_9007288[];
-extern u8 D_9007408[];
-extern u8 D_9007588[];
-extern u8 D_9007708[];
-extern u8 D_9007888[];
-extern u8 D_9007A08[];
-extern u8 D_9007B88[];
-extern u8 D_9007D08[];
-extern u8 D_9007E88[];
-extern u8 D_9008008[];
-
-extern u8 D_7008780[];
-extern u8 D_701EFA0[];
-extern u8 D_701F120[];
-
-extern s32 D_80119890;
+extern u16 D_4000D80[];
+extern u16 D_4000F00[];
+extern u16 D_4001080[];
+extern u16 D_4001200[];
+extern u16 D_4000F00[];
+extern u16 D_4000A80[];
+extern u16 D_4000C00[];
+extern u16 D_4001500[];
+extern u16 D_4001800[];
+extern u16 D_4001980[];
+extern u16 D_4000000[];
+extern u16 D_4000180[];
+extern u16 D_4000300[];
 
 s32 D_xk1_8003A550;
 s32 D_xk1_8003A554;
@@ -738,8 +576,6 @@ void func_xk1_800269F4(unk_80026914* arg0, s32* arg1, s32* arg2) {
     }
 }
 
-extern u8 D_70201A0[];
-
 void func_xk1_80026B44(Gfx** gfxP, unk_80026914* arg1, s32 arg2, s32 arg3) {
     s32 temp_ra;
     s32 temp_s0;
@@ -848,7 +684,6 @@ void func_xk1_80026B44(Gfx** gfxP, unk_80026914* arg1, s32 arg2, s32 arg3) {
     *gfxP = gfx;
 }
 
-extern u16 D_701F5A0[];
 extern u32 gGameFrameCount;
 
 void func_xk1_800276B0(Gfx** gfxP, unk_80026914* arg1, s32 arg2, s32 arg3) {
@@ -1155,18 +990,12 @@ void func_xk1_80028064(void) {
 
 void func_xk1_8002820C(void) {
     D_xk1_80030614 = 0;
-    D_xk1_800327A8[1].unk_08 = &D_9004888;
+    D_xk1_800327A8[1].unk_08 = D_9004888;
     D_xk1_800327A8[1].unk_10 = &D_xk1_80032354;
     D_xk1_8003067C[1] = &D_xk1_8003061C;
     D_xk1_800327A8[2].unk_08 = NULL;
     D_xk1_800327A8[2].unk_10 = NULL;
 }
-
-extern u8 D_9004A08[];
-extern u8 D_9004B88[];
-extern u8 D_9004D08[];
-extern u8 D_9004E88[];
-extern u8 D_9005008[];
 
 void func_xk1_80028250(void) {
     unk_80026914* sp94[] = {

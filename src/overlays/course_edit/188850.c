@@ -2,6 +2,7 @@
 #include "leo/leo_functions.h"
 #include "fzx_racer.h"
 #include "fzx_course.h"
+#include "assets/segment_21C170.h"
 
 Controller* D_80119720;
 UNUSED s32 D_xk2_80119724;
@@ -1705,7 +1706,6 @@ extern s32 D_xk1_8003061C;
 extern s32 D_xk1_80030620;
 extern unk_80026914 D_xk1_80032354;
 extern unk_80026914_unk_1C D_xk1_800327A8[];
-extern u8 D_9004888[];
 extern s32* D_xk1_8003067C[];
 
 void func_xk2_800DB924(void) {
@@ -2957,8 +2957,6 @@ void func_xk2_800DE758(void) {
 }
 
 extern u16* D_8076C970[];
-extern u16 D_9002B88[];
-extern u16 D_9002D88[];
 
 void func_xk2_800DE8D0(void) {
 
@@ -3034,9 +3032,6 @@ void func_xk2_800DEB38(void) {
     gPlayers->unk_50.z = D_xk2_80104CC0;
 }
 
-extern u16 D_9002388[];
-extern u16 D_9002588[];
-
 void func_xk2_800DEC1C(void) {
     if (gControllers[gPlayerControlPorts[0]].buttonPressed & BTN_A) {
         if ((D_xk2_800F705C != 1) || (D_800D6CA0.unk_00 == 1)) {
@@ -3058,8 +3053,6 @@ void func_xk2_800DEC1C(void) {
 }
 
 extern s32 D_8076C96C;
-extern u16 D_9002788[];
-extern u16 D_9002988[];
 
 void func_xk2_800DECF0(void) {
 

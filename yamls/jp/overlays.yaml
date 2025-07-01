@@ -356,5 +356,3 @@
       - [0x1FB800, .data, 1E1FD0]
       - [0x1FB840, .rodata, 1E1FD0]
       - { type: .bss, vram: 0x800F1AE0, name: 1E0B00 }
-
-  - [0x1FB850]
