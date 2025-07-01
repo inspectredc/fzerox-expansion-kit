@@ -2,6 +2,7 @@
 #include "leo/leo_functions.h"
 #include "fzx_game.h"
 #include "fzx_assets.h"
+#include "assets/segment_1FB850.h"
 
 // TODO: Unsure on sizes
 u8 D_xk1_8003A560[16];
@@ -23,10 +24,6 @@ UNUSED s32 D_xk1_80032B00 = 0x202D;
 char* func_xk1_800290D0(char* buffer, const char* fmt, size_t size) {
     return (char*) memcpy(buffer, fmt, size) + size;
 }
-
-extern Gfx D_7020850[];
-extern Gfx D_7020890[];
-extern Gfx D_70208D0[];
 
 Gfx* func_xk1_800290F4(Gfx* gfx, s32 arg1, s32 arg2, u32 arg3) {
 
@@ -339,9 +336,6 @@ extern unk_80128C94* D_80128C94;
 
 extern Gfx D_3000510[];
 extern Gfx D_60110C8[];
-extern u8 D_700B480[];
-extern u8 D_700B520[];
-extern u8 D_700FF80[];
 
 extern u32 gGameFrameCount;
 extern s32 gGameMode;

@@ -1,4 +1,5 @@
 #include "global.h"
+#include "assets/segment_21C170.h"
 
 u8 D_xk2_80104280[] = {
     255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
@@ -24,8 +25,6 @@ Gfx* func_xk2_800ED954(Gfx* gfx, s32 arg1, s32 arg2, u8 arg3) {
 
     return gfx;
 }
-
-extern u8 D_9003408[];
 
 void func_xk2_800EDA34(Gfx** gfxP) {
     Gfx* gfx;

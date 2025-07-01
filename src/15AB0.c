@@ -239,7 +239,7 @@ void func_80708A44(void) {
             break;
         case GAMEMODE_COURSE_EDIT:
         case GAMEMODE_CREATE_MACHINE:
-            ramSize = SEGMENT_VRAM_SIZE(segment_145B70);
+            ramSize = SEGMENT_VRAM_SIZE(segment_1FB850);
             break;
         default:
             D_8076CBD4 = 0;
@@ -268,7 +268,7 @@ void func_80708B34(void) {
             segmentSize = SEGMENT_DATA_SIZE_CONST(segment_22B0A0);
             break;
         case GAMEMODE_COURSE_EDIT:
-            segmentSize = SEGMENT_VRAM_SIZE(course_edit_textures);
+            segmentSize = SEGMENT_VRAM_SIZE(segment_21C170);
             break;
         default:
             D_8076CBD8 = 0;
@@ -587,8 +587,8 @@ void func_80709620(void) {
         case GAMEMODE_CREATE_MACHINE:
             loadFromDisk = true;
             diskOffset = D_2AC;
-            // diskOffset = SEGMENT_DISK_START(segment_145B70);
-            ramSize = SEGMENT_VRAM_SIZE(segment_145B70);
+            // diskOffset = SEGMENT_DISK_START(segment_1FB850);
+            ramSize = SEGMENT_VRAM_SIZE(segment_1FB850);
             break;
         default:
             D_8076CBD4 = 0;
@@ -628,8 +628,8 @@ void func_80709760(void) {
         case GAMEMODE_COURSE_EDIT:
             loadFromDisk = true;
             diskOffset = D_2B4;
-            // diskOffset = SEGMENT_DISK_START(course_edit_textures);
-            ramSize = SEGMENT_VRAM_SIZE(course_edit_textures);
+            // diskOffset = SEGMENT_DISK_START(segment_21C170);
+            ramSize = SEGMENT_VRAM_SIZE(segment_21C170);
             break;
         default:
             D_8076CBD8 = 0;

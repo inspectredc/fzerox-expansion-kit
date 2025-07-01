@@ -1,5 +1,7 @@
 #include "global.h"
 #include "leo/leo_functions.h"
+#include "assets/segment_1FB850.h"
+#include "assets/segment_21C170.h"
 
 s32 D_xk2_80128CA0;
 s32 D_xk2_80128CA4;
@@ -194,7 +196,6 @@ void func_xk2_800EE664(s32 arg0) {
 }
 
 extern Gfx D_8014940[];
-extern u16 D_9002788[];
 extern s32 D_8076C960;
 
 void func_xk2_800EE67C(Gfx** gfxP) {
@@ -227,8 +228,6 @@ void func_xk2_800EE67C(Gfx** gfxP) {
     }
     *gfxP = gfx;
 }
-
-extern u16 D_7004900[];
 
 void func_xk2_800EE8A0(Gfx** gfxP) {
     Gfx* gfx;

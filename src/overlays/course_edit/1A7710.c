@@ -1,4 +1,5 @@
 #include "global.h"
+#include "assets/segment_21C170.h"
 
 Vec3f D_xk2_8013A740;
 UNUSED s32 D_xk2_8013A750[2];
@@ -145,7 +146,6 @@ void func_xk2_800F5F2C(void) {
     D_xk2_80119690 = gControllers[gPlayerControlPorts[0]].buttonCurrent & BTN_Z;
 }
 
-extern Gfx D_9014D18[];
 extern GfxPool D_1000000;
 
 void func_xk2_800F61DC(Gfx** gfxP) {

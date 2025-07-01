@@ -4,6 +4,7 @@
 #include "fzx_font.h"
 #include "fzx_machine.h"
 #include "fzx_assets.h"
+#include "assets/segment_1FB850.h"
 
 extern u8 D_xk3_80139870[];
 extern u8 D_xk3_801398F0[];
@@ -698,11 +699,6 @@ extern u8 D_4001200[];
 extern u8 D_4001500[];
 extern u8 D_4001800[];
 extern u8 D_4001980[];
-extern u8 D_7005180[];
-extern u8 D_7005D80[];
-extern u8 D_7007580[];
-extern u8 D_7010180[];
-extern u8 D_701F9A0[];
 
 extern u8 D_xk3_80136548;
 extern u8 D_xk3_8013654C;
