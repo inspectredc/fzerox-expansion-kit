@@ -3061,7 +3061,6 @@ extern u8 gEditCupTrackNames[][9];
 extern s16 gPlayer1OverallPosition;
 extern s32 D_807C70C8;
 extern s32 D_800F7404;
-extern u8 D_320[];
 extern OSMesgQueue D_8079F998;
 extern s32 D_8079F9B4;
 extern s32 D_80794CD4;
@@ -3111,7 +3110,7 @@ void func_80701E90(s32 courseIndex) {
             }
             PRINTF("DEF LOAD OK\n");
             func_i2_800A8CE4(func_i2_800AA84C(), courseIndex);
-            func_80703B40(D_320 + sp50, &COURSE_CONTEXT()->courseData, sizeof(CourseData), 0);
+            func_80703B40(SEGMENT_DISK_START(silence_3) + sp50, &COURSE_CONTEXT()->courseData, sizeof(CourseData), 0);
             if ((Course_CalculateChecksum() != COURSE_CONTEXT()->courseData.checksum) ||
                 (COURSE_CONTEXT()->courseData.creatorId != CREATOR_NINTENDO) ||
                 ((s8) COURSE_CONTEXT()->courseData.fileName[0x16] >= 0xE)) {
@@ -3142,7 +3141,7 @@ void func_80701E90(s32 courseIndex) {
                         }
                         PRINTF("DEF LOAD OK\n");
                         func_i2_800A8CE4(func_i2_800AA84C(), courseIndex);
-                        func_80703B40(D_320 + sp50, &COURSE_CONTEXT()->courseData, sizeof(CourseData), 0);
+                        func_80703B40(SEGMENT_DISK_START(silence_3) + sp50, &COURSE_CONTEXT()->courseData, sizeof(CourseData), 0);
                         if ((Course_CalculateChecksum() != COURSE_CONTEXT()->courseData.checksum) ||
                             (COURSE_CONTEXT()->courseData.creatorId != CREATOR_NINTENDO) ||
                             ((s8) COURSE_CONTEXT()->courseData.fileName[0x16] >= 0xE)) {
@@ -3235,7 +3234,7 @@ void func_80702448(s32 courseIndex) {
             PRINTF("course index is %d\n", courseIndex);
             PRINTF("DEF LOAD OK\n");
             func_i2_800A8CE4(func_i2_800AA84C(), courseIndex);
-            func_80703B40(D_320 + sp4C, &COURSE_CONTEXT()->courseData, sizeof(CourseData), 0);
+            func_80703B40(SEGMENT_DISK_START(silence_3) + sp4C, &COURSE_CONTEXT()->courseData, sizeof(CourseData), 0);
             if ((Course_CalculateChecksum() != COURSE_CONTEXT()->courseData.checksum) ||
                 (COURSE_CONTEXT()->courseData.creatorId != CREATOR_NINTENDO) ||
                 ((s8) COURSE_CONTEXT()->courseData.fileName[0x16] >= 0xE)) {
@@ -3268,7 +3267,7 @@ void func_80702448(s32 courseIndex) {
                         PRINTF("course index is %d\n", courseIndex);
                         PRINTF("DEF LOAD OK\n");
                         func_i2_800A8CE4(func_i2_800AA84C(), courseIndex);
-                        func_80703B40(D_320 + sp4C, &COURSE_CONTEXT()->courseData, sizeof(CourseData), 0);
+                        func_80703B40(SEGMENT_DISK_START(silence_3) + sp4C, &COURSE_CONTEXT()->courseData, sizeof(CourseData), 0);
                         if ((Course_CalculateChecksum() != COURSE_CONTEXT()->courseData.checksum) ||
                             (COURSE_CONTEXT()->courseData.creatorId != CREATOR_NINTENDO) ||
                             ((s8) COURSE_CONTEXT()->courseData.fileName[0x16] >= 0xE)) {

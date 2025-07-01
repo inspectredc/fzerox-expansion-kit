@@ -1,15 +1,8 @@
 #ifndef FZX_SAVE_H
 #define FZX_SAVE_H
 
-#include "unk_structs.h"
-
-typedef enum GhostType {
-    /* 0 */ GHOST_NONE,
-    /* 1 */ GHOST_PLAYER,
-    /* 2 */ GHOST_STAFF,
-    /* 3 */ GHOST_CELEBRITY,
-    /* 4 */ GHOST_CHAMP,
-} GhostType;
+#include "libc/stdbool.h"
+#include "fzx_ghost.h"
 
 typedef struct SaveCourseRecords {
     u16 checksum;

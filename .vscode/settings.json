@@ -79,7 +79,8 @@
       "course_select.h": "c",
       "ovl_i6.h": "c",
       "title.h": "c",
-      "records.h": "c"
+      "records.h": "c",
+      "fzx_ghost.h": "c"
     },
     "C_Cpp_Runner.msvcBatchPath": "",
     "C_Cpp.errorSquiggles": "enabled"

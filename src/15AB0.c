@@ -561,7 +561,6 @@ void func_807093F4(void) {
 }
 
 extern s32 D_807C70E8;
-extern u8 D_2AC[];
 
 void func_80709620(void) {
     bool loadFromDisk = false;
@@ -586,8 +585,7 @@ void func_80709620(void) {
         case GAMEMODE_COURSE_EDIT:
         case GAMEMODE_CREATE_MACHINE:
             loadFromDisk = true;
-            diskOffset = D_2AC;
-            // diskOffset = SEGMENT_DISK_START(segment_1FB850);
+            diskOffset = SEGMENT_DISK_START(segment_1FB850);
             ramSize = SEGMENT_VRAM_SIZE(segment_1FB850);
             break;
         default:
@@ -603,7 +601,6 @@ void func_80709620(void) {
     D_8076CBD4 = 0;
 }
 
-extern u8 D_2B4[];
 extern s32 D_807C7110;
 
 void func_80709760(void) {
@@ -627,8 +624,7 @@ void func_80709760(void) {
             break;
         case GAMEMODE_COURSE_EDIT:
             loadFromDisk = true;
-            diskOffset = D_2B4;
-            // diskOffset = SEGMENT_DISK_START(segment_21C170);
+            diskOffset = SEGMENT_DISK_START(segment_21C170);
             ramSize = SEGMENT_VRAM_SIZE(segment_21C170);
             break;
         default:

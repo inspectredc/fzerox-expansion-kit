@@ -18,7 +18,11 @@ typedef struct CourseData {
     /* 0x003 */ s8 skybox;
     /* 0x004 */ u32 checksum;
     /* 0x008 */ u8 flag;
-    /* 0x009 */ char fileName[23];
+    /* 0x009 */ char fileName[13];
+    /* 0x016 */ s8 unk_16;
+    /* 0x017 */ s8 unk_17;
+    /* 0x018 */ s32 unk_18;
+    /* 0x01C */ s32 unk_1C;
     /* 0x020 */ ControlPoint controlPoint[64];
     /* 0x520 */ s16 bankAngle[64];
     /* 0x5A0 */ s8 pit[64];

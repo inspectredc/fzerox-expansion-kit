@@ -12,6 +12,7 @@
 #include "controller.h"
 #include "fzx_course.h"
 #include "fzx_save.h"
+#include "fzx_ghost.h"
 #include "fzx_object.h"
 
 void Game_ThreadEntry(void* entry);

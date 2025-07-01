@@ -1,5 +1,5 @@
 name: F-Zero X Expansion Kit (JP)
-sha1: 1995b21d7c5df7eee646d48977f97f769cc644c8
+sha1: 103ca1f2fbd6ef515dedeb0b433c550dd7f3057f
 options:
   basename: fzerox-expansion
   target_path: baserom.jp.z64dd

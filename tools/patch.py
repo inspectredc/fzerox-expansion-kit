@@ -24,6 +24,20 @@ patchedEntries = [
     "course_edit",
     "machine_create",
     "ovl_xk4",
+    "segment_1FB850",
+    "segment_21C170",
+    "silence_3",
+    "sand_ocean_3",
+    "devils_forest_4",
+    "port_town_3",
+    "devils_forest_5",
+    "big_blue_3",
+    "mute_city_4",
+    "space_plant_2",
+    "port_town_4",
+    "fire_field_2",
+    "white_land_3",
+    "big_foot",
 ]
 
 diskRomAddrs = {
@@ -41,6 +55,20 @@ diskRomAddrs = {
     "course_edit" : 0x188850,
     "machine_create" : 0x1CB1E0,
     "ovl_xk4" : 0x1E0B00,
+    "segment_1FB850" : 0x1FB850,
+    "segment_21C170" : 0x21C170,
+    "silence_3" : 0x230FB0,
+    "sand_ocean_3" : 0x231790,
+    "devils_forest_4" : 0x231F70,
+    "port_town_3" : 0x232750,
+    "devils_forest_5" : 0x232F30,
+    "big_blue_3" : 0x233710,
+    "mute_city_4" : 0x233EF0,
+    "space_plant_2" : 0x2346D0,
+    "port_town_4" : 0x234EB0,
+    "fire_field_2" : 0x235690,
+    "white_land_3" : 0x235E70,
+    "big_foot" : 0x236650,
 }
 
 diskSegments = {
@@ -58,6 +86,20 @@ diskSegments = {
     "course_edit" : 656,
     "machine_create" : 672,
     "ovl_xk4" : 677,
+    "segment_1FB850" : 684,
+    "segment_21C170" : 692,
+    "silence_3" : 800,
+    "sand_ocean_3" : 801,
+    "devils_forest_4" : 802,
+    "port_town_3" : 803,
+    "devils_forest_5" : 804,
+    "big_blue_3" : 805,
+    "mute_city_4" : 806,
+    "space_plant_2" : 807,
+    "port_town_4" : 808,
+    "fire_field_2" : 809,
+    "white_land_3" : 810,
+    "big_foot" : 811,
 }
 
 VERBOSE = False
