@@ -38,6 +38,18 @@ patchedEntries = [
     "fire_field_2",
     "white_land_3",
     "big_foot",
+    "silence_3_staff_ghost",
+    "sand_ocean_3_staff_ghost",
+    "devils_forest_4_staff_ghost",
+    "port_town_3_staff_ghost",
+    "devils_forest_5_staff_ghost",
+    "big_blue_3_staff_ghost",
+    "mute_city_4_staff_ghost",
+    "space_plant_2_staff_ghost",
+    "port_town_4_staff_ghost",
+    "fire_field_2_staff_ghost",
+    "white_land_3_staff_ghost",
+    "big_foot_staff_ghost",
 ]
 
 diskRomAddrs = {
@@ -69,6 +81,18 @@ diskRomAddrs = {
     "fire_field_2" : 0x235690,
     "white_land_3" : 0x235E70,
     "big_foot" : 0x236650,
+    "silence_3_staff_ghost" : 0x236E30,
+    "sand_ocean_3_staff_ghost" : 0x23ADF0,
+    "devils_forest_4_staff_ghost" : 0x23EDB0,
+    "port_town_3_staff_ghost" : 0x242D70,
+    "devils_forest_5_staff_ghost" : 0x246D30,
+    "big_blue_3_staff_ghost" : 0x24ACF0,
+    "mute_city_4_staff_ghost" : 0x24ECB0,
+    "space_plant_2_staff_ghost" : 0x252C70,
+    "port_town_4_staff_ghost" : 0x256C30,
+    "fire_field_2_staff_ghost" : 0x25ABF0,
+    "white_land_3_staff_ghost" : 0x25EBB0,
+    "big_foot_staff_ghost" : 0x262B70,
 }
 
 diskSegments = {
@@ -100,6 +124,18 @@ diskSegments = {
     "fire_field_2" : 809,
     "white_land_3" : 810,
     "big_foot" : 811,
+    "silence_3_staff_ghost" : 834,
+    "sand_ocean_3_staff_ghost" : 835,
+    "devils_forest_4_staff_ghost" : 836,
+    "port_town_3_staff_ghost" : 837,
+    "devils_forest_5_staff_ghost" : 838,
+    "big_blue_3_staff_ghost" : 839,
+    "mute_city_4_staff_ghost" : 840,
+    "space_plant_2_staff_ghost" : 841,
+    "port_town_4_staff_ghost" : 842,
+    "fire_field_2_staff_ghost" : 843,
+    "white_land_3_staff_ghost" : 844,
+    "big_foot_staff_ghost" : 845,
 }
 
 VERBOSE = False
