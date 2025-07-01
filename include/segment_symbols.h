@@ -100,4 +100,17 @@ DECLARE_SEGMENT(segment_22B0A0);
 DECLARE_SEGMENT(segment_235130);
 DECLARE_SEGMENT(segment_2738A0);
 
+DECLARE_SEGMENT(silence_3);
+DECLARE_SEGMENT(sand_ocean_3);
+DECLARE_SEGMENT(devils_forest_4);
+DECLARE_SEGMENT(port_town_3);
+DECLARE_SEGMENT(devils_forest_5);
+DECLARE_SEGMENT(big_blue_3);
+DECLARE_SEGMENT(mute_city_4);
+DECLARE_SEGMENT(space_plant_2);
+DECLARE_SEGMENT(port_town_4);
+DECLARE_SEGMENT(fire_field_2);
+DECLARE_SEGMENT(white_land_3);
+DECLARE_SEGMENT(big_foot);
+
 #endif

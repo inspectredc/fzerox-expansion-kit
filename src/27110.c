@@ -2,6 +2,7 @@
 #include "unk_gfx.h"
 #include "fzx_game.h"
 #include "fzx_racer.h"
+#include "fzx_ghost.h"
 #include "fzx_assets.h"
 #include "fzx_machine.h"
 

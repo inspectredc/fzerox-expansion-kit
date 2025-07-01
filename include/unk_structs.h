@@ -3,6 +3,8 @@
 
 #include "libultra/ultra64.h"
 #include "PR/leo.h"
+#include "fzx_machine.h"
+#include "other_types.h"
 
 typedef struct unk_807C6F10 {
     s32 unk_00;
@@ -139,57 +141,6 @@ typedef struct CourseSegment {
     /* 0x9C */ f32 halfMarkLength;
     /* 0xA0 */ f32 threeQuarterMarkLength;
 } CourseSegment; // size = 0xA4
-
-typedef struct MachineInfo {
-    /* 0x00 */ u8 character;
-    /* 0x01 */ u8 customType;
-    /* 0x02 */ u8 frontType;
-    /* 0x03 */ u8 rearType;
-    /* 0x04 */ u8 wingType;
-    /* 0x05 */ u8 logo;
-    /* 0x06 */ u8 number;
-    /* 0x07 */ u8 decal;
-    /* 0x08 */ u8 bodyR;
-    /* 0x09 */ u8 bodyG;
-    /* 0x0A */ u8 bodyB;
-    /* 0x0B */ u8 numberR;
-    /* 0x0C */ u8 numberG;
-    /* 0x0D */ u8 numberB;
-    /* 0x0E */ u8 decalR;
-    /* 0x0F */ u8 decalG;
-    /* 0x10 */ u8 decalB;
-    /* 0x11 */ u8 cockpitR;
-    /* 0x12 */ u8 cockpitG;
-    /* 0x13 */ u8 cockpitB;
-} MachineInfo; // size = 0x14
-
-typedef struct unk_80141C88_unk_1D {
-    MachineInfo unk_00;
-    s8 unk_14[12];
-} unk_80141C88_unk_1D; // size = 0x20
-
-typedef struct GhostInfo {
-    /* 0x00 */ s32 courseIndex;
-    /* 0x04 */ s32 encodedCourseIndex;
-    /* 0x08 */ s32 raceTime;
-    /* 0x0C */ s32 replayChecksum;
-    /* 0x10 */ u16 ghostType;
-    /* 0x12 */ u16 unk_12;
-    /* 0x14 */ char trackName[9];
-    /* 0x1D */ unk_80141C88_unk_1D unk_1D;
-} GhostInfo; // size = 0x40
-
-typedef struct Ghost {
-    /* 0x0000 */ s32 encodedCourseIndex;
-    /* 0x0004 */ s32 raceTime;
-    /* 0x0008 */ s32 lapTimes[3];
-    /* 0x0014 */ s32 replayEnd;
-    /* 0x0018 */ s32 replaySize;
-    /* 0x001C */ s8 replayData[16200];
-    /* 0x3F64 */ s32 replayChecksum;
-    /* 0x3F68 */ s16 ghostType;
-    /* 0x3F6A */ MachineInfo machineInfo;
-} Ghost; // size = 0x3F80
 
 typedef struct CourseInfo {
     /* 0x00 */ s32 encodedCourseIndex;
@@ -485,21 +436,6 @@ typedef struct Racer {
     s32 unk_3A0;
     s32 unk_3A4;
 } Racer; // size = 0x3A8
-
-typedef struct GhostRacer {
-    s32 frameCount;
-    Ghost* ghost;
-    s8* replayPtr;
-    s32 replayIndex;
-    s16 initialized;
-    s16 exists;
-    s32 replayPosX;
-    s32 replayPosY;
-    s32 replayPosZ;
-    Vec3f pos;
-    f32 scale;
-    Racer* racer;
-} GhostRacer; // size 0x34
 
 typedef struct RaceStats {
     s32 raceTime;

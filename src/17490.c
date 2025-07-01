@@ -1,5 +1,6 @@
 #include "global.h"
 #include "fzx_game.h"
+#include "fzx_ghost.h"
 #include "fzx_assets.h"
 #include "src/overlays/ovl_i4/ovl_i4.h"
 

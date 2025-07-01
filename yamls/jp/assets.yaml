@@ -16,4 +16,112 @@
     subsegments:
       - [0x21C170, .data, segment_21C170/segment_21C170]
 
-  - [0x230FB0]
+  - name: silence_3
+    exclusive_ram_id: course
+    type: code
+    dir: assets/courses
+    vram: 0x0
+    start: 0x230FB0
+    subsegments:
+      - [0x230FB0, .data, silence_3/silence_3]
+
+  - name: sand_ocean_3
+    exclusive_ram_id: course
+    type: code
+    dir: assets/courses
+    vram: 0x0
+    start: 0x231790
+    subsegments:
+      - [0x231790, .data, sand_ocean_3/sand_ocean_3]
+
+  - name: devils_forest_4
+    exclusive_ram_id: course
+    type: code
+    dir: assets/courses
+    vram: 0x0
+    start: 0x231F70
+    subsegments:
+      - [0x231F70, .data, devils_forest_4/devils_forest_4]
+
+  - name: port_town_3
+    exclusive_ram_id: course
+    type: code
+    dir: assets/courses
+    vram: 0x0
+    start: 0x232750
+    subsegments:
+      - [0x232750, .data, port_town_3/port_town_3]
+
+  - name: devils_forest_5
+    exclusive_ram_id: course
+    type: code
+    dir: assets/courses
+    vram: 0x0
+    start: 0x232F30
+    subsegments:
+      - [0x232F30, .data, devils_forest_5/devils_forest_5]
+
+  - name: big_blue_3
+    exclusive_ram_id: course
+    type: code
+    dir: assets/courses
+    vram: 0x0
+    start: 0x233710
+    subsegments:
+      - [0x233710, .data, big_blue_3/big_blue_3]
+
+  - name: mute_city_4
+    exclusive_ram_id: course
+    type: code
+    dir: assets/courses
+    vram: 0x0
+    start: 0x233EF0
+    subsegments:
+      - [0x233EF0, .data, mute_city_4/mute_city_4]
+
+  - name: space_plant_2
+    exclusive_ram_id: course
+    type: code
+    dir: assets/courses
+    vram: 0x0
+    start: 0x2346D0
+    subsegments:
+      - [0x2346D0, .data, space_plant_2/space_plant_2]
+
+  - name: port_town_4
+    exclusive_ram_id: course
+    type: code
+    dir: assets/courses
+    vram: 0x0
+    start: 0x234EB0
+    subsegments:
+      - [0x234EB0, .data, port_town_4/port_town_4]
+
+  - name: fire_field_2
+    exclusive_ram_id: course
+    type: code
+    dir: assets/courses
+    vram: 0x0
+    start: 0x235690
+    subsegments:
+      - [0x235690, .data, fire_field_2/fire_field_2]
+
+  - name: white_land_3
+    exclusive_ram_id: course
+    type: code
+    dir: assets/courses
+    vram: 0x0
+    start: 0x235E70
+    subsegments:
+      - [0x235E70, .data, white_land_3/white_land_3]
+
+  - name: big_foot
+    exclusive_ram_id: course
+    type: code
+    dir: assets/courses
+    vram: 0x0
+    start: 0x236650
+    subsegments:
+      - [0x236650, .data, big_foot/big_foot]
+
+  - [0x236E30]
