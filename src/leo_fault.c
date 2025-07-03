@@ -412,7 +412,7 @@ void func_8070F8A4(s32 arg0, s32 arg1) {
     u64* var_v0;
 
     func_80767940();
-    if (arg0 == 0x25) {
+    if (arg0 == LEO_ERROR_WAITING_NMI) {
         return;
     }
 

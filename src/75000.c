@@ -388,7 +388,7 @@ s32 func_80768C08(OSPiHandle* arg0, OSIoMesg* arg1, s32 direction) {
     return 0;
 }
 
-extern OSMesg D_80794CD4;
+extern s32 D_80794CD4;
 
 s32 func_80768C88(u16 arg0, u8* arg1, u8* arg2) {
     if (func_80766660(arg0) == -1) {
@@ -396,8 +396,8 @@ s32 func_80768C88(u16 arg0, u8* arg1, u8* arg2) {
     }
     while (func_80766788() != 0xFFFF) {}
 
-    if (func_8075F7C0(arg0, arg1, arg2) == 0xFFFF) {
-        if ((s32) D_80794CD4 == 0xF2) {
+    if (Mfs_GetFileIndex(arg0, arg1, arg2) == 0xFFFF) {
+        if (D_80794CD4 == 0xF2) {
             D_80794CD4 = 0;
         }
         return 0;

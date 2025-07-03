@@ -329,18 +329,18 @@ void func_xk3_8012F7AC(Gfx** gfxP, char* arg1) {
     u8 sp43 = 0;
 
     gfx = *gfxP;
-    if (Leo_strlen(arg1) >= 9) {
+    if (mfsStrLen(arg1) >= 9) {
         sp43 = 1;
     }
     func_xk1_80026830(arg1, &sp44);
     if (sp43) {
-        sp67 = Leo_strlen(&sp44) + Leo_strlen(D_xk3_801372B8[10]);
+        sp67 = mfsStrLen(&sp44) + mfsStrLen(D_xk3_801372B8[10]);
         sp6A = ((((34 - sp67) / 2) + 3) * 8);
         sp68 = 46;
 
         gfx = func_xk1_8002EA10(gfx, sp6A, sp68, sp6A + (sp67 * 8), 124 - sp68, GPACK_RGBA5551(130, 130, 255, 1));
     } else {
-        sp67 = Leo_strlen(&sp44) + Leo_strlen(D_xk3_801372B8[10]) + Leo_strlen(D_xk3_801372B8[11]);
+        sp67 = mfsStrLen(&sp44) + mfsStrLen(D_xk3_801372B8[10]) + mfsStrLen(D_xk3_801372B8[11]);
         sp6A = ((((34 - sp67) / 2) + 3) * 8);
         sp68 = 54;
         gfx = func_xk1_8002EA10(gfx, sp6A, sp68, sp6A + (sp67 * 8), 124 - sp68, GPACK_RGBA5551(130, 130, 255, 1));
@@ -348,7 +348,7 @@ void func_xk3_8012F7AC(Gfx** gfxP, char* arg1) {
 
     gDPSetPrimColor(gfx++, 0, 0, 255, 64, 64, 255);
     gfx = func_xk1_800262F4(gfx, sp6A, sp68, &sp44);
-    sp6A += Leo_strlen(&sp44) * 8;
+    sp6A += mfsStrLen(&sp44) * 8;
     gDPPipeSync(gfx++);
     gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, 255);
 

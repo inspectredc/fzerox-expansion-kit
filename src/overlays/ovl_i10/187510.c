@@ -49,7 +49,7 @@ void func_i10_8012B904(void) {
     osRecvMesg(&D_8079F998, NULL, 1);
 
     for (i = 0; i < 6; i++) {
-        if (func_80762D80(gEditCupTrackNames[i]) != 0) {
+        if (Mfs_ValidateFileName(gEditCupTrackNames[i]) != 0) {
             gEditCupTrackNames[i][0] = '\0';
         }
     }

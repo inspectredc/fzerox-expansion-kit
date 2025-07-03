@@ -2684,12 +2684,12 @@ void func_xk2_800DD938(void) {
                 return;
             }
             func_xk1_800294AC();
-            func_xk1_800294EC(&func_xk1_8002AC24);
+            func_xk1_800294EC(func_xk1_8002AC24);
             D_800D6CA0.unk_08 = 2;
             return;
         case 1:
             if (!(sp1C->unk_10 & 0x2000)) {
-                Leo_strcpy(D_xk1_8003A570, sp1C);
+                mfsStrCpy(D_xk1_8003A570, sp1C);
                 D_800D6CA0.unk_08 = 0x34;
                 func_8076877C(1, "CRSD");
                 // TODO: move to appropriate place
@@ -2713,7 +2713,7 @@ void func_xk2_800DD938(void) {
         case 3:
             if (!(sp1C->unk_10 & 0x2000)) {
                 func_xk1_800294AC();
-                func_xk1_800294EC(&func_xk1_8002AC24);
+                func_xk1_800294EC(func_xk1_8002AC24);
                 D_800D6CA0.unk_08 = 2;
                 return;
             }

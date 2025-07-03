@@ -433,10 +433,10 @@ __LeoBootGame3 = 0x8075AA10;
 LeoGetKAdr = 0x8075BB20;
 LeoGetAAdr = 0x8075C620;
 
-Leo_strcmp = 0x8076294C;
-Leo_strcpy = 0x80762B78;
-Leo_bcmp = 0x807629FC;
-Leo_strlen = 0x80762B1C;
+mfsStrCmp = 0x8076294C;
+mfsStrCpy = 0x80762B78;
+mfsStrnCmp = 0x807629FC;
+mfsStrLen = 0x80762B1C;
 
 // libleo data
 
@@ -495,6 +495,15 @@ gLeoReadRTCFunc = 0x807C6E80;
 gLeoSetRTCFunc = 0x807C6E84;
 gLeoModeSelectAsyncFunc = 0x807C6E88;
 gLeoRezeroFunc = 0x807C6E8C;
+
+gMfsRamArea = 0x80784EF0;
+gCurrentDirectoryEntry = 0x80793620;
+gFileAllocationTable = 0x80793650;
+gDirectoryEntryCount = 0x80794CD0;
+gWorkingDirectory = 0x80794CE0;
+gRamAreaCapacity = 0x80794D24;
+gCompanyCode = 0x80794D40;
+gGameCode = 0x80794D44;
 
 // audio
 

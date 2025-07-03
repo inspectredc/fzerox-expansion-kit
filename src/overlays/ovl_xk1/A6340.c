@@ -181,7 +181,7 @@ s32 func_xk1_80029560(void) {
         var_s1 = 1;
     }
     while (var_s1 < func_xk1_8002BFA4()) {
-        if (Leo_strcmp(D_xk1_8003A5D8[var_s1].unk_00, D_xk1_8003A560) == 0) {
+        if (mfsStrCmp(D_xk1_8003A5D8[var_s1].unk_00, D_xk1_8003A560) == 0) {
             return 1;
         }
         var_s1++;
@@ -515,7 +515,7 @@ void func_xk1_8002AC70(void) {
             }
             return;
         case 1:
-            Leo_strcpy(D_xk1_8003A560, D_xk1_8003A570);
+            mfsStrCpy(D_xk1_8003A560, D_xk1_8003A570);
             if ((func_xk1_80029560() == 0) && ((func_xk1_8002BFA4() - 1) >= 100)) {
                 D_80119880 = -2;
                 D_xk2_80104378 = 6;

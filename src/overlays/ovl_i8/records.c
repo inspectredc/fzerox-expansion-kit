@@ -911,7 +911,7 @@ void func_i8_8009CE64(void) {
                 func_8074122C(0x1E);
             }
             if (gInputButtonPressed & (BTN_A | BTN_START)) {
-                D_i8_800A1F14 = func_807112A0(4, 120, 60, 148, 72, 40, GPACK_RGBA5551(0, 0, 255, 1), &func_i8_8009D6A4);
+                D_i8_800A1F14 = func_807112A0(4, 120, 60, 148, 72, 40, GPACK_RGBA5551(0, 0, 255, 1), func_i8_8009D6A4);
 
                 if (D_i8_800A1F14 != NULL) {
                     D_800A1EF0 = 5;
@@ -1262,7 +1262,7 @@ void func_i8_8009DCC8(void) {
                         }
                     }
                     D_i8_800A1F18 =
-                        func_807112A0(5, 130, 126, 168, 72, 50, GPACK_RGBA5551(0, 0, 255, 1), &func_i8_8009D9D8);
+                        func_807112A0(5, 130, 126, 168, 72, 50, GPACK_RGBA5551(0, 0, 255, 1), func_i8_8009D9D8);
 
                     if (D_i8_800A1F18 != NULL) {
                         D_800A1EF0 = 6;

@@ -5,11 +5,11 @@
 
 extern s32 D_80794CD8;
 extern OSMesgQueue D_80794D0C;
-extern OSMesg D_80794CD4;
+extern s32 D_80794CD4;
 extern u8 D_8077B4D0[];
 extern u8 D_80794D48;
 
-s32 func_80761BB0(s32 year, s32 month, s32 day, s32 hour, s32 minute, s32 second) {
+s32 Mfs_SetRtc(s32 year, s32 month, s32 day, s32 hour, s32 minute, s32 second) {
     LEOCmd cmd;
     LEODiskTime diskTime;
 
@@ -22,7 +22,7 @@ s32 func_80761BB0(s32 year, s32 month, s32 day, s32 hour, s32 minute, s32 second
     diskTime.minute = minute;
     diskTime.second = second / 2;
     D_80794CD8 = 10;
-    if (D_80794D48 != 0) {
+    if (D_80794D48) {
         return 0;
     }
     if (gLeoSetRTCFunc(&cmd, &diskTime, &D_80794D0C) < 0) {
@@ -32,9 +32,9 @@ s32 func_80761BB0(s32 year, s32 month, s32 day, s32 hour, s32 minute, s32 second
     return func_80762390();
 }
 
-void func_80761CF4(s32 year, s32 month, s32 day, s32 hour, s32 minute, s32 second) {
-    func_80761BB0(Leo_EncodeTime(year % 100), Leo_EncodeTime(month), Leo_EncodeTime(day), Leo_EncodeTime(hour),
-                  Leo_EncodeTime(minute), Leo_EncodeTime(second));
+void Mfs_EncodeAndSetRtc(s32 year, s32 month, s32 day, s32 hour, s32 minute, s32 second) {
+    Mfs_SetRtc(Mfs_EncodeTime(year % 100), Mfs_EncodeTime(month), Mfs_EncodeTime(day), Mfs_EncodeTime(hour),
+                  Mfs_EncodeTime(minute), Mfs_EncodeTime(second));
     return;
 }
 
@@ -44,7 +44,7 @@ s32 func_80761DCC(s32* year, s32* month, s32* day, s32* hour, s32* minute, s32* 
     LEOCmd cmd;
 
     D_80794CD8 = 9;
-    if (D_80794D48 != 0) {
+    if (D_80794D48) {
         if (year != NULL) {
             *year = D_807C6E40.yearlo;
         }
@@ -105,31 +105,32 @@ s32 func_80761FAC(s32* year, s32* month, s32* day, s32* hour, s32* minute, s32* 
         return -1;
     }
     if (year != NULL) {
-        *year = Leo_DecodeTime(yearE);
+        *year = Mfs_DecodeTime(yearE);
     }
     if (month != NULL) {
-        *month = Leo_DecodeTime(monthE);
+        *month = Mfs_DecodeTime(monthE);
     }
     if (day != NULL) {
-        *day = Leo_DecodeTime(dayE);
+        *day = Mfs_DecodeTime(dayE);
     }
     if (hour != NULL) {
-        *hour = Leo_DecodeTime(hourE);
+        *hour = Mfs_DecodeTime(hourE);
     }
     if (minute != NULL) {
-        *minute = Leo_DecodeTime(minuteE);
+        *minute = Mfs_DecodeTime(minuteE);
     }
     if (second != NULL) {
-        *second = Leo_DecodeTime(secondE);
+        *second = Mfs_DecodeTime(secondE);
     }
     return 0;
 }
 
-s32 func_807620C0(LEODiskTime* arg0) {
+// mfsReadRtc
+s32 Mfs_ReadRtc(LEODiskTime* arg0) {
     LEOCmd sp1C;
 
     D_80794CD8 = 9;
-    if (D_80794D48 != 0) {
+    if (D_80794D48) {
         bcopy(&D_807C6E40, arg0, 8);
     } else {
         if (gLeoReadRTCFunc(&sp1C, &D_80794D0C) < 0) {
@@ -145,32 +146,32 @@ s32 func_807620C0(LEODiskTime* arg0) {
     return 0;
 }
 
-void func_80762184(LEODiskTime* diskTime, unk_leo_timeformat* arg1) {
+void Mfs_LEODiskTimeToMfsTime(LEODiskTime* diskTime, MfsTimeFormat* mfsTime) {
     s32 sp1C;
 
-    sp1C = Leo_DecodeTime(diskTime->yearlo);
+    sp1C = Mfs_DecodeTime(diskTime->yearlo);
     if ((sp1C < 0x60) && (sp1C >= 0x16)) {
         sp1C = (sp1C + 0x4B) % 100;
     }
 
-    arg1->unkb0 = (sp1C >= 0x60) ? ((((sp1C - 0x60) << 1) & 0xFE) | (arg1->unkb0 & 0xFF01))
-                                 : ((((sp1C + 3) << 1) & 0xFE) | (arg1->unkb0 & 0xFF01));
+    mfsTime->unkb0 = (sp1C >= 0x60) ? ((((sp1C - 0x60) << 1) & 0xFE) | (mfsTime->unkb0 & 0xFF01))
+                                 : ((((sp1C + 3) << 1) & 0xFE) | (mfsTime->unkb0 & 0xFF01));
 
-    arg1->unks0 = (((Leo_DecodeTime(diskTime->month) & 0xF) << 5) & 0x1E0) | (arg1->unks0 & 0xFE1F);
-    arg1->unkb1 = (Leo_DecodeTime(diskTime->day) & 0x1F & 0x1F) | (arg1->unkb1 & 0xFFE0);
+    mfsTime->unks0 = (((Mfs_DecodeTime(diskTime->month) & 0xF) << 5) & 0x1E0) | (mfsTime->unks0 & 0xFE1F);
+    mfsTime->unkb1 = (Mfs_DecodeTime(diskTime->day) & 0x1F & 0x1F) | (mfsTime->unkb1 & 0xFFE0);
 
-    arg1->unkb2 = ((((Leo_DecodeTime(diskTime->hour) & 0x1F) << 3) & 0xF8) | (arg1->unkb2 & 0xFF07));
-    arg1->unks2 = (((Leo_DecodeTime(diskTime->minute) & 0x3F) << 5) & 0x7E0) | (arg1->unks2 & 0xF81F);
-    arg1->unkb3 = ((Leo_DecodeTime(diskTime->second) / 2) & 0x1F & 0x1F) | (arg1->unkb3 & 0xFFE0);
+    mfsTime->unkb2 = ((((Mfs_DecodeTime(diskTime->hour) & 0x1F) << 3) & 0xF8) | (mfsTime->unkb2 & 0xFF07));
+    mfsTime->unks2 = (((Mfs_DecodeTime(diskTime->minute) & 0x3F) << 5) & 0x7E0) | (mfsTime->unks2 & 0xF81F);
+    mfsTime->unkb3 = ((Mfs_DecodeTime(diskTime->second) / 2) & 0x1F & 0x1F) | (mfsTime->unkb3 & 0xFFE0);
 }
 
 void func_80762330(LEODiskTime* diskTime) {
     if (diskTime == NULL) {
-        D_80794D48 = 0;
+        D_80794D48 = false;
         return;
     }
-    D_80794D48 = 1;
-    bcopy(diskTime, &D_807C6E40, 8);
+    D_80794D48 = true;
+    bcopy(diskTime, &D_807C6E40, sizeof(LEODiskTime));
 }
 
 extern s32 D_80794CC4;
@@ -191,85 +192,85 @@ s32 func_80762390(void) {
     return 0;
 }
 
-s32 func_80762458(u8 arg0) {
-    LEOCmd sp1C;
+s32 Mfs_SpdlMotor(LEOSpdlMode mode) {
+    LEOCmd cmdBlock;
 
-    if (arg0 == 2) {
+    if (mode == LEO_MOTOR_SLEEP) {
         D_80794CD8 = 6;
     } else {
         D_80794CD8 = 7;
     }
-    if (gLeoSpdlMotorFunc(&sp1C, arg0, &D_80794D0C) < 0) {
+    if (gLeoSpdlMotorFunc(&cmdBlock, mode, &D_80794D0C) < 0) {
         D_80794CD4 = 0xF7;
         return -1;
     }
     return func_80762390();
 }
 
-s32 func_807624F0(u32 arg0, u32 arg1) {
-    LEOCmd sp1C;
+s32 Mfs_ModeSelectAsync(u32 standby, u32 sleep) {
+    LEOCmd cmdBlock;
 
     D_80794CD8 = 0xB;
-    if (gLeoModeSelectAsyncFunc(&sp1C, arg0, arg1, &D_80794D0C) < 0) {
+    if (gLeoModeSelectAsyncFunc(&cmdBlock, standby, sleep, &D_80794D0C) < 0) {
         D_80794CD4 = 0xF7;
         return -1;
     }
     return func_80762390();
 }
 
-s32 func_80762570(u32 arg0, u8* arg1, u32 arg2) {
+s32 Mfs_ReadLBA(u32 startLBA, u8* buf, u32 nLBAs) {
     LEOCmd cmd;
     s32 i;
     s32 sp24;
     u8* sp20;
 
-    sp20 = arg1;
-    if (!((uintptr_t) arg1 & 0xF)) {
-        LeoLBAToByte(arg0, arg2, &sp24);
-        osInvalDCache(arg1, sp24);
+    sp20 = buf;
+    if (!((uintptr_t) buf & 0xF)) {
+        LeoLBAToByte(startLBA, nLBAs, &sp24);
+        osInvalDCache(buf, sp24);
         D_80794CD8 = 2;
-        if (gLeoReadWriteFunc(&cmd, 0, arg0, arg1, arg2, &D_80794D0C) < 0) {
+        if (gLeoReadWriteFunc(&cmd, OS_READ, startLBA, buf, nLBAs, &D_80794D0C) < 0) {
             D_80794CD4 = 0xF7;
             return -1;
         }
         if (func_80762390() < 0) {
             return -1;
         }
-        osWritebackDCache(arg1, sp24);
+        osWritebackDCache(buf, sp24);
     } else {
         osInvalDCache(D_8077B4D0, 0x4D10);
 
-        for (i = 0; i < arg2; i++) {
-            LeoLBAToByte(arg0 + i, 1, &sp24);
+        for (i = 0; i < nLBAs; i++) {
+            LeoLBAToByte(startLBA + i, 1, &sp24);
             D_80794CD8 = 2;
-            if (gLeoReadWriteFunc(&cmd, 0, arg0 + i, D_8077B4D0, 1U, &D_80794D0C) < 0) {
+            if (gLeoReadWriteFunc(&cmd, OS_READ, startLBA + i, D_8077B4D0, 1, &D_80794D0C) < 0) {
                 D_80794CD4 = 0xF7;
                 return -1;
             }
             if (func_80762390() < 0) {
                 return -1;
             }
-            bcopy(D_8077B4D0, arg1, sp24);
-            arg1 += sp24;
+            bcopy(D_8077B4D0, buf, sp24);
+            buf += sp24;
         }
 
-        LeoLBAToByte(arg0, arg2, &sp24);
+        LeoLBAToByte(startLBA, nLBAs, &sp24);
         osWritebackDCache(sp20, sp24);
     }
 
     return 0;
 }
 
-s32 func_80762768(u32 arg0, u8* arg1, u32 arg2) {
+s32 Mfs_WriteLBA(u32 startLBA, u8* buf, u32 nLBAs) {
     LEOCmd sp2C;
     s32 i;
     s32 sp24;
 
-    if (!((uintptr_t) arg1 & 0xF)) {
-        LeoLBAToByte(arg0, arg2, &sp24);
-        osWritebackDCache(arg1, sp24);
+    if (!((uintptr_t) buf & 0xF)) {
+        LeoLBAToByte(startLBA, nLBAs, &sp24);
+        osWritebackDCache(buf, sp24);
         D_80794CD8 = 3;
-        if (gLeoReadWriteFunc(&sp2C, 1, arg0, arg1, arg2, &D_80794D0C) < 0) {
+        if (gLeoReadWriteFunc(&sp2C, OS_WRITE, startLBA, buf, nLBAs, &D_80794D0C) < 0) {
             D_80794CD4 = 0xF7;
             return -1;
         }
@@ -278,29 +279,29 @@ s32 func_80762768(u32 arg0, u8* arg1, u32 arg2) {
         }
     } else {
 
-        LeoLBAToByte(arg0, arg2, &sp24);
-        osWritebackDCache(arg1, sp24);
+        LeoLBAToByte(startLBA, nLBAs, &sp24);
+        osWritebackDCache(buf, sp24);
 
-        for (i = 0; i < arg2; i++) {
+        for (i = 0; i < nLBAs; i++) {
 
-            LeoLBAToByte(arg0 + i, 1, &sp24);
-            bcopy(arg1, D_8077B4D0, sp24);
+            LeoLBAToByte(startLBA + i, 1, &sp24);
+            bcopy(buf, D_8077B4D0, sp24);
             osWritebackDCache(D_8077B4D0, 0x4D10);
             D_80794CD8 = 3;
-            if (gLeoReadWriteFunc(&sp2C, 1, arg0 + i, D_8077B4D0, 1, &D_80794D0C) < 0) {
+            if (gLeoReadWriteFunc(&sp2C, OS_WRITE, startLBA + i, D_8077B4D0, 1, &D_80794D0C) < 0) {
                 D_80794CD4 = 0xF7;
                 return -1;
             }
             if (func_80762390() < 0) {
                 return -1;
             }
-            arg1 += sp24;
+            buf += sp24;
         }
     }
     return 0;
 }
 
-s32 Leo_strcmp(u8* s1, u8* s2) {
+s32 mfsStrCmp(u8* s1, u8* s2) {
     u8* p1 = s1;
     u8* p2 = s2;
 
@@ -319,7 +320,7 @@ s32 Leo_strcmp(u8* s1, u8* s2) {
     return -1;
 }
 
-s32 Leo_bcmp(u8* b1, u8* b2, size_t length) {
+s32 mfsStrnCmp(u8* b1, u8* b2, size_t length) {
     u8* p1 = b1;
     u8* p2 = b2;
 
@@ -344,7 +345,7 @@ s32 Leo_bcmp(u8* b1, u8* b2, size_t length) {
     return (*p1 != 0) ? 1 : -1;
 }
 
-s32 Leo_strlen(u8* str) {
+s32 mfsStrLen(u8* str) {
     s32 len = 0;
 
     if (str == NULL) {
@@ -357,7 +358,7 @@ s32 Leo_strlen(u8* str) {
     return len;
 }
 
-s32 Leo_strcpy(u8* dest, u8* src) {
+s32 mfsStrCpy(u8* dest, u8* src) {
     u8* p1 = dest;
     u8* p2 = src;
 
@@ -369,7 +370,7 @@ s32 Leo_strcpy(u8* dest, u8* src) {
     return 0;
 }
 
-s32 Leo_bcopy(u8* dest, u8* src, size_t length) {
+s32 mfsStrnCpy(u8* dest, u8* src, size_t length) {
     u8* p1 = dest;
     u8* p2 = src;
     size_t i;
@@ -387,7 +388,7 @@ s32 Leo_bcopy(u8* dest, u8* src, size_t length) {
     return 0;
 }
 
-s32 Leo_strcat(u8* dest, u8* src) {
+s32 mfsStrCat(u8* dest, u8* src) {
     u8* p1 = dest;
     u8* p2 = src;
 
@@ -402,10 +403,10 @@ s32 Leo_strcat(u8* dest, u8* src) {
     return 0;
 }
 
-s32 Leo_DecodeTime(s32 arg0) {
+s32 Mfs_DecodeTime(s32 arg0) {
     return ((arg0 >> 4) * 10) + (arg0 & 0xF);
 }
 
-s32 Leo_EncodeTime(s32 arg0) {
+s32 Mfs_EncodeTime(s32 arg0) {
     return ((arg0 / 10) << 4) + (arg0 % 10);
 }

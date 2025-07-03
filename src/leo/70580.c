@@ -2,26 +2,26 @@
 #include "leo/leo_internal.h"
 #include "leo/unk_leo.h"
 
-s32 func_80762D80(u8* arg0) {
-    u8* sp1C;
+s32 Mfs_ValidateFileName(char* name) {
+    char* ptr;
 
-    if ((arg0 == NULL) || (*arg0 == 0)) {
+    if ((name == NULL) || (*name == 0)) {
         return -1;
     }
-    if (Leo_strlen(arg0) > 20) {
+    if (mfsStrLen(name) > 20) {
         return -1;
     }
 
-    for (sp1C = arg0; *sp1C != 0; sp1C++) {
-        if (*sp1C == 0x2F || *sp1C == 0x2E || *sp1C == 0x3A) {
+    for (ptr = name; *ptr != 0; ptr++) {
+        if (*ptr == '/' || *ptr == '.' || *ptr == ':') {
             return -1;
         }
-        if ((((*sp1C >= 0x20 && *sp1C < 0x7F) || (*sp1C > 0xA0 && *sp1C < 0xE0)) && (*sp1C != 0x2F))) {
+        if ((((*ptr >= 0x20 && *ptr < 0x7F) || (*ptr > 0xA0 && *ptr < 0xE0)) && (*ptr != '/'))) {
             continue;
         }
-        if (*sp1C >= 0x81 && *sp1C < 0x99) {
-            sp1C++;
-            if (*sp1C >= 0x40 && *sp1C < 0xFD && *sp1C != 0x7F) {
+        if (*ptr >= 0x81 && *ptr < 0x99) {
+            ptr++;
+            if (*ptr >= 0x40 && *ptr < 0xFD && *ptr != 0x7F) {
                 continue;
             }
             return -1;
@@ -50,10 +50,10 @@ s16 func_80762F14(s32 arg0) {
     return 0;
 }
 
-extern OSMesg D_80794CD4;
-extern LEOCapacity D_80794D24;
+extern s32 D_80794CD4;
+extern LEOCapacity gRamAreaCapacity;
 
-s32 func_80762F80(u8* arg0, u32 arg1, s32 arg2) {
+s32 func_80762F80(u8* arg0, u32 arg1, bool isEncoded) {
     u32 sp2C = arg1;
     s32 sp28;
     s32 sp24;
@@ -61,14 +61,14 @@ s32 func_80762F80(u8* arg0, u32 arg1, s32 arg2) {
     s32 sp1C = -1;
     u8* sp18 = arg0;
 
-    func_807648D0();
+    Mfs_CopyFATFromRam();
 
     while (sp2C != 0) {
         if (func_8075FB38(sp2C, &sp24, &sp20, &sp28) < 0) {
             D_80794CD4 = 0xF1;
             return -1;
         }
-        if (func_80766124(sp24 + D_80794D24.startLBA, sp18, sp20, arg2) < 0) {
+        if (Mfs_WriteFile(sp24 + gRamAreaCapacity.startLBA, sp18, sp20, isEncoded) < 0) {
             return -1;
         }
         func_80764958(&sp1C, sp24, sp20);
@@ -84,45 +84,45 @@ s32 func_80762F80(u8* arg0, u32 arg1, s32 arg2) {
 
 extern u8 D_80794DD0;
 
-s32 func_80763098(u16 arg0, u8* arg1, u8* arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6) {
+s32 func_80763098(u16 parentDirId, char* name, u8* arg2, s32 arg3, s32 arg4, s32 attr, s32 arg6) {
     u16 sp26;
 
-    func_8075F554();
+    Mfs_InitDirEntry();
     if ((arg6 < 0) || (arg6 >= 0x100)) {
         D_80794CD4 = 0xF4;
         return -1;
     }
-    if (arg5 & 0x8000) {
+    if (attr & MFS_FILE_ATTR_DIRECTORY) {
         D_80794CD4 = 0xF4;
         return -1;
     }
-    arg5 |= 0x4000;
+    attr |= MFS_FILE_ATTR_FILE;
     if ((arg6 > 0) && (arg6 < 0xFE)) {
-        arg5 |= 0x200;
+        attr |= MFS_FILE_ATTR_COPYLIMIT;
     }
-    sp26 = func_8075FABC();
+    sp26 = Mfs_GetNextFreeDirectoryEntry();
     if (sp26 == 0xFFFF) {
         D_80794CD4 = 0xF1;
         return -1;
     }
 
-    if (func_80762F80(arg3, arg4, (arg5 & 0x400) ? 1 : 0) < 0) {
+    if (func_80762F80(arg3, arg4, (attr & MFS_FILE_ATTR_ENCODE) ? true : false) < 0) {
         return -1;
     }
-    func_8075F4C8(arg0, arg1);
-    func_8075F2B0(arg5);
-    func_8075F4B0(arg4);
-    func_8075F454(arg2);
-    func_8075F520(arg6);
-    func_8075F538(D_80794DD0);
-    func_8075F584(sp26);
-    func_8075F67C(sp26);
-    func_80764914();
+    Mfs_CreateDirEntry(parentDirId, name);
+    Mfs_SetDirEntryAttr(attr);
+    Mfs_SetDirEntryFileSize(arg4);
+    Mfs_SetDirEntryExtension(arg2);
+    Mfs_SetDirEntryCopyCount(arg6);
+    Mfs_SetDirEntryRenewalCounter(D_80794DD0);
+    Mfs_CopyDirEntryToRam(sp26);
+    Mfs_IncreaseFileRC(sp26);
+    Mfs_CopyFATToRam();
     return 0;
 }
 
-extern unk_leo_80419EA0 D_80784EF0;
-extern u16 D_80794CE0;
+extern MfsRamArea gMfsRamArea;
+extern u16 gWorkingDirectory;
 
 s32 func_8076321C(u16 arg0, u8* arg1, u8* arg2, s32 arg3, u32 arg4, s32 arg5, s32 arg6, s32 arg7) {
     u16 sp2E;
@@ -136,25 +136,25 @@ s32 func_8076321C(u16 arg0, u8* arg1, u8* arg2, s32 arg3, u32 arg4, s32 arg5, s3
         D_80794CD4 = 0xF4;
         return -1;
     }
-    if (func_80762D80(arg1) < 0) {
+    if (Mfs_ValidateFileName(arg1) < 0) {
         D_80794CD4 = 0xF4;
         return -1;
     }
     if (arg0 == 0xFFFB) {
-        arg0 = D_80794CE0;
+        arg0 = gWorkingDirectory;
     }
     if (arg0 == 0xFFFC) {
-        arg0 = func_80761590(0xFFFB);
+        arg0 = Mfs_GetParentDir(0xFFFB);
     }
-    sp2C = func_8075F9E0(arg0);
+    sp2C = Mfs_GetDirectoryIndex(arg0);
     if (sp2C == 0xFFFF) {
         D_80794CD4 = 0xF2;
         return -1;
     }
     D_80794DD0 = 0;
-    sp2E = func_8075F7C0(arg0, arg1, arg2);
+    sp2E = Mfs_GetFileIndex(arg0, arg1, arg2);
     if (sp2E != 0xFFFF) {
-        D_80794DD0 = D_80784EF0.unk_16B0[sp2E].unk_2A;
+        D_80794DD0 = gMfsRamArea.directoryEntry[sp2E].renewalCounter;
         if (func_80766CC0(0xB0, sp2E, 0, 0) < 0) {
             D_80794CD4 = 0x106;
             return -1;
@@ -182,7 +182,7 @@ s32 func_8076321C(u16 arg0, u8* arg1, u8* arg2, s32 arg3, u32 arg4, s32 arg5, s3
         }
     }
 
-    if ((arg7 != 0) && (func_807608A4() < 0)) {
+    if ((arg7 != 0) && (Mfs_WriteRamArea() < 0)) {
         return -1;
     }
     return 0;
@@ -190,7 +190,7 @@ s32 func_8076321C(u16 arg0, u8* arg1, u8* arg2, s32 arg3, u32 arg4, s32 arg5, s3
 
 extern u8 D_8077B4D0[];
 
-s32 func_80763510(u16 arg0, u8* arg1, u32 arg2, s32 arg3) {
+s32 func_80763510(u16 arg0, u8* arg1, u32 arg2, bool isEncoded) {
     s32 sp44;
     u32 sp40;
     u32 sp3C;
@@ -203,18 +203,18 @@ s32 func_80763510(u16 arg0, u8* arg1, u32 arg2, s32 arg3) {
 
     sp40 = arg2;
     sp24 = arg1;
-    sp44 = D_80784EF0.unk_16B0[arg0].unk_0C;
-    sp30 = D_80784EF0.unk_16B0[arg0].unk_0A;
-    func_807648D0();
+    sp44 = gMfsRamArea.directoryEntry[arg0].fileSize;
+    sp30 = gMfsRamArea.directoryEntry[arg0].fileAllocationTableId;
+    Mfs_CopyFATFromRam();
     func_80764B04(&sp30, sp44, &sp3C);
     if (sp3C != 0) {
-        LeoLBAToByte(sp30 + D_80794D24.startLBA, 1, &sp38);
-        if (func_80766248(sp30 + D_80794D24.startLBA, D_8077B4D0, 1, arg3) < 0) {
+        LeoLBAToByte(sp30 + gRamAreaCapacity.startLBA, 1, &sp38);
+        if (Mfs_ReadFile(sp30 + gRamAreaCapacity.startLBA, D_8077B4D0, 1, isEncoded) < 0) {
             return -1;
         }
 
         bcopy(sp24, (sp38 - sp3C) + D_8077B4D0, (sp3C > sp40) ? sp40 : sp3C);
-        if (func_80766124(sp30 + D_80794D24.startLBA, D_8077B4D0, 1, arg3) < 0) {
+        if (Mfs_WriteFile(sp30 + gRamAreaCapacity.startLBA, D_8077B4D0, 1, isEncoded) < 0) {
             return -1;
         }
     }
@@ -228,7 +228,7 @@ s32 func_80763510(u16 arg0, u8* arg1, u32 arg2, s32 arg3) {
             D_80794CD4 = 0xF1;
             return -1;
         }
-        if (func_80766124(sp2C + D_80794D24.startLBA, sp24, sp28, arg3) < 0) {
+        if (Mfs_WriteFile(sp2C + gRamAreaCapacity.startLBA, sp24, sp28, isEncoded) < 0) {
             return -1;
         }
         func_80764958(&sp30, sp2C, sp28);
@@ -240,34 +240,34 @@ s32 func_80763510(u16 arg0, u8* arg1, u32 arg2, s32 arg3) {
         sp24 += sp38;
     }
 
-    func_8075F4B0(sp44 + arg2);
-    func_8075F3FC();
-    func_8075F584(arg0);
-    func_8075F67C(arg0);
-    func_80764914();
+    Mfs_SetDirEntryFileSize(sp44 + arg2);
+    Mfs_SetDirEntryCreateTime();
+    Mfs_CopyDirEntryToRam(arg0);
+    Mfs_IncreaseFileRC(arg0);
+    Mfs_CopyFATToRam();
     return 0;
 }
 
 s32 func_807637C4(u16 arg0, u8* arg1, s32 arg2) {
     u32 sp2C;
-    s32 sp28;
+    s32 attr;
 
     if (arg2 == 0) {
         D_80794CD4 = 0xF4;
         return -1;
     }
-    sp2C = D_80784EF0.unk_16B0[arg0].unk_0C + arg2;
+    sp2C = gMfsRamArea.directoryEntry[arg0].fileSize + arg2;
 
-    func_807648D0();
-    func_80764A4C(D_80784EF0.unk_16B0[arg0].unk_0A);
-    if (func_80760E5C() < sp2C) {
+    Mfs_CopyFATFromRam();
+    func_80764A4C(gMfsRamArea.directoryEntry[arg0].fileAllocationTableId);
+    if (Mfs_RamGetFreeSize() < sp2C) {
         func_80760244();
         D_80794CD4 = 0xF1;
         return -1;
     }
-    sp28 = D_80784EF0.unk_16B0[arg0].unk_00;
+    attr = gMfsRamArea.directoryEntry[arg0].attr;
 
-    if (func_80763510(arg0, arg1, arg2, (sp28 & 0x400) ? 1 : 0) < 0) {
+    if (func_80763510(arg0, arg1, arg2, (attr & MFS_FILE_ATTR_ENCODE) ? true : false) < 0) {
         return -1;
     }
     return 0;
@@ -280,17 +280,17 @@ s32 func_80763904(u16 arg0, u8* arg1, u8* arg2, u8* arg3, s32 arg4, s32 arg5) {
     if (func_80760C6C() < 0) {
         return -1;
     }
-    if (func_80762D80(arg1) < 0) {
+    if (Mfs_ValidateFileName(arg1) < 0) {
         D_80794CD4 = 0xF4;
         return -1;
     }
     if (arg0 == 0xFFFB) {
-        arg0 = D_80794CE0;
+        arg0 = gWorkingDirectory;
     }
     if (arg0 == 0xFFFC) {
-        arg0 = func_80761590(0xFFFB);
+        arg0 = Mfs_GetParentDir(0xFFFB);
     }
-    sp1E = func_8075F7C0(arg0, arg1, arg2);
+    sp1E = Mfs_GetFileIndex(arg0, arg1, arg2);
     if (sp1E == 0xFFFF) {
         D_80794CD4 = 0xF2;
         return -1;
@@ -302,28 +302,28 @@ s32 func_80763904(u16 arg0, u8* arg1, u8* arg2, u8* arg3, s32 arg4, s32 arg5) {
     if (func_807637C4(sp1E, arg3, arg4) < 0) {
         return -1;
     }
-    if ((arg5 != 0) && (func_807608A4() < 0)) {
+    if ((arg5 != 0) && (Mfs_WriteRamArea() < 0)) {
         return -1;
     }
     return 0;
 }
 
-extern s32 D_80794CD0;
+extern s32 gDirectoryEntryCount;
 
 s32 func_80763A64(u16 arg0, u8* arg1, s32 arg2, s32 arg3) {
     D_80794CD4 = 0;
     if (func_80760C6C() < 0) {
         return -1;
     }
-    if ((arg0 < 0) || (arg0 > D_80794CD0)) {
+    if ((arg0 < 0) || (arg0 > gDirectoryEntryCount)) {
         D_80794CD4 = 0xF4;
         return -1;
     }
-    if (!(D_80784EF0.unk_16B0[arg0].unk_00 & 0x4000)) {
+    if (!(gMfsRamArea.directoryEntry[arg0].attr & MFS_FILE_ATTR_FILE)) {
         D_80794CD4 = 0xF2;
         return -1;
     }
-    if (D_80784EF0.unk_16B0[arg0].unk_00 & 0x8000) {
+    if (gMfsRamArea.directoryEntry[arg0].attr & MFS_FILE_ATTR_DIRECTORY) {
         D_80794CD4 = 0xF2;
         return -1;
     }
@@ -334,15 +334,15 @@ s32 func_80763A64(u16 arg0, u8* arg1, s32 arg2, s32 arg3) {
     if (func_807637C4(arg0, arg1, arg2) < 0) {
         return -1;
     }
-    if ((arg3 != 0) && (func_807608A4() < 0)) {
+    if ((arg3 != 0) && (Mfs_WriteRamArea() < 0)) {
         return -1;
     }
     return 0;
 }
 
-extern u16 D_80793650[];
+extern u16 gFileAllocationTable[];
 
-s32 func_80763BDC(u16 arg0, u8* arg1, s32 arg2, u32 arg3, s32 arg4) {
+s32 func_80763BDC(u16 arg0, u8* arg1, s32 arg2, u32 arg3, bool isEncoded) {
     s32 sp4C;
     u32 sp48;
     u32 sp44;
@@ -356,18 +356,18 @@ s32 func_80763BDC(u16 arg0, u8* arg1, s32 arg2, u32 arg3, s32 arg4) {
 
     sp48 = arg3;
     sp24 = arg1;
-    sp4C = D_80784EF0.unk_16B0[arg0].unk_0C;
-    sp38 = D_80784EF0.unk_16B0[arg0].unk_0A;
-    func_807648D0();
+    sp4C = gMfsRamArea.directoryEntry[arg0].fileSize;
+    sp38 = gMfsRamArea.directoryEntry[arg0].fileAllocationTableId;
+    Mfs_CopyFATFromRam();
     func_80764C54(&sp38, arg2, &sp44);
     if (sp44 != 0) {
-        LeoLBAToByte(sp38 + D_80794D24.startLBA, 1, &sp40);
-        if (func_80766248(sp38 + D_80794D24.startLBA, D_8077B4D0, 1, arg4) < 0) {
+        LeoLBAToByte(sp38 + gRamAreaCapacity.startLBA, 1, &sp40);
+        if (Mfs_ReadFile(sp38 + gRamAreaCapacity.startLBA, D_8077B4D0, 1, isEncoded) < 0) {
             return -1;
         }
 
         bcopy(sp24, (sp40 - sp44) + D_8077B4D0, (sp44 > sp48) ? sp48 : sp44);
-        if (func_80766124(sp38 + D_80794D24.startLBA, D_8077B4D0, 1, arg4) < 0) {
+        if (Mfs_WriteFile(sp38 + gRamAreaCapacity.startLBA, D_8077B4D0, 1, isEncoded) < 0) {
             return -1;
         }
         sp3C = (sp44 > sp48) ? sp48 : sp44;
@@ -375,7 +375,7 @@ s32 func_80763BDC(u16 arg0, u8* arg1, s32 arg2, u32 arg3, s32 arg4) {
         sp48 -= sp3C;
         sp24 += sp3C;
         if (sp48 != 0) {
-            sp38 = D_80793650[sp38];
+            sp38 = gFileAllocationTable[sp38];
             if (sp38 == 0xFFFF) {
                 D_80794CD4 = 0xF3;
                 return -1;
@@ -387,20 +387,20 @@ s32 func_80763BDC(u16 arg0, u8* arg1, s32 arg2, u32 arg3, s32 arg4) {
         sp2C = func_80764D4C(sp38);
 
         for (i = 1; i <= sp2C; i++) {
-            LeoLBAToByte(sp38 + D_80794D24.startLBA, i, &sp40);
+            LeoLBAToByte(sp38 + gRamAreaCapacity.startLBA, i, &sp40);
             if (sp40 >= sp48) {
                 break;
             }
         }
         if (sp40 == sp48) {
-            if (func_80766124(sp38 + D_80794D24.startLBA, sp24, i, arg4) < 0) {
+            if (Mfs_WriteFile(sp38 + gRamAreaCapacity.startLBA, sp24, i, isEncoded) < 0) {
                 return -1;
             }
             sp48 = 0;
         } else {
             if (--i > 0) {
-                LeoLBAToByte(sp38 + D_80794D24.startLBA, i, &sp40);
-                if (func_80766124(sp38 + D_80794D24.startLBA, sp24, i, arg4) < 0) {
+                LeoLBAToByte(sp38 + gRamAreaCapacity.startLBA, i, &sp40);
+                if (Mfs_WriteFile(sp38 + gRamAreaCapacity.startLBA, sp24, i, isEncoded) < 0) {
                     return -1;
                 }
                 sp38 += i;
@@ -415,41 +415,41 @@ s32 func_80763BDC(u16 arg0, u8* arg1, s32 arg2, u32 arg3, s32 arg4) {
             break;
         }
         sp38 = (sp38 + sp2C) - 1;
-        if ((sp38 = D_80793650[sp38]) == 0xFFFF) {
+        if ((sp38 = gFileAllocationTable[sp38]) == 0xFFFF) {
             D_80794CD4 = 0xF3;
             return -1;
         }
     }
 
     if (sp48 != 0) {
-        if (func_80766248(sp38 + D_80794D24.startLBA, D_8077B4D0, 1, arg4) < 0) {
+        if (Mfs_ReadFile(sp38 + gRamAreaCapacity.startLBA, D_8077B4D0, 1, isEncoded) < 0) {
             return -1;
         }
         bcopy(sp24, D_8077B4D0, sp48);
-        if (func_80766124(sp38 + D_80794D24.startLBA, D_8077B4D0, 1, arg4) < 0) {
+        if (Mfs_WriteFile(sp38 + gRamAreaCapacity.startLBA, D_8077B4D0, 1, isEncoded) < 0) {
             return -1;
         }
     }
 
-    func_8075F3FC();
-    func_8075F584(arg0);
+    Mfs_SetDirEntryCreateTime();
+    Mfs_CopyDirEntryToRam(arg0);
     return 0;
 }
 
 s32 func_80764048(u16 arg0, u8* arg1, u32 arg2, s32 arg3) {
-    s32 sp2C;
+    s32 attr;
 
     if (arg3 == 0) {
         D_80794CD4 = 0xF4;
         return -1;
     }
-    if (D_80784EF0.unk_16B0[arg0].unk_0C < arg2 + arg3) {
+    if (gMfsRamArea.directoryEntry[arg0].fileSize < arg2 + arg3) {
         D_80794CD4 = 0xF4;
         return -1;
     }
-    sp2C = D_80784EF0.unk_16B0[arg0].unk_00;
+    attr = gMfsRamArea.directoryEntry[arg0].attr;
 
-    if (func_80763BDC(arg0, arg1, arg2, arg3, (sp2C & 0x400) ? 1 : 0) < 0) {
+    if (func_80763BDC(arg0, arg1, arg2, arg3, (attr & MFS_FILE_ATTR_ENCODE) ? true : false) < 0) {
         return -1;
     }
     return 0;
@@ -462,17 +462,17 @@ s32 func_80764154(u16 arg0, u8* arg1, u8* arg2, u8* arg3, s32 arg4, s32 arg5, s3
     if (func_80760C6C() < 0) {
         return -1;
     }
-    if (func_80762D80(arg1) < 0) {
+    if (Mfs_ValidateFileName(arg1) < 0) {
         D_80794CD4 = 0xF4;
         return -1;
     }
     if (arg0 == 0xFFFB) {
-        arg0 = D_80794CE0;
+        arg0 = gWorkingDirectory;
     }
     if (arg0 == 0xFFFC) {
-        arg0 = func_80761590(0xFFFB);
+        arg0 = Mfs_GetParentDir(0xFFFB);
     }
-    sp1E = func_8075F7C0(arg0, arg1, arg2);
+    sp1E = Mfs_GetFileIndex(arg0, arg1, arg2);
     if (sp1E == 0xFFFF) {
         D_80794CD4 = 0xF2;
         return -1;
@@ -484,7 +484,7 @@ s32 func_80764154(u16 arg0, u8* arg1, u8* arg2, u8* arg3, s32 arg4, s32 arg5, s3
     if (func_80764048(sp1E, arg3, arg4, arg5) < 0) {
         return -1;
     }
-    if ((arg6 != 0) && (func_807608A4() < 0)) {
+    if ((arg6 != 0) && (Mfs_WriteRamArea() < 0)) {
         return -1;
     }
     return 0;
@@ -495,15 +495,15 @@ s32 func_807642B8(u16 arg0, u8* arg1, s32 arg2, s32 arg3, s32 arg4) {
     if (func_80760C6C() < 0) {
         return -1;
     }
-    if ((arg0 < 0) || (arg0 > D_80794CD0)) {
+    if ((arg0 < 0) || (arg0 > gDirectoryEntryCount)) {
         D_80794CD4 = 0xF4;
         return -1;
     }
-    if (!(D_80784EF0.unk_16B0[arg0].unk_00 & 0x4000)) {
+    if (!(gMfsRamArea.directoryEntry[arg0].attr & MFS_FILE_ATTR_FILE)) {
         D_80794CD4 = 0xF2;
         return -1;
     }
-    if (D_80784EF0.unk_16B0[arg0].unk_00 & 0x8000) {
+    if (gMfsRamArea.directoryEntry[arg0].attr & MFS_FILE_ATTR_DIRECTORY) {
         D_80794CD4 = 0xF2;
         return -1;
     }
@@ -514,14 +514,14 @@ s32 func_807642B8(u16 arg0, u8* arg1, s32 arg2, s32 arg3, s32 arg4) {
     if (func_80764048(arg0, arg1, arg2, arg3) < 0) {
         return -1;
     }
-    if ((arg4 != 0) && (func_807608A4() < 0)) {
+    if ((arg4 != 0) && (Mfs_WriteRamArea() < 0)) {
         return -1;
     }
     return 0;
 }
 
 s32 func_80764434(u16 arg0, u8* arg1, u32 arg2, s32 arg3) {
-    s32 sp34;
+    s32 attr;
     s32 sp30;
     s32 sp2C;
 
@@ -531,19 +531,19 @@ s32 func_80764434(u16 arg0, u8* arg1, u32 arg2, s32 arg3) {
         D_80794CD4 = 0xF4;
         return -1;
     }
-    if (D_80784EF0.unk_16B0[arg0].unk_0C < arg2 + arg3) {
-        sp30 = D_80784EF0.unk_16B0[arg0].unk_0C - arg2;
-        sp2C = (arg2 + arg3) - D_80784EF0.unk_16B0[arg0].unk_0C;
+    if (gMfsRamArea.directoryEntry[arg0].fileSize < arg2 + arg3) {
+        sp30 = gMfsRamArea.directoryEntry[arg0].fileSize - arg2;
+        sp2C = (arg2 + arg3) - gMfsRamArea.directoryEntry[arg0].fileSize;
     } else {
         sp30 = arg3;
     }
-    sp34 = D_80784EF0.unk_16B0[arg0].unk_00;
+    attr = gMfsRamArea.directoryEntry[arg0].attr;
 
-    if (func_80763BDC(arg0, arg1, arg2, sp30, (sp34 & 0x400) ? 1 : 0) < 0) {
+    if (func_80763BDC(arg0, arg1, arg2, sp30, (attr & MFS_FILE_ATTR_ENCODE) ? true : false) < 0) {
         return -1;
     }
     if (sp2C != 0) {
-        if (func_80763510(arg0, arg1 + sp30, sp2C, (sp34 & 0x400) ? 1 : 0) < 0) {
+        if (func_80763510(arg0, arg1 + sp30, sp2C, (attr & MFS_FILE_ATTR_ENCODE) ? true : false) < 0) {
             return -1;
         }
     }
@@ -557,17 +557,17 @@ s32 func_807645EC(u16 arg0, u8* arg1, u8* arg2, u8* arg3, s32 arg4, s32 arg5, s3
     if (func_80760C6C() < 0) {
         return -1;
     }
-    if (func_80762D80(arg1) < 0) {
+    if (Mfs_ValidateFileName(arg1) < 0) {
         D_80794CD4 = 0xF4;
         return -1;
     }
     if (arg0 == 0xFFFB) {
-        arg0 = D_80794CE0;
+        arg0 = gWorkingDirectory;
     }
     if (arg0 == 0xFFFC) {
-        arg0 = func_80761590(0xFFFB);
+        arg0 = Mfs_GetParentDir(0xFFFB);
     }
-    sp1E = func_8075F7C0(arg0, arg1, arg2);
+    sp1E = Mfs_GetFileIndex(arg0, arg1, arg2);
     if (sp1E == 0xFFFF) {
         D_80794CD4 = 0xF2;
         return -1;
@@ -579,7 +579,7 @@ s32 func_807645EC(u16 arg0, u8* arg1, u8* arg2, u8* arg3, s32 arg4, s32 arg5, s3
     if (func_80764434(sp1E, arg3, arg4, arg5) < 0) {
         return -1;
     }
-    if ((arg6 != 0) && (func_807608A4() < 0)) {
+    if ((arg6 != 0) && (Mfs_WriteRamArea() < 0)) {
         return -1;
     }
     return 0;
@@ -590,15 +590,15 @@ s32 func_80764750(u16 arg0, u8* arg1, s32 arg2, s32 arg3, s32 arg4) {
     if (func_80760C6C() < 0) {
         return -1;
     }
-    if ((arg0 < 0) || (arg0 > D_80794CD0)) {
+    if ((arg0 < 0) || (arg0 > gDirectoryEntryCount)) {
         D_80794CD4 = 0xF4;
         return -1;
     }
-    if (!(D_80784EF0.unk_16B0[arg0].unk_00 & 0x4000)) {
+    if (!(gMfsRamArea.directoryEntry[arg0].attr & MFS_FILE_ATTR_FILE)) {
         D_80794CD4 = 0xF2;
         return -1;
     }
-    if (D_80784EF0.unk_16B0[arg0].unk_00 & 0x8000) {
+    if (gMfsRamArea.directoryEntry[arg0].attr & MFS_FILE_ATTR_DIRECTORY) {
         D_80794CD4 = 0xF2;
         return -1;
     }
@@ -609,7 +609,7 @@ s32 func_80764750(u16 arg0, u8* arg1, s32 arg2, s32 arg3, s32 arg4) {
     if (func_80764434(arg0, arg1, arg2, arg3) < 0) {
         return -1;
     }
-    if ((arg4 != 0) && (func_807608A4() < 0)) {
+    if ((arg4 != 0) && (Mfs_WriteRamArea() < 0)) {
         return -1;
     }
     return 0;

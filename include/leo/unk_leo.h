@@ -4,7 +4,7 @@
 #include "libultra/ultra64.h"
 #include "PR/leo.h"
 
-typedef struct unk_leo_timeformat {
+typedef struct MfsTimeFormat {
     union {
         struct {
             u8 unkb0, unkb1, unkb2, unkb3;
@@ -14,38 +14,75 @@ typedef struct unk_leo_timeformat {
         };
         u32 unki1;
     };
-} unk_leo_timeformat;
+} MfsTimeFormat;
 
-typedef struct unk_leo_804285D0 {
-    u16 unk_00;
-    u16 unk_02;
-    s8 unk_04[2];
-    s8 unk_06[4];
-    u16 unk_0A;
-    s32 unk_0C;
-    u8 unk_10[20];
-    u8 unk_24[5];
-    u8 unk_29;
-    u8 unk_2A;
-    s8 unk_2B[0x1];
-    unk_leo_timeformat unk_2C;
-} unk_leo_804285D0; // size = 0x30
+typedef struct MfsRamId {
+    /* 0x00 */ char diskId[10]; // "64dd-Multi"
+    /* 0x0A */ s8 fsType[2];
+    /* 0x0C */ s8 fsVersion[2];
+    /* 0x0E */ u8 attr;
+    /* 0x0F */ u8 diskType;
+    /* 0x10 */ char volumeName[20];
+    /* 0x24 */ MfsTimeFormat formatDate;
+    /* 0x28 */ u16 renewalCounter;
+    /* 0x2A */ u8 destinationCode;
+    /* 0x2B */ s8 reserve1;
+    /* 0x2C */ u32 checksum;
+    /* 0x30 */ s8 reserve2[0xC];
+} MfsRamId; // size = 0x3C
 
-typedef struct unk_leo_80419EA0 {
-    u8 unk_00[10];
-    s8 unk_0A[4];
-    u8 unk_0E;
-    u8 unk_0F;
-    u8 unk_10[20];
-    unk_leo_timeformat unk_24;
-    u16 unk_28;
-    s8 unk_2C[0x12];
-    u16 unk_3C[0xB3A];
-    unk_leo_804285D0 unk_16B0[1112];
-} unk_leo_80419EA0;
+typedef struct MfsRamDirectoryEntry {
+    u16 attr;
+    u16 parentDirId;
+    s8 companyCode[2];
+    s8 gameCode[4];
+    union {
+        u16 dirId; // directories only
+        u16 fileAllocationTableId; // files only
+    };
+    union {
+        s8 reserve1[0x4]; // directories only
+        s32 fileSize; // files only
+    };
+    char name[20];
+    union {
+        s8 reserve2[0x6]; // directories only
+        struct {
+            char extension[5];
+            u8 copyCount;
+        }; // files only
+    };
+    u8 renewalCounter;
+    s8 reserve3;
+    MfsTimeFormat creationDate;
+} MfsRamDirectoryEntry; // size = 0x30
+
+typedef struct MfsRamArea {
+    MfsRamId id;
+    u16 fileAllocationTable[0xB3A];
+    MfsRamDirectoryEntry directoryEntry[1112];
+} MfsRamArea;
 
 #define LEO_MANAGER_REGION_NONE 0
 #define LEO_MANAGER_REGION_JP 0x101
 #define LEO_MANAGER_REGION_US 0x102
+
+#define MFS_VOLUME_ATTR_VPROTECT_WRITE (1 << 5) // Prohibits writes unless game and company code matches
+#define MFS_VOLUME_ATTR_VPROTECT_READ (1 << 6) // Prohibits reads unless game and company code matches
+#define MFS_VOLUME_ATTR_WPROTECT (1 << 7) // Prohibits all writes
+
+#define MFS_FILE_ATTR_COPYLIMIT (1 << 9)
+#define MFS_FILE_ATTR_ENCODE (1 << 10)
+#define MFS_FILE_ATTR_HIDDEN (1 << 11)
+#define MFS_FILE_ATTR_FORBID_R (1 << 12)
+#define MFS_FILE_ATTR_FORBID_W (1 << 13)
+#define MFS_FILE_ATTR_FILE (1 << 14)
+#define MFS_FILE_ATTR_DIRECTORY (1 << 15)
+
+#define MFS_ENTRY_ROOT_DIR 0
+#define MFS_ENTRY_WORKING_DIR 0xFFFB
+#define MFS_ENTRY_WORKING_PARENT_DIR 0xFFFC
+#define MFS_ENTRY_ROOT_PARENT_DIR 0xFFFE
+#define MFS_ENTRY_DOES_NOT_EXIST 0xFFFF
 
 #endif // UNK_LEO_H
