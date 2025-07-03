@@ -105,27 +105,27 @@ s32 func_xk2_800EAA1C(u8* arg0) {
     COURSE_CONTEXT()->courseData.checksum = sp18;
     if ((D_80119880 == -1) || (D_80119880 == 1)) {
         if (COURSE_CONTEXT()->courseData.flag != 0) {
-            Leo_strcpy(D_xk1_8003A598.unk_00, arg0);
+            mfsStrCpy(D_xk1_8003A598.unk_00, arg0);
             func_xk2_800EA9B0(D_xk1_8003A598.unk_1D, "CRSD");
             D_800D6CA0.unk_08 = 0x14;
         } else {
-            Leo_strcpy(D_xk1_8003A598.unk_00, arg0);
+            mfsStrCpy(D_xk1_8003A598.unk_00, arg0);
             func_xk2_800EA9B0(D_xk1_8003A598.unk_1D, "CRSE");
             D_800D6CA0.unk_08 = 0x14;
         }
     }
-    Leo_strcpy(D_80030060, arg0);
-    Leo_strcpy(D_8003006C, arg0);
+    mfsStrCpy(D_80030060, arg0);
+    mfsStrCpy(D_8003006C, arg0);
     return 0;
 }
 
 s32 func_xk2_800EAC28(u8* arg0) {
     if (D_xk2_800F7408.courseData.flag != 0) {
-        Leo_strcpy(&D_xk1_8003A598, arg0);
+        mfsStrCpy(&D_xk1_8003A598, arg0);
         func_xk2_800EA9B0(D_xk1_8003A598.unk_1D, "CRSD");
         D_800D6CA0.unk_08 = 0x14;
     } else {
-        Leo_strcpy(&D_xk1_8003A598, arg0);
+        mfsStrCpy(&D_xk1_8003A598, arg0);
         func_xk2_800EA9B0(D_xk1_8003A598.unk_1D, "CRSE");
         D_800D6CA0.unk_08 = 0x14;
     }
@@ -205,7 +205,7 @@ s32 func_xk2_800EAF24(unk_8003A5D8* arg0) {
     D_80794E10 = 0;
     D_xk2_800F7400 = 0;
     func_80768574(0xFFFB, arg0->unk_00, &D_xk1_8003A5D8[D_xk2_80119884].unk_1D, &D_xk2_800F7408, 0xC830);
-    Leo_strcpy(&D_80030060, arg0);
+    mfsStrCpy(&D_80030060, arg0);
     return 0;
 }
 
@@ -239,14 +239,14 @@ void func_xk2_800EB018(void) {
         D_800D6CA0.unk_08 = 3;
         switch (D_80119880) {
             case 0:
-                Leo_strcpy(D_xk1_8003A5D8[0].unk_00, "OFFICIAL");
-                Leo_strcpy(D_xk1_8003A5D8[0].unk_1D, "CRSD");
+                mfsStrCpy(D_xk1_8003A5D8[0].unk_00, "OFFICIAL");
+                mfsStrCpy(D_xk1_8003A5D8[0].unk_1D, "CRSD");
                 func_xk1_8002B150(0xA8, 0x68, &D_xk1_8003A550, &D_xk1_8003A554);
                 D_xk2_800F684C = 0;
                 break;
             case 1:
-                Leo_strcpy(D_xk1_8003A5D8[0].unk_00, "NEWFILE");
-                Leo_strcpy(D_xk1_8003A5D8[0].unk_1D, "CRSD");
+                mfsStrCpy(D_xk1_8003A5D8[0].unk_00, "NEWFILE");
+                mfsStrCpy(D_xk1_8003A5D8[0].unk_1D, "CRSD");
                 PRINTF("EDIT_MODE_COURSE 08\n");
                 PRINTF("EDIT_MODE_COURSE 09\n");
                 PRINTF("EDIT_MODE_FILE_LOADING 0\n");
@@ -441,13 +441,13 @@ void func_xk2_800EB400(void) {
                 func_xk1_8002D290();
                 break;
             }
-            Leo_strcpy(gEditCupTrackNames[D_xk2_80103F10], D_xk1_8003A5D8[courseIndex].unk_00);
+            mfsStrCpy(gEditCupTrackNames[D_xk2_80103F10], D_xk1_8003A5D8[courseIndex].unk_00);
             func_xk2_800EC110();
             D_800D6CA0.unk_08 = 0x37;
             break;
         case 7:
             func_xk1_800294AC();
-            Leo_strcpy(D_xk1_8003A560, D_xk1_8003A5D8[courseIndex].unk_00);
+            mfsStrCpy(D_xk1_8003A560, D_xk1_8003A5D8[courseIndex].unk_00);
             func_xk2_800EAFA8(D_xk1_8003A5D8[courseIndex].unk_00);
             D_xk1_80030610 = -1;
             D_800D6CA0.unk_08 = 0x33;

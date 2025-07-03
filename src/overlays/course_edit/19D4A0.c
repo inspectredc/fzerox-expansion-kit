@@ -18,14 +18,14 @@ void func_xk2_800EBA34(void) {
     s32 i;
 
     for (i = 0; i < 6; i++) {
-        if (func_80762D80(gEditCupTrackNames[i]) != 0) {
+        if (Mfs_ValidateFileName(gEditCupTrackNames[i]) != 0) {
             gEditCupTrackNames[i][0] = 0;
         }
     }
 
     for (i = 0; i < 6; i++) {
-        if ((gEditCupTrackNames[i][0] != '\0') && (func_8075F7C0(0xFFFB, gEditCupTrackNames[i], "CRSD") == 0xFFFF) &&
-            (func_8075F7C0(0xFFFB, gEditCupTrackNames[i], "CRSE") == 0xFFFF)) {
+        if ((gEditCupTrackNames[i][0] != '\0') && (Mfs_GetFileIndex(0xFFFB, gEditCupTrackNames[i], "CRSD") == MFS_ENTRY_DOES_NOT_EXIST) &&
+            (Mfs_GetFileIndex(0xFFFB, gEditCupTrackNames[i], "CRSE") == MFS_ENTRY_DOES_NOT_EXIST)) {
             gEditCupTrackNames[i][0] = '\0';
         }
     }
@@ -144,7 +144,7 @@ void func_xk2_800EBFE8(u8* arg0) {
     s32 i;
 
     for (i = 0; i < 6; i++) {
-        if (Leo_strcmp(arg0, gEditCupTrackNames[i]) == 0) {
+        if (mfsStrCmp(arg0, gEditCupTrackNames[i]) == 0) {
             gEditCupTrackNames[i][0] = '\0';
         }
     }
@@ -161,7 +161,7 @@ void func_xk2_800EC04C(void) {
         var_s3 = true;
         if (gEditCupTrackNames[i][0] != '\0') {
             for (j = 0; j < func_xk1_8002BFA4(); j++) {
-                if (Leo_strcmp(D_xk1_8003A5D8[j].unk_00, gEditCupTrackNames[i]) == 0) {
+                if (mfsStrCmp(D_xk1_8003A5D8[j].unk_00, gEditCupTrackNames[i]) == 0) {
                     var_s3 = false;
                 }
             }
@@ -195,7 +195,7 @@ s32 func_xk2_800EC234(unk_8003A5D8* arg0) {
     s32 i;
 
     for (i = 0; i < 6; i++) {
-        if (Leo_strcmp(arg0->unk_00, gEditCupTrackNames[i]) == 0) {
+        if (mfsStrCmp(arg0->unk_00, gEditCupTrackNames[i]) == 0) {
             return 1;
         }
     }

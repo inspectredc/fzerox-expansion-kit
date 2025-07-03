@@ -1,179 +1,183 @@
 #include "leo/unk_leo.h"
 #include "leo/leo_functions.h"
 
-extern OSMesg D_80794CD4;
-extern u16 D_80794CE0;
+extern s32 D_80794CD4;
+extern u16 gWorkingDirectory;
 
-s32 func_80761390(s32 arg0) {
-    u16 sp1E;
+s32 Mfs_CreateRootDirectory(bool arg0) {
+    u16 dirId;
 
     if (func_80760C6C() < 0) {
         return -1;
     }
-    if (func_8075F904(0xFFFE, "/") != 0xFFFF) {
+    if (Mfs_GetDirectoryIndexFromParent(MFS_ENTRY_ROOT_PARENT_DIR, "/") != MFS_ENTRY_DOES_NOT_EXIST) {
         D_80794CD4 = 0x100;
         return -1;
     }
-    sp1E = func_8075FABC();
-    if (sp1E != 0) {
+    dirId = Mfs_GetNextFreeDirectoryEntry();
+    if (dirId != 0) {
         D_80794CD4 = 0x103;
         return -1;
     }
-    func_8075F554();
-    func_8075F4C8(0xFFFE, "/");
-    func_8075F2B0(0x8000);
-    func_8075F438(0);
-    func_8075F538(0);
-    func_8075F584(sp1E);
-    if ((arg0 != 0) && (func_807608A4() < 0)) {
-        return -1;
+    Mfs_InitDirEntry();
+    Mfs_CreateDirEntry(MFS_ENTRY_ROOT_PARENT_DIR, "/");
+    Mfs_SetDirEntryAttr(MFS_FILE_ATTR_DIRECTORY);
+    Mfs_SetDirEntryDirId(MFS_ENTRY_ROOT_DIR);
+    Mfs_SetDirEntryRenewalCounter(0);
+    Mfs_CopyDirEntryToRam(dirId);
+    if (arg0) {
+        if (Mfs_WriteRamArea() < 0) {
+            return -1;
+        }
     }
     return 0;
 }
 
-s32 func_8076148C(u16 arg0) {
+s32 Mfs_SetWorkingDirImpl(u16 dirId) {
     if (func_80760C6C() < 0) {
         return -1;
     }
-    if (arg0 == 0xFFFB) {
+    if (dirId == MFS_ENTRY_WORKING_DIR) {
         return 0;
     }
-    if ((arg0 == 0xFFFC) && ((arg0 = func_80761590(0xFFFB), (arg0 == 0xFFFE)) || (arg0 == 0xFFFF))) {
+    if ((dirId == MFS_ENTRY_WORKING_PARENT_DIR) && ((dirId = Mfs_GetParentDir(MFS_ENTRY_WORKING_DIR), (dirId == MFS_ENTRY_ROOT_PARENT_DIR)) || (dirId == MFS_ENTRY_DOES_NOT_EXIST))) {
         D_80794CD4 = 0xF4;
         return -1;
     }
-    if (func_8075F9E0(arg0) == 0xFFFF) {
+    if (Mfs_GetDirectoryIndex(dirId) == MFS_ENTRY_DOES_NOT_EXIST) {
         return 0xF2;
     }
-    D_80794CE0 = arg0;
+    gWorkingDirectory = dirId;
     return 0;
 }
 
-void func_8076155C(u16 arg0) {
-    func_8076148C(arg0);
+void Mfs_SetWorkingDir(u16 dirId) {
+    Mfs_SetWorkingDirImpl(dirId);
     return;
 }
 
-extern unk_leo_80419EA0 D_80784EF0;
+extern MfsRamArea gMfsRamArea;
 
-s32 func_80761590(u16 arg0) {
-    u16 sp1E;
+s32 Mfs_GetParentDir(u16 dirId) {
+    u16 entryId;
 
     if (func_80760C6C() < 0) {
         return 0xFFF0;
     }
-    if (arg0 == 0xFFFB) {
-        arg0 = D_80794CE0;
+    if (dirId == MFS_ENTRY_WORKING_DIR) {
+        dirId = gWorkingDirectory;
     }
-    if (arg0 == 0) {
-        return 0xFFFE;
+    if (dirId == MFS_ENTRY_ROOT_DIR) {
+        return MFS_ENTRY_ROOT_PARENT_DIR;
     }
-    if (arg0 == 0xFFFC) {
-        arg0 = func_80761590(0xFFFB);
+    if (dirId == MFS_ENTRY_WORKING_PARENT_DIR) {
+        dirId = Mfs_GetParentDir(MFS_ENTRY_WORKING_DIR);
     }
-    sp1E = func_8075F9E0(arg0);
-    if (sp1E == 0xFFFF) {
+    entryId = Mfs_GetDirectoryIndex(dirId);
+    if (entryId == MFS_ENTRY_DOES_NOT_EXIST) {
         D_80794CD4 = 0xF2;
-        return 0xFFFF;
+        return MFS_ENTRY_DOES_NOT_EXIST;
     }
-    return D_80784EF0.unk_16B0[arg0].unk_02;
+    return gMfsRamArea.directoryEntry[dirId].parentDirId;
 }
 
-s32 func_80761668(u16 arg0, u16 arg1) {
-    u16 sp1E;
-    u16 sp1C;
-    u16 sp1A;
+s32 Mfs_AddToDir(u16 dirId1, u16 dirId2) {
+    u16 parentDirId;
+    u16 entryIndex1;
+    u16 entryIndex2;
 
     if (func_80760C6C() < 0) {
         return -1;
     }
-    if (arg0 == 0xFFFB) {
-        arg0 = D_80794CE0;
+    if (dirId1 == MFS_ENTRY_WORKING_DIR) {
+        dirId1 = gWorkingDirectory;
     }
-    if (arg1 == 0xFFFB) {
-        arg1 = D_80794CE0;
+    if (dirId2 == MFS_ENTRY_WORKING_DIR) {
+        dirId2 = gWorkingDirectory;
     }
-    if (arg0 == 0xFFFC) {
-        arg0 = func_80761590(0xFFFB);
+    if (dirId1 == MFS_ENTRY_WORKING_PARENT_DIR) {
+        dirId1 = Mfs_GetParentDir(MFS_ENTRY_WORKING_DIR);
     }
-    if (arg1 == 0xFFFC) {
-        arg1 = func_80761590(0xFFFB);
+    if (dirId2 == MFS_ENTRY_WORKING_PARENT_DIR) {
+        dirId2 = Mfs_GetParentDir(MFS_ENTRY_WORKING_DIR);
     }
-    if (arg0 == 0) {
+    if (dirId1 == 0) {
         D_80794CD4 = 0x104;
         return -1;
     }
-    if (arg0 == 0xFFFE) {
+    if (dirId1 == MFS_ENTRY_ROOT_PARENT_DIR) {
         D_80794CD4 = 0x104;
         return -1;
     }
-    if (arg0 == arg1) {
+    if (dirId1 == dirId2) {
         D_80794CD4 = 0x104;
         return -1;
     }
-    sp1C = func_8075F9E0(arg0);
-    if (sp1C == 0xFFFF) {
+    entryIndex1 = Mfs_GetDirectoryIndex(dirId1);
+    if (entryIndex1 == MFS_ENTRY_DOES_NOT_EXIST) {
         D_80794CD4 = 0xF2;
         return -1;
     }
-    sp1A = func_8075F9E0(arg1);
-    if (sp1A == 0xFFFF) {
+    entryIndex2 = Mfs_GetDirectoryIndex(dirId2);
+    if (entryIndex2 == MFS_ENTRY_DOES_NOT_EXIST) {
         D_80794CD4 = 0xF2;
         return -1;
     }
-    if (func_80766CC0(0xB2, sp1C, sp1A, arg0) < 0) {
+    if (func_80766CC0(0xB2, entryIndex1, entryIndex2, dirId1) < 0) {
         D_80794CD4 = 0x106;
         return -1;
     }
-    sp1E = D_80784EF0.unk_16B0[sp1C].unk_02;
-    if (sp1E == arg1) {
+    parentDirId = gMfsRamArea.directoryEntry[entryIndex1].parentDirId;
+    if (parentDirId == dirId2) {
         return 0;
     }
-    if (func_8075F904(arg1, D_80784EF0.unk_16B0[sp1C].unk_10) != 0xFFFF) {
+    if (Mfs_GetDirectoryIndexFromParent(dirId2, gMfsRamArea.directoryEntry[entryIndex1].name) != MFS_ENTRY_DOES_NOT_EXIST) {
         D_80794CD4 = 0x100;
         return -1;
     }
-    D_80784EF0.unk_16B0[sp1C].unk_02 = arg1;
+    gMfsRamArea.directoryEntry[entryIndex1].parentDirId = dirId2;
 
     return 0;
 }
 
-extern s32 D_80794CD0;
+extern s32 gDirectoryEntryCount;
 
-s32 func_807618B8(u16 arg0, s32 arg1) {
+s32 Mfs_DeleteDirEntry(u16 entryId, bool writeChanges) {
     u16 i;
-    u16 sp1C;
-    s32 sp18;
+    u16 dirId;
+    s32 entriesInDir;
 
-    if (func_80766CC0(0xB0, arg0, 0, 0) < 0) {
+    if (func_80766CC0(0xB0, entryId, 0, 0) < 0) {
         D_80794CD4 = 0x106;
         return -1;
     }
-    sp1C = D_80784EF0.unk_16B0[arg0].unk_0A;
+    dirId = gMfsRamArea.directoryEntry[entryId].dirId;
 
-    for (i = 0, sp18 = 0; i < D_80794CD0; i++) {
-        if (D_80784EF0.unk_16B0[i].unk_00 == 0) {
+    for (i = 0, entriesInDir = 0; i < gDirectoryEntryCount; i++) {
+        if (gMfsRamArea.directoryEntry[i].attr == 0) {
             continue;
         }
-        if (D_80784EF0.unk_16B0[i].unk_02 == sp1C) {
-            sp18++;
+        if (gMfsRamArea.directoryEntry[i].parentDirId == dirId) {
+            entriesInDir++;
         }
     }
-    if (sp18 != 0) {
+    if (entriesInDir != 0) {
         D_80794CD4 = 0x103;
         return -1;
     }
-    bzero(&D_80784EF0.unk_16B0[arg0], 0x30);
-    if ((arg1 != 0) && (func_807608A4() < 0)) {
-        return -1;
+    bzero(&gMfsRamArea.directoryEntry[entryId], sizeof(MfsRamDirectoryEntry));
+    if (writeChanges) {
+        if (Mfs_WriteRamArea() < 0) {
+            return -1;
+        }
     }
     return 0;
 }
 
 extern s32 D_80794CDC;
 
-s32 func_80761A3C(u16 arg0, s32 arg1, s32 arg2) {
-    u16 sp26;
+s32 Mfs_DeleteDir(u16 dirId, char* name, bool writeChanges) {
+    u16 entryId;
     UNUSED s32 pad[2];
     s32 sp18;
 
@@ -182,34 +186,34 @@ s32 func_80761A3C(u16 arg0, s32 arg1, s32 arg2) {
     if (func_80760C6C() < 0) {
         return -1;
     }
-    if (func_80762D80(arg1) < 0) {
+    if (Mfs_ValidateFileName(name) < 0) {
         D_80794CD4 = 0xF4;
         return -1;
     }
-    if (arg0 == 0xFFFB) {
-        arg0 = D_80794CE0;
+    if (dirId == MFS_ENTRY_WORKING_DIR) {
+        dirId = gWorkingDirectory;
     }
-    if (arg0 == 0xFFFC) {
-        arg0 = func_80761590(0xFFFB);
+    if (dirId == MFS_ENTRY_WORKING_PARENT_DIR) {
+        dirId = Mfs_GetParentDir(MFS_ENTRY_WORKING_DIR);
     }
-    if (arg0 == 0) {
+    if (dirId == MFS_ENTRY_ROOT_DIR) {
         D_80794CD4 = 0x106;
         return -1;
     }
-    if (arg0 == 0xFFFE) {
+    if (dirId == MFS_ENTRY_ROOT_PARENT_DIR) {
         D_80794CD4 = 0xF4;
         return -1;
     }
-    if (arg0 == 0xFFFB) {
+    if (dirId == MFS_ENTRY_WORKING_DIR) {
         D_80794CD4 = 0xF4;
         return -1;
     }
-    sp26 = func_8075F9E0(arg0);
-    if (sp26 == 0xFFFF) {
+    entryId = Mfs_GetDirectoryIndex(dirId);
+    if (entryId == MFS_ENTRY_DOES_NOT_EXIST) {
         D_80794CD4 = 0xF2;
         return -1;
     }
-    if (func_807618B8(sp26, arg2) < 0) {
+    if (Mfs_DeleteDirEntry(entryId, writeChanges) < 0) {
         return -1;
     }
     return 0;

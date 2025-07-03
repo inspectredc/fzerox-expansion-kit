@@ -83,7 +83,7 @@ void func_xk3_8012BB48(void) {
 
     for (i = 0; i < 30; i++) {
         if (D_806F2400.unk_3C0[i] > 0) {
-            if (Leo_strcmp(&D_806F2400.unk_00[i].machineName, &D_xk1_800333D0.machineName) == 0) {
+            if (mfsStrCmp(&D_806F2400.unk_00[i].machineName, &D_xk1_800333D0.machineName) == 0) {
                 D_806F2400.unk_00[i] = D_xk1_800333D0;
                 D_806F2400.unk_00[i].number = D_xk3_80140750[i];
                 break;
@@ -707,12 +707,12 @@ void func_xk3_8012CE44(void) {
             case 32: {
                 u8 i;
                 func_8074122C(0x27);
-                if (Leo_strcmp(D_xk3_80141298, &D_xk1_800333D0.machineName) == 0) {
+                if (mfsStrCmp(D_xk3_80141298, &D_xk1_800333D0.machineName) == 0) {
                     D_xk1_800333D0.number = 31;
                 }
                 for (i = 0; i < 30; i++) {
                     if ((D_806F2400.unk_3C0[i] > 0) &&
-                        (Leo_strcmp(&D_806F2400.unk_00[i].machineName, D_xk3_80141298) == 0)) {
+                        (mfsStrCmp(&D_806F2400.unk_00[i].machineName, D_xk3_80141298) == 0)) {
                         D_806F2400.unk_3C0[i] = 0;
                         D_806F2400.unk_00[i].number = 31;
                         func_8071E0C0();
@@ -734,7 +734,7 @@ void func_xk3_8012CE44(void) {
                 func_8074122C(0x27);
 
                 for (i = 0; i < 30; i++) {
-                    if ((D_806F2400.unk_3C0[i] == -1) && (Leo_strcmp(D_xk3_80141298, D_xk3_801366F4[i]) == 0)) {
+                    if ((D_806F2400.unk_3C0[i] == -1) && (mfsStrCmp(D_xk3_80141298, D_xk3_801366F4[i]) == 0)) {
                         D_806F2400.unk_3C0[i] = 0;
                         D_806F2400.unk_00[i].number = 31;
                         func_8071E0C0();
@@ -770,7 +770,7 @@ void func_xk3_8012CE44(void) {
                 D_xk3_80141298 = func_xk1_8002BCC4();
 
                 for (i = 0; i < 30; i++) {
-                    if (Leo_strcmp(D_xk3_80141298, D_xk3_801366F4[i]) == 0) {
+                    if (mfsStrCmp(D_xk3_80141298, D_xk3_801366F4[i]) == 0) {
                         D_800333F4 = i;
                         break;
                     }
@@ -805,13 +805,13 @@ void func_xk3_8012CE44(void) {
             case 16:
             case 37: {
                 u8 i;
-                if (Leo_strcmp(D_xk3_80141298, &D_xk1_800333D0.machineName) == 0) {
+                if (mfsStrCmp(D_xk3_80141298, &D_xk1_800333D0.machineName) == 0) {
                     D_xk1_800333D0.number = 31;
                 }
 
                 for (i = 0; i < 30; i++) {
                     if ((D_806F2400.unk_3C0[i] > 0) &&
-                        (Leo_strcmp(D_806F2400.unk_00[i].machineName, D_xk3_80141298) == 0)) {
+                        (mfsStrCmp(D_806F2400.unk_00[i].machineName, D_xk3_80141298) == 0)) {
                         D_806F2400.unk_3C0[i] = 0;
                         D_806F2400.unk_00[i].number = 31;
                         func_8071E0C0();
@@ -855,7 +855,7 @@ void func_xk3_8012D700(void) {
 
     for (i = 0; i < 30; i++) {
         if ((D_806F2400.unk_3C0[i] > 0) &&
-            (Leo_strcmp(D_806F2400.unk_00[i].machineName, D_xk1_800333D0.machineName) == 0)) {
+            (mfsStrCmp(D_806F2400.unk_00[i].machineName, D_xk1_800333D0.machineName) == 0)) {
             D_xk1_800333D0.number = D_xk3_80140750[i];
             return;
         }
@@ -888,7 +888,7 @@ void func_xk3_8012D79C(void) {
 
                 for (i = 0; i < 30; i++) {
                     if ((D_806F2400.unk_3C0[i] > 0) &&
-                        (Leo_strcmp(D_806F2400.unk_00[i].machineName, D_xk1_800333D0.machineName) == 0)) {
+                        (mfsStrCmp(D_806F2400.unk_00[i].machineName, D_xk1_800333D0.machineName) == 0)) {
                         D_806F2400.unk_3C0[i] = 1;
                         break;
                     }

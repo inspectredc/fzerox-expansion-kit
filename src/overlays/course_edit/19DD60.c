@@ -364,7 +364,7 @@ void func_xk2_800ECD90(void) {
 
     if (gControllers[gPlayerControlPorts[0]].buttonPressed & BTN_A) {
         func_xk1_800294EC(func_xk1_8002AC24);
-        D_xk1_80032AC0 = Leo_strlen(D_xk1_8003A560);
+        D_xk1_80032AC0 = mfsStrLen(D_xk1_8003A560);
         D_800D6CA0.unk_08 = 2;
         D_80119880 = 9;
         func_xk1_8002AEB4(9, 4);

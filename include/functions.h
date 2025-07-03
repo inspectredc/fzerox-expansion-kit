@@ -326,7 +326,7 @@ void func_80742F44(void);
 void func_80742F68(void);
 
 void func_80762330(LEODiskTime*);
-void func_80760F40(u8*, u8*);
+void Mfs_SetGameCode(char* companyCode, char* gameCode);
 s32 func_80768B88(OSPiHandle*, OSIoMesg*, s32);
 u16 func_80766788(void);
 s32 func_80766660(u16);

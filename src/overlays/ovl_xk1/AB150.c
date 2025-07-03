@@ -10,20 +10,20 @@ void func_xk1_8002DEE0(s32 arg0) {
     while (true) {}
 }
 
-extern s16 D_80794CE0;
+extern s16 gWorkingDirectory;
 extern s32 D_80794D30;
 extern LEODiskID D_8076CB50;
 extern LEODiskID D_80794CE8;
-extern unk_leo_80419EA0 D_80784EF0;
+extern MfsRamArea gMfsRamArea;
 extern s32 D_80794CD4;
 
 void func_xk1_8002DF10(void) {
     D_80794CE8 = D_8076CB50;
 
     func_80760320();
-    D_80794CE0 = 0;
+    gWorkingDirectory = MFS_ENTRY_ROOT_DIR;
     D_80794D30 = 0;
-    D_80784EF0.unk_00[0] = 0;
+    gMfsRamArea.id.diskId[0] = '\0';
     func_807047AC();
     if (D_80794CD4 == 0xF2) {
         D_80794CD4 = 0;
@@ -37,31 +37,31 @@ void func_xk1_8002DFB4(s32* arg0, s32* arg1) {
     switch (*arg0) {
         case LEO_ERROR_GOOD:
             func_80767940();
-            *arg1 = 0;
+            *arg1 = LEO_ERROR_GOOD;
             break;
         case LEO_ERROR_QUEUE_FULL:
-            *arg1 = 2;
+            *arg1 = LEO_ERROR_DIAGNOSTIC_FAILURE;
             break;
         case LEO_ERROR_EJECTED_ILLEGALLY_RESUME:
             D_807C6EA8.unk_14 = *arg0;
             D_807C6EA8.unk_04 = 1;
             D_807C6EA8.unk_08 = 2;
             D_807C6EA8.unk_0C = 1;
-            *arg1 = 2;
+            *arg1 = LEO_ERROR_DIAGNOSTIC_FAILURE;
             break;
         case LEO_ERROR_MEDIUM_NOT_PRESENT:
             D_807C6EA8.unk_0C = 1;
-            *arg1 = 2;
+            *arg1 = LEO_ERROR_DIAGNOSTIC_FAILURE;
             break;
         case LEO_ERROR_COMMAND_TERMINATED:
             func_80767940();
-            *arg1 = 0x22;
+            *arg1 = LEO_ERROR_COMMAND_TERMINATED;
             break;
         case LEO_ERROR_DIAGNOSTIC_FAILURE:
             D_807C6EA8.unk_14 = *arg0;
             D_807C6EA8.unk_04 = 1;
             D_807C6EA8.unk_0C = 3;
-            *arg1 = 2;
+            *arg1 = LEO_ERROR_DIAGNOSTIC_FAILURE;
             break;
         default:
             func_xk1_8002DEE0(*arg0);
@@ -74,7 +74,7 @@ extern s32 gGameMode;
 s32 func_xk1_8002E0A8(void) {
     s32 sp2C;
 
-    if (func_80760260(&D_8076CB50) == 0) {
+    if (Mfs_ReadDiskId(&D_8076CB50) == 0) {
         if (func_80704120(D_8076CB50) != 2) {
             func_80767940();
             return 4;
@@ -97,22 +97,22 @@ s32 func_xk1_8002E0A8(void) {
 s32 func_xk1_8002E238(void) {
     s32 sp1C;
 
-    func_80762458(4);
+    Mfs_SpdlMotor(LEO_MOTOR_BRAKE);
     switch (D_80794CD4) {
         case LEO_ERROR_GOOD:
             D_807C6EA8.unk_0C = 2;
-            sp1C = 2;
+            sp1C = LEO_ERROR_DIAGNOSTIC_FAILURE;
             break;
         case LEO_ERROR_QUEUE_FULL:
-            sp1C = 2;
+            sp1C = LEO_ERROR_DIAGNOSTIC_FAILURE;
             break;
         case LEO_ERROR_MEDIUM_NOT_PRESENT:
             D_807C6EA8.unk_0C = 0;
-            sp1C = 0x2A;
+            sp1C = LEO_ERROR_MEDIUM_NOT_PRESENT;
             break;
         case LEO_ERROR_COMMAND_TERMINATED:
             D_807C6EA8.unk_0C = 0;
-            sp1C = 0x22;
+            sp1C = LEO_ERROR_COMMAND_TERMINATED;
             break;
         default:
             func_xk1_8002DEE0(D_80794CD4);
@@ -127,17 +127,17 @@ s32 func_xk1_8002E2E8(s32 arg0) {
     switch (arg0) {
         case 0:
             var_v1 = func_xk1_8002E0A8();
-            if (var_v1 == 0) {
+            if (var_v1 == LEO_ERROR_GOOD) {
                 D_807C6EA8.unk_04 = 0;
                 D_807C6EA8.unk_08 = 0;
-                var_v1 = 0;
+                var_v1 = LEO_ERROR_GOOD;
             }
             break;
         case 1:
             var_v1 = func_xk1_8002E238();
-            if (var_v1 == 0x2A) {
+            if (var_v1 == LEO_ERROR_MEDIUM_NOT_PRESENT) {
                 D_807C6EA8.unk_08 = 0;
-                var_v1 = 0;
+                var_v1 = LEO_ERROR_GOOD;
             }
             break;
     }
@@ -219,7 +219,7 @@ s32 func_xk1_8002E368(void) {
             D_xk1_80033400 = 0;
             sp3C = D_xk1_80033404;
 
-            if ((D_xk1_80033404 == 0) || (D_xk1_80033404 == 0xF2)) {
+            if ((D_xk1_80033404 == LEO_ERROR_GOOD) || (D_xk1_80033404 == 0xF2)) {
                 D_807C6EA8.unk_08 = 0;
                 switch (D_807C6EA8.unk_00) {
                     case 9:
@@ -243,15 +243,15 @@ s32 func_xk1_8002E368(void) {
             if (D_xk1_80033404 == 0x106) {
                 D_80794E1C = 1;
                 D_807C6EA8.unk_08 = 0x10;
-                sp3C = 0;
+                sp3C = LEO_ERROR_GOOD;
                 break;
             }
-            if (D_xk1_80033404 == 0x22) {
-                sp3C = 0x22;
+            if (D_xk1_80033404 == LEO_ERROR_COMMAND_TERMINATED) {
+                sp3C = LEO_ERROR_COMMAND_TERMINATED;
                 break;
             }
-            if ((D_xk1_80033404 == 0x23) || (D_xk1_80033404 == 8)) {
-                sp3C = 2;
+            if ((D_xk1_80033404 == LEO_ERROR_QUEUE_FULL) || (D_xk1_80033404 == LEO_ERROR_BUSY)) {
+                sp3C = LEO_ERROR_DIAGNOSTIC_FAILURE;
                 break;
             }
             if ((D_xk1_80033404 == 0x10A) || (D_xk1_80033404 == 0xF3)) {
@@ -261,14 +261,14 @@ s32 func_xk1_8002E368(void) {
                     func_807040C8();
                     SLMFSRecoverManageArea();
                     D_xk1_8003340C = 1;
-                    sp3C = 2;
+                    sp3C = LEO_ERROR_DIAGNOSTIC_FAILURE;
                 } else {
                     if (sp3B == 1) {
                         func_807038B0();
                         func_80706518(1, 0x20, 0);
                         func_807040C8();
                     }
-                    sp3C = 2;
+                    sp3C = LEO_ERROR_DIAGNOSTIC_FAILURE;
                 }
                 break;
             }
@@ -277,15 +277,15 @@ s32 func_xk1_8002E368(void) {
                 func_807038B0();
                 func_80706518(1, 0x20, 0);
                 func_807040C8();
-                sp3C = 2;
+                sp3C = LEO_ERROR_DIAGNOSTIC_FAILURE;
                 break;
             }
             if (D_xk1_80033404 == 0xF6) {
                 sp3C = func_xk1_8002E2E8(1);
-                if (sp3C == 0) {
-                    sp3C = 2;
-                } else if (sp3C == 2) {
-                    sp3C = 4;
+                if (sp3C == LEO_ERROR_GOOD) {
+                    sp3C = LEO_ERROR_DIAGNOSTIC_FAILURE;
+                } else if (sp3C == LEO_ERROR_DIAGNOSTIC_FAILURE) {
+                    sp3C = LEO_ERROR_DATA_PHASE_ERROR;
                 }
                 break;
             }
@@ -295,22 +295,22 @@ s32 func_xk1_8002E368(void) {
             }
 
             switch (D_xk1_80033404) {
-                case 2:
-                case 42:
-                case 47:
-                case 49:
-                    if (D_xk1_80033404 == 0x31) {
+                case LEO_ERROR_DIAGNOSTIC_FAILURE:
+                case LEO_ERROR_MEDIUM_NOT_PRESENT:
+                case LEO_ERROR_MEDIUM_MAY_HAVE_CHANGED:
+                case LEO_ERROR_EJECTED_ILLEGALLY_RESUME:
+                    if (D_xk1_80033404 == LEO_ERROR_EJECTED_ILLEGALLY_RESUME) {
                         D_807C6EA8.unk_04 = 1;
                         D_807C6EA8.unk_08 = 2;
                     }
                     sp3C = func_xk1_8002E2E8(0);
-                    if (sp3C == 0) {
-                        sp3C = 2;
-                    } else if (sp3C == 2) {
+                    if (sp3C == LEO_ERROR_GOOD) {
+                        sp3C = LEO_ERROR_DIAGNOSTIC_FAILURE;
+                    } else if (sp3C == LEO_ERROR_DIAGNOSTIC_FAILURE) {
                         D_xk1_80033400 = 1;
                     }
                     break;
-                case 23:
+                case LEO_ERROR_UNRECOVERED_READ_ERROR:
                     func_80704068();
                     if (sp3B == 0) {
                         func_80703948();
@@ -322,7 +322,7 @@ s32 func_xk1_8002E368(void) {
                         func_80706518(1, 0x20, 0);
                         func_807040C8();
                     }
-                    sp3C = 2;
+                    sp3C = LEO_ERROR_DIAGNOSTIC_FAILURE;
                     break;
                 default:
                     func_xk1_8002DEE0(D_xk1_80033404);

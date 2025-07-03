@@ -235,7 +235,7 @@ void func_xk3_80132D00(void) {
         D_xk3_80136820 = 0;
         return;
     }
-    Leo_strcpy(D_xk1_800333D0.machineName, &D_xk1_8003A560);
+    mfsStrCpy(D_xk1_800333D0.machineName, &D_xk1_8003A560);
     D_xk3_801365E0 = D_xk1_800333D0;
     D_xk3_801365E0.number = 31;
     func_xk3_8012D700();
@@ -258,7 +258,7 @@ void func_xk3_80132DDC(void) {
         func_xk1_8002D86C(0x1B, 6);
         func_xk1_8002D880(0x28);
         func_xk1_800294AC();
-        Leo_strcpy(&D_xk1_8003A560, D_xk1_800333D0.machineName);
+        mfsStrCpy(&D_xk1_8003A560, D_xk1_800333D0.machineName);
         func_xk1_800294EC(func_xk3_80132D00);
     }
 }

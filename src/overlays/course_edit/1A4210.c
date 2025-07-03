@@ -465,7 +465,7 @@ void func_xk2_800F2B48(Gfx** gfxP) {
     }
 
     if ((D_xk2_80104F04 != 0) && (func_xk2_800EF780() != 0) && (D_xk2_800F6828 < 200)) {
-        width = Leo_strlen(D_xk1_800331F0[21]) * 8;
+        width = mfsStrLen(D_xk1_800331F0[21]) * 8;
         width += 16;
         temp_v1 = (s32) (SCREEN_WIDTH - width) / 2;
 

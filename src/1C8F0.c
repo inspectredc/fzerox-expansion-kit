@@ -11,7 +11,7 @@ void func_8070F0F0(void) {
     LEODiskTime diskTime = LEO_DISK_TIME(19, 99, 12, 31, 23, 59, 59);
 
     func_80762330(&diskTime);
-    func_80760F40("01", "EFZJ");
+    Mfs_SetGameCode("01", "EFZJ");
     SLMFSCreateManager(LEO_MANAGER_REGION_NONE);
     func_8070481C();
     SLLeoReadDiskID(&D_8076CB50);

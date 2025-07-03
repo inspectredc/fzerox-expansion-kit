@@ -285,7 +285,7 @@ void func_xk1_8002BD58(void) {
     D_xk1_80032BD4 = 0;
 }
 
-extern unk_leo_80419EA0 D_80784EF0;
+extern MfsRamArea gMfsRamArea;
 
 s32 func_xk1_8002BD64(u8 arg0, s32 arg1) {
     s32 i;
@@ -311,12 +311,12 @@ s32 func_xk1_8002BD64(u8 arg0, s32 arg1) {
         if ((*var_s1 = func_80766788()) == 0xFFFF) {
             break;
         }
-        if ((arg1 == 0) || (Leo_bcmp(D_80784EF0.unk_16B0[*var_s1].unk_24, arg1, 3) == 0)) {
+        if ((arg1 == 0) || (mfsStrnCmp(gMfsRamArea.directoryEntry[*var_s1].extension, arg1, 3) == 0)) {
             temp_s0 = &D_xk1_8003A5D8[D_xk1_8003A5D0];
             temp_s0->unk_22 = 0;
-            Leo_strcpy(temp_s0->unk_00, D_80784EF0.unk_16B0[*var_s1].unk_10);
-            Leo_strcpy(temp_s0->unk_1D, D_80784EF0.unk_16B0[*var_s1].unk_24);
-            temp_s0->unk_10 = D_80784EF0.unk_16B0[*var_s1].unk_00;
+            mfsStrCpy(temp_s0->unk_00, gMfsRamArea.directoryEntry[*var_s1].name);
+            mfsStrCpy(temp_s0->unk_1D, gMfsRamArea.directoryEntry[*var_s1].extension);
+            temp_s0->unk_10 = gMfsRamArea.directoryEntry[*var_s1].attr;
             var_s6++;
 
             if (++D_xk1_8003A5D0 == 0x66) {
@@ -330,7 +330,7 @@ s32 func_xk1_8002BD64(u8 arg0, s32 arg1) {
     var_s0++;
     D_xk1_80032BEC = 0;
     D_xk1_80032BD4 = var_s0;
-    func_xk1_8002CEF8(&D_xk1_8003A5D8[arg0], D_xk1_8003A5D0 - arg0, 0x24, &func_xk1_8002CA98);
+    func_xk1_8002CEF8(&D_xk1_8003A5D8[arg0], D_xk1_8003A5D0 - arg0, 0x24, func_xk1_8002CA98);
     D_xk1_80032BF8 = var_s0;
 
     if (var_s6 > 100) {
@@ -428,8 +428,8 @@ void func_xk1_8002C720(Gfx** gfxP, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
         return;
     }
     func_xk1_80026830(arg3, sp1B4);
-    Leo_strcpy(spB4, D_xk1_800331F0[arg4 + 1]);
-    temp_a0 = Leo_strlen(sp1B4) + Leo_strlen(spB4);
+    mfsStrCpy(spB4, D_xk1_800331F0[arg4 + 1]);
+    temp_a0 = mfsStrLen(sp1B4) + mfsStrLen(spB4);
     temp_t4 = temp_a0 * 8;
     arg1 = (((34 - temp_a0) / 2) * 8) + 24;
 
@@ -451,7 +451,7 @@ void func_xk1_8002C720(Gfx** gfxP, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     gDPPipeSync(gfx++);
     gDPSetPrimColor(gfx++, 0, 0, 255, 64, 64, 255);
     gfx = func_xk1_800262F4(gfx, arg1, arg2, sp1B4);
-    arg1 += Leo_strlen(sp1B4) * 8;
+    arg1 += mfsStrLen(sp1B4) * 8;
     gDPPipeSync(gfx++);
     gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, 255);
     gfx = func_xk1_800264C0(gfx, arg1, arg2, arg4 + 1);

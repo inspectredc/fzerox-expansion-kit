@@ -215,7 +215,7 @@ void Main_ThreadEntry(void* arg0) {
     osViBlack(false);
 
     if (gRamDDCompatible) {
-        osCreateThread(&D_80799EE0, THREAD_ID_6, &func_80767958, 0, D_80797670 + sizeof(D_80797670), 0x1E);
+        osCreateThread(&D_80799EE0, THREAD_ID_6, func_80767958, 0, D_80797670 + sizeof(D_80797670), 0x1E);
         if (D_8079A32C == 1) {
             osStartThread(&D_80799EE0);
             D_8079A32C = 2;
@@ -224,8 +224,8 @@ void Main_ThreadEntry(void* arg0) {
 
     func_80704F38(&sGameThread);
 
-    AudioLoad_SetDmaHandler(&func_80768C08);
-    AudioLoad_SetLeoHandler(&func_80768AF0);
+    AudioLoad_SetDmaHandler(func_80768C08);
+    AudioLoad_SetLeoHandler(func_80768AF0);
 
     osCreateThread(&sAudioThread, THREAD_ID_AUDIO, Audio_ThreadEntry, NULL,
                    sAudioThreadStack + sizeof(sAudioThreadStack), 20);
