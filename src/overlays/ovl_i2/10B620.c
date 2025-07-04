@@ -5,7 +5,7 @@
 
 char D_i2_800BF030[] = "GHOST00";
 
-extern OSMesgQueue D_8079F998;
+extern OSMesgQueue gMFSMesgQ;
 extern u8 gEditCupTrackNames[][9];
 
 void func_i2_800A9CE0(s32 courseIndex, GhostRecord* ghostRecord) {
@@ -30,7 +30,7 @@ void func_i2_800A9CE0(s32 courseIndex, GhostRecord* ghostRecord) {
     func_i2_800AA80C();
     func_807684AC(0xFFFB, D_i2_800BF030, "GOST", COURSE_CONTEXT()->ghostSave, 0x7E0,
                   3 * sizeof(GhostSave) + sizeof(SaveCourseRecords));
-    osRecvMesg(&D_8079F998, NULL, OS_MESG_BLOCK);
+    osRecvMesg(&gMFSMesgQ, NULL, OS_MESG_BLOCK);
     for (i = 0; i < 3; i++, ghostRecord++, ghostSave++) {
         PRINTF("Ghost Name %s\n");
         if (ghostSave->record.checksum != Save_CalculateGhostRecordChecksum(&ghostSave->record) * 1) {
@@ -92,7 +92,7 @@ void func_i2_800AA024(s32 courseIndex, s32 ghostIndex, GhostData* ghostData) {
     }
     func_i2_800AA80C();
     func_807684AC(0xFFFB, D_i2_800BF030, "GOST", COURSE_CONTEXT()->ghostSave, 0x7E0, 3 * sizeof(GhostSave));
-    osRecvMesg(&D_8079F998, NULL, OS_MESG_BLOCK);
+    osRecvMesg(&gMFSMesgQ, NULL, OS_MESG_BLOCK);
     *ghostData = ghostSave[ghostIndex].data;
 }
 

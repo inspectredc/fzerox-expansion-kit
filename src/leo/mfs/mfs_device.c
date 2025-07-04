@@ -5,7 +5,7 @@
 
 extern s32 D_80794CD8;
 extern OSMesgQueue D_80794D0C;
-extern s32 D_80794CD4;
+extern s32 gMfsError;
 extern u8 D_8077B4D0[];
 extern u8 D_80794D48;
 
@@ -26,7 +26,7 @@ s32 Mfs_SetRtc(s32 year, s32 month, s32 day, s32 hour, s32 minute, s32 second) {
         return 0;
     }
     if (gLeoSetRTCFunc(&cmd, &diskTime, &D_80794D0C) < 0) {
-        D_80794CD4 = 0xF7;
+        gMfsError = 0xF7;
         return -1;
     }
     return func_80762390();
@@ -34,7 +34,7 @@ s32 Mfs_SetRtc(s32 year, s32 month, s32 day, s32 hour, s32 minute, s32 second) {
 
 void Mfs_EncodeAndSetRtc(s32 year, s32 month, s32 day, s32 hour, s32 minute, s32 second) {
     Mfs_SetRtc(Mfs_EncodeTime(year % 100), Mfs_EncodeTime(month), Mfs_EncodeTime(day), Mfs_EncodeTime(hour),
-                  Mfs_EncodeTime(minute), Mfs_EncodeTime(second));
+               Mfs_EncodeTime(minute), Mfs_EncodeTime(second));
     return;
 }
 
@@ -65,7 +65,7 @@ s32 func_80761DCC(s32* year, s32* month, s32* day, s32* hour, s32* minute, s32* 
         }
     } else {
         if (gLeoReadRTCFunc(&cmd, &D_80794D0C) < 0) {
-            D_80794CD4 = 0xF7;
+            gMfsError = 0xF7;
             return -1;
         }
         if (func_80762390() < 0) {
@@ -125,22 +125,21 @@ s32 func_80761FAC(s32* year, s32* month, s32* day, s32* hour, s32* minute, s32* 
     return 0;
 }
 
-// mfsReadRtc
-s32 Mfs_ReadRtc(LEODiskTime* arg0) {
+s32 Mfs_ReadRtc(LEODiskTime* diskTime) {
     LEOCmd sp1C;
 
     D_80794CD8 = 9;
     if (D_80794D48) {
-        bcopy(&D_807C6E40, arg0, 8);
+        bcopy(&D_807C6E40, diskTime, sizeof(LEODiskTime));
     } else {
         if (gLeoReadRTCFunc(&sp1C, &D_80794D0C) < 0) {
-            D_80794CD4 = 0xF7;
+            gMfsError = 0xF7;
             return -1;
         }
         if (func_80762390() < 0) {
             return -1;
         }
-        bcopy(&sp1C.data, arg0, 8);
+        bcopy(&sp1C.data, diskTime, sizeof(LEODiskTime));
     }
 
     return 0;
@@ -155,7 +154,7 @@ void Mfs_LEODiskTimeToMfsTime(LEODiskTime* diskTime, MfsTimeFormat* mfsTime) {
     }
 
     mfsTime->unkb0 = (sp1C >= 0x60) ? ((((sp1C - 0x60) << 1) & 0xFE) | (mfsTime->unkb0 & 0xFF01))
-                                 : ((((sp1C + 3) << 1) & 0xFE) | (mfsTime->unkb0 & 0xFF01));
+                                    : ((((sp1C + 3) << 1) & 0xFE) | (mfsTime->unkb0 & 0xFF01));
 
     mfsTime->unks0 = (((Mfs_DecodeTime(diskTime->month) & 0xF) << 5) & 0x1E0) | (mfsTime->unks0 & 0xFE1F);
     mfsTime->unkb1 = (Mfs_DecodeTime(diskTime->day) & 0x1F & 0x1F) | (mfsTime->unkb1 & 0xFFE0);
@@ -180,13 +179,13 @@ extern OSMesg D_80794CCC;
 
 s32 func_80762390(void) {
     if (D_80794CC4 != 0) {
-        while (osRecvMesg(&D_80794D0C, &D_80794CD4, OS_MESG_NOBLOCK) < 0) {
+        while (osRecvMesg(&D_80794D0C, &gMfsError, OS_MESG_NOBLOCK) < 0) {
             osSendMesg(D_80794CC8, D_80794CCC, OS_MESG_BLOCK);
         }
     } else {
-        osRecvMesg(&D_80794D0C, &D_80794CD4, OS_MESG_BLOCK);
+        osRecvMesg(&D_80794D0C, &gMfsError, OS_MESG_BLOCK);
     }
-    if (D_80794CD4 != NULL) {
+    if (gMfsError != NULL) {
         return -1;
     }
     return 0;
@@ -201,7 +200,7 @@ s32 Mfs_SpdlMotor(LEOSpdlMode mode) {
         D_80794CD8 = 7;
     }
     if (gLeoSpdlMotorFunc(&cmdBlock, mode, &D_80794D0C) < 0) {
-        D_80794CD4 = 0xF7;
+        gMfsError = 0xF7;
         return -1;
     }
     return func_80762390();
@@ -212,7 +211,7 @@ s32 Mfs_ModeSelectAsync(u32 standby, u32 sleep) {
 
     D_80794CD8 = 0xB;
     if (gLeoModeSelectAsyncFunc(&cmdBlock, standby, sleep, &D_80794D0C) < 0) {
-        D_80794CD4 = 0xF7;
+        gMfsError = 0xF7;
         return -1;
     }
     return func_80762390();
@@ -230,7 +229,7 @@ s32 Mfs_ReadLBA(u32 startLBA, u8* buf, u32 nLBAs) {
         osInvalDCache(buf, sp24);
         D_80794CD8 = 2;
         if (gLeoReadWriteFunc(&cmd, OS_READ, startLBA, buf, nLBAs, &D_80794D0C) < 0) {
-            D_80794CD4 = 0xF7;
+            gMfsError = 0xF7;
             return -1;
         }
         if (func_80762390() < 0) {
@@ -244,7 +243,7 @@ s32 Mfs_ReadLBA(u32 startLBA, u8* buf, u32 nLBAs) {
             LeoLBAToByte(startLBA + i, 1, &sp24);
             D_80794CD8 = 2;
             if (gLeoReadWriteFunc(&cmd, OS_READ, startLBA + i, D_8077B4D0, 1, &D_80794D0C) < 0) {
-                D_80794CD4 = 0xF7;
+                gMfsError = 0xF7;
                 return -1;
             }
             if (func_80762390() < 0) {
@@ -271,7 +270,7 @@ s32 Mfs_WriteLBA(u32 startLBA, u8* buf, u32 nLBAs) {
         osWritebackDCache(buf, sp24);
         D_80794CD8 = 3;
         if (gLeoReadWriteFunc(&sp2C, OS_WRITE, startLBA, buf, nLBAs, &D_80794D0C) < 0) {
-            D_80794CD4 = 0xF7;
+            gMfsError = 0xF7;
             return -1;
         }
         if (func_80762390() < 0) {
@@ -289,7 +288,7 @@ s32 Mfs_WriteLBA(u32 startLBA, u8* buf, u32 nLBAs) {
             osWritebackDCache(D_8077B4D0, 0x4D10);
             D_80794CD8 = 3;
             if (gLeoReadWriteFunc(&sp2C, OS_WRITE, startLBA + i, D_8077B4D0, 1, &D_80794D0C) < 0) {
-                D_80794CD4 = 0xF7;
+                gMfsError = 0xF7;
                 return -1;
             }
             if (func_80762390() < 0) {
@@ -403,10 +402,10 @@ s32 mfsStrCat(u8* dest, u8* src) {
     return 0;
 }
 
-s32 Mfs_DecodeTime(s32 arg0) {
-    return ((arg0 >> 4) * 10) + (arg0 & 0xF);
+s32 Mfs_DecodeTime(s32 timeUnit) {
+    return ((timeUnit >> 4) * 10) + (timeUnit & 0xF);
 }
 
-s32 Mfs_EncodeTime(s32 arg0) {
-    return ((arg0 / 10) << 4) + (arg0 % 10);
+s32 Mfs_EncodeTime(s32 timeUnit) {
+    return ((timeUnit / 10) << 4) + (timeUnit % 10);
 }

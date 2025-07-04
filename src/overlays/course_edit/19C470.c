@@ -18,15 +18,15 @@ void func_xk2_800EA9B0(s8* arg0, s8* arg1) {
     arg0[4] = arg1[4];
 }
 
-extern s32 D_80794CD4;
+extern s32 gMfsError;
 
 void func_xk2_800EA9DC(s32 arg0) {
-    if (D_80794CD4 < 0x2A) {
+    if (gMfsError < 0x2A) {
         PRINTF("%s DEVICE COMMUNICATION FAILURE\n");
         return;
     }
     // TODO: Figure out order of PRINTFs
-    switch (D_80794CD4) {
+    switch (gMfsError) {
         case 0xF0:
             PRINTF("%s MEDIA_NOT_INIT\n");
             break;
@@ -457,11 +457,12 @@ void func_xk2_800EB400(void) {
     }
 }
 
-void func_xk2_800EB938(u16 arg0, u8* arg1, u8* arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7) {
-    if (arg2[3] == 'D') {
-        SLMFSDeleteFile(arg0, arg1, "CRSE", arg7);
+void func_xk2_800EB938(u16 dirId, char* name, char* extension, u8* buf, u32 fileSize, s32 attr, s32 copyCount,
+                       bool writeChanges) {
+    if (extension[3] == 'D') {
+        SLMFSDeleteFile(dirId, name, "CRSE", writeChanges);
     } else {
-        SLMFSDeleteFile(arg0, arg1, "CRSD", arg7);
+        SLMFSDeleteFile(dirId, name, "CRSD", writeChanges);
     }
-    SLMFSSave(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+    SLMFSSave(dirId, name, extension, buf, fileSize, attr, copyCount, writeChanges);
 }

@@ -3061,9 +3061,9 @@ extern u8 gEditCupTrackNames[][9];
 extern s16 gPlayer1OverallPosition;
 extern s32 D_807C70C8;
 extern s32 D_800F7404;
-extern OSMesgQueue D_8079F998;
+extern OSMesgQueue gMFSMesgQ;
 extern s32 D_8079F9B4;
-extern s32 D_80794CD4;
+extern s32 gMfsError;
 extern u8 D_800BF044[];
 extern s8 D_8076C7D8;
 
@@ -3101,7 +3101,7 @@ void func_80701E90(s32 courseIndex) {
             func_i2_800A7CB8(func_i2_800AA84C());
             func_8076852C(0xFFFB, sp38, "GOST", COURSE_CONTEXT(),
                           sizeof(CourseData) + 3 * sizeof(GhostSave) + sizeof(SaveCourseRecords));
-            osRecvMesg(&D_8079F998, NULL, OS_MESG_BLOCK);
+            osRecvMesg(&gMFSMesgQ, NULL, OS_MESG_BLOCK);
             Course_CalculateChecksum();
             if (func_i2_800A9F98()) {
                 PRINTF("GHOST DATA WAS BROKEN\n");
@@ -3120,10 +3120,10 @@ void func_80701E90(s32 courseIndex) {
         } else {
             func_8076852C(0xFFFB, gEditCupTrackNames[sp50], "CRSD", COURSE_CONTEXT(),
                           sizeof(CourseData) + 3 * sizeof(GhostSave) + sizeof(SaveCourseRecords));
-            osRecvMesg(&D_8079F998, NULL, OS_MESG_BLOCK);
+            osRecvMesg(&gMFSMesgQ, NULL, OS_MESG_BLOCK);
             PRINTF("ENTRY CHECK BUT NONE %s (DEFAULT COURSE)\n");
             if (D_8079F9B4 != 0) {
-                if (D_80794CD4 == 0xF2) {
+                if (gMfsError == 0xF2) {
                     gEditCupTrackNames[sp50][0] = '\0';
                     {
                         char sp30[8] = { "GHOST00" };
@@ -3132,7 +3132,7 @@ void func_80701E90(s32 courseIndex) {
                         func_i2_800A7CB8(func_i2_800AA84C());
                         func_8076852C(0xFFFB, sp30, "GOST", COURSE_CONTEXT(),
                                       sizeof(CourseData) + 3 * sizeof(GhostSave) + sizeof(SaveCourseRecords));
-                        osRecvMesg(&D_8079F998, NULL, OS_MESG_BLOCK);
+                        osRecvMesg(&gMFSMesgQ, NULL, OS_MESG_BLOCK);
                         Course_CalculateChecksum();
                         if (func_i2_800A9F98()) {
                             PRINTF("GHOST DATA WAS BROKEN\n");
@@ -3141,7 +3141,8 @@ void func_80701E90(s32 courseIndex) {
                         }
                         PRINTF("DEF LOAD OK\n");
                         func_i2_800A8CE4(func_i2_800AA84C(), courseIndex);
-                        func_80703B40(SEGMENT_DISK_START(silence_3) + sp50, &COURSE_CONTEXT()->courseData, sizeof(CourseData), 0);
+                        func_80703B40(SEGMENT_DISK_START(silence_3) + sp50, &COURSE_CONTEXT()->courseData,
+                                      sizeof(CourseData), 0);
                         if ((Course_CalculateChecksum() != COURSE_CONTEXT()->courseData.checksum) ||
                             (COURSE_CONTEXT()->courseData.creatorId != CREATOR_NINTENDO) ||
                             ((s8) COURSE_CONTEXT()->courseData.fileName[0x16] >= 0xE)) {
@@ -3165,7 +3166,7 @@ void func_80701E90(s32 courseIndex) {
         if (D_8076C7D8 == 0) {
             func_8076852C(0xFFFB, sp28, "GOST", COURSE_CONTEXT(),
                           sizeof(CourseData) + 3 * sizeof(GhostSave) + sizeof(SaveCourseRecords));
-            osRecvMesg(&D_8079F998, NULL, OS_MESG_BLOCK);
+            osRecvMesg(&gMFSMesgQ, NULL, OS_MESG_BLOCK);
         }
         sp48 = D_807C70C8 + courseIndex * sizeof(CourseData);
         PRINTF("UNPACK\n");
@@ -3225,7 +3226,7 @@ void func_80702448(s32 courseIndex) {
             func_i2_800A7CB8(func_i2_800AA84C());
             func_8076852C(0xFFFB, sp38, "GOST", COURSE_CONTEXT(),
                           sizeof(CourseData) + 3 * sizeof(GhostSave) + sizeof(SaveCourseRecords));
-            osRecvMesg(&D_8079F998, NULL, OS_MESG_BLOCK);
+            osRecvMesg(&gMFSMesgQ, NULL, OS_MESG_BLOCK);
             Course_CalculateChecksum();
             if (func_i2_800A9F98()) {
                 func_i2_800AA80C();
@@ -3244,10 +3245,10 @@ void func_80702448(s32 courseIndex) {
         } else {
             func_8076852C(0xFFFB, gEditCupTrackNames[sp4C], "CRSD", COURSE_CONTEXT(),
                           sizeof(CourseData) + 3 * sizeof(GhostSave) + sizeof(SaveCourseRecords));
-            osRecvMesg(&D_8079F998, NULL, OS_MESG_BLOCK);
+            osRecvMesg(&gMFSMesgQ, NULL, OS_MESG_BLOCK);
             PRINTF("ENTRY CHECK BUT NONE %s (DEFAULT COURSE)\n");
             if (D_8079F9B4 != 0) {
-                if (D_80794CD4 == 0xF2) {
+                if (gMfsError == 0xF2) {
                     gEditCupTrackNames[sp4C][0] = '\0';
                     {
                         char sp30[8] = { "GHOST00" };
@@ -3258,7 +3259,7 @@ void func_80702448(s32 courseIndex) {
                         func_i2_800A7CB8(func_i2_800AA84C());
                         func_8076852C(0xFFFB, sp30, "GOST", COURSE_CONTEXT(),
                                       sizeof(CourseData) + 3 * sizeof(GhostSave) + sizeof(SaveCourseRecords));
-                        osRecvMesg(&D_8079F998, NULL, OS_MESG_BLOCK);
+                        osRecvMesg(&gMFSMesgQ, NULL, OS_MESG_BLOCK);
                         Course_CalculateChecksum();
                         if (func_i2_800A9F98()) {
                             func_i2_800AA80C();
@@ -3267,7 +3268,8 @@ void func_80702448(s32 courseIndex) {
                         PRINTF("course index is %d\n", courseIndex);
                         PRINTF("DEF LOAD OK\n");
                         func_i2_800A8CE4(func_i2_800AA84C(), courseIndex);
-                        func_80703B40(SEGMENT_DISK_START(silence_3) + sp4C, &COURSE_CONTEXT()->courseData, sizeof(CourseData), 0);
+                        func_80703B40(SEGMENT_DISK_START(silence_3) + sp4C, &COURSE_CONTEXT()->courseData,
+                                      sizeof(CourseData), 0);
                         if ((Course_CalculateChecksum() != COURSE_CONTEXT()->courseData.checksum) ||
                             (COURSE_CONTEXT()->courseData.creatorId != CREATOR_NINTENDO) ||
                             ((s8) COURSE_CONTEXT()->courseData.fileName[0x16] >= 0xE)) {

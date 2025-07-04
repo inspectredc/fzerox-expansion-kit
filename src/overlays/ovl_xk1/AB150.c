@@ -15,7 +15,7 @@ extern s32 D_80794D30;
 extern LEODiskID D_8076CB50;
 extern LEODiskID D_80794CE8;
 extern MfsRamArea gMfsRamArea;
-extern s32 D_80794CD4;
+extern s32 gMfsError;
 
 void func_xk1_8002DF10(void) {
     D_80794CE8 = D_8076CB50;
@@ -25,8 +25,8 @@ void func_xk1_8002DF10(void) {
     D_80794D30 = 0;
     gMfsRamArea.id.diskId[0] = '\0';
     func_807047AC();
-    if (D_80794CD4 == 0xF2) {
-        D_80794CD4 = 0;
+    if (gMfsError == 0xF2) {
+        gMfsError = 0;
     }
 }
 
@@ -90,7 +90,7 @@ s32 func_xk1_8002E0A8(void) {
         func_xk1_8002DF10();
     }
 
-    func_xk1_8002DFB4(&D_80794CD4, &sp2C);
+    func_xk1_8002DFB4(&gMfsError, &sp2C);
     return sp2C;
 }
 
@@ -98,7 +98,7 @@ s32 func_xk1_8002E238(void) {
     s32 sp1C;
 
     Mfs_SpdlMotor(LEO_MOTOR_BRAKE);
-    switch (D_80794CD4) {
+    switch (gMfsError) {
         case LEO_ERROR_GOOD:
             D_807C6EA8.unk_0C = 2;
             sp1C = LEO_ERROR_DIAGNOSTIC_FAILURE;
@@ -115,7 +115,7 @@ s32 func_xk1_8002E238(void) {
             sp1C = LEO_ERROR_COMMAND_TERMINATED;
             break;
         default:
-            func_xk1_8002DEE0(D_80794CD4);
+            func_xk1_8002DEE0(gMfsError);
             break;
     }
     return sp1C;
@@ -182,37 +182,37 @@ s32 func_xk1_8002E368(void) {
                     break;
                 case 13:
                 case 14:
-                    if (func_80768C88(D_807C6EA8.unk_16, D_807C6EA8.unk_18, D_807C6EA8.unk_1C) != 0) {
+                    if (func_80768C88(D_807C6EA8.unk_16, D_807C6EA8.unk_18, D_807C6EA8.unk_1C)) {
                         D_80794E20 = 1;
                     } else {
                         D_80794E20 = 0;
                     }
                     break;
                 case 8:
-                    func_8076321C(D_807C6EA8.unk_16, D_807C6EA8.unk_18, D_807C6EA8.unk_1C, D_807C6EA8.unk_20,
-                                  D_807C6EA8.unk_28, D_807C6EA8.unk_2C, D_807C6EA8.unk_30, D_807C6EA8.unk_34);
+                    Mfs_SaveFile(D_807C6EA8.unk_16, D_807C6EA8.unk_18, D_807C6EA8.unk_1C, D_807C6EA8.unk_20,
+                                 D_807C6EA8.unk_28, D_807C6EA8.unk_2C, D_807C6EA8.unk_30, D_807C6EA8.unk_34);
                     break;
                 case 9:
                 case 10:
-                    func_8076543C(D_807C6EA8.unk_16, D_807C6EA8.unk_18, D_807C6EA8.unk_1C, D_807C6EA8.unk_38,
-                                  D_807C6EA8.unk_28);
+                    Mfs_LoadFileInDir(D_807C6EA8.unk_16, D_807C6EA8.unk_18, D_807C6EA8.unk_1C, D_807C6EA8.unk_38,
+                                      D_807C6EA8.unk_28);
                     break;
                 case 15:
-                    func_80766434(D_807C6EA8.unk_16, D_807C6EA8.unk_3C, D_807C6EA8.unk_40, D_807C6EA8.unk_44,
-                                  D_807C6EA8.unk_48, D_807C6EA8.unk_34);
+                    Mfs_RenameFileInDir(D_807C6EA8.unk_16, D_807C6EA8.unk_3C, D_807C6EA8.unk_40, D_807C6EA8.unk_44,
+                                        D_807C6EA8.unk_48, D_807C6EA8.unk_34);
                     break;
                 case 16:
-                    func_80764E90(D_807C6EA8.unk_16, D_807C6EA8.unk_18, D_807C6EA8.unk_1C, D_807C6EA8.unk_34);
+                    Mfs_DeleteFileInDir(D_807C6EA8.unk_16, D_807C6EA8.unk_18, D_807C6EA8.unk_1C, D_807C6EA8.unk_34);
                     break;
                 case 17:
-                    func_80766BC0(D_807C6EA8.unk_16, D_807C6EA8.unk_18, D_807C6EA8.unk_1C);
+                    Mfs_GetFileInDirAttr(D_807C6EA8.unk_16, D_807C6EA8.unk_18, D_807C6EA8.unk_1C);
                     break;
                 case 18:
-                    func_80766A98(D_807C6EA8.unk_16, D_807C6EA8.unk_18, D_807C6EA8.unk_1C, D_807C6EA8.unk_4C,
-                                  D_807C6EA8.unk_50, D_807C6EA8.unk_34);
+                    Mfs_ChangeFileInDirAttr(D_807C6EA8.unk_16, D_807C6EA8.unk_18, D_807C6EA8.unk_1C, D_807C6EA8.unk_4C,
+                                            D_807C6EA8.unk_50, D_807C6EA8.unk_34);
                     break;
             }
-            D_807C6EA8.unk_14 = D_xk1_80033404 = D_80794CD4;
+            D_807C6EA8.unk_14 = D_xk1_80033404 = gMfsError;
             D_xk1_80033408 = D_80794CD8;
             /* fallthrough */
         case 1:
@@ -237,7 +237,7 @@ s32 func_xk1_8002E368(void) {
                         D_xk1_8003BB80 = D_8076CB50;
                         break;
                 }
-                sp3C = D_807C6EA8.unk_14 = D_80794CD4 = 0;
+                sp3C = D_807C6EA8.unk_14 = gMfsError = 0;
                 break;
             }
             if (D_xk1_80033404 == 0x106) {

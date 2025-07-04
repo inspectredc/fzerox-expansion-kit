@@ -44,7 +44,7 @@ void Mfs_SetDirEntryDirId(u16 dirId) {
     gCurrentDirectoryEntry.dirId = dirId;
 }
 
-void Mfs_SetDirEntryExtension(u8* extension) {
+void Mfs_SetDirEntryExtension(char* extension) {
     bzero(gCurrentDirectoryEntry.extension, 5);
     if (extension != NULL) {
         mfsStrnCpy(gCurrentDirectoryEntry.extension, extension, 5);
@@ -81,81 +81,83 @@ void Mfs_InitDirEntry(void) {
 extern s32 gDirectoryEntryCount;
 extern MfsRamArea gMfsRamArea;
 
-s32 Mfs_CopyDirEntryToRam(u16 dirId) {
-    if (dirId > gDirectoryEntryCount) {
+s32 Mfs_CopyDirEntryToRam(u16 entryId) {
+    if (entryId > gDirectoryEntryCount) {
         return -1;
     }
-    bcopy(&gCurrentDirectoryEntry, &gMfsRamArea.directoryEntry[dirId], sizeof(MfsRamDirectoryEntry));
+    bcopy(&gCurrentDirectoryEntry, &gMfsRamArea.directoryEntry[entryId], sizeof(MfsRamDirectoryEntry));
     return 0;
 }
 
-s32 Mfs_CopyDirEntryFromRam(u16 dirId) {
-    if (dirId > gDirectoryEntryCount) {
+s32 Mfs_CopyDirEntryFromRam(u16 entryId) {
+    if (entryId > gDirectoryEntryCount) {
         return -1;
     }
-    bcopy(&gMfsRamArea.directoryEntry[dirId], &gCurrentDirectoryEntry, sizeof(MfsRamDirectoryEntry));
+    bcopy(&gMfsRamArea.directoryEntry[entryId], &gCurrentDirectoryEntry, sizeof(MfsRamDirectoryEntry));
     return 0;
 }
 
-void Mfs_IncreaseFileRC(u16 dirId) {
+void Mfs_IncreaseFileRC(u16 entryId) {
 
-    if (gMfsRamArea.directoryEntry[dirId].renewalCounter < 0xFF) {
-        gMfsRamArea.directoryEntry[dirId].renewalCounter++;
+    if (gMfsRamArea.directoryEntry[entryId].renewalCounter < 0xFF) {
+        gMfsRamArea.directoryEntry[entryId].renewalCounter++;
     }
 }
 
-void Mfs_ResetFileRC(u16 dirId) {
-    gMfsRamArea.directoryEntry[dirId].renewalCounter = 0;
+void Mfs_ResetFileRC(u16 entryId) {
+    gMfsRamArea.directoryEntry[entryId].renewalCounter = 0;
 }
 
-s32 func_8075F714(u16 dirId) {
+s32 Mfs_ValidateGameCode(u16 entryId) {
 
-    if (mfsStrnCmp(gMfsRamArea.directoryEntry[dirId].companyCode, gCompanyCode, 2) != 0) {
+    if (mfsStrnCmp(gMfsRamArea.directoryEntry[entryId].companyCode, gCompanyCode, 2) != 0) {
         return -1;
     }
 
-    if (mfsStrnCmp(gMfsRamArea.directoryEntry[dirId].gameCode, gGameCode, 4) != 0) {
+    if (mfsStrnCmp(gMfsRamArea.directoryEntry[entryId].gameCode, gGameCode, 4) != 0) {
         return -1;
     }
 
     return 0;
 }
 
-extern s32 D_80794CD4;
+extern s32 gMfsError;
 extern u16 gWorkingDirectory;
 
 u16 Mfs_GetFileIndex(u16 dirId, char* name, char* extension) {
     s32 i;
 
-    D_80794CD4 = 0;
-    if (dirId == 0xFFFB) {
+    gMfsError = 0;
+    if (dirId == MFS_ENTRY_WORKING_DIR) {
         dirId = gWorkingDirectory;
     }
-    if (dirId == 0xFFFC) {
-        dirId = Mfs_GetParentDir(0xFFFB);
+    if (dirId == MFS_ENTRY_WORKING_PARENT_DIR) {
+        dirId = Mfs_GetParentDir(MFS_ENTRY_WORKING_DIR);
     }
 
     for (i = 0; i < gDirectoryEntryCount; i++) {
-        if ((gMfsRamArea.directoryEntry[i].attr & MFS_FILE_ATTR_FILE) && (gMfsRamArea.directoryEntry[i].parentDirId == dirId) &&
+        if ((gMfsRamArea.directoryEntry[i].attr & MFS_FILE_ATTR_FILE) &&
+            (gMfsRamArea.directoryEntry[i].parentDirId == dirId) &&
             (mfsStrnCmp(gMfsRamArea.directoryEntry[i].name, name, 20) == 0) &&
             (mfsStrnCmp(gMfsRamArea.directoryEntry[i].extension, extension, 5) == 0)) {
             return i;
         }
     }
 
-    D_80794CD4 = 0xF2;
+    gMfsError = 0xF2;
     return MFS_ENTRY_DOES_NOT_EXIST;
 }
 
-u16 Mfs_GetDirectoryIndexFromParent(u16 dirId, u8* name) {
+u16 Mfs_GetDirectoryIndexFromParent(u16 parentDirId, char* name) {
     s32 i;
 
-    if (dirId == 0xFFFB) {
-        dirId = gWorkingDirectory;
+    if (parentDirId == MFS_ENTRY_WORKING_DIR) {
+        parentDirId = gWorkingDirectory;
     }
 
     for (i = 0; i < gDirectoryEntryCount; i++) {
-        if ((gMfsRamArea.directoryEntry[i].attr & MFS_FILE_ATTR_DIRECTORY) && (gMfsRamArea.directoryEntry[i].parentDirId == dirId) &&
+        if ((gMfsRamArea.directoryEntry[i].attr & MFS_FILE_ATTR_DIRECTORY) &&
+            (gMfsRamArea.directoryEntry[i].parentDirId == parentDirId) &&
             (mfsStrnCmp(gMfsRamArea.directoryEntry[i].name, name, 20) == 0)) {
             return i;
         }
@@ -167,15 +169,16 @@ u16 Mfs_GetDirectoryIndexFromParent(u16 dirId, u8* name) {
 u16 Mfs_GetDirectoryIndex(u16 dirId) {
     s32 i;
 
-    if (dirId == 0xFFFB) {
+    if (dirId == MFS_ENTRY_WORKING_DIR) {
         dirId = gWorkingDirectory;
     }
-    if (dirId == 0xFFFC) {
-        dirId = Mfs_GetParentDir(0xFFFB);
+    if (dirId == MFS_ENTRY_WORKING_PARENT_DIR) {
+        dirId = Mfs_GetParentDir(MFS_ENTRY_WORKING_DIR);
     }
 
     for (i = 0; i < gDirectoryEntryCount; i++) {
-        if ((gMfsRamArea.directoryEntry[i].attr & MFS_FILE_ATTR_DIRECTORY) && (gMfsRamArea.directoryEntry[i].dirId == dirId)) {
+        if ((gMfsRamArea.directoryEntry[i].attr & MFS_FILE_ATTR_DIRECTORY) &&
+            (gMfsRamArea.directoryEntry[i].dirId == dirId)) {
             return i;
         }
     }
@@ -198,77 +201,77 @@ u16 Mfs_GetNextFreeDirectoryEntry(void) {
 extern u16 gFileAllocationTable[];
 extern LEOCapacity gRamAreaCapacity;
 
-s32 func_8075FB38(u32 arg0, s32* arg1, s32* arg2, s32* arg3) {
-    u32 sp34;
-    s32 sp30;
-    u32 sp2C;
-    s32 sp28;
+s32 Mfs_FindBlocksForSize(u32 sizeRequired, s32* lbaPtr, s32* nLBAsPtr, s32* blockSizePtr) {
+    u32 lba;
+    s32 nLBAs;
+    u32 bestBlockSize;
+    s32 availableBlockSize;
     s32 i;
     s32 j;
-    s32 sp1C;
-    s32 sp18;
+    s32 updateBestBlockConditionsSatisfied;
+    bool firstAvailableBlock;
 
-    sp34 = -1;
-    sp30 = -1;
-    sp2C = 0;
-    sp18 = 1;
+    lba = -1;
+    nLBAs = -1;
+    bestBlockSize = 0;
+    firstAvailableBlock = true;
 
     for (i = 6; i < (gRamAreaCapacity.endLBA - gRamAreaCapacity.startLBA); i++) {
-        if (gFileAllocationTable[i] != 0) {
+        if (gFileAllocationTable[i] != MFS_FAT_UNUSED) {
             continue;
         }
         j = i;
         while (j < (gRamAreaCapacity.endLBA - gRamAreaCapacity.startLBA)) {
-            if (gFileAllocationTable[j] != 0) {
+            if (gFileAllocationTable[j] != MFS_FAT_UNUSED) {
                 break;
             }
             j++;
         }
 
-        LeoLBAToByte(i + gRamAreaCapacity.startLBA, j - i, &sp28);
-        sp1C = 0;
-        if (sp18 != 0) {
-            sp1C++;
-            sp18 = 0;
+        LeoLBAToByte(i + gRamAreaCapacity.startLBA, j - i, &availableBlockSize);
+        updateBestBlockConditionsSatisfied = 0;
+        if (firstAvailableBlock) {
+            updateBestBlockConditionsSatisfied++;
+            firstAvailableBlock = false;
         }
-        if ((sp2C < arg0) && (sp28 > arg0)) {
-            sp1C++;
+        if ((bestBlockSize < sizeRequired) && (availableBlockSize > sizeRequired)) {
+            updateBestBlockConditionsSatisfied++;
         }
-        if ((sp28 <= arg0) && (sp2C < sp28)) {
-            sp1C++;
+        if ((availableBlockSize <= sizeRequired) && (bestBlockSize < availableBlockSize)) {
+            updateBestBlockConditionsSatisfied++;
         }
-        if ((sp28 >= arg0) && (sp2C > sp28)) {
-            sp1C++;
+        if ((availableBlockSize >= sizeRequired) && (bestBlockSize > availableBlockSize)) {
+            updateBestBlockConditionsSatisfied++;
         }
-        if (sp1C != 0) {
-            sp34 = i;
-            sp30 = j - i;
-            sp2C = sp28;
+        if (updateBestBlockConditionsSatisfied != 0) {
+            lba = i;
+            nLBAs = j - i;
+            bestBlockSize = availableBlockSize;
         }
         i = j;
     }
 
     if (false) {
-        *arg1 = -1;
-        *arg2 = 0;
-        *arg3 = 0;
+        *lbaPtr = -1;
+        *nLBAsPtr = 0;
+        *blockSizePtr = 0;
         return -1;
     }
 
-    if (sp2C > arg0) {
-        for (j = 1; j <= sp30; j++) {
-            LeoLBAToByte(sp34 + gRamAreaCapacity.startLBA, j, &sp28);
-            if (sp28 >= arg0) {
+    if (bestBlockSize > sizeRequired) {
+        for (j = 1; j <= nLBAs; j++) {
+            LeoLBAToByte(lba + gRamAreaCapacity.startLBA, j, &availableBlockSize);
+            if (availableBlockSize >= sizeRequired) {
                 break;
             }
         }
 
-        sp30 = j;
-        sp2C = sp28;
+        nLBAs = j;
+        bestBlockSize = availableBlockSize;
     }
-    *arg1 = sp34;
-    *arg2 = sp30;
-    *arg3 = sp2C;
+    *lbaPtr = lba;
+    *nLBAsPtr = nLBAs;
+    *blockSizePtr = bestBlockSize;
 
     return 0;
 }
