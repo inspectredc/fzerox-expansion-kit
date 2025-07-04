@@ -1,6 +1,6 @@
 #include "leo/leo_internal.h"
 
-void func_80766860(void) {
+void Mfs_SetLeoHandlerFuncs(void) {
     gLeoReadWriteFunc = LeoReadWrite;
     gLeoSeekFunc = LeoSeek;
     gLeoSpdlMotorFunc = LeoSpdlMotor;

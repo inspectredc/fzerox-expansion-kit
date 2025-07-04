@@ -496,14 +496,18 @@ gLeoSetRTCFunc = 0x807C6E84;
 gLeoModeSelectAsyncFunc = 0x807C6E88;
 gLeoRezeroFunc = 0x807C6E8C;
 
-gMfsRamArea = 0x80784EF0;
+gMfsRamArea = 0x80784EF0; // size:0xE730
 gCurrentDirectoryEntry = 0x80793620;
 gFileAllocationTable = 0x80793650;
 gDirectoryEntryCount = 0x80794CD0;
+gMfsError = 0x80794CD4;
 gWorkingDirectory = 0x80794CE0;
 gRamAreaCapacity = 0x80794D24;
 gCompanyCode = 0x80794D40;
 gGameCode = 0x80794D44;
+
+gPreparedDirectoryId = 0x807C6E60;
+gPreparedEntryIndexCounter = 0x807C6E62;
 
 // audio
 

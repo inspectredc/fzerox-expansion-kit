@@ -301,14 +301,14 @@ s32 func_xk1_8002BD64(u8 arg0, s32 arg1) {
     D_xk1_8003A5D8[0].unk_22 = 1;
     D_xk1_8003A5D0 = arg0;
 
-    if (func_80766660(0xFFFB) != 0) {
+    if (Mfs_GetFilesPreparation(MFS_ENTRY_WORKING_DIR) != 0) {
         return D_xk1_8003A5D0;
     }
 
     var_s6 = 0;
     while (true) {
 
-        if ((*var_s1 = func_80766788()) == 0xFFFF) {
+        if ((*var_s1 = Mfs_GetNextFileInPreparedDir()) == MFS_ENTRY_DOES_NOT_EXIST) {
             break;
         }
         if ((arg1 == 0) || (mfsStrnCmp(gMfsRamArea.directoryEntry[*var_s1].extension, arg1, 3) == 0)) {
@@ -336,7 +336,7 @@ s32 func_xk1_8002BD64(u8 arg0, s32 arg1) {
     if (var_s6 > 100) {
         for (i = 0; i < var_s6 - 100; i++) {
             temp_s0 = &D_xk1_8003A5D8[D_xk1_8003A5D0 - (i + 1)];
-            func_80764E90(0xFFFB, temp_s0->unk_00, temp_s0->unk_1D, 1);
+            Mfs_DeleteFileInDir(MFS_ENTRY_WORKING_DIR, temp_s0->unk_00, temp_s0->unk_1D, 1);
             D_xk1_8003A5D0--;
         }
     }

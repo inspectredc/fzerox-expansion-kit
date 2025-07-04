@@ -24,7 +24,8 @@ void func_xk2_800EBA34(void) {
     }
 
     for (i = 0; i < 6; i++) {
-        if ((gEditCupTrackNames[i][0] != '\0') && (Mfs_GetFileIndex(0xFFFB, gEditCupTrackNames[i], "CRSD") == MFS_ENTRY_DOES_NOT_EXIST) &&
+        if ((gEditCupTrackNames[i][0] != '\0') &&
+            (Mfs_GetFileIndex(0xFFFB, gEditCupTrackNames[i], "CRSD") == MFS_ENTRY_DOES_NOT_EXIST) &&
             (Mfs_GetFileIndex(0xFFFB, gEditCupTrackNames[i], "CRSE") == MFS_ENTRY_DOES_NOT_EXIST)) {
             gEditCupTrackNames[i][0] = '\0';
         }

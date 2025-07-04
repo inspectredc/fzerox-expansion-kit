@@ -388,21 +388,21 @@ s32 func_80768C08(OSPiHandle* arg0, OSIoMesg* arg1, s32 direction) {
     return 0;
 }
 
-extern s32 D_80794CD4;
+extern s32 gMfsError;
 
-s32 func_80768C88(u16 arg0, u8* arg1, u8* arg2) {
-    if (func_80766660(arg0) == -1) {
-        return 0;
+bool func_80768C88(u16 dirId, char* name, char* extension) {
+    if (Mfs_GetFilesPreparation(dirId) == -1) {
+        return false;
     }
-    while (func_80766788() != 0xFFFF) {}
+    while (Mfs_GetNextFileInPreparedDir() != MFS_ENTRY_DOES_NOT_EXIST) {}
 
-    if (Mfs_GetFileIndex(arg0, arg1, arg2) == 0xFFFF) {
-        if (D_80794CD4 == 0xF2) {
-            D_80794CD4 = 0;
+    if (Mfs_GetFileIndex(dirId, name, extension) == MFS_ENTRY_DOES_NOT_EXIST) {
+        if (gMfsError == 0xF2) {
+            gMfsError = 0;
         }
-        return 0;
+        return false;
     }
-    return 1;
+    return true;
 }
 
 extern LEODiskID D_8076CB50;

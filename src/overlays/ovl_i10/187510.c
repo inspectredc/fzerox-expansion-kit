@@ -34,7 +34,7 @@ void func_i10_8012B894(s32 progress) {
 }
 
 extern s32 D_800D11C8[];
-extern OSMesgQueue D_8079F998;
+extern OSMesgQueue gMFSMesgQ;
 extern u8 gEditCupTrackNames[][9];
 
 void func_i10_8012B904(void) {
@@ -44,9 +44,9 @@ void func_i10_8012B904(void) {
         gEditCupTrackNames[i][0] = '\0';
     }
     func_8076852C(0xFFFB, "CRS_ENTRY", "CENT", gEditCupTrackNames, 0xD8);
-    osRecvMesg(&D_8079F998, NULL, 1);
+    osRecvMesg(&gMFSMesgQ, NULL, 1);
     func_8076852C(0xFFFB, "OPTION", "OPT", D_800D11C8, 0x18);
-    osRecvMesg(&D_8079F998, NULL, 1);
+    osRecvMesg(&gMFSMesgQ, NULL, 1);
 
     for (i = 0; i < 6; i++) {
         if (Mfs_ValidateFileName(gEditCupTrackNames[i]) != 0) {

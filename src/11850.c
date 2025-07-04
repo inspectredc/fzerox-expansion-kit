@@ -7,7 +7,7 @@ LEOStatus D_8079F954;
 LEOCmd D_8079F958;
 OSMesgQueue D_8079F978;
 OSMesg D_8079F990[1];
-OSMesgQueue D_8079F998;
+OSMesgQueue gMFSMesgQ;
 OSMesg D_8079F9B0[1];
 s32 D_8079F9B4;
 s32 D_8079F9B8;
@@ -23,7 +23,7 @@ extern s32 D_8076CBB0;
 extern s32 D_8076CBBC;
 extern s32 D_8076CBC8;
 extern s32 D_8076CBCC;
-extern s32 D_80794CD4;
+extern s32 gMfsError;
 
 void func_80704050(s32 arg0) {
     D_8076CBCC = arg0;
@@ -95,18 +95,18 @@ s32 SLMFSLoadSpecial(u16 arg0, u8* arg1, u8* arg2, u8* arg3, s32 arg4) {
 
     while (true) {
         func_80707B08();
-        D_8079F9B4 = func_8076543C(arg0, arg1, arg2, arg3, arg4);
+        D_8079F9B4 = Mfs_LoadFileInDir(arg0, arg1, arg2, arg3, arg4);
 
         if (D_8079F9B4 == 0) {
             PRINTF("SLMFSLoadSP Good Return\n");
             return D_8079F9B4;
         }
         PRINTF("SLMFSLoadSP error N64DD_NOT_FOUND %s\n", arg1);
-        PRINTF("SLMFSLoadSP error 0x%X\n", D_80794CD4);
+        PRINTF("SLMFSLoadSP error 0x%X\n", gMfsError);
         PRINTF("name %s, type %s\n", arg1, arg2);
 
-        D_8079F9B8 = D_80794CD4;
-        if (D_80794CD4 == 0xF2) {}
+        D_8079F9B8 = gMfsError;
+        if (gMfsError == 0xF2) {}
         switch (D_8079F9B8) {
             case LEO_ERROR_GOOD:
                 PRINTF("FILE NOT FOUND\n");
@@ -160,7 +160,7 @@ s32 SLMFSLoadSpecial2(u16 arg0, u8* arg1, u8* arg2, u8* arg3, s32 arg4) {
 
     while (true) {
         func_80707B08();
-        D_8079F9B4 = func_8076543C(arg0, arg1, arg2, arg3, arg4);
+        D_8079F9B4 = Mfs_LoadFileInDir(arg0, arg1, arg2, arg3, arg4);
 
         if (D_8079F9B4 == 0) {
             PRINTF("SLMFSLoadSpecial2 Good Return\n");
@@ -168,12 +168,12 @@ s32 SLMFSLoadSpecial2(u16 arg0, u8* arg1, u8* arg2, u8* arg3, s32 arg4) {
         }
 
         PRINTF("SLMFSLoadSP2 error N64DD_NOT_FOUND %s\n", arg1);
-        PRINTF("SLMFSLoadSP2 error 0x%X\n", D_80794CD4);
+        PRINTF("SLMFSLoadSP2 error 0x%X\n", gMfsError);
         PRINTF("name %s, type %s\n", arg1, arg2);
 
-        D_8079F9B8 = D_80794CD4;
+        D_8079F9B8 = gMfsError;
 
-        if (D_80794CD4 == 0xF2) {}
+        if (gMfsError == 0xF2) {}
         if (1) {}
 
         switch (D_8079F9B8) {
@@ -677,13 +677,13 @@ s32 func_8070595C(void) {
     return 0;
 }
 
-void func_80705A38(LEODiskID arg0) {
-    D_8076CB50 = arg0;
+void func_80705A38(LEODiskID diskId) {
+    D_8076CB50 = diskId;
 }
 
 void func_80705A98(void) {
     osCreateMesgQueue(&D_8079F978, D_8079F990, 1);
-    osCreateMesgQueue(&D_8079F998, D_8079F9B0, 1);
+    osCreateMesgQueue(&gMFSMesgQ, D_8079F9B0, 1);
 }
 
 s32 SLLeoCreateManager(s32 arg0) {
@@ -816,12 +816,12 @@ void SLMFSRecoverManageArea(void) {
             SLMFSNewDisk2();
             D_8076CBB0 = 0;
         }
-        if (func_80761238() == 0) {
+        if (Mfs_CopyRamAreaFromBackup() == 0) {
             PRINTF("SLMFSRecoverManageArea Good Return\n");
             break;
         }
 
-        D_8079F9B8 = D_80794CD4;
+        D_8079F9B8 = gMfsError;
         switch (D_8079F9B8) {
             case LEO_ERROR_GOOD:
                 PRINTF("SLMFSRecoverManageArea Good Return\n");
@@ -869,7 +869,7 @@ void SLMFSRecoverManageArea(void) {
     }
 }
 
-void SLMFSGetFilesPreparation(u16 arg0) {
+void SLMFSGetFilesPreparation(u16 dirId) {
     PRINTF("hoge24\n");
     PRINTF("SLMFSGetFilesPreparation\n");
     PRINTF("SLMFSGetFilesPreparation LOOP\n");
@@ -880,10 +880,10 @@ void SLMFSGetFilesPreparation(u16 arg0) {
             SLMFSNewDisk();
             D_8076CBB0 = 0;
         }
-        if (func_80766660(arg0) == 0) {
+        if (Mfs_GetFilesPreparation(dirId) == 0) {
             return;
         }
-        D_8079F9B8 = D_80794CD4;
+        D_8079F9B8 = gMfsError;
         switch (D_8079F9B8) {
             case LEO_ERROR_GOOD:
                 return;
@@ -954,8 +954,8 @@ void func_80706518(s32 arg0, s32 arg1, s32 arg2) {
     SLMFSNewDisk();
 }
 
-void SLMFSDeleteFile(u16 arg0, u8* arg1, u8* arg2, s32 arg3) {
-    PRINTF("SLMFSDeleteFile name:%s, type:%s\n", arg1, arg2);
+void SLMFSDeleteFile(u16 dirId, char* name, char* extension, bool writeChanges) {
+    PRINTF("SLMFSDeleteFile name:%s, type:%s\n", name, extension);
     PRINTF("SLMFSDeleteFile LOOP\n");
 
     while (true) {
@@ -964,12 +964,12 @@ void SLMFSDeleteFile(u16 arg0, u8* arg1, u8* arg2, s32 arg3) {
             SLMFSNewDisk();
             D_8076CBB0 = 0;
         }
-        if (func_80764E90(arg0, arg1, arg2, arg3) == 0) {
+        if (Mfs_DeleteFileInDir(dirId, name, extension, writeChanges) == 0) {
             PRINTF("SLMFSDeleteFile Good Return\n");
             return;
         }
 
-        D_8079F9B8 = D_80794CD4;
+        D_8079F9B8 = gMfsError;
         PRINTF("SLMFSDeleteFile Return %d\n", D_8079F9B8);
 
         switch (D_8079F9B8) {
@@ -1023,7 +1023,7 @@ s32 SLMFSLoad(u16 arg0, u8* arg1, u8* arg2, u8* arg3, s32 arg4) {
     PRINTF("============================================================\n");
     PRINTF("SLMFSLoad LOOP %s\n", arg1);
 
-    osRecvMesg(&D_8079F998, NULL, OS_MESG_NOBLOCK);
+    osRecvMesg(&gMFSMesgQ, NULL, OS_MESG_NOBLOCK);
 
     while (true) {
         func_80707B08();
@@ -1031,31 +1031,31 @@ s32 SLMFSLoad(u16 arg0, u8* arg1, u8* arg2, u8* arg3, s32 arg4) {
             SLMFSNewDisk();
             D_8076CBB0 = 0;
         }
-        D_8079F9B4 = func_8076543C(arg0, arg1, arg2, arg3, arg4);
+        D_8079F9B4 = Mfs_LoadFileInDir(arg0, arg1, arg2, arg3, arg4);
         if (D_8079F9B4 == 0) {
             PRINTF("SLMFSLoad good\n");
             PRINTF("MFSMesgQ Send 16\n");
-            osSendMesg(&D_8079F998, NULL, OS_MESG_BLOCK);
+            osSendMesg(&gMFSMesgQ, NULL, OS_MESG_BLOCK);
             return D_8079F9B4;
         }
-        D_8079F9B8 = D_80794CD4;
+        D_8079F9B8 = gMfsError;
 
         PRINTF("SLMFSLoad error N64DD_NOT_FOUND %s\n", arg1);
         PRINTF("SLMFSLoad error 0x%2X\n", D_8079F9B8);
         PRINTF("name %s, type %s\n", arg1, arg2);
 
-        if (D_80794CD4 == 0xF2) {}
+        if (gMfsError == 0xF2) {}
         if (1) {}
 
         switch (D_8079F9B8) {
             case LEO_ERROR_GOOD:
                 PRINTF("MFSMesgQ Send 17\n");
-                osSendMesg(&D_8079F998, NULL, OS_MESG_BLOCK);
+                osSendMesg(&gMFSMesgQ, NULL, OS_MESG_BLOCK);
                 PRINTF("FILE NOT FOUND\n");
                 return 0;
             case 0xF2:
                 PRINTF("MFSMesgQ Send 18\n");
-                osSendMesg(&D_8079F998, NULL, OS_MESG_BLOCK);
+                osSendMesg(&gMFSMesgQ, NULL, OS_MESG_BLOCK);
                 return D_8079F9B8;
             case LEO_ERROR_BUSY:
             case LEO_ERROR_QUEUE_FULL:
@@ -1090,7 +1090,7 @@ s32 SLMFSLoad(u16 arg0, u8* arg1, u8* arg2, u8* arg3, s32 arg4) {
                     SLMFSDeleteFile(arg0, arg1, arg2, 1);
                 }
                 PRINTF("MFSMesgQ Send 19\n");
-                osSendMesg(&D_8079F998, NULL, OS_MESG_BLOCK);
+                osSendMesg(&gMFSMesgQ, NULL, OS_MESG_BLOCK);
                 return 0xF2;
             case 0x10A:
                 func_80703948();
@@ -1111,11 +1111,11 @@ s32 SLMFSLoad(u16 arg0, u8* arg1, u8* arg2, u8* arg3, s32 arg4) {
     }
 }
 
-s32 SLMFSLoadHalfway(u16 arg0, char* name, u8* arg2, u8* arg3, s32 arg4, s32 arg5) {
+s32 SLMFSLoadHalfway(u16 dirId, char* name, char* extension, u8* buf, s32 offset, s32 sizeToLoad) {
     PRINTF("hoge45\n");
     PRINTF("SLMFSLoadHalfway LOOP\n");
 
-    osRecvMesg(&D_8079F998, NULL, OS_MESG_NOBLOCK);
+    osRecvMesg(&gMFSMesgQ, NULL, OS_MESG_NOBLOCK);
 
     while (true) {
         func_80707B08();
@@ -1123,23 +1123,23 @@ s32 SLMFSLoadHalfway(u16 arg0, char* name, u8* arg2, u8* arg3, s32 arg4, s32 arg
             SLMFSNewDisk();
             D_8076CBB0 = 0;
         }
-        D_8079F9B4 = func_80765BC8(arg0, name, arg2, arg3, arg4, arg5);
+        D_8079F9B4 = Mfs_LoadFileInDirFromOffset(dirId, name, extension, buf, offset, sizeToLoad);
 
         if (D_8079F9B4 == 0) {
             PRINTF("MFSMesgQ Send 20\n");
-            osSendMesg(&D_8079F998, NULL, OS_MESG_BLOCK);
+            osSendMesg(&gMFSMesgQ, NULL, OS_MESG_BLOCK);
             PRINTF("SLMFSLoadHalfway Finished\n");
             return 0;
         }
-        D_8079F9B8 = D_80794CD4;
+        D_8079F9B8 = gMfsError;
         switch (D_8079F9B8) {
             case LEO_ERROR_GOOD:
                 PRINTF("MFSMesgQ Send 21\n");
-                osSendMesg(&D_8079F998, NULL, OS_MESG_BLOCK);
+                osSendMesg(&gMFSMesgQ, NULL, OS_MESG_BLOCK);
                 return 0;
             case 0xF2:
                 PRINTF("MFSMesgQ Send 22\n");
-                osSendMesg(&D_8079F998, NULL, OS_MESG_BLOCK);
+                osSendMesg(&gMFSMesgQ, NULL, OS_MESG_BLOCK);
                 return D_8079F9B8;
             case LEO_ERROR_BUSY:
             case LEO_ERROR_QUEUE_FULL:
@@ -1172,10 +1172,10 @@ s32 SLMFSLoadHalfway(u16 arg0, char* name, u8* arg2, u8* arg3, s32 arg4, s32 arg
                     SLMFSRecoverManageArea();
                 } else if (D_80794CDC == 1) {
                     PRINTF("FILE DELETE ON SLMFSLoadHalfway\n");
-                    SLMFSDeleteFile(arg0, name, arg2, 1);
+                    SLMFSDeleteFile(dirId, name, extension, true);
                 }
                 PRINTF("MFSMesgQ Send 23\n");
-                osSendMesg(&D_8079F998, NULL, OS_MESG_BLOCK);
+                osSendMesg(&gMFSMesgQ, NULL, OS_MESG_BLOCK);
                 return 0xF2;
             case 0x10A:
                 func_80703948();
@@ -1196,12 +1196,13 @@ s32 SLMFSLoadHalfway(u16 arg0, char* name, u8* arg2, u8* arg3, s32 arg4, s32 arg
     }
 }
 
-void SLMFSSave(u16 arg0, u8* arg1, u8* arg2, s32 arg3, u32 arg4, s32 arg5, s32 arg6, s32 arg7) {
+void SLMFSSave(u16 dirId, char* name, char* extension, u8* buf, u32 fileSize, s32 attr, s32 copyCount,
+               bool writeChanges) {
     PRINTF("hoge48\n");
     PRINTF("SLMFSSave\n");
     PRINTF("SLMFSSave LOOP\n");
 
-    osRecvMesg(&D_8079F998, NULL, OS_MESG_NOBLOCK);
+    osRecvMesg(&gMFSMesgQ, NULL, OS_MESG_NOBLOCK);
     while (true) {
         func_80704068();
         func_80707B08();
@@ -1210,18 +1211,18 @@ void SLMFSSave(u16 arg0, u8* arg1, u8* arg2, s32 arg3, u32 arg4, s32 arg5, s32 a
             D_8076CBB0 = 0;
         }
         func_807040C8();
-        if (func_8076321C(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7) == 0) {
+        if (Mfs_SaveFile(dirId, name, extension, buf, fileSize, attr, copyCount, writeChanges) == 0) {
             PRINTF("MFSMesgQ Send 24\n");
-            osSendMesg(&D_8079F998, NULL, OS_MESG_BLOCK);
+            osSendMesg(&gMFSMesgQ, NULL, OS_MESG_BLOCK);
             return;
         }
-        D_8079F9B8 = D_80794CD4;
+        D_8079F9B8 = gMfsError;
         PRINTF("SLMFSSave Error %d\n", D_8079F9B8);
 
         switch (D_8079F9B8) {
             case LEO_ERROR_GOOD:
                 PRINTF("MFSMesgQ Send 25\n");
-                osSendMesg(&D_8079F998, NULL, OS_MESG_BLOCK);
+                osSendMesg(&gMFSMesgQ, NULL, OS_MESG_BLOCK);
                 if (0) {
                     PRINTF("SLMFSSave 0\n");
                     PRINTF("SLMFSSave 1\n");
@@ -1288,8 +1289,8 @@ s32 SLMFSCreateManager(s32 region) {
     PRINTF("hoge52\n");
 
     func_80705A98();
-    if ((func_8076007C(region, D_8079F9D0, 0x10) != 0) &&
-        (D_80794CD4 == LEO_ERROR_DEVICE_COMMUNICATION_FAILURE)) {
+    if ((Mfs_CreateLeoManager(region, D_8079F9D0, 0x10) != 0) &&
+        (gMfsError == LEO_ERROR_DEVICE_COMMUNICATION_FAILURE)) {
         func_8070F8A4(D_8079F9B8, 0);
         while (true) {}
     }
@@ -1310,7 +1311,7 @@ void SLMFSNewDisk(void) {
             PRINTF("SLMFSNewDisk return %d\n", D_8079F9BC);
             return;
         }
-        D_8079F9B8 = D_80794CD4;
+        D_8079F9B8 = gMfsError;
 
         PRINTF("SLMFSNewDisk OK (ENTRY LOAD BEFORE)\n");
         PRINTF("SLMFSNewDisk OK (ENTRY LOAD AFTER)\n");
@@ -1365,7 +1366,7 @@ void SLMFSNewDisk2(void) {
             return;
         }
 
-        D_8079F9B8 = D_80794CD4;
+        D_8079F9B8 = gMfsError;
         PRINTF("ERROR SLMFSNewDisk %d\n", D_8079F9B8);
 
         switch (D_8079F9B8) {
@@ -1415,10 +1416,10 @@ void SLMFSFlushManageArea(void) {
             D_8076CBB0 = 0;
         }
         func_807040C8();
-        if (Mfs_WriteRamArea() == 0) {
+        if (Mfs_BackupRamArea() == 0) {
             return;
         }
-        D_8079F9B8 = D_80794CD4;
+        D_8079F9B8 = gMfsError;
         PRINTF("SLMFSFlushManageArea Error %d\n", D_8079F9B8);
 
         if (0) {
