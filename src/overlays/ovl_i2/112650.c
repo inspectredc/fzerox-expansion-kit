@@ -3016,7 +3016,7 @@ void Course_GenerateRandomCourse(void) {
 
     gCurrentCourseInfo->maxSpeed = 0.0f;
     gCurrentCourseInfo->bestTime = 600000 - 1;
-    COURSE_CONTEXT()->courseData.fileName[0x16] = (Math_Rand2() & 0x1FFFF) % 14;
+    COURSE_CONTEXT()->courseData.unk_1F = (Math_Rand2() & 0x1FFFF) % 14;
 }
 
 extern CourseSegment D_802D0620[];

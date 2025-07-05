@@ -102,7 +102,7 @@ s32 Mfs_LoadFileInDir(u16 dirId, char* name, char* extension, u8* buf, s32 sizeT
         return -1;
     }
     if (Mfs_ValidateFileName(name) < 0) {
-        gMfsError = 0xF4;
+        gMfsError = N64DD_ARGUMENT_ILLEGAL;
         return -1;
     }
     if (dirId == MFS_ENTRY_WORKING_DIR) {
@@ -113,7 +113,7 @@ s32 Mfs_LoadFileInDir(u16 dirId, char* name, char* extension, u8* buf, s32 sizeT
     }
     entryId = Mfs_GetFileIndex(dirId, name, extension);
     if (entryId == MFS_ENTRY_DOES_NOT_EXIST) {
-        gMfsError = 0xF2;
+        gMfsError = N64DD_NOT_FOUND;
         return -1;
     }
     return Mfs_CalculateSizeAndLoadFile(entryId, buf, sizeToLoad);
@@ -129,15 +129,15 @@ s32 Mfs_CheckAndLoadFile(u16 entryId, u8* buf, s32 sizeToLoad) {
         return -1;
     }
     if ((entryId < 0) || (entryId > gDirectoryEntryCount)) {
-        gMfsError = 0xF4;
+        gMfsError = N64DD_ARGUMENT_ILLEGAL;
         return -1;
     }
     if (!(gMfsRamArea.directoryEntry[entryId].attr & MFS_FILE_ATTR_FILE)) {
-        gMfsError = 0xF2;
+        gMfsError = N64DD_NOT_FOUND;
         return -1;
     }
     if (gMfsRamArea.directoryEntry[entryId].attr & MFS_FILE_ATTR_DIRECTORY) {
-        gMfsError = 0xF2;
+        gMfsError = N64DD_NOT_FOUND;
         return -1;
     }
     return Mfs_CalculateSizeAndLoadFile(entryId, buf, sizeToLoad);
@@ -183,7 +183,7 @@ s32 Mfs_LoadFileFromOffset(u16 entryId, u8* buf, s32 offset, u32 sizeToLoad) {
         if (sizeRemaining != 0) {
             fatId = gFileAllocationTable[fatId];
             if (fatId == MFS_ENTRY_DOES_NOT_EXIST) {
-                gMfsError = 0xF3;
+                gMfsError = N64DD_DISK_DAMAGED;
                 return -1;
             }
         }
@@ -231,7 +231,7 @@ s32 Mfs_LoadFileFromOffset(u16 entryId, u8* buf, s32 offset, u32 sizeToLoad) {
         fatId = (fatId + nLBAs) - 1;
 
         if ((fatId = gFileAllocationTable[fatId]) == MFS_FAT_LAST_BLOCK) {
-            gMfsError = 0xF3;
+            gMfsError = N64DD_DISK_DAMAGED;
             return -1;
         }
     }
@@ -269,7 +269,7 @@ s32 Mfs_LoadFileInDirFromOffset(u16 dirId, char* name, char* extension, u8* buf,
         return -1;
     }
     if (Mfs_ValidateFileName(name) < 0) {
-        gMfsError = 0xF4;
+        gMfsError = N64DD_ARGUMENT_ILLEGAL;
         return -1;
     }
     if (dirId == MFS_ENTRY_WORKING_DIR) {
@@ -280,7 +280,7 @@ s32 Mfs_LoadFileInDirFromOffset(u16 dirId, char* name, char* extension, u8* buf,
     }
     entryId = Mfs_GetFileIndex(dirId, name, extension);
     if (entryId == MFS_ENTRY_DOES_NOT_EXIST) {
-        gMfsError = 0xF2;
+        gMfsError = N64DD_NOT_FOUND;
         return -1;
     }
     return Mfs_CalculateSizeAndLoadFileFromOffset(entryId, buf, offset, sizeToLoad);

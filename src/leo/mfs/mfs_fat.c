@@ -56,11 +56,11 @@ s32 Mfs_ClearFileAllocationTableEntry(s32 fatId) {
             break;
         }
         if (fatValue == MFS_FAT_UNUSED) {
-            gMfsError = 0xF3;
+            gMfsError = N64DD_DISK_DAMAGED;
             return -1;
         }
         if (fatValue == MFS_FAT_PROHIBITED) {
-            gMfsError = 0xF3;
+            gMfsError = N64DD_DISK_DAMAGED;
             return -1;
         }
         fatIdToClear = fatValue;
@@ -79,7 +79,7 @@ s32 Mfs_GetFileExtraBlockSpace(s32* fatIdPtr, u32 fileSize, s32* extraSpace) {
     while (gFileAllocationTable[fatId] != MFS_FAT_LAST_BLOCK) {
         LeoLBAToByte(fatId + gRamAreaCapacity.startLBA, 1, &blockSize);
         if (fileSize < blockSize) {
-            gMfsError = 0xF3;
+            gMfsError = N64DD_DISK_DAMAGED;
             return -1;
         }
         fileSize -= blockSize;
@@ -88,7 +88,7 @@ s32 Mfs_GetFileExtraBlockSpace(s32* fatIdPtr, u32 fileSize, s32* extraSpace) {
 
     LeoLBAToByte(fatId + gRamAreaCapacity.startLBA, 1, &blockSize);
     if (fileSize > blockSize) {
-        gMfsError = 0xF3;
+        gMfsError = N64DD_DISK_DAMAGED;
         return -1;
     }
     *extraSpace = blockSize - fileSize;
@@ -109,7 +109,7 @@ s32 Mfs_GetFileExtraBlockSpace2(s32* fatIdPtr, u32 fileSize, s32* extraSpace) {
         }
         fileSize -= blockSize;
         if (fatId == MFS_FAT_LAST_BLOCK) {
-            return 0xF4;
+            return N64DD_ARGUMENT_ILLEGAL;
         }
         fatId = gFileAllocationTable[fatId];
     }

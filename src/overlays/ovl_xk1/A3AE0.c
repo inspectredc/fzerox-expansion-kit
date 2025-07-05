@@ -1432,7 +1432,7 @@ void func_xk1_80028F94(void) {
             D_xk1_800305F4 = D_xk1_800328B4[D_xk1_80030674];
             func_80741AF4(D_xk1_800328B4[D_xk1_800314C0.unk_04]);
             D_xk1_800314C0.unk_04 = -1;
-            COURSE_CONTEXT()->courseData.fileName[0x16] = D_xk1_800328B4[D_xk1_80030674];
+            COURSE_CONTEXT()->courseData.unk_1F = D_xk1_800328B4[D_xk1_80030674];
         }
     }
 }

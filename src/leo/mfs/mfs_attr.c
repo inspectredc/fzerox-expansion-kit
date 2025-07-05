@@ -10,11 +10,11 @@ s32 Mfs_ChangeFileAttr(u16 entryId, u16 attributeToAdd, u16 attributeToRemove) {
 
     if (!(gMfsRamArea.directoryEntry[entryId].attr & MFS_FILE_ATTR_FILE) ||
         (gMfsRamArea.directoryEntry[entryId].attr & MFS_FILE_ATTR_DIRECTORY)) {
-        gMfsError = 0xF2;
+        gMfsError = N64DD_NOT_FOUND;
         return -1;
     }
     if ((attributeToAdd & MFS_FILE_ATTR_DIRECTORY) || (attributeToRemove & MFS_FILE_ATTR_FILE)) {
-        gMfsError = 0xF4;
+        gMfsError = N64DD_ARGUMENT_ILLEGAL;
         return -1;
     }
     attr = gMfsRamArea.directoryEntry[entryId].attr;
@@ -39,7 +39,7 @@ s32 Mfs_CheckAndChangeFileAttr(u16 entryId, s32 attributeToAdd, s32 attributeToR
     return 0;
 }
 
-s32 Mfs_ChangeFileInDirAttr(u16 dirId, char* name, char* extension, s32 attributeToAdd, s32 attributeToDelete,
+s32 Mfs_ChangeFileInDirAttr(u16 dirId, char* name, char* extension, s32 attributeToAdd, s32 attributeToRemove,
                             bool writeChanges) {
     u16 entryId;
 
@@ -47,7 +47,7 @@ s32 Mfs_ChangeFileInDirAttr(u16 dirId, char* name, char* extension, s32 attribut
         return -1;
     }
     if (Mfs_ValidateFileName(name) < 0) {
-        gMfsError = 0xF4;
+        gMfsError = N64DD_ARGUMENT_ILLEGAL;
         return -1;
     }
     if (dirId == MFS_ENTRY_WORKING_DIR) {
@@ -58,10 +58,10 @@ s32 Mfs_ChangeFileInDirAttr(u16 dirId, char* name, char* extension, s32 attribut
     }
     entryId = Mfs_GetFileIndex(dirId, name, extension);
     if (entryId == MFS_ENTRY_DOES_NOT_EXIST) {
-        gMfsError = 0xF2;
+        gMfsError = N64DD_NOT_FOUND;
         return -1;
     }
-    if (Mfs_ChangeFileAttr(entryId, attributeToAdd, attributeToDelete) < 0) {
+    if (Mfs_ChangeFileAttr(entryId, attributeToAdd, attributeToRemove) < 0) {
         return -1;
     }
     if (writeChanges) {
@@ -80,7 +80,7 @@ s32 Mfs_GetFileInDirAttr(u16 dirId, char* name, char* extension) {
         return -1;
     }
     if (Mfs_ValidateFileName(name) < 0) {
-        gMfsError = 0xF4;
+        gMfsError = N64DD_ARGUMENT_ILLEGAL;
         return -1;
     }
     if (dirId == MFS_ENTRY_WORKING_DIR) {
@@ -91,7 +91,7 @@ s32 Mfs_GetFileInDirAttr(u16 dirId, char* name, char* extension) {
     }
     entryId = Mfs_GetFileIndex(dirId, name, extension);
     if (entryId == MFS_ENTRY_DOES_NOT_EXIST) {
-        gMfsError = 0xF2;
+        gMfsError = N64DD_NOT_FOUND;
         return -1;
     }
     return gMfsRamArea.directoryEntry[entryId].attr;

@@ -26,7 +26,7 @@ s32 Mfs_SetRtc(s32 year, s32 month, s32 day, s32 hour, s32 minute, s32 second) {
         return 0;
     }
     if (gLeoSetRTCFunc(&cmd, &diskTime, &D_80794D0C) < 0) {
-        gMfsError = 0xF7;
+        gMfsError = N64DD_MANAGER_NOT_CREATED;
         return -1;
     }
     return func_80762390();
@@ -65,7 +65,7 @@ s32 func_80761DCC(s32* year, s32* month, s32* day, s32* hour, s32* minute, s32* 
         }
     } else {
         if (gLeoReadRTCFunc(&cmd, &D_80794D0C) < 0) {
-            gMfsError = 0xF7;
+            gMfsError = N64DD_MANAGER_NOT_CREATED;
             return -1;
         }
         if (func_80762390() < 0) {
@@ -133,7 +133,7 @@ s32 Mfs_ReadRtc(LEODiskTime* diskTime) {
         bcopy(&D_807C6E40, diskTime, sizeof(LEODiskTime));
     } else {
         if (gLeoReadRTCFunc(&sp1C, &D_80794D0C) < 0) {
-            gMfsError = 0xF7;
+            gMfsError = N64DD_MANAGER_NOT_CREATED;
             return -1;
         }
         if (func_80762390() < 0) {
@@ -200,7 +200,7 @@ s32 Mfs_SpdlMotor(LEOSpdlMode mode) {
         D_80794CD8 = 7;
     }
     if (gLeoSpdlMotorFunc(&cmdBlock, mode, &D_80794D0C) < 0) {
-        gMfsError = 0xF7;
+        gMfsError = N64DD_MANAGER_NOT_CREATED;
         return -1;
     }
     return func_80762390();
@@ -211,7 +211,7 @@ s32 Mfs_ModeSelectAsync(u32 standby, u32 sleep) {
 
     D_80794CD8 = 0xB;
     if (gLeoModeSelectAsyncFunc(&cmdBlock, standby, sleep, &D_80794D0C) < 0) {
-        gMfsError = 0xF7;
+        gMfsError = N64DD_MANAGER_NOT_CREATED;
         return -1;
     }
     return func_80762390();
@@ -229,7 +229,7 @@ s32 Mfs_ReadLBA(u32 startLBA, u8* buf, u32 nLBAs) {
         osInvalDCache(buf, sp24);
         D_80794CD8 = 2;
         if (gLeoReadWriteFunc(&cmd, OS_READ, startLBA, buf, nLBAs, &D_80794D0C) < 0) {
-            gMfsError = 0xF7;
+            gMfsError = N64DD_MANAGER_NOT_CREATED;
             return -1;
         }
         if (func_80762390() < 0) {
@@ -243,7 +243,7 @@ s32 Mfs_ReadLBA(u32 startLBA, u8* buf, u32 nLBAs) {
             LeoLBAToByte(startLBA + i, 1, &sp24);
             D_80794CD8 = 2;
             if (gLeoReadWriteFunc(&cmd, OS_READ, startLBA + i, D_8077B4D0, 1, &D_80794D0C) < 0) {
-                gMfsError = 0xF7;
+                gMfsError = N64DD_MANAGER_NOT_CREATED;
                 return -1;
             }
             if (func_80762390() < 0) {
@@ -270,7 +270,7 @@ s32 Mfs_WriteLBA(u32 startLBA, u8* buf, u32 nLBAs) {
         osWritebackDCache(buf, sp24);
         D_80794CD8 = 3;
         if (gLeoReadWriteFunc(&sp2C, OS_WRITE, startLBA, buf, nLBAs, &D_80794D0C) < 0) {
-            gMfsError = 0xF7;
+            gMfsError = N64DD_MANAGER_NOT_CREATED;
             return -1;
         }
         if (func_80762390() < 0) {
@@ -288,7 +288,7 @@ s32 Mfs_WriteLBA(u32 startLBA, u8* buf, u32 nLBAs) {
             osWritebackDCache(D_8077B4D0, 0x4D10);
             D_80794CD8 = 3;
             if (gLeoReadWriteFunc(&sp2C, OS_WRITE, startLBA + i, D_8077B4D0, 1, &D_80794D0C) < 0) {
-                gMfsError = 0xF7;
+                gMfsError = N64DD_MANAGER_NOT_CREATED;
                 return -1;
             }
             if (func_80762390() < 0) {

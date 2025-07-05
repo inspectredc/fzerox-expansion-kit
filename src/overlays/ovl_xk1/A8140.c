@@ -33,7 +33,7 @@ void func_xk1_8002AED0(void) {
     PRINTF("FILE LISTS %d\n");
 
     for (i = 0; i < 102; i++) {
-        D_xk1_8003A5D8[i].unk_1D[3] = '\0';
+        D_xk1_8003A5D8[i].extension[3] = '\0';
     }
 }
 
@@ -181,7 +181,7 @@ Gfx* func_xk1_8002B17C(Gfx* gfx, s32 arg1) {
         }
 
         gfx = func_xk1_8002924C(gfx, D_xk1_80032BE4, temp_s4, &D_xk1_8003A5D8[i]);
-        if ((D_xk1_8003A5D8[i].unk_1D[3] == 'E') && ((gGameFrameCount % 16) < 8)) {
+        if ((D_xk1_8003A5D8[i].extension[3] == 'E') && ((gGameFrameCount % 16) < 8)) {
             gSPDisplayList(gfx++, D_7020808);
             gSPTextureRectangle(gfx++, (D_xk1_80032BE4 + 0x1C) << 2, temp_s4 << 2, (D_xk1_80032BE4 + 0x24) << 2,
                                 (temp_s4 + 8) << 2, 0, 0, 0, 1 << 10, 1 << 10);
@@ -254,7 +254,7 @@ void func_xk1_8002BBA4(void) {
     }
 }
 
-u8* func_xk1_8002BCC4(void) {
+char* func_xk1_8002BCC4(void) {
     s32 var_v1;
 
     D_xk1_80032BD4 = 0;
@@ -264,7 +264,7 @@ u8* func_xk1_8002BCC4(void) {
     if (var_v1 > D_xk1_8003A5D0 - 1) {
         var_v1 = D_xk1_8003A5D0 - 1;
     }
-    return D_xk1_8003A5D8[var_v1].unk_00;
+    return D_xk1_8003A5D8[var_v1].name;
 }
 
 s32 func_xk1_8002BD14(void) {
@@ -287,7 +287,7 @@ void func_xk1_8002BD58(void) {
 
 extern MfsRamArea gMfsRamArea;
 
-s32 func_xk1_8002BD64(u8 arg0, s32 arg1) {
+s32 func_xk1_8002BD64(u8 arg0, char* extension) {
     s32 i;
     s32 var_s0 = 0;
     s32 pad[3];
@@ -297,11 +297,11 @@ s32 func_xk1_8002BD64(u8 arg0, s32 arg1) {
 
     var_s1 = D_xk1_8003B430;
     D_xk1_80032BF8 = 0;
-    D_xk1_8003A5D8[0].unk_10 = 0;
+    D_xk1_8003A5D8[0].attr = 0;
     D_xk1_8003A5D8[0].unk_22 = 1;
     D_xk1_8003A5D0 = arg0;
 
-    if (Mfs_GetFilesPreparation(MFS_ENTRY_WORKING_DIR) != 0) {
+    if (Mfs_GetFilesPreparation(MFS_ENTRY_WORKING_DIR)) {
         return D_xk1_8003A5D0;
     }
 
@@ -311,12 +311,12 @@ s32 func_xk1_8002BD64(u8 arg0, s32 arg1) {
         if ((*var_s1 = Mfs_GetNextFileInPreparedDir()) == MFS_ENTRY_DOES_NOT_EXIST) {
             break;
         }
-        if ((arg1 == 0) || (mfsStrnCmp(gMfsRamArea.directoryEntry[*var_s1].extension, arg1, 3) == 0)) {
+        if ((extension == NULL) || (mfsStrnCmp(gMfsRamArea.directoryEntry[*var_s1].extension, extension, 3) == 0)) {
             temp_s0 = &D_xk1_8003A5D8[D_xk1_8003A5D0];
             temp_s0->unk_22 = 0;
-            mfsStrCpy(temp_s0->unk_00, gMfsRamArea.directoryEntry[*var_s1].name);
-            mfsStrCpy(temp_s0->unk_1D, gMfsRamArea.directoryEntry[*var_s1].extension);
-            temp_s0->unk_10 = gMfsRamArea.directoryEntry[*var_s1].attr;
+            mfsStrCpy(temp_s0->name, gMfsRamArea.directoryEntry[*var_s1].name);
+            mfsStrCpy(temp_s0->extension, gMfsRamArea.directoryEntry[*var_s1].extension);
+            temp_s0->attr = gMfsRamArea.directoryEntry[*var_s1].attr;
             var_s6++;
 
             if (++D_xk1_8003A5D0 == 0x66) {
@@ -330,13 +330,13 @@ s32 func_xk1_8002BD64(u8 arg0, s32 arg1) {
     var_s0++;
     D_xk1_80032BEC = 0;
     D_xk1_80032BD4 = var_s0;
-    func_xk1_8002CEF8(&D_xk1_8003A5D8[arg0], D_xk1_8003A5D0 - arg0, 0x24, func_xk1_8002CA98);
+    func_xk1_8002CEF8(&D_xk1_8003A5D8[arg0], D_xk1_8003A5D0 - arg0, sizeof(unk_8003A5D8), func_xk1_8002CA98);
     D_xk1_80032BF8 = var_s0;
 
     if (var_s6 > 100) {
         for (i = 0; i < var_s6 - 100; i++) {
             temp_s0 = &D_xk1_8003A5D8[D_xk1_8003A5D0 - (i + 1)];
-            Mfs_DeleteFileInDir(MFS_ENTRY_WORKING_DIR, temp_s0->unk_00, temp_s0->unk_1D, 1);
+            Mfs_DeleteFileInDir(MFS_ENTRY_WORKING_DIR, temp_s0->name, temp_s0->extension, true);
             D_xk1_8003A5D0--;
         }
     }
@@ -416,7 +416,7 @@ Gfx* func_xk1_8002C420(Gfx* gfx, s32 arg1, s32 arg2) {
 
 extern u8* D_xk1_800331F0[];
 
-void func_xk1_8002C720(Gfx** gfxP, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
+void func_xk1_8002C720(Gfx** gfxP, s32 arg1, s32 arg2, char* arg3, s32 arg4) {
     Gfx* gfx;
     s32 temp_a0;
     s32 temp_t4;
@@ -662,10 +662,10 @@ void func_xk1_8002D16C(void) {
     k = 0;
     for (i = 0, var_s0 = D_xk1_8003A5D8; i < 6; i++) {
         for (j = 0; j < 6; j++, k++, var_s0++) {
-            var_s0->unk_10 = 0;
+            var_s0->attr = 0;
             var_s0->unk_22 = 0;
-            var_s0->unk_1D[3] = '\0';
-            sprintf(var_s0->unk_00, "%s%d", sp48[i], j + 1);
+            var_s0->extension[3] = '\0';
+            sprintf(var_s0->name, "%s%d", sp48[i], j + 1);
         }
     }
     D_xk1_8003A5D0 = k;

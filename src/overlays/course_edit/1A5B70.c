@@ -1,4 +1,5 @@
 #include "global.h"
+#include "leo/unk_leo.h"
 #include "assets/segment_1FB850.h"
 #include "assets/segment_21C170.h"
 
@@ -16,7 +17,7 @@ s32 D_xk2_8011961C[][2] = {
     { 2, 17 }, { 19, 30 }, { 49, 17 }, { 66, 16 }, { 82, 17 }, { 99, 16 },
 };
 
-extern s32 D_800D11C8[];
+extern s32 D_800D11C8[6];
 extern unk_800D6CA0 D_800D6CA0;
 
 void func_xk2_800F40B0(void) {
@@ -123,7 +124,7 @@ void func_xk2_800F40B0(void) {
         switch (D_xk2_801195E0) {
             case 0:
                 func_8074122C(0x25);
-                func_807683B8(0xFFFB, "OPTION", "OPT", D_800D11C8, 0x18, 0, 0xFF, 1);
+                func_807683B8(MFS_ENTRY_WORKING_DIR, "OPTION", "OPT", D_800D11C8, sizeof(D_800D11C8), 0, 0xFF, true);
                 D_800D6CA0.unk_08 = 0x38;
                 break;
             case 1:

@@ -989,7 +989,7 @@ void func_xk2_800D934C(void) {
     s32 temp_a1;
     s32 temp_a2;
 
-    D_80119720 = &gControllers[*gPlayerControlPorts];
+    D_80119720 = &gControllers[gPlayerControlPorts[0]];
 
     temp_a1 = D_80119720->stickX;
     temp_a2 = D_80119720->stickY;
@@ -2688,7 +2688,7 @@ void func_xk2_800DD938(void) {
             D_800D6CA0.unk_08 = 2;
             return;
         case 1:
-            if (!(sp1C->unk_10 & 0x2000)) {
+            if (!(sp1C->attr & MFS_FILE_ATTR_FORBID_W)) {
                 mfsStrCpy(D_xk1_8003A570, sp1C);
                 D_800D6CA0.unk_08 = 0x34;
                 func_8076877C(1, "CRSD");
@@ -2711,7 +2711,7 @@ void func_xk2_800DD938(void) {
             }
             break;
         case 3:
-            if (!(sp1C->unk_10 & 0x2000)) {
+            if (!(sp1C->attr & MFS_FILE_ATTR_FORBID_W)) {
                 func_xk1_800294AC();
                 func_xk1_800294EC(func_xk1_8002AC24);
                 D_800D6CA0.unk_08 = 2;
@@ -2719,9 +2719,9 @@ void func_xk2_800DD938(void) {
             }
             break;
         case 2:
-            if (!(sp1C->unk_10 & 0x2000)) {
-                func_xk2_800EBFE8(sp1C);
-                func_807688D0(0xFFFB, sp1C, sp1C->unk_1D, 1);
+            if (!(sp1C->attr & MFS_FILE_ATTR_FORBID_W)) {
+                func_xk2_800EBFE8(sp1C->name);
+                func_807688D0(MFS_ENTRY_WORKING_DIR, sp1C->name, sp1C->extension, true);
                 D_xk1_80030610 = -1;
                 D_800D6CA0.unk_08 = 0x22;
                 return;

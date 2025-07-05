@@ -17,7 +17,7 @@ s32 Mfs_WriteNewFile(u8* buf, u32 fileSize, bool isEncoded) {
 
     while (sizeRemaining != 0) {
         if (Mfs_FindBlocksForSize(sizeRemaining, &lba, &nLBAs, &blockSize) < 0) {
-            gMfsError = 0xF1;
+            gMfsError = N64DD_AREA_LACKED;
             return -1;
         }
         if (Mfs_WriteFile(lba + gRamAreaCapacity.startLBA, bufPtr, nLBAs, isEncoded) < 0) {
@@ -42,11 +42,11 @@ s32 Mfs_WriteNewFileInDir(u16 parentDirId, char* name, char* extension, u8* buf,
 
     Mfs_InitDirEntry();
     if ((copyCount < 0) || (copyCount >= 0x100)) {
-        gMfsError = 0xF4;
+        gMfsError = N64DD_ARGUMENT_ILLEGAL;
         return -1;
     }
     if (attr & MFS_FILE_ATTR_DIRECTORY) {
-        gMfsError = 0xF4;
+        gMfsError = N64DD_ARGUMENT_ILLEGAL;
         return -1;
     }
     attr |= MFS_FILE_ATTR_FILE;
@@ -55,7 +55,7 @@ s32 Mfs_WriteNewFileInDir(u16 parentDirId, char* name, char* extension, u8* buf,
     }
     entryId = Mfs_GetNextFreeDirectoryEntry();
     if (entryId == MFS_ENTRY_DOES_NOT_EXIST) {
-        gMfsError = 0xF1;
+        gMfsError = N64DD_AREA_LACKED;
         return -1;
     }
 
@@ -87,11 +87,11 @@ s32 Mfs_SaveFile(u16 parentDirId, char* name, char* extension, u8* buf, u32 file
         return -1;
     }
     if (fileSize == 0) {
-        gMfsError = 0xF4;
+        gMfsError = N64DD_ARGUMENT_ILLEGAL;
         return -1;
     }
     if (Mfs_ValidateFileName(name) < 0) {
-        gMfsError = 0xF4;
+        gMfsError = N64DD_ARGUMENT_ILLEGAL;
         return -1;
     }
     if (parentDirId == MFS_ENTRY_WORKING_DIR) {
@@ -102,7 +102,7 @@ s32 Mfs_SaveFile(u16 parentDirId, char* name, char* extension, u8* buf, u32 file
     }
     parentDirEntryId = Mfs_GetDirectoryIndex(parentDirId);
     if (parentDirEntryId == MFS_ENTRY_DOES_NOT_EXIST) {
-        gMfsError = 0xF2;
+        gMfsError = N64DD_NOT_FOUND;
         return -1;
     }
     D_80794DD0 = 0;
@@ -116,7 +116,7 @@ s32 Mfs_SaveFile(u16 parentDirId, char* name, char* extension, u8* buf, u32 file
             return -1;
         }
         if (Mfs_RamGetFreeSize() < fileSize) {
-            gMfsError = 0xF1;
+            gMfsError = N64DD_AREA_LACKED;
             return -1;
         }
         if (Mfs_WriteNewFileInDir(parentDirId, "__TMP__", "_!TMP", buf, fileSize, attr, copyCount) < 0) {
@@ -131,7 +131,7 @@ s32 Mfs_SaveFile(u16 parentDirId, char* name, char* extension, u8* buf, u32 file
             return -1;
         }
         if (Mfs_RamGetFreeSize() < fileSize) {
-            gMfsError = 0xF1;
+            gMfsError = N64DD_AREA_LACKED;
             return -1;
         }
         if (Mfs_WriteNewFileInDir(parentDirId, name, extension, buf, fileSize, attr, copyCount) < 0) {

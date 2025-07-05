@@ -22,7 +22,7 @@ unk_806F2400_unk_00 D_xk3_80141270;
 u8 D_xk3_80141290;
 u8 D_xk3_80141291;
 s32 D_xk3_80141294;
-u8* D_xk3_80141298;
+char* D_xk3_80141298;
 
 f32 D_xk3_80136540 = -7000.0f;
 s8 D_xk3_80136544 = -1;
@@ -94,7 +94,7 @@ void func_xk3_8012BB48(void) {
     PRINTF("WORKS MACHINE MODE : 0\n");
     D_xk3_80136820 = 0;
     D_xk3_801365E0.checksum = func_xk3_8012BB14(&D_xk3_801365E0);
-    func_80768244(0xFFFB, &D_xk3_801365E0.machineName, "CARD", &D_xk3_801365E0, 0x20, 0, 0xFF, 1);
+    func_80768244(MFS_ENTRY_WORKING_DIR, D_xk3_801365E0.machineName, "CARD", &D_xk3_801365E0, sizeof(unk_806F2400_unk_00), 0, 0xFF, true);
 }
 
 extern s32 D_xk3_80136820;
@@ -756,7 +756,7 @@ void func_xk3_8012CE44(void) {
                     D_xk3_80141298 = func_xk1_8002BCC4();
                     PRINTF("WORKS MACHINE MODE : ENTRY_LOAD_NOW\n");
                     D_xk3_80136820 = 0x1B;
-                    func_80768638(0xFFFB, D_xk3_80141298, "CARD", &D_xk3_801365E0, 0x20);
+                    func_80768638(MFS_ENTRY_WORKING_DIR, D_xk3_80141298, "CARD", &D_xk3_801365E0, sizeof(unk_806F2400_unk_00));
                     PRINTF("SUPER MACHINE No.%d\n");
                 }
                 break;
@@ -800,7 +800,7 @@ void func_xk3_8012CE44(void) {
                 func_8074122C(0x24);
                 PRINTF("WORKS MACHINE MODE : LOAD_NOW\n");
                 D_xk3_80136820 = 7;
-                func_80768574(0xFFFB, D_xk3_80141298, "CARD", &D_xk3_801365E0, 0x20);
+                func_80768574(MFS_ENTRY_WORKING_DIR, D_xk3_80141298, "CARD", &D_xk3_801365E0, sizeof(unk_806F2400_unk_00));
                 break;
             case 16:
             case 37: {
@@ -822,7 +822,7 @@ void func_xk3_8012CE44(void) {
                 func_8074122C(0x24);
                 PRINTF("WORKS MACHINE MODE : 0\n");
                 D_xk3_80136820 = 0;
-                func_807688D0(0xFFFB, D_xk3_80141298, "CARD", 1);
+                func_807688D0(MFS_ENTRY_WORKING_DIR, D_xk3_80141298, "CARD", true);
                 break;
             }
             case 11:
@@ -954,7 +954,7 @@ void func_xk3_8012D79C(void) {
             if (D_807C6F0C == 100) {
                 PRINTF("WORKS MACHINE MODE : OVERWRITE_FILE_EXIST\n");
                 D_xk3_80136820 = 0xC;
-                func_8076870C(0xFFFB, D_xk1_800333D0.machineName, "CARD");
+                func_8076870C(MFS_ENTRY_WORKING_DIR, D_xk1_800333D0.machineName, "CARD");
             } else if (D_807C6F0C > 100) {
                 D_807C6EA8.unk_08 = 0x13;
                 PRINTF("WORKS MACHINE MODE : MESSAGE_BUTTON\n");
@@ -1073,7 +1073,7 @@ s32 func_xk3_8012DF04(void) {
     if (D_xk3_80136820 == 8) {
         PRINTF("WORKS MACHINE MODE : SAVE_FILE_EXIST\n");
         D_xk3_80136820 = 9;
-        func_8076869C(0xFFFB, D_xk1_800333D0.machineName, "CARD");
+        func_8076869C(MFS_ENTRY_WORKING_DIR, D_xk1_800333D0.machineName, "CARD");
     }
     func_xk1_8002D974();
     if ((D_80794E14 == 0) && (D_800BEE14 == 0) && (D_xk3_80136548 == 0)) {

@@ -181,7 +181,7 @@ s32 func_xk1_80029560(void) {
         var_s1 = 1;
     }
     while (var_s1 < func_xk1_8002BFA4()) {
-        if (mfsStrCmp(D_xk1_8003A5D8[var_s1].unk_00, D_xk1_8003A560) == 0) {
+        if (mfsStrCmp(D_xk1_8003A5D8[var_s1].name, D_xk1_8003A560) == 0) {
             return 1;
         }
         var_s1++;
@@ -538,9 +538,9 @@ void func_xk1_8002AC70(void) {
             }
             return;
         case 3:
-            func_xk2_800EBFE8(D_xk1_8003A598.unk_00);
-            func_80768844(0xFFFB, D_xk1_8003A598.unk_00, D_xk1_8003A598.unk_1D, D_xk1_8003A560, D_xk1_8003A598.unk_1D,
-                          1);
+            func_xk2_800EBFE8(D_xk1_8003A598.name);
+            func_80768844(MFS_ENTRY_WORKING_DIR, D_xk1_8003A598.name, D_xk1_8003A598.extension, D_xk1_8003A560, D_xk1_8003A598.extension,
+                          true);
             D_xk1_80030610 = -1;
             D_800D6CA0.unk_08 = 0x22;
             return;

@@ -8,6 +8,12 @@
 #include "libc/stdbool.h"
 #include "unk_leo.h"
 
+void func_80762330(LEODiskTime* diskTime);
+void Mfs_SetGameCode(char* companyCode, char* gameCode);
+u16 Mfs_GetNextFileInPreparedDir(void);
+s32 Mfs_GetFilesPreparation(u16 dirId);
+s32 Mfs_ChangeFileInDirAttr(u16 dirId, char* name, char* extension, s32 attributeToAdd, s32 attributeToRemove, bool writeChanges);
+s32 Mfs_GetFileInDirAttr(u16 dirId, char* name, char* extension);
 void Mfs_SetDirEntryAttr(u16 attr);
 void Mfs_SetDirEntryName(char* name);
 void Mfs_SetDirEntryCreateTime(void);

@@ -72,7 +72,7 @@ s32 func_8075FF9C(void) {
         return 0;
     }
 
-    gMfsError = 0xF5;
+    gMfsError = N64DD_DISKID_ILLEGAL;
     return -1;
 }
 
@@ -110,7 +110,7 @@ s32 Mfs_CreateLeoManager(s32 region, OSMesg* cmdBuf, s32 cmdMsgCount) {
             gMfsError = LeoCACreateLeoManager(0x95, 0x96, cmdBuf, cmdMsgCount);
             break;
         default:
-            gMfsError = 0xF4;
+            gMfsError = N64DD_ARGUMENT_ILLEGAL;
             return -1;
             break;
     }
@@ -143,7 +143,7 @@ s32 Mfs_ReadDiskId(LEODiskID* diskId) {
     D_80794CD8 = 8;
     osInvalDCache(diskId, 4);
     if (gLeoReadDiskIDFunc(&sp1C, diskId, &D_80794D0C) < 0) {
-        gMfsError = 0xF7;
+        gMfsError = N64DD_MANAGER_NOT_CREATED;
         return -1;
     }
     return func_80762390();
@@ -188,8 +188,8 @@ s32 func_807603A8(void) {
         return -1;
     }
     if (gRamAreaCapacity.nbytes == 0) {
-        D_80794D30 = 0xF6;
-        gMfsError = 0xF6;
+        D_80794D30 = N64DD_READ_ONLY_MEDIA;
+        gMfsError = N64DD_READ_ONLY_MEDIA;
         return -1;
     }
     gWorkingDirectory = MFS_ENTRY_ROOT_DIR;
@@ -222,12 +222,12 @@ s32 Mfs_RamGetDiskType(void) {
 }
 
 s32 func_8076055C(void) {
-    LEOStatus sp1F;
+    LEOStatus status;
 
     gMfsError = LEO_ERROR_GOOD;
     D_80794CD8 = 15;
-    gMfsError = LeoTestUnitReady(&sp1F);
-    if (!(sp1F & 1)) {
+    gMfsError = LeoTestUnitReady(&status);
+    if (!(status & LEO_TEST_UNIT_MR)) {
         if (gMfsError == LEO_SENSE_MEDIUM_MAY_HAVE_CHANGED) {}
         return 1;
     }
@@ -251,7 +251,7 @@ s32 Mfs_InitRamArea(s32 arg0, u8 attr, u8* volumeName) {
     } else if (arg0 == 2) {
         sp20 = false;
     } else {
-        gMfsError = 0xF4;
+        gMfsError = N64DD_ARGUMENT_ILLEGAL;
         return -1;
     }
 
@@ -350,7 +350,7 @@ s32 Mfs_ValidateRamVolume(void) {
     }
 
     if (j != 0) {
-        gMfsError = 0xF0;
+        gMfsError = N64DD_MEDIA_NOT_INIT;
         return -1;
     }
     return 0;
@@ -390,11 +390,11 @@ s32 func_80760ABC(void) {
             }
         } else {
             if (gMfsError == LEO_ERROR_UNRECOVERED_READ_ERROR) {
-                gMfsError = 0xF0;
+                gMfsError = N64DD_MEDIA_NOT_INIT;
                 return 0;
             }
             if (gMfsError == 0x10A) {
-                gMfsError = 0xF0;
+                gMfsError = N64DD_MEDIA_NOT_INIT;
                 return 0;
             }
             return -1;
@@ -407,7 +407,7 @@ s32 func_80760ABC(void) {
         return 1;
     }
 
-    gMfsError = 0xF0;
+    gMfsError = N64DD_MEDIA_NOT_INIT;
 
     return 0;
 }
@@ -441,7 +441,7 @@ s32 func_80760C6C(void) {
         if (Mfs_ValidateRamVolume() == 0) {
             return 0;
         }
-        if (gMfsError == 0xF0) {
+        if (gMfsError == N64DD_MEDIA_NOT_INIT) {
             if (Mfs_ReadRamArea() < 0) {
                 return -1;
             }
@@ -592,7 +592,7 @@ s32 Mfs_SpdlMotorBrake(void) {
     LEOCmd cmdBlock;
 
     if (gLeoSpdlMotorFunc(&cmdBlock, LEO_MOTOR_BRAKE, &D_80794D0C) < 0) {
-        gMfsError = 0xF7;
+        gMfsError = N64DD_MANAGER_NOT_CREATED;
         return -1;
     }
     return func_80762390();
