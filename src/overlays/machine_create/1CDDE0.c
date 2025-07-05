@@ -721,7 +721,7 @@ extern s32 D_xk3_80140E54;
 
 extern unk_806F2400 D_806F2400;
 extern unk_800E51B8* D_xk3_80140E44;
-extern u8* D_xk3_80141298;
+extern char* D_xk3_80141298;
 
 Gfx* func_xk3_80131494(Gfx* gfx) {
     static f32 D_xk3_8013680C = 0.0f;

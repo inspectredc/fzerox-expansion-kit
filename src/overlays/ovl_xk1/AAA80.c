@@ -74,7 +74,7 @@ void func_xk1_8002D974(void) {
     static s32 sLastStickX = 0;
     static s32 sLastStickY = 0;
 
-    D_xk1_8003BB50 = &gControllers[*gPlayerControlPorts];
+    D_xk1_8003BB50 = &gControllers[gPlayerControlPorts[0]];
 
     if (ABS(D_xk1_8003BB50->stickX) > D_xk1_80032C80 || ABS(D_xk1_8003BB50->stickY) > D_xk1_80032C80) {
         D_xk1_80032C8C++;

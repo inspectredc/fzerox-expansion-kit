@@ -25,7 +25,7 @@ s32 Mfs_GetFilesPreparation(u16 dirId) {
         }
     }
     if ((dirId == MFS_ENTRY_DOES_NOT_EXIST) || (Mfs_GetDirectoryIndex(dirId) == MFS_ENTRY_DOES_NOT_EXIST)) {
-        gMfsError = 0xF2;
+        gMfsError = N64DD_NOT_FOUND;
         return -1;
     }
     if (Mfs_ValidateFileSystemOperation(MFS_VALIDATION_CHECK_READ | MFS_VALIDATION_CHECK_DIRECTORY, 0, 0, dirId) < 0) {

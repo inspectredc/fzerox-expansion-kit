@@ -25,7 +25,7 @@ void func_xk1_8002DF10(void) {
     D_80794D30 = 0;
     gMfsRamArea.id.diskId[0] = '\0';
     func_807047AC();
-    if (gMfsError == 0xF2) {
+    if (gMfsError == N64DD_NOT_FOUND) {
         gMfsError = 0;
     }
 }
@@ -149,7 +149,7 @@ extern volatile u8 D_80794E1C;
 extern volatile u8 D_80794E20;
 extern volatile u8 D_80794E24;
 extern volatile s32 D_807C6F0C;
-extern s32 D_8076CBB0;
+extern bool D_8076CBB0;
 extern s32 D_80794CD8;
 
 s32 func_xk1_8002E368(void) {
@@ -167,49 +167,49 @@ s32 func_xk1_8002E368(void) {
     if (D_807C6EA8.unk_10 == 4) {
         D_807C6EA8.unk_10 = 1;
         D_xk1_80033400 = 1;
-        D_xk1_80033404 = 0xF6;
+        D_xk1_80033404 = N64DD_READ_ONLY_MEDIA;
     }
     switch (D_xk1_80033400) {
         case 0:
-            if (D_8076CBB0 != 0) {
+            if (D_8076CBB0) {
                 func_xk1_8002DF10();
-                D_8076CBB0 = 0;
+                D_8076CBB0 = false;
             }
             switch (D_807C6EA8.unk_00) {
                 case 11:
                 case 12:
-                    D_807C6F0C = func_xk1_8002BD64(D_807C6EA8.unk_54, D_807C6EA8.unk_1C);
+                    D_807C6F0C = func_xk1_8002BD64(D_807C6EA8.unk_54, D_807C6EA8.extension);
                     break;
                 case 13:
                 case 14:
-                    if (func_80768C88(D_807C6EA8.unk_16, D_807C6EA8.unk_18, D_807C6EA8.unk_1C)) {
+                    if (func_80768C88(D_807C6EA8.dirId, D_807C6EA8.name, D_807C6EA8.extension)) {
                         D_80794E20 = 1;
                     } else {
                         D_80794E20 = 0;
                     }
                     break;
                 case 8:
-                    Mfs_SaveFile(D_807C6EA8.unk_16, D_807C6EA8.unk_18, D_807C6EA8.unk_1C, D_807C6EA8.unk_20,
-                                 D_807C6EA8.unk_28, D_807C6EA8.unk_2C, D_807C6EA8.unk_30, D_807C6EA8.unk_34);
+                    Mfs_SaveFile(D_807C6EA8.dirId, D_807C6EA8.name, D_807C6EA8.extension, D_807C6EA8.writeBuf,
+                                 D_807C6EA8.fileSize, D_807C6EA8.attr, D_807C6EA8.copyCount, D_807C6EA8.writeChanges);
                     break;
                 case 9:
                 case 10:
-                    Mfs_LoadFileInDir(D_807C6EA8.unk_16, D_807C6EA8.unk_18, D_807C6EA8.unk_1C, D_807C6EA8.unk_38,
-                                      D_807C6EA8.unk_28);
+                    Mfs_LoadFileInDir(D_807C6EA8.dirId, D_807C6EA8.name, D_807C6EA8.extension, D_807C6EA8.readBuf,
+                                      D_807C6EA8.fileSize);
                     break;
                 case 15:
-                    Mfs_RenameFileInDir(D_807C6EA8.unk_16, D_807C6EA8.unk_3C, D_807C6EA8.unk_40, D_807C6EA8.unk_44,
-                                        D_807C6EA8.unk_48, D_807C6EA8.unk_34);
+                    Mfs_RenameFileInDir(D_807C6EA8.dirId, D_807C6EA8.oldName, D_807C6EA8.oldExtension, D_807C6EA8.newName,
+                                        D_807C6EA8.newExtension, D_807C6EA8.writeChanges);
                     break;
                 case 16:
-                    Mfs_DeleteFileInDir(D_807C6EA8.unk_16, D_807C6EA8.unk_18, D_807C6EA8.unk_1C, D_807C6EA8.unk_34);
+                    Mfs_DeleteFileInDir(D_807C6EA8.dirId, D_807C6EA8.name, D_807C6EA8.extension, D_807C6EA8.writeChanges);
                     break;
                 case 17:
-                    Mfs_GetFileInDirAttr(D_807C6EA8.unk_16, D_807C6EA8.unk_18, D_807C6EA8.unk_1C);
+                    Mfs_GetFileInDirAttr(D_807C6EA8.dirId, D_807C6EA8.name, D_807C6EA8.extension);
                     break;
                 case 18:
-                    Mfs_ChangeFileInDirAttr(D_807C6EA8.unk_16, D_807C6EA8.unk_18, D_807C6EA8.unk_1C, D_807C6EA8.unk_4C,
-                                            D_807C6EA8.unk_50, D_807C6EA8.unk_34);
+                    Mfs_ChangeFileInDirAttr(D_807C6EA8.dirId, D_807C6EA8.name, D_807C6EA8.extension, D_807C6EA8.attributeToAdd,
+                                            D_807C6EA8.attributeToRemove, D_807C6EA8.writeChanges);
                     break;
             }
             D_807C6EA8.unk_14 = D_xk1_80033404 = gMfsError;
@@ -219,7 +219,7 @@ s32 func_xk1_8002E368(void) {
             D_xk1_80033400 = 0;
             sp3C = D_xk1_80033404;
 
-            if ((D_xk1_80033404 == LEO_ERROR_GOOD) || (D_xk1_80033404 == 0xF2)) {
+            if ((D_xk1_80033404 == LEO_ERROR_GOOD) || (D_xk1_80033404 == N64DD_NOT_FOUND)) {
                 D_807C6EA8.unk_08 = 0;
                 switch (D_807C6EA8.unk_00) {
                     case 9:
@@ -254,7 +254,7 @@ s32 func_xk1_8002E368(void) {
                 sp3C = LEO_ERROR_DIAGNOSTIC_FAILURE;
                 break;
             }
-            if ((D_xk1_80033404 == 0x10A) || (D_xk1_80033404 == 0xF3)) {
+            if ((D_xk1_80033404 == 0x10A) || (D_xk1_80033404 == N64DD_DISK_DAMAGED)) {
                 func_80704068();
                 if (sp3B == 0) {
                     func_80703948();
@@ -272,7 +272,7 @@ s32 func_xk1_8002E368(void) {
                 }
                 break;
             }
-            if (D_xk1_80033404 == 0xF0) {
+            if (D_xk1_80033404 == N64DD_MEDIA_NOT_INIT) {
                 func_80704068();
                 func_807038B0();
                 func_80706518(1, 0x20, 0);
@@ -280,7 +280,7 @@ s32 func_xk1_8002E368(void) {
                 sp3C = LEO_ERROR_DIAGNOSTIC_FAILURE;
                 break;
             }
-            if (D_xk1_80033404 == 0xF6) {
+            if (D_xk1_80033404 == N64DD_READ_ONLY_MEDIA) {
                 sp3C = func_xk1_8002E2E8(1);
                 if (sp3C == LEO_ERROR_GOOD) {
                     sp3C = LEO_ERROR_DIAGNOSTIC_FAILURE;

@@ -144,7 +144,7 @@ u16 Mfs_GetFileIndex(u16 dirId, char* name, char* extension) {
         }
     }
 
-    gMfsError = 0xF2;
+    gMfsError = N64DD_NOT_FOUND;
     return MFS_ENTRY_DOES_NOT_EXIST;
 }
 

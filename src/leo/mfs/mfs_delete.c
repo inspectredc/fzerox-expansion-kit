@@ -35,7 +35,7 @@ s32 Mfs_DeleteFileInDir(u16 dirId, char* name, char* extension, bool writeChange
     }
     entryId = Mfs_GetFileIndex(dirId, name, extension);
     if (entryId == MFS_ENTRY_DOES_NOT_EXIST) {
-        gMfsError = 0xF2;
+        gMfsError = N64DD_NOT_FOUND;
         return -1;
     }
     if (Mfs_DeleteFile(entryId) < 0) {
@@ -57,15 +57,15 @@ s32 Mfs_CheckAndDeleteFile(u16 entryId, bool writeChanges) {
         return -1;
     }
     if (entryId < 0 || entryId > gDirectoryEntryCount) {
-        gMfsError = 0xF4;
+        gMfsError = N64DD_ARGUMENT_ILLEGAL;
         return -1;
     }
     if (!(gMfsRamArea.directoryEntry[entryId].attr & MFS_FILE_ATTR_FILE)) {
-        gMfsError = 0xF2;
+        gMfsError = N64DD_NOT_FOUND;
         return -1;
     }
     if (gMfsRamArea.directoryEntry[entryId].attr & MFS_FILE_ATTR_DIRECTORY) {
-        gMfsError = 0xF2;
+        gMfsError = N64DD_NOT_FOUND;
         return -1;
     }
     if (Mfs_DeleteFile(entryId) < 0) {

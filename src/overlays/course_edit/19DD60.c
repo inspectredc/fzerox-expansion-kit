@@ -106,7 +106,7 @@ void func_xk2_800EC508(void) {
     if (gControllers[gPlayerControlPorts[0]].buttonPressed & BTN_A) {
         if (D_xk1_80032C20 != 0) {
             func_8074122C(5);
-            func_80767FE4(1, 0x20, 0);
+            func_80767FE4(1, 0x20, NULL);
             D_800D6CA0.unk_08 = 0xFE;
         } else {
             func_8074122C(0x25);
@@ -199,7 +199,7 @@ void CourseEdit_Init(void) {
     ;
     D_xk1_8003066C = COURSE_CONTEXT()->courseData.venue;
     D_xk1_80030670 = COURSE_CONTEXT()->courseData.skybox;
-    D_xk1_80030674 = D_xk1_800328B4[(s8) COURSE_CONTEXT()->courseData.fileName[0x16]];
+    D_xk1_80030674 = D_xk1_800328B4[COURSE_CONTEXT()->courseData.unk_1F];
     func_80702FF4(D_xk1_8003066C);
     func_xk2_800E7028(D_80030608);
     func_xk2_800F5C5C();
@@ -400,7 +400,7 @@ s32 CourseEdit_Update(void) {
         func_xk2_800EC2A0();
     }
     func_xk2_800D8DAC();
-    func_xk1_8002D810(&gControllers[*gPlayerControlPorts]);
+    func_xk1_8002D810(&gControllers[gPlayerControlPorts[0]]);
     func_xk1_8002D974();
 
     if (D_8076C950 != 0) {
@@ -442,13 +442,13 @@ s32 CourseEdit_Update(void) {
             switch (D_80119880) {
                 case -1:
                 case 1:
-                    func_8076814C(0xFFFB, D_xk1_8003A598.unk_00, &D_xk1_8003A598.unk_1D, COURSE_CONTEXT(), 0xC830, 0,
-                                  0xFF, 1);
+                    func_8076814C(MFS_ENTRY_WORKING_DIR, D_xk1_8003A598.name, &D_xk1_8003A598.extension, COURSE_CONTEXT(), sizeof(CourseContext), 0,
+                                  0xFF, true);
                     D_800D6CA0.unk_08 = 0x12;
                     break;
                 case 9:
-                    func_807681C8(0xFFFB, D_xk1_8003A598.unk_00, &D_xk1_8003A598.unk_1D, &D_xk2_800F7408, 0xC830, 0,
-                                  0xFF, 1);
+                    func_807681C8(MFS_ENTRY_WORKING_DIR, D_xk1_8003A598.name, &D_xk1_8003A598.extension, &D_xk2_800F7408, sizeof(CourseContext), 0,
+                                  0xFF, true);
                     D_800D6CA0.unk_08 = 0x12;
                     break;
             }
@@ -461,7 +461,7 @@ s32 CourseEdit_Update(void) {
                 case -1:
                 case 1:
                     if (COURSE_CONTEXT()->courseData.flag == 0) {
-                        func_xk2_800EBFE8(D_xk1_8003A598.unk_00);
+                        func_xk2_800EBFE8(D_xk1_8003A598.name);
                         D_800D6CA0.unk_08 = 0x22;
                     } else {
                         D_800D6CA0.unk_08 = 0;
@@ -469,7 +469,7 @@ s32 CourseEdit_Update(void) {
                     break;
                 case 9:
                     if (D_xk2_800F7408.courseData.flag == 0) {
-                        func_xk2_800EBFE8(D_xk1_8003A598.unk_00);
+                        func_xk2_800EBFE8(D_xk1_8003A598.name);
                         D_800D6CA0.unk_08 = 0x22;
                     } else {
                         D_800D6CA0.unk_08 = 0;

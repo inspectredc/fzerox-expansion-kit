@@ -4,6 +4,7 @@
 #include "fzx_course.h"
 #include "fzx_assets.h"
 #include "segment_symbols.h"
+#include "leo/unk_leo.h"
 #include "leo/leo_internal.h"
 
 OSMesg D_8079E920;
@@ -3064,24 +3065,24 @@ extern s32 D_800F7404;
 extern OSMesgQueue gMFSMesgQ;
 extern s32 D_8079F9B4;
 extern s32 gMfsError;
-extern u8 D_800BF044[];
+extern u8 D_i2_800BF044[];
 extern s8 D_8076C7D8;
 
 UNUSED s32 D_80773738 = 0;
 
 void func_80701E90(s32 courseIndex) {
     s32 pad;
-    s32 sp50;
+    s32 diskCourseIndex;
     s32 pad2;
-    s32 sp48;
+    RomOffset romAddr;
     s32 pad3[2];
 
     PRINTF("============== COURSE LOAD %2d  ==============\n", courseIndex);
 
     func_i2_800AA80C();
     if (courseIndex >= COURSE_DEATH_RACE) {
-        sp48 = D_807C70C8 + (courseIndex - 30) * sizeof(CourseData);
-        func_80701D7C(sp48, osVirtualToPhysical(&COURSE_CONTEXT()->courseData), sizeof(CourseData));
+        romAddr = D_807C70C8 + (courseIndex - 30) * sizeof(CourseData);
+        func_80701D7C(romAddr, osVirtualToPhysical(&COURSE_CONTEXT()->courseData), sizeof(CourseData));
         PRINTF("ENTRY CHECK\n");
         if ((gPlayer1OverallPosition >= 4) && (courseIndex == COURSE_ENDING)) {
             COURSE_CONTEXT()->courseData.skybox = SKYBOX_BLUE;
@@ -3091,16 +3092,15 @@ void func_80701E90(s32 courseIndex) {
         return;
     } else if (courseIndex >= COURSE_EDIT_1) {
         PRINTF("ENTRY CHECK NONE(DEFAULT COURSE)\n");
-        sp50 = courseIndex - COURSE_EDIT_1;
+        diskCourseIndex = courseIndex - COURSE_EDIT_1;
         func_80701E08();
-        if (gEditCupTrackNames[sp50][0] == '\0' || sp50 >= 6) {
-            char sp38[8] = { "GHOST00" };
+        if (gEditCupTrackNames[diskCourseIndex][0] == '\0' || diskCourseIndex >= 6) {
+            char ghostName[8] = { "GHOST00" };
 
-            sp38[5] = (courseIndex / 10) + '0';
-            sp38[6] = (courseIndex % 10) + '0';
+            ghostName[5] = (courseIndex / 10) + '0';
+            ghostName[6] = (courseIndex % 10) + '0';
             func_i2_800A7CB8(func_i2_800AA84C());
-            func_8076852C(0xFFFB, sp38, "GOST", COURSE_CONTEXT(),
-                          sizeof(CourseData) + 3 * sizeof(GhostSave) + sizeof(SaveCourseRecords));
+            func_8076852C(MFS_ENTRY_WORKING_DIR, ghostName, "GOST", COURSE_CONTEXT(), sizeof(CourseContext));
             osRecvMesg(&gMFSMesgQ, NULL, OS_MESG_BLOCK);
             Course_CalculateChecksum();
             if (func_i2_800A9F98()) {
@@ -3110,28 +3110,26 @@ void func_80701E90(s32 courseIndex) {
             }
             PRINTF("DEF LOAD OK\n");
             func_i2_800A8CE4(func_i2_800AA84C(), courseIndex);
-            func_80703B40(SEGMENT_DISK_START(silence_3) + sp50, &COURSE_CONTEXT()->courseData, sizeof(CourseData), 0);
+            func_80703B40(SEGMENT_DISK_START(silence_3) + diskCourseIndex, &COURSE_CONTEXT()->courseData, sizeof(CourseData), 0);
             if ((Course_CalculateChecksum() != COURSE_CONTEXT()->courseData.checksum) ||
                 (COURSE_CONTEXT()->courseData.creatorId != CREATOR_NINTENDO) ||
-                ((s8) COURSE_CONTEXT()->courseData.fileName[0x16] >= 0xE)) {
+                (COURSE_CONTEXT()->courseData.unk_1F >= 0xE)) {
                 func_8070F8A4(-1, 9);
                 while (true) {}
             }
         } else {
-            func_8076852C(0xFFFB, gEditCupTrackNames[sp50], "CRSD", COURSE_CONTEXT(),
-                          sizeof(CourseData) + 3 * sizeof(GhostSave) + sizeof(SaveCourseRecords));
+            func_8076852C(MFS_ENTRY_WORKING_DIR, gEditCupTrackNames[diskCourseIndex], "CRSD", COURSE_CONTEXT(), sizeof(CourseContext));
             osRecvMesg(&gMFSMesgQ, NULL, OS_MESG_BLOCK);
             PRINTF("ENTRY CHECK BUT NONE %s (DEFAULT COURSE)\n");
             if (D_8079F9B4 != 0) {
-                if (gMfsError == 0xF2) {
-                    gEditCupTrackNames[sp50][0] = '\0';
+                if (gMfsError == N64DD_NOT_FOUND) {
+                    gEditCupTrackNames[diskCourseIndex][0] = '\0';
                     {
-                        char sp30[8] = { "GHOST00" };
-                        sp30[5] = (courseIndex / 10) + '0';
-                        sp30[6] = (courseIndex % 10) + '0';
+                        char ghostName[8] = { "GHOST00" };
+                        ghostName[5] = (courseIndex / 10) + '0';
+                        ghostName[6] = (courseIndex % 10) + '0';
                         func_i2_800A7CB8(func_i2_800AA84C());
-                        func_8076852C(0xFFFB, sp30, "GOST", COURSE_CONTEXT(),
-                                      sizeof(CourseData) + 3 * sizeof(GhostSave) + sizeof(SaveCourseRecords));
+                        func_8076852C(MFS_ENTRY_WORKING_DIR, ghostName, "GOST", COURSE_CONTEXT(), sizeof(CourseContext));
                         osRecvMesg(&gMFSMesgQ, NULL, OS_MESG_BLOCK);
                         Course_CalculateChecksum();
                         if (func_i2_800A9F98()) {
@@ -3141,11 +3139,11 @@ void func_80701E90(s32 courseIndex) {
                         }
                         PRINTF("DEF LOAD OK\n");
                         func_i2_800A8CE4(func_i2_800AA84C(), courseIndex);
-                        func_80703B40(SEGMENT_DISK_START(silence_3) + sp50, &COURSE_CONTEXT()->courseData,
+                        func_80703B40(SEGMENT_DISK_START(silence_3) + diskCourseIndex, &COURSE_CONTEXT()->courseData,
                                       sizeof(CourseData), 0);
                         if ((Course_CalculateChecksum() != COURSE_CONTEXT()->courseData.checksum) ||
                             (COURSE_CONTEXT()->courseData.creatorId != CREATOR_NINTENDO) ||
-                            ((s8) COURSE_CONTEXT()->courseData.fileName[0x16] >= 0xE)) {
+                            (COURSE_CONTEXT()->courseData.unk_1F >= 0xE)) {
                             func_8070F8A4(-1, 9);
                             while (true) {}
                         }
@@ -3159,20 +3157,19 @@ void func_80701E90(s32 courseIndex) {
         }
         gCourseInfos[courseIndex].encodedCourseIndex = (Course_CalculateChecksum() << 5) | COURSE_EDIT_1;
     } else {
-        char sp28[8] = { "GHOST00" };
-        sp28[5] = (courseIndex / 10) + '0';
-        sp28[6] = (courseIndex % 10) + '0';
+        char ghostName[8] = { "GHOST00" };
+        ghostName[5] = (courseIndex / 10) + '0';
+        ghostName[6] = (courseIndex % 10) + '0';
         func_i2_800A7CB8(func_i2_800AA84C());
         if (D_8076C7D8 == 0) {
-            func_8076852C(0xFFFB, sp28, "GOST", COURSE_CONTEXT(),
-                          sizeof(CourseData) + 3 * sizeof(GhostSave) + sizeof(SaveCourseRecords));
+            func_8076852C(MFS_ENTRY_WORKING_DIR, ghostName, "GOST", COURSE_CONTEXT(), sizeof(CourseContext));
             osRecvMesg(&gMFSMesgQ, NULL, OS_MESG_BLOCK);
         }
-        sp48 = D_807C70C8 + courseIndex * sizeof(CourseData);
+        romAddr = D_807C70C8 + courseIndex * sizeof(CourseData);
         PRINTF("UNPACK\n");
-        func_80701D7C(sp48, osVirtualToPhysical(&COURSE_CONTEXT()->courseData), sizeof(CourseData));
+        func_80701D7C(romAddr, osVirtualToPhysical(&COURSE_CONTEXT()->courseData), sizeof(CourseData));
         PRINTF("UNPACK OK\n");
-        COURSE_CONTEXT()->courseData.fileName[0x16] = D_800BF044[courseIndex];
+        COURSE_CONTEXT()->courseData.unk_1F = D_i2_800BF044[courseIndex];
         if ((D_8076C954 != 0) && (courseIndex == COURSE_RED_CANYON_2)) {
             COURSE_CONTEXT()->courseData.dirt[21] = DIRT_NONE;
             COURSE_CONTEXT()->courseData.checksum = Course_CalculateChecksum();
@@ -3187,16 +3184,16 @@ void func_80701E90(s32 courseIndex) {
 
 void func_80702448(s32 courseIndex) {
     s32 pad[2];
-    s32 sp4C;
-    s32 sp48;
+    s32 diskCourseIndex;
+    RomOffset romAddr;
     s32 pad3[2];
 
     func_i2_800AA80C();
     if (courseIndex >= COURSE_DEATH_RACE) {
         PRINTF("ENTRY CHECK\n");
         PRINTF("INDEX %d\n");
-        sp48 = D_807C70C8 + (courseIndex - 30) * sizeof(CourseData);
-        func_80701D7C(sp48, osVirtualToPhysical(&COURSE_CONTEXT()->courseData), sizeof(CourseData));
+        romAddr = D_807C70C8 + (courseIndex - 30) * sizeof(CourseData);
+        func_80701D7C(romAddr, osVirtualToPhysical(&COURSE_CONTEXT()->courseData), sizeof(CourseData));
         if ((gPlayer1OverallPosition >= 4) && (courseIndex == COURSE_ENDING)) {
             COURSE_CONTEXT()->courseData.skybox = SKYBOX_BLUE;
         }
@@ -3205,7 +3202,7 @@ void func_80702448(s32 courseIndex) {
         return;
     } else if (courseIndex >= COURSE_EDIT_1) {
         PRINTF("ENTRY CHECK NONE(DEFAULT COURSE)\n");
-        sp4C = courseIndex - COURSE_EDIT_1;
+        diskCourseIndex = courseIndex - COURSE_EDIT_1;
         switch (func_8070595C()) {
             case 1:
                 func_8070F8A4(-1, 3);
@@ -3217,15 +3214,14 @@ void func_80702448(s32 courseIndex) {
                 break;
         }
         while (func_8070595C() != 2) {}
-        if (gEditCupTrackNames[sp4C][0] == '\0' || sp4C >= 6) {
-            char sp38[8] = { "GHOST00" };
+        if (gEditCupTrackNames[diskCourseIndex][0] == '\0' || diskCourseIndex >= 6) {
+            char ghostName[8] = { "GHOST00" };
             s32 pad;
 
-            sp38[5] = (courseIndex / 10) + '0';
-            sp38[6] = (courseIndex % 10) + '0';
+            ghostName[5] = (courseIndex / 10) + '0';
+            ghostName[6] = (courseIndex % 10) + '0';
             func_i2_800A7CB8(func_i2_800AA84C());
-            func_8076852C(0xFFFB, sp38, "GOST", COURSE_CONTEXT(),
-                          sizeof(CourseData) + 3 * sizeof(GhostSave) + sizeof(SaveCourseRecords));
+            func_8076852C(MFS_ENTRY_WORKING_DIR, ghostName, "GOST", COURSE_CONTEXT(), sizeof(CourseContext));
             osRecvMesg(&gMFSMesgQ, NULL, OS_MESG_BLOCK);
             Course_CalculateChecksum();
             if (func_i2_800A9F98()) {
@@ -3235,30 +3231,28 @@ void func_80702448(s32 courseIndex) {
             PRINTF("course index is %d\n", courseIndex);
             PRINTF("DEF LOAD OK\n");
             func_i2_800A8CE4(func_i2_800AA84C(), courseIndex);
-            func_80703B40(SEGMENT_DISK_START(silence_3) + sp4C, &COURSE_CONTEXT()->courseData, sizeof(CourseData), 0);
+            func_80703B40(SEGMENT_DISK_START(silence_3) + diskCourseIndex, &COURSE_CONTEXT()->courseData, sizeof(CourseData), 0);
             if ((Course_CalculateChecksum() != COURSE_CONTEXT()->courseData.checksum) ||
                 (COURSE_CONTEXT()->courseData.creatorId != CREATOR_NINTENDO) ||
-                ((s8) COURSE_CONTEXT()->courseData.fileName[0x16] >= 0xE)) {
+                (COURSE_CONTEXT()->courseData.unk_1F >= 0xE)) {
                 func_8070F8A4(-1, 9);
                 while (true) {}
             }
         } else {
-            func_8076852C(0xFFFB, gEditCupTrackNames[sp4C], "CRSD", COURSE_CONTEXT(),
-                          sizeof(CourseData) + 3 * sizeof(GhostSave) + sizeof(SaveCourseRecords));
+            func_8076852C(MFS_ENTRY_WORKING_DIR, gEditCupTrackNames[diskCourseIndex], "CRSD", COURSE_CONTEXT(), sizeof(CourseContext));
             osRecvMesg(&gMFSMesgQ, NULL, OS_MESG_BLOCK);
             PRINTF("ENTRY CHECK BUT NONE %s (DEFAULT COURSE)\n");
             if (D_8079F9B4 != 0) {
-                if (gMfsError == 0xF2) {
-                    gEditCupTrackNames[sp4C][0] = '\0';
+                if (gMfsError == N64DD_NOT_FOUND) {
+                    gEditCupTrackNames[diskCourseIndex][0] = '\0';
                     {
-                        char sp30[8] = { "GHOST00" };
+                        char ghostName[8] = { "GHOST00" };
                         s32 pad;
 
-                        sp30[5] = (courseIndex / 10) + '0';
-                        sp30[6] = (courseIndex % 10) + '0';
+                        ghostName[5] = (courseIndex / 10) + '0';
+                        ghostName[6] = (courseIndex % 10) + '0';
                         func_i2_800A7CB8(func_i2_800AA84C());
-                        func_8076852C(0xFFFB, sp30, "GOST", COURSE_CONTEXT(),
-                                      sizeof(CourseData) + 3 * sizeof(GhostSave) + sizeof(SaveCourseRecords));
+                        func_8076852C(MFS_ENTRY_WORKING_DIR, ghostName, "GOST", COURSE_CONTEXT(), sizeof(CourseContext));
                         osRecvMesg(&gMFSMesgQ, NULL, OS_MESG_BLOCK);
                         Course_CalculateChecksum();
                         if (func_i2_800A9F98()) {
@@ -3268,11 +3262,11 @@ void func_80702448(s32 courseIndex) {
                         PRINTF("course index is %d\n", courseIndex);
                         PRINTF("DEF LOAD OK\n");
                         func_i2_800A8CE4(func_i2_800AA84C(), courseIndex);
-                        func_80703B40(SEGMENT_DISK_START(silence_3) + sp4C, &COURSE_CONTEXT()->courseData,
+                        func_80703B40(SEGMENT_DISK_START(silence_3) + diskCourseIndex, &COURSE_CONTEXT()->courseData,
                                       sizeof(CourseData), 0);
                         if ((Course_CalculateChecksum() != COURSE_CONTEXT()->courseData.checksum) ||
                             (COURSE_CONTEXT()->courseData.creatorId != CREATOR_NINTENDO) ||
-                            ((s8) COURSE_CONTEXT()->courseData.fileName[0x16] >= 0xE)) {
+                            (COURSE_CONTEXT()->courseData.unk_1F >= 0xE)) {
                             func_8070F8A4(-1, 9);
                             while (true) {}
                         }
@@ -3286,9 +3280,9 @@ void func_80702448(s32 courseIndex) {
         }
         gCourseInfos[courseIndex].encodedCourseIndex = (Course_CalculateChecksum() << 5) | COURSE_EDIT_1;
     } else {
-        sp48 = D_807C70C8 + courseIndex * sizeof(CourseData);
+        romAddr = D_807C70C8 + courseIndex * sizeof(CourseData);
 
-        func_80701D7C(sp48, osVirtualToPhysical(&COURSE_CONTEXT()->courseData), sizeof(CourseData));
+        func_80701D7C(romAddr, osVirtualToPhysical(&COURSE_CONTEXT()->courseData), sizeof(CourseData));
         if (D_8076C954 != 0 && courseIndex == COURSE_RED_CANYON_2) {
             COURSE_CONTEXT()->courseData.dirt[21] = DIRT_NONE;
             COURSE_CONTEXT()->courseData.checksum = Course_CalculateChecksum();
@@ -3556,7 +3550,7 @@ Gfx D_8076CAF8[] = {
 };
 
 s32 func_80703228(void) {
-    return (s8) COURSE_CONTEXT()->courseData.fileName[0x16];
+    return COURSE_CONTEXT()->courseData.unk_1F;
 }
 
 void func_80703234(void) {

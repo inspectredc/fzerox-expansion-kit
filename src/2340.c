@@ -379,7 +379,7 @@ void func_806F5118(void) {
 extern OSMesgQueue gSerialEventQueue;
 extern s8 gGamePaused;
 extern CourseInfo* gCurrentCourseInfo;
-extern u8 D_800BF044[];
+extern u8 D_i2_800BF044[];
 
 void func_806F5310(void) {
     s32 sp24;
@@ -553,7 +553,7 @@ void func_806F5310(void) {
                     func_i3_UpdateCharacterPortraits();
                     if (D_8076C7D8 == 0) {
                         if (gCurrentCourseInfo->courseIndex < COURSE_EDIT_1) {
-                            func_807419F0(D_800BF044[gCurrentCourseInfo->courseIndex]);
+                            func_807419F0(D_i2_800BF044[gCurrentCourseInfo->courseIndex]);
                         } else if (gCurrentCourseInfo->courseIndex == COURSE_DEATH_RACE) {
                             func_807419F0(0x11);
                         } else {

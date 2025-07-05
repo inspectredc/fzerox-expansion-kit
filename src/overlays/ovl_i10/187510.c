@@ -33,9 +33,9 @@ void func_i10_8012B894(s32 progress) {
     func_i10_8012B780(aDDLoadBlueFalconTex, progress, 180, 32, 16, 32);
 }
 
-extern s32 D_800D11C8[];
+extern s32 D_800D11C8[6];
 extern OSMesgQueue gMFSMesgQ;
-extern u8 gEditCupTrackNames[][9];
+extern u8 gEditCupTrackNames[4 * 6][9];
 
 void func_i10_8012B904(void) {
     s32 i;
@@ -43,10 +43,10 @@ void func_i10_8012B904(void) {
     for (i = 0; i < 6; i++) {
         gEditCupTrackNames[i][0] = '\0';
     }
-    func_8076852C(0xFFFB, "CRS_ENTRY", "CENT", gEditCupTrackNames, 0xD8);
-    osRecvMesg(&gMFSMesgQ, NULL, 1);
-    func_8076852C(0xFFFB, "OPTION", "OPT", D_800D11C8, 0x18);
-    osRecvMesg(&gMFSMesgQ, NULL, 1);
+    func_8076852C(MFS_ENTRY_WORKING_DIR, "CRS_ENTRY", "CENT", gEditCupTrackNames, sizeof(gEditCupTrackNames));
+    osRecvMesg(&gMFSMesgQ, NULL, OS_MESG_BLOCK);
+    func_8076852C(MFS_ENTRY_WORKING_DIR, "OPTION", "OPT", D_800D11C8, sizeof(D_800D11C8));
+    osRecvMesg(&gMFSMesgQ, NULL, OS_MESG_BLOCK);
 
     for (i = 0; i < 6; i++) {
         if (Mfs_ValidateFileName(gEditCupTrackNames[i]) != 0) {

@@ -9,42 +9,42 @@
 typedef struct unk_807C6F10 {
     s32 unk_00;
     s32 lba;
-    s32 unk_08;
-    s32 unk_0C;
-    OSPiHandle* unk_10;
-    OSIoMesg* unk_14;
+    void* vAddr;
+    s32 nLBAs;
+    OSPiHandle* piHandle;
+    OSIoMesg* ioMesg;
     s32 direction;
     LEOCmd* cmdBlock;
     OSMesgQueue* mq;
 } unk_807C6F10;
 
 typedef struct unk_807C6EA8 {
-    s32 unk_00;
-    u8 unk_04;
-    s32 unk_08;
-    s32 unk_0C;
-    s32 unk_10;
-    s16 unk_14;
-    u16 unk_16;
-    u8* unk_18;
-    u8* unk_1C;
-    void* unk_20;
-    s32 unk_24;
-    s32 unk_28;
-    s32 unk_2C;
-    s32 unk_30;
-    s32 unk_34;
-    void* unk_38;
-    u8* unk_3C;
-    u8* unk_40;
-    u8* unk_44;
-    u8* unk_48;
-    s32 unk_4C;
-    s32 unk_50;
-    u8 unk_54;
-    s32 unk_58;
-    s32 unk_5C;
-    s32 unk_60;
+    /* 0x00 */ s32 unk_00;
+    /* 0x04 */ u8 unk_04;
+    /* 0x08 */ s32 unk_08;
+    /* 0x0C */ s32 unk_0C;
+    /* 0x10 */ s32 unk_10;
+    /* 0x14 */ s16 unk_14;
+    /* 0x16 */ u16 dirId;
+    /* 0x18 */ char* name;
+    /* 0x1C */ char* extension;
+    /* 0x20 */ void* writeBuf;
+    /* 0x24 */ s32 offset;
+    /* 0x28 */ s32 fileSize;
+    /* 0x2C */ s32 attr;
+    /* 0x30 */ s32 copyCount;
+    /* 0x34 */ bool writeChanges;
+    /* 0x38 */ void* readBuf;
+    /* 0x3C */ char* oldName;
+    /* 0x40 */ char* oldExtension;
+    /* 0x44 */ char* newName;
+    /* 0x48 */ char* newExtension;
+    /* 0x4C */ s32 attributeToAdd;
+    /* 0x50 */ s32 attributeToRemove;
+    /* 0x54 */ u8 unk_54;
+    /* 0x58 */ s32 startLba;
+    /* 0x5C */ s32 lbaBuf;
+    /* 0x60 */ s32 bssSize;
 } unk_807C6EA8;
 
 typedef struct unk_80225800 {
@@ -697,7 +697,7 @@ typedef struct unk_806F2400_unk_00 {
     u8 cockpitR;
     u8 cockpitG;
     u8 cockpitB;
-    u8 machineName[9];
+    char machineName[9];
     u16 checksum;
 } unk_806F2400_unk_00; // size = 0x20
 
@@ -732,11 +732,11 @@ typedef struct unk_8009E224 {
 } unk_8009E224; // size = 0x10
 
 typedef struct unk_8003A5D8 {
-    char unk_00[16];
-    s32 unk_10;
+    char name[16];
+    s32 attr;
     s8 unk_14[0x8];
     char unk_1C;
-    char unk_1D[5];
+    char extension[5];
     u8 unk_22;
     s8 unk_23;
 } unk_8003A5D8; //size = 0x24

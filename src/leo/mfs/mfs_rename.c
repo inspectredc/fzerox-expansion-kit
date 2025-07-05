@@ -38,7 +38,7 @@ s32 Mfs_RenameFileInDir(u16 dirId, char* oldName, char* oldExtension, char* newN
     }
     entryId = Mfs_GetFileIndex(dirId, oldName, oldExtension);
     if (entryId == MFS_ENTRY_DOES_NOT_EXIST) {
-        gMfsError = 0xF2;
+        gMfsError = N64DD_NOT_FOUND;
         return -1;
     }
     if (Mfs_RenameFile(entryId, newName, newExtension) < 0) {
@@ -61,15 +61,15 @@ s32 Mfs_CheckAndRenameFile(u16 entryId, char* newName, char* newExtension, bool 
         return -1;
     }
     if ((entryId < 0) || (entryId > gDirectoryEntryCount)) {
-        gMfsError = 0xF4;
+        gMfsError = N64DD_ARGUMENT_ILLEGAL;
         return -1;
     }
     if (!(gMfsRamArea.directoryEntry[entryId].attr & MFS_FILE_ATTR_FILE)) {
-        gMfsError = 0xF2;
+        gMfsError = N64DD_NOT_FOUND;
         return -1;
     }
     if (gMfsRamArea.directoryEntry[entryId].attr & MFS_FILE_ATTR_DIRECTORY) {
-        gMfsError = 0xF2;
+        gMfsError = N64DD_NOT_FOUND;
         return -1;
     }
     if (Mfs_RenameFile(entryId, newName, newExtension) < 0) {

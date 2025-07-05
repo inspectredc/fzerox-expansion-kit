@@ -105,12 +105,12 @@ s32 Mfs_CopyFileToDir(s32 entryId, char* name, u16 parentDirId) {
     fileSize = gMfsRamArea.directoryEntry[entryId].fileSize;
     nextFreeEntryId = Mfs_GetNextFreeDirectoryEntry();
     if (nextFreeEntryId == MFS_ENTRY_DOES_NOT_EXIST) {
-        gMfsError = 0xF1;
+        gMfsError = N64DD_AREA_LACKED;
         return -1;
     }
     Mfs_GetFATBlockSizeInfo(NULL, &unusedBlocksSize);
     if (unusedBlocksSize < fileSize) {
-        gMfsError = 0xF1;
+        gMfsError = N64DD_AREA_LACKED;
         return -1;
     }
     originalFatId = gMfsRamArea.directoryEntry[entryId].fileAllocationTableId;
@@ -118,7 +118,7 @@ s32 Mfs_CopyFileToDir(s32 entryId, char* name, u16 parentDirId) {
     while (fileSize > 0) {
         Mfs_FindBlocksForSize(fileSize, &firstLba, &nLBAs, &bestBlockSize);
         if (firstLba == -1) {
-            gMfsError = 0xF1;
+            gMfsError = N64DD_AREA_LACKED;
             return -1;
         }
         lbaOffset = 0;

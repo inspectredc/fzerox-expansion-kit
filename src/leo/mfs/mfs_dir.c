@@ -43,11 +43,11 @@ s32 Mfs_SetWorkingDirImpl(u16 dirId) {
     if ((dirId == MFS_ENTRY_WORKING_PARENT_DIR) &&
         ((dirId = Mfs_GetParentDir(MFS_ENTRY_WORKING_DIR), (dirId == MFS_ENTRY_ROOT_PARENT_DIR)) ||
          (dirId == MFS_ENTRY_DOES_NOT_EXIST))) {
-        gMfsError = 0xF4;
+        gMfsError = N64DD_ARGUMENT_ILLEGAL;
         return -1;
     }
     if (Mfs_GetDirectoryIndex(dirId) == MFS_ENTRY_DOES_NOT_EXIST) {
-        return 0xF2;
+        return N64DD_NOT_FOUND;
     }
     gWorkingDirectory = dirId;
     return 0;
@@ -77,7 +77,7 @@ s32 Mfs_GetParentDir(u16 dirId) {
     }
     entryId = Mfs_GetDirectoryIndex(dirId);
     if (entryId == MFS_ENTRY_DOES_NOT_EXIST) {
-        gMfsError = 0xF2;
+        gMfsError = N64DD_NOT_FOUND;
         return MFS_ENTRY_DOES_NOT_EXIST;
     }
     return gMfsRamArea.directoryEntry[dirId].parentDirId;
@@ -117,12 +117,12 @@ s32 Mfs_MkDir(u16 dirId, u16 subDirId) {
     }
     dirEntryIndex = Mfs_GetDirectoryIndex(dirId);
     if (dirEntryIndex == MFS_ENTRY_DOES_NOT_EXIST) {
-        gMfsError = 0xF2;
+        gMfsError = N64DD_NOT_FOUND;
         return -1;
     }
     subDirEntryIndex = Mfs_GetDirectoryIndex(subDirId);
     if (subDirEntryIndex == MFS_ENTRY_DOES_NOT_EXIST) {
-        gMfsError = 0xF2;
+        gMfsError = N64DD_NOT_FOUND;
         return -1;
     }
     if (Mfs_ValidateFileSystemOperation(MFS_VALIDATION_CHECK_WRITE | MFS_VALIDATION_CHECK_MAIN_ENTRY |
@@ -194,7 +194,7 @@ s32 Mfs_DeleteDir(u16 dirId, char* name, bool writeChanges) {
         return -1;
     }
     if (Mfs_ValidateFileName(name) < 0) {
-        gMfsError = 0xF4;
+        gMfsError = N64DD_ARGUMENT_ILLEGAL;
         return -1;
     }
     if (dirId == MFS_ENTRY_WORKING_DIR) {
@@ -208,16 +208,16 @@ s32 Mfs_DeleteDir(u16 dirId, char* name, bool writeChanges) {
         return -1;
     }
     if (dirId == MFS_ENTRY_ROOT_PARENT_DIR) {
-        gMfsError = 0xF4;
+        gMfsError = N64DD_ARGUMENT_ILLEGAL;
         return -1;
     }
     if (dirId == MFS_ENTRY_WORKING_DIR) {
-        gMfsError = 0xF4;
+        gMfsError = N64DD_ARGUMENT_ILLEGAL;
         return -1;
     }
     entryId = Mfs_GetDirectoryIndex(dirId);
     if (entryId == MFS_ENTRY_DOES_NOT_EXIST) {
-        gMfsError = 0xF2;
+        gMfsError = N64DD_NOT_FOUND;
         return -1;
     }
     if (Mfs_DeleteDirEntry(entryId, writeChanges) < 0) {

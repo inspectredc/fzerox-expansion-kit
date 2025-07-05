@@ -67,6 +67,15 @@ typedef struct MfsRamArea {
 #define LEO_MANAGER_REGION_JP 0x101
 #define LEO_MANAGER_REGION_US 0x102
 
+#define N64DD_MEDIA_NOT_INIT 0xF0
+#define N64DD_AREA_LACKED 0xF1
+#define N64DD_NOT_FOUND 0xF2
+#define N64DD_DISK_DAMAGED 0xF3
+#define N64DD_ARGUMENT_ILLEGAL 0xF4
+#define N64DD_DISKID_ILLEGAL 0xF5
+#define N64DD_READ_ONLY_MEDIA 0xF6
+#define N64DD_MANAGER_NOT_CREATED 0xF7
+
 #define MFS_VOLUME_ATTR_VPROTECT_WRITE (1 << 5) // Prohibits writes unless game and company code matches
 #define MFS_VOLUME_ATTR_VPROTECT_READ (1 << 6) // Prohibits reads unless game and company code matches
 #define MFS_VOLUME_ATTR_WPROTECT (1 << 7) // Prohibits all writes
