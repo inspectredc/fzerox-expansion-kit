@@ -157,8 +157,7 @@ void func_xk2_800EACB0(void) {
         *COURSE_CONTEXT() = D_xk2_800F7408;
     }
     if ((Course_CalculateChecksum() != COURSE_CONTEXT()->courseData.checksum) ||
-        (COURSE_CONTEXT()->courseData.creatorId != CREATOR_NINTENDO) ||
-        (COURSE_CONTEXT()->courseData.unk_1F >= 0xE)) {
+        (COURSE_CONTEXT()->courseData.creatorId != CREATOR_NINTENDO) || (COURSE_CONTEXT()->courseData.unk_1F >= 0xE)) {
         PRINTF("COURSE DATA CHECK SUM ERROR 0x%x(DATA WAS BROKEN 0x%x)\n");
         func_xk2_800EE664(0xA);
         func_xk2_800EF8B0();
@@ -204,7 +203,8 @@ extern s32 D_xk2_80119884;
 s32 func_xk2_800EAF24(unk_8003A5D8* arg0) {
     D_80794E10 = 0;
     D_xk2_800F7400 = 0;
-    func_80768574(MFS_ENTRY_WORKING_DIR, arg0->name, &D_xk1_8003A5D8[D_xk2_80119884].extension, &D_xk2_800F7408, sizeof(CourseContext));
+    func_80768574(MFS_ENTRY_WORKING_DIR, arg0->name, &D_xk1_8003A5D8[D_xk2_80119884].extension, &D_xk2_800F7408,
+                  sizeof(CourseContext));
     mfsStrCpy(&D_80030060, arg0);
     return 0;
 }
@@ -212,7 +212,8 @@ s32 func_xk2_800EAF24(unk_8003A5D8* arg0) {
 s32 func_xk2_800EAFA8(unk_8003A5D8* arg0) {
     D_80794E10 = 0;
     D_xk2_800F7400 = 0;
-    func_80768574(MFS_ENTRY_WORKING_DIR, arg0->name, &D_xk1_8003A5D8[D_xk2_80119884].extension, &D_xk2_800F7408, sizeof(CourseContext));
+    func_80768574(MFS_ENTRY_WORKING_DIR, arg0->name, &D_xk1_8003A5D8[D_xk2_80119884].extension, &D_xk2_800F7408,
+                  sizeof(CourseContext));
     return 0;
 }
 
@@ -297,9 +298,11 @@ void func_xk2_800EB250(void) {
 
 void func_xk2_800EB304(char* name, s32 attr) {
     if (attr & MFS_FILE_ATTR_FORBID_W) {
-        func_807689BC(MFS_ENTRY_WORKING_DIR, name, &D_xk1_8003A5D8[D_xk2_80119884].extension, 0, MFS_FILE_ATTR_FORBID_W, true);
+        func_807689BC(MFS_ENTRY_WORKING_DIR, name, &D_xk1_8003A5D8[D_xk2_80119884].extension, 0, MFS_FILE_ATTR_FORBID_W,
+                      true);
     } else {
-        func_807689BC(MFS_ENTRY_WORKING_DIR, name, &D_xk1_8003A5D8[D_xk2_80119884].extension, MFS_FILE_ATTR_FORBID_W, 0, true);
+        func_807689BC(MFS_ENTRY_WORKING_DIR, name, &D_xk1_8003A5D8[D_xk2_80119884].extension, MFS_FILE_ATTR_FORBID_W, 0,
+                      true);
     }
 }
 
@@ -314,7 +317,7 @@ void func_xk2_800EB3B4(void) {
 }
 
 extern s32 D_xk1_80030610;
-extern u8 D_xk1_8003A560[];
+extern u8 gExpansionKitNameEntryStr[];
 extern s32 D_xk2_80103F10;
 extern s32 D_xk2_80104378;
 extern s32 D_xk2_80119884;
@@ -447,7 +450,7 @@ void func_xk2_800EB400(void) {
             break;
         case 7:
             func_xk1_800294AC();
-            mfsStrCpy(D_xk1_8003A560, D_xk1_8003A5D8[courseIndex].name);
+            mfsStrCpy(gExpansionKitNameEntryStr, D_xk1_8003A5D8[courseIndex].name);
             func_xk2_800EAFA8(D_xk1_8003A5D8[courseIndex].name);
             D_xk1_80030610 = -1;
             D_800D6CA0.unk_08 = 0x33;

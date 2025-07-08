@@ -29,8 +29,8 @@ void func_i2_800A9CE0(s32 courseIndex, GhostRecord* ghostRecord) {
         return;
     }
     func_i2_800AA80C();
-    func_807684AC(MFS_ENTRY_WORKING_DIR, D_i2_800BF030, "GOST", COURSE_CONTEXT()->ghostSave, offsetof(CourseContext, ghostSave),
-                  3 * sizeof(GhostSave) + sizeof(SaveCourseRecords));
+    func_807684AC(MFS_ENTRY_WORKING_DIR, D_i2_800BF030, "GOST", COURSE_CONTEXT()->ghostSave,
+                  offsetof(CourseContext, ghostSave), 3 * sizeof(GhostSave) + sizeof(SaveCourseRecords));
     osRecvMesg(&gMFSMesgQ, NULL, OS_MESG_BLOCK);
     for (i = 0; i < 3; i++, ghostRecord++, ghostSave++) {
         PRINTF("Ghost Name %s\n");
@@ -92,8 +92,8 @@ void func_i2_800AA024(s32 courseIndex, s32 ghostIndex, GhostData* ghostData) {
         return;
     }
     func_i2_800AA80C();
-    func_807684AC(MFS_ENTRY_WORKING_DIR, D_i2_800BF030, "GOST", COURSE_CONTEXT()->ghostSave, offsetof(CourseContext, ghostSave),
-                  3 * sizeof(GhostSave));
+    func_807684AC(MFS_ENTRY_WORKING_DIR, D_i2_800BF030, "GOST", COURSE_CONTEXT()->ghostSave,
+                  offsetof(CourseContext, ghostSave), 3 * sizeof(GhostSave));
     osRecvMesg(&gMFSMesgQ, NULL, OS_MESG_BLOCK);
     *ghostData = ghostSave[ghostIndex].data;
 }

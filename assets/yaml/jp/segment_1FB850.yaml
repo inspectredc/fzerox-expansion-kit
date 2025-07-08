@@ -61,23 +61,14 @@ D_7004300:
   offset: 0x4300
   symbol: D_7004300
 
-D_7004900:
+aExpansionKitABButtonTex:
   type: TEXTURE
   ctype: u16
   format: RGBA16
   width: 16
-  height: 16
+  height: 32
   offset: 0x4900
-  symbol: D_7004900
-
-D_7004B00:
-  type: TEXTURE
-  ctype: u16
-  format: RGBA16
-  width: 16
-  height: 16
-  offset: 0x4B00
-  symbol: D_7004B00
+  symbol: aExpansionKitABButtonTex
 
 D_7004D00:
   type: TEXTURE
@@ -340,7 +331,7 @@ D_700A880:
   offset: 0xA880
   symbol: D_700A880
 
-D_700B480:
+aExpansionKitNameEntryTex:
   type: TEXTURE
   ctype: u8
   format: CI8
@@ -348,15 +339,15 @@ D_700B480:
   height: 120
   tlut: 0x700FF80
   offset: 0xB480
-  symbol: D_700B480
+  symbol: aExpansionKitNameEntryTex
 
-D_700FF80:
+aExpansionKitNameEntryPalette:
   type: TEXTURE
   offset: 0xFF80
   ctype: u16
   format: TLUT
   colors: 256
-  symbol: D_700FF80
+  symbol: aExpansionKitNameEntryPalette
 
 D_7010180:
   type: TEXTURE

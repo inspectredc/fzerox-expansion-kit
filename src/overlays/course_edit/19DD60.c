@@ -170,7 +170,7 @@ void CourseEdit_Init(void) {
     D_800D6CA0.unk_28.pos.z = 0.0f;
     // clang-format on
     func_xk1_80025C00(3);
-    func_xk1_80029350(3);
+    ExpansionKit_SetInputIndicatorFlashRate(3);
     func_xk1_8002FB80();
     func_xk1_8002E9D0(3);
     func_i2_800B91AC(0);
@@ -196,7 +196,6 @@ void CourseEdit_Init(void) {
     func_xk1_8002D880(0x18);
     func_xk2_800E77F0();
     COURSE_CONTEXT()->courseData = D_800D0910;
-    ;
     D_xk1_8003066C = COURSE_CONTEXT()->courseData.venue;
     D_xk1_80030670 = COURSE_CONTEXT()->courseData.skybox;
     D_xk1_80030674 = D_xk1_800328B4[COURSE_CONTEXT()->courseData.unk_1F];
@@ -356,15 +355,15 @@ void func_xk2_800ECD60(void) {
 }
 
 extern s32 D_xk1_80030610;
-extern s32 D_xk1_80032AC0;
-extern u8 D_xk1_8003A560[];
+extern s32 gExpansionKitNameEntryStrLength;
+extern u8 gExpansionKitNameEntryStr[];
 extern s32 D_80119880;
 
 void func_xk2_800ECD90(void) {
 
     if (gControllers[gPlayerControlPorts[0]].buttonPressed & BTN_A) {
         func_xk1_800294EC(func_xk1_8002AC24);
-        D_xk1_80032AC0 = mfsStrLen(D_xk1_8003A560);
+        gExpansionKitNameEntryStrLength = mfsStrLen(gExpansionKitNameEntryStr);
         D_800D6CA0.unk_08 = 2;
         D_80119880 = 9;
         func_xk1_8002AEB4(9, 4);
@@ -442,13 +441,13 @@ s32 CourseEdit_Update(void) {
             switch (D_80119880) {
                 case -1:
                 case 1:
-                    func_8076814C(MFS_ENTRY_WORKING_DIR, D_xk1_8003A598.name, &D_xk1_8003A598.extension, COURSE_CONTEXT(), sizeof(CourseContext), 0,
-                                  0xFF, true);
+                    func_8076814C(MFS_ENTRY_WORKING_DIR, D_xk1_8003A598.name, &D_xk1_8003A598.extension,
+                                  COURSE_CONTEXT(), sizeof(CourseContext), 0, 0xFF, true);
                     D_800D6CA0.unk_08 = 0x12;
                     break;
                 case 9:
-                    func_807681C8(MFS_ENTRY_WORKING_DIR, D_xk1_8003A598.name, &D_xk1_8003A598.extension, &D_xk2_800F7408, sizeof(CourseContext), 0,
-                                  0xFF, true);
+                    func_807681C8(MFS_ENTRY_WORKING_DIR, D_xk1_8003A598.name, &D_xk1_8003A598.extension,
+                                  &D_xk2_800F7408, sizeof(CourseContext), 0, 0xFF, true);
                     D_800D6CA0.unk_08 = 0x12;
                     break;
             }
@@ -501,7 +500,7 @@ s32 CourseEdit_Update(void) {
             func_xk2_800F40B0();
             break;
         case 0x2:
-            func_xk1_80029AB4(&D_xk1_8003A550, &D_xk1_8003A554);
+            ExpansionKit_NameEntryUpdate(&D_xk1_8003A550, &D_xk1_8003A554);
             break;
         case 0x20:
             func_xk2_800ECD60();

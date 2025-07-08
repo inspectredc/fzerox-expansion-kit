@@ -56,6 +56,8 @@ SLCheckDiskChange2 = 0x80707A54;
 
 Controller_SetGlobalInputs = 0x8070D43C;
 
+Character_GetSlotFromCharacter = 0x8070DBF0;
+
 LeoFault_CopyFontToRam = 0x8070F170;
 LeoFault_DrawErrorMessage = 0x8070F6C8;
 LeoFault_DrawErrorMessageNumber = 0x8070F76C;
@@ -534,7 +536,7 @@ sScriptLoadMsgBuf = 0x807C18C8;
 gCourseInfos = 0x802BB140; //segment:unk_context size:0x3480
 gRacers = 0x802D2F20; //segment:unk_context size:0x6DB0
 
-D_806F2400 = 0x806F2400; //segment:unk_custom size:0x3E0
+gCustomMachinesInfo = 0x806F2400; //segment:custom_machine_info size:0x3E0
 
 D_807B3C20 = 0x807B3C20; // size:0x2904
 D_807B6528 = 0x807B6528; // size:0x2904

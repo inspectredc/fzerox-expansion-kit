@@ -2,40 +2,40 @@
 #include "fzx_racer.h"
 #include "fzx_machine.h"
 
-extern unk_806F2400 D_806F2400;
+extern CustomMachinesInfo gCustomMachinesInfo;
 
 void func_xk1_8002FFA0(void) {
     u8 i;
 
     for (i = 0; i < 30; i++) {
-        D_806F2400.unk_00[i].number = 31;
-        D_806F2400.unk_3C0[i] = 0;
+        gCustomMachinesInfo.customMachines[i].number = 31;
+        gCustomMachinesInfo.characterCustomState[i] = 0;
     }
 }
 
-extern unk_806F2400_unk_00 D_xk1_800333D0;
+extern CustomMachine gCustomMachine;
 
 void func_xk1_8002FFDC(void) {
-    D_xk1_800333D0.body = BODY_A;
-    D_xk1_800333D0.boost = BOOST_A;
-    D_xk1_800333D0.grip = GRIP_A;
-    D_xk1_800333D0.frontType = FRONT_0;
-    D_xk1_800333D0.rearType = REAR_0;
-    D_xk1_800333D0.wingType = WING_NONE;
-    D_xk1_800333D0.logo = MACHINE_LOGO(LOGO_SHIELD);
-    D_xk1_800333D0.number = 31;
-    D_xk1_800333D0.decal = MACHINE_DECAL(DECAL_STRIPE);
-    D_xk1_800333D0.red = 0;
-    D_xk1_800333D0.green = 255;
-    D_xk1_800333D0.blue = 0;
-    D_xk1_800333D0.numberR = 255;
-    D_xk1_800333D0.numberG = 255;
-    D_xk1_800333D0.numberB = 255;
-    D_xk1_800333D0.decalR = 255;
-    D_xk1_800333D0.decalG = 255;
-    D_xk1_800333D0.decalB = 0;
-    D_xk1_800333D0.cockpitR = 0;
-    D_xk1_800333D0.cockpitG = 0;
-    D_xk1_800333D0.cockpitB = 93;
-    D_xk1_800333D0.machineName[0] = '\0';
+    gCustomMachine.body = 0;
+    gCustomMachine.boost = 0;
+    gCustomMachine.grip = 0;
+    gCustomMachine.frontType = FRONT_0;
+    gCustomMachine.rearType = REAR_0;
+    gCustomMachine.wingType = WING_NONE;
+    gCustomMachine.logo = MACHINE_LOGO(LOGO_SHIELD);
+    gCustomMachine.number = 31;
+    gCustomMachine.decal = MACHINE_DECAL(DECAL_STRIPE);
+    gCustomMachine.red = 0;
+    gCustomMachine.green = 255;
+    gCustomMachine.blue = 0;
+    gCustomMachine.numberR = 255;
+    gCustomMachine.numberG = 255;
+    gCustomMachine.numberB = 255;
+    gCustomMachine.decalR = 255;
+    gCustomMachine.decalG = 255;
+    gCustomMachine.decalB = 0;
+    gCustomMachine.cockpitR = 0;
+    gCustomMachine.cockpitG = 0;
+    gCustomMachine.cockpitB = 93;
+    gCustomMachine.machineName[0] = '\0';
 }

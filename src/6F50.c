@@ -3110,7 +3110,8 @@ void func_80701E90(s32 courseIndex) {
             }
             PRINTF("DEF LOAD OK\n");
             func_i2_800A8CE4(func_i2_800AA84C(), courseIndex);
-            func_80703B40(SEGMENT_DISK_START(silence_3) + diskCourseIndex, &COURSE_CONTEXT()->courseData, sizeof(CourseData), 0);
+            func_80703B40(SEGMENT_DISK_START(silence_3) + diskCourseIndex, &COURSE_CONTEXT()->courseData,
+                          sizeof(CourseData), 0);
             if ((Course_CalculateChecksum() != COURSE_CONTEXT()->courseData.checksum) ||
                 (COURSE_CONTEXT()->courseData.creatorId != CREATOR_NINTENDO) ||
                 (COURSE_CONTEXT()->courseData.unk_1F >= 0xE)) {
@@ -3118,7 +3119,8 @@ void func_80701E90(s32 courseIndex) {
                 while (true) {}
             }
         } else {
-            func_8076852C(MFS_ENTRY_WORKING_DIR, gEditCupTrackNames[diskCourseIndex], "CRSD", COURSE_CONTEXT(), sizeof(CourseContext));
+            func_8076852C(MFS_ENTRY_WORKING_DIR, gEditCupTrackNames[diskCourseIndex], "CRSD", COURSE_CONTEXT(),
+                          sizeof(CourseContext));
             osRecvMesg(&gMFSMesgQ, NULL, OS_MESG_BLOCK);
             PRINTF("ENTRY CHECK BUT NONE %s (DEFAULT COURSE)\n");
             if (D_8079F9B4 != 0) {
@@ -3129,7 +3131,8 @@ void func_80701E90(s32 courseIndex) {
                         ghostName[5] = (courseIndex / 10) + '0';
                         ghostName[6] = (courseIndex % 10) + '0';
                         func_i2_800A7CB8(func_i2_800AA84C());
-                        func_8076852C(MFS_ENTRY_WORKING_DIR, ghostName, "GOST", COURSE_CONTEXT(), sizeof(CourseContext));
+                        func_8076852C(MFS_ENTRY_WORKING_DIR, ghostName, "GOST", COURSE_CONTEXT(),
+                                      sizeof(CourseContext));
                         osRecvMesg(&gMFSMesgQ, NULL, OS_MESG_BLOCK);
                         Course_CalculateChecksum();
                         if (func_i2_800A9F98()) {
@@ -3231,7 +3234,8 @@ void func_80702448(s32 courseIndex) {
             PRINTF("course index is %d\n", courseIndex);
             PRINTF("DEF LOAD OK\n");
             func_i2_800A8CE4(func_i2_800AA84C(), courseIndex);
-            func_80703B40(SEGMENT_DISK_START(silence_3) + diskCourseIndex, &COURSE_CONTEXT()->courseData, sizeof(CourseData), 0);
+            func_80703B40(SEGMENT_DISK_START(silence_3) + diskCourseIndex, &COURSE_CONTEXT()->courseData,
+                          sizeof(CourseData), 0);
             if ((Course_CalculateChecksum() != COURSE_CONTEXT()->courseData.checksum) ||
                 (COURSE_CONTEXT()->courseData.creatorId != CREATOR_NINTENDO) ||
                 (COURSE_CONTEXT()->courseData.unk_1F >= 0xE)) {
@@ -3239,7 +3243,8 @@ void func_80702448(s32 courseIndex) {
                 while (true) {}
             }
         } else {
-            func_8076852C(MFS_ENTRY_WORKING_DIR, gEditCupTrackNames[diskCourseIndex], "CRSD", COURSE_CONTEXT(), sizeof(CourseContext));
+            func_8076852C(MFS_ENTRY_WORKING_DIR, gEditCupTrackNames[diskCourseIndex], "CRSD", COURSE_CONTEXT(),
+                          sizeof(CourseContext));
             osRecvMesg(&gMFSMesgQ, NULL, OS_MESG_BLOCK);
             PRINTF("ENTRY CHECK BUT NONE %s (DEFAULT COURSE)\n");
             if (D_8079F9B4 != 0) {
@@ -3252,7 +3257,8 @@ void func_80702448(s32 courseIndex) {
                         ghostName[5] = (courseIndex / 10) + '0';
                         ghostName[6] = (courseIndex % 10) + '0';
                         func_i2_800A7CB8(func_i2_800AA84C());
-                        func_8076852C(MFS_ENTRY_WORKING_DIR, ghostName, "GOST", COURSE_CONTEXT(), sizeof(CourseContext));
+                        func_8076852C(MFS_ENTRY_WORKING_DIR, ghostName, "GOST", COURSE_CONTEXT(),
+                                      sizeof(CourseContext));
                         osRecvMesg(&gMFSMesgQ, NULL, OS_MESG_BLOCK);
                         Course_CalculateChecksum();
                         if (func_i2_800A9F98()) {

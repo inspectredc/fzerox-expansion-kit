@@ -5,20 +5,20 @@
 #include "assets/segment_1FB850.h"
 
 // TODO: Unsure on sizes
-u8 D_xk1_8003A560[16];
+u8 gExpansionKitNameEntryStr[16];
 u8 D_xk1_8003A570[40];
 unk_8003A5D8 D_xk1_8003A598;
-s32 D_xk1_8003A5BC;
-s32 D_xk1_8003A5C0;
+s32 sNameEntryCursorXPos;
+s32 sNameEntryCursorYPos;
 void (*D_xk1_8003A5C4)(void);
 
-s32 D_xk1_80032AC0 = 0;
-s32 D_xk1_80032AC4 = 1;
-s32 D_xk1_80032AC8 = 0;
+s32 gExpansionKitNameEntryStrLength = 0;
+s32 sInputIndicatorFlashRate = 1;
+bool D_xk1_80032AC8 = false;
 u32 D_xk1_80032ACC = -1;
 s32 D_xk1_80032AD0 = 0;
 
-char D_xk1_80032AD4[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ,'& 0123456789";
+char sNameEntryKeyboardStr[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ,'& 0123456789";
 UNUSED s32 D_xk1_80032B00 = 0x202D;
 
 char* func_xk1_800290D0(char* buffer, const char* fmt, size_t size) {
@@ -88,66 +88,66 @@ Gfx* func_xk1_8002924C(Gfx* gfx, s32 xPos, s32 yPos, const char* fmt, ...) {
     return gfx;
 }
 
-void func_xk1_80029350(s32 arg0) {
-    D_xk1_80032AC4 = arg0;
+void ExpansionKit_SetInputIndicatorFlashRate(s32 rate) {
+    sInputIndicatorFlashRate = rate;
 }
 
-void func_xk1_8002935C(u8 arg0, s32* arg1, s32* arg2) {
-    s32 sp4;
-    s32 sp0;
-    s32 temp_a1;
+void ExpansionKit_GetCharacterKeyboardPosition(char letter, s32* xPosPtr, s32* yPosPtr) {
+    s32 xPos;
+    s32 yPos;
+    s32 alphabetIndex;
 
-    switch (arg0) {
+    switch (letter) {
         case ' ':
-            sp4 = 6;
-            sp0 = 4;
+            xPos = 6;
+            yPos = 4;
             break;
         case ',':
-            sp4 = 6;
-            sp0 = 2;
+            xPos = 6;
+            yPos = 2;
             break;
         case '.':
-            sp4 = 7;
-            sp0 = 2;
+            xPos = 7;
+            yPos = 2;
             break;
         case '&':
-            sp4 = 8;
-            sp0 = 2;
+            xPos = 8;
+            yPos = 2;
             break;
         case '\'':
-            sp4 = 7;
-            sp0 = 2;
+            xPos = 7;
+            yPos = 2;
             break;
         case '-':
-            sp4 = 7;
-            sp0 = 4;
+            xPos = 7;
+            yPos = 4;
             break;
         case '\0':
-            sp4 = 9;
-            sp0 = 4;
+            xPos = 9;
+            yPos = 4;
             break;
     }
 
-    if ((arg0 >= '0') && (arg0 <= '9')) {
-        sp4 = arg0 - '0';
-        sp0 = 3;
+    if ((letter >= '0') && (letter <= '9')) {
+        xPos = letter - '0';
+        yPos = 3;
     }
-    if ((arg0 >= 'A') && (arg0 <= 'Z')) {
-        temp_a1 = arg0 - 'A';
-        sp4 = temp_a1 % 10;
-        sp0 = temp_a1 / 10;
+    if ((letter >= 'A') && (letter <= 'Z')) {
+        alphabetIndex = letter - 'A';
+        xPos = alphabetIndex % 10;
+        yPos = alphabetIndex / 10;
     }
-    *arg1 = sp4;
-    *arg2 = sp0;
+    *xPosPtr = xPos;
+    *yPosPtr = yPos;
 }
 
 void func_xk1_800294AC(void) {
     s32 i;
 
-    D_xk1_80032AC0 = 0;
+    gExpansionKitNameEntryStrLength = 0;
 
     for (i = 0; i < 9; i++) {
-        D_xk1_8003A560[i] = 0;
+        gExpansionKitNameEntryStr[i] = 0;
     }
 }
 
@@ -155,18 +155,18 @@ extern s32 D_xk1_8003A550;
 extern s32 D_xk1_8003A554;
 
 void func_xk1_800294EC(void (*arg0)(void)) {
-    D_xk1_8003A5BC = 0;
-    D_xk1_8003A5C0 = 0;
-    D_xk1_80032AC8 = 1;
+    sNameEntryCursorXPos = 0;
+    sNameEntryCursorYPos = 0;
+    D_xk1_80032AC8 = true;
     D_xk1_8003A5C4 = arg0;
-    D_xk1_80032AC0 = 0;
+    gExpansionKitNameEntryStrLength = 0;
     D_xk1_8003A550 = 0x58;
     D_xk1_8003A554 = 0x58;
     while (true) {
-        if (D_xk1_8003A560[D_xk1_80032AC0] == 0) {
+        if (gExpansionKitNameEntryStr[gExpansionKitNameEntryStrLength] == 0) {
             break;
         }
-        D_xk1_80032AC0++;
+        gExpansionKitNameEntryStrLength++;
     }
 }
 
@@ -181,7 +181,7 @@ s32 func_xk1_80029560(void) {
         var_s1 = 1;
     }
     while (var_s1 < func_xk1_8002BFA4()) {
-        if (mfsStrCmp(D_xk1_8003A5D8[var_s1].name, D_xk1_8003A560) == 0) {
+        if (mfsStrCmp(D_xk1_8003A5D8[var_s1].name, gExpansionKitNameEntryStr) == 0) {
             return 1;
         }
         var_s1++;
@@ -191,16 +191,16 @@ s32 func_xk1_80029560(void) {
 }
 
 void func_xk1_8002961C(void) {
-    if ((D_xk1_80032AC0 != 0) && (D_xk1_8003A5C4 != NULL)) {
+    if ((gExpansionKitNameEntryStrLength != 0) && (D_xk1_8003A5C4 != NULL)) {
         D_xk1_8003A5C4();
     }
 }
 
-void func_xk1_80029658(void) {
-    s32 var_a0;
-    s32 var_v1;
-    u8* var_v0;
-    u8 sp1B;
+void ExpansionKit_NameEntryHandleAPress(void) {
+    s32 xPos;
+    s32 yPos;
+    char* namePtr;
+    char letter;
 
     // TODO: move to appropriate section
     PRINTF("MOJI %d,%d\n");
@@ -208,63 +208,64 @@ void func_xk1_80029658(void) {
     PRINTF("GET_FILE_NAMES_START\n");
 
     if (gControllers[gPlayerControlPorts[0]].buttonPressed & BTN_A) {
-        if (D_xk1_80032AC0 >= 9) {
+        if (gExpansionKitNameEntryStrLength >= 9) {
             func_8074122C(0x20);
             return;
         }
-        var_v1 = D_xk1_8003A5BC;
-        var_a0 = D_xk1_8003A5C0;
-        sp1B = D_xk1_80032AD4[var_a0 * 10 + var_v1];
-        if ((sp1B != 0) && (D_xk1_80032AC0 >= 8)) {
+        xPos = sNameEntryCursorXPos;
+        yPos = sNameEntryCursorYPos;
+        letter = sNameEntryKeyboardStr[yPos * 10 + xPos];
+        if ((letter != '\0') && (gExpansionKitNameEntryStrLength >= 8)) {
             func_8074122C(0x20);
             return;
         }
 
-        if (sp1B == 0) {
-            if (D_xk1_80032AC0 == 0) {
+        if (letter == '\0') {
+            if (gExpansionKitNameEntryStrLength == 0) {
                 func_8074122C(0x20);
             } else {
                 func_8074122C(0x21);
-                D_xk1_8003A560[D_xk1_80032AC0] = sp1B;
-                var_v0 = &D_xk1_8003A560[D_xk1_80032AC0];
-                var_v0--;
-                while (*var_v0 == 0x20) {
-                    *var_v0-- = 0;
-                    D_xk1_80032AC0--;
+                gExpansionKitNameEntryStr[gExpansionKitNameEntryStrLength] = letter;
+                namePtr = &gExpansionKitNameEntryStr[gExpansionKitNameEntryStrLength];
+                namePtr--;
+                while (*namePtr == ' ') {
+                    *namePtr-- = '\0';
+                    gExpansionKitNameEntryStrLength--;
                 }
                 func_xk1_8002961C();
-                D_xk1_80032AC0++;
+                gExpansionKitNameEntryStrLength++;
             }
-        } else if ((D_xk1_80032AC0 == 0) && (sp1B == 0x20)) {
+        } else if ((gExpansionKitNameEntryStrLength == 0) && (letter == ' ')) {
             func_8074122C(0x20);
         } else {
             func_8074122C(0x27);
-            D_xk1_8003A560[D_xk1_80032AC0] = sp1B;
-            D_xk1_80032AC0++;
+            gExpansionKitNameEntryStr[gExpansionKitNameEntryStrLength] = letter;
+            gExpansionKitNameEntryStrLength++;
         }
-        if (D_xk1_80032AC0 >= 8) {
-            D_xk1_8003A5BC = 9;
-            D_xk1_8003A5C0 = 4;
+        // Mpve Cursor To End
+        if (gExpansionKitNameEntryStrLength >= 8) {
+            sNameEntryCursorXPos = 9;
+            sNameEntryCursorYPos = 4;
         }
     }
 }
 
-void func_xk1_80029830(void) {
+void ExpansionKit_NameEntryHandleStartPress(void) {
     if (gControllers[gPlayerControlPorts[0]].buttonPressed & BTN_START) {
-        D_xk1_8003A5BC = 9;
-        D_xk1_8003A5C0 = 4;
+        sNameEntryCursorXPos = 9;
+        sNameEntryCursorYPos = 4;
     }
 }
 
 extern s32 D_xk1_80030610;
 
-void func_xk1_80029884(void) {
+void ExpansionKit_NameEntryHandleBPress(void) {
 
     if (gControllers[gPlayerControlPorts[0]].buttonPressed & BTN_B) {
         func_8074122C(0x25);
-        if (D_xk1_80032AC0 != 0) {
-            D_xk1_80032AC0--;
-            D_xk1_8003A560[D_xk1_80032AC0] = 0;
+        if (gExpansionKitNameEntryStrLength != 0) {
+            gExpansionKitNameEntryStrLength--;
+            gExpansionKitNameEntryStr[gExpansionKitNameEntryStrLength] = 0;
             return;
         }
         if (D_xk1_8003A5C4 != NULL) {
@@ -275,17 +276,17 @@ void func_xk1_80029884(void) {
 }
 
 void func_xk1_80029924(void) {
-    if (D_xk1_8003A5C0 != 4) {
+    if (sNameEntryCursorYPos != 4) {
         func_8074122C(0x23);
         return;
     }
-    if ((D_xk1_8003A5BC >= 6) && (D_xk1_8003A5BC < 9)) {
+    if ((sNameEntryCursorXPos >= 6) && (sNameEntryCursorXPos < 9)) {
         func_8074122C(0x23);
     }
 }
 
-void func_xk1_80029980(void) {
-    s32 sp1C;
+void ExpansionKit_NameEntryHandleStickInput(void) {
+    s32 oldPos;
     Controller* controller;
     s32 stickXMag;
     s32 stickYMag;
@@ -296,90 +297,93 @@ void func_xk1_80029980(void) {
     stickYMag = ABS(controller->stickY);
 
     if (stickYMag < stickXMag) {
-        sp1C = D_xk1_8003A5BC;
-        func_xk1_8002DAE0(&D_xk1_8003A5BC, 9, 1);
-        if (sp1C != D_xk1_8003A5BC) {
+        oldPos = sNameEntryCursorXPos;
+        func_xk1_8002DAE0(&sNameEntryCursorXPos, 9, 1);
+        if (oldPos != sNameEntryCursorXPos) {
             func_xk1_80029924();
         }
     } else {
-        sp1C = D_xk1_8003A5C0;
-        func_xk1_8002DBD4(&D_xk1_8003A5C0, 4, 0);
-        if (sp1C != D_xk1_8003A5C0) {
+        oldPos = sNameEntryCursorYPos;
+        func_xk1_8002DBD4(&sNameEntryCursorYPos, 4, 0);
+        if (oldPos != sNameEntryCursorYPos) {
             func_8074122C(0x23);
         }
     }
-    if (D_xk1_8003A5C0 == 4) {
-        if (D_xk1_8003A5BC < 6) {
-            D_xk1_8003A5BC = 6;
+    if (sNameEntryCursorYPos == 4) {
+        if (sNameEntryCursorXPos < 6) {
+            sNameEntryCursorXPos = 6;
         }
-        if (D_xk1_8003A5BC > 8) {
-            D_xk1_8003A5BC = 8;
+        if (sNameEntryCursorXPos > 8) {
+            sNameEntryCursorXPos = 8;
         }
     }
 }
 
-void func_xk1_80029AB4(s32 arg0, s32 arg1) {
-    if (D_xk1_80032AC8 != 0) {
-        D_xk1_80032AC8 = 0;
+void ExpansionKit_NameEntryUpdate(s32* arg0, s32* arg1) {
+    if (D_xk1_80032AC8) {
+        D_xk1_80032AC8 = false;
         return;
     }
-    func_xk1_80029830();
-    func_xk1_80029980();
+    ExpansionKit_NameEntryHandleStartPress();
+    ExpansionKit_NameEntryHandleStickInput();
     if (gControllers[gPlayerControlPorts[0]].buttonPressed & BTN_A) {
-        func_xk1_80029658();
+        ExpansionKit_NameEntryHandleAPress();
     } else {
-        func_xk1_80029884();
+        ExpansionKit_NameEntryHandleBPress();
     }
 }
 
 extern unk_80128C94* D_80128C94;
 
 extern Gfx D_3000510[];
-extern Gfx D_60110C8[];
+extern unk_80128C94 D_6000000;
 
 extern u32 gGameFrameCount;
 extern s32 gGameMode;
 
-Gfx* func_xk1_80029B48(Gfx* gfx, s32 arg1, s32 arg2) {
+Gfx* ExpansionKit_NameEntryDraw(Gfx* gfx, s32* arg1, s32* arg2) {
     Gfx* var_v0;
-    s32 sp208;
-    s32 sp204;
-    u8 var_a0;
+    s32 xPos;
+    s32 yPos;
+    char letter;
     s32 i;
 
-    sp208 = D_xk1_8003A5BC;
-    if (D_xk1_8003A5C0 < 5) {
-        var_a0 = D_xk1_80032AD4[D_xk1_8003A5C0 * 10 + sp208];
-        sp204 = D_xk1_8003A5C0;
+    xPos = sNameEntryCursorXPos;
+    if (sNameEntryCursorYPos < 5) {
+        letter = sNameEntryKeyboardStr[sNameEntryCursorYPos * 10 + xPos];
+        yPos = sNameEntryCursorYPos;
     } else {
-        sp204 = D_xk1_8003A5C0;
-        var_a0 = 0;
+        yPos = sNameEntryCursorYPos;
+        letter = '\0';
     }
 
     gSPDisplayList(gfx++, D_8014940);
     gSPDisplayList(gfx++, D_3000510);
     gDPSetPrimColor(gfx++, 0, 0, 128, 128, 255, 255);
 
-    gSPTextureRectangle(gfx++, 78 << 2, 78 << 2, 242 << 2, 80 << 2, 0, 0, 0, 1 << 10, 1 << 10);
-    gSPTextureRectangle(gfx++, 78 << 2, 200 << 2, 242 << 2, 202 << 2, 0, 0, 0, 1 << 10, 1 << 10);
-    gSPTextureRectangle(gfx++, 78 << 2, 80 << 2, 80 << 2, 200 << 2, 0, 0, 0, 1 << 10, 1 << 10);
-    gSPTextureRectangle(gfx++, 240 << 2, 80 << 2, 242 << 2, 200 << 2, 0, 0, 0, 1 << 10, 1 << 10);
+    gSPTextureRectangle(gfx++, (80 - 2) << 2, (80 - 2) << 2, (240 + 2) << 2, 80 << 2, 0, 0, 0, 1 << 10, 1 << 10);
+    gSPTextureRectangle(gfx++, (80 - 2) << 2, 200 << 2, (240 + 2) << 2, (200 + 2) << 2, 0, 0, 0, 1 << 10, 1 << 10);
+    gSPTextureRectangle(gfx++, (80 - 2) << 2, 80 << 2, 80 << 2, 200 << 2, 0, 0, 0, 1 << 10, 1 << 10);
+    gSPTextureRectangle(gfx++, 240 << 2, 80 << 2, (240 + 2) << 2, 200 << 2, 0, 0, 0, 1 << 10, 1 << 10);
     gDPPipeSync(gfx++);
     gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, 200);
     gSPTextureRectangle(gfx++, 80 << 2, 80 << 2, 240 << 2, 200 << 2, 0, 0, 0, 1 << 10, 1 << 10);
 
-    if (var_a0 != 0) {
+    // Highlight current letter
+    if (letter != '\0') {
         gDPPipeSync(gfx++);
         gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, 255);
-        gSPTextureRectangle(gfx++, ((sp208 * 0x10) + 0x50) << 2, ((sp204 * 0x10) + 0x50) << 2,
-                            ((sp208 * 0x10) + 0x60) << 2, ((sp204 * 0x10) + 0x60) << 2, 0, 0, 0, 1 << 10, 1 << 10);
+        gSPTextureRectangle(gfx++, ((xPos * 16) + 80) << 2, ((yPos * 16) + 80) << 2,
+                            (((xPos + 1) * 16) + 80) << 2, (((yPos + 1) * 16) + 80) << 2, 0, 0, 0, 1 << 10, 1 << 10);
     }
+
+    // Draw whole name entry
     gDPPipeSync(gfx++);
     gDPSetTextureLOD(gfx++, G_TL_TILE);
     gDPSetTextureFilter(gfx++, G_TF_BILERP);
     gDPSetTextureConvert(gfx++, G_TC_FILT);
     gDPSetTextureLUT(gfx++, G_TT_RGBA16);
-    gDPLoadTLUT_pal256(gfx++, D_700FF80);
+    gDPLoadTLUT_pal256(gfx++, aExpansionKitNameEntryPalette);
     gDPSetCycleType(gfx++, G_CYC_1CYCLE);
     gDPSetAlphaCompare(gfx++, G_AC_NONE);
     gDPSetCombineMode(gfx++, G_CC_DECALRGBA, G_CC_DECALRGBA);
@@ -388,65 +392,71 @@ Gfx* func_xk1_80029B48(Gfx* gfx, s32 arg1, s32 arg2) {
     if (gGameMode == GAMEMODE_COURSE_EDIT) {
         var_v0 = D_80128C94->unk_110C8;
         for (i = 0; i < 120; i++) {
-            gDPLoadTextureBlock(var_v0++, D_700B480 + i * 160, G_IM_FMT_CI, G_IM_SIZ_8b, 160, 1, 0,
+            gDPLoadTextureBlock(var_v0++, aExpansionKitNameEntryTex + i * 160, G_IM_FMT_CI, G_IM_SIZ_8b, 160, 1, 0,
                                 G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
                                 G_TX_NOLOD, G_TX_NOLOD);
 
-            gSPTextureRectangle(var_v0++, 80 << 2, (i + 0x50) << 2, 240 << 2, (i + 0x51) << 2, 0, 0, 0, 1 << 10,
+            gSPTextureRectangle(var_v0++, 80 << 2, (i + 80) << 2, 240 << 2, (i + 81) << 2, 0, 0, 0, 1 << 10,
                                 1 << 10);
         }
         gSPEndDisplayList(var_v0++);
-        gSPDisplayList(gfx++, D_60110C8);
+        gSPDisplayList(gfx++, D_6000000.unk_110C8);
     } else {
         for (i = 0; i < 120; i++) {
-            gDPLoadTextureBlock(gfx++, D_700B480 + i * 160, G_IM_FMT_CI, G_IM_SIZ_8b, 160, 1, 0,
+            gDPLoadTextureBlock(gfx++, aExpansionKitNameEntryTex + i * 160, G_IM_FMT_CI, G_IM_SIZ_8b, 160, 1, 0,
                                 G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
                                 G_TX_NOLOD, G_TX_NOLOD);
 
-            gSPTextureRectangle(gfx++, 80 << 2, (i + 0x50) << 2, 240 << 2, (i + 0x51) << 2, 0, 0, 0, 1 << 10, 1 << 10);
+            gSPTextureRectangle(gfx++, 80 << 2, (i + 80) << 2, 240 << 2, (i + 81) << 2, 0, 0, 0, 1 << 10, 1 << 10);
         }
     }
+
+    // Draw name at bottom
     gDPPipeSync(gfx++);
     gDPSetCombineMode(gfx++, G_CC_DECALRGBA, G_CC_DECALRGBA);
 
     for (i = 0; i < 8; i++) {
-        var_a0 = D_xk1_8003A560[i];
-        if (var_a0 == 0) {
+        letter = gExpansionKitNameEntryStr[i];
+        if (letter == '\0') {
             continue;
         }
 
-        func_xk1_8002935C(var_a0, &sp208, &sp204);
+        ExpansionKit_GetCharacterKeyboardPosition(letter, &xPos, &yPos);
         gDPPipeSync(gfx++);
 
-        gDPLoadTextureTile(gfx++, D_700B480, G_IM_FMT_CI, G_IM_SIZ_8b, 160, 1, sp208 * 16, sp204 * 16,
-                           (sp208 * 16) + 15, (sp204 * 16) + 15, 0, G_TX_NOMIRROR | G_TX_CLAMP,
+        gDPLoadTextureTile(gfx++, aExpansionKitNameEntryTex, G_IM_FMT_CI, G_IM_SIZ_8b, 160, 120, xPos * 16, yPos * 16,
+                           (xPos * 16) + 15, (yPos * 16) + 15, 0, G_TX_NOMIRROR | G_TX_CLAMP,
                            G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
-        gSPTextureRectangle(gfx++, ((i * 16) + 0x6F) << 2, 176 << 2, ((i * 16) + 0x7E) << 2, 191 << 2, 0,
-                            (sp208 * 16) << 5, (sp204 * 16) << 5, 1 << 10, 1 << 10);
+        gSPTextureRectangle(gfx++, ((i * 16) + 111) << 2, 176 << 2, ((i * 16) + 111 + 15) << 2, (176 + 15) << 2, 0,
+                            (xPos * 16) << 5, (yPos * 16) << 5, 1 << 10, 1 << 10);
     }
+
+    // Flash over current underscore input indicator
     gDPPipeSync(gfx++);
     gDPSetCombineLERP(gfx++, 0, 0, 0, PRIMITIVE, 0, 0, 0, TEXEL0, 0, 0, 0, PRIMITIVE, 0, 0, 0, TEXEL0);
 
-    if ((gGameFrameCount % (6 / D_xk1_80032AC4)) < (3 / D_xk1_80032AC4)) {
+    if ((gGameFrameCount % (6 / sInputIndicatorFlashRate)) < (3 / sInputIndicatorFlashRate)) {
         gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, 255);
     } else {
         gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, 255);
     }
-    if (D_xk1_80032AC0 < 8) {
-        gDPLoadTextureTile(gfx++, D_700B480, G_IM_FMT_CI, G_IM_SIZ_8b, 160, 1, (D_xk1_80032AC0 * 16) + 0x1F, 96,
-                           (D_xk1_80032AC0 * 16) + 0x2F, 116, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
+    if (gExpansionKitNameEntryStrLength < 8) {
+        gDPLoadTextureTile(gfx++, aExpansionKitNameEntryTex, G_IM_FMT_CI, G_IM_SIZ_8b, 160, 120, (gExpansionKitNameEntryStrLength * 16) + 31, 96,
+                           ((gExpansionKitNameEntryStrLength + 1) * 16) + 31, 116, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
                            G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
-        gSPTextureRectangle(gfx++, ((D_xk1_80032AC0 * 0x10) + 0x6F) << 2, 176 << 2,
-                            ((D_xk1_80032AC0 * 0x10) + 0x7F) << 2, 196 << 2, 0, ((D_xk1_80032AC0 * 0x10) + 0x1F) << 5,
+        gSPTextureRectangle(gfx++, ((gExpansionKitNameEntryStrLength * 16) + 111) << 2, 176 << 2,
+                            (((gExpansionKitNameEntryStrLength + 1) * 16) + 111) << 2, 196 << 2, 0, ((gExpansionKitNameEntryStrLength * 16) + 31) << 5,
                             96 << 5, 1 << 10, 1 << 10);
     }
+
+    // Flash over "END"
     gDPPipeSync(gfx++);
     gDPSetCombineLERP(gfx++, 0, 0, 0, PRIMITIVE, 0, 0, 0, TEXEL0, 0, 0, 0, PRIMITIVE, 0, 0, 0, TEXEL0);
 
-    if (((D_xk1_8003A5BC == 8) || (D_xk1_8003A5BC == 9)) && (D_xk1_8003A5C0 == 4)) {
-        if ((gGameFrameCount % (6 / D_xk1_80032AC4)) < (3 / D_xk1_80032AC4)) {
+    if (((sNameEntryCursorXPos == 8) || (sNameEntryCursorXPos == 9)) && (sNameEntryCursorYPos == 4)) {
+        if ((gGameFrameCount % (6 / sInputIndicatorFlashRate)) < (3 / sInputIndicatorFlashRate)) {
             gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, 255);
         } else {
             gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, 255);
@@ -455,7 +465,7 @@ Gfx* func_xk1_80029B48(Gfx* gfx, s32 arg1, s32 arg2) {
         gDPSetCombineMode(gfx++, G_CC_DECALRGBA, G_CC_DECALRGBA);
     }
 
-    gDPLoadTextureTile(gfx++, D_700B480, G_IM_FMT_CI, G_IM_SIZ_8b, 160, 1, 128, 64, 160, 84, 0,
+    gDPLoadTextureTile(gfx++, aExpansionKitNameEntryTex, G_IM_FMT_CI, G_IM_SIZ_8b, 160, 1, 128, 64, 160, 84, 0,
                        G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                        G_TX_NOLOD);
 
@@ -468,7 +478,7 @@ Gfx* func_xk1_80029B48(Gfx* gfx, s32 arg1, s32 arg2) {
 extern unk_800D6CA0 D_800D6CA0;
 
 void func_xk1_8002AC24(void) {
-    if (D_xk1_80032AC0 == 0) {
+    if (gExpansionKitNameEntryStrLength == 0) {
         D_800D6CA0.unk_08 = 0;
     } else {
         D_800D6CA0.unk_08 = 0x34;
@@ -508,14 +518,14 @@ void func_xk1_8002AC70(void) {
 
     switch (D_80119880) {
         case -1:
-            if (func_xk2_800EAA1C(D_xk1_8003A560) != 0) {
+            if (func_xk2_800EAA1C(gExpansionKitNameEntryStr) != 0) {
                 D_xk1_80030610 = -1;
             } else {
                 D_xk1_80030610 = -1;
             }
             return;
         case 1:
-            mfsStrCpy(D_xk1_8003A560, D_xk1_8003A570);
+            mfsStrCpy(gExpansionKitNameEntryStr, D_xk1_8003A570);
             if ((func_xk1_80029560() == 0) && ((func_xk1_8002BFA4() - 1) >= 100)) {
                 D_80119880 = -2;
                 D_xk2_80104378 = 6;
@@ -533,14 +543,14 @@ void func_xk1_8002AC70(void) {
                 D_xk1_80032C20 = 0;
                 D_800D6CA0.unk_08 = 0x10;
             } else {
-                func_xk2_800EAC28(D_xk1_8003A560);
+                func_xk2_800EAC28(gExpansionKitNameEntryStr);
                 D_xk1_80030610 = -1;
             }
             return;
         case 3:
             func_xk2_800EBFE8(D_xk1_8003A598.name);
-            func_80768844(MFS_ENTRY_WORKING_DIR, D_xk1_8003A598.name, D_xk1_8003A598.extension, D_xk1_8003A560, D_xk1_8003A598.extension,
-                          true);
+            func_80768844(MFS_ENTRY_WORKING_DIR, D_xk1_8003A598.name, D_xk1_8003A598.extension, gExpansionKitNameEntryStr,
+                          D_xk1_8003A598.extension, true);
             D_xk1_80030610 = -1;
             D_800D6CA0.unk_08 = 0x22;
             return;
@@ -549,6 +559,6 @@ void func_xk1_8002AC70(void) {
 }
 
 void func_xk1_8002AEB4(s32 arg0, s32 arg1) {
-    D_xk1_8003A5BC = arg0;
-    D_xk1_8003A5C0 = arg1;
+    sNameEntryCursorXPos = arg0;
+    sNameEntryCursorYPos = arg1;
 }

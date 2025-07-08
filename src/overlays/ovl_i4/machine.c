@@ -10,10 +10,10 @@
 #include "assets/overlays/ovl_i4/machine.h"
 
 UNUSED s32 D_80077050;
-s32 sMachinesUnlocked;
+static s32 sMachinesUnlocked;
 f32 D_i4_80077058;
 f32 D_i4_8007705C;
-s16 sMachineSelectIndex[8];
+static s16 sMachineSelectIndex[8];
 
 UNUSED s32 D_i4_80074F50 = 0;
 #include "src/assets/overlays/ovl_i4/machine/machine.c"
@@ -219,125 +219,130 @@ unk_800792D8* D_i4_800756A8[] = {
     D_i4_80075528, D_i4_80075638, D_i4_80075678, D_i4_80075678, D_i4_80075678, D_i4_80075688, D_i4_80075698,
 };
 
-unk_80077D50 sSmallPortraitDrStewartCompTexInfo[] = {
+static unk_80077D50 sSmallPortraitDrStewartCompTexInfo[] = {
     { 17, aSmallPortraitDrStewartTex, TEX_WIDTH(aSmallPortraitDrStewartTex), TEX_HEIGHT(aSmallPortraitDrStewartTex),
       TEX_COMPRESSED_SIZE(aSmallPortraitDrStewartTex) },
 };
-unk_80077D50 sSmallPortraitCaptainFalconCompTexInfo[] = {
+static unk_80077D50 sSmallPortraitCaptainFalconCompTexInfo[] = {
     { 17, aSmallPortraitCaptainFalconTex, TEX_WIDTH(aSmallPortraitCaptainFalconTex),
       TEX_HEIGHT(aSmallPortraitCaptainFalconTex), TEX_COMPRESSED_SIZE(aSmallPortraitCaptainFalconTex) },
 };
-unk_80077D50 sSmallPortraitJodySummerCompTexInfo[] = {
+static unk_80077D50 sSmallPortraitJodySummerCompTexInfo[] = {
     { 17, aSmallPortraitJodySummerTex, TEX_WIDTH(aSmallPortraitJodySummerTex), TEX_HEIGHT(aSmallPortraitJodySummerTex),
       TEX_COMPRESSED_SIZE(aSmallPortraitJodySummerTex) },
 };
-unk_80077D50 sSmallPortraitSamuraiGorohCompTexInfo[] = {
+static unk_80077D50 sSmallPortraitSamuraiGorohCompTexInfo[] = {
     { 17, aSmallPortraitSamuraiGorohTex, TEX_WIDTH(aSmallPortraitSamuraiGorohTex),
       TEX_HEIGHT(aSmallPortraitSamuraiGorohTex), TEX_COMPRESSED_SIZE(aSmallPortraitSamuraiGorohTex) },
 };
-unk_80077D50 sSmallPortraitMightyGazelleCompTexInfo[] = {
+static unk_80077D50 sSmallPortraitMightyGazelleCompTexInfo[] = {
     { 17, aSmallPortraitMightyGazelleTex, TEX_WIDTH(aSmallPortraitMightyGazelleTex),
       TEX_HEIGHT(aSmallPortraitMightyGazelleTex), TEX_COMPRESSED_SIZE(aSmallPortraitMightyGazelleTex) },
 };
-unk_80077D50 sSmallPortraitPicoCompTexInfo[] = { { 17, aSmallPortraitPicoTex, TEX_WIDTH(aSmallPortraitPicoTex),
-                                                   TEX_HEIGHT(aSmallPortraitPicoTex),
-                                                   TEX_COMPRESSED_SIZE(aSmallPortraitPicoTex) } };
-unk_80077D50 sSmallPortraitBabaCompTexInfo[] = { { 17, aSmallPortraitBabaTex, TEX_WIDTH(aSmallPortraitBabaTex),
-                                                   TEX_HEIGHT(aSmallPortraitBabaTex),
-                                                   TEX_COMPRESSED_SIZE(aSmallPortraitBabaTex) } };
-unk_80077D50 sSmallPortraitMrEadCompTexInfo[] = { { 17, aSmallPortraitMrEadTex, TEX_WIDTH(aSmallPortraitMrEadTex),
-                                                    TEX_HEIGHT(aSmallPortraitMrEadTex),
-                                                    TEX_COMPRESSED_SIZE(aSmallPortraitMrEadTex) } };
-unk_80077D50 sSmallPortraitOctomanCompTexInfo[] = { { 17, aSmallPortraitOctomanTex, TEX_WIDTH(aSmallPortraitOctomanTex),
-                                                      TEX_HEIGHT(aSmallPortraitOctomanTex),
-                                                      TEX_COMPRESSED_SIZE(aSmallPortraitOctomanTex) } };
-unk_80077D50 sSmallPortraitTheSkullCompTexInfo[] = {
+static unk_80077D50 sSmallPortraitPicoCompTexInfo[] = { { 17, aSmallPortraitPicoTex, TEX_WIDTH(aSmallPortraitPicoTex),
+                                                          TEX_HEIGHT(aSmallPortraitPicoTex),
+                                                          TEX_COMPRESSED_SIZE(aSmallPortraitPicoTex) } };
+static unk_80077D50 sSmallPortraitBabaCompTexInfo[] = { { 17, aSmallPortraitBabaTex, TEX_WIDTH(aSmallPortraitBabaTex),
+                                                          TEX_HEIGHT(aSmallPortraitBabaTex),
+                                                          TEX_COMPRESSED_SIZE(aSmallPortraitBabaTex) } };
+static unk_80077D50 sSmallPortraitMrEadCompTexInfo[] = {
+    { 17, aSmallPortraitMrEadTex, TEX_WIDTH(aSmallPortraitMrEadTex), TEX_HEIGHT(aSmallPortraitMrEadTex),
+      TEX_COMPRESSED_SIZE(aSmallPortraitMrEadTex) }
+};
+static unk_80077D50 sSmallPortraitOctomanCompTexInfo[] = {
+    { 17, aSmallPortraitOctomanTex, TEX_WIDTH(aSmallPortraitOctomanTex), TEX_HEIGHT(aSmallPortraitOctomanTex),
+      TEX_COMPRESSED_SIZE(aSmallPortraitOctomanTex) }
+};
+static unk_80077D50 sSmallPortraitTheSkullCompTexInfo[] = {
     { 17, aSmallPortraitTheSkullTex, TEX_WIDTH(aSmallPortraitTheSkullTex), TEX_HEIGHT(aSmallPortraitTheSkullTex),
       TEX_COMPRESSED_SIZE(aSmallPortraitTheSkullTex) },
 };
-unk_80077D50 sSmallPortraitBeastmanCompTexInfo[] = {
+static unk_80077D50 sSmallPortraitBeastmanCompTexInfo[] = {
     { 17, aSmallPortraitBeastmanTex, TEX_WIDTH(aSmallPortraitBeastmanTex), TEX_HEIGHT(aSmallPortraitBeastmanTex),
       TEX_COMPRESSED_SIZE(aSmallPortraitBeastmanTex) },
 };
-unk_80077D50 sSmallPortraitAntonioGusterCompTexInfo[] = {
+static unk_80077D50 sSmallPortraitAntonioGusterCompTexInfo[] = {
     { 17, aSmallPortraitAntonioGusterTex, TEX_WIDTH(aSmallPortraitAntonioGusterTex),
       TEX_HEIGHT(aSmallPortraitAntonioGusterTex), TEX_COMPRESSED_SIZE(aSmallPortraitAntonioGusterTex) },
 };
-unk_80077D50 sSmallPortraitDraqCompTexInfo[] = { { 17, aSmallPortraitDraqTex, TEX_WIDTH(aSmallPortraitDraqTex),
-                                                   TEX_HEIGHT(aSmallPortraitDraqTex),
-                                                   TEX_COMPRESSED_SIZE(aSmallPortraitDraqTex) } };
-unk_80077D50 sSmallPortraitRogerBusterCompTexInfo[] = {
+static unk_80077D50 sSmallPortraitDraqCompTexInfo[] = { { 17, aSmallPortraitDraqTex, TEX_WIDTH(aSmallPortraitDraqTex),
+                                                          TEX_HEIGHT(aSmallPortraitDraqTex),
+                                                          TEX_COMPRESSED_SIZE(aSmallPortraitDraqTex) } };
+static unk_80077D50 sSmallPortraitRogerBusterCompTexInfo[] = {
     { 17, aSmallPortraitRogerBusterTex, TEX_WIDTH(aSmallPortraitRogerBusterTex),
       TEX_HEIGHT(aSmallPortraitRogerBusterTex), TEX_COMPRESSED_SIZE(aSmallPortraitRogerBusterTex) },
 };
-unk_80077D50 sSmallPortraitSilverNeelsenCompTexInfo[] = {
+static unk_80077D50 sSmallPortraitSilverNeelsenCompTexInfo[] = {
     { 17, aSmallPortraitSilverNeelsenTex, TEX_WIDTH(aSmallPortraitSilverNeelsenTex),
       TEX_HEIGHT(aSmallPortraitSilverNeelsenTex), TEX_COMPRESSED_SIZE(aSmallPortraitSilverNeelsenTex) },
 };
-unk_80077D50 sSmallPortraitSuperArrowCompTexInfo[] = {
+static unk_80077D50 sSmallPortraitSuperArrowCompTexInfo[] = {
     { 17, aSmallPortraitSuperArrowTex, TEX_WIDTH(aSmallPortraitSuperArrowTex), TEX_HEIGHT(aSmallPortraitSuperArrowTex),
       TEX_COMPRESSED_SIZE(aSmallPortraitSuperArrowTex) },
 };
-unk_80077D50 sSmallPortraitMrsArrowCompTexInfo[] = {
+static unk_80077D50 sSmallPortraitMrsArrowCompTexInfo[] = {
     { 17, aSmallPortraitMrsArrowTex, TEX_WIDTH(aSmallPortraitMrsArrowTex), TEX_HEIGHT(aSmallPortraitMrsArrowTex),
       TEX_COMPRESSED_SIZE(aSmallPortraitMrsArrowTex) },
 };
-unk_80077D50 sSmallPortraitZodaCompTexInfo[] = { { 17, aSmallPortraitZodaTex, TEX_WIDTH(aSmallPortraitZodaTex),
-                                                   TEX_HEIGHT(aSmallPortraitZodaTex),
-                                                   TEX_COMPRESSED_SIZE(aSmallPortraitZodaTex) } };
-unk_80077D50 sSmallPortraitJohnTanakaCompTexInfo[] = {
+static unk_80077D50 sSmallPortraitZodaCompTexInfo[] = { { 17, aSmallPortraitZodaTex, TEX_WIDTH(aSmallPortraitZodaTex),
+                                                          TEX_HEIGHT(aSmallPortraitZodaTex),
+                                                          TEX_COMPRESSED_SIZE(aSmallPortraitZodaTex) } };
+static unk_80077D50 sSmallPortraitJohnTanakaCompTexInfo[] = {
     { 17, aSmallPortraitJohnTanakaTex, TEX_WIDTH(aSmallPortraitJohnTanakaTex), TEX_HEIGHT(aSmallPortraitJohnTanakaTex),
       TEX_COMPRESSED_SIZE(aSmallPortraitJohnTanakaTex) },
 };
-unk_80077D50 sSmallPortraitBioRexCompTexInfo[] = { { 17, aSmallPortraitBioRexTex, TEX_WIDTH(aSmallPortraitBioRexTex),
-                                                     TEX_HEIGHT(aSmallPortraitBioRexTex),
-                                                     TEX_COMPRESSED_SIZE(aSmallPortraitBioRexTex) } };
-unk_80077D50 sSmallPortraitKateAlenCompTexInfo[] = {
+static unk_80077D50 sSmallPortraitBioRexCompTexInfo[] = {
+    { 17, aSmallPortraitBioRexTex, TEX_WIDTH(aSmallPortraitBioRexTex), TEX_HEIGHT(aSmallPortraitBioRexTex),
+      TEX_COMPRESSED_SIZE(aSmallPortraitBioRexTex) }
+};
+static unk_80077D50 sSmallPortraitKateAlenCompTexInfo[] = {
     { 17, aSmallPortraitKateAlenTex, TEX_WIDTH(aSmallPortraitKateAlenTex), TEX_HEIGHT(aSmallPortraitKateAlenTex),
       TEX_COMPRESSED_SIZE(aSmallPortraitKateAlenTex) },
 };
-unk_80077D50 sSmallPortraitGomarAndShiohCompTexInfo[] = {
+static unk_80077D50 sSmallPortraitGomarAndShiohCompTexInfo[] = {
     { 17, aSmallPortraitGomarAndShiohTex, TEX_WIDTH(aSmallPortraitGomarAndShiohTex),
       TEX_HEIGHT(aSmallPortraitGomarAndShiohTex), TEX_COMPRESSED_SIZE(aSmallPortraitGomarAndShiohTex) },
 };
-unk_80077D50 sSmallPortraitMichaelChainCompTexInfo[] = {
+static unk_80077D50 sSmallPortraitMichaelChainCompTexInfo[] = {
     { 17, aSmallPortraitMichaelChainTex, TEX_WIDTH(aSmallPortraitMichaelChainTex),
       TEX_HEIGHT(aSmallPortraitMichaelChainTex), TEX_COMPRESSED_SIZE(aSmallPortraitMichaelChainTex) },
 };
-unk_80077D50 sSmallPortraitBillyCompTexInfo[] = { { 17, aSmallPortraitBillyTex, TEX_WIDTH(aSmallPortraitBillyTex),
-                                                    TEX_HEIGHT(aSmallPortraitBillyTex),
-                                                    TEX_COMPRESSED_SIZE(aSmallPortraitBillyTex) } };
-unk_80077D50 sSmallPortraitDrClashCompTexInfo[] = { { 17, aSmallPortraitDrClashTex, TEX_WIDTH(aSmallPortraitDrClashTex),
-                                                      TEX_HEIGHT(aSmallPortraitDrClashTex),
-                                                      TEX_COMPRESSED_SIZE(aSmallPortraitDrClashTex) } };
-unk_80077D50 sSmallPortraitJackLevinCompTexInfo[] = {
+static unk_80077D50 sSmallPortraitBillyCompTexInfo[] = {
+    { 17, aSmallPortraitBillyTex, TEX_WIDTH(aSmallPortraitBillyTex), TEX_HEIGHT(aSmallPortraitBillyTex),
+      TEX_COMPRESSED_SIZE(aSmallPortraitBillyTex) }
+};
+static unk_80077D50 sSmallPortraitDrClashCompTexInfo[] = {
+    { 17, aSmallPortraitDrClashTex, TEX_WIDTH(aSmallPortraitDrClashTex), TEX_HEIGHT(aSmallPortraitDrClashTex),
+      TEX_COMPRESSED_SIZE(aSmallPortraitDrClashTex) }
+};
+static unk_80077D50 sSmallPortraitJackLevinCompTexInfo[] = {
     { 17, aSmallPortraitJackLevinTex, TEX_WIDTH(aSmallPortraitJackLevinTex), TEX_HEIGHT(aSmallPortraitJackLevinTex),
       TEX_COMPRESSED_SIZE(aSmallPortraitJackLevinTex) },
 };
-unk_80077D50 sSmallPortraitBloodFalconCompTexInfo[] = {
+static unk_80077D50 sSmallPortraitBloodFalconCompTexInfo[] = {
     { 17, aSmallPortraitBloodFalconTex, TEX_WIDTH(aSmallPortraitBloodFalconTex),
       TEX_HEIGHT(aSmallPortraitBloodFalconTex), TEX_COMPRESSED_SIZE(aSmallPortraitBloodFalconTex) },
 };
-unk_80077D50 sSmallPortraitLeonCompTexInfo[] = { { 17, aSmallPortraitLeonTex, TEX_WIDTH(aSmallPortraitLeonTex),
-                                                   TEX_HEIGHT(aSmallPortraitLeonTex),
-                                                   TEX_COMPRESSED_SIZE(aSmallPortraitLeonTex) } };
-unk_80077D50 sSmallPortraitJamesMcCloudCompTexInfo[] = {
+static unk_80077D50 sSmallPortraitLeonCompTexInfo[] = { { 17, aSmallPortraitLeonTex, TEX_WIDTH(aSmallPortraitLeonTex),
+                                                          TEX_HEIGHT(aSmallPortraitLeonTex),
+                                                          TEX_COMPRESSED_SIZE(aSmallPortraitLeonTex) } };
+static unk_80077D50 sSmallPortraitJamesMcCloudCompTexInfo[] = {
     { 17, aSmallPortraitJamesMcCloudTex, TEX_WIDTH(aSmallPortraitJamesMcCloudTex),
       TEX_HEIGHT(aSmallPortraitJamesMcCloudTex), TEX_COMPRESSED_SIZE(aSmallPortraitJamesMcCloudTex) },
 };
-unk_80077D50 sSmallPortraitBlackShadowCompTexInfo[] = {
+static unk_80077D50 sSmallPortraitBlackShadowCompTexInfo[] = {
     { 17, aSmallPortraitBlackShadowTex, TEX_WIDTH(aSmallPortraitBlackShadowTex),
       TEX_HEIGHT(aSmallPortraitBlackShadowTex), TEX_COMPRESSED_SIZE(aSmallPortraitBlackShadowTex) },
 };
-unk_80077D50 sSmallPortraitCaptainFalconAltCompTexInfo[] = {
+static unk_80077D50 sSmallPortraitCaptainFalconAltCompTexInfo[] = {
     { 17, aSmallPortraitCaptainFalconAltTex, TEX_WIDTH(aSmallPortraitCaptainFalconAltTex),
       TEX_HEIGHT(aSmallPortraitCaptainFalconAltTex), TEX_COMPRESSED_SIZE(aSmallPortraitCaptainFalconAltTex) },
 };
-unk_80077D50 sSmallPortraitSamuraiGorohAltCompTexInfo[] = {
+static unk_80077D50 sSmallPortraitSamuraiGorohAltCompTexInfo[] = {
     { 17, aSmallPortraitSamuraiGorohAltTex, TEX_WIDTH(aSmallPortraitSamuraiGorohAltTex),
       TEX_HEIGHT(aSmallPortraitSamuraiGorohAltTex), TEX_COMPRESSED_SIZE(aSmallPortraitSamuraiGorohAltTex) },
 };
-unk_80077D50 sSmallPortraitJodySummerAltCompTexInfo[] = {
+static unk_80077D50 sSmallPortraitJodySummerAltCompTexInfo[] = {
     { 17, aSmallPortraitJodySummerAltTex, TEX_WIDTH(aSmallPortraitJodySummerAltTex),
       TEX_HEIGHT(aSmallPortraitJodySummerAltTex), TEX_COMPRESSED_SIZE(aSmallPortraitJodySummerAltTex) },
 };
@@ -605,9 +610,10 @@ unk_80077D50* sPlayerNumIconCompTexInfos[] = {
     s4PIconCompTexInfo,
 };
 
-unk_80077D50 sMachineSelectCursorCompTexInfo[] = { { 17, aMachineSelectCursorTex, TEX_WIDTH(aMachineSelectCursorTex),
-                                                     TEX_HEIGHT(aMachineSelectCursorTex),
-                                                     TEX_COMPRESSED_SIZE(aMachineSelectCursorTex) } };
+static unk_80077D50 sMachineSelectCursorCompTexInfo[] = {
+    { 17, aMachineSelectCursorTex, TEX_WIDTH(aMachineSelectCursorTex), TEX_HEIGHT(aMachineSelectCursorTex),
+      TEX_COMPRESSED_SIZE(aMachineSelectCursorTex) }
+};
 unk_80077D50 sMachineInfoGraphCompTexInfo[] = { { 17, aMachineInfoGraphTex, TEX_WIDTH(aMachineInfoGraphTex),
                                                   TEX_HEIGHT(aMachineInfoGraphTex),
                                                   TEX_COMPRESSED_SIZE(aMachineInfoGraphTex) } };
@@ -761,14 +767,14 @@ static unk_80077D50* sDifficultyCompTexInfos[] = {
     sMasterCompTexInfo,
 };
 
-unk_80077D50 sBoostCompTexInfo[] = { { 17, aBoostTex, TEX_WIDTH(aBoostTex), TEX_HEIGHT(aBoostTex),
-                                       TEX_COMPRESSED_SIZE(aBoostTex) } };
-unk_80077D50 sBodyCompTexInfo[] = { { 17, aBodyTex, TEX_WIDTH(aBodyTex), TEX_HEIGHT(aBodyTex),
-                                      TEX_COMPRESSED_SIZE(aBodyTex) } };
-unk_80077D50 sGripCompTexInfo[] = { { 17, aGripTex, TEX_WIDTH(aGripTex), TEX_HEIGHT(aGripTex),
-                                      TEX_COMPRESSED_SIZE(aGripTex) } };
+static unk_80077D50 sBoostCompTexInfo[] = { { 17, aBoostTex, TEX_WIDTH(aBoostTex), TEX_HEIGHT(aBoostTex),
+                                              TEX_COMPRESSED_SIZE(aBoostTex) } };
+static unk_80077D50 sBodyCompTexInfo[] = { { 17, aBodyTex, TEX_WIDTH(aBodyTex), TEX_HEIGHT(aBodyTex),
+                                             TEX_COMPRESSED_SIZE(aBodyTex) } };
+static unk_80077D50 sGripCompTexInfo[] = { { 17, aGripTex, TEX_WIDTH(aGripTex), TEX_HEIGHT(aGripTex),
+                                             TEX_COMPRESSED_SIZE(aGripTex) } };
 
-unk_80077D50* sMachineStatCompTexInfos[] = {
+static unk_80077D50* sMachineStatCompTexInfos[] = {
     sBodyCompTexInfo,
     sBoostCompTexInfo,
     sGripCompTexInfo,
@@ -777,7 +783,7 @@ unk_80077D50* sMachineStatCompTexInfos[] = {
 static unk_80077D50 sOKCompTexInfo[] = { { 17, aOKTex, TEX_WIDTH(aOKTex), TEX_HEIGHT(aOKTex),
                                            TEX_COMPRESSED_SIZE(aOKTex) } };
 
-const char* sMachineStatValues[] = { "a", "b", "c", "d", "e" };
+static const char* sMachineStatValueStr[] = { "a", "b", "c", "d", "e" };
 
 UNUSED s32 D_i4_8007663C[] = { 100, 218, 252, 221 };
 
@@ -822,7 +828,7 @@ void MachineSelect_Init(void) {
 
     for (i = 0; i < 4; i++) {
         gPlayerSelectionLock[i] = SELECTION_FREE;
-        sMachineSelectIndex[i] = func_8070DBF0(gRacers[i].character);
+        sMachineSelectIndex[i] = Character_GetSlotFromCharacter(gRacers[i].character);
     }
     sMachinesUnlocked = ((func_8070DA54() / 3) * 6) + 6;
     if (gSettingEverythingUnlocked != 0) {
@@ -999,7 +1005,7 @@ s32 MachineSelect_Update(void) {
 
                 sMachineSelectIndex[i] += sMachinesUnlocked;
                 sMachineSelectIndex[i] %= sMachinesUnlocked;
-                gRacers[i].character = func_8070DBE0(sMachineSelectIndex[i]);
+                gRacers[i].character = Character_GetCharacterFromSlot(sMachineSelectIndex[i]);
 
                 if (lastMachineIndex != sMachineSelectIndex[i]) {
                     func_80741014(i, 0x1E);
@@ -1223,11 +1229,11 @@ Gfx* MachineSettings_Draw(Gfx* gfx) {
     return gfx;
 }
 
-extern unk_806F2400 D_806F2400;
+extern CustomMachinesInfo gCustomMachinesInfo;
 
 s32 MachineSettings_GetCharacter(s32 character) {
 
-    if (D_806F2400.unk_3C0[character] == -1) {
+    if (gCustomMachinesInfo.characterCustomState[character] == -1) {
         character += 30;
         if (character >= 36) {
             character %= 30;
@@ -1531,14 +1537,14 @@ Gfx* MachineSelect_StatsDraw(Gfx* gfx, Object* statsObj) {
         for (i = 0; i < 3; i++) {
             gfx = func_i2_800AF584(gfx, sMachineStatCompTexInfos[i], temp_fp, (temp_t0 - 7) + i * 20, 0, 0, 0, 1.0f,
                                    1.0f, true);
-            temp_s0 = sMachineStatValues[temp_a3[i]];
+            temp_s0 = sMachineStatValueStr[temp_a3[i]];
             gfx = Font_DrawString(gfx, temp_fp + 5, (temp_t0 + 10) + i * 20, temp_s0, 0, FONT_SET_2, 0);
         }
     } else {
         for (i = 0; i < 3; i++) {
             gfx = func_i2_800AF584(gfx, sMachineStatCompTexInfos[i], temp_fp - 20, (temp_t0 - 7) + i * 20, 0, 0, 0,
                                    1.0f, 1.0f, true);
-            temp_s0 = sMachineStatValues[temp_a3[i]];
+            temp_s0 = sMachineStatValueStr[temp_a3[i]];
             gfx = Font_DrawString(gfx, (temp_fp - Font_GetStringWidth(temp_s0, FONT_SET_2, 0)) - 5,
                                   (temp_t0 + 10) + i * 20, temp_s0, 0, FONT_SET_2, 0);
         }
@@ -1576,7 +1582,7 @@ Gfx* MachineSelect_CursorDraw(Gfx* gfx, Object* cursorObj) {
     for (i = 0; i < 4; i++) {
         if (Object_Get(OBJECT_MACHINE_SELECT_CURSOR_NUM_0 + i) != NULL) {
             temp_v0 = (u32) gGameFrameCount % temp_s3;
-            if (D_806F2400.unk_3C0[sMachineSelectIndex[i]] != 0) {
+            if (gCustomMachinesInfo.characterCustomState[sMachineSelectIndex[i]] != 0) {
                 red = 255;
                 green = 155;
                 blue = 55;
@@ -1650,7 +1656,7 @@ Gfx* MachineSelect_MachineDraw(Gfx* gfx, Object* machineObj) {
             gSPMatrix(gfx++, &D_1000000.unk_32308[0], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         }
         gDPSetRenderMode(gfx++, G_RM_PASS, G_RM_AA_ZB_OPA_SURF2);
-        gfx = func_8072DF40(gfx, func_8070DBE0(i), 0);
+        gfx = func_8072DF40(gfx, Character_GetCharacterFromSlot(i), 0);
     }
     return gfx;
 }
@@ -1678,9 +1684,9 @@ Gfx* MachineSettings_NameDraw(Gfx* gfx) {
     s32 characterSlot;
 
     if (gNumPlayers == 1) {
-        characterSlot = func_8070DBF0(gRacers[0].character);
-        if (D_806F2400.unk_3C0[characterSlot] > 0) {
-            machineName = D_806F2400.unk_00[characterSlot].machineName;
+        characterSlot = Character_GetSlotFromCharacter(gRacers[0].character);
+        if (gCustomMachinesInfo.characterCustomState[characterSlot] > 0) {
+            machineName = gCustomMachinesInfo.customMachines[characterSlot].machineName;
         } else {
             machineName = gMachineNames[MachineSettings_GetCharacter(gRacers[0].character)];
         }
@@ -1689,9 +1695,9 @@ Gfx* MachineSettings_NameDraw(Gfx* gfx) {
     } else {
         for (i = 0; i < gNumPlayers; i++) {
             var_s0 = &D_i4_80076FA4[i * 2];
-            characterSlot = func_8070DBF0(gRacers[i].character);
-            if (D_806F2400.unk_3C0[characterSlot] > 0) {
-                machineName = D_806F2400.unk_00[characterSlot].machineName;
+            characterSlot = Character_GetSlotFromCharacter(gRacers[i].character);
+            if (gCustomMachinesInfo.characterCustomState[characterSlot] > 0) {
+                machineName = gCustomMachinesInfo.customMachines[characterSlot].machineName;
             } else {
                 machineName = gMachineNames[MachineSettings_GetCharacter(gRacers[i].character)];
             }
@@ -1843,8 +1849,8 @@ Gfx* MachineSettings_StatsDraw(Gfx* gfx, Object* statsObj) {
 
             for (j = 0; j < 3; j++) {
                 temp = gMachines[gRacers[i].character].machineStats;
-                gfx = Font_DrawString(gfx, leftOffset + 0x6B, topOffset + 0x43 + j * 14, sMachineStatValues[temp[j]], 0,
-                                      FONT_SET_2, 0);
+                gfx = Font_DrawString(gfx, leftOffset + 0x6B, topOffset + 0x43 + j * 14, sMachineStatValueStr[temp[j]],
+                                      0, FONT_SET_2, 0);
             }
         }
     }
@@ -1865,7 +1871,7 @@ Gfx* func_i4_800729D8(Gfx* gfx, Object* arg1) {
 
         for (j = 0; j < 3; j++) {
             temp = gMachines[gRacers[i].character].machineStats;
-            temp2 = sMachineStatValues[temp[j]];
+            temp2 = sMachineStatValueStr[temp[j]];
             gfx = Font_DrawString(gfx, var_s3 + 0x6B, var_s1 + 0x43 + j * 14, temp2, 0, FONT_SET_2, 0);
         }
     }
@@ -1947,7 +1953,7 @@ Gfx* MachineSelect_DifficultyCupsDraw(Gfx* gfx, Object* difficultyCupsObj) {
     s32 cupsUnlocked;
     s8* var_t1;
 
-    character = func_8070DBE0(sMachineSelectIndex[0]);
+    character = Character_GetCharacterFromSlot(sMachineSelectIndex[0]);
     difficulty = 0;
     switch (gMachineSelectState) {
         case MACHINE_SELECT_AWAIT_OK:
@@ -2020,15 +2026,16 @@ Gfx* MachineSelect_NameDraw(Gfx* gfx, Object* nameObj) {
     s32 pad[2];
     const char* machineName;
 
-    if (D_806F2400.unk_3C0[sMachineSelectIndex[0]] > 0) {
-        machineName = D_806F2400.unk_00[sMachineSelectIndex[0]].machineName;
+    if (gCustomMachinesInfo.characterCustomState[sMachineSelectIndex[0]] > 0) {
+        machineName = gCustomMachinesInfo.customMachines[sMachineSelectIndex[0]].machineName;
     } else {
         machineName = gMachineNames[MachineSettings_GetCharacter(gRacers[0].character)];
     }
 
     gfx = Font_DrawString(gfx, 160 - (Font_GetStringWidth(machineName, FONT_SET_2, 0) / 2), 218, machineName, 0,
                           FONT_SET_2, 0);
-    gfx = Font_DrawMachineWeightSmall(gfx, 252, 221, gMachines[func_8070DBE0(sMachineSelectIndex[0])].weight);
+    gfx = Font_DrawMachineWeightSmall(gfx, 252, 221,
+                                      gMachines[Character_GetCharacterFromSlot(sMachineSelectIndex[0])].weight);
     return Font_DrawString(gfx, 252, 221, "$", 0, FONT_SET_2, 0);
 }
 

@@ -486,8 +486,10 @@ void func_xk2_800F2B48(Gfx** gfxP) {
 
         gSPDisplayList(gfx++, D_8014940);
 
-        gDPLoadTextureBlock(gfx++, D_7004B00, G_IM_FMT_RGBA, G_IM_SIZ_16b, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+        // B Button
+        gDPLoadTextureBlock(gfx++, aExpansionKitABButtonTex + 16 * 16, G_IM_FMT_RGBA, G_IM_SIZ_16b, 16, 16, 0,
+                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                            G_TX_NOLOD);
 
         gSPTextureRectangle(gfx++, temp_v1 << 2, top << 2, (temp_v1 + 16) << 2, (top + 16) << 2, 0, 0, 0, 1 << 10,
                             1 << 10);

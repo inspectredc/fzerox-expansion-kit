@@ -198,18 +198,20 @@ s32 func_xk1_8002E368(void) {
                                       D_807C6EA8.fileSize);
                     break;
                 case 15:
-                    Mfs_RenameFileInDir(D_807C6EA8.dirId, D_807C6EA8.oldName, D_807C6EA8.oldExtension, D_807C6EA8.newName,
-                                        D_807C6EA8.newExtension, D_807C6EA8.writeChanges);
+                    Mfs_RenameFileInDir(D_807C6EA8.dirId, D_807C6EA8.oldName, D_807C6EA8.oldExtension,
+                                        D_807C6EA8.newName, D_807C6EA8.newExtension, D_807C6EA8.writeChanges);
                     break;
                 case 16:
-                    Mfs_DeleteFileInDir(D_807C6EA8.dirId, D_807C6EA8.name, D_807C6EA8.extension, D_807C6EA8.writeChanges);
+                    Mfs_DeleteFileInDir(D_807C6EA8.dirId, D_807C6EA8.name, D_807C6EA8.extension,
+                                        D_807C6EA8.writeChanges);
                     break;
                 case 17:
                     Mfs_GetFileInDirAttr(D_807C6EA8.dirId, D_807C6EA8.name, D_807C6EA8.extension);
                     break;
                 case 18:
-                    Mfs_ChangeFileInDirAttr(D_807C6EA8.dirId, D_807C6EA8.name, D_807C6EA8.extension, D_807C6EA8.attributeToAdd,
-                                            D_807C6EA8.attributeToRemove, D_807C6EA8.writeChanges);
+                    Mfs_ChangeFileInDirAttr(D_807C6EA8.dirId, D_807C6EA8.name, D_807C6EA8.extension,
+                                            D_807C6EA8.attributeToAdd, D_807C6EA8.attributeToRemove,
+                                            D_807C6EA8.writeChanges);
                     break;
             }
             D_807C6EA8.unk_14 = D_xk1_80033404 = gMfsError;

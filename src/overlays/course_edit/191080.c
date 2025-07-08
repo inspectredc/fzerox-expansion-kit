@@ -226,7 +226,7 @@ Gfx* func_xk2_800DF6FC(Gfx* gfx) {
         func_xk2_800F5250(&gfx);
     }
     if (D_800D6CA0.unk_08 == 2) {
-        gfx = func_xk1_80029B48(gfx, &D_xk2_800F6824, &D_xk2_800F6828);
+        gfx = ExpansionKit_NameEntryDraw(gfx, &D_xk2_800F6824, &D_xk2_800F6828);
         if (D_80119880 == 9) {
             s32 x = 24;
             s32 y = 56;

@@ -1,10 +1,10 @@
 #include "global.h"
+#include "machine_create.h"
 #include "leo/leo_functions.h"
 
 u8 D_xk3_80137160 = 0;
 
 extern unk_8003A5D8 D_xk1_8003A5D8[];
-extern s32 D_xk3_80136820;
 extern u8 D_800D1308[];
 
 void func_xk3_80135F90(void) {
@@ -15,8 +15,8 @@ void func_xk3_80135F90(void) {
     for (i = 0; i < 30; i++) {
         D_xk3_80137160 += D_800D1308[i];
     }
-    if (D_xk3_80136820 == 0x18) {
-        if (D_xk3_80137160) {
+    if (gWorksMachineMode == MACHINE_MODE_ENTRY_GET_FILE) {
+        if (D_xk3_80137160 != 0) {
             func_8076877C(1, "CARD");
             mfsStrCpy(D_xk1_8003A5D8[0].name, "SUPER");
         } else {
@@ -35,17 +35,17 @@ void func_xk3_80135F90(void) {
     }
 }
 
-extern const char* D_xk3_801366F4[];
+extern const char* gSuperMachineNames[];
 
 void func_xk3_801360B8(void) {
     u8 i;
     u8 var_s1;
 
     for (i = 0, var_s1 = 0; i < 30; i++) {
-        if (D_800D1308[func_8070DBE0(i)] != 0) {
+        if (D_800D1308[Character_GetCharacterFromSlot(i)] != 0) {
             D_xk1_8003A5D8[var_s1].attr = 0;
             D_xk1_8003A5D8[var_s1].unk_22 = 0;
-            mfsStrCpy(D_xk1_8003A5D8[var_s1].name, D_xk3_801366F4[i]);
+            mfsStrCpy(D_xk1_8003A5D8[var_s1].name, gSuperMachineNames[i]);
             var_s1++;
         }
     }
@@ -53,7 +53,7 @@ void func_xk3_801360B8(void) {
     func_xk1_8002D290();
 }
 
-extern unk_806F2400 D_806F2400;
+extern CustomMachinesInfo gCustomMachinesInfo;
 
 u8 func_xk3_8013618C(s32 arg0) {
     u8 var_s3;
@@ -61,7 +61,7 @@ u8 func_xk3_8013618C(s32 arg0) {
 
     var_s3 = 0;
     for (i = 0, D_xk3_80137160 = 0; i < 30; i++) {
-        if (D_806F2400.unk_3C0[i] == -1) {
+        if (gCustomMachinesInfo.characterCustomState[i] == -1) {
             D_xk3_80137160++;
         }
     }
@@ -73,10 +73,10 @@ u8 func_xk3_8013618C(s32 arg0) {
     }
 
     for (i = 0; i < 30; i++) {
-        if (D_806F2400.unk_3C0[i] > 0) {
+        if (gCustomMachinesInfo.characterCustomState[i] > 0) {
             D_xk1_8003A5D8[var_s3].attr = 0;
             D_xk1_8003A5D8[var_s3].unk_22 = 0;
-            mfsStrCpy(D_xk1_8003A5D8[var_s3].name, D_806F2400.unk_00[i].machineName);
+            mfsStrCpy(D_xk1_8003A5D8[var_s3].name, gCustomMachinesInfo.customMachines[i].machineName);
             var_s3++;
         }
     }
@@ -98,10 +98,10 @@ u8 func_xk3_80136320(void) {
     u8 var_s1;
 
     for (i = 0, var_s1 = 0; i < 30; i++) {
-        if (D_806F2400.unk_3C0[i] == -1) {
+        if (gCustomMachinesInfo.characterCustomState[i] == -1) {
             D_xk1_8003A5D8[var_s1].attr = 0;
             D_xk1_8003A5D8[var_s1].unk_22 = 0;
-            mfsStrCpy(D_xk1_8003A5D8[var_s1].name, D_xk3_801366F4[i]);
+            mfsStrCpy(D_xk1_8003A5D8[var_s1].name, gSuperMachineNames[i]);
             var_s1++;
         }
     }
@@ -115,8 +115,8 @@ s32 func_xk3_801363F8(unk_8003A5D8* arg0) {
     u8 i;
 
     for (i = 0; i < 30; i++) {
-        if ((D_806F2400.unk_3C0[i] > 0 && mfsStrCmp(arg0->name, D_806F2400.unk_00[i].machineName) == 0) ||
-            (D_806F2400.unk_3C0[i] == -1 && mfsStrCmp(arg0->name, D_xk3_801366F4[i]) == 0)) {
+        if ((gCustomMachinesInfo.characterCustomState[i] > 0 && mfsStrCmp(arg0->name, gCustomMachinesInfo.customMachines[i].machineName) == 0) ||
+            (gCustomMachinesInfo.characterCustomState[i] == -1 && mfsStrCmp(arg0->name, gSuperMachineNames[i]) == 0)) {
             if (arg0->unk_22 == 0) {
                 return 1;
             }
@@ -125,7 +125,7 @@ s32 func_xk3_801363F8(unk_8003A5D8* arg0) {
     var_v0 = false;
 
     for (i = 0; i < 30; i++) {
-        if (D_806F2400.unk_3C0[i] == -1) {
+        if (gCustomMachinesInfo.characterCustomState[i] == -1) {
             var_v0 = true;
             break;
         }
