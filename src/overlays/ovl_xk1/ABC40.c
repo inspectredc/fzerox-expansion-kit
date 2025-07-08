@@ -13,7 +13,7 @@ void func_xk1_8002E9D0(s32 arg0) {
 
 Gfx* func_xk1_8002EA10(Gfx* gfx, u16 arg1, u16 arg2, u16 arg3, u16 arg4, u16 arg5) {
 
-    gfx = func_xk1_8002FCA0(gfx, arg1 - 2, arg2 - 2, arg3 + 1, arg4 + 1, arg5, 2, 2);
+    gfx = ExpansionKit_DrawRectangleBorder(gfx, arg1 - 2, arg2 - 2, arg3 + 1, arg4 + 1, arg5, 2, 2);
 
     gSPDisplayList(gfx++, D_xk1_800335F0);
     gDPFillRectangle(gfx++, arg1, arg2, arg3, arg4);

@@ -3,6 +3,7 @@
 #include "audio.h"
 #include "fzx_game.h"
 #include "fzx_object.h"
+#include "fzx_bordered_box.h"
 #include "fzx_assets.h"
 
 SaveContext* sSaveContextPtr;
@@ -12,7 +13,7 @@ s16 D_i6_8008A620[176];
 s32 sOptionsDataClearMenu;
 s16 sOptionsDataAlreadyCleared;
 s32 sOptionsSelectionState[7];
-unk_800E51B8* D_i6_8008A7A4;
+BorderedBoxWidget* D_i6_8008A7A4;
 s16 D_i6_8008A7A8;
 s16 D_i6_8008A7AA;
 TexturePtr D_i6_8008A7AC;
@@ -173,8 +174,8 @@ void OptionsMenu_Init(void) {
     D_i6_8008A7B0 = 0;
     gOptionsCurrentRow = 0;
     func_i6_80082A24();
-    func_80711170(&D_i6_8008A7A4);
-    func_80711178();
+    BorderedBox_CleanWidget(&D_i6_8008A7A4);
+    BorderedBox_ClearAll();
     sSaveContextPtr = &gSaveContext;
 }
 
@@ -234,7 +235,7 @@ extern s16 D_8076C814;
 
 s32 OptionsMenu_Update(void) {
     Controller_SetGlobalInputs(&gSharedController);
-    func_80711414();
+    BorderedBox_Update();
     func_i6_80083A20();
     if (!sOptionsDataAlreadyCleared) {
         switch (sOptionsDataClearMenu) {
@@ -264,7 +265,7 @@ bool func_i6_80082DB4(void) {
     bool updateSettings;
     OptionsInfo* option;
 
-    if (func_80711AC0(D_i6_8008A7A4, 0)) {
+    if (BorderedBox_GetInfo(D_i6_8008A7A4, IS_BORDERED_BOX_ACTIVE)) {
         return false;
     }
     lastRow = gOptionsCurrentRow;
@@ -362,7 +363,7 @@ bool func_i6_80082DB4(void) {
         case OPTIONS_DATA_CLEAR:
             if (gInputButtonPressed & (BTN_A | BTN_START)) {
                 D_i6_8008A7A4 =
-                    func_807112A0(0, 0x5A, 0x8C, 0x94, 0x50, 10, GPACK_RGBA5551(255, 0, 0, 1), func_i6_800837F4);
+                    BorderedBox_Init(0, 0x5A, 0x8C, 0x94, 0x50, 10, GPACK_RGBA5551(255, 0, 0, 1), func_i6_800837F4);
                 if (D_i6_8008A7A4 != NULL) {
                     sOptionsDataClearMenu = OPTIONS_DATA_CLEAR_MENU_OPEN;
                     sOptionsSelectionState[gOptionsCurrentRow] = 0;
@@ -395,7 +396,7 @@ void func_i6_800831E8(void) {
     s32 i;
     bool updateSettings;
 
-    if (func_80711AC0(D_i6_8008A7A4, 1) != 0) {
+    if (BorderedBox_GetInfo(D_i6_8008A7A4, IS_BORDERED_BOX_OPENED)) {
         lastSelectionState = sOptionsSelectionState[gOptionsCurrentRow];
         if (gInputButtonPressed & BTN_LEFT) {
             if (--sOptionsSelectionState[gOptionsCurrentRow] < 0) {
@@ -432,7 +433,7 @@ void func_i6_800831E8(void) {
         }
         if (updateSettings) {
             sOptionsDataClearMenu = OPTIONS_DATA_CLEAR_MENU_CLOSED;
-            func_807113DC(D_i6_8008A7A4);
+            BorderedBox_StartClose(D_i6_8008A7A4);
         }
     }
 }
@@ -509,7 +510,7 @@ Gfx* OptionsMenu_Draw(Gfx* gfx) {
         var_s5 += var_s7;
     }
 
-    return func_80711698(gfx);
+    return BorderedBox_Draw(gfx);
 }
 
 Gfx* func_i6_800837F4(Gfx* gfx, s32 arg1, s32 arg2) {

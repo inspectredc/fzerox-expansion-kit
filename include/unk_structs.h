@@ -446,26 +446,6 @@ typedef struct RaceStats {
     s8 unk_0E[0x2];
 } RaceStats; // size = 0x10
 
-typedef Gfx* (*unk_800E51B8_unk_1C_func)(Gfx*, s32, s32);
-
-typedef struct unk_800E51B8 {
-    s32 unk_00;
-    s16 unk_04;
-    s16 unk_06;
-    s16 unk_08;
-    s16 unk_0A;
-    s16 unk_0C;
-    s16 unk_0E;
-    s16 unk_10;
-    s16 unk_12;
-    s16 unk_14;
-    s16 unk_16;
-    u16 unk_18;
-    u16 unk_1A;
-    u16 unk_1C;
-    unk_800E51B8_unk_1C_func unk_20;
-} unk_800E51B8; // size = 0x20
-
 typedef struct unk_struct_20 {
     Vec3f unk_00;
     Vec3f unk_0C;
@@ -675,7 +655,7 @@ typedef struct unk_800E4068 {
     TexturePtr unk_04;
 } unk_800E4068; // size = 0x8
 
-typedef struct unk_806F2400_unk_00 {
+typedef struct CustomMachine {
     u8 body;
     u8 boost;
     u8 grip;
@@ -699,13 +679,13 @@ typedef struct unk_806F2400_unk_00 {
     u8 cockpitB;
     char machineName[9];
     u16 checksum;
-} unk_806F2400_unk_00; // size = 0x20
+} CustomMachine; // size = 0x20
 
-typedef struct unk_806F2400 {
-    unk_806F2400_unk_00 unk_00[30];
-    s8 unk_3C0[30];
-    u16 unk_3DE;
-} unk_806F2400; // size = 0x3E0
+typedef struct CustomMachinesInfo {
+    CustomMachine customMachines[30];
+    s8 characterCustomState[30];
+    u16 checksum;
+} CustomMachinesInfo; // size = 0x3E0
 
 typedef struct unk_80144F74 {
     void* unk_00;

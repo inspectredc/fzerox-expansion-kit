@@ -372,8 +372,9 @@ void func_xk1_8002BFB0(Gfx** gfxP) {
     gSPTextureRectangle(gfx++, x << 2, x << 2, (x + 32) << 2, (y + 32) << 2, 0, 0, 0, 1 << 10, 1 << 10);
     gDPPipeSync(gfx++);
     gDPSetCombineMode(gfx++, G_CC_DECALRGBA, G_CC_DECALRGBA);
-    gDPLoadTextureBlock(gfx++, D_7004900, G_IM_FMT_RGBA, G_IM_SIZ_16b, 16, 32, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    gDPLoadTextureBlock(gfx++, aExpansionKitABButtonTex, G_IM_FMT_RGBA, G_IM_SIZ_16b, 16, 32, 0,
+                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                        G_TX_NOLOD);
     gSPTextureRectangle(gfx++, (x + 32) << 2, y << 2, (x + 48) << 2, (y + 16) << 2, 0, 0, 16 << 5, new_var, 1 << 10);
     gSPTextureRectangle(gfx++, (x + 32) << 2, (y + 16) << 2, (x + 48) << 2, (y + 32) << 2, 0, 0, 0, 1 << 10, 1 << 10);
     *gfxP = gfx;

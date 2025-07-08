@@ -71,13 +71,15 @@ void func_80767958(void* entry) {
             switch (temp_s0->unk_00) {
                 case 0:
                     D_807C7074 = temp_s0;
-                    SLLeoReadWrite(D_807C7074->cmdBlock, D_807C7074->direction, D_807C7074->lba, D_807C7074->vAddr, D_807C7074->nLBAs, &D_807C7058);
+                    SLLeoReadWrite(D_807C7074->cmdBlock, D_807C7074->direction, D_807C7074->lba, D_807C7074->vAddr,
+                                   D_807C7074->nLBAs, &D_807C7058);
                     osRecvMesg(&D_807C7058, &D_807C7078, OS_MESG_BLOCK);
                     osSendMesg(D_807C7074->mq, D_807C7078, OS_MESG_BLOCK);
                     break;
                 case 1:
                     D_807C7074 = temp_s0;
-                    SLLeoReadWrite_DATA(D_807C7074->cmdBlock, D_807C7074->direction, D_807C7074->lba, D_807C7074->vAddr, D_807C7074->nLBAs, &D_807C7058);
+                    SLLeoReadWrite_DATA(D_807C7074->cmdBlock, D_807C7074->direction, D_807C7074->lba, D_807C7074->vAddr,
+                                        D_807C7074->nLBAs, &D_807C7058);
                     osRecvMesg(&D_807C7058, &D_807C7078, OS_MESG_BLOCK);
                     osSendMesg(D_807C7074->mq, D_807C7078, OS_MESG_BLOCK);
                     break;
@@ -101,12 +103,14 @@ void func_80767958(void* entry) {
         }
         D_80794E18 = 1;
         if (D_807C6EA8.unk_00 == 4) {
-            SLMFSSave(D_807C6EA8.dirId, D_807C6EA8.name, D_807C6EA8.extension, D_807C6EA8.writeBuf, D_807C6EA8.fileSize, D_807C6EA8.attr, D_807C6EA8.copyCount, D_807C6EA8.writeChanges);
+            SLMFSSave(D_807C6EA8.dirId, D_807C6EA8.name, D_807C6EA8.extension, D_807C6EA8.writeBuf, D_807C6EA8.fileSize,
+                      D_807C6EA8.attr, D_807C6EA8.copyCount, D_807C6EA8.writeChanges);
             D_80794E14 = D_80794E18 = 0;
             continue;
         }
         if (D_807C6EA8.unk_00 == 5) {
-            func_xk2_800EB938(D_807C6EA8.dirId, D_807C6EA8.name, D_807C6EA8.extension, D_807C6EA8.writeBuf, D_807C6EA8.fileSize, D_807C6EA8.attr, D_807C6EA8.copyCount, D_807C6EA8.writeChanges);
+            func_xk2_800EB938(D_807C6EA8.dirId, D_807C6EA8.name, D_807C6EA8.extension, D_807C6EA8.writeBuf,
+                              D_807C6EA8.fileSize, D_807C6EA8.attr, D_807C6EA8.copyCount, D_807C6EA8.writeChanges);
             func_80767940();
             D_80794E14 = D_80794E18 = 0;
             continue;
@@ -117,7 +121,8 @@ void func_80767958(void* entry) {
             continue;
         }
         if (D_807C6EA8.unk_00 == 7) {
-            SLMFSLoadHalfway(D_807C6EA8.dirId, D_807C6EA8.name, D_807C6EA8.extension, D_807C6EA8.readBuf, D_807C6EA8.offset, D_807C6EA8.fileSize);
+            SLMFSLoadHalfway(D_807C6EA8.dirId, D_807C6EA8.name, D_807C6EA8.extension, D_807C6EA8.readBuf,
+                             D_807C6EA8.offset, D_807C6EA8.fileSize);
             D_80794E14 = D_80794E18 = 0;
             continue;
         }
@@ -150,22 +155,22 @@ void func_80767958(void* entry) {
 
         temp_v0_3 = func_xk1_8002E368();
         switch (temp_v0_3) {
-            case 0:
+            case LEO_ERROR_GOOD:
                 D_807C6EA8.unk_10 = 0;
                 D_80794E14 = 0;
                 D_80794E18 = 0;
                 break;
-            case 2:
+            case LEO_ERROR_DIAGNOSTIC_FAILURE:
                 D_807C6EA8.unk_10 = 2;
                 break;
-            case 3:
+            case LEO_ERROR_COMMAND_PHASE_ERROR:
                 D_807C6EA8.unk_10 = 3;
                 break;
-            case 4:
+            case LEO_ERROR_DATA_PHASE_ERROR:
                 D_807C6EA8.unk_10 = 4;
                 D_807C6EA8.unk_08 = 3;
                 break;
-            case 0x22:
+            case LEO_ERROR_COMMAND_TERMINATED:
                 func_8070F8A4(temp_v0_3, 0);
                 while (true) {}
             default:
@@ -201,7 +206,8 @@ s32 func_80767E30(void) {
     }
 }
 
-void func_80767E98(u16 dirId, char* name, char* extension, void* buf, s32 fileSize, s32 attr, s32 copyCount, bool writeChanges) {
+void func_80767E98(u16 dirId, char* name, char* extension, void* buf, s32 fileSize, s32 attr, s32 copyCount,
+                   bool writeChanges) {
 
     D_807C6EA8.dirId = dirId;
     D_807C6EA8.name = name;
@@ -261,14 +267,16 @@ void func_807680A4(void) {
     }
 }
 
-void func_807680EC(u16 dirId, char* name, char* extension, void* buf, s32 fileSize, s32 attr, s32 copyCount, bool writeChanges) {
+void func_807680EC(u16 dirId, char* name, char* extension, void* buf, s32 fileSize, s32 attr, s32 copyCount,
+                   bool writeChanges) {
     if (D_80794E18 == 0) {
         D_807C6EA8.unk_00 = 4;
         func_80767E98(dirId, name, extension, buf, fileSize, attr, copyCount, writeChanges);
     }
 }
 
-void func_8076814C(u16 dirId, char* name, char* extension, void* buf, s32 fileSize, s32 attr, s32 copyCount, bool writeChanges) {
+void func_8076814C(u16 dirId, char* name, char* extension, void* buf, s32 fileSize, s32 attr, s32 copyCount,
+                   bool writeChanges) {
     if (func_80767E30() == 0) {
         D_807C6EA8.unk_00 = 5;
         D_807C6EA8.unk_08 = 6;
@@ -276,7 +284,8 @@ void func_8076814C(u16 dirId, char* name, char* extension, void* buf, s32 fileSi
     }
 }
 
-void func_807681C8(u16 dirId, char* name, char* extension, void* buf, s32 fileSize, s32 attr, s32 copyCount, bool writeChanges) {
+void func_807681C8(u16 dirId, char* name, char* extension, void* buf, s32 fileSize, s32 attr, s32 copyCount,
+                   bool writeChanges) {
     if (func_80767E30() == 0) {
         D_807C6EA8.unk_00 = 5;
         D_807C6EA8.unk_08 = 7;
@@ -284,7 +293,8 @@ void func_807681C8(u16 dirId, char* name, char* extension, void* buf, s32 fileSi
     }
 }
 
-void func_80768244(u16 dirId, char* name, char* extension, void* buf, s32 fileSize, s32 attr, s32 copyCount, bool writeChanges) {
+void func_80768244(u16 dirId, char* name, char* extension, void* buf, s32 fileSize, s32 attr, s32 copyCount,
+                   bool writeChanges) {
     if (func_80767E30() == 0) {
         D_807C6EA8.unk_00 = 8;
         D_807C6EA8.unk_08 = 6;
@@ -292,7 +302,8 @@ void func_80768244(u16 dirId, char* name, char* extension, void* buf, s32 fileSi
     }
 }
 
-void func_807682C0(u16 dirId, char* name, char* extension, void* buf, s32 fileSize, s32 attr, s32 copyCount, bool writeChanges) {
+void func_807682C0(u16 dirId, char* name, char* extension, void* buf, s32 fileSize, s32 attr, s32 copyCount,
+                   bool writeChanges) {
     if (func_80767E30() == 0) {
         D_807C6EA8.unk_00 = 8;
         D_807C6EA8.unk_08 = 10;
@@ -300,7 +311,8 @@ void func_807682C0(u16 dirId, char* name, char* extension, void* buf, s32 fileSi
     }
 }
 
-void func_8076833C(u16 dirId, char* name, char* extension, void* buf, s32 fileSize, s32 attr, s32 copyCount, bool writeChanges) {
+void func_8076833C(u16 dirId, char* name, char* extension, void* buf, s32 fileSize, s32 attr, s32 copyCount,
+                   bool writeChanges) {
     if (func_80767E30() == 0) {
         D_807C6EA8.unk_00 = 8;
         D_807C6EA8.unk_08 = 25;
@@ -308,7 +320,8 @@ void func_8076833C(u16 dirId, char* name, char* extension, void* buf, s32 fileSi
     }
 }
 
-void func_807683B8(u16 dirId, char* name, char* extension, void* buf, s32 fileSize, s32 attr, s32 copyCount, bool writeChanges) {
+void func_807683B8(u16 dirId, char* name, char* extension, void* buf, s32 fileSize, s32 attr, s32 copyCount,
+                   bool writeChanges) {
     if (func_80767E30() == 0) {
         D_807C6EA8.unk_00 = 8;
         D_807C6EA8.unk_08 = 26;
@@ -316,7 +329,8 @@ void func_807683B8(u16 dirId, char* name, char* extension, void* buf, s32 fileSi
     }
 }
 
-void func_80768434(u16 dirId, char* name, char* extension, void* buf, s32 fileSize, s32 attr, s32 copyCount, bool writeChanges) {
+void func_80768434(u16 dirId, char* name, char* extension, void* buf, s32 fileSize, s32 attr, s32 copyCount,
+                   bool writeChanges) {
     if (func_80767E30() == 0) {
         D_807C6EA8.unk_00 = 8;
         D_807C6EA8.unk_08 = 8;
@@ -447,7 +461,8 @@ void func_8076894C(u16 dirId, char* name, char* extension) {
     }
 }
 
-void func_807689BC(u16 dirId, char* name, char* extension, s32 attributeToAdd, s32 attributeToRemove, bool writeChanges) {
+void func_807689BC(u16 dirId, char* name, char* extension, s32 attributeToAdd, s32 attributeToRemove,
+                   bool writeChanges) {
     if (func_80767E30() == 0) {
         D_807C6EA8.unk_00 = 18;
         if (attributeToAdd == MFS_FILE_ATTR_FORBID_W) {

@@ -57,12 +57,12 @@
     subsegments:
       - { type: .bss, vram: 0x806ECA00, name: audio/audio_context }
 
-  - name: unk_custom
+  - name: custom_machine_info
     type: code
     vram: 0x806F2400
     bss_size: 0x3E0
     subsegments:
-      - { type: .bss, vram: 0x806F2400, name: unk_custom }
+      - { type: .bss, vram: 0x806F2400, name: custom_machine_info }
 
   - name: entry
     type: code

@@ -169,9 +169,8 @@ s32 SLMFSLoadSpecial2(u16 dirId, char* name, char* extension, u8* buf, s32 sizeT
             return D_8079F9B4;
         }
 
-        
         sSLLeoError = gMfsError;
-        
+
         if (gMfsError == N64DD_NOT_FOUND) {
             PRINTF("SLMFSLoadSP2 error N64DD_NOT_FOUND %s\n", name);
         }
