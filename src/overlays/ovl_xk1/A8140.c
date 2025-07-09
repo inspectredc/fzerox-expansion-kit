@@ -51,7 +51,7 @@ void func_xk1_8002AF1C(Gfx** gfxP, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     gfx = *gfxP;
     gSPDisplayList(gfx++, D_8014940);
 
-    gDPLoadTextureBlock(gfx++, D_7004D00, G_IM_FMT_RGBA, G_IM_SIZ_16b, 24, 24, 0, G_TX_NOMIRROR | G_TX_WRAP,
+    gDPLoadTextureBlock(gfx++, aExpansionKitFileMenuBorderTex, G_IM_FMT_RGBA, G_IM_SIZ_16b, 24, 24, 0, G_TX_NOMIRROR | G_TX_WRAP,
                         G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
     for (i = 0; i < arg4; i++) {
@@ -180,7 +180,7 @@ Gfx* func_xk1_8002B17C(Gfx* gfx, s32 arg1) {
             }
         }
 
-        gfx = func_xk1_8002924C(gfx, D_xk1_80032BE4, temp_s4, &D_xk1_8003A5D8[i]);
+        gfx = func_xk1_8002924C(gfx, D_xk1_80032BE4, temp_s4, D_xk1_8003A5D8[i].name);
         if ((D_xk1_8003A5D8[i].extension[3] == 'E') && ((gGameFrameCount % 16) < 8)) {
             gSPDisplayList(gfx++, D_7020808);
             gSPTextureRectangle(gfx++, (D_xk1_80032BE4 + 0x1C) << 2, temp_s4 << 2, (D_xk1_80032BE4 + 0x24) << 2,
@@ -366,7 +366,7 @@ void func_xk1_8002BFB0(Gfx** gfxP) {
     gSPTextureRectangle(gfx++, x << 2, y << 2, (x + 48) << 2, (y + 32) << 2, 0, 0, 0, new_var, 1 << 10);
     gSPDisplayList(gfx++, D_3000540);
     gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, 255);
-    gDPLoadTextureBlock_4b(gfx++, D_7004100, G_IM_FMT_I, 32, 32, 0, G_TX_NOMIRROR | G_TX_WRAP,
+    gDPLoadTextureBlock_4b(gfx++, aExpansionKitYesNoTex, G_IM_FMT_I, 32, 32, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
     gSPTextureRectangle(gfx++, x << 2, y << 2, (x + 32) << 2, x << 2, 0, 0, 16 << 5, 1 << 10, 1 << 10);
     gSPTextureRectangle(gfx++, x << 2, x << 2, (x + 32) << 2, (y + 32) << 2, 0, 0, 0, 1 << 10, 1 << 10);
@@ -747,7 +747,7 @@ void func_xk1_8002D340(Gfx** gfxP) {
     x += 8;
     gSPDisplayList(gfx++, D_3000540);
     gDPSetCombineMode(gfx++, G_CC_MODULATEIDECALA_PRIM, G_CC_MODULATEIDECALA_PRIM);
-    gDPLoadTextureBlock_4b(gfx++, D_7004100, G_IM_FMT_I, 32, 32, 0, G_TX_NOMIRROR | G_TX_WRAP,
+    gDPLoadTextureBlock_4b(gfx++, aExpansionKitYesNoTex, G_IM_FMT_I, 32, 32, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
     if (D_xk1_80032C20 == 0) {

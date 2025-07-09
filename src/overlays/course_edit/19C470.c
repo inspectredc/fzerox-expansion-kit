@@ -141,7 +141,7 @@ extern s32 D_xk1_8003066C;
 extern s32 D_xk1_80030670;
 extern s32 D_xk1_80030674;
 extern s32 D_xk1_800328B4[];
-extern unk_80026914 D_xk1_80031140;
+extern MenuWidget D_xk1_80031140;
 extern s32 D_xk2_800F7040;
 
 void func_xk2_800EACB0(void) {
@@ -390,7 +390,7 @@ void func_xk2_800EB400(void) {
                     D_800D6CA0.unk_08 = 0x10;
                 } else {
                     func_xk1_800294AC();
-                    func_xk1_800294EC(func_xk1_8002AC24);
+                    ExpansionKit_NameEntryInit(func_xk1_8002AC24);
                     D_xk1_8003A550 = 0x58;
                     D_xk1_8003A554 = 0x68;
                     D_800D6CA0.unk_08 = 2;
@@ -416,7 +416,7 @@ void func_xk2_800EB400(void) {
                 D_800D6CA0.unk_08 = 0x10;
             } else {
                 func_xk1_800294AC();
-                func_xk1_800294EC(func_xk1_8002AC24);
+                ExpansionKit_NameEntryInit(func_xk1_8002AC24);
                 D_xk1_8003A550 = 0x58;
                 D_xk1_8003A554 = 0x68;
                 D_800D6CA0.unk_08 = 2;

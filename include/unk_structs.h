@@ -743,34 +743,34 @@ typedef struct unk_80128C94 {
     Gfx unk_110C8[0x13C8];
 } unk_80128C94; // size = 0x1AF08
 
-typedef struct unk_80026914_unk_1C {
-    void* unk_00;
-    void* unk_04;
-    void* unk_08;
-    void* unk_0C;
-    struct unk_80026914* unk_10;
-    void (*unk_14)(void);
-    u16 unk_18;
-    u16 unk_1A;
+typedef struct MenuDropItem {
+    void* backgroundTex;
+    void* backgroundSelectedTex;
+    void* contentsTex;
+    void* subContentsRGBATex;
+    struct MenuWidget* widget;
+    void (*action)(void);
+    u16 contentsWidth;
+    u16 contentsHeight;
     void* unk_1C;
-    void* unk_20;
-} unk_80026914_unk_1C; // size = 0x24
+    void* subContentsI4Tex;
+} MenuDropItem; // size = 0x24
 
-typedef struct unk_80026914 {
-    s32 unk_00;
+typedef struct MenuWidget {
+    s32 numItems;
     s32 unk_04;
     s32 unk_08;
     s32 unk_0C;
     s32 unk_10;
     s32 unk_14;
     s32 unk_18;
-    unk_80026914_unk_1C* unk_1C;
+    MenuDropItem* dropItems;
     s32 unk_20;
     s32 unk_24;
     s32 unk_28;
     s32 unk_2C;
     s32* unk_30;
-} unk_80026914; // size = 0x34
+} MenuWidget; // size = 0x34
 
 typedef struct unk_80140E60 {
     s32 unk_00; // type

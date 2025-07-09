@@ -234,7 +234,7 @@ void func_xk3_80132C90(void) {
 
 extern u8 gExpansionKitNameEntryStr[];
 
-void func_xk3_80132D00(void) {
+void MachineCreate_NameEntryCallback(void) {
     D_807C6EA8.unk_08 = 0;
     if (gControllers[gPlayerControlPorts[0]].buttonPressed & BTN_B) {
         PRINTF("WORKS MACHINE MODE : 0\n");
@@ -265,7 +265,7 @@ void func_xk3_80132DDC(void) {
         func_xk1_8002D880(0x28);
         func_xk1_800294AC();
         mfsStrCpy(gExpansionKitNameEntryStr, gCustomMachine.machineName);
-        func_xk1_800294EC(func_xk3_80132D00);
+        ExpansionKit_NameEntryInit(MachineCreate_NameEntryCallback);
     }
 }
 

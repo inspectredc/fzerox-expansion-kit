@@ -1282,6 +1282,9 @@ aMachineCreateStatSelectedATex = 0x4003E40;
 aMachineCreateBodyTex = 0x4003840;
 aMachineCreateBoostTex = 0x4003A40;
 aMachineCreateGripTex = 0x4003C40;
+aCreateMachinePartsTex = 0x4000000;
+aCreateMachineDesignTex = 0x4000180;
+aCreateMachineSettingsTex = 0x4000300;
 
 D_A00B000 = 0xA00B000;
 D_A00B240 = 0xA00B240;

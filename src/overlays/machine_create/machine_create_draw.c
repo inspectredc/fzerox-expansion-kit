@@ -699,7 +699,7 @@ extern u8 D_xk3_8013654C;
 extern s32 D_xk3_80136658;
 extern s32 D_xk3_80136664;
 extern s32 D_xk3_8013666C;
-extern unk_80026914 D_xk1_80031E50;
+extern MenuWidget D_xk1_80031E50;
 extern s32 D_xk3_80140E50;
 extern s32 D_xk3_80140E54;
 
@@ -771,7 +771,7 @@ Gfx* func_xk3_80131494(Gfx* gfx) {
     } else {
         gfx = MachineCreate_DrawColorGradientRectangle(gfx, 25, 90, 152, 217, colorInfo[0], colorInfo[1], colorInfo[2],
                                                        colorInfo[3], colorInfo[4], colorInfo[5]);
-        if (D_xk3_80136548 != 0) {
+        if (D_xk3_80136548) {
             color = GPACK_RGBA5551(255, 70, 70, 1);
         } else {
             color = GPACK_RGBA5551(255, 255, 255, 1);
@@ -870,12 +870,12 @@ Gfx* func_xk3_80131494(Gfx* gfx) {
         gfx = BorderedBox_Draw(gfx);
     }
 
-    if (D_xk3_80136548 != 0) {
+    if (D_xk3_80136548) {
         gSPDisplayList(gfx++, D_xk3_80137378);
-        gfx = MachineCreate_DrawTextureTileRGBA16(gfx, D_7000000, 48, 20, 224, 32, 0, 0, 63, 31);
-        gfx = MachineCreate_DrawTextureTileRGBA16(gfx, D_7000000, 48, 20, 224, 32, 64, 0, 127, 31);
-        gfx = MachineCreate_DrawTextureTileRGBA16(gfx, D_7000000, 48, 20, 224, 32, 128, 0, 191, 31);
-        gfx = MachineCreate_DrawTextureTileRGBA16(gfx, D_7000000, 48, 20, 224, 32, 192, 0, 223, 31);
+        gfx = MachineCreate_DrawTextureTileRGBA16(gfx, aExpansionKitPauseInstructionsTex, 48, 20, 224, 32, 0, 0, 63, 31);
+        gfx = MachineCreate_DrawTextureTileRGBA16(gfx, aExpansionKitPauseInstructionsTex, 48, 20, 224, 32, 64, 0, 127, 31);
+        gfx = MachineCreate_DrawTextureTileRGBA16(gfx, aExpansionKitPauseInstructionsTex, 48, 20, 224, 32, 128, 0, 191, 31);
+        gfx = MachineCreate_DrawTextureTileRGBA16(gfx, aExpansionKitPauseInstructionsTex, 48, 20, 224, 32, 192, 0, 223, 31);
     } else {
         gDPSetTexturePersp(gfx++, G_TP_NONE);
         func_xk1_800276B0(&gfx, &D_xk1_80031E50, D_xk3_80140E50, D_xk3_80140E54);
@@ -883,55 +883,55 @@ Gfx* func_xk3_80131494(Gfx* gfx) {
             case MACHINE_MODE_LOAD_GET_FILE:
             case MACHINE_MODE_LOAD_SELECT_FILE:
             case MACHINE_MODE_LOAD_SELECT_SUPER:
-                gfx = MachineCreate_DrawMenuItem(gfx, D_7007580, D_4001500, 168, 36, 48, 16, 0, 0, 0);
+                gfx = MachineCreate_DrawMenuItem(gfx, aExpansionKitMenuBlueBorderHighlightBackgroundTex, D_4001500, 168, 36, 48, 16, 0, 0, 0);
                 break;
             case MACHINE_MODE_DELETE_GET_FILE:
             case MACHINE_MODE_DELETE_SELECT_FILE:
-                gfx = MachineCreate_DrawMenuItem(gfx, D_7007580, D_xk3_80138CB0, 168, 36, 48, 16, 0, 0, 0);
+                gfx = MachineCreate_DrawMenuItem(gfx, aExpansionKitMenuBlueBorderHighlightBackgroundTex, D_xk3_80138CB0, 168, 36, 48, 16, 0, 0, 0);
                 break;
             case MACHINE_MODE_ENTRY_GET_FILE:
             case MACHINE_MODE_ENTRY_SELECT_FILE:
             case MACHINE_MODE_ENTRY_SELECT_SUPER:
-                gfx = MachineCreate_DrawMenuItem(gfx, D_7007580, D_4001800, 216, 36, 48, 16, 0, 0, 0);
+                gfx = MachineCreate_DrawMenuItem(gfx, aExpansionKitMenuBlueBorderHighlightBackgroundTex, D_4001800, 216, 36, 48, 16, 0, 0, 0);
                 break;
             case MACHINE_MODE_ENTRY_CLEAR_SELECT_FILE:
             case MACHINE_MODE_ENTRY_CLEAR_SELECT_SUPER:
-                gfx = MachineCreate_DrawMenuItem(gfx, D_7007580, D_4001980, 216, 36, 48, 16, 0, 0, 0);
+                gfx = MachineCreate_DrawMenuItem(gfx, aExpansionKitMenuBlueBorderHighlightBackgroundTex, D_4001980, 216, 36, 48, 16, 0, 0, 0);
                 break;
             case MACHINE_MODE_MNAME:
-                gfx = MachineCreate_DrawMenuItem(gfx, D_7007580, D_xk3_80138B30, 168, 36, 48, 16, 0, 0, 0);
+                gfx = MachineCreate_DrawMenuItem(gfx, aExpansionKitMenuBlueBorderHighlightBackgroundTex, D_xk3_80138B30, 168, 36, 48, 16, 0, 0, 0);
                 break;
             case MACHINE_MODE_SELECT_LINE:
-                gfx = MachineCreate_DrawMenuItem(gfx, D_7005D80, D_4000F00, 72, 36, 48, 16, 0, 0, 0);
+                gfx = MachineCreate_DrawMenuItem(gfx, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_4000F00, 72, 36, 48, 16, 0, 0, 0);
                 break;
             case MACHINE_MODE_SELECT_MARK:
-                gfx = MachineCreate_DrawMenuItem(gfx, D_7005D80, D_4000A80, 72, 36, 48, 16, 0, 0, 0);
+                gfx = MachineCreate_DrawMenuItem(gfx, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_4000A80, 72, 36, 48, 16, 0, 0, 0);
                 break;
             case MACHINE_MODE_MENU_COLOR:
-                gfx = MachineCreate_DrawMenuItem(gfx, D_7005180, D_4000C00, 72, 36, 48, 16, 0, 0, 0);
+                gfx = MachineCreate_DrawMenuItem(gfx, aExpansionKitMenuGoldBackgroundTex, D_4000C00, 72, 36, 48, 16, 0, 0, 0);
                 break;
             case MACHINE_MODE_BODY_COLOR:
-                gfx = MachineCreate_DrawMenuItem(gfx, D_7005180, D_4000C00, 72, 36, 48, 16, 0, 0, 0);
-                gfx = MachineCreate_DrawMenuItem(gfx, D_7005D80, D_4000D80, 72, 52, 48, 16, 0, 0, 0);
+                gfx = MachineCreate_DrawMenuItem(gfx, aExpansionKitMenuGoldBackgroundTex, D_4000C00, 72, 36, 48, 16, 0, 0, 0);
+                gfx = MachineCreate_DrawMenuItem(gfx, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_4000D80, 72, 52, 48, 16, 0, 0, 0);
                 break;
             case MACHINE_MODE_LINE_COLOR:
-                gfx = MachineCreate_DrawMenuItem(gfx, D_7005180, D_4000C00, 72, 36, 48, 16, 0, 0, 0);
-                gfx = MachineCreate_DrawMenuItem(gfx, D_7005D80, D_4000F00, 72, 52, 48, 16, 0, 0, 0);
+                gfx = MachineCreate_DrawMenuItem(gfx, aExpansionKitMenuGoldBackgroundTex, D_4000C00, 72, 36, 48, 16, 0, 0, 0);
+                gfx = MachineCreate_DrawMenuItem(gfx, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_4000F00, 72, 52, 48, 16, 0, 0, 0);
                 break;
             case MACHINE_MODE_NUMBER_COLOR:
-                gfx = MachineCreate_DrawMenuItem(gfx, D_7005180, D_4000C00, 72, 36, 48, 16, 0, 0, 0);
-                gfx = MachineCreate_DrawMenuItem(gfx, D_7005D80, D_4001080, 72, 52, 48, 16, 0, 0, 0);
+                gfx = MachineCreate_DrawMenuItem(gfx, aExpansionKitMenuGoldBackgroundTex, D_4000C00, 72, 36, 48, 16, 0, 0, 0);
+                gfx = MachineCreate_DrawMenuItem(gfx, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_4001080, 72, 52, 48, 16, 0, 0, 0);
                 break;
             case MACHINE_MODE_COCKPIT_COLOR:
-                gfx = MachineCreate_DrawMenuItem(gfx, D_7005180, D_4000C00, 72, 36, 48, 16, 0, 0, 0);
-                gfx = MachineCreate_DrawMenuItem(gfx, D_7005D80, D_4001200, 72, 52, 48, 16, 0, 0, 0);
+                gfx = MachineCreate_DrawMenuItem(gfx, aExpansionKitMenuGoldBackgroundTex, D_4000C00, 72, 36, 48, 16, 0, 0, 0);
+                gfx = MachineCreate_DrawMenuItem(gfx, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_4001200, 72, 52, 48, 16, 0, 0, 0);
                 break;
         }
         gSPDisplayList(gfx++, D_xk3_80137378);
-        if (D_xk3_8013654C != 0) {
-            gfx = MachineCreate_DrawTextureBlockRGBA16(gfx, D_7010180, 265, 20, 32, 16);
+        if (D_xk3_8013654C) {
+            gfx = MachineCreate_DrawTextureBlockRGBA16(gfx, aExpansionKitMenuExitHighlightTex, 265, 20, 32, 16);
         } else {
-            gfx = MachineCreate_DrawTextureBlockRGBA16(gfx, D_701F9A0, 265, 20, 32, 16);
+            gfx = MachineCreate_DrawTextureBlockRGBA16(gfx, aExpansionKitMenuExitTex, 265, 20, 32, 16);
         }
     }
 

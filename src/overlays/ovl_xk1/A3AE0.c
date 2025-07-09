@@ -24,15 +24,14 @@ extern u16 D_4000D80[];
 extern u16 D_4000F00[];
 extern u16 D_4001080[];
 extern u16 D_4001200[];
-extern u16 D_4000F00[];
 extern u16 D_4000A80[];
 extern u16 D_4000C00[];
 extern u16 D_4001500[];
 extern u16 D_4001800[];
 extern u16 D_4001980[];
-extern u16 D_4000000[];
-extern u16 D_4000180[];
-extern u16 D_4000300[];
+extern u16 aCreateMachinePartsTex[];
+extern u16 aCreateMachineDesignTex[];
+extern u16 aCreateMachineSettingsTex[];
 
 s32 D_xk1_8003A550;
 s32 D_xk1_8003A554;
@@ -78,194 +77,194 @@ s32* D_xk1_8003067C[] = {
     &D_xk1_80030614, &D_xk1_8003061C, NULL, &D_xk1_80030610, &D_xk1_80030678,
 };
 
-unk_80026914_unk_1C D_xk1_80030690[] = {
-    { D_7006380, D_7006980, D_7008900, D_900D408, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008980, D_900D648, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008A00, D_900D888, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008A80, D_900DAC8, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7005780, D_7005D80, D_9003808, NULL, NULL, NULL, 48, 16, NULL, NULL },
+MenuDropItem D_xk1_80030690[] = {
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu1Tex, D_900D408, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu2Tex, D_900D648, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu3Tex, D_900D888, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu4Tex, D_900DAC8, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, aCourseEditMenuClearTex, NULL, NULL, NULL, 48, 16, NULL, NULL },
 };
 
-unk_80026914 D_xk1_80030744 = { 5, -1, -1, 120, 36, 0, 16, D_xk1_80030690, 160, 48, 160, 112, &D_xk1_80030648 };
+MenuWidget D_xk1_80030744 = { 5, -1, -1, 120, 36, 0, 16, D_xk1_80030690, 160, 48, 160, 112, &D_xk1_80030648 };
 
-unk_80026914_unk_1C D_xk1_80030778[] = {
-    { D_7006380, D_7006980, D_7008900, D_900DD08, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008980, D_900DF48, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008A00, D_900E188, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7005780, D_7005D80, D_9003808, NULL, NULL, NULL, 48, 16, NULL, NULL },
+MenuDropItem D_xk1_80030778[] = {
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu1Tex, D_900DD08, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu2Tex, D_900DF48, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu3Tex, D_900E188, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, aCourseEditMenuClearTex, NULL, NULL, NULL, 48, 16, NULL, NULL },
 };
 
-unk_80026914 D_xk1_80030808 = { 4, -1, -1, 120, 36, 0, 16, D_xk1_80030778, 160, 48, 160, 96, &D_xk1_8003064C };
+MenuWidget D_xk1_80030808 = { 4, -1, -1, 120, 36, 0, 16, D_xk1_80030778, 160, 48, 160, 96, &D_xk1_8003064C };
 
-unk_80026914_unk_1C D_xk1_8003083C[] = {
-    { D_7006380, D_7006980, D_7008900, D_900E3C8, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008980, D_900E608, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008A00, D_900E848, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008A80, D_900EA88, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7005780, D_7005D80, D_9003808, NULL, NULL, NULL, 48, 16, NULL, NULL },
+MenuDropItem D_xk1_8003083C[] = {
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu1Tex, D_900E3C8, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu2Tex, D_900E608, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu3Tex, D_900E848, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu4Tex, D_900EA88, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, aCourseEditMenuClearTex, NULL, NULL, NULL, 48, 16, NULL, NULL },
 };
 
-unk_80026914 D_xk1_800308F0 = { 5, -1, -1, 120, 36, 0, 16, D_xk1_8003083C, 160, 48, 160, 112, &D_xk1_80030650 };
+MenuWidget D_xk1_800308F0 = { 5, -1, -1, 120, 36, 0, 16, D_xk1_8003083C, 160, 48, 160, 112, &D_xk1_80030650 };
 
-unk_80026914_unk_1C D_xk1_80030924[] = {
-    { D_7006380, D_7006980, D_7008900, D_900ECC8, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008980, D_900EF08, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008A00, D_900F148, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008A80, D_900F388, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7005780, D_7005D80, D_9003808, NULL, NULL, NULL, 48, 16, NULL, NULL },
+MenuDropItem D_xk1_80030924[] = {
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu1Tex, D_900ECC8, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu2Tex, D_900EF08, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu3Tex, D_900F148, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu4Tex, D_900F388, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, aCourseEditMenuClearTex, NULL, NULL, NULL, 48, 16, NULL, NULL },
 };
 
-unk_80026914 D_xk1_800309D8 = { 5, -1, -1, 120, 36, 0, 16, D_xk1_80030924, 160, 48, 160, 112, &D_xk1_80030654 };
+MenuWidget D_xk1_800309D8 = { 5, -1, -1, 120, 36, 0, 16, D_xk1_80030924, 160, 48, 160, 112, &D_xk1_80030654 };
 
-unk_80026914_unk_1C D_xk1_80030A0C[] = {
-    { D_7006380, D_7006980, D_7008900, D_900F5C8, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008980, D_900F808, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008A00, D_900FA48, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7005780, D_7005D80, D_9003808, NULL, NULL, NULL, 48, 16, NULL, NULL },
+MenuDropItem D_xk1_80030A0C[] = {
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu1Tex, D_900F5C8, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu2Tex, D_900F808, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu3Tex, D_900FA48, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, aCourseEditMenuClearTex, NULL, NULL, NULL, 48, 16, NULL, NULL },
 };
 
-unk_80026914 D_xk1_80030A9C = { 4, -1, -1, 120, 36, 0, 16, D_xk1_80030A0C, 160, 48, 160, 96, &D_xk1_80030658 };
+MenuWidget D_xk1_80030A9C = { 4, -1, -1, 120, 36, 0, 16, D_xk1_80030A0C, 160, 48, 160, 96, &D_xk1_80030658 };
 
-unk_80026914_unk_1C D_xk1_80030AD0[] = {
-    { D_7006380, D_7006980, D_7008900, D_900FC88, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008980, D_900FEC8, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008A00, D_9010108, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7005780, D_7005D80, D_9003808, NULL, NULL, NULL, 48, 16, NULL, NULL },
+MenuDropItem D_xk1_80030AD0[] = {
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu1Tex, D_900FC88, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu2Tex, D_900FEC8, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu3Tex, D_9010108, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, aCourseEditMenuClearTex, NULL, NULL, NULL, 48, 16, NULL, NULL },
 };
 
-unk_80026914 D_xk1_80030B60 = { 4, -1, -1, 120, 36, 0, 16, D_xk1_80030AD0, 160, 48, 160, 96, &D_xk1_8003065C };
+MenuWidget D_xk1_80030B60 = { 4, -1, -1, 120, 36, 0, 16, D_xk1_80030AD0, 160, 48, 160, 96, &D_xk1_8003065C };
 
-unk_80026914_unk_1C D_xk1_80030B94[] = {
-    { D_7006380, D_7006980, D_7008900, D_9010348, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008980, D_9010588, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008A00, D_90107C8, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7005780, D_7005D80, D_9003808, NULL, NULL, NULL, 48, 16, NULL, NULL },
+MenuDropItem D_xk1_80030B94[] = {
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu1Tex, D_9010348, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu2Tex, D_9010588, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu3Tex, D_90107C8, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, aCourseEditMenuClearTex, NULL, NULL, NULL, 48, 16, NULL, NULL },
 };
 
-unk_80026914 D_xk1_80030C24 = { 4, -1, -1, 120, 36, 0, 16, D_xk1_80030B94, 160, 48, 160, 96, &D_xk1_80030660 };
+MenuWidget D_xk1_80030C24 = { 4, -1, -1, 120, 36, 0, 16, D_xk1_80030B94, 160, 48, 160, 96, &D_xk1_80030660 };
 
-unk_80026914_unk_1C D_xk1_80030C58[] = {
-    { D_7006380, D_7006980, D_7008900, D_9010A08, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008980, D_9010C48, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008A00, D_9010E88, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008A80, D_90110C8, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008B00, D_9011308, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008B80, D_9011548, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008C00, D_9011788, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008C80, D_90119C8, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008D00, D_9011C08, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008D80, D_9011E48, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008E00, D_9012088, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008E80, D_90122C8, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008F00, D_9012508, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008F80, D_9012748, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7009000, D_9012988, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7005780, D_7005D80, D_9003808, NULL, NULL, NULL, 48, 16, NULL, NULL },
+MenuDropItem D_xk1_80030C58[] = {
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu1Tex, D_9010A08, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu2Tex, D_9010C48, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu3Tex, D_9010E88, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu4Tex, D_90110C8, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu5Tex, D_9011308, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu6Tex, D_9011548, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu7Tex, D_9011788, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu8Tex, D_90119C8, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu9Tex, D_9011C08, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu10Tex, D_9011E48, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu11Tex, D_9012088, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu12Tex, D_90122C8, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu13Tex, D_9012508, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu14Tex, D_9012748, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu15Tex, D_9012988, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, aCourseEditMenuClearTex, NULL, NULL, NULL, 48, 16, NULL, NULL },
 };
 
-unk_80026914 D_xk1_80030E98 = { 16, -1, -1, 120, 36, 0, 16, D_xk1_80030C58, 160, 48, 160, 288, &D_xk1_80030664 };
+MenuWidget D_xk1_80030E98 = { 16, -1, -1, 120, 36, 0, 16, D_xk1_80030C58, 160, 48, 160, 288, &D_xk1_80030664 };
 
-unk_80026914_unk_1C D_xk1_80030ECC[] = {
-    { D_7006380, D_7006980, D_7008900, D_9012BC8, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008980, D_9012E08, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008A00, D_9013048, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008A80, D_9013288, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008B00, D_90134C8, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7005780, D_7005D80, D_9003808, NULL, NULL, NULL, 48, 16, NULL, NULL },
+MenuDropItem D_xk1_80030ECC[] = {
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu1Tex, D_9012BC8, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu2Tex, D_9012E08, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu3Tex, D_9013048, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu4Tex, D_9013288, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu5Tex, D_90134C8, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, aCourseEditMenuClearTex, NULL, NULL, NULL, 48, 16, NULL, NULL },
 };
 
-unk_80026914 D_xk1_80030FA4 = { 6, -1, -1, 120, 36, 0, 16, D_xk1_80030ECC, 160, 48, 160, 128, &D_xk1_80030668 };
+MenuWidget D_xk1_80030FA4 = { 6, -1, -1, 120, 36, 0, 16, D_xk1_80030ECC, 160, 48, 160, 128, &D_xk1_80030668 };
 
-unk_80026914_unk_1C D_xk1_80030FD8[] = {
-    { D_7006380, D_7006980, D_7008900, D_9009088, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008980, D_90092C8, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008A00, D_9009508, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008A80, D_9009748, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008B00, D_9009988, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008B80, D_9009BC8, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008C00, D_9009E08, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008C80, D_900A048, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008D00, D_900A288, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008D80, D_900A4C8, NULL, NULL, 16, 16, NULL, NULL },
+MenuDropItem D_xk1_80030FD8[] = {
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu1Tex, D_9009088, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu2Tex, D_90092C8, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu3Tex, D_9009508, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu4Tex, D_9009748, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu5Tex, D_9009988, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu6Tex, D_9009BC8, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu7Tex, D_9009E08, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu8Tex, D_900A048, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu9Tex, D_900A288, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu10Tex, D_900A4C8, NULL, NULL, 16, 16, NULL, NULL },
 };
 
-unk_80026914 D_xk1_80031140 = { 10, -1, -1, 72, 36, 0, 16, D_xk1_80030FD8, 112, 48, 112, 192, &D_xk1_8003066C };
+MenuWidget D_xk1_80031140 = { 10, -1, -1, 72, 36, 0, 16, D_xk1_80030FD8, 112, 48, 112, 192, &D_xk1_8003066C };
 
-unk_80026914_unk_1C D_xk1_80031174[] = {
-    { D_7006380, D_7006980, D_7008900, D_9013708, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008980, D_9013948, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008A00, D_9013B88, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008A80, D_9013DC8, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008B00, D_9014008, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008B80, D_9014248, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008C00, D_9014488, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008C80, D_90146C8, NULL, NULL, 16, 16, NULL, NULL },
+MenuDropItem D_xk1_80031174[] = {
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu1Tex, D_9013708, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu2Tex, D_9013948, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu3Tex, D_9013B88, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu4Tex, D_9013DC8, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu5Tex, D_9014008, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu6Tex, D_9014248, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu7Tex, D_9014488, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu8Tex, D_90146C8, NULL, NULL, 16, 16, NULL, NULL },
 };
 
-unk_80026914 D_xk1_80031294 = { 8, -1, -1, 120, 36, 0, 16, D_xk1_80031174, 160, 48, 160, 160, &D_xk1_80030670 };
+MenuWidget D_xk1_80031294 = { 8, -1, -1, 120, 36, 0, 16, D_xk1_80031174, 160, 48, 160, 160, &D_xk1_80030670 };
 
-unk_80026914_unk_1C D_xk1_800312C8[] = {
-    { D_7005780, D_7005D80, D_xk1_80030470, NULL, NULL, NULL, 48, 16, NULL, D_7008900 },
-    { D_7005780, D_7005D80, D_xk1_80030470, NULL, NULL, NULL, 48, 16, NULL, D_7008980 },
-    { D_7005780, D_7005D80, D_xk1_80030470, NULL, NULL, NULL, 48, 16, NULL, D_7008A00 },
-    { D_7005780, D_7005D80, D_xk1_80030470, NULL, NULL, NULL, 48, 16, NULL, D_7008A80 },
-    { D_7005780, D_7005D80, D_xk1_80030470, NULL, NULL, NULL, 48, 16, NULL, D_7008B00 },
-    { D_7005780, D_7005D80, D_xk1_80030470, NULL, NULL, NULL, 48, 16, NULL, D_7008B80 },
-    { D_7005780, D_7005D80, D_xk1_80030470, NULL, NULL, NULL, 48, 16, NULL, D_7008C00 },
-    { D_7005780, D_7005D80, D_xk1_80030470, NULL, NULL, NULL, 48, 16, NULL, D_7008C80 },
-    { D_7005780, D_7005D80, D_xk1_80030470, NULL, NULL, NULL, 48, 16, NULL, D_7008D00 },
-    { D_7005780, D_7005D80, D_xk1_80030470, NULL, NULL, NULL, 48, 16, NULL, D_7008D80 },
-    { D_7005780, D_7005D80, D_xk1_80030470, NULL, NULL, NULL, 48, 16, NULL, D_7008E00 },
-    { D_7005780, D_7005D80, D_xk1_80030470, NULL, NULL, NULL, 48, 16, NULL, D_7008E80 },
-    { D_7005780, D_7005D80, D_xk1_80030470, NULL, NULL, NULL, 48, 16, NULL, D_7008F00 },
-    { D_7005780, D_7005D80, D_xk1_80030470, NULL, NULL, NULL, 48, 16, NULL, D_7008F80 },
+MenuDropItem D_xk1_800312C8[] = {
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_xk1_80030470, NULL, NULL, NULL, 48, 16, NULL, aExpansionKitMenu1Tex },
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_xk1_80030470, NULL, NULL, NULL, 48, 16, NULL, aExpansionKitMenu2Tex },
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_xk1_80030470, NULL, NULL, NULL, 48, 16, NULL, aExpansionKitMenu3Tex },
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_xk1_80030470, NULL, NULL, NULL, 48, 16, NULL, aExpansionKitMenu4Tex },
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_xk1_80030470, NULL, NULL, NULL, 48, 16, NULL, aExpansionKitMenu5Tex },
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_xk1_80030470, NULL, NULL, NULL, 48, 16, NULL, aExpansionKitMenu6Tex },
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_xk1_80030470, NULL, NULL, NULL, 48, 16, NULL, aExpansionKitMenu7Tex },
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_xk1_80030470, NULL, NULL, NULL, 48, 16, NULL, aExpansionKitMenu8Tex },
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_xk1_80030470, NULL, NULL, NULL, 48, 16, NULL, aExpansionKitMenu9Tex },
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_xk1_80030470, NULL, NULL, NULL, 48, 16, NULL, aExpansionKitMenu10Tex },
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_xk1_80030470, NULL, NULL, NULL, 48, 16, NULL, aExpansionKitMenu11Tex },
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_xk1_80030470, NULL, NULL, NULL, 48, 16, NULL, aExpansionKitMenu12Tex },
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_xk1_80030470, NULL, NULL, NULL, 48, 16, NULL, aExpansionKitMenu13Tex },
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_xk1_80030470, NULL, NULL, NULL, 48, 16, NULL, aExpansionKitMenu14Tex },
 };
 
-unk_80026914 D_xk1_800314C0 = { 14, -1, -1, 72, 36, 0, 16, D_xk1_800312C8, 112, 48, 112, 256, &D_xk1_80030674 };
+MenuWidget D_xk1_800314C0 = { 14, -1, -1, 72, 36, 0, 16, D_xk1_800312C8, 112, 48, 112, 256, &D_xk1_80030674 };
 
-unk_80026914_unk_1C D_xk1_800314F4[] = {
-    { D_7006380, D_7006980, D_7008900, D_900B008, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008980, D_900B248, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008A00, D_900B488, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008A80, D_900B6C8, NULL, NULL, 16, 16, NULL, NULL },
+MenuDropItem D_xk1_800314F4[] = {
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu1Tex, D_900B008, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu2Tex, D_900B248, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu3Tex, D_900B488, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu4Tex, D_900B6C8, NULL, NULL, 16, 16, NULL, NULL },
 };
 
-unk_80026914 D_xk1_80031584 = { 4, -1, -1, 120, 36, 0, 16, D_xk1_800314F4, 160, 48, 160, 96, &D_xk1_80030638 };
+MenuWidget D_xk1_80031584 = { 4, -1, -1, 120, 36, 0, 16, D_xk1_800314F4, 160, 48, 160, 96, &D_xk1_80030638 };
 
-unk_80026914_unk_1C D_xk1_800315B8[] = {
-    { D_7006380, D_7006980, D_7008900, D_900B908, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008980, D_900BB48, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008A00, D_900BD88, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008A80, D_900BFC8, NULL, NULL, 16, 16, NULL, NULL },
+MenuDropItem D_xk1_800315B8[] = {
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu1Tex, D_900B908, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu2Tex, D_900BB48, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu3Tex, D_900BD88, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu4Tex, D_900BFC8, NULL, NULL, 16, 16, NULL, NULL },
 };
 
-unk_80026914 D_xk1_80031648 = { 4, -1, -1, 120, 36, 0, 16, D_xk1_800315B8, 160, 48, 160, 96, &D_xk1_8003063C };
+MenuWidget D_xk1_80031648 = { 4, -1, -1, 120, 36, 0, 16, D_xk1_800315B8, 160, 48, 160, 96, &D_xk1_8003063C };
 
-unk_80026914_unk_1C D_xk1_8003167C[] = {
-    { D_7006380, D_7006980, D_7008900, D_900C208, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008980, D_900C448, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008A00, D_900C688, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008A80, D_900C8C8, NULL, NULL, 16, 16, NULL, NULL },
+MenuDropItem D_xk1_8003167C[] = {
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu1Tex, D_900C208, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu2Tex, D_900C448, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu3Tex, D_900C688, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu4Tex, D_900C8C8, NULL, NULL, 16, 16, NULL, NULL },
 };
 
-unk_80026914 D_xk1_8003170C = { 4, -1, -1, 120, 36, 0, 16, D_xk1_8003167C, 160, 48, 160, 96, &D_xk1_80030640 };
+MenuWidget D_xk1_8003170C = { 4, -1, -1, 120, 36, 0, 16, D_xk1_8003167C, 160, 48, 160, 96, &D_xk1_80030640 };
 
-unk_80026914_unk_1C D_xk1_80031740[] = {
-    { D_7006380, D_7006980, D_7008900, D_900CB08, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008980, D_900CD48, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008A00, D_900CF88, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008A80, D_900D1C8, NULL, NULL, 16, 16, NULL, NULL },
+MenuDropItem D_xk1_80031740[] = {
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu1Tex, D_900CB08, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu2Tex, D_900CD48, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu3Tex, D_900CF88, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu4Tex, D_900D1C8, NULL, NULL, 16, 16, NULL, NULL },
 };
 
-unk_80026914 D_xk1_800317D0 = { 4, -1, -1, 120, 36, 0, 16, D_xk1_80031740, 160, 48, 160, 96, &D_xk1_80030644 };
+MenuWidget D_xk1_800317D0 = { 4, -1, -1, 120, 36, 0, 16, D_xk1_80031740, 160, 48, 160, 96, &D_xk1_80030644 };
 
-unk_80026914_unk_1C D_xk1_80031804[] = {
-    { D_7007B80, D_7008180, D_701F2A0, NULL, NULL, func_xk1_80026870, 48, 16, NULL, NULL },
-    { D_7007B80, D_7008180, D_701F420, NULL, NULL, func_xk1_800268A8, 48, 16, NULL, NULL },
-    { D_7007B80, D_7008180, D_7008780, NULL, NULL, func_xk1_800268E4, 48, 16, NULL, NULL },
+MenuDropItem D_xk1_80031804[] = {
+    { aExpansionKitMenuPurpleBorderBackgroundTex, aExpansionKitMenuPurpleBorderHighlightBackgroundTex, D_701F2A0, NULL, NULL, func_xk1_80026870, 48, 16, NULL, NULL },
+    { aExpansionKitMenuPurpleBorderBackgroundTex, aExpansionKitMenuPurpleBorderHighlightBackgroundTex, D_701F420, NULL, NULL, func_xk1_800268A8, 48, 16, NULL, NULL },
+    { aExpansionKitMenuPurpleBorderBackgroundTex, aExpansionKitMenuPurpleBorderHighlightBackgroundTex, aExpansionKitMenuClearAllTex, NULL, NULL, func_xk1_800268E4, 48, 16, NULL, NULL },
 };
 
-unk_80026914 D_xk1_80031870 = { 3, -1, -1, 216, 36, 0, 16, D_xk1_80031804, 256, 48, 256, 80, &D_xk1_80030678 };
+MenuWidget D_xk1_80031870 = { 3, -1, -1, 216, 36, 0, 16, D_xk1_80031804, 256, 48, 256, 80, &D_xk1_80030678 };
 
 s32 D_xk1_800318A4 = -1;
 s32 D_xk1_800318A8 = -1;
@@ -274,179 +273,179 @@ s32 D_xk1_800318B0 = -1;
 s32 D_xk1_800318B4 = -1;
 s32 D_xk1_800318B8 = -1;
 
-unk_80026914_unk_1C D_xk1_800318BC[] = {
-    { D_7006380, D_7006980, D_7008900, D_4001B00, NULL, func_xk3_8013298C, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008980, D_4001D40, NULL, func_xk3_801329A4, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008A00, D_4001F80, NULL, func_xk3_801329BC, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008A80, D_40021C0, NULL, func_xk3_801329D4, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008B00, D_4002400, NULL, func_xk3_801329EC, 16, 16, NULL, NULL },
+MenuDropItem D_xk1_800318BC[] = {
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu1Tex, D_4001B00, NULL, func_xk3_8013298C, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu2Tex, D_4001D40, NULL, func_xk3_801329A4, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu3Tex, D_4001F80, NULL, func_xk3_801329BC, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu4Tex, D_40021C0, NULL, func_xk3_801329D4, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu5Tex, D_4002400, NULL, func_xk3_801329EC, 16, 16, NULL, NULL },
 };
 
-unk_80026914 D_xk1_80031970 = { 5, -1, -1, 72, 52, 0, 16, D_xk1_800318BC, 104, 56, 104, 120, &D_xk1_800318A8 };
+MenuWidget D_xk1_80031970 = { 5, -1, -1, 72, 52, 0, 16, D_xk1_800318BC, 104, 56, 104, 120, &D_xk1_800318A8 };
 
-unk_80026914_unk_1C D_xk1_800319A4[] = {
-    { D_7006380, D_7006980, D_7008900, D_4002640, NULL, func_xk3_80132A80, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008980, D_4002880, NULL, func_xk3_80132A98, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008A00, D_4002AC0, NULL, func_xk3_80132AB0, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008A80, D_4002D00, NULL, func_xk3_80132AC8, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008B00, D_4002F40, NULL, func_xk3_80132AE0, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008B80, D_4003180, NULL, func_xk3_80132AF8, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008C00, D_40033C0, NULL, func_xk3_80132B10, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008C80, D_4003600, NULL, func_xk3_80132B28, 16, 16, NULL, NULL },
+MenuDropItem D_xk1_800319A4[] = {
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu1Tex, D_4002640, NULL, func_xk3_80132A80, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu2Tex, D_4002880, NULL, func_xk3_80132A98, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu3Tex, D_4002AC0, NULL, func_xk3_80132AB0, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu4Tex, D_4002D00, NULL, func_xk3_80132AC8, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu5Tex, D_4002F40, NULL, func_xk3_80132AE0, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu6Tex, D_4003180, NULL, func_xk3_80132AF8, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu7Tex, D_40033C0, NULL, func_xk3_80132B10, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu8Tex, D_4003600, NULL, func_xk3_80132B28, 16, 16, NULL, NULL },
 };
 
-unk_80026914 D_xk1_80031AC4 = { 8, -1, -1, 72, 52, 0, 16, D_xk1_800319A4, 104, 56, 104, 168, &D_xk1_800318AC };
+MenuWidget D_xk1_80031AC4 = { 8, -1, -1, 72, 52, 0, 16, D_xk1_800319A4, 104, 56, 104, 168, &D_xk1_800318AC };
 
-unk_80026914_unk_1C D_xk1_80031AF8[] = {
-    { D_7005780, D_7005D80, D_4000D80, NULL, NULL, func_xk3_80132B40, 48, 16, NULL, NULL },
-    { D_7005780, D_7005D80, D_4000F00, NULL, NULL, func_xk3_80132BB0, 48, 16, NULL, NULL },
-    { D_7005780, D_7005D80, D_4001080, NULL, NULL, func_xk3_80132C20, 48, 16, NULL, NULL },
-    { D_7005780, D_7005D80, D_4001200, NULL, NULL, func_xk3_80132C90, 48, 16, NULL, NULL },
+MenuDropItem D_xk1_80031AF8[] = {
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_4000D80, NULL, NULL, func_xk3_80132B40, 48, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_4000F00, NULL, NULL, func_xk3_80132BB0, 48, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_4001080, NULL, NULL, func_xk3_80132C20, 48, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_4001200, NULL, NULL, func_xk3_80132C90, 48, 16, NULL, NULL },
 };
 
-unk_80026914 D_xk1_80031B88 = { 4, -1, -1, 72, 52, 0, 16, D_xk1_80031AF8, 104, 56, 104, 104, &D_xk1_800318B0 };
+MenuWidget D_xk1_80031B88 = { 4, -1, -1, 72, 52, 0, 16, D_xk1_80031AF8, 104, 56, 104, 104, &D_xk1_800318B0 };
 
-unk_80026914_unk_1C D_xk1_80031BBC[] = {
-    { D_7005780, D_7005D80, D_4000F00, NULL, &D_xk1_80031970, func_xk3_80132910, 48, 16, NULL, NULL },
-    { D_7005780, D_7005D80, D_4000A80, NULL, &D_xk1_80031AC4, func_xk3_80132A04, 48, 16, NULL, NULL },
-    { D_7005180, D_7005180, D_4000C00, NULL, &D_xk1_80031B88, func_xk3_801326F0, 48, 16, NULL, NULL },
+MenuDropItem D_xk1_80031BBC[] = {
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_4000F00, NULL, &D_xk1_80031970, func_xk3_80132910, 48, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_4000A80, NULL, &D_xk1_80031AC4, func_xk3_80132A04, 48, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBackgroundTex, aExpansionKitMenuGoldBackgroundTex, D_4000C00, NULL, &D_xk1_80031B88, func_xk3_801326F0, 48, 16, NULL, NULL },
 };
 
-unk_80026914 D_xk1_80031C28 = { 3, -1, -1, 72, 36, 0, 16, D_xk1_80031BBC, 104, 48, 104, 80, &D_xk1_800318A4 };
+MenuWidget D_xk1_80031C28 = { 3, -1, -1, 72, 36, 0, 16, D_xk1_80031BBC, 104, 48, 104, 80, &D_xk1_800318A4 };
 
-unk_80026914_unk_1C D_xk1_80031C5C[] = {
-    { D_7006F80, D_7007580, D_4001500, NULL, NULL, func_xk3_80132828, 48, 16, NULL, NULL },
-    { D_7006F80, D_7007580, D_xk3_80138B30, NULL, NULL, func_xk3_80132DDC, 48, 16, NULL, NULL },
-    { D_7006F80, D_7007580, D_xk3_80138CB0, NULL, NULL, func_xk3_80132850, 48, 16, NULL, NULL },
+MenuDropItem D_xk1_80031C5C[] = {
+    { aExpansionKitMenuBlueBorderBackgroundTex, aExpansionKitMenuBlueBorderHighlightBackgroundTex, D_4001500, NULL, NULL, func_xk3_80132828, 48, 16, NULL, NULL },
+    { aExpansionKitMenuBlueBorderBackgroundTex, aExpansionKitMenuBlueBorderHighlightBackgroundTex, D_xk3_80138B30, NULL, NULL, func_xk3_80132DDC, 48, 16, NULL, NULL },
+    { aExpansionKitMenuBlueBorderBackgroundTex, aExpansionKitMenuBlueBorderHighlightBackgroundTex, D_xk3_80138CB0, NULL, NULL, func_xk3_80132850, 48, 16, NULL, NULL },
 };
 
-unk_80026914 D_xk1_80031CC8 = { 3, -1, -1, 168, 36, 0, 16, D_xk1_80031C5C, 200, 48, 200, 80, &D_xk1_800318B4 };
+MenuWidget D_xk1_80031CC8 = { 3, -1, -1, 168, 36, 0, 16, D_xk1_80031C5C, 200, 48, 200, 80, &D_xk1_800318B4 };
 
-unk_80026914_unk_1C D_xk1_80031CFC[] = {
-    { D_7007B80, D_7008180, D_4001800, NULL, NULL, func_xk3_8013277C, 48, 16, NULL, NULL },
-    { D_7007B80, D_7008180, D_4001980, NULL, NULL, func_xk3_801327A4, 48, 16, NULL, NULL },
-    { D_7007B80, D_7008180, D_7008780, NULL, NULL, func_xk3_80132808, 48, 16, NULL, NULL },
+MenuDropItem D_xk1_80031CFC[] = {
+    { aExpansionKitMenuPurpleBorderBackgroundTex, aExpansionKitMenuPurpleBorderHighlightBackgroundTex, D_4001800, NULL, NULL, func_xk3_8013277C, 48, 16, NULL, NULL },
+    { aExpansionKitMenuPurpleBorderBackgroundTex, aExpansionKitMenuPurpleBorderHighlightBackgroundTex, D_4001980, NULL, NULL, func_xk3_801327A4, 48, 16, NULL, NULL },
+    { aExpansionKitMenuPurpleBorderBackgroundTex, aExpansionKitMenuPurpleBorderHighlightBackgroundTex, aExpansionKitMenuClearAllTex, NULL, NULL, func_xk3_80132808, 48, 16, NULL, NULL },
 };
 
-unk_80026914 D_xk1_80031D68 = { 3, -1, -1, 216, 36, 0, 16, D_xk1_80031CFC, 248, 48, 248, 80, &D_xk1_800318B8 };
+MenuWidget D_xk1_80031D68 = { 3, -1, -1, 216, 36, 0, 16, D_xk1_80031CFC, 248, 48, 248, 80, &D_xk1_800318B8 };
 
-unk_80026914_unk_1C D_xk1_80031D9C[] = {
-    { D_7005180, D_7005180, D_4000000, NULL, NULL, func_xk3_80132884, 48, 16, NULL, NULL },
-    { D_7005180, D_7005180, D_4000180, NULL, &D_xk1_80031C28, func_xk3_801326D8, 48, 16, NULL, NULL },
-    { D_7005180, D_7005180, D_4000300, NULL, NULL, func_xk3_80132E84, 48, 16, NULL, NULL },
+MenuDropItem D_xk1_80031D9C[] = {
+    { aExpansionKitMenuGoldBackgroundTex, aExpansionKitMenuGoldBackgroundTex, aCreateMachinePartsTex, NULL, NULL, func_xk3_80132884, 48, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBackgroundTex, aExpansionKitMenuGoldBackgroundTex, aCreateMachineDesignTex, NULL, &D_xk1_80031C28, func_xk3_801326D8, 48, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBackgroundTex, aExpansionKitMenuGoldBackgroundTex, aCreateMachineSettingsTex, NULL, NULL, func_xk3_80132E84, 48, 16, NULL, NULL },
     { D_xk3_80138E30, D_xk3_80138E30, NULL, NULL, &D_xk1_80031CC8, func_xk3_801326C0, 48, 16, NULL, NULL },
-    { D_7004300, D_7004300, NULL, NULL, &D_xk1_80031D68, func_xk3_80132764, 48, 16, NULL, NULL },
+    { aExpansionKitMenuEntryTex, aExpansionKitMenuEntryTex, NULL, NULL, &D_xk1_80031D68, func_xk3_80132764, 48, 16, NULL, NULL },
 };
 
-unk_80026914 D_xk1_80031E50 = { 5, -1, -1, 24, 20, 48, 0, D_xk1_80031D9C, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, NULL };
+MenuWidget D_xk1_80031E50 = { 5, -1, -1, 24, 20, 48, 0, D_xk1_80031D9C, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, NULL };
 
-unk_80026914_unk_1C D_xk1_80031E84[] = {
-    { D_7006380, D_7006980, D_7008900, D_A00B000, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008980, D_A00B240, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008A00, D_A00B480, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008A80, D_A00B6C0, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008B00, D_A00B900, NULL, NULL, 16, 16, NULL, NULL },
+MenuDropItem D_xk1_80031E84[] = {
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu1Tex, D_A00B000, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu2Tex, D_A00B240, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu3Tex, D_A00B480, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu4Tex, D_A00B6C0, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu5Tex, D_A00B900, NULL, NULL, 16, 16, NULL, NULL },
 };
 
-unk_80026914 D_xk1_80031F38 = { 5, -1, -1, 120, 36, 0, 16, D_xk1_80031E84, 160, 48, 160, 112, &D_xk1_8003062C };
+MenuWidget D_xk1_80031F38 = { 5, -1, -1, 120, 36, 0, 16, D_xk1_80031E84, 160, 48, 160, 112, &D_xk1_8003062C };
 
-unk_80026914_unk_1C D_xk1_80031F6C[] = {
-    { D_7006380, D_7006980, D_7008900, D_A00BB40, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008980, D_900A708, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008A00, D_900A948, NULL, NULL, 16, 16, NULL, NULL },
+MenuDropItem D_xk1_80031F6C[] = {
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu1Tex, D_A00BB40, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu2Tex, D_900A708, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu3Tex, D_900A948, NULL, NULL, 16, 16, NULL, NULL },
 };
 
-unk_80026914 D_xk1_80031FD8 = { 3, -1, -1, 120, 36, 0, 16, D_xk1_80031F6C, 160, 48, 160, 80, &D_xk1_80030630 };
+MenuWidget D_xk1_80031FD8 = { 3, -1, -1, 120, 36, 0, 16, D_xk1_80031F6C, 160, 48, 160, 80, &D_xk1_80030630 };
 
-unk_80026914_unk_1C D_xk1_8003200C[] = {
-    { D_7006380, D_7006980, D_7008900, D_A00BD80, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008980, D_900AB88, NULL, NULL, 16, 16, NULL, NULL },
-    { D_7006380, D_7006980, D_7008A00, D_900ADC8, NULL, NULL, 16, 16, NULL, NULL },
+MenuDropItem D_xk1_8003200C[] = {
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu1Tex, D_A00BD80, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu2Tex, D_900AB88, NULL, NULL, 16, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderSplitBackgroundTex, aExpansionKitMenuGoldBorderSplitHighlightBackgroundTex, aExpansionKitMenu3Tex, D_900ADC8, NULL, NULL, 16, 16, NULL, NULL },
 };
 
-unk_80026914 D_xk1_80032078 = { 3, -1, -1, 120, 36, 0, 16, D_xk1_8003200C, 160, 48, 160, 80, &D_xk1_80030634 };
+MenuWidget D_xk1_80032078 = { 3, -1, -1, 120, 36, 0, 16, D_xk1_8003200C, 160, 48, 160, 80, &D_xk1_80030634 };
 
-unk_80026914_unk_1C D_xk1_800320AC[] = {
-    { D_7006F80, D_7007580, D_9003F88, NULL, NULL, NULL, 48, 16, NULL, NULL },
-    { D_7006F80, D_7007580, D_9004108, NULL, NULL, NULL, 48, 16, NULL, NULL },
-    { D_7006F80, D_7007580, D_9004288, NULL, NULL, NULL, 48, 16, NULL, NULL },
-    { D_7006F80, D_7007580, D_9004408, NULL, NULL, NULL, 48, 16, NULL, NULL },
-    { D_7006F80, D_7007580, D_701EFA0, NULL, NULL, NULL, 48, 16, NULL, NULL },
+MenuDropItem D_xk1_800320AC[] = {
+    { aExpansionKitMenuBlueBorderBackgroundTex, aExpansionKitMenuBlueBorderHighlightBackgroundTex, D_9003F88, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { aExpansionKitMenuBlueBorderBackgroundTex, aExpansionKitMenuBlueBorderHighlightBackgroundTex, D_9004108, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { aExpansionKitMenuBlueBorderBackgroundTex, aExpansionKitMenuBlueBorderHighlightBackgroundTex, D_9004288, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { aExpansionKitMenuBlueBorderBackgroundTex, aExpansionKitMenuBlueBorderHighlightBackgroundTex, D_9004408, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { aExpansionKitMenuBlueBorderBackgroundTex, aExpansionKitMenuBlueBorderHighlightBackgroundTex, aExpansionKitMenuCopyTex, NULL, NULL, NULL, 48, 16, NULL, NULL },
 };
 
-unk_80026914 D_xk1_80032160 = { 5, -1, -1, 168, 36, 0, 16, D_xk1_800320AC, 208, 48, 208, 112, &D_xk1_80030610 };
+MenuWidget D_xk1_80032160 = { 5, -1, -1, 168, 36, 0, 16, D_xk1_800320AC, 208, 48, 208, 112, &D_xk1_80030610 };
 
-unk_80026914_unk_1C D_xk1_80032194[] = {
-    { D_7005780, D_7005D80, D_9005188, NULL, NULL, NULL, 48, 16, NULL, NULL },
-    { D_7005780, D_7005D80, D_9005308, NULL, NULL, NULL, 48, 16, NULL, NULL },
-    { D_7005780, D_7005D80, D_9005488, NULL, NULL, NULL, 48, 16, NULL, NULL },
-    { D_7005780, D_7005D80, D_9005608, NULL, NULL, NULL, 48, 16, NULL, NULL },
-    { D_7005780, D_7005D80, D_9005788, NULL, NULL, NULL, 48, 16, NULL, NULL },
-    { D_7005780, D_7005D80, D_xk1_800302F0, NULL, NULL, NULL, 48, 16, NULL, NULL },
+MenuDropItem D_xk1_80032194[] = {
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_9005188, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_9005308, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_9005488, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_9005608, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_9005788, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_xk1_800302F0, NULL, NULL, NULL, 48, 16, NULL, NULL },
 };
 
-unk_80026914 D_xk1_8003226C = { 6, -1, -1, 24, 36, 0, 16, D_xk1_80032194, 64, 48, 64, 128, &D_xk1_80030614 };
+MenuWidget D_xk1_8003226C = { 6, -1, -1, 24, 36, 0, 16, D_xk1_80032194, 64, 48, 64, 128, &D_xk1_80030614 };
 
-unk_80026914_unk_1C D_xk1_800322A0[] = {
-    { D_7005780, D_7005D80, D_9005908, NULL, NULL, NULL, 48, 16, NULL, NULL },
-    { D_7005780, D_7005D80, D_9005A88, NULL, NULL, NULL, 48, 16, NULL, NULL },
-    { D_7005780, D_7005D80, D_9005C08, NULL, NULL, NULL, 48, 16, NULL, NULL },
-    { D_7005780, D_7005D80, D_701F120, NULL, NULL, NULL, 48, 16, NULL, NULL },
-    { D_7005780, D_7005D80, D_7008780, NULL, NULL, NULL, 48, 16, NULL, NULL },
+MenuDropItem D_xk1_800322A0[] = {
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_9005908, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_9005A88, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_9005C08, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_701F120, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, aExpansionKitMenuClearAllTex, NULL, NULL, NULL, 48, 16, NULL, NULL },
 };
 
-unk_80026914 D_xk1_80032354 = { 5, -1, -1, 72, 36, 0, 16, D_xk1_800322A0, 112, 48, 112, 112, &D_xk1_8003061C };
+MenuWidget D_xk1_80032354 = { 5, -1, -1, 72, 36, 0, 16, D_xk1_800322A0, 112, 48, 112, 112, &D_xk1_8003061C };
 
-unk_80026914_unk_1C D_xk1_80032388[] = {
-    { D_7005780, D_7005D80, D_9005D88, NULL, NULL, NULL, 48, 16, NULL, NULL },
-    { D_7005780, D_7005D80, D_9005F08, NULL, NULL, NULL, 48, 16, NULL, NULL },
-    { D_7005780, D_7005D80, D_9006088, NULL, NULL, NULL, 48, 16, NULL, NULL },
-    { D_7005780, D_7005D80, D_9006208, NULL, NULL, NULL, 48, 16, NULL, NULL },
-    { D_7005780, D_7005D80, D_9006388, NULL, NULL, NULL, 48, 16, NULL, NULL },
-    { D_7005780, D_7005D80, D_9003808, NULL, NULL, NULL, 48, 16, NULL, NULL },
-    { D_7005780, D_7005D80, D_9006508, NULL, NULL, NULL, 48, 16, NULL, NULL },
+MenuDropItem D_xk1_80032388[] = {
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_9005D88, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_9005F08, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_9006088, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_9006208, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_9006388, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, aCourseEditMenuClearTex, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_9006508, NULL, NULL, NULL, 48, 16, NULL, NULL },
 };
 
-unk_80026914 D_xk1_80032484 = { 7, -1, -1, 72, 36, 0, 16, D_xk1_80032388, 112, 48, 112, 144, &D_xk1_80030620 };
+MenuWidget D_xk1_80032484 = { 7, -1, -1, 72, 36, 0, 16, D_xk1_80032388, 112, 48, 112, 144, &D_xk1_80030620 };
 
-unk_80026914_unk_1C D_xk1_800324B8[] = {
-    { D_7005780, D_7005D80, D_9006688, NULL, NULL, NULL, 48, 16, NULL, NULL },
-    { D_7005780, D_7005D80, D_9006808, NULL, NULL, NULL, 48, 16, NULL, NULL },
-    { D_7005780, D_7005D80, D_9006988, NULL, NULL, NULL, 48, 16, NULL, NULL },
-    { D_7005780, D_7005D80, D_9006B08, NULL, NULL, NULL, 48, 16, NULL, NULL },
-    { D_7005780, D_7005D80, D_9006C88, NULL, NULL, NULL, 48, 16, NULL, NULL },
-    { D_7005780, D_7005D80, D_9006E08, NULL, NULL, NULL, 48, 16, NULL, NULL },
-    { D_7005780, D_7005D80, D_9006F88, NULL, NULL, NULL, 48, 16, NULL, NULL },
-    { D_7005780, D_7005D80, D_9007108, NULL, NULL, NULL, 48, 16, NULL, NULL },
-    { D_7005780, D_7005D80, D_9007288, NULL, NULL, NULL, 48, 16, NULL, NULL },
+MenuDropItem D_xk1_800324B8[] = {
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_9006688, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_9006808, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_9006988, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_9006B08, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_9006C88, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_9006E08, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_9006F88, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_9007108, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_9007288, NULL, NULL, NULL, 48, 16, NULL, NULL },
 };
 
-unk_80026914 D_xk1_800325FC = { 9, -1, -1, 72, 36, 0, 16, D_xk1_800324B8, 112, 48, 112, 176, &D_xk1_80030624 };
+MenuWidget D_xk1_800325FC = { 9, -1, -1, 72, 36, 0, 16, D_xk1_800324B8, 112, 48, 112, 176, &D_xk1_80030624 };
 
-unk_80026914_unk_1C D_xk1_80032630[] = {
-    { D_7005780, D_7005D80, D_9007408, NULL, NULL, NULL, 48, 16, NULL, NULL },
-    { D_7005780, D_7005D80, D_9007588, NULL, NULL, NULL, 48, 16, NULL, NULL },
-    { D_7005780, D_7005D80, D_9007708, NULL, NULL, NULL, 48, 16, NULL, NULL },
-    { D_7005780, D_7005D80, D_9007888, NULL, NULL, NULL, 48, 16, NULL, NULL },
-    { D_7005780, D_7005D80, D_9007A08, NULL, NULL, NULL, 48, 16, NULL, NULL },
-    { D_7005780, D_7005D80, D_9007B88, NULL, NULL, NULL, 48, 16, NULL, NULL },
-    { D_7005780, D_7005D80, D_9007D08, NULL, NULL, NULL, 48, 16, NULL, NULL },
-    { D_7005780, D_7005D80, D_9007E88, NULL, NULL, NULL, 48, 16, NULL, NULL },
-    { D_7005780, D_7005D80, D_9008008, NULL, NULL, NULL, 48, 16, NULL, NULL },
+MenuDropItem D_xk1_80032630[] = {
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_9007408, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_9007588, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_9007708, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_9007888, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_9007A08, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_9007B88, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_9007D08, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_9007E88, NULL, NULL, NULL, 48, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBorderBackgroundTex, aExpansionKitMenuGoldBorderHighlightBackgroundTex, D_9008008, NULL, NULL, NULL, 48, 16, NULL, NULL },
 };
 
-unk_80026914 D_xk1_80032774 = { 9, -1, -1, 72, 36, 0, 16, D_xk1_80032630, 112, 48, 112, 176, &D_xk1_80030628 };
+MenuWidget D_xk1_80032774 = { 9, -1, -1, 72, 36, 0, 16, D_xk1_80032630, 112, 48, 112, 176, &D_xk1_80030628 };
 
-unk_80026914_unk_1C D_xk1_800327A8[] = {
-    { D_7005180, D_7005180, D_9004708, NULL, &D_xk1_8003226C, NULL, 48, 16, NULL, NULL },
-    { D_7005180, D_7005180, D_9004888, NULL, &D_xk1_80032354, NULL, 48, 16, NULL, NULL },
-    { D_7005180, D_7005180, NULL, NULL, NULL, NULL, 48, 16, NULL, NULL },
+MenuDropItem D_xk1_800327A8[] = {
+    { aExpansionKitMenuGoldBackgroundTex, aExpansionKitMenuGoldBackgroundTex, D_9004708, NULL, &D_xk1_8003226C, NULL, 48, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBackgroundTex, aExpansionKitMenuGoldBackgroundTex, D_9004888, NULL, &D_xk1_80032354, NULL, 48, 16, NULL, NULL },
+    { aExpansionKitMenuGoldBackgroundTex, aExpansionKitMenuGoldBackgroundTex, NULL, NULL, NULL, NULL, 48, 16, NULL, NULL },
     { D_9003988, D_9003988, NULL, NULL, &D_xk1_80032160, NULL, 48, 16, NULL, NULL },
-    { D_7004300, D_7004300, NULL, NULL, &D_xk1_80031870, NULL, 48, 16, NULL, NULL },
+    { aExpansionKitMenuEntryTex, aExpansionKitMenuEntryTex, NULL, NULL, &D_xk1_80031870, NULL, 48, 16, NULL, NULL },
     { NULL, NULL, NULL, NULL, NULL, NULL, 48, 16, NULL, NULL },
 };
 
-unk_80026914 D_xk1_80032880 = { 6, -1, -1, 24, 20, 48, 0, D_xk1_800327A8, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, NULL };
+MenuWidget D_xk1_80032880 = { 6, -1, -1, 24, 20, 48, 0, D_xk1_800327A8, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, NULL };
 
 s32 D_xk1_800328B4[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 12, 11, 10, 13 };
 
@@ -484,15 +483,15 @@ void func_xk1_80026908(s32 arg0) {
     D_xk1_800305F0 = arg0;
 }
 
-unk_80026914* func_xk1_80026914(unk_80026914* arg0) {
-    unk_80026914* temp_a0;
-    unk_80026914* var_v1 = arg0;
+MenuWidget* func_xk1_80026914(MenuWidget* arg0) {
+    MenuWidget* temp_a0;
+    MenuWidget* var_v1 = arg0;
 
     while (true) {
         if (var_v1->unk_04 == -1) {
             break;
         }
-        temp_a0 = var_v1->unk_1C[var_v1->unk_04].unk_10;
+        temp_a0 = var_v1->dropItems[var_v1->unk_04].widget;
         if (temp_a0 == NULL) {
             break;
         }
@@ -502,12 +501,12 @@ unk_80026914* func_xk1_80026914(unk_80026914* arg0) {
     return var_v1;
 }
 
-s32 func_xk1_80026958(unk_80026914* arg0, s32 arg1, s32 arg2) {
+s32 func_xk1_80026958(MenuWidget* arg0, s32 arg1, s32 arg2) {
     s32 i;
     s32 var_v1;
 
     var_v1 = -1;
-    for (i = 0; i < arg0->unk_00; i++) {
+    for (i = 0; i < arg0->numItems; i++) {
         if ((arg1 >= (arg0->unk_0C + arg0->unk_14 * i)) && (arg1 < ((arg0->unk_0C + arg0->unk_14 * i) + 0x30))) {
             if (((arg2 + D_xk1_8003060C) >= (arg0->unk_10 + (arg0->unk_18 * i))) &&
                 ((arg2 + D_xk1_8003060C) < ((arg0->unk_10 + (arg0->unk_18 * i)) + 0x10))) {
@@ -518,16 +517,16 @@ s32 func_xk1_80026958(unk_80026914* arg0, s32 arg1, s32 arg2) {
     return var_v1;
 }
 
-void func_xk1_800269F4(unk_80026914* arg0, s32* arg1, s32* arg2) {
+void func_xk1_800269F4(MenuWidget* arg0, s32* arg1, s32* arg2) {
     s32 var_v0;
     s32 var_v1;
-    unk_80026914* temp_v1;
+    MenuWidget* temp_v1;
 
     while (true) {
         if (arg0->unk_04 == -1) {
             break;
         }
-        temp_v1 = arg0->unk_1C[arg0->unk_04].unk_10;
+        temp_v1 = arg0->dropItems[arg0->unk_04].widget;
         if (temp_v1 == NULL) {
             break;
         }
@@ -548,7 +547,7 @@ void func_xk1_800269F4(unk_80026914* arg0, s32* arg1, s32* arg2) {
         var_v1 = arg0->unk_2C;
     }
 
-    if (arg0->unk_00 < 10) {
+    if (arg0->numItems < 10) {
         if (var_v1 < arg0->unk_24) {
             var_v1 = arg0->unk_24;
         }
@@ -576,11 +575,11 @@ void func_xk1_800269F4(unk_80026914* arg0, s32* arg1, s32* arg2) {
     }
 }
 
-void func_xk1_80026B44(Gfx** gfxP, unk_80026914* arg1, s32 arg2, s32 arg3) {
+void func_xk1_80026B44(Gfx** gfxP, MenuWidget* arg1, s32 arg2, s32 arg3) {
     s32 temp_ra;
     s32 temp_s0;
     s32 temp_v0;
-    unk_80026914_unk_1C* var_t5;
+    MenuDropItem* var_t5;
     s32 width;
     s32 height;
     Gfx* gfx;
@@ -590,8 +589,8 @@ void func_xk1_80026B44(Gfx** gfxP, unk_80026914* arg1, s32 arg2, s32 arg3) {
 
     temp_v0 = func_xk1_80026958(arg1, arg2, arg3);
 
-    for (i = 0; i < arg1->unk_00; i++) {
-        var_t5 = &arg1->unk_1C[i];
+    for (i = 0; i < arg1->numItems; i++) {
+        var_t5 = &arg1->dropItems[i];
 
         temp_ra = arg1->unk_0C + (i * arg1->unk_14);
         temp_s0 = (arg1->unk_10 + (i * arg1->unk_18)) - (D_xk1_8003060C * (arg1->unk_14 == 0));
@@ -600,8 +599,8 @@ void func_xk1_80026B44(Gfx** gfxP, unk_80026914* arg1, s32 arg2, s32 arg3) {
         gDPSetCombineMode(gfx++, G_CC_DECALRGBA, G_CC_DECALRGBA);
 
         if (i == temp_v0) {
-            if (var_t5->unk_04 != NULL) {
-                gDPLoadTextureBlock(gfx++, var_t5->unk_04, G_IM_FMT_RGBA, G_IM_SIZ_16b, 48, 16, 0,
+            if (var_t5->backgroundSelectedTex != NULL) {
+                gDPLoadTextureBlock(gfx++, var_t5->backgroundSelectedTex, G_IM_FMT_RGBA, G_IM_SIZ_16b, 48, 16, 0,
                                     G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
                                     G_TX_NOLOD, G_TX_NOLOD);
 
@@ -619,8 +618,8 @@ void func_xk1_80026B44(Gfx** gfxP, unk_80026914* arg1, s32 arg2, s32 arg3) {
                                   PRIMITIVE, 0, TEXEL0, 0);
                 gDPSetPrimColor(gfx++, 0, 0, 128, 128, 128, 255);
             }
-            if (var_t5->unk_00 != 0) {
-                gDPLoadTextureBlock(gfx++, var_t5->unk_00, G_IM_FMT_RGBA, G_IM_SIZ_16b, 48, 16, 0,
+            if (var_t5->backgroundTex != NULL) {
+                gDPLoadTextureBlock(gfx++, var_t5->backgroundTex, G_IM_FMT_RGBA, G_IM_SIZ_16b, 48, 16, 0,
                                     G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
                                     G_TX_NOLOD, G_TX_NOLOD);
 
@@ -631,35 +630,35 @@ void func_xk1_80026B44(Gfx** gfxP, unk_80026914* arg1, s32 arg2, s32 arg3) {
         gDPPipeSync(gfx++);
         gDPSetCombineMode(gfx++, G_CC_DECALRGBA, G_CC_DECALRGBA);
 
-        if (arg1->unk_1C[i].unk_0C != NULL) {
-            gDPLoadTextureBlock(gfx++, var_t5->unk_0C, G_IM_FMT_RGBA, G_IM_SIZ_16b, 24, 12, 0,
+        if (arg1->dropItems[i].subContentsRGBATex != NULL) {
+            gDPLoadTextureBlock(gfx++, var_t5->subContentsRGBATex, G_IM_FMT_RGBA, G_IM_SIZ_16b, 24, 12, 0,
                                 G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
                                 G_TX_NOLOD, G_TX_NOLOD);
 
             gSPTextureRectangle(gfx++, (temp_ra + 19) << 2, (temp_s0 + 2) << 2, (temp_ra + 45) << 2,
                                 (temp_s0 + 14) << 2, 0, 0, 0, 1 << 10, 1 << 10);
         }
-        if (arg1->unk_1C[i].unk_08 != NULL) {
-            width = var_t5->unk_18;
-            height = var_t5->unk_1A;
+        if (arg1->dropItems[i].contentsTex != NULL) {
+            width = var_t5->contentsWidth;
+            height = var_t5->contentsHeight;
             gDPPipeSync(gfx++);
             gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, 255);
             gDPSetCombineMode(gfx++, G_CC_MODULATEIDECALA_PRIM, G_CC_MODULATEIDECALA_PRIM);
 
-            gDPLoadTextureBlock_4b(gfx++, var_t5->unk_08, G_IM_FMT_I, width, height, 0, G_TX_NOMIRROR | G_TX_CLAMP,
+            gDPLoadTextureBlock_4b(gfx++, var_t5->contentsTex, G_IM_FMT_I, width, height, 0, G_TX_NOMIRROR | G_TX_CLAMP,
                                    G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
             gSPTextureRectangle(gfx++, temp_ra << 2, temp_s0 << 2, (temp_ra + width) << 2, (temp_s0 + height) << 2, 0,
                                 0, 0, 1 << 10, 1 << 10);
         }
-        if (arg1->unk_1C[i].unk_20 != NULL) {
+        if (arg1->dropItems[i].subContentsI4Tex != NULL) {
             width = 16;
             height = 16;
             gDPPipeSync(gfx++);
             gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, 255);
             gDPSetCombineMode(gfx++, G_CC_MODULATEIDECALA_PRIM, G_CC_MODULATEIDECALA_PRIM);
 
-            gDPLoadTextureBlock_4b(gfx++, var_t5->unk_20, G_IM_FMT_I, width, height, 0, G_TX_NOMIRROR | G_TX_CLAMP,
+            gDPLoadTextureBlock_4b(gfx++, var_t5->subContentsI4Tex, G_IM_FMT_I, width, height, 0, G_TX_NOMIRROR | G_TX_CLAMP,
                                    G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
             gSPTextureRectangle(gfx++, (temp_ra + 28) << 2, temp_s0 << 2, (temp_ra + 44) << 2, (temp_s0 + 16) << 2, 0,
@@ -686,9 +685,9 @@ void func_xk1_80026B44(Gfx** gfxP, unk_80026914* arg1, s32 arg2, s32 arg3) {
 
 extern u32 gGameFrameCount;
 
-void func_xk1_800276B0(Gfx** gfxP, unk_80026914* arg1, s32 arg2, s32 arg3) {
+void func_xk1_800276B0(Gfx** gfxP, MenuWidget* arg1, s32 arg2, s32 arg3) {
     Gfx* gfx;
-    unk_80026914* temp_v1;
+    MenuWidget* temp_v1;
 
     gfx = *gfxP;
 
@@ -723,7 +722,7 @@ void func_xk1_800276B0(Gfx** gfxP, unk_80026914* arg1, s32 arg2, s32 arg3) {
         if (arg1->unk_04 == -1) {
             break;
         }
-        temp_v1 = arg1->unk_1C[arg1->unk_04].unk_10;
+        temp_v1 = arg1->dropItems[arg1->unk_04].widget;
         if (temp_v1 == NULL) {
             break;
         }
@@ -734,7 +733,7 @@ void func_xk1_800276B0(Gfx** gfxP, unk_80026914* arg1, s32 arg2, s32 arg3) {
 
     gDPSetScissor(gfx++, G_SC_NON_INTERLACE, 12, 8, 308, 232);
 
-    if ((arg1->unk_00 > 10) && (D_xk1_8003060C < ((arg1->unk_00 - 10) * arg1->unk_18))) {
+    if ((arg1->numItems > 10) && (D_xk1_8003060C < ((arg1->numItems - 10) * arg1->unk_18))) {
         if ((gGameFrameCount % 4) >= 2) {
             gDPPipeSync(gfx++);
             gDPSetCombineMode(gfx++, G_CC_DECALRGBA, G_CC_DECALRGBA);
@@ -749,8 +748,8 @@ void func_xk1_800276B0(Gfx** gfxP, unk_80026914* arg1, s32 arg2, s32 arg3) {
     *gfxP = gfx;
 }
 
-void func_xk1_80027B74(unk_80026914* arg0) {
-    unk_80026914* temp_v1;
+void func_xk1_80027B74(MenuWidget* arg0) {
+    MenuWidget* temp_v1;
     s32 temp_v0;
 
     if (D_xk1_800305F8 == 0) {
@@ -762,7 +761,7 @@ void func_xk1_80027B74(unk_80026914* arg0) {
             break;
         }
         arg0->unk_04 = -1;
-        temp_v1 = arg0->unk_1C[temp_v0].unk_10;
+        temp_v1 = arg0->dropItems[temp_v0].widget;
         if (temp_v1 == NULL) {
             break;
         }
@@ -778,8 +777,8 @@ void func_xk1_80027B74(unk_80026914* arg0) {
     D_xk1_8003060C = 0;
 }
 
-void func_xk1_80027C1C(unk_80026914* arg0) {
-    unk_80026914* temp_v1;
+void func_xk1_80027C1C(MenuWidget* arg0) {
+    MenuWidget* temp_v1;
     s32 temp_v0;
 
     if (D_xk1_800305F8 == 0) {
@@ -791,7 +790,7 @@ void func_xk1_80027C1C(unk_80026914* arg0) {
             break;
         }
         arg0->unk_04 = -1;
-        temp_v1 = arg0->unk_1C[temp_v0].unk_10;
+        temp_v1 = arg0->dropItems[temp_v0].widget;
         if (temp_v1 == NULL) {
             break;
         }
@@ -803,8 +802,8 @@ void func_xk1_80027C1C(unk_80026914* arg0) {
     D_xk1_8003060C = 0;
 }
 
-void func_xk1_80027C80(unk_80026914* arg0) {
-    unk_80026914* temp_v1;
+void func_xk1_80027C80(MenuWidget* arg0) {
+    MenuWidget* temp_v1;
     s32 temp_v0;
 
     if (D_800D6CA0.unk_08 != 1 || D_xk1_800305F8 == 0) {
@@ -816,7 +815,7 @@ void func_xk1_80027C80(unk_80026914* arg0) {
             break;
         }
         arg0->unk_04 = -1;
-        temp_v1 = arg0->unk_1C[temp_v0].unk_10;
+        temp_v1 = arg0->dropItems[temp_v0].widget;
         if (temp_v1 == NULL) {
             break;
         }
@@ -831,10 +830,10 @@ void func_xk1_80027C80(unk_80026914* arg0) {
 
 extern s32 D_xk2_800F7048;
 
-void func_xk1_80027CFC(unk_80026914* arg0, s32* arg1, s32* arg2) {
+void func_xk1_80027CFC(MenuWidget* arg0, s32* arg1, s32* arg2) {
     s32 pad;
-    unk_80026914* var_a3 = arg0;
-    unk_80026914* temp_v1;
+    MenuWidget* var_a3 = arg0;
+    MenuWidget* temp_v1;
     s32 var_a1;
 
     if (D_xk2_800F7048 == 1) {
@@ -845,7 +844,7 @@ void func_xk1_80027CFC(unk_80026914* arg0, s32* arg1, s32* arg2) {
         if (var_a3->unk_04 == -1) {
             break;
         }
-        temp_v1 = var_a3->unk_1C[var_a3->unk_04].unk_10;
+        temp_v1 = var_a3->dropItems[var_a3->unk_04].widget;
         if (temp_v1 == NULL) {
             break;
         }
@@ -860,10 +859,10 @@ void func_xk1_80027CFC(unk_80026914* arg0, s32* arg1, s32* arg2) {
     var_a3->unk_08 = var_a1;
 }
 
-void func_xk1_80027DC8(unk_80026914* arg0, s32* arg1, s32* arg2) {
-    unk_80026914* temp_v1;
-    unk_80026914* var_a3;
-    unk_80026914* sp24;
+void func_xk1_80027DC8(MenuWidget* arg0, s32* arg1, s32* arg2) {
+    MenuWidget* temp_v1;
+    MenuWidget* var_a3;
+    MenuWidget* sp24;
     s32 sp20;
 
     var_a3 = arg0;
@@ -871,7 +870,7 @@ void func_xk1_80027DC8(unk_80026914* arg0, s32* arg1, s32* arg2) {
         if (var_a3->unk_04 == -1) {
             break;
         }
-        temp_v1 = var_a3->unk_1C[var_a3->unk_04].unk_10;
+        temp_v1 = var_a3->dropItems[var_a3->unk_04].widget;
         if (temp_v1 == NULL) {
             break;
         }
@@ -880,7 +879,7 @@ void func_xk1_80027DC8(unk_80026914* arg0, s32* arg1, s32* arg2) {
 
     sp20 = func_xk1_80026958(var_a3, *arg1, *arg2);
     if (sp20 != -1) {
-        if (((var_a3 != &D_xk1_80032880) || (sp20 != 2) || (D_xk1_80032880.unk_1C[2].unk_10 != NULL)) &&
+        if (((var_a3 != &D_xk1_80032880) || (sp20 != 2) || (D_xk1_80032880.dropItems[2].widget != NULL)) &&
             ((var_a3 != &D_xk1_80032880) || (sp20 != 5)) && ((var_a3 != &D_xk1_80032880) || (sp20 != 5)) &&
             (var_a3 != &D_xk1_800314C0)) {
             func_8074122C(0x24);
@@ -895,13 +894,13 @@ void func_xk1_80027DC8(unk_80026914* arg0, s32* arg1, s32* arg2) {
             *var_a3->unk_30 = sp20;
         }
 
-        sp24 = var_a3->unk_1C[sp20].unk_10;
+        sp24 = var_a3->dropItems[sp20].widget;
         if (sp24 != NULL) {
             D_xk1_800305F8 = 1;
         }
         if (sp24 != NULL) {
-            if (var_a3->unk_1C[sp20].unk_14 != NULL) {
-                var_a3->unk_1C[sp20].unk_14();
+            if (var_a3->dropItems[sp20].action != NULL) {
+                var_a3->dropItems[sp20].action();
             }
 
             if (sp24->unk_30 != NULL) {
@@ -922,9 +921,9 @@ void func_xk1_80027DC8(unk_80026914* arg0, s32* arg1, s32* arg2) {
                 *arg2 = sp24->unk_24;
             }
         } else {
-            if (var_a3->unk_1C[sp20].unk_14 != NULL) {
+            if (var_a3->dropItems[sp20].action != NULL) {
                 func_xk1_80027C1C(arg0);
-                var_a3->unk_1C[sp20].unk_14();
+                var_a3->dropItems[sp20].action();
             }
         }
     }
@@ -990,15 +989,15 @@ void func_xk1_80028064(void) {
 
 void func_xk1_8002820C(void) {
     D_xk1_80030614 = 0;
-    D_xk1_800327A8[1].unk_08 = D_9004888;
-    D_xk1_800327A8[1].unk_10 = &D_xk1_80032354;
+    D_xk1_800327A8[1].contentsTex = D_9004888;
+    D_xk1_800327A8[1].widget = &D_xk1_80032354;
     D_xk1_8003067C[1] = &D_xk1_8003061C;
-    D_xk1_800327A8[2].unk_08 = NULL;
-    D_xk1_800327A8[2].unk_10 = NULL;
+    D_xk1_800327A8[2].contentsTex = NULL;
+    D_xk1_800327A8[2].widget = NULL;
 }
 
 void func_xk1_80028250(void) {
-    unk_80026914* sp94[] = {
+    MenuWidget* sp94[] = {
         &D_xk1_80031F38,
         &D_xk1_80031FD8,
         &D_xk1_80032078,
@@ -1020,7 +1019,7 @@ void func_xk1_80028250(void) {
         NULL,
         NULL,
     };
-    unk_80026914* sp4C[9] = {
+    MenuWidget* sp4C[9] = {
         &D_xk1_80030744, &D_xk1_80030808, &D_xk1_800308F0, &D_xk1_800309D8, &D_xk1_80030A9C,
         &D_xk1_80030B60, &D_xk1_80030C24, &D_xk1_80030E98, &D_xk1_80030FA4,
     };
@@ -1036,19 +1035,19 @@ void func_xk1_80028250(void) {
     func_xk1_80027C80(&D_xk1_80032880);
     switch (D_xk1_80030614) {
         case 0:
-            D_xk1_800327A8[1].unk_08 = D_9004888;
-            D_xk1_800327A8[1].unk_10 = &D_xk1_80032354;
+            D_xk1_800327A8[1].contentsTex = D_9004888;
+            D_xk1_800327A8[1].widget = &D_xk1_80032354;
             D_xk1_8003067C[1] = &D_xk1_8003061C;
-            D_xk1_800327A8[2].unk_08 = NULL;
-            D_xk1_800327A8[2].unk_10 = NULL;
+            D_xk1_800327A8[2].contentsTex = NULL;
+            D_xk1_800327A8[2].widget = NULL;
             D_xk1_8003061C = 0;
             break;
         case 1:
-            D_xk1_800327A8[1].unk_08 = D_9004A08;
-            D_xk1_800327A8[1].unk_10 = &D_xk1_80032484;
+            D_xk1_800327A8[1].contentsTex = D_9004A08;
+            D_xk1_800327A8[1].widget = &D_xk1_80032484;
             D_xk1_8003067C[1] = &D_xk1_80030620;
-            D_xk1_800327A8[2].unk_08 = NULL;
-            D_xk1_800327A8[2].unk_10 = NULL;
+            D_xk1_800327A8[2].contentsTex = NULL;
+            D_xk1_800327A8[2].widget = NULL;
             D_xk1_80030620 = 0;
             break;
         case 2:
@@ -1060,21 +1059,21 @@ void func_xk1_80028250(void) {
             D_xk1_8003063C = 0;
             D_xk1_80030640 = 0;
             D_xk1_80030644 = 0;
-            D_xk1_800327A8[1].unk_08 = D_9004B88;
-            D_xk1_800327A8[1].unk_10 = &D_xk1_800325FC;
+            D_xk1_800327A8[1].contentsTex = D_9004B88;
+            D_xk1_800327A8[1].widget = &D_xk1_800325FC;
             D_xk1_8003067C[1] = &D_xk1_80030624;
 
             switch (D_xk1_80030624) {
                 case 7:
                 case 8:
-                    D_xk1_800327A8[2].unk_08 = NULL;
+                    D_xk1_800327A8[2].contentsTex = NULL;
                     break;
                 default:
-                    D_xk1_800327A8[2].unk_08 = D_9004E88;
+                    D_xk1_800327A8[2].contentsTex = D_9004E88;
                     break;
             }
 
-            D_xk1_800327A8[2].unk_10 = sp94[D_xk1_80030624];
+            D_xk1_800327A8[2].widget = sp94[D_xk1_80030624];
             D_xk1_8003067C[2] = sp70[D_xk1_80030624];
             break;
         case 3:
@@ -1089,27 +1088,27 @@ void func_xk1_80028250(void) {
             D_xk1_80030664 = 0;
             D_xk1_80030668 = 0;
 
-            D_xk1_800327A8[1].unk_08 = D_9004B88;
-            D_xk1_800327A8[1].unk_10 = &D_xk1_80032774;
+            D_xk1_800327A8[1].contentsTex = D_9004B88;
+            D_xk1_800327A8[1].widget = &D_xk1_80032774;
             D_xk1_8003067C[1] = &D_xk1_80030628;
-            D_xk1_800327A8[2].unk_08 = D_9004E88;
-            D_xk1_800327A8[2].unk_10 = sp4C[D_xk1_80030628];
+            D_xk1_800327A8[2].contentsTex = D_9004E88;
+            D_xk1_800327A8[2].widget = sp4C[D_xk1_80030628];
             D_xk1_8003067C[2] = sp28[D_xk1_80030628];
             break;
         case 4:
-            D_xk1_800327A8[1].unk_08 = D_9004D08;
-            D_xk1_800327A8[1].unk_10 = &D_xk1_80031140;
+            D_xk1_800327A8[1].contentsTex = D_9004D08;
+            D_xk1_800327A8[1].widget = &D_xk1_80031140;
             D_xk1_8003067C[1] = &D_xk1_8003066C;
-            D_xk1_800327A8[2].unk_08 = D_9005008;
-            D_xk1_800327A8[2].unk_10 = &D_xk1_80031294;
+            D_xk1_800327A8[2].contentsTex = D_9005008;
+            D_xk1_800327A8[2].widget = &D_xk1_80031294;
             D_xk1_8003067C[2] = &D_xk1_80030670;
             break;
         case 5:
-            D_xk1_800327A8[1].unk_08 = D_9004E88;
-            D_xk1_800327A8[1].unk_10 = &D_xk1_800314C0;
+            D_xk1_800327A8[1].contentsTex = D_9004E88;
+            D_xk1_800327A8[1].widget = &D_xk1_800314C0;
             D_xk1_8003067C[1] = &D_xk1_80030674;
-            D_xk1_800327A8[2].unk_08 = NULL;
-            D_xk1_800327A8[2].unk_10 = NULL;
+            D_xk1_800327A8[2].contentsTex = NULL;
+            D_xk1_800327A8[2].widget = NULL;
             break;
     }
 }
@@ -1210,47 +1209,47 @@ void func_xk1_80028818(void) {
     func_xk1_80027C80(&D_xk1_80032880);
     switch (D_xk1_80030624) {
         case 0:
-            D_xk1_800327A8[2].unk_08 = D_9004E88;
-            D_xk1_800327A8[2].unk_10 = &D_xk1_80031F38;
+            D_xk1_800327A8[2].contentsTex = D_9004E88;
+            D_xk1_800327A8[2].widget = &D_xk1_80031F38;
             D_xk1_8003067C[2] = &D_xk1_8003062C;
             break;
         case 1:
-            D_xk1_800327A8[2].unk_08 = D_9004E88;
-            D_xk1_800327A8[2].unk_10 = &D_xk1_80031FD8;
+            D_xk1_800327A8[2].contentsTex = D_9004E88;
+            D_xk1_800327A8[2].widget = &D_xk1_80031FD8;
             D_xk1_8003067C[2] = &D_xk1_80030630;
             break;
         case 2:
-            D_xk1_800327A8[2].unk_08 = D_9004E88;
-            D_xk1_800327A8[2].unk_10 = &D_xk1_80032078;
+            D_xk1_800327A8[2].contentsTex = D_9004E88;
+            D_xk1_800327A8[2].widget = &D_xk1_80032078;
             D_xk1_8003067C[2] = &D_xk1_80030634;
             break;
         case 4:
-            D_xk1_800327A8[2].unk_08 = D_9004E88;
-            D_xk1_800327A8[2].unk_10 = &D_xk1_80031648;
+            D_xk1_800327A8[2].contentsTex = D_9004E88;
+            D_xk1_800327A8[2].widget = &D_xk1_80031648;
             D_xk1_8003067C[2] = &D_xk1_8003063C;
             break;
         case 3:
-            D_xk1_800327A8[2].unk_08 = D_9004E88;
-            D_xk1_800327A8[2].unk_10 = &D_xk1_80031584;
+            D_xk1_800327A8[2].contentsTex = D_9004E88;
+            D_xk1_800327A8[2].widget = &D_xk1_80031584;
             D_xk1_8003067C[2] = &D_xk1_80030638;
             break;
         case 5:
-            D_xk1_800327A8[2].unk_08 = D_9004E88;
-            D_xk1_800327A8[2].unk_10 = &D_xk1_8003170C;
+            D_xk1_800327A8[2].contentsTex = D_9004E88;
+            D_xk1_800327A8[2].widget = &D_xk1_8003170C;
             D_xk1_8003067C[2] = &D_xk1_80030640;
             break;
         case 6:
-            D_xk1_800327A8[2].unk_08 = D_9004E88;
-            D_xk1_800327A8[2].unk_10 = &D_xk1_800317D0;
+            D_xk1_800327A8[2].contentsTex = D_9004E88;
+            D_xk1_800327A8[2].widget = &D_xk1_800317D0;
             D_xk1_8003067C[2] = &D_xk1_80030644;
             break;
         case 7:
-            D_xk1_800327A8[2].unk_08 = NULL;
-            D_xk1_800327A8[2].unk_10 = NULL;
+            D_xk1_800327A8[2].contentsTex = NULL;
+            D_xk1_800327A8[2].widget = NULL;
             break;
         case 8:
-            D_xk1_800327A8[2].unk_08 = NULL;
-            D_xk1_800327A8[2].unk_10 = NULL;
+            D_xk1_800327A8[2].contentsTex = NULL;
+            D_xk1_800327A8[2].widget = NULL;
             break;
     }
 }
@@ -1263,39 +1262,39 @@ void func_xk1_80028A04(void) {
     func_xk1_80027C80(&D_xk1_80032880);
     switch (D_xk1_80030628) {
         case 0:
-            D_xk1_800327A8[2].unk_10 = &D_xk1_80030744;
+            D_xk1_800327A8[2].widget = &D_xk1_80030744;
             D_xk1_8003067C[2] = &D_xk1_80030648;
             break;
         case 1:
-            D_xk1_800327A8[2].unk_10 = &D_xk1_80030808;
+            D_xk1_800327A8[2].widget = &D_xk1_80030808;
             D_xk1_8003067C[2] = &D_xk1_8003064C;
             break;
         case 2:
-            D_xk1_800327A8[2].unk_10 = &D_xk1_800308F0;
+            D_xk1_800327A8[2].widget = &D_xk1_800308F0;
             D_xk1_8003067C[2] = &D_xk1_80030650;
             break;
         case 3:
-            D_xk1_800327A8[2].unk_10 = &D_xk1_800309D8;
+            D_xk1_800327A8[2].widget = &D_xk1_800309D8;
             D_xk1_8003067C[2] = &D_xk1_80030654;
             break;
         case 4:
-            D_xk1_800327A8[2].unk_10 = &D_xk1_80030A9C;
+            D_xk1_800327A8[2].widget = &D_xk1_80030A9C;
             D_xk1_8003067C[2] = &D_xk1_80030658;
             break;
         case 5:
-            D_xk1_800327A8[2].unk_10 = &D_xk1_80030B60;
+            D_xk1_800327A8[2].widget = &D_xk1_80030B60;
             D_xk1_8003067C[2] = &D_xk1_8003065C;
             break;
         case 6:
-            D_xk1_800327A8[2].unk_10 = &D_xk1_80030C24;
+            D_xk1_800327A8[2].widget = &D_xk1_80030C24;
             D_xk1_8003067C[2] = &D_xk1_80030660;
             break;
         case 7:
-            D_xk1_800327A8[2].unk_10 = &D_xk1_80030E98;
+            D_xk1_800327A8[2].widget = &D_xk1_80030E98;
             D_xk1_8003067C[2] = &D_xk1_80030664;
             break;
         case 8:
-            D_xk1_800327A8[2].unk_10 = &D_xk1_80030FA4;
+            D_xk1_800327A8[2].widget = &D_xk1_80030FA4;
             D_xk1_8003067C[2] = &D_xk1_80030668;
             break;
     }
@@ -1439,11 +1438,11 @@ void func_xk1_80028F94(void) {
 
 void func_xk1_80029070(void) {
     D_xk1_80030614 = 0;
-    D_xk1_800327A8[1].unk_08 = D_9004888;
-    D_xk1_800327A8[1].unk_10 = &D_xk1_80032354;
+    D_xk1_800327A8[1].contentsTex = D_9004888;
+    D_xk1_800327A8[1].widget = &D_xk1_80032354;
     D_xk1_8003067C[1] = &D_xk1_8003061C;
-    D_xk1_800327A8[2].unk_08 = NULL;
-    D_xk1_800327A8[2].unk_10 = NULL;
+    D_xk1_800327A8[2].contentsTex = NULL;
+    D_xk1_800327A8[2].widget = NULL;
 }
 
 s32 func_xk1_800290B4(void) {
