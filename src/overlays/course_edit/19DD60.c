@@ -127,7 +127,7 @@ extern s32 D_xk1_80032BF8;
 extern s32 D_xk2_800F7058;
 extern s32 D_xk2_80119800;
 extern u8* sCourseMinimapTex;
-extern unk_80026914 D_xk1_80032880;
+extern MenuWidget D_xk1_80032880;
 extern s32 gNumPlayers;
 extern s32 gCourseIndex;
 extern s32 D_xk1_8003061C;
@@ -362,7 +362,7 @@ extern s32 D_80119880;
 void func_xk2_800ECD90(void) {
 
     if (gControllers[gPlayerControlPorts[0]].buttonPressed & BTN_A) {
-        func_xk1_800294EC(func_xk1_8002AC24);
+        ExpansionKit_NameEntryInit(func_xk1_8002AC24);
         gExpansionKitNameEntryStrLength = mfsStrLen(gExpansionKitNameEntryStr);
         D_800D6CA0.unk_08 = 2;
         D_80119880 = 9;

@@ -10,7 +10,7 @@ u8 D_xk1_8003A570[40];
 unk_8003A5D8 D_xk1_8003A598;
 s32 sNameEntryCursorXPos;
 s32 sNameEntryCursorYPos;
-void (*D_xk1_8003A5C4)(void);
+void (*sNameEntryCallbackFunc)(void);
 
 s32 gExpansionKitNameEntryStrLength = 0;
 s32 sInputIndicatorFlashRate = 1;
@@ -30,15 +30,15 @@ Gfx* func_xk1_800290F4(Gfx* gfx, s32 arg1, s32 arg2, u32 arg3) {
     D_xk1_80032ACC = arg3 / 96;
     switch (arg3 / 96) {
         case 0:
-            gSPDisplayList(gfx++, D_7020850);
+            gSPDisplayList(gfx++, aExpansionKitSetupFontCharacterSheet1DL);
             break;
         case 1:
             arg3 -= 0x60;
-            gSPDisplayList(gfx++, D_7020890);
+            gSPDisplayList(gfx++, aExpansionKitSetupFontCharacterSheet2DL);
             break;
         case 2:
             arg3 -= 0xC0;
-            gSPDisplayList(gfx++, D_70208D0);
+            gSPDisplayList(gfx++, aExpansionKitSetupFontCharacterSheet3DL);
             break;
     }
     gSPTextureRectangle(gfx++, arg1 << 2, arg2 << 2, (arg1 + 8) << 2, (arg2 + 8) << 2, 0, ((arg3 % 16) * 8) << 5,
@@ -154,16 +154,16 @@ void func_xk1_800294AC(void) {
 extern s32 D_xk1_8003A550;
 extern s32 D_xk1_8003A554;
 
-void func_xk1_800294EC(void (*arg0)(void)) {
+void ExpansionKit_NameEntryInit(void (*callback)(void)) {
     sNameEntryCursorXPos = 0;
     sNameEntryCursorYPos = 0;
     D_xk1_80032AC8 = true;
-    D_xk1_8003A5C4 = arg0;
+    sNameEntryCallbackFunc = callback;
     gExpansionKitNameEntryStrLength = 0;
     D_xk1_8003A550 = 0x58;
     D_xk1_8003A554 = 0x58;
     while (true) {
-        if (gExpansionKitNameEntryStr[gExpansionKitNameEntryStrLength] == 0) {
+        if (gExpansionKitNameEntryStr[gExpansionKitNameEntryStrLength] == '\0') {
             break;
         }
         gExpansionKitNameEntryStrLength++;
@@ -191,8 +191,8 @@ s32 func_xk1_80029560(void) {
 }
 
 void func_xk1_8002961C(void) {
-    if ((gExpansionKitNameEntryStrLength != 0) && (D_xk1_8003A5C4 != NULL)) {
-        D_xk1_8003A5C4();
+    if ((gExpansionKitNameEntryStrLength != 0) && (sNameEntryCallbackFunc != NULL)) {
+        sNameEntryCallbackFunc();
     }
 }
 
@@ -268,8 +268,8 @@ void ExpansionKit_NameEntryHandleBPress(void) {
             gExpansionKitNameEntryStr[gExpansionKitNameEntryStrLength] = 0;
             return;
         }
-        if (D_xk1_8003A5C4 != NULL) {
-            D_xk1_8003A5C4();
+        if (sNameEntryCallbackFunc != NULL) {
+            sNameEntryCallbackFunc();
         }
         D_xk1_80030610 = -1;
     }

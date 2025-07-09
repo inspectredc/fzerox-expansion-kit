@@ -227,14 +227,14 @@ D_9003408:
   offset: 0x3408
   symbol: D_9003408
 
-D_9003808:
+aCourseEditMenuClearTex:
   type: TEXTURE
   ctype: u8
   format: I4
   width: 48
   height: 16
   offset: 0x3808
-  symbol: D_9003808
+  symbol: aCourseEditMenuClearTex
 
 D_9003988:
   type: TEXTURE

@@ -171,8 +171,8 @@ void func_xk2_800EFCD0(void) {
     }
 }
 
-extern s32 D_xk2_800F6824;
-extern s32 D_xk2_800F6828;
+extern s32 gCourseEditCursorXPos;
+extern s32 gCourseEditCursorYPos;
 
 s32 func_xk2_800EFDE4(f32 arg0) {
     s32 i;
@@ -189,7 +189,7 @@ s32 func_xk2_800EFDE4(f32 arg0) {
         if (func_xk2_800EF090(sp58, &sp70, &sp6C) != 0) {
             continue;
         }
-        temp_fv0 = SQ(D_xk2_800F6824 - sp70) + SQ(D_xk2_800F6828 - sp6C);
+        temp_fv0 = SQ(gCourseEditCursorXPos - sp70) + SQ(gCourseEditCursorYPos - sp6C);
         if (temp_fv0 < arg0) {
             arg0 = temp_fv0;
             var_fp = i;
@@ -377,7 +377,7 @@ void func_xk2_800F07A4(void) {
     Vec3f spF0;
     Mtx3F spCC;
 
-    if ((D_xk2_800F6828 < 0x38) || (D_800D6CA0.unk_08 == 1) || (D_800D6CA0.unk_08 == 3) || (D_800D6CA0.unk_08 == 2) ||
+    if ((gCourseEditCursorYPos < 0x38) || (D_800D6CA0.unk_08 == 1) || (D_800D6CA0.unk_08 == 3) || (D_800D6CA0.unk_08 == 2) ||
         (D_800D6CA0.unk_08 == 0x10) || (D_xk1_80030614 != 2) || (D_xk1_80030624 != 8) ||
         !(gControllers[gPlayerControlPorts[0]].buttonPressed & BTN_A) || (D_800D6CA0.unk_0C == 0)) {
         return;

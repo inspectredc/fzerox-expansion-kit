@@ -446,7 +446,7 @@ extern Gfx D_3000510[];
 extern Gfx D_3000540[];
 extern Gfx D_8014940[];
 extern u8* D_xk1_800331F0[];
-extern s32 D_xk2_800F6828;
+extern s32 gCourseEditCursorYPos;
 
 void func_xk2_800F2B48(Gfx** gfxP) {
     Gfx* gfx;
@@ -464,7 +464,7 @@ void func_xk2_800F2B48(Gfx** gfxP) {
         }
     }
 
-    if ((D_xk2_80104F04 != 0) && (func_xk2_800EF780() != 0) && (D_xk2_800F6828 < 200)) {
+    if ((D_xk2_80104F04 != 0) && (func_xk2_800EF780() != 0) && (gCourseEditCursorYPos < 200)) {
         width = mfsStrLen(D_xk1_800331F0[21]) * 8;
         width += 16;
         temp_v1 = (s32) (SCREEN_WIDTH - width) / 2;
@@ -585,7 +585,7 @@ void func_xk2_800F3164(Gfx** gfxP) {
     gSPDisplayList(gfx++, D_8014940);
 
     for (i = 0; i < 32; i++) {
-        gDPLoadTextureBlock(gfx++, D_7000000 + i * width, G_IM_FMT_RGBA, G_IM_SIZ_16b, 224, 1, 0,
+        gDPLoadTextureBlock(gfx++, aExpansionKitPauseInstructionsTex + i * width, G_IM_FMT_RGBA, G_IM_SIZ_16b, 224, 1, 0,
                             G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                             G_TX_NOLOD);
 
@@ -677,19 +677,19 @@ void func_xk2_800F3548(Gfx** gfxP) {
     *gfxP = gfx;
 }
 
-extern unk_80026914 D_xk1_80032880;
-extern unk_80026914 D_xk1_80031870;
-extern unk_80026914 D_xk1_80032160;
-extern unk_80026914 D_xk1_8003226C;
-extern unk_80026914 D_xk1_80032354;
-extern unk_80026914 D_xk1_80032484;
-extern unk_80026914 D_xk1_800325FC;
-extern unk_80026914 D_xk1_80032774;
+extern MenuWidget D_xk1_80032880;
+extern MenuWidget D_xk1_80031870;
+extern MenuWidget D_xk1_80032160;
+extern MenuWidget D_xk1_8003226C;
+extern MenuWidget D_xk1_80032354;
+extern MenuWidget D_xk1_80032484;
+extern MenuWidget D_xk1_800325FC;
+extern MenuWidget D_xk1_80032774;
 
 void func_xk2_800F3600(Gfx** gfxP) {
     s32 pad;
     Gfx* gfx;
-    unk_80026914* sp2C;
+    MenuWidget* sp2C;
 
     if ((D_8076C96C == 0) || (D_800D6CA0.unk_08 != 1)) {
         return;

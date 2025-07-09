@@ -111,7 +111,7 @@ Gfx* func_xk2_800EE158(Gfx* gfx) {
 
 extern u8* D_xk1_8003339C[];
 extern u8 D_xk2_80104CA0[];
-extern s32 D_xk2_800F6828;
+extern s32 gCourseEditCursorYPos;
 
 Gfx* func_xk2_800EE268(Gfx* gfx) {
     s32 i;
@@ -130,8 +130,8 @@ Gfx* func_xk2_800EE268(Gfx* gfx) {
         left = func_xk2_800EE578(temp_v0);
 
         top = (D_xk2_80104360 * 0x10) + 0x38;
-        if ((D_xk2_800F6828 + 0x10) >= top) {
-            if ((top + 0x10) >= D_xk2_800F6828) {
+        if ((gCourseEditCursorYPos + 0x10) >= top) {
+            if ((top + 0x10) >= gCourseEditCursorYPos) {
                 D_xk2_80104360 += 2;
             }
         }
@@ -159,7 +159,7 @@ Gfx* func_xk2_800EE268(Gfx* gfx) {
     return gfx;
 }
 
-extern s32 D_xk2_800F6824;
+extern s32 gCourseEditCursorXPos;
 extern s32 D_xk2_800F703C;
 
 s32 func_xk2_800EE578(s32 arg0) {
@@ -175,7 +175,7 @@ s32 func_xk2_800EE578(s32 arg0) {
     if (var_a1 < D_xk2_80128CA4) {
         var_a1 = D_xk2_80128CA4;
     }
-    if ((D_xk2_800F6824 > 0xE0) && (D_xk2_800F703C != -1)) {
+    if ((gCourseEditCursorXPos > 0xE0) && (D_xk2_800F703C != -1)) {
         var_a1 = D_xk2_80128CA0 + 0x20;
         if (((arg0 * 8) + var_a1) > 0x128) {
             var_a1 = (((0x22 - arg0) / 2) * 8) + 0x18;
