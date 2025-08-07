@@ -93,13 +93,13 @@ Gfx* func_xk2_800EBB24(Gfx* gfx) {
     return gfx;
 }
 
-extern s32 D_xk1_80030678;
+extern s32 gCourseEditEntryOption;
 
 void func_xk2_800EBE14(void) {
     if ((gControllers[gPlayerControlPorts[0]].buttonPressed & BTN_B) && (D_800D6CA0.unk_08 == 0x20)) {
         func_8074122C(0x25);
         D_800D6CA0.unk_08 = 0;
-        D_xk1_80030678 = -1;
+        gCourseEditEntryOption = -1;
     }
 }
 
@@ -177,7 +177,7 @@ void func_xk2_800EC110(void) {
     func_8070405C(0);
     func_80768434(MFS_ENTRY_WORKING_DIR, "CRS_ENTRY", "CENT", gEditCupTrackNames, sizeof(gEditCupTrackNames), 0, 0xFF,
                   1);
-    D_xk1_80030678 = -1;
+    gCourseEditEntryOption = -1;
 }
 
 void func_xk2_800EC174(void) {
@@ -186,7 +186,7 @@ void func_xk2_800EC174(void) {
     func_8070405C(0);
     func_807682C0(MFS_ENTRY_WORKING_DIR, "CRS_ENTRY", "CENT", gEditCupTrackNames, sizeof(gEditCupTrackNames), 0, 0xFF,
                   1);
-    D_xk1_80030678 = -1;
+    gCourseEditEntryOption = -1;
 }
 
 void func_xk2_800EC1D8(void) {

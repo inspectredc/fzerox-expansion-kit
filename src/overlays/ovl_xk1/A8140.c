@@ -51,8 +51,9 @@ void func_xk1_8002AF1C(Gfx** gfxP, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     gfx = *gfxP;
     gSPDisplayList(gfx++, D_8014940);
 
-    gDPLoadTextureBlock(gfx++, aExpansionKitFileMenuBorderTex, G_IM_FMT_RGBA, G_IM_SIZ_16b, 24, 24, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    gDPLoadTextureBlock(gfx++, aExpansionKitFileMenuBorderTex, G_IM_FMT_RGBA, G_IM_SIZ_16b, 24, 24, 0,
+                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                        G_TX_NOLOD);
 
     for (i = 0; i < arg4; i++) {
         for (j = 0; j < arg3; j++) {
@@ -192,8 +193,8 @@ Gfx* func_xk1_8002B17C(Gfx* gfx, s32 arg1) {
     gDPSetScissor(gfx++, G_SC_NON_INTERLACE, 12, 8, 308, 232);
     gDPSetCombineMode(gfx++, G_CC_DECALRGBA, G_CC_DECALRGBA);
 
-    gDPLoadTextureBlock(gfx++, D_701F5A0, G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                        G_TX_NOMIRROR | G_TX_WRAP, 5, 4, G_TX_NOLOD, G_TX_NOLOD);
+    gDPLoadTextureBlock(gfx++, aExpansionKitScrollArrowIndicatorTex, G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 16, 0,
+                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 5, 4, G_TX_NOLOD, G_TX_NOLOD);
 
     if (D_xk1_80032BEC != 0) {
         if (((gGameFrameCount % D_xk1_80032BD0) < (D_xk1_80032BD0 / 2))) {

@@ -21,7 +21,7 @@ MachineSelect_BackgroundDraw = 0x80070D30; //segment:ovl_i4
 
 Credits_IntroDraw = 0x8007FF1C; //segment:ovl_i6
 
-D_xk1_80030614 = 0x80030614; //segment:ovl_xk1
+gCreateOption = 0x80030614; //segment:ovl_xk1
 
 D_xk2_80128CB8 = 0x80128CB8; //segment:course_edit size:0x3C
 D_xk2_80128DF8 = 0x80128DF8; //segment:course_edit size:0xE100

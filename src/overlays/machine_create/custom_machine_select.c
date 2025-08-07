@@ -542,7 +542,8 @@ Gfx* func_xk3_80133F6C(Gfx* gfx, Object* arg1) {
         gfx = func_i2_800AF678(gfx, &D_800D63F8[OBJECT_CACHE_INDEX(arg1)], OBJECT_LEFT(arg1), OBJECT_TOP(arg1), 0, 0, 0,
                                1.0f, 1.0f, 0);
         if (gCustomMachinesInfo.characterCustomState[sMachineSelectIndex] > 0) {
-            gfx = Font_DrawString(gfx, 0x46, 0x25, gCustomMachinesInfo.customMachines[sMachineSelectIndex].machineName, 0, 2, 0);
+            gfx = Font_DrawString(gfx, 0x46, 0x25, gCustomMachinesInfo.customMachines[sMachineSelectIndex].machineName,
+                                  0, 2, 0);
         } else if (gCustomMachinesInfo.characterCustomState[sMachineSelectIndex] < 0) {
             gfx = Font_DrawString(gfx, 0x46, 0x25, gSuperMachineNames[sMachineSelectIndex], 0, 2, 0);
         } else {
@@ -577,13 +578,16 @@ Gfx* func_xk3_801340DC(Gfx* gfx, Object* arg1) {
             if (gCustomMachinesInfo.characterCustomState[sMachineSelectIndex] > 0) {
                 switch (i) {
                     case BODY_STAT:
-                        MachineCreate_StatValueToString(&statValueStr, gCustomMachinesInfo.customMachines[sMachineSelectIndex].body);
+                        MachineCreate_StatValueToString(&statValueStr,
+                                                        gCustomMachinesInfo.customMachines[sMachineSelectIndex].body);
                         break;
                     case BOOST_STAT:
-                        MachineCreate_StatValueToString(&statValueStr, gCustomMachinesInfo.customMachines[sMachineSelectIndex].boost);
+                        MachineCreate_StatValueToString(&statValueStr,
+                                                        gCustomMachinesInfo.customMachines[sMachineSelectIndex].boost);
                         break;
                     case GRIP_STAT:
-                        MachineCreate_StatValueToString(&statValueStr, gCustomMachinesInfo.customMachines[sMachineSelectIndex].grip);
+                        MachineCreate_StatValueToString(&statValueStr,
+                                                        gCustomMachinesInfo.customMachines[sMachineSelectIndex].grip);
                         break;
                 }
             } else if (gCustomMachinesInfo.characterCustomState[sMachineSelectIndex] < 0) {
@@ -602,16 +606,22 @@ Gfx* func_xk3_8013430C(Gfx* gfx, s32 characterSlot) {
     gfx = Machine_DrawLoadCustomTextures(gfx, gCustomMachinesInfo.customMachines[characterSlot].logo - 1,
                                          gCustomMachinesInfo.customMachines[characterSlot].number - 1,
                                          gCustomMachinesInfo.customMachines[characterSlot].decal - 1);
-    gDPSetEnvColor(gfx++, gCustomMachinesInfo.customMachines[characterSlot].red, gCustomMachinesInfo.customMachines[characterSlot].green,
+    gDPSetEnvColor(gfx++, gCustomMachinesInfo.customMachines[characterSlot].red,
+                   gCustomMachinesInfo.customMachines[characterSlot].green,
                    gCustomMachinesInfo.customMachines[characterSlot].blue, 255);
 
     gfx = Machine_DrawCustom(gfx, 0, gCustomMachinesInfo.customMachines[characterSlot].frontType,
-                             gCustomMachinesInfo.customMachines[characterSlot].rearType, gCustomMachinesInfo.customMachines[characterSlot].wingType,
-                             gCustomMachinesInfo.customMachines[characterSlot].decalR, gCustomMachinesInfo.customMachines[characterSlot].decalG,
-                             gCustomMachinesInfo.customMachines[characterSlot].decalB, gCustomMachinesInfo.customMachines[characterSlot].numberR,
-                             gCustomMachinesInfo.customMachines[characterSlot].numberG, gCustomMachinesInfo.customMachines[characterSlot].numberB, 255,
-                             255, 255, gCustomMachinesInfo.customMachines[characterSlot].cockpitR,
-                             gCustomMachinesInfo.customMachines[characterSlot].cockpitG, gCustomMachinesInfo.customMachines[characterSlot].cockpitB);
+                             gCustomMachinesInfo.customMachines[characterSlot].rearType,
+                             gCustomMachinesInfo.customMachines[characterSlot].wingType,
+                             gCustomMachinesInfo.customMachines[characterSlot].decalR,
+                             gCustomMachinesInfo.customMachines[characterSlot].decalG,
+                             gCustomMachinesInfo.customMachines[characterSlot].decalB,
+                             gCustomMachinesInfo.customMachines[characterSlot].numberR,
+                             gCustomMachinesInfo.customMachines[characterSlot].numberG,
+                             gCustomMachinesInfo.customMachines[characterSlot].numberB, 255, 255, 255,
+                             gCustomMachinesInfo.customMachines[characterSlot].cockpitR,
+                             gCustomMachinesInfo.customMachines[characterSlot].cockpitG,
+                             gCustomMachinesInfo.customMachines[characterSlot].cockpitB);
 
     return gfx;
 }

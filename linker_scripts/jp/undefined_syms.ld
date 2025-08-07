@@ -1285,6 +1285,14 @@ aMachineCreateGripTex = 0x4003C40;
 aCreateMachinePartsTex = 0x4000000;
 aCreateMachineDesignTex = 0x4000180;
 aCreateMachineSettingsTex = 0x4000300;
+aCreateMachineMarkTex = 0x4000A80;
+aCreateMachineColorTex = 0x4000C00;
+aCreateMachineBodyTex = 0x4000D80;
+aCreateMachineLineTex = 0x4000F00;
+aCreateMachineNumberTex = 0x4001080;
+aCreateMachineCockpitTex = 0x4001200;
+aCreateMachineUseTex = 0x4001800;
+aCreateMachineClearTex = 0x4001980;
 
 D_A00B000 = 0xA00B000;
 D_A00B240 = 0xA00B240;

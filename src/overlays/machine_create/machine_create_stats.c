@@ -294,7 +294,8 @@ void func_xk3_8013571C(void) {
 }
 
 bool MachineCreate_CustomMachineStatsIsValid(CustomMachine* customMachine) {
-    if (sMachineStatWeightings[BODY_STAT][customMachine->body] + sMachineStatWeightings[BOOST_STAT][customMachine->boost] +
+    if (sMachineStatWeightings[BODY_STAT][customMachine->body] +
+            sMachineStatWeightings[BOOST_STAT][customMachine->boost] +
             sMachineStatWeightings[GRIP_STAT][customMachine->grip] >
         MACHINE_STAT_MAX_WEIGHTING) {
         return true;

@@ -80,7 +80,8 @@
       "ovl_i6.h": "c",
       "title.h": "c",
       "records.h": "c",
-      "fzx_ghost.h": "c"
+      "fzx_ghost.h": "c",
+      "segment_1fb850.h": "c"
     },
     "C_Cpp_Runner.msvcBatchPath": "",
     "C_Cpp.errorSquiggles": "enabled"

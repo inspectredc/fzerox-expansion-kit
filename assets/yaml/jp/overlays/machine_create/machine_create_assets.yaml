@@ -122,14 +122,14 @@ D_xk3_80138CB0:
   offset: 0x1D8970
   symbol: D_xk3_80138CB0
 
-D_xk3_80138E30:
+aMachineCreateMachineRegistrationTex:
   type: TEXTURE
   ctype: u16
   format: RGBA16
   width: 48
   height: 16
   offset: 0x1D8AF0
-  symbol: D_xk3_80138E30
+  symbol: aMachineCreateMachineRegistrationTex
 
 aMachineCreateEnterTex:
   type: TEXTURE

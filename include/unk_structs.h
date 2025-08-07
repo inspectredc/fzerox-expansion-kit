@@ -758,18 +758,18 @@ typedef struct MenuDropItem {
 
 typedef struct MenuWidget {
     s32 numItems;
-    s32 unk_04;
-    s32 unk_08;
-    s32 unk_0C;
-    s32 unk_10;
-    s32 unk_14;
-    s32 unk_18;
-    MenuDropItem* dropItems;
-    s32 unk_20;
-    s32 unk_24;
-    s32 unk_28;
-    s32 unk_2C;
-    s32* unk_30;
+    s32 openIndex;
+    s32 highlightedIndex;
+    s32 left;
+    s32 top;
+    s32 itemXOffset;
+    s32 itemYOffset;
+    MenuDropItem* menuItems;
+    s32 cursorMinPosX;
+    s32 cursorMinPosY;
+    s32 cursorMaxPosX;
+    s32 cursorMaxPosY;
+    s32* option;
 } MenuWidget; // size = 0x34
 
 typedef struct unk_80140E60 {

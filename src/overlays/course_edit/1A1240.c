@@ -1,4 +1,5 @@
 #include "global.h"
+#include "fzx_expansion_kit.h"
 
 f32 D_xk2_80128CB0;
 f32 D_xk2_80128CB4;
@@ -40,8 +41,8 @@ void func_xk2_800EF78C(void) {
 extern s32 D_xk2_800F703C;
 extern s32 D_xk2_800F7040;
 extern CourseSegment* D_xk2_801197EC;
-extern s32 D_xk1_8003066C;
-extern s32 D_xk1_80030670;
+extern s32 gVenueOption;
+extern s32 gSkyboxOption;
 
 void func_xk2_800EF8B0(void) {
     s32 i;
@@ -67,10 +68,10 @@ void func_xk2_800EF8B0(void) {
     func_xk2_800F5C50();
     D_800D6CA0.unk_0C = D_xk2_80119800;
     D_xk2_800F7040 = 3;
-    D_xk1_8003066C = COURSE_CONTEXT()->courseData.venue;
-    D_xk1_80030670 = COURSE_CONTEXT()->courseData.skybox;
-    func_80702FF4(D_xk1_8003066C);
-    func_80709A38(D_xk1_8003066C);
+    gVenueOption = COURSE_CONTEXT()->courseData.venue;
+    gSkyboxOption = COURSE_CONTEXT()->courseData.skybox;
+    func_80702FF4(gVenueOption);
+    func_80709A38(gVenueOption);
 }
 
 void func_xk2_800EFA94(CourseSegment* arg0, CourseSegment* arg1) {
@@ -363,8 +364,8 @@ f32 func_xk2_800F05C0(CourseSegment* arg0, Vec3f arg1) {
     return var_fv1;
 }
 
-extern s32 D_xk1_80030614;
-extern s32 D_xk1_80030624;
+extern s32 gCreateOption;
+extern s32 gDesignStyleOption;
 
 void func_xk2_800F07A4(void) {
     s32 i;
@@ -377,8 +378,9 @@ void func_xk2_800F07A4(void) {
     Vec3f spF0;
     Mtx3F spCC;
 
-    if ((gCourseEditCursorYPos < 0x38) || (D_800D6CA0.unk_08 == 1) || (D_800D6CA0.unk_08 == 3) || (D_800D6CA0.unk_08 == 2) ||
-        (D_800D6CA0.unk_08 == 0x10) || (D_xk1_80030614 != 2) || (D_xk1_80030624 != 8) ||
+    if ((gCourseEditCursorYPos < 0x38) || (D_800D6CA0.unk_08 == 1) || (D_800D6CA0.unk_08 == 3) ||
+        (D_800D6CA0.unk_08 == 2) || (D_800D6CA0.unk_08 == 0x10) ||
+        !((gCreateOption == CREATE_OPTION_DESIGN) && (gDesignStyleOption == TRACK_DESIGN_STYLE_LOOP)) ||
         !(gControllers[gPlayerControlPorts[0]].buttonPressed & BTN_A) || (D_800D6CA0.unk_0C == 0)) {
         return;
     }

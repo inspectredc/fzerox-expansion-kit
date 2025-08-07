@@ -3,6 +3,7 @@
 #include "fzx_thread.h"
 #include "fzx_course.h"
 #include "fzx_assets.h"
+#include "assets/segment_21C170.h"
 #include "segment_symbols.h"
 #include "leo/unk_leo.h"
 #include "leo/leo_internal.h"
@@ -151,16 +152,11 @@ void func_806F9774(void) {
     }
 }
 
-extern u16 D_9002188[];
-extern u16 D_9002388[];
-extern u16 D_9002B88[];
-extern u16 D_9002788[];
-
-u16* D_8076C970[] = {
-    D_9002188,
-    D_9002388,
-    D_9002B88,
-    D_9002788,
+u16* gCourseEditIconTextures[] = {
+    aCourseEditTestDriveIconTex,
+    aCourseEditLineModeIconTex,
+    aCourseEditGridAlignIconTex,
+    aCourseEditQuestionIconTex,
 };
 
 Gfx* (*D_8076C980[])(Gfx*) = {
@@ -3114,7 +3110,7 @@ void func_80701E90(s32 courseIndex) {
                           sizeof(CourseData), 0);
             if ((Course_CalculateChecksum() != COURSE_CONTEXT()->courseData.checksum) ||
                 (COURSE_CONTEXT()->courseData.creatorId != CREATOR_NINTENDO) ||
-                (COURSE_CONTEXT()->courseData.unk_1F >= 0xE)) {
+                (COURSE_CONTEXT()->courseData.bgm >= 0xE)) {
                 func_8070F8A4(-1, 9);
                 while (true) {}
             }
@@ -3146,7 +3142,7 @@ void func_80701E90(s32 courseIndex) {
                                       sizeof(CourseData), 0);
                         if ((Course_CalculateChecksum() != COURSE_CONTEXT()->courseData.checksum) ||
                             (COURSE_CONTEXT()->courseData.creatorId != CREATOR_NINTENDO) ||
-                            (COURSE_CONTEXT()->courseData.unk_1F >= 0xE)) {
+                            (COURSE_CONTEXT()->courseData.bgm >= 0xE)) {
                             func_8070F8A4(-1, 9);
                             while (true) {}
                         }
@@ -3172,7 +3168,7 @@ void func_80701E90(s32 courseIndex) {
         PRINTF("UNPACK\n");
         func_80701D7C(romAddr, osVirtualToPhysical(&COURSE_CONTEXT()->courseData), sizeof(CourseData));
         PRINTF("UNPACK OK\n");
-        COURSE_CONTEXT()->courseData.unk_1F = D_i2_800BF044[courseIndex];
+        COURSE_CONTEXT()->courseData.bgm = D_i2_800BF044[courseIndex];
         if ((D_8076C954 != 0) && (courseIndex == COURSE_RED_CANYON_2)) {
             COURSE_CONTEXT()->courseData.dirt[21] = DIRT_NONE;
             COURSE_CONTEXT()->courseData.checksum = Course_CalculateChecksum();
@@ -3238,7 +3234,7 @@ void func_80702448(s32 courseIndex) {
                           sizeof(CourseData), 0);
             if ((Course_CalculateChecksum() != COURSE_CONTEXT()->courseData.checksum) ||
                 (COURSE_CONTEXT()->courseData.creatorId != CREATOR_NINTENDO) ||
-                (COURSE_CONTEXT()->courseData.unk_1F >= 0xE)) {
+                (COURSE_CONTEXT()->courseData.bgm >= 0xE)) {
                 func_8070F8A4(-1, 9);
                 while (true) {}
             }
@@ -3272,7 +3268,7 @@ void func_80702448(s32 courseIndex) {
                                       sizeof(CourseData), 0);
                         if ((Course_CalculateChecksum() != COURSE_CONTEXT()->courseData.checksum) ||
                             (COURSE_CONTEXT()->courseData.creatorId != CREATOR_NINTENDO) ||
-                            (COURSE_CONTEXT()->courseData.unk_1F >= 0xE)) {
+                            (COURSE_CONTEXT()->courseData.bgm >= 0xE)) {
                             func_8070F8A4(-1, 9);
                             while (true) {}
                         }
@@ -3556,7 +3552,7 @@ Gfx D_8076CAF8[] = {
 };
 
 s32 func_80703228(void) {
-    return COURSE_CONTEXT()->courseData.unk_1F;
+    return COURSE_CONTEXT()->courseData.bgm;
 }
 
 void func_80703234(void) {
