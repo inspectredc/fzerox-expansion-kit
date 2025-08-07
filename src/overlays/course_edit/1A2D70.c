@@ -141,8 +141,8 @@ Gfx* func_xk2_800F1428(Gfx* gfx) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/course_edit/1A2D70/func_xk2_800F1428.s")
 #endif
 
-extern s32 D_xk2_800F6824;
-extern s32 D_xk2_800F6828;
+extern s32 gCourseEditCursorXPos;
+extern s32 gCourseEditCursorYPos;
 extern unk_807B3C20 D_807B3C20;
 
 void func_xk2_800F1938(void) {
@@ -165,13 +165,13 @@ void func_xk2_800F1938(void) {
     f64 temp_dfv1;
     f32 pad;
 
-    if (D_xk2_800F6828 < 0x38) {
+    if (gCourseEditCursorYPos < 0x38) {
         return;
     }
     temp_dfv0 = gPlayers[0].unk_94.x;
     temp_dfv1 = ((gPlayers[0].unk_94.x * 320.0f) / 240.0f);
-    temp_dfv1 = ((D_xk2_800F6824 - 0xA0) / 320.0) * temp_dfv1;
-    temp_dfv0 = ((D_xk2_800F6828 - 0x78) / 240.0) * temp_dfv0;
+    temp_dfv1 = ((gCourseEditCursorXPos - 0xA0) / 320.0) * temp_dfv1;
+    temp_dfv0 = ((gCourseEditCursorYPos - 0x78) / 240.0) * temp_dfv0;
 
     temp_dfv1 = (4096.0 * temp_dfv1) / 360.0;
     temp_dfv0 = (4096.0 * temp_dfv0) / 360.0;

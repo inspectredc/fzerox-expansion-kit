@@ -2,6 +2,7 @@
 #include "leo/leo_functions.h"
 #include "fzx_game.h"
 #include "fzx_assets.h"
+#include "assets/segment_1FB850.h"
 
 s32 D_xk1_8003A5D0;
 unk_8003A5D8 D_xk1_8003A5D8[102];
@@ -32,15 +33,13 @@ void func_xk1_8002AED0(void) {
     PRINTF("FILE LISTS %d\n");
 
     for (i = 0; i < 102; i++) {
-        D_xk1_8003A5D8[i].unk_1D[3] = '\0';
+        D_xk1_8003A5D8[i].extension[3] = '\0';
     }
 }
 
 void func_xk1_8002AF10(s32 arg0) {
     D_xk1_80032BD0 = arg0;
 }
-
-extern u16 D_7004D00[];
 
 void func_xk1_8002AF1C(Gfx** gfxP, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     s32 var_a0;
@@ -52,8 +51,9 @@ void func_xk1_8002AF1C(Gfx** gfxP, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     gfx = *gfxP;
     gSPDisplayList(gfx++, D_8014940);
 
-    gDPLoadTextureBlock(gfx++, D_7004D00, G_IM_FMT_RGBA, G_IM_SIZ_16b, 24, 24, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    gDPLoadTextureBlock(gfx++, aExpansionKitFileMenuBorderTex, G_IM_FMT_RGBA, G_IM_SIZ_16b, 24, 24, 0,
+                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                        G_TX_NOLOD);
 
     for (i = 0; i < arg4; i++) {
         for (j = 0; j < arg3; j++) {
@@ -85,9 +85,6 @@ void func_xk1_8002B150(s32 arg0, s32 arg1, s32* arg2, s32* arg3) {
     D_xk1_80032BF0 = arg2;
     D_xk1_80032BF4 = arg3;
 }
-
-extern Gfx D_7020808[];
-extern u16 D_701F5A0[];
 
 extern u32 gGameFrameCount;
 extern s32 gGameMode;
@@ -184,8 +181,8 @@ Gfx* func_xk1_8002B17C(Gfx* gfx, s32 arg1) {
             }
         }
 
-        gfx = func_xk1_8002924C(gfx, D_xk1_80032BE4, temp_s4, &D_xk1_8003A5D8[i]);
-        if ((D_xk1_8003A5D8[i].unk_1D[3] == 'E') && ((gGameFrameCount % 16) < 8)) {
+        gfx = func_xk1_8002924C(gfx, D_xk1_80032BE4, temp_s4, D_xk1_8003A5D8[i].name);
+        if ((D_xk1_8003A5D8[i].extension[3] == 'E') && ((gGameFrameCount % 16) < 8)) {
             gSPDisplayList(gfx++, D_7020808);
             gSPTextureRectangle(gfx++, (D_xk1_80032BE4 + 0x1C) << 2, temp_s4 << 2, (D_xk1_80032BE4 + 0x24) << 2,
                                 (temp_s4 + 8) << 2, 0, 0, 0, 1 << 10, 1 << 10);
@@ -196,8 +193,8 @@ Gfx* func_xk1_8002B17C(Gfx* gfx, s32 arg1) {
     gDPSetScissor(gfx++, G_SC_NON_INTERLACE, 12, 8, 308, 232);
     gDPSetCombineMode(gfx++, G_CC_DECALRGBA, G_CC_DECALRGBA);
 
-    gDPLoadTextureBlock(gfx++, D_701F5A0, G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                        G_TX_NOMIRROR | G_TX_WRAP, 5, 4, G_TX_NOLOD, G_TX_NOLOD);
+    gDPLoadTextureBlock(gfx++, aExpansionKitScrollArrowIndicatorTex, G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 16, 0,
+                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 5, 4, G_TX_NOLOD, G_TX_NOLOD);
 
     if (D_xk1_80032BEC != 0) {
         if (((gGameFrameCount % D_xk1_80032BD0) < (D_xk1_80032BD0 / 2))) {
@@ -258,7 +255,7 @@ void func_xk1_8002BBA4(void) {
     }
 }
 
-u8* func_xk1_8002BCC4(void) {
+char* func_xk1_8002BCC4(void) {
     s32 var_v1;
 
     D_xk1_80032BD4 = 0;
@@ -268,7 +265,7 @@ u8* func_xk1_8002BCC4(void) {
     if (var_v1 > D_xk1_8003A5D0 - 1) {
         var_v1 = D_xk1_8003A5D0 - 1;
     }
-    return D_xk1_8003A5D8[var_v1].unk_00;
+    return D_xk1_8003A5D8[var_v1].name;
 }
 
 s32 func_xk1_8002BD14(void) {
@@ -289,9 +286,9 @@ void func_xk1_8002BD58(void) {
     D_xk1_80032BD4 = 0;
 }
 
-extern unk_leo_80419EA0 D_80784EF0;
+extern MfsRamArea gMfsRamArea;
 
-s32 func_xk1_8002BD64(u8 arg0, s32 arg1) {
+s32 func_xk1_8002BD64(u8 arg0, char* extension) {
     s32 i;
     s32 var_s0 = 0;
     s32 pad[3];
@@ -301,26 +298,26 @@ s32 func_xk1_8002BD64(u8 arg0, s32 arg1) {
 
     var_s1 = D_xk1_8003B430;
     D_xk1_80032BF8 = 0;
-    D_xk1_8003A5D8[0].unk_10 = 0;
+    D_xk1_8003A5D8[0].attr = 0;
     D_xk1_8003A5D8[0].unk_22 = 1;
     D_xk1_8003A5D0 = arg0;
 
-    if (func_80766660(0xFFFB) != 0) {
+    if (Mfs_GetFilesPreparation(MFS_ENTRY_WORKING_DIR)) {
         return D_xk1_8003A5D0;
     }
 
     var_s6 = 0;
     while (true) {
 
-        if ((*var_s1 = func_80766788()) == 0xFFFF) {
+        if ((*var_s1 = Mfs_GetNextFileInPreparedDir()) == MFS_ENTRY_DOES_NOT_EXIST) {
             break;
         }
-        if ((arg1 == 0) || (Leo_bcmp(D_80784EF0.unk_16B0[*var_s1].unk_24, arg1, 3) == 0)) {
+        if ((extension == NULL) || (mfsStrnCmp(gMfsRamArea.directoryEntry[*var_s1].extension, extension, 3) == 0)) {
             temp_s0 = &D_xk1_8003A5D8[D_xk1_8003A5D0];
             temp_s0->unk_22 = 0;
-            Leo_strcpy(temp_s0->unk_00, D_80784EF0.unk_16B0[*var_s1].unk_10);
-            Leo_strcpy(temp_s0->unk_1D, D_80784EF0.unk_16B0[*var_s1].unk_24);
-            temp_s0->unk_10 = D_80784EF0.unk_16B0[*var_s1].unk_00;
+            mfsStrCpy(temp_s0->name, gMfsRamArea.directoryEntry[*var_s1].name);
+            mfsStrCpy(temp_s0->extension, gMfsRamArea.directoryEntry[*var_s1].extension);
+            temp_s0->attr = gMfsRamArea.directoryEntry[*var_s1].attr;
             var_s6++;
 
             if (++D_xk1_8003A5D0 == 0x66) {
@@ -334,13 +331,13 @@ s32 func_xk1_8002BD64(u8 arg0, s32 arg1) {
     var_s0++;
     D_xk1_80032BEC = 0;
     D_xk1_80032BD4 = var_s0;
-    func_xk1_8002CEF8(&D_xk1_8003A5D8[arg0], D_xk1_8003A5D0 - arg0, 0x24, &func_xk1_8002CA98);
+    func_xk1_8002CEF8(&D_xk1_8003A5D8[arg0], D_xk1_8003A5D0 - arg0, sizeof(unk_8003A5D8), func_xk1_8002CA98);
     D_xk1_80032BF8 = var_s0;
 
     if (var_s6 > 100) {
         for (i = 0; i < var_s6 - 100; i++) {
             temp_s0 = &D_xk1_8003A5D8[D_xk1_8003A5D0 - (i + 1)];
-            func_80764E90(0xFFFB, temp_s0->unk_00, temp_s0->unk_1D, 1);
+            Mfs_DeleteFileInDir(MFS_ENTRY_WORKING_DIR, temp_s0->name, temp_s0->extension, true);
             D_xk1_8003A5D0--;
         }
     }
@@ -351,9 +348,6 @@ s32 func_xk1_8002BD64(u8 arg0, s32 arg1) {
 s32 func_xk1_8002BFA4(void) {
     return D_xk1_8003A5D0;
 }
-
-extern u8 D_7004100[];
-extern u16 D_7004900[];
 
 // FAKE! -- requires some very specific permutation of temps for matching
 void func_xk1_8002BFB0(Gfx** gfxP) {
@@ -373,14 +367,15 @@ void func_xk1_8002BFB0(Gfx** gfxP) {
     gSPTextureRectangle(gfx++, x << 2, y << 2, (x + 48) << 2, (y + 32) << 2, 0, 0, 0, new_var, 1 << 10);
     gSPDisplayList(gfx++, D_3000540);
     gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, 255);
-    gDPLoadTextureBlock_4b(gfx++, D_7004100, G_IM_FMT_I, 32, 32, 0, G_TX_NOMIRROR | G_TX_WRAP,
+    gDPLoadTextureBlock_4b(gfx++, aExpansionKitYesNoTex, G_IM_FMT_I, 32, 32, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
     gSPTextureRectangle(gfx++, x << 2, y << 2, (x + 32) << 2, x << 2, 0, 0, 16 << 5, 1 << 10, 1 << 10);
     gSPTextureRectangle(gfx++, x << 2, x << 2, (x + 32) << 2, (y + 32) << 2, 0, 0, 0, 1 << 10, 1 << 10);
     gDPPipeSync(gfx++);
     gDPSetCombineMode(gfx++, G_CC_DECALRGBA, G_CC_DECALRGBA);
-    gDPLoadTextureBlock(gfx++, D_7004900, G_IM_FMT_RGBA, G_IM_SIZ_16b, 16, 32, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    gDPLoadTextureBlock(gfx++, aExpansionKitABButtonTex, G_IM_FMT_RGBA, G_IM_SIZ_16b, 16, 32, 0,
+                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                        G_TX_NOLOD);
     gSPTextureRectangle(gfx++, (x + 32) << 2, y << 2, (x + 48) << 2, (y + 16) << 2, 0, 0, 16 << 5, new_var, 1 << 10);
     gSPTextureRectangle(gfx++, (x + 32) << 2, (y + 16) << 2, (x + 48) << 2, (y + 32) << 2, 0, 0, 0, 1 << 10, 1 << 10);
     *gfxP = gfx;
@@ -423,7 +418,7 @@ Gfx* func_xk1_8002C420(Gfx* gfx, s32 arg1, s32 arg2) {
 
 extern u8* D_xk1_800331F0[];
 
-void func_xk1_8002C720(Gfx** gfxP, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
+void func_xk1_8002C720(Gfx** gfxP, s32 arg1, s32 arg2, char* arg3, s32 arg4) {
     Gfx* gfx;
     s32 temp_a0;
     s32 temp_t4;
@@ -435,8 +430,8 @@ void func_xk1_8002C720(Gfx** gfxP, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
         return;
     }
     func_xk1_80026830(arg3, sp1B4);
-    Leo_strcpy(spB4, D_xk1_800331F0[arg4 + 1]);
-    temp_a0 = Leo_strlen(sp1B4) + Leo_strlen(spB4);
+    mfsStrCpy(spB4, D_xk1_800331F0[arg4 + 1]);
+    temp_a0 = mfsStrLen(sp1B4) + mfsStrLen(spB4);
     temp_t4 = temp_a0 * 8;
     arg1 = (((34 - temp_a0) / 2) * 8) + 24;
 
@@ -458,7 +453,7 @@ void func_xk1_8002C720(Gfx** gfxP, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     gDPPipeSync(gfx++);
     gDPSetPrimColor(gfx++, 0, 0, 255, 64, 64, 255);
     gfx = func_xk1_800262F4(gfx, arg1, arg2, sp1B4);
-    arg1 += Leo_strlen(sp1B4) * 8;
+    arg1 += mfsStrLen(sp1B4) * 8;
     gDPPipeSync(gfx++);
     gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, 255);
     gfx = func_xk1_800264C0(gfx, arg1, arg2, arg4 + 1);
@@ -669,10 +664,10 @@ void func_xk1_8002D16C(void) {
     k = 0;
     for (i = 0, var_s0 = D_xk1_8003A5D8; i < 6; i++) {
         for (j = 0; j < 6; j++, k++, var_s0++) {
-            var_s0->unk_10 = 0;
+            var_s0->attr = 0;
             var_s0->unk_22 = 0;
-            var_s0->unk_1D[3] = '\0';
-            sprintf(var_s0->unk_00, "%s%d", sp48[i], j + 1);
+            var_s0->extension[3] = '\0';
+            sprintf(var_s0->name, "%s%d", sp48[i], j + 1);
         }
     }
     D_xk1_8003A5D0 = k;
@@ -753,7 +748,7 @@ void func_xk1_8002D340(Gfx** gfxP) {
     x += 8;
     gSPDisplayList(gfx++, D_3000540);
     gDPSetCombineMode(gfx++, G_CC_MODULATEIDECALA_PRIM, G_CC_MODULATEIDECALA_PRIM);
-    gDPLoadTextureBlock_4b(gfx++, D_7004100, G_IM_FMT_I, 32, 32, 0, G_TX_NOMIRROR | G_TX_WRAP,
+    gDPLoadTextureBlock_4b(gfx++, aExpansionKitYesNoTex, G_IM_FMT_I, 32, 32, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
     if (D_xk1_80032C20 == 0) {

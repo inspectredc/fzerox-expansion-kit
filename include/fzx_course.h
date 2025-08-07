@@ -18,7 +18,8 @@ typedef struct CourseData {
     /* 0x003 */ s8 skybox;
     /* 0x004 */ u32 checksum;
     /* 0x008 */ u8 flag;
-    /* 0x009 */ char fileName[23];
+    /* 0x009 */ char fileName[22];
+    /* 0x01F */ s8 bgm;
     /* 0x020 */ ControlPoint controlPoint[64];
     /* 0x520 */ s16 bankAngle[64];
     /* 0x5A0 */ s8 pit[64];
@@ -157,6 +158,8 @@ typedef enum PitZone {
     /*  0 */ PIT_BOTH,
     /*  1 */ PIT_LEFT,
     /*  2 */ PIT_RIGHT,
+    /*  3 */ PIT_MIDDLE,
+    /*  4 */ PIT_MAX,
 } PitZone;
 
 typedef enum DashZone {
@@ -164,6 +167,7 @@ typedef enum DashZone {
     /*  0 */ DASH_MIDDLE,
     /*  1 */ DASH_LEFT,
     /*  2 */ DASH_RIGHT,
+    /*  3 */ DASH_MAX,
 } DashZone;
 
 typedef enum Dirt {
@@ -172,6 +176,7 @@ typedef enum Dirt {
     /*  1 */ DIRT_LEFT,
     /*  2 */ DIRT_RIGHT,
     /*  3 */ DIRT_MIDDLE,
+    /*  4 */ DIRT_MAX,
 } Dirt;
 
 typedef enum Ice {
@@ -180,6 +185,7 @@ typedef enum Ice {
     /*  1 */ ICE_LEFT,
     /*  2 */ ICE_RIGHT,
     /*  3 */ ICE_MIDDLE,
+    /*  4 */ ICE_MAX,
 } Ice;
 
 typedef enum Jump {
@@ -187,6 +193,7 @@ typedef enum Jump {
     /*  0 */ JUMP_ALL,
     /*  1 */ JUMP_LEFT,
     /*  2 */ JUMP_RIGHT,
+    /*  3 */ JUMP_MAX,
 } Jump;
 
 typedef enum Landmine {
@@ -194,6 +201,7 @@ typedef enum Landmine {
     /*  0 */ LANDMINE_MIDDLE,
     /*  1 */ LANDMINE_LEFT,
     /*  2 */ LANDMINE_RIGHT,
+    /*  3 */ LANDMINE_MAX,
 } Landmine;
 
 typedef enum Gate {
@@ -201,6 +209,7 @@ typedef enum Gate {
     /*  0 */ GATE_SQUARE,
     /*  1 */ GATE_START,
     /*  2 */ GATE_HEXAGONAL,
+    /*  3 */ GATE_MAX,
 } Gate;
 
 typedef enum Building {
@@ -220,6 +229,7 @@ typedef enum Building {
     /* 12 */ BUILDING_TALL_GOLD_BOTH,
     /* 13 */ BUILDING_TALL_GOLD_LEFT,
     /* 14 */ BUILDING_TALL_GOLD_RIGHT,
+    /* 15 */ BUILDING_MAX,
 } Building;
 
 typedef enum Sign {
@@ -229,6 +239,7 @@ typedef enum Sign {
     /*  2 */ SIGN_2,
     /*  3 */ SIGN_NINTEX,
     /*  4 */ SIGN_OVERHEAD,
+    /*  5 */ SIGN_MAX,
 } Sign;
 
 typedef enum Road {

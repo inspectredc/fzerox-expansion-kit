@@ -56,6 +56,8 @@ SLCheckDiskChange2 = 0x80707A54;
 
 Controller_SetGlobalInputs = 0x8070D43C;
 
+Character_GetSlotFromCharacter = 0x8070DBF0;
+
 LeoFault_CopyFontToRam = 0x8070F170;
 LeoFault_DrawErrorMessage = 0x8070F6C8;
 LeoFault_DrawErrorMessageNumber = 0x8070F76C;
@@ -420,9 +422,6 @@ __osRunningThread = 0x80771E20;
 __osFaultedThread = 0x80771E24;
 __osShutdown = 0x80771E5C;
 __OSGlobalIntMask = 0x80771E60;
-osViModeNtscLan1 = 0x80771F10;
-osViModeMpalLan1 = 0x807727D0;
-__osPiTable = 0x8077300C;
 
 // libultra bss
 
@@ -432,93 +431,14 @@ __osEventStateTab = 0x807C3390; //size:0x80
 
 // libleo
 
-LeoReadWrite = 0x807560F0;
-leoInitialize = 0x80756180;
-leoCommand = 0x80756354;
-LeoReset = 0x807564B4;
-__leoSetReset = 0x80756544;
-LeoResetClear = 0x80756568;
-leointerrupt = 0x80756600;
-read_write_track = 0x80756790;
-leoChk_mecha_int = 0x80756D8C;
-leosetup_BM = 0x80756DF4;
-leochk_err_reg = 0x80756EDC;
-leomain = 0x80757000;
-leoRead_system_area = 0x8075747C;
-leoRead_common = 0x807576BC;
-leoRead = 0x80757690;
-LeoLBAToByte = 0x80757850;
-leoInquiry = 0x807579A0;
-osLeoDiskInit = 0x80757A50;
-LeoReadDiskID = 0x80757AF0;
-leoReadDiskId = 0x80757B50;
-leoAnalize_asic_status = 0x80757CE0;
-leoChk_asic_ready = 0x80757DEC;
-leoChk_done_status = 0x80757ED4;
-leoSend_asic_cmd_i = 0x80758088;
-leoWait_mecha_cmd_done = 0x80758130;
-leoSend_asic_cmd_w = 0x80758180;
-leoSend_asic_cmd_w_nochkDiskChange = 0x807581B8;
-leoDetect_index_w = 0x807582A4;
-leoRecal_i = 0x807582CC;
-leoRecal_w = 0x807582F4;
-leoSeek_i = 0x8075831C;
-leoSeek_w = 0x80758380;
-leoRecv_event_mesg = 0x807583BC;
-leoChk_err_retry = 0x80758410;
-leoChk_cur_drvmode = 0x80758520;
-leoDrive_reset = 0x80758560;
-leoChkUnit_atten = 0x80758590;
-leoRetUnit_atten = 0x8075859C;
-leoClrUA_RESET = 0x807585D0;
-leoClrUA_MEDIUM_CHANGED = 0x807585EC;
-leoSetUA_MEDIUM_CHANGED = 0x80758608;
-leoInitUnit_atten = 0x80758620;
-LeoSpdlMotor = 0x80758630;
-leoC2_Correction = 0x807586F0;
-leoC2_single_ecc = 0x8075877C;
-leoC2_double_ecc = 0x80758850;
-leoC2_3_ecc = 0x80758AD0;
-leoC2_4_ecc = 0x80758EB8;
-leoAlpha_mult = 0x80759754;
-leoAlpha_div = 0x80759798;
-LeoCreateLeoManager = 0x807597E0;
-__osLeoInterrupt = 0x80759950;
-osDriveRomInit = 0x8075A020;
-LeoSetRTC = 0x8075A180;
-leoSet_mseq = 0x8075A2F0;
-leoStart_stop = 0x8075A4A0;
 __LeoBootGame3 = 0x8075AA10;
-LeoDriveExist = 0x8075AA60;
-leoMode_sel = 0x8075AB30;
-leoRd_capacity = 0x8075ABE0;
-leoLba_to_phys = 0x8075AC80;
-leoLba_to_vzone = 0x8075AE74;
-LeoRezero = 0x8075AED0;
-leoRezero = 0x8075AF30;
-LeoByteToLBA = 0x8075AFD0;
-leoClr_queue = 0x8075B130;
-leoClr_reset = 0x8075B1D8;
-LeoModeSelectAsync = 0x8075B250;
-LeoReadCapacity = 0x8075B2E0;
-leoTranslate = 0x8075B370;
-leoReadTimer = 0x8075B610;
-leoSetTimer = 0x8075B6CC;
 LeoGetKAdr = 0x8075BB20;
 LeoGetAAdr = 0x8075C620;
-leoWrite = 0x8075EAB0;
-LeoCJCreateLeoManager = 0x8075EBE0;
-LeoCACreateLeoManager = 0x8075EE20;
-LeoTestUnitReady = 0x8075F050;
-leoTest_unit_rdy = 0x8075F0F0;
-LeoReadRTC = 0x8075F130;
-leoSeek = 0x8075F190;
-LeoSeek = 0x8075F250;
 
-Leo_strcmp = 0x8076294C;
-Leo_strcpy = 0x80762B78;
-Leo_bcmp = 0x807629FC;
-Leo_strlen = 0x80762B1C;
+mfsStrCmp = 0x8076294C;
+mfsStrCpy = 0x80762B78;
+mfsStrnCmp = 0x807629FC;
+mfsStrLen = 0x80762B1C;
 
 // libleo data
 
@@ -526,18 +446,6 @@ __leoResetCalled = 0x8077AC40;
 __leoQueuesCreated = 0x8077AC44;
 leo_sys_read_cmd = 0x8077AC90;
 __leoActive = 0x8077ACD0;
-
-// libleo rodata
-
-LEOfirmware_rev = 0x8077AE30;
-LEOBYTE_TBL1 = 0x8077AE38;
-LEOBYTE_TBL2 = 0x8077AE44; //size:0x14
-LEOVZONE_TBL = 0x8077AE58;
-LEOZONE_SCYL_TBL = 0x8077AF38;
-LEOVZONE_PZONEHD_TBL = 0x8077AF58;
-LEOZONE_OUTERCYL_TBL = 0x8077AFC6;
-LEORAM_START_LBA = 0x8077AFD8;
-LEORAM_BYTE = 0x8077AFE8;
 
 // libleo bss
 
@@ -590,284 +498,20 @@ gLeoSetRTCFunc = 0x807C6E84;
 gLeoModeSelectAsyncFunc = 0x807C6E88;
 gLeoRezeroFunc = 0x807C6E8C;
 
+gMfsRamArea = 0x80784EF0; // size:0xE730
+gCurrentDirectoryEntry = 0x80793620;
+gFileAllocationTable = 0x80793650;
+gDirectoryEntryCount = 0x80794CD0;
+gMfsError = 0x80794CD4;
+gWorkingDirectory = 0x80794CE0;
+gRamAreaCapacity = 0x80794D24;
+gCompanyCode = 0x80794D40;
+gGameCode = 0x80794D44;
+
+gPreparedDirectoryId = 0x807C6E60;
+gPreparedEntryIndexCounter = 0x807C6E62;
+
 // audio
-
-AudioSynth_InitNextRingBuf = 0x8072E460;
-AudioSynth_SyncSampleStates = 0x8072E7DC;
-AudioSynth_Update = 0x8072E8A4;
-AudioSynth_LoadRingBuffer = 0x8072EB10;
-AudioSynth_SaveRingBuffer = 0x8072EBB8;
-AudioSynth_LeakReverb = 0x8072EC60;
-AudioSynth_FilterReverb = 0x8072F220;
-AudioSynth_MaybeMixRingBuffer1 = 0x8072F2C8;
-AudioSynth_ClearBuffer = 0x8072F390;
-AudioSynth_SetBuffer = 0x8072F3E8;
-AudioSynth_InterL = 0x8072F454;
-AudioSynth_SaveBuffer = 0x8072F490;
-AudioSynth_S8Dec = 0x8072F4D8;
-AudioSynth_HiLoGain = 0x8072F4F4;
-AudioSynth_UnkCmd19 = 0x8072F528;
-AudioSynth_LoadFilterBuffer = 0x8072F59C;
-AudioSynth_LoadFilterSize = 0x8072F5C0;
-AudioSynth_LoadRingBuffer1 = 0x8072F5D8;
-AudioSynth_LoadRingBuffer2 = 0x8072F684;
-AudioSynth_LoadRingBufferPart = 0x8072F730;
-AudioSynth_SaveRingBufferPart = 0x8072F79C;
-AudioSynth_MaybeLoadRingBuffer2 = 0x8072F84C;
-AudioSynth_LoadReverbSamples = 0x8072F88C;
-AudioSynth_SaveReverbSamples = 0x8072F900;
-AudioSynth_SaveRingBuffer2 = 0x8072FA04;
-AudioSynth_SingleAudioUpdate = 0x8072FAAC;
-AudioSynth_ProcessNote = 0x80730048;
-AudioSynth_FinalResample = 0x80730BE8;
-AudioSynth_ProcessEnvelope = 0x80730C88;
-
-AudioHeap_InitAdsrDecayTable = 0x80730F1C;
-AudioHeap_ResetLoadStatus = 0x80731060;
-AudioHeap_DiscardFont = 0x80731150;
-AudioHeap_ReleaseNotesForFont = 0x80731234;
-AudioHeap_DiscardSequence = 0x807312AC;
-AudioHeap_WritebackDCache = 0x80731330;
-AudioHeap_AllocZeroedAttemptExternal = 0x80731350;
-AudioHeap_AllocAttemptExternal = 0x807313A8;
-AudioHeap_AllocDmaMemory = 0x80731400;
-AudioHeap_AllocDmaMemoryZeroed = 0x8073143C;
-AudioHeap_AllocZeroed = 0x80731478;
-AudioHeap_Alloc = 0x807314D4;
-AudioHeap_InitPool = 0x8073152C;
-AudioHeap_InitPersistentCache = 0x80731554;
-AudioHeap_InitTemporaryCache = 0x80731568;
-AudioHeap_ResetPool = 0x80731598;
-AudioHeap_PopPersistentCache = 0x807315A8;
-AudioHeap_InitMainPools = 0x807316E8;
-AudioHeap_InitSessionPools = 0x80731748;
-AudioHeap_InitCachePools = 0x807317CC;
-AudioHeap_InitPersistentPoolsAndCaches = 0x80731850;
-AudioHeap_InitTemporaryPoolsAndCaches = 0x80731914;
-AudioHeap_AllocCached = 0x807319D8;
-AudioHeap_SearchCaches = 0x8073216C;
-AudioHeap_SearchRegularCaches = 0x807321C4;
-AudioHeap_ClearFilter = 0x807326A4;
-AudioHeap_LoadLowPassFilter = 0x807326D4;
-AudioHeap_LoadHighPassFilter = 0x80732728;
-AudioHeap_LoadFilter = 0x80732780;
-AudioHeap_UpdateReverb = 0x807328B4;
-AudioHeap_UpdateReverbs = 0x807328BC;
-AudioHeap_ClearCurrentAiBuffer = 0x80732980;
-AudioHeap_ResetStep = 0x807329EC;
-AudioHeap_Init = 0x80732CF0;
-AudioHeap_InitSampleCaches = 0x8073373C;
-AudioHeap_AllocTemporarySampleCacheEntry = 0x807337D4;
-AudioHeap_AllocPersistentSampleCacheEntry = 0x80733D00;
-AudioHeap_SearchPermanentCache = 0x807335F0;
-AudioHeap_AllocPermanent = 0x80733648;
-AudioHeap_AllocSampleCache = 0x807336CC;
-AudioHeap_UnapplySampleCacheForFont = 0x80733A6C;
-AudioHeap_DiscardSampleCacheEntry = 0x80733BE0;
-AudioHeap_UnapplySampleCache = 0x80733CBC;
-AudioHeap_DiscardSampleCaches = 0x80733DC4;
-AudioHeap_DiscardSampleBank = 0x80733F74;
-AudioHeap_ApplySampleBankCache = 0x80733F98;
-AudioHeap_DiscardSampleBanks = 0x8073422C;
-
-AudioLoad_DecreaseSampleDmaTtls = 0x807342E0;
-AudioLoad_DmaSampleData = 0x807343CC;
-AudioLoad_InitSampleDmaBuffers = 0x80734708;
-AudioLoad_IsFontLoadComplete = 0x807349A0;
-AudioLoad_IsSeqLoadComplete = 0x80734A18;
-AudioLoad_IsSampleLoadComplete = 0x80734A90;
-AudioLoad_SetFontLoadStatus = 0x80734B08;
-AudioLoad_SetSeqLoadStatus = 0x80734B38;
-AudioLoad_SetSampleFontLoadStatusAndApplyCaches = 0x80734B68;
-AudioLoad_SetSampleFontLoadStatus = 0x80734BC8;
-AudioLoad_InitTable = 0x80734BF8;
-AudioLoad_SyncLoadSeqFonts = 0x80734C58;
-AudioLoad_SyncLoadSeqParts = 0x80734CF4;
-AudioLoad_SyncLoadSample = 0x80734D40;
-AudioLoad_SyncLoadInstrument = 0x80734E2C;
-AudioLoad_AsyncLoad = 0x80734EFC;
-AudioLoad_AsyncLoadSampleBank = 0x80734F78;
-AudioLoad_AsyncLoadFont = 0x80734FBC;
-AudioLoad_AsyncLoadSeq = 0x80734F34;
-AudioLoad_GetFontsForSequence = 0x80735000;
-AudioLoad_DiscardSeqFonts = 0x80735044;
-AudioLoad_DiscardFont = 0x807350F4;
-AudioLoad_SyncInitSeqPlayer = 0x8073519C;
-AudioLoad_SyncInitSeqPlayerSkipTicks = 0x807351EC;
-AudioLoad_SyncLoadSeq = 0x80735374;
-AudioLoad_GetSampleBank = 0x807353C8;
-AudioLoad_SyncLoadFont = 0x80735504;
-AudioLoad_SyncLoad = 0x80735608;
-AudioLoad_GetLoadTableIndex = 0x80735818;
-AudioLoad_SearchCaches = 0x80735854;
-AudioLoad_GetLoadTable = 0x807358A8;
-AudioLoad_RelocateFont = 0x807358EC;
-AudioLoad_SyncDma = 0x80735B58;
-AudioLoad_SyncDiskDrive = 0x80735C7C;
-AudioLoad_Dma = 0x80735CD4;
-AudioLoad_GetStartLbaAddr = 0x80735ECC;
-AudioLoad_AsyncLoadInner = 0x80735F2C;
-AudioLoad_ProcessLoads = 0x80736238;
-AudioLoad_InitSoundFont = 0x80736334;
-AudioLoad_Init = 0x80736394;
-AudioLoad_InitSlowLoads = 0x80736754;
-AudioLoad_SlowLoadSample = 0x80736768;
-AudioLoad_GetFontSample = 0x80736938;
-AudioLoad_FinishSlowLoad = 0x807369D0;
-AudioLoad_ProcessSlowLoads = 0x80736A44;
-AudioLoad_DmaSlowCopy = 0x80736BCC;
-AudioLoad_DmaSlowCopyDiskDrive = 0x80736C50;
-AudioLoad_SlowLoadSeq = 0x80736CA8;
-AudioLoad_InitAsyncLoads = 0x80736D8C;
-AudioLoad_StartAsyncLoadDiskDrive = 0x80736E08;
-AudioLoad_StartAsyncLoad = 0x80736E8C;
-AudioLoad_ProcessAsyncLoads = 0x80736FB0;
-AudioLoad_ProcessAsyncLoadDiskDrive = 0x807370D4;
-AudioLoad_FinishAsyncLoad = 0x807371B4;
-AudioLoad_ProcessAsyncLoad = 0x807372F0;
-AudioLoad_AsyncDma = 0x8073744C;
-AudioLoad_AsyncDiskDrive = 0x807374DC;
-AudioLoad_RelocateSample = 0x80737534;
-AudioLoad_RelocateFontAndPreloadSamples = 0x80737674;
-AudioLoad_ProcessSamplePreloads = 0x80737A6C;
-AudioLoad_GetSamplesForFont = 0x80737C68;
-AudioLoad_AddUsedSample = 0x80737D9C;
-AudioLoad_PreloadSamplesForFont = 0x80737DF4;
-AudioLoad_LoadPermanentSamples = 0x80738270;
-AudioLoad_DiskInit = 0x80738580;
-AudioLoad_DiskLoad = 0x8073860C;
-AudioLoad_ScriptLoad = 0x80738850;
-AudioLoad_ProcessScriptLoads = 0x807388BC;
-AudioLoad_InitScriptLoads = 0x80738914;
-
-AudioThread_CreateTask = 0x80738FA0;
-AudioThread_CreateTaskImpl = 0x80738FC0;
-AudioThread_ProcessGlobalCmd = 0x8073954C;
-AudioThread_SetFadeOutTimer = 0x80739930;
-AudioThread_SetFadeInTimer = 0x80739984;
-AudioThread_InitMesgQueuesImpl = 0x807399CC;
-AudioThread_QueueCmdF32 = 0x80739AB0;
-AudioThread_QueueCmdS32 = 0x80739AD4;
-AudioThread_QueueCmdS8 = 0x80739AF8;
-AudioThread_ScheduleProcessCmds = 0x80739B58;
-AudioThread_ProcessCmds = 0x80739D18;
-AudioThread_GetAsyncLoadStatus = 0x80739DCC;
-AudioThread_ResetComplete = 0x80739E88;
-AudioThread_ResetAudioHeap = 0x80739F34;
-AudioThread_PreNMIInternal = 0x80739FD0;
-AudioThread_InitMesgQueues = 0x8073A7F4;
-
-Audio_InvalDCache = 0x8073A820;
-Audio_WritebackDCache = 0x8073A860;
-osAiSetNextBuffer = 0x8073A8A0;
-
-Audio_InitNoteSub = 0x8073A920;
-Audio_NoteSetResamplingRate = 0x8073AD54;
-Audio_NoteInit = 0x8073AE0C;
-Audio_NoteDisable = 0x8073AECC;
-Audio_ProcessNotes = 0x8073AF30;
-Audio_GetInstrumentTunedSample = 0x8073B428;
-Audio_GetInstrument = 0x8073B464;
-Audio_GetDrum = 0x8073B538;
-Audio_GetSoundEffect = 0x8073B61C;
-Audio_SetFontInstrument = 0x8073B710;
-Audio_SeqLayerDecayRelease = 0x8073B854;
-Audio_SeqLayerNoteDecay = 0x8073BAAC;
-Audio_SeqLayerNoteRelease = 0x8073BACC;
-Audio_InitNoteList = 0x8073BAEC;
-Audio_InitNoteLists = 0x8073BAFC;
-Audio_InitNoteFreeList = 0x8073BB4C;
-Audio_NotePoolClear = 0x8073BBF0;
-Audio_NotePoolFill = 0x8073BD50;
-Audio_AudioListPushFront = 0x8073BE8C;
-Audio_AudioListRemove = 0x8073BECC;
-Audio_FindLowerPriorityNode = 0x8073BEF8;
-Audio_NoteInitForLayer = 0x8073BF78;
-Audio_AllocNoteFromDisabled = 0x8073C124;
-Audio_AllocNoteFromDecaying = 0x8073C170;
-Audio_AllocNoteFromActive = 0x8073C1C0;
-Audio_AllocNote = 0x8073C2B8;
-Audio_NoteInitAll = 0x8073C58C;
-
-Audio_SequenceChannelProcessSound = 0x8073C6C0;
-Audio_SequencePlayerProcessSound = 0x8073C888;
-Audio_GetPortamentoFreqScale = 0x8073C9D4;
-Audio_GetVibratoPitchChange = 0x8073CA30;
-Audio_GetVibratoFreqScale = 0x8073CA68;
-Audio_NoteVibratoUpdate = 0x8073CC7C;
-Audio_NoteVibratoInit = 0x8073CCD8;
-Audio_NotePortamentoInit = 0x8073CD90;
-Audio_AdsrInit = 0x8073CDBC;
-Audio_AdsrUpdate = 0x8073CDDC;
-
-AudioSeq_GetScriptControlFlowArgument = 0x8073D120;
-AudioSeq_HandleScriptFlowControl = 0x8073D188;
-AudioSeq_InitSequenceChannel = 0x8073D364;
-AudioSeq_SeqChannelSetLayer = 0x8073D4C8;
-AudioSeq_SeqLayerDisable = 0x8073D5EC;
-AudioSeq_AudioListPushBack2 = 0x8073D668;
-AudioSeq_SeqLayerFree = 0x8073D6B0;
-AudioSeq_SequenceChannelDisable = 0x8073D710;
-AudioSeq_SequencePlayerSetupChannels = 0x8073D780;
-AudioSeq_SequencePlayerDisableChannels = 0x8073D878;
-AudioSeq_SequenceChannelEnable = 0x8073D8F8;
-AudioSeq_SequencePlayerDisableAsFinished = 0x8073D990;
-AudioSeq_SequencePlayerDisable = 0x8073D9B8;
-AudioSeq_AudioListPushBack = 0x8073DA98;
-AudioSeq_AudioListPopBack = 0x8073DAD8;
-AudioSeq_InitLayerFreelist = 0x8073DB18;
-AudioSeq_ScriptReadU8 = 0x8073DBB8;
-AudioSeq_ScriptReadS16 = 0x8073DBCC;
-AudioSeq_ScriptReadCompressedU16 = 0x8073DC04;
-AudioSeq_SeqLayerProcessScript = 0x8073DC44;
-AudioSeq_SetChannelPriorities = 0x8073ED34;
-AudioSeq_GetInstrument = 0x8073ED64;
-AudioSeq_SetInstrument = 0x8073EDD8;
-AudioSeq_SequenceChannelSetVolume = 0x8073EE84;
-AudioSeq_SequenceChannelProcessScript = 0x8073EEA8;
-AudioSeq_SequencePlayerProcessSequence = 0x8073FB28;
-AudioSeq_ProcessSequences = 0x80740344;
-AudioSeq_SkipForwardSequence = 0x807403F8;
-AudioSeq_ResetSequencePlayer = 0x80740448;
-AudioSeq_InitSequencePlayerChannels = 0x80740514;
-AudioSeq_InitSequencePlayers = 0x807406BC;
-
-Audio_SetSoundMode = 0x80740B70;
-Audio_SetupCreateTask = 0x80745BDC;
-
-// audio data
-
-gLowPassFilterData = 0x80770320;
-gHighPassFilterData = 0x80770420;
-
-gWaveSamples = 0x80770710;
-gBendPitchOneOctaveFrequencies = 0x80770734;
-gBendPitchTwoSemitonesFrequencies = 0x80770B34;
-gPitchFrequencies = 0x80770F34;
-
-D_80771228 = 0x80771228;
-gDefaultShortNoteVelocityTable = 0x80771134;
-gDefaultShortNoteGateTimeTable = 0x80771144;
-
-gDefaultEnvelope = 0x80771154;
-gZeroNoteSub = 0x80771164;
-gDefaultNoteSub = 0x80771184;
-gHaasEffectDelaySizes = 0x807711A4;
-gHeadsetPanVolume = 0x807712A8;
-gStereoPanVolume = 0x807714A8;
-gDefaultPanVolume = 0x807716A8;
-
-sEnvMixerOp = 0x80771934;
-sEnvMixerDefaultDmemDests = 0x80771940;
-
-sDmaHandler = 0x80771960;
-sLeoHandler = 0x80771964;
-D_80771978 = 0x80771978; // size:0x24
-D_807719A0 = 0x807719A0; // size:0x40
-D_807719E0 = 0x807719E0; // size:0x40
-gAudioContextInitialized = 0x80771A20;
-
-sSeqInstructionArgsTable = 0x80771A70;
 
 gCurAudioTask = 0x80771D68;
 
@@ -885,24 +529,14 @@ gSequenceFontTable = 0x807952F0;
 gSequenceTable = 0x80795350;
 gSampleBankTable = 0x807954D0;
 
-// audio bss
-
-gAudioHeap = 0x80400000;
-
 sScriptLoadDonePointers = 0x807C1908;
 sScriptLoadQueue = 0x807C18B0;
 sScriptLoadMsgBuf = 0x807C18C8;
 
-gAudioCtx = 0x806ECA10; // segment:audio_context size:0x5910
-D_806F2328 = 0x806F2328; // segment:audio_context size:0x18
-D_806F2348 = 0x806F2348; // segment:audio_context size:0x8
-D_806F2350 = 0x806F2350; // segment:audio_context size:0x6C
-gAudioCustomUpdateFunction = 0x806F2320; // segment:audio_context
-
 gCourseInfos = 0x802BB140; //segment:unk_context size:0x3480
 gRacers = 0x802D2F20; //segment:unk_context size:0x6DB0
 
-D_806F2400 = 0x806F2400; //segment:unk_custom size:0x3E0
+gCustomMachinesInfo = 0x806F2400; //segment:custom_machine_info size:0x3E0
 
 D_807B3C20 = 0x807B3C20; // size:0x2904
 D_807B6528 = 0x807B6528; // size:0x2904

@@ -1,4 +1,5 @@
 #include "global.h"
+#include "assets/segment_21C170.h"
 
 u8 D_xk2_80104280[] = {
     255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
@@ -25,14 +26,12 @@ Gfx* func_xk2_800ED954(Gfx* gfx, s32 arg1, s32 arg2, u8 arg3) {
     return gfx;
 }
 
-extern u8 D_9003408[];
-
 void func_xk2_800EDA34(Gfx** gfxP) {
     Gfx* gfx;
 
     gfx = *gfxP;
 
-    gDPLoadTextureBlock_4b(gfx++, D_9003408, G_IM_FMT_I, 64, 32, 0, G_TX_NOMIRROR | G_TX_WRAP,
+    gDPLoadTextureBlock_4b(gfx++, aCourseEditInfoFontSheetTex, G_IM_FMT_I, 64, 32, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
     *gfxP = gfx;
@@ -49,7 +48,7 @@ void func_xk2_800EDAD0(Gfx** gfxP, s32 xPos, s32 yPos, const char* fmt, ...) {
 
     gfx = *gfxP;
 
-    gDPLoadTextureBlock_4b(gfx++, D_9003408, G_IM_FMT_I, 64, 32, 0, G_TX_NOMIRROR | G_TX_WRAP,
+    gDPLoadTextureBlock_4b(gfx++, aCourseEditInfoFontSheetTex, G_IM_FMT_I, 64, 32, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
     charRemaining = _Printf(func_xk2_800ED930, buffer, fmt, args);

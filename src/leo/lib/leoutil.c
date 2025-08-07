@@ -53,7 +53,7 @@ u16 leoLba_to_phys(u32 lba) {
     // Calculate Physical Cylinder
     if (LEOtgt_param.head != 0) {
         LEOtgt_param.cylinder = pzone_cylinder_start - zone_cylinder;
-        pzone_cylinder_start = LEOZONE_OUTERCYL_TBL[LEOtgt_param.zone - 0];
+        pzone_cylinder_start = LEOZONE_OUTERCYL_TBL[LEOtgt_param.zone - 1];
     } else {
         LEOtgt_param.cylinder = pzone_cylinder_start + zone_cylinder;
     }

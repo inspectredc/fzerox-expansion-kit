@@ -1,5 +1,7 @@
 #include "global.h"
 #include "leo/leo_functions.h"
+#include "assets/segment_1FB850.h"
+#include "assets/segment_21C170.h"
 
 s32 D_xk2_80128CA0;
 s32 D_xk2_80128CA4;
@@ -96,7 +98,7 @@ Gfx* func_xk2_800EE158(Gfx* gfx) {
         case 1:
         case 2:
         case 3:
-            func_xk1_8002C720(&gfx, sp12C, (D_xk2_80104360 * 0x10) + 0x38, D_xk1_8003A5D8[D_xk2_80119884].unk_00,
+            func_xk1_8002C720(&gfx, sp12C, (D_xk2_80104360 * 0x10) + 0x38, D_xk1_8003A5D8[D_xk2_80119884].name,
                               D_xk2_80104378 - 1);
             D_xk2_80104360++;
             return gfx;
@@ -109,7 +111,7 @@ Gfx* func_xk2_800EE158(Gfx* gfx) {
 
 extern u8* D_xk1_8003339C[];
 extern u8 D_xk2_80104CA0[];
-extern s32 D_xk2_800F6828;
+extern s32 gCourseEditCursorYPos;
 
 Gfx* func_xk2_800EE268(Gfx* gfx) {
     s32 i;
@@ -123,13 +125,13 @@ Gfx* func_xk2_800EE268(Gfx* gfx) {
             continue;
         }
 
-        temp_v0 = Leo_strlen(D_xk1_8003339C[i]);
+        temp_v0 = mfsStrLen(D_xk1_8003339C[i]);
         width = temp_v0 * 8;
         left = func_xk2_800EE578(temp_v0);
 
         top = (D_xk2_80104360 * 0x10) + 0x38;
-        if ((D_xk2_800F6828 + 0x10) >= top) {
-            if ((top + 0x10) >= D_xk2_800F6828) {
+        if ((gCourseEditCursorYPos + 0x10) >= top) {
+            if ((top + 0x10) >= gCourseEditCursorYPos) {
                 D_xk2_80104360 += 2;
             }
         }
@@ -157,7 +159,7 @@ Gfx* func_xk2_800EE268(Gfx* gfx) {
     return gfx;
 }
 
-extern s32 D_xk2_800F6824;
+extern s32 gCourseEditCursorXPos;
 extern s32 D_xk2_800F703C;
 
 s32 func_xk2_800EE578(s32 arg0) {
@@ -173,7 +175,7 @@ s32 func_xk2_800EE578(s32 arg0) {
     if (var_a1 < D_xk2_80128CA4) {
         var_a1 = D_xk2_80128CA4;
     }
-    if ((D_xk2_800F6824 > 0xE0) && (D_xk2_800F703C != -1)) {
+    if ((gCourseEditCursorXPos > 0xE0) && (D_xk2_800F703C != -1)) {
         var_a1 = D_xk2_80128CA0 + 0x20;
         if (((arg0 * 8) + var_a1) > 0x128) {
             var_a1 = (((0x22 - arg0) / 2) * 8) + 0x18;
@@ -194,7 +196,6 @@ void func_xk2_800EE664(s32 arg0) {
 }
 
 extern Gfx D_8014940[];
-extern u16 D_9002788[];
 extern s32 D_8076C960;
 
 void func_xk2_800EE67C(Gfx** gfxP) {
@@ -219,16 +220,15 @@ void func_xk2_800EE67C(Gfx** gfxP) {
 
     if (D_8076C960 != 0) {
         gSPDisplayList(gfx++, D_8014940);
-        gDPLoadTextureBlock(gfx++, D_9002788, G_IM_FMT_RGBA, G_IM_SIZ_16b, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+        gDPLoadTextureBlock(gfx++, aCourseEditQuestionIconTex, G_IM_FMT_RGBA, G_IM_SIZ_16b, 16, 16, 0,
+                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                            G_TX_NOLOD);
 
         gSPTextureRectangle(gfx++, left << 2, top << 2, (left + width) << 2, (top + height) << 2, 0, 0, 0, 1 << 10,
                             1 << 10);
     }
     *gfxP = gfx;
 }
-
-extern u16 D_7004900[];
 
 void func_xk2_800EE8A0(Gfx** gfxP) {
     Gfx* gfx;
@@ -242,7 +242,7 @@ void func_xk2_800EE8A0(Gfx** gfxP) {
         return;
     }
 
-    temp_v0 = Leo_strlen(D_xk1_800331F0[12]);
+    temp_v0 = mfsStrLen(D_xk1_800331F0[12]);
     width = temp_v0 * 8;
 
     left = 0x22 - temp_v0;
@@ -268,7 +268,7 @@ void func_xk2_800EE8A0(Gfx** gfxP) {
     gDPSetPrimColor(gfx++, 0, 0, 255, 0, 0, 255);
 
     gfx = func_xk1_800264C0(gfx, left, top, 12);
-    left = 0x22 - Leo_strlen(D_xk1_800331F0[13]);
+    left = 0x22 - mfsStrLen(D_xk1_800331F0[13]);
     left = ((left / 2) * 8) + 0x18;
     top = 104;
 
@@ -282,8 +282,9 @@ void func_xk2_800EE8A0(Gfx** gfxP) {
     gDPPipeSync(gfx++);
     gDPSetCombineMode(gfx++, G_CC_DECALRGBA, G_CC_DECALRGBA);
 
-    gDPLoadTextureBlock(gfx++, D_7004900, G_IM_FMT_RGBA, G_IM_SIZ_16b, 16, 32, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    gDPLoadTextureBlock(gfx++, aExpansionKitABButtonTex, G_IM_FMT_RGBA, G_IM_SIZ_16b, 16, 32, 0,
+                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                        G_TX_NOLOD);
 
     top += 24;
     left += 0x70;
@@ -313,7 +314,7 @@ void func_xk2_800EECD4(Gfx** gfxP, s32 left, s32 top, s8* arg3, s32 arg4) {
     do {
         if (1) {}
         temp_s0 = func_xk2_800EE0EC(spBC, &sp1BC);
-        temp_v0 = Leo_strlen(spBC);
+        temp_v0 = mfsStrLen(spBC);
         temp_v1 = (((0x22 - temp_v0) / 2) * 8) + 0x18;
         if (temp_v1 < var_s4) {
             var_s4 = temp_v1;

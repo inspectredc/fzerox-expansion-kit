@@ -2,19 +2,20 @@
 #include "fzx_game.h"
 #include "fzx_racer.h"
 #include "fzx_course.h"
+#include "fzx_bordered_box.h"
 #include "fzx_assets.h"
 #include "assets/overlays/ovl_i8/records.h"
 
 s32 D_800A1EF0;
 s32 sUnlockedCourseCount;
 s16 D_i8_800A1EF8[5];
-unk_800E51B8* D_i8_800A1F04;
-unk_800E51B8* D_i8_800A1F08;
-unk_800E51B8* D_i8_800A1F0C;
-unk_800E51B8* D_i8_800A1F10;
-unk_800E51B8* D_i8_800A1F14;
-unk_800E51B8* D_i8_800A1F18;
-unk_800E51B8* D_i8_800A1F1C;
+BorderedBoxWidget* D_i8_800A1F04;
+BorderedBoxWidget* D_i8_800A1F08;
+BorderedBoxWidget* D_i8_800A1F0C;
+BorderedBoxWidget* D_i8_800A1F10;
+BorderedBoxWidget* D_i8_800A1F14;
+BorderedBoxWidget* D_i8_800A1F18;
+BorderedBoxWidget* D_i8_800A1F1C;
 s16 D_i8_800A1F20;
 s16 D_i8_800A1F22;
 s16 D_i8_800A1F24;
@@ -233,14 +234,14 @@ void func_i8_8009B348(void) {
     func_i2_800AE7C4(aMenuNoGamePakTex, TEX_SIZE(aMenuNoGamePakTex, sizeof(u8)), 0, 1, false);
     func_i2_800AE7C4(aMenuNoDiskTex, TEX_SIZE(aMenuNoDiskTex, sizeof(u8)), 0, 1, false);
     func_i3_80064F20();
-    func_80711170(&D_i8_800A1F04);
-    func_80711170(&D_i8_800A1F08);
-    func_80711170(&D_i8_800A1F10);
-    func_80711170(&D_i8_800A1F14);
-    func_80711170(&D_i8_800A1F18);
-    func_80711170(&D_i8_800A1F1C);
-    func_80711170(&D_i8_800A1F0C);
-    func_80711178();
+    BorderedBox_CleanWidget(&D_i8_800A1F04);
+    BorderedBox_CleanWidget(&D_i8_800A1F08);
+    BorderedBox_CleanWidget(&D_i8_800A1F10);
+    BorderedBox_CleanWidget(&D_i8_800A1F14);
+    BorderedBox_CleanWidget(&D_i8_800A1F18);
+    BorderedBox_CleanWidget(&D_i8_800A1F1C);
+    BorderedBox_CleanWidget(&D_i8_800A1F0C);
+    BorderedBox_ClearAll();
 }
 
 bool func_i8_8009B704(s32 courseIndex) {
@@ -334,7 +335,7 @@ s32 Records_Update(void) {
         func_i8_8009C708();
     }
     func_i3_80065204();
-    func_80711414();
+    BorderedBox_Update();
     gameMode = GAMEMODE_RECORDS;
     sp1C = 0;
     if (D_i8_800A1F30 == 0) {
@@ -421,13 +422,13 @@ s32 func_i8_8009BB60(void) {
     if (D_800BEE14 != 0) {
         return 0;
     }
-    if (func_80711AC0(D_i8_800A1F04, 0) != 0) {
+    if (BorderedBox_GetInfo(D_i8_800A1F04, IS_BORDERED_BOX_ACTIVE)) {
         return 0;
     }
-    if (func_80711AC0(D_i8_800A1F10, 0) != 0) {
+    if (BorderedBox_GetInfo(D_i8_800A1F10, IS_BORDERED_BOX_ACTIVE)) {
         return 0;
     }
-    if (func_80711AC0(D_i8_800A1F0C, 0) != 0) {
+    if (BorderedBox_GetInfo(D_i8_800A1F0C, IS_BORDERED_BOX_ACTIVE)) {
         return 0;
     }
 
@@ -484,7 +485,7 @@ s32 func_i8_8009BB60(void) {
     }
     if (sp30 == 0) {
         if (gInputButtonPressed & (BTN_A | BTN_START)) {
-            D_i8_800A1F04 = func_807112A0(0, 108, 50, 104, 120, 10, GPACK_RGBA5551(0, 255, 0, 1), func_i8_8009CA7C);
+            D_i8_800A1F04 = BorderedBox_Init(0, 108, 50, 104, 120, 10, GPACK_RGBA5551(0, 255, 0, 1), func_i8_8009CA7C);
             if (D_i8_800A1F04 != NULL) {
                 D_800A1EF0 = 1;
                 D_i8_800A1F20 = 0;
@@ -510,7 +511,7 @@ s32 func_i8_8009BE14(void) {
     s32 temp_a3;
     bool var_a2;
 
-    if (func_80711AC0(D_i8_800A1F04, 1) == 0) {
+    if (!BorderedBox_GetInfo(D_i8_800A1F04, IS_BORDERED_BOX_OPENED)) {
         return 0;
     }
     sp2C = 0;
@@ -556,7 +557,7 @@ s32 func_i8_8009BE14(void) {
                 }
 
                 D_i8_800A1F08 =
-                    func_807112A0(1, 120, var_v0, 148, 80, 20, GPACK_RGBA5551(255, 0, 0, 1), func_i8_8009CC30);
+                    BorderedBox_Init(1, 120, var_v0, 148, 80, 20, GPACK_RGBA5551(255, 0, 0, 1), func_i8_8009CC30);
 
                 var_t0 = false;
                 if (D_i8_800A1F08 != NULL) {
@@ -566,7 +567,8 @@ s32 func_i8_8009BE14(void) {
                 }
                 break;
             case 4:
-                D_i8_800A1F10 = func_807112A0(3, 40, 46, 168, 122, 30, GPACK_RGBA5551(0, 0, 255, 1), func_i8_8009D0E8);
+                D_i8_800A1F10 =
+                    BorderedBox_Init(3, 40, 46, 168, 122, 30, GPACK_RGBA5551(0, 0, 255, 1), func_i8_8009D0E8);
 
                 var_t0 = false;
                 if (D_i8_800A1F10 != NULL) {
@@ -624,7 +626,7 @@ s32 func_i8_8009BE14(void) {
     } else if (gInputButtonPressed & BTN_B) {
         D_800A1EF0 = 0;
         func_i3_80067118(1);
-        func_807113DC(D_i8_800A1F04);
+        BorderedBox_StartClose(D_i8_800A1F04);
         func_8074122C(0x10);
     }
     return sp2C;
@@ -634,7 +636,7 @@ void func_i8_8009C26C(void) {
     s32 sp1C;
     bool sp18;
 
-    if (func_80711AC0(D_i8_800A1F08, 1) != 0) {
+    if (BorderedBox_GetInfo(D_i8_800A1F08, IS_BORDERED_BOX_OPENED)) {
         sp1C = D_i8_800A1F26;
         if (gInputPressed & BTN_LEFT) {
             D_i8_800A1F26--;
@@ -678,16 +680,16 @@ void func_i8_8009C26C(void) {
         }
         if (sp18) {
             D_800A1EF0 = 1;
-            func_807113DC(D_i8_800A1F08);
+            BorderedBox_StartClose(D_i8_800A1F08);
         }
     }
 }
 
 void func_i8_8009C44C(void) {
-    if (func_80711AC0(D_i8_800A1F0C, 1) && (gInputButtonPressed & BTN_B)) {
+    if (BorderedBox_GetInfo(D_i8_800A1F0C, IS_BORDERED_BOX_OPENED) && (gInputButtonPressed & BTN_B)) {
         D_800A1EF0 = 0;
         func_i3_80067118(1);
-        func_807113DC(D_i8_800A1F0C);
+        BorderedBox_StartClose(D_i8_800A1F0C);
         func_8074122C(0x10);
     }
 }
@@ -731,7 +733,7 @@ Gfx* Records_Draw(Gfx* gfx) {
     if (D_i8_800A1F2A != 0) {
         gfx = func_i8_8009C900(gfx);
     }
-    return func_80711698(gfx);
+    return BorderedBox_Draw(gfx);
 }
 
 void func_i8_8009C708(void) {
@@ -873,12 +875,13 @@ void func_i8_8009CE64(void) {
     s32 temp;
     s32 var_v1;
 
-    if ((func_80711AC0(D_i8_800A1F10, 1) != 0) && (func_80711AC0(D_i8_800A1F14, 0) == 0)) {
+    if ((BorderedBox_GetInfo(D_i8_800A1F10, IS_BORDERED_BOX_OPENED)) &&
+        (!BorderedBox_GetInfo(D_i8_800A1F14, IS_BORDERED_BOX_ACTIVE))) {
         temp = D_i8_800A2050;
         if (D_i8_800A2050 == -1) {
             if (gInputButtonPressed & BTN_B) {
                 D_800A1EF0 = 1;
-                func_807113DC(D_i8_800A1F10);
+                BorderedBox_StartClose(D_i8_800A1F10);
                 func_8074122C(0x10);
             }
         } else {
@@ -911,7 +914,8 @@ void func_i8_8009CE64(void) {
                 func_8074122C(0x1E);
             }
             if (gInputButtonPressed & (BTN_A | BTN_START)) {
-                D_i8_800A1F14 = func_807112A0(4, 120, 60, 148, 72, 40, GPACK_RGBA5551(0, 0, 255, 1), &func_i8_8009D6A4);
+                D_i8_800A1F14 =
+                    BorderedBox_Init(4, 120, 60, 148, 72, 40, GPACK_RGBA5551(0, 0, 255, 1), func_i8_8009D6A4);
 
                 if (D_i8_800A1F14 != NULL) {
                     D_800A1EF0 = 5;
@@ -930,7 +934,7 @@ void func_i8_8009CE64(void) {
             if (gInputButtonPressed & BTN_B) {
                 D_800A1EF0 = 1;
                 func_80704810(1);
-                func_807113DC(D_i8_800A1F10);
+                BorderedBox_StartClose(D_i8_800A1F10);
                 func_8074122C(0x10);
             }
         }
@@ -1001,7 +1005,8 @@ void func_i8_8009D430(void) {
     s32 temp;
     s16 sp20[2];
 
-    if (func_80711AC0(D_i8_800A1F14, 1) && !func_80711AC0(D_i8_800A1F18, 0)) {
+    if (BorderedBox_GetInfo(D_i8_800A1F14, IS_BORDERED_BOX_OPENED) &&
+        !BorderedBox_GetInfo(D_i8_800A1F18, IS_BORDERED_BOX_ACTIVE)) {
         sp20[0] = D_i8_800A2090[0];
         sp20[1] = -0x1181;
         temp = D_i8_800A2052;
@@ -1035,7 +1040,7 @@ void func_i8_8009D430(void) {
         }
         if (gInputButtonPressed & BTN_B) {
             D_800A1EF0 = 4;
-            func_807113DC(D_i8_800A1F14);
+            BorderedBox_StartClose(D_i8_800A1F14);
             func_8074122C(0x10);
         }
     }
@@ -1045,14 +1050,14 @@ void func_i8_8009D5B8(s32 arg0) {
     s32 temp_v1;
     s32 temp_t0;
     unk_8009E224* temp_v0;
-    unk_800E51B8* temp_v0_2;
+    BorderedBoxWidget* temp_v0_2;
 
     D_i8_800A2058 = arg0;
     temp_v0 = &D_i8_8009E264[D_i8_800A2058];
     temp_v1 = temp_v0->width + 20;
     temp_t0 = temp_v0->height + 20;
-    D_i8_800A1F1C = func_807112A0(6, (SCREEN_WIDTH - temp_v1) / 2, (SCREEN_HEIGHT - temp_t0) / 2, temp_v1, temp_t0, 60,
-                                  GPACK_RGBA5551(255, 255, 0, 1), func_i8_8009E0F0);
+    D_i8_800A1F1C = BorderedBox_Init(6, (SCREEN_WIDTH - temp_v1) / 2, (SCREEN_HEIGHT - temp_t0) / 2, temp_v1, temp_t0,
+                                     60, GPACK_RGBA5551(255, 255, 0, 1), func_i8_8009E0F0);
 
     if (D_i8_800A1F1C != NULL) {
         D_800A1EF0 = 7;
@@ -1107,7 +1112,8 @@ Gfx* func_i8_8009D6A4(Gfx* gfx, s32 arg1, s32 arg2) {
 void func_i8_8009D8A4(void) {
     s32 temp;
 
-    if (func_80711AC0(D_i8_800A1F18, 1) && !func_80711AC0(D_i8_800A1F1C, 0)) {
+    if (BorderedBox_GetInfo(D_i8_800A1F18, IS_BORDERED_BOX_OPENED) &&
+        !BorderedBox_GetInfo(D_i8_800A1F1C, IS_BORDERED_BOX_ACTIVE)) {
         temp = D_i8_800A2054;
         if (gInputPressed & BTN_UP) {
             D_i8_800A2054--;
@@ -1131,9 +1137,9 @@ void func_i8_8009D8A4(void) {
         if (gInputButtonPressed & BTN_B) {
             func_80704810(1);
             D_800A1EF0 = 1;
-            func_807113DC(D_i8_800A1F18);
-            func_807113DC(D_i8_800A1F14);
-            func_807113DC(D_i8_800A1F10);
+            BorderedBox_StartClose(D_i8_800A1F18);
+            BorderedBox_StartClose(D_i8_800A1F14);
+            BorderedBox_StartClose(D_i8_800A1F10);
             func_8074122C(0x10);
         }
     }
@@ -1205,7 +1211,7 @@ void func_i8_8009DCC8(void) {
     bool var_a2;
     s32 temp_a3;
 
-    if (func_80711AC0(D_i8_800A1F1C, 1)) {
+    if (BorderedBox_GetInfo(D_i8_800A1F1C, IS_BORDERED_BOX_OPENED)) {
         switch (D_i8_800A2058) {
             case 0:
                 if (D_i8_800A2056 < 1000) {
@@ -1223,12 +1229,12 @@ void func_i8_8009DCC8(void) {
                 if (D_i8_800A2056 >= 60) {
                     func_80704810(1);
                     D_800A1EF0 = 1;
-                    func_807113DC(D_i8_800A1F1C);
+                    BorderedBox_StartClose(D_i8_800A1F1C);
                     if (D_i8_800A2054 != 0) {
-                        func_807113DC(D_i8_800A1F18);
+                        BorderedBox_StartClose(D_i8_800A1F18);
                     }
-                    func_807113DC(D_i8_800A1F14);
-                    func_807113DC(D_i8_800A1F10);
+                    BorderedBox_StartClose(D_i8_800A1F14);
+                    BorderedBox_StartClose(D_i8_800A1F10);
                 }
                 break;
             case 1:
@@ -1262,12 +1268,12 @@ void func_i8_8009DCC8(void) {
                         }
                     }
                     D_i8_800A1F18 =
-                        func_807112A0(5, 130, 126, 168, 72, 50, GPACK_RGBA5551(0, 0, 255, 1), &func_i8_8009D9D8);
+                        BorderedBox_Init(5, 130, 126, 168, 72, 50, GPACK_RGBA5551(0, 0, 255, 1), func_i8_8009D9D8);
 
                     if (D_i8_800A1F18 != NULL) {
                         D_800A1EF0 = 6;
                         D_i8_800A2054 = 1;
-                        func_807113DC(D_i8_800A1F1C);
+                        BorderedBox_StartClose(D_i8_800A1F1C);
                     }
                     func_8074122C(0x21);
                 }

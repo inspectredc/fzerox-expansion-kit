@@ -4931,7 +4931,7 @@ Gfx* Machine_DrawSuperCatLod5(Gfx* gfx) {
 }
 
 extern s16 D_8076E5A4;
-extern s16 D_8076E5A8;
+extern s16 gGreyscaleMachinePart;
 extern f32 gBodyHealthValues[];
 extern OSMesgQueue D_8079A0F0;
 void func_i2_800A9AE0(s32);
@@ -4977,7 +4977,7 @@ Gfx* Machine_DrawBlueFalconLod1(Gfx* gfx) {
     gSP2Triangles(gfx++, 13, 16, 14, 0, 17, 18, 19, 0);
 
     gDPPipeSync(gfx++);
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetPrimColor(gfx++, 0, 0, 228, 228, 228, 255);
     } else {
         gDPSetPrimColor(gfx++, 0, 0, 255, 255, 0, 255);
@@ -5068,7 +5068,7 @@ Gfx* Machine_DrawBlueFalconLod1(Gfx* gfx) {
 
     gDPPipeSync(gfx++);
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetPrimColor(gfx++, 0, 0, 232, 232, 232, 255);
         gDPSetEnvColor(gfx++, 81, 81, 81, 255);
     } else {
@@ -5413,7 +5413,7 @@ Gfx* Machine_DrawGoldenFoxLod1(Gfx* gfx) {
 
     gDPPipeSync(gfx++);
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetPrimColor(gfx++, 0, 0, 203, 203, 203, 255);
         gDPSetEnvColor(gfx++, 34, 34, 34, 255);
     } else {
@@ -5732,7 +5732,7 @@ Gfx* Machine_DrawWildGooseLod1(Gfx* gfx) {
 
     gDPPipeSync(gfx++);
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetEnvColor(gfx++, 204, 204, 204, 255);
     } else {
         gDPSetEnvColor(gfx++, 255, 215, 0, 255);
@@ -5766,7 +5766,7 @@ Gfx* Machine_DrawWildGooseLod1(Gfx* gfx) {
 
     gDPPipeSync(gfx++);
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetPrimColor(gfx++, 0, 0, 203, 203, 203, 255);
         gDPSetEnvColor(gfx++, 34, 34, 34, 255);
     } else {
@@ -6097,7 +6097,7 @@ Gfx* Machine_DrawFireStingrayLod1(Gfx* gfx) {
 
     gDPPipeSync(gfx++);
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetPrimColor(gfx++, 0, 0, 203, 203, 203, 255);
         gDPSetEnvColor(gfx++, 34, 34, 34, 255);
     } else {
@@ -6404,7 +6404,7 @@ Gfx* Machine_DrawWhiteCatLod1(Gfx* gfx) {
 
     gDPPipeSync(gfx++);
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetPrimColor(gfx++, 0, 0, 203, 203, 203, 255);
         gDPSetEnvColor(gfx++, 34, 34, 34, 255);
     } else {
@@ -6420,7 +6420,7 @@ Gfx* Machine_DrawWhiteCatLod1(Gfx* gfx) {
 
     gDPPipeSync(gfx++);
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetEnvColor(gfx++, 77, 77, 77, 255);
     } else {
         gDPSetEnvColor(gfx++, 255, 0, 0, 255);
@@ -6660,7 +6660,7 @@ Gfx* Machine_DrawWhiteCatLod5(Gfx* gfx) {
 
 Gfx* Machine_DrawRedGazelleLod1(Gfx* gfx) {
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetPrimColor(gfx++, 0, 0, 228, 228, 228, 255);
     } else {
         gDPSetPrimColor(gfx++, 0, 0, 255, 255, 0, 255);
@@ -6748,7 +6748,7 @@ Gfx* Machine_DrawRedGazelleLod1(Gfx* gfx) {
 
     gDPPipeSync(gfx++);
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetPrimColor(gfx++, 0, 0, 203, 203, 203, 255);
         gDPSetEnvColor(gfx++, 34, 34, 34, 255);
     } else {
@@ -7060,7 +7060,7 @@ Gfx* Machine_DrawWonderWaspLod1(Gfx* gfx) {
 
     gDPPipeSync(gfx++);
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetPrimColor(gfx++, 0, 0, 203, 203, 203, 255);
         gDPSetEnvColor(gfx++, 34, 34, 34, 255);
     } else {
@@ -7078,7 +7078,7 @@ Gfx* Machine_DrawWonderWaspLod1(Gfx* gfx) {
 
     gDPPipeSync(gfx++);
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetEnvColor(gfx++, 228, 228, 228, 255);
     } else {
         gDPSetEnvColor(gfx++, 255, 255, 0, 255);
@@ -7397,7 +7397,7 @@ Gfx* Machine_DrawIronTigerLod1(Gfx* gfx) {
 
     gDPPipeSync(gfx++);
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetPrimColor(gfx++, 0, 0, 203, 203, 203, 255);
         gDPSetEnvColor(gfx++, 34, 34, 34, 255);
     } else {
@@ -7665,7 +7665,7 @@ Gfx* Machine_DrawIronTigerLod5(Gfx* gfx) {
 
 Gfx* Machine_DrawDeepClawLod1(Gfx* gfx) {
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetPrimColor(gfx++, 0, 0, 228, 228, 228, 255);
     } else {
         gDPSetPrimColor(gfx++, 0, 0, 255, 255, 0, 255);
@@ -7745,7 +7745,7 @@ Gfx* Machine_DrawDeepClawLod1(Gfx* gfx) {
 
     gDPPipeSync(gfx++);
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetPrimColor(gfx++, 0, 0, 203, 203, 203, 255);
         gDPSetEnvColor(gfx++, 34, 34, 34, 255);
     } else {
@@ -7998,7 +7998,7 @@ Gfx* Machine_DrawTwinNorittaLod1(Gfx* gfx) {
 
     gDPPipeSync(gfx++);
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetPrimColor(gfx++, 0, 0, 23, 23, 23, 255);
     } else {
         gDPSetPrimColor(gfx++, 0, 0, 0, 26, 68, 255);
@@ -8071,7 +8071,7 @@ Gfx* Machine_DrawTwinNorittaLod1(Gfx* gfx) {
 
     gDPPipeSync(gfx++);
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetPrimColor(gfx++, 0, 0, 232, 232, 232, 255);
         gDPSetEnvColor(gfx++, 81, 81, 81, 255);
     } else {
@@ -8332,7 +8332,7 @@ Gfx* Machine_DrawTwinNorittaLod5(Gfx* gfx) {
 
 Gfx* Machine_DrawSuperPiranhaLod1(Gfx* gfx) {
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetPrimColor(gfx++, 0, 0, 77, 77, 77, 255);
     } else {
         gDPSetPrimColor(gfx++, 0, 0, 255, 0, 0, 255);
@@ -8394,7 +8394,7 @@ Gfx* Machine_DrawSuperPiranhaLod1(Gfx* gfx) {
 
     gDPPipeSync(gfx++);
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetPrimColor(gfx++, 0, 0, 203, 203, 203, 255);
         gDPSetEnvColor(gfx++, 34, 34, 34, 255);
     } else {
@@ -8410,7 +8410,7 @@ Gfx* Machine_DrawSuperPiranhaLod1(Gfx* gfx) {
 
     gDPPipeSync(gfx++);
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetEnvColor(gfx++, 77, 77, 77, 255);
     } else {
         gDPSetEnvColor(gfx++, 255, 0, 0, 255);
@@ -8679,7 +8679,7 @@ Gfx* Machine_DrawSuperPiranhaLod5(Gfx* gfx) {
 
 Gfx* Machine_DrawMightyHurricaneLod1(Gfx* gfx) {
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetPrimColor(gfx++, 0, 0, 228, 228, 228, 255);
     } else {
         gDPSetPrimColor(gfx++, 0, 0, 255, 255, 0, 255);
@@ -8765,7 +8765,7 @@ Gfx* Machine_DrawMightyHurricaneLod1(Gfx* gfx) {
 
     gDPPipeSync(gfx++);
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetPrimColor(gfx++, 0, 0, 114, 114, 114, 255);
         gDPSetEnvColor(gfx++, 23, 23, 23, 255);
     } else {
@@ -9079,7 +9079,7 @@ Gfx* Machine_DrawLittleWyvernLod1(Gfx* gfx) {
 
     gDPPipeSync(gfx++);
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetPrimColor(gfx++, 0, 0, 232, 232, 232, 255);
         gDPSetEnvColor(gfx++, 81, 81, 81, 255);
     } else {
@@ -9096,7 +9096,7 @@ Gfx* Machine_DrawLittleWyvernLod1(Gfx* gfx) {
 
     gDPPipeSync(gfx++);
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetEnvColor(gfx++, 24, 24, 24, 255);
     } else {
         gDPSetEnvColor(gfx++, 6, 18, 105, 255);
@@ -9372,7 +9372,7 @@ Gfx* Machine_DrawLittleWyvernLod5(Gfx* gfx) {
 
 Gfx* Machine_DrawSpaceAnglerLod1(Gfx* gfx) {
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetPrimColor(gfx++, 0, 0, 16, 16, 16, 255);
     } else {
         gDPSetPrimColor(gfx++, 0, 0, 0, 0, 150, 255);
@@ -9440,7 +9440,7 @@ Gfx* Machine_DrawSpaceAnglerLod1(Gfx* gfx) {
 
     gDPPipeSync(gfx++);
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetPrimColor(gfx++, 0, 0, 114, 114, 114, 255);
         gDPSetEnvColor(gfx++, 23, 23, 23, 255);
     } else {
@@ -9754,7 +9754,7 @@ Gfx* Machine_DrawGreenPantherLod1(Gfx* gfx) {
 
     gDPPipeSync(gfx++);
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetPrimColor(gfx++, 0, 0, 232, 232, 232, 255);
         gDPSetEnvColor(gfx++, 81, 81, 81, 255);
     } else {
@@ -10007,7 +10007,7 @@ Gfx* Machine_DrawBlackBullLod1(Gfx* gfx) {
 
     gDPPipeSync(gfx++);
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetPrimColor(gfx++, 0, 0, 77, 77, 77, 255);
     } else {
         gDPSetPrimColor(gfx++, 0, 0, 255, 0, 0, 255);
@@ -10342,7 +10342,7 @@ Gfx* Machine_DrawBlackBullLod5(Gfx* gfx) {
 
 Gfx* Machine_DrawWildBoarLod1(Gfx* gfx) {
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetPrimColor(gfx++, 0, 0, 15, 15, 15, 255);
     } else {
         gDPSetPrimColor(gfx++, 0, 0, 50, 0, 0, 255);
@@ -10421,7 +10421,7 @@ Gfx* Machine_DrawWildBoarLod1(Gfx* gfx) {
 
     gDPPipeSync(gfx++);
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetPrimColor(gfx++, 0, 0, 203, 203, 203, 255);
         gDPSetEnvColor(gfx++, 34, 34, 34, 255);
     } else {
@@ -10678,7 +10678,7 @@ Gfx* Machine_DrawWildBoarLod5(Gfx* gfx) {
 
 Gfx* Machine_DrawAstroRobinLod1(Gfx* gfx) {
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetPrimColor(gfx++, 0, 0, 228, 228, 228, 255);
     } else {
         gDPSetPrimColor(gfx++, 0, 0, 255, 255, 0, 255);
@@ -10760,7 +10760,7 @@ Gfx* Machine_DrawAstroRobinLod1(Gfx* gfx) {
 
     gDPPipeSync(gfx++);
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetPrimColor(gfx++, 0, 0, 232, 232, 232, 255);
         gDPSetEnvColor(gfx++, 81, 81, 81, 255);
     } else {
@@ -11028,7 +11028,7 @@ Gfx* Machine_DrawAstroRobinLod5(Gfx* gfx) {
 
 Gfx* Machine_DrawKingMeteorLod1(Gfx* gfx) {
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetPrimColor(gfx++, 0, 0, 194, 194, 194, 255);
     } else {
         gDPSetPrimColor(gfx++, 0, 0, 101, 229, 255, 255);
@@ -11104,7 +11104,7 @@ Gfx* Machine_DrawKingMeteorLod1(Gfx* gfx) {
 
     gDPPipeSync(gfx++);
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetPrimColor(gfx++, 0, 0, 203, 203, 203, 255);
         gDPSetEnvColor(gfx++, 34, 34, 34, 255);
     } else {
@@ -11377,7 +11377,7 @@ Gfx* Machine_DrawQueenMeteorLod1(Gfx* gfx) {
 
     gDPPipeSync(gfx++);
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetPrimColor(gfx++, 0, 0, 194, 194, 194, 255);
     } else {
         gDPSetPrimColor(gfx++, 0, 0, 101, 229, 255, 255);
@@ -11449,7 +11449,7 @@ Gfx* Machine_DrawQueenMeteorLod1(Gfx* gfx) {
 
     gDPPipeSync(gfx++);
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetPrimColor(gfx++, 0, 0, 203, 203, 203, 255);
         gDPSetEnvColor(gfx++, 34, 34, 34, 255);
     } else {
@@ -11715,7 +11715,7 @@ Gfx* Machine_DrawQueenMeteorLod5(Gfx* gfx) {
 
 Gfx* Machine_DrawGreatStarLod1(Gfx* gfx) {
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetPrimColor(gfx++, 0, 0, 228, 228, 228, 255);
     } else {
         gDPSetPrimColor(gfx++, 0, 0, 255, 255, 0, 255);
@@ -11730,7 +11730,7 @@ Gfx* Machine_DrawGreatStarLod1(Gfx* gfx) {
 
     gDPPipeSync(gfx++);
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetPrimColor(gfx++, 0, 0, 17, 17, 17, 255);
     } else {
         gDPSetPrimColor(gfx++, 0, 0, 10, 10, 70, 255);
@@ -11800,7 +11800,7 @@ Gfx* Machine_DrawGreatStarLod1(Gfx* gfx) {
 
     gDPPipeSync(gfx++);
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetPrimColor(gfx++, 0, 0, 232, 232, 232, 255);
         gDPSetEnvColor(gfx++, 81, 81, 81, 255);
     } else {
@@ -12091,7 +12091,7 @@ Gfx* Machine_DrawHyperSpeederLod1(Gfx* gfx) {
 
     gDPPipeSync(gfx++);
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetPrimColor(gfx++, 0, 0, 168, 168, 168, 255);
     } else {
         gDPSetPrimColor(gfx++, 0, 0, 255, 147, 33, 255);
@@ -12117,7 +12117,7 @@ Gfx* Machine_DrawHyperSpeederLod1(Gfx* gfx) {
 
     gDPPipeSync(gfx++);
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetPrimColor(gfx++, 0, 0, 181, 181, 181, 255);
     } else {
         gDPSetPrimColor(gfx++, 0, 0, 240, 180, 20, 255);
@@ -12153,7 +12153,7 @@ Gfx* Machine_DrawHyperSpeederLod1(Gfx* gfx) {
 
     gDPPipeSync(gfx++);
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetPrimColor(gfx++, 0, 0, 114, 114, 114, 255);
         gDPSetEnvColor(gfx++, 23, 23, 23, 255);
     } else {
@@ -12448,7 +12448,7 @@ Gfx* Machine_DrawDeathAnchorLod1(Gfx* gfx) {
 
     gDPPipeSync(gfx++);
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetPrimColor(gfx++, 0, 0, 228, 228, 228, 255);
     } else {
         gDPSetPrimColor(gfx++, 0, 0, 255, 255, 0, 255);
@@ -12468,7 +12468,7 @@ Gfx* Machine_DrawDeathAnchorLod1(Gfx* gfx) {
 
     gDPPipeSync(gfx++);
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetPrimColor(gfx++, 0, 0, 179, 179, 179, 255);
     } else {
         gDPSetPrimColor(gfx++, 0, 0, 0, 255, 255, 255);
@@ -12513,7 +12513,7 @@ Gfx* Machine_DrawDeathAnchorLod1(Gfx* gfx) {
 
     gDPPipeSync(gfx++);
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetPrimColor(gfx++, 0, 0, 203, 203, 203, 255);
         gDPSetEnvColor(gfx++, 34, 34, 34, 255);
     } else {
@@ -12773,7 +12773,7 @@ Gfx* Machine_DrawCrazyBearLod1(Gfx* gfx) {
 
     gDPPipeSync(gfx++);
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetPrimColor(gfx++, 0, 0, 33, 33, 33, 255);
     } else {
         gDPSetPrimColor(gfx++, 0, 0, 100, 0, 24, 255);
@@ -12796,7 +12796,7 @@ Gfx* Machine_DrawCrazyBearLod1(Gfx* gfx) {
 
     gDPPipeSync(gfx++);
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetPrimColor(gfx++, 0, 0, 12, 12, 12, 255);
     } else {
         gDPSetPrimColor(gfx++, 0, 0, 0, 0, 107, 255);
@@ -12858,7 +12858,7 @@ Gfx* Machine_DrawCrazyBearLod1(Gfx* gfx) {
 
     gDPPipeSync(gfx++);
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetPrimColor(gfx++, 0, 0, 203, 203, 203, 255);
         gDPSetEnvColor(gfx++, 34, 34, 34, 255);
     } else {
@@ -13145,7 +13145,7 @@ Gfx* Machine_DrawCrazyBearLod5(Gfx* gfx) {
 
 Gfx* Machine_DrawNightThunderLod1(Gfx* gfx) {
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetPrimColor(gfx++, 0, 0, 228, 228, 228, 255);
     } else {
         gDPSetPrimColor(gfx++, 0, 0, 255, 255, 0, 255);
@@ -13218,7 +13218,7 @@ Gfx* Machine_DrawNightThunderLod1(Gfx* gfx) {
 
     gDPPipeSync(gfx++);
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetPrimColor(gfx++, 0, 0, 203, 203, 203, 255);
         gDPSetEnvColor(gfx++, 34, 34, 34, 255);
     } else {
@@ -13484,7 +13484,7 @@ Gfx* Machine_DrawNightThunderLod5(Gfx* gfx) {
 
 Gfx* Machine_DrawBigFangLod1(Gfx* gfx) {
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetPrimColor(gfx++, 0, 0, 228, 228, 228, 255);
     } else {
         gDPSetPrimColor(gfx++, 0, 0, 255, 255, 0, 255);
@@ -13557,7 +13557,7 @@ Gfx* Machine_DrawBigFangLod1(Gfx* gfx) {
 
     gDPPipeSync(gfx++);
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetPrimColor(gfx++, 0, 0, 232, 232, 232, 255);
         gDPSetEnvColor(gfx++, 81, 81, 81, 255);
     } else {
@@ -13815,7 +13815,7 @@ Gfx* Machine_DrawBigFangLod5(Gfx* gfx) {
 
 Gfx* Machine_DrawMightyTyphoonLod1(Gfx* gfx) {
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetPrimColor(gfx++, 0, 0, 228, 228, 228, 255);
     } else {
         gDPSetPrimColor(gfx++, 0, 0, 255, 255, 0, 255);
@@ -13904,7 +13904,7 @@ Gfx* Machine_DrawMightyTyphoonLod1(Gfx* gfx) {
 
     gDPPipeSync(gfx++);
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetPrimColor(gfx++, 0, 0, 114, 114, 114, 255);
         gDPSetEnvColor(gfx++, 23, 23, 23, 255);
     } else {
@@ -14183,7 +14183,7 @@ Gfx* Machine_DrawMadWolfLod1(Gfx* gfx) {
 
     gDPPipeSync(gfx++);
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetPrimColor(gfx++, 0, 0, 77, 77, 77, 255);
     } else {
         gDPSetPrimColor(gfx++, 0, 0, 89, 84, 0, 255);
@@ -14205,7 +14205,7 @@ Gfx* Machine_DrawMadWolfLod1(Gfx* gfx) {
 
     gDPPipeSync(gfx++);
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetPrimColor(gfx++, 0, 0, 28, 28, 28, 255);
     } else {
         gDPSetPrimColor(gfx++, 0, 0, 0, 0, 255, 255);
@@ -14253,7 +14253,7 @@ Gfx* Machine_DrawMadWolfLod1(Gfx* gfx) {
 
     gDPPipeSync(gfx++);
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetPrimColor(gfx++, 0, 0, 203, 203, 203, 255);
         gDPSetEnvColor(gfx++, 34, 34, 34, 255);
     } else {
@@ -14593,7 +14593,7 @@ Gfx* Machine_DrawSonicPhantomLod1(Gfx* gfx) {
 
     gDPPipeSync(gfx++);
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetPrimColor(gfx++, 0, 0, 114, 114, 114, 255);
         gDPSetEnvColor(gfx++, 23, 23, 23, 255);
     } else {
@@ -14846,7 +14846,7 @@ Gfx* Machine_DrawBloodHawkLod1(Gfx* gfx) {
 
     gDPPipeSync(gfx++);
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetPrimColor(gfx++, 0, 0, 203, 203, 203, 255);
     } else {
         gDPSetPrimColor(gfx++, 0, 0, 255, 212, 0, 255);
@@ -14917,7 +14917,7 @@ Gfx* Machine_DrawBloodHawkLod1(Gfx* gfx) {
 
     gDPPipeSync(gfx++);
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPSetPrimColor(gfx++, 0, 0, 203, 203, 203, 255);
         gDPSetEnvColor(gfx++, 34, 34, 34, 255);
     } else {
@@ -15325,7 +15325,7 @@ Gfx* Machine_DrawLoadCrazyBearTextures(Gfx* gfx) {
 
     gDPPipeSync(gfx++);
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPLoadMultiBlock(gfx++, D_8013E180, 0x10, 1, G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32, 0, G_TX_MIRROR | G_TX_WRAP,
                           G_TX_MIRROR | G_TX_CLAMP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
     } else {
@@ -15374,7 +15374,7 @@ Gfx* Machine_DrawLoadHyperSpeederTextures(Gfx* gfx) {
 
     gDPPipeSync(gfx++);
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPLoadMultiBlock(gfx++, D_8013F380, 0x10, 1, G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32, 0, G_TX_MIRROR | G_TX_CLAMP,
                           G_TX_MIRROR | G_TX_CLAMP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
     } else {
@@ -15526,7 +15526,7 @@ Gfx* Machine_DrawLoadGreenPantherTextures(Gfx* gfx) {
 
     gDPPipeSync(gfx++);
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPLoadMultiBlock(gfx++, D_8013EB80, 0x10, 1, G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32, 0, G_TX_NOMIRROR | G_TX_WRAP,
                           G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
     } else {
@@ -15572,7 +15572,7 @@ Gfx* Machine_DrawLoadLittleWyvernTextures(Gfx* gfx) {
 
     gDPPipeSync(gfx++);
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPLoadMultiBlock(gfx++, D_8013E980, 0x10, 1, G_IM_FMT_RGBA, G_IM_SIZ_16b, 16, 16, 0, G_TX_MIRROR | G_TX_CLAMP,
                           G_TX_NOMIRROR | G_TX_WRAP, 4, 4, G_TX_NOLOD, G_TX_NOLOD);
     } else {
@@ -15682,7 +15682,7 @@ Gfx* Machine_DrawLoadIronTigerTextures(Gfx* gfx) {
 
     gDPPipeSync(gfx++);
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPLoadMultiBlock(gfx++, D_8013D980, 0x10, 1, G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32, 0, G_TX_NOMIRROR | G_TX_WRAP,
                           G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
     } else {
@@ -15774,7 +15774,7 @@ Gfx* Machine_DrawLoadFireStingrayTextures(Gfx* gfx) {
 
     gDPPipeSync(gfx++);
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPLoadMultiBlock(gfx++, D_8013D180, 0x10, 1, G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32, 0, G_TX_NOMIRROR | G_TX_WRAP,
                           G_TX_MIRROR | G_TX_CLAMP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
     } else {
@@ -15802,7 +15802,7 @@ Gfx* Machine_DrawLoadWildGooseTextures(Gfx* gfx) {
 
     gDPPipeSync(gfx++);
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPLoadMultiBlock(gfx++, D_8013C980, 0x10, 1, G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32, 0, G_TX_MIRROR | G_TX_CLAMP,
                           G_TX_MIRROR | G_TX_CLAMP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
     } else {
@@ -15832,7 +15832,7 @@ Gfx* Machine_DrawLoadGoldenFoxTextures(Gfx* gfx) {
 
     gDPPipeSync(gfx++);
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPLoadMultiBlock(gfx++, D_8013C780, 0x10, 1, G_IM_FMT_RGBA, G_IM_SIZ_16b, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                           G_TX_MIRROR | G_TX_CLAMP, 4, 4, G_TX_NOLOD, G_TX_NOLOD);
     } else {
@@ -15862,7 +15862,7 @@ Gfx* Machine_DrawLoadBlueFalconTextures(Gfx* gfx) {
 
     gDPPipeSync(gfx++);
 
-    if (D_8076E5A8 != 0) {
+    if (gGreyscaleMachinePart) {
         gDPLoadMultiBlock(gfx++, D_8013C580, 0x10, 1, G_IM_FMT_RGBA, G_IM_SIZ_16b, 16, 16, 0, G_TX_MIRROR | G_TX_CLAMP,
                           G_TX_NOMIRROR | G_TX_WRAP, 4, 4, G_TX_NOLOD, G_TX_NOLOD);
     } else {

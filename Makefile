@@ -213,7 +213,9 @@ else
   CPPFLAGS := -P -Wno-trigraphs -Wmissing-prototypes -Wstrict-prototypes -D_LANGUAGE_ASSEMBLY
 endif
 
-ASM_PROC_FLAGS  := --input-enc=utf-8 --output-enc=euc-jp --convert-statics=global-with-filename
+OUT_ENCODING := euc-jp
+
+ASM_PROC_FLAGS  = --input-enc=utf-8 --output-enc=$(OUT_ENCODING) --convert-statics=global-with-filename
 
 SPLAT           ?= $(PYTHON) $(TOOLS)/splat/split.py
 SPLAT_YAML      ?= $(TARGET).$(VERSION).yaml
@@ -358,8 +360,13 @@ $(BUILD_DIR)/src/libultra/libc/ll.o: MIPS_VERSION := -mips3 -32
 $(BUILD_DIR)/src/libultra/libc/llcvt.o: OPTFLAGS := -O1 -g0
 $(BUILD_DIR)/src/libultra/libc/llcvt.o: MIPS_VERSION := -mips3 -32
 
+$(BUILD_DIR)/src/leo_fault.o: OUT_ENCODING := shift-jis
+$(BUILD_DIR)/src/overlays/ovl_xk1/ovl_xk1_disk_data.o: OUT_ENCODING := shift-jis
+$(BUILD_DIR)/src/overlays/ovl_xk1/ovl_xk1_text.o: OUT_ENCODING := shift-jis
+$(BUILD_DIR)/src/overlays/machine_create/machine_create_text.o: OUT_ENCODING := shift-jis
+
 # cc & asm-processor
-CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(IDO) -- $(AS) $(ASFLAGS) --
+CC = $(ASM_PROC) $(ASM_PROC_FLAGS) $(IDO) -- $(AS) $(ASFLAGS) --
 $(BUILD_DIR)/src/libultra/gu/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(IDO53) -- $(AS) $(ASFLAGS) --
 $(BUILD_DIR)/src/libultra/io/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(IDO53) -- $(AS) $(ASFLAGS) --
 $(BUILD_DIR)/src/libultra/os/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(IDO53) -- $(AS) $(ASFLAGS) --

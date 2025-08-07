@@ -18,8 +18,8 @@ AudioSpec gAudioSpecs[] = {
       0x24C100, 0x52F00, 0 },
 };
 
-s32 D_80771DC0 = 0x384;
-s32 D_80771DC4 = 0x38E;
-s32 gSoundFontTableLba = 0x3E8;
-s32 gSequenceTableLba = 0x3EA;
-s32 gSampleBankTableLba = 0x3EC;
+s32 D_80771DC0 = 900;
+s32 D_80771DC4 = 910;
+s32 gSoundFontTableLba = 1000;
+s32 gSequenceTableLba = 1002;
+s32 gSampleBankTableLba = 1004;

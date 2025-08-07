@@ -1,4 +1,5 @@
 #include "global.h"
+#include "assets/segment_21C170.h"
 
 Vec3f D_xk2_8013A740;
 UNUSED s32 D_xk2_8013A750[2];
@@ -87,8 +88,8 @@ extern s32 D_xk2_80104CBC;
 extern s32 D_xk2_80104CC0;
 extern unk_807B3C20 D_807B3C20;
 extern unk_800D6CA0 D_800D6CA0;
-extern s32 D_xk2_800F6824;
-extern s32 D_xk2_800F6828;
+extern s32 gCourseEditCursorXPos;
+extern s32 gCourseEditCursorYPos;
 extern s32 D_xk2_800F7040;
 
 void func_xk2_800F5F2C(void) {
@@ -112,7 +113,7 @@ void func_xk2_800F5F2C(void) {
         D_xk2_80119690 = gControllers[gPlayerControlPorts[0]].buttonCurrent & BTN_Z;
         return;
     }
-    if (D_xk2_800F6828 < 0x38) {
+    if (gCourseEditCursorYPos < 0x38) {
         D_xk2_80119690 = gControllers[gPlayerControlPorts[0]].buttonCurrent & BTN_Z;
         return;
     }
@@ -122,8 +123,8 @@ void func_xk2_800F5F2C(void) {
             return;
         }
         D_xk2_80119680 = 1;
-        D_xk2_800F6824 = 160;
-        D_xk2_800F6828 = 120;
+        gCourseEditCursorXPos = 160;
+        gCourseEditCursorYPos = 120;
         if (D_8076C968 != 0) {
             func_xk2_800DE4F8();
         }
@@ -145,7 +146,6 @@ void func_xk2_800F5F2C(void) {
     D_xk2_80119690 = gControllers[gPlayerControlPorts[0]].buttonCurrent & BTN_Z;
 }
 
-extern Gfx D_9014D18[];
 extern GfxPool D_1000000;
 
 void func_xk2_800F61DC(Gfx** gfxP) {

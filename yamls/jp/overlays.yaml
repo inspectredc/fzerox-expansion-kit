@@ -310,36 +310,36 @@
     bss_size: 0x6A0
     symbol_name_format: xk3_$VRAM
     subsegments:
-      - [0x1CB1E0, c]
-      - [0x1CB610, c]
-      - [0x1CDDE0, c]
-      - [0x1D2380, c]
-      - [0x1D2C10, c]
-      - [0x1D4960, c]
-      - [0x1D5570, c]
-      - [0x1D5C50, c]
-      - [0x1D6200, .data, 1CB610]
+      - [0x1CB1E0, c, machine_create]
+      - [0x1CB610, c, machine_create_update]
+      - [0x1CDDE0, c, machine_create_draw]
+      - [0x1D2380, c, 1D2380]
+      - [0x1D2C10, c, custom_machine_select]
+      - [0x1D4960, c, machine_create_stats]
+      - [0x1D5570, c, machine_create_color_select]
+      - [0x1D5C50, c, 1D5C50]
+      - [0x1D6200, .data, machine_create_update]
       - [0x1D62A0, .data, machine_create_data]
-      - [0x1D62C0, .data, 1CDDE0]
+      - [0x1D62C0, .data, machine_create_draw]
       - [0x1D64E0, .data, 1D2380]
-      - [0x1D64F0, .data, 1D2C10]
-      - [0x1D6C60, .data, 1D4960]
-      - [0x1D6D60, .data, 1D5570]
+      - [0x1D64F0, .data, custom_machine_select]
+      - [0x1D6C60, .data, machine_create_stats]
+      - [0x1D6D60, .data, machine_create_color_select]
       - [0x1D6E20, .data, 1D5C50]
       - [0x1D6E30, .data, machine_create_text]
       - [0x1D6FB0, .data, machine_create_assets]
-      - [0x1DF840, .rodata, 1CB1E0]
-      - [0x1DF860, .rodata, 1CB610]
-      - [0x1E0230, .rodata, 1CDDE0]
+      - [0x1DF840, .rodata, machine_create]
+      - [0x1DF860, .rodata, machine_create_update]
+      - [0x1E0230, .rodata, machine_create_draw]
       - [0x1E05D0, .rodata, 1D2380]
-      - [0x1E0A20, .rodata, 1D2C10]
-      - [0x1E0A50, .rodata, 1D4960]
+      - [0x1E0A20, .rodata, custom_machine_select]
+      - [0x1E0A50, .rodata, machine_create_stats]
       - [0x1E0AB0, .rodata, 1D5C50]
-      - { type: .bss, vram: 0x80140E40, name: 1CB1E0 }
-      - { type: .bss, vram: 0x80140E50, name: 1CB610 }
-      - { type: .bss, vram: 0x801412A0, name: 1CDDE0 }
-      - { type: .bss, vram: 0x801414C0, name: 1D2C10 }
-      - { type: .bss, vram: 0x801414D0, name: 1D5570 }
+      - { type: .bss, vram: 0x80140E40, name: machine_create }
+      - { type: .bss, vram: 0x80140E50, name: machine_create_update }
+      - { type: .bss, vram: 0x801412A0, name: machine_create_draw }
+      - { type: .bss, vram: 0x801414C0, name: custom_machine_select }
+      - { type: .bss, vram: 0x801414D0, name: machine_create_color_select }
 
   - name: ovl_xk4
     exclusive_ram_id: overlay_800D6D90
@@ -356,5 +356,3 @@
       - [0x1FB800, .data, 1E1FD0]
       - [0x1FB840, .rodata, 1E1FD0]
       - { type: .bss, vram: 0x800F1AE0, name: 1E0B00 }
-
-  - [0x1FB850]

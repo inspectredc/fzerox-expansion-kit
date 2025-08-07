@@ -57,12 +57,12 @@
     subsegments:
       - { type: .bss, vram: 0x806ECA00, name: audio/audio_context }
 
-  - name: unk_custom
+  - name: custom_machine_info
     type: code
     vram: 0x806F2400
     bss_size: 0x3E0
     subsegments:
-      - { type: .bss, vram: 0x806F2400, name: unk_custom }
+      - { type: .bss, vram: 0x806F2400, name: custom_machine_info }
 
   - name: entry
     type: code
@@ -285,18 +285,23 @@
       - [0x6C930, c, leo/lib/readrtc]
       - [0x6C990, c, leo/lib/leoseek]
       - [0x6CA50, c, leo/lib/seek]
-      - [0x6CAB0, c, leo/6CAB0]
-      - [0x6D660, c, leo/6D660]
-      - [0x6EB90, c, leo/6EB90]
-      - [0x6F3B0, c, leo/6F3B0]
-      - [0x70580, c, leo/70580]
-      - [0x720D0, c, leo/720D0]
-      - [0x725D0, c, leo/725D0]
-      - [0x728A0, c, leo/728A0]
-      - [0x73B70, c, leo/73B70]
-      - [0x73E60, c, leo/73E60]
-      - [0x74060, c, leo/74060]
-      - [0x74100, c, leo/74100]
+      - [0x6CAB0, c, leo/mfs/mfs_dir_entry_util]
+      - [0x6D660, c, leo/mfs/mfs_ram]
+      - [0x6EB90, c, leo/mfs/mfs_dir]
+      - [0x6F3B0, c, leo/mfs/mfs_device]
+      - [0x70580, c, leo/mfs/mfs_name]
+      - [0x70780, c, leo/mfs/mfs_save]
+      - [0x70D10, c, leo/mfs/mfs_update]
+      - [0x720D0, c, leo/mfs/mfs_fat]
+      - [0x725D0, c, leo/mfs/mfs_delete]
+      - [0x728A0, c, leo/mfs/mfs_load]
+      - [0x734C0, c, leo/mfs/mfs_read_write]
+      - [0x73B70, c, leo/mfs/mfs_rename]
+      - [0x73E60, c, leo/mfs/mfs_prepared_dir]
+      - [0x74060, c, leo/mfs/mfs_handlers]
+      - [0x74100, c, leo/mfs/mfs_attr]
+      - [0x744C0, c, leo/mfs/mfs_validate]
+      - [0x74970, c, leo/mfs/mfs_copy]
       - [0x75000, c]
       - [0x76660, textbin, aspmain]
 
@@ -458,10 +463,10 @@
       - [0x88CB0, .rodata, leo/lib/leotimer]
       - [0x88CD0, data]
       - [0xA2410, rodata]
-      - [0xA2550, .data, leo/70580]
+      - [0xA2550, .data, leo/mfs/mfs_name]
       - [0xA25D0, data]
-      - [0xA25E0, .rodata, leo/6EB90]
-      - [0xA25F0, .rodata, leo/70580]
+      - [0xA25E0, .rodata, leo/mfs/mfs_dir]
+      - [0xA25F0, .rodata, leo/mfs/mfs_save]
       - [0xA2610, rodata]
       - [0xA2630, .rodata, 75000]
       - [0xA2690, data, aspmain]
