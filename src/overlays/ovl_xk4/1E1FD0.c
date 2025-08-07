@@ -72,13 +72,13 @@ Gfx* func_xk4_800D8348(Gfx* gfx) {
         gSPTextureRectangle(gfx++, 24 << 2, (i + 32) << 2, 184 << 2, ((i + 1) + 32) << 2, 0, 0, 0, 1 << 10, 1 << 10);
     }
 
-    if (SQ(gControllers[gPlayerControlPorts[0]].stickX) >= 0x65) {
+    if (SQ(gControllers[gPlayerControlPorts[0]].stickX) > 100) {
         D_xk4_800F1AC0 += gControllers[gPlayerControlPorts[0]].stickX / 10;
     }
     if (gControllers[gPlayerControlPorts[0]].buttonCurrent & BTN_Z) {
         D_xk4_800F1AC0 = 0;
     }
-    temp_lo = (s32) (D_xk4_800F1AC0 << 0xC) / 360;
+    temp_lo = (s32) (D_xk4_800F1AC0 * 0x1000) / 360;
     func_806F7FCC(gGfxPool->unk_36628, NULL, 1.0f, 1.0f, 1.0f, SIN(temp_lo), 0.0f, COS(temp_lo), 0.0f, 1.0f, 0.0f, 0.0f,
                   0.0f, 0.0f);
 

@@ -2,6 +2,7 @@
 #include "unk_gfx.h"
 #include "fzx_game.h"
 #include "fzx_racer.h"
+#include "fzx_ghost.h"
 #include "fzx_assets.h"
 #include "fzx_machine.h"
 
@@ -378,7 +379,7 @@ f32 sEnergyRefillScale = 0.008f;
 s16 D_8076E59C = 0;
 s16 D_8076E5A0 = 1;
 s16 D_8076E5A4 = 0;
-s16 D_8076E5A8 = 0;
+s16 gGreyscaleMachinePart = false;
 
 // clang-format off
 BoosterInfo sBoosterInfos[] = {
@@ -1864,7 +1865,7 @@ void func_8071D48C(void) {
     }
 }
 
-extern unk_806F2400 D_806F2400;
+extern CustomMachinesInfo gCustomMachinesInfo;
 
 extern u8 D_800D1308[];
 
@@ -1873,12 +1874,12 @@ void func_8071E0C0(void) {
     CustomMachineInfo* temp_a2;
     s32 characterSlot;
     s32 i;
-    unk_806F2400_unk_00* temp_a1;
+    CustomMachine* temp_a1;
 
     for (i = 29; i >= 0; i--) {
-        characterSlot = func_8070DBF0(i);
-        temp_a1 = &D_806F2400.unk_00[characterSlot];
-        if (D_806F2400.unk_3C0[characterSlot] > 0) {
+        characterSlot = Character_GetSlotFromCharacter(i);
+        temp_a1 = &gCustomMachinesInfo.customMachines[characterSlot];
+        if (gCustomMachinesInfo.characterCustomState[characterSlot] > 0) {
             temp_a2 = &sCustomMachineInfo[i];
             temp_a2->decalR = temp_a1->decalR;
             temp_a2->decalG = temp_a1->decalG;
@@ -1915,7 +1916,7 @@ void func_8071E0C0(void) {
             gMachines[i].machineStats[GRIP_STAT] = GRIP_E - temp_a1->grip;
             gMachines[i].weight =
                 D_8076F2AC[temp_a2->frontType] + D_8076F2BC[temp_a2->rearType] + D_8076F2CC[temp_a2->wingType];
-        } else if (D_806F2400.unk_3C0[characterSlot] < 0) {
+        } else if (gCustomMachinesInfo.characterCustomState[characterSlot] < 0) {
             if ((i == CAPTAIN_FALCON) && (D_800D1308[CAPTAIN_FALCON] != 0)) {
                 gMachines[i] = sDefaultMachines[30];
             } else {
@@ -6689,7 +6690,7 @@ Gfx* func_8072DF40(Gfx* gfx, s32 character, s32 arg2) {
 
     gSPDisplayList(gfx++, D_8076DB58[character]);
 
-    if ((D_8076E5A8 != 0) && (temp_t0->customType == CUSTOM_MACHINE_DEFAULT)) {
+    if (gGreyscaleMachinePart && (temp_t0->customType == CUSTOM_MACHINE_DEFAULT)) {
         color = (temp_t0->red[arg2] * 77) + (temp_t0->green[arg2] * 151) + (temp_t0->blue[arg2] * 28);
         color >>= 8;
         gDPSetEnvColor(gfx++, color, color, color, 255);
@@ -6718,16 +6719,16 @@ Gfx* func_8072E1C0(Gfx* gfx, s32 character) {
 
 Gfx* func_8072E1F0(Gfx* gfx, s32 character) {
     s32 characterSlot;
-    unk_806F2400_unk_00* temp_v1_2;
+    CustomMachine* temp_v1_2;
 
-    characterSlot = func_8070DBF0(character);
+    characterSlot = Character_GetSlotFromCharacter(character);
 
-    if (D_806F2400.unk_3C0[characterSlot] > 0) {
-        temp_v1_2 = &D_806F2400.unk_00[characterSlot];
+    if (gCustomMachinesInfo.characterCustomState[characterSlot] > 0) {
+        temp_v1_2 = &gCustomMachinesInfo.customMachines[characterSlot];
         gSPDisplayList(gfx++, D_8076D970[temp_v1_2->frontType]);
         gSPDisplayList(gfx++, D_8076D98C[temp_v1_2->rearType]);
         gSPDisplayList(gfx++, D_8076D9A8[temp_v1_2->wingType]);
-    } else if (D_806F2400.unk_3C0[characterSlot] < 0) {
+    } else if (gCustomMachinesInfo.characterCustomState[characterSlot] < 0) {
         if ((character == CAPTAIN_FALCON) && (D_800D1308[CAPTAIN_FALCON] != 0)) {
             gSPDisplayList(gfx++, D_9012718);
         } else if ((character == SAMURAI_GOROH) && (D_800D1308[SAMURAI_GOROH] != 0)) {

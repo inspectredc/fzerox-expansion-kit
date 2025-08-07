@@ -1,43 +1,42 @@
 #include "global.h"
+#include "fzx_bordered_box.h"
 #include "fzx_assets.h"
 
-void func_80711170(unk_800E51B8** arg0) {
-    *arg0 = NULL;
+void BorderedBox_CleanWidget(BorderedBoxWidget** boxPtr) {
+    *boxPtr = NULL;
 }
 
-s32 D_807A0870;
-unk_800E51B8 D_807A0878[5];
+s32 sBorderedBoxCount;
+BorderedBoxWidget sBorderedBoxes[5];
 
-void func_80711178(void) {
+void BorderedBox_ClearAll(void) {
     s32 i;
-    unk_800E51B8* var_v1;
+    BorderedBoxWidget* box;
 
-    D_807A0870 = 0;
+    sBorderedBoxCount = 0;
 
-    for (i = 0, var_v1 = D_807A0878; i < 5; i++, var_v1++) {
-        var_v1->unk_00 = 0;
-        var_v1->unk_04 = -1;
-        var_v1->unk_06 = var_v1->unk_08 = var_v1->unk_0A = var_v1->unk_0C = var_v1->unk_0E = var_v1->unk_10 =
-            var_v1->unk_12 = 0;
-        var_v1->unk_18 = var_v1->unk_1A = 0;
+    for (i = 0, box = sBorderedBoxes; i < 5; i++, box++) {
+        box->state = BORDERED_BOX_CLOSED;
+        box->id = -1;
+        box->timer = box->left = box->top = box->maxLeft = box->maxTop = box->width = box->height = 0;
+        box->boxColor = box->borderColor = 0;
     }
 }
 
-unk_800E51B8* func_807112A0(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, u16 arg5, u16 arg6,
-                            unk_800E51B8_unk_1C_func arg7) {
-    s32 var_v0;
+BorderedBoxWidget* BorderedBox_Init(s16 id, s16 left, s16 top, s16 width, s16 height, u16 depth, u16 borderColor,
+                                    BorderedBoxContentsDrawFunc contentsDrawFunc) {
     s32 i;
-    unk_800E51B8* var_v1;
-    s64 one = 1;
+    BorderedBoxWidget* box;
+    s64 state = BORDERED_BOX_OPEN_WIDTH;
 
-    for (i = 0, var_v1 = D_807A0878; i < 5; i++, var_v1++) {
-        if (arg0 == var_v1->unk_04) {
+    for (i = 0, box = sBorderedBoxes; i < 5; i++, box++) {
+        if (id == box->id) {
             return NULL;
         }
     }
 
-    for (i = 0, var_v1 = D_807A0878; i < 5; i++, var_v1++) {
-        if (var_v1->unk_04 == -1) {
+    for (i = 0, box = sBorderedBoxes; i < 5; i++, box++) {
+        if (box->id == -1) {
             break;
         }
     }
@@ -45,182 +44,181 @@ unk_800E51B8* func_807112A0(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, u1
     if (i == 5) {
         return NULL;
     }
-    D_807A0870++;
-    var_v1->unk_00 = one;
-    var_v1->unk_04 = arg0;
-    var_v1->unk_06 = 0;
-    var_v1->unk_08 = arg1 + (arg3 / 2);
-    var_v1->unk_0A = arg2 + ((s32) (arg4 - 2) / 2);
-    var_v1->unk_0C = arg1;
-    var_v1->unk_0E = arg2;
-    var_v1->unk_10 = 0;
-    var_v1->unk_12 = 2;
-    var_v1->unk_14 = arg3;
-    var_v1->unk_16 = arg4;
-    var_v1->unk_18 = GPACK_RGBA5551(0, 0, 0, 1);
-    var_v1->unk_1A = arg6;
-    var_v1->unk_1C = arg5;
-    var_v1->unk_20 = arg7;
-    return var_v1;
+    sBorderedBoxCount++;
+    box->state = state;
+    box->id = id;
+    box->timer = 0;
+    box->left = left + (width / 2);
+    box->top = top + ((height - 2) / 2);
+    box->maxLeft = left;
+    box->maxTop = top;
+    box->width = 0;
+    box->height = 2;
+    box->maxWidth = width;
+    box->maxHeight = height;
+    box->boxColor = GPACK_RGBA5551(0, 0, 0, 1);
+    box->borderColor = borderColor;
+    box->depth = depth;
+    box->contentsDrawFunc = contentsDrawFunc;
+    return box;
 }
 
-void func_807113DC(unk_800E51B8* arg0) {
-    if (arg0 == NULL) {
+void BorderedBox_StartClose(BorderedBoxWidget* box) {
+    if (box == NULL) {
         return;
     }
-    arg0->unk_00 = 4;
-    arg0->unk_06 = 0;
-    arg0->unk_0C = arg0->unk_08;
-    arg0->unk_0E = arg0->unk_0A;
-    arg0->unk_14 = arg0->unk_10;
-    arg0->unk_16 = arg0->unk_12;
+    box->state = BORDERED_BOX_CLOSE_HEIGHT;
+    box->timer = 0;
+    box->maxLeft = box->left;
+    box->maxTop = box->top;
+    box->maxWidth = box->width;
+    box->maxHeight = box->height;
 }
 
-void func_80711414(void) {
+void BorderedBox_Update(void) {
     s32 i;
-    unk_800E51B8* var_v1;
-    f32 temp1;
+    BorderedBoxWidget* box;
+    f32 scale;
 
-    for (i = 0, var_v1 = D_807A0878; i < 5; i++, var_v1++) {
-        if (var_v1->unk_04 == -1) {
+    for (i = 0, box = sBorderedBoxes; i < 5; i++, box++) {
+        if (box->id == -1) {
             continue;
         }
 
-        switch (var_v1->unk_00) {
-            case 1:
-                var_v1->unk_06++;
-                temp1 = (var_v1->unk_06 / 10.0f);
+        switch (box->state) {
+            case BORDERED_BOX_OPEN_WIDTH:
+                box->timer++;
+                scale = (box->timer / 10.0f);
 
-                var_v1->unk_08 = var_v1->unk_0C + ((s16) ((var_v1->unk_14 / 2.0f) * (1.0f - temp1)));
-                var_v1->unk_10 = var_v1->unk_14 * temp1;
+                box->left = box->maxLeft + ((s16) ((box->maxWidth / 2.0f) * (1.0f - scale)));
+                box->width = box->maxWidth * scale;
 
-                if (var_v1->unk_06 >= 10) {
-                    var_v1->unk_00 = 2;
-                    var_v1->unk_06 = 0;
-                    var_v1->unk_10 = var_v1->unk_14;
-                    var_v1->unk_08 = var_v1->unk_0C;
+                if (box->timer >= 10) {
+                    box->state = BORDERED_BOX_OPEN_HEIGHT;
+                    box->timer = 0;
+                    box->width = box->maxWidth;
+                    box->left = box->maxLeft;
                 }
                 break;
-            case 2:
-                var_v1->unk_06++;
-                temp1 = (var_v1->unk_06 / 10.0f);
+            case BORDERED_BOX_OPEN_HEIGHT:
+                box->timer++;
+                scale = (box->timer / 10.0f);
 
-                var_v1->unk_0A = var_v1->unk_0E + (s16) (((var_v1->unk_16 - 2) / 2.0f) * (1.0f - temp1));
-                var_v1->unk_12 = (s16) ((var_v1->unk_16 - 2) * temp1) + 2;
+                box->top = box->maxTop + (s16) (((box->maxHeight - 2) / 2.0f) * (1.0f - scale));
+                box->height = (s16) ((box->maxHeight - 2) * scale) + 2;
 
-                if (var_v1->unk_06 >= 10) {
-                    var_v1->unk_00 = 3;
-                    var_v1->unk_06 = 0;
-                    var_v1->unk_12 = var_v1->unk_16;
-                    var_v1->unk_0A = var_v1->unk_0E;
+                if (box->timer >= 10) {
+                    box->state = BORDERED_BOX_OPENED;
+                    box->timer = 0;
+                    box->height = box->maxHeight;
+                    box->top = box->maxTop;
                 }
                 break;
-            case 3:
+            case BORDERED_BOX_OPENED:
                 break;
-            case 4:
-                var_v1->unk_06++;
-                temp1 = (var_v1->unk_06 / 10.0f);
+            case BORDERED_BOX_CLOSE_HEIGHT:
+                box->timer++;
+                scale = (box->timer / 10.0f);
 
-                var_v1->unk_0A = var_v1->unk_0E + (s16) (((var_v1->unk_16 - 2) / 2.0f) * temp1);
-                var_v1->unk_12 = (var_v1->unk_16 - 2) * (1.0f - temp1);
+                box->top = box->maxTop + (s16) (((box->maxHeight - 2) / 2.0f) * scale);
+                box->height = (box->maxHeight - 2) * (1.0f - scale);
 
-                if (var_v1->unk_06 >= 10) {
-                    var_v1->unk_00 = 5;
-                    var_v1->unk_06 = 0;
-                    var_v1->unk_12 = 2;
-                    var_v1->unk_0A = var_v1->unk_0E + ((var_v1->unk_16 - 2) / 2);
+                if (box->timer >= 10) {
+                    box->state = BORDERED_BOX_CLOSE_WIDTH;
+                    box->timer = 0;
+                    box->height = 2;
+                    box->top = box->maxTop + ((box->maxHeight - 2) / 2);
                 }
                 break;
-            case 5:
-                var_v1->unk_06++;
-                temp1 = (var_v1->unk_06 / 10.0f);
+            case BORDERED_BOX_CLOSE_WIDTH:
+                box->timer++;
+                scale = (box->timer / 10.0f);
 
-                var_v1->unk_08 = var_v1->unk_0C + (s16) ((var_v1->unk_14 / 2.0f) * temp1);
-                var_v1->unk_10 = var_v1->unk_14 * (1.0f - temp1);
+                box->left = box->maxLeft + (s16) ((box->maxWidth / 2.0f) * scale);
+                box->width = box->maxWidth * (1.0f - scale);
 
-                if (var_v1->unk_06 >= 11) {
-                    var_v1->unk_00 = 0;
-                    var_v1->unk_04 = -1;
-                    D_807A0870--;
+                if (box->timer >= 11) {
+                    box->state = BORDERED_BOX_CLOSED;
+                    box->id = -1;
+                    sBorderedBoxCount--;
                 }
                 break;
         }
     }
 }
 
-Gfx* func_80711698(Gfx* gfx) {
+Gfx* BorderedBox_Draw(Gfx* gfx) {
     s32 i;
     s32 j;
-    s32 var_s2;
-    unk_800E51B8* var_s0;
-    unk_800E51B8* temp_v0;
-    s16* var_v1;
-    bool var_a0;
-    s16 temp_a2;
-    s16 sp60[5];
+    s32 boxCount;
+    BorderedBoxWidget* box;
+    BorderedBoxWidget* box2;
+    s16* boxIndex;
+    bool swapIndexes;
+    s16 tempIndex;
+    s16 sortedBoxIndexes[5];
 
-    var_s2 = 0;
-    for (i = 0, var_s0 = D_807A0878, var_v1 = sp60; i < 5; i++, var_v1++, var_s0++) {
-        *var_v1 = i;
-        if (var_s0->unk_04 != -1) {
-            var_s2++;
+    boxCount = 0;
+    for (i = 0, box = sBorderedBoxes, boxIndex = sortedBoxIndexes; i < 5; i++, boxIndex++, box++) {
+        *boxIndex = i;
+        if (box->id != -1) {
+            boxCount++;
         }
     }
 
     for (i = 0; i < 5; i++) {
 
-        var_s0 = &D_807A0878[sp60[i]];
+        box = &sBorderedBoxes[sortedBoxIndexes[i]];
         for (j = i + 1; j < 5; j++) {
-            var_a0 = false;
-            temp_v0 = &D_807A0878[sp60[j]];
+            swapIndexes = false;
+            box2 = &sBorderedBoxes[sortedBoxIndexes[j]];
 
-            if (var_s0->unk_04 == -1) {
-                if (temp_v0->unk_04 != -1) {
-                    var_a0 = true;
+            if (box->id == -1) {
+                if (box2->id != -1) {
+                    swapIndexes = true;
                 }
             } else {
-                if (temp_v0->unk_04 != -1 && temp_v0->unk_1C < var_s0->unk_1C) {
-                    var_a0 = true;
+                if (box2->id != -1 && box2->depth < box->depth) {
+                    swapIndexes = true;
                 }
             }
 
-            if (var_a0) {
-                temp_a2 = sp60[i];
-                sp60[i] = sp60[j];
-                sp60[j] = temp_a2;
+            if (swapIndexes) {
+                tempIndex = sortedBoxIndexes[i];
+                sortedBoxIndexes[i] = sortedBoxIndexes[j];
+                sortedBoxIndexes[j] = tempIndex;
             }
         }
     }
 
-    for (i = 0; i < var_s2; i++, var_s0++) {
-        var_s0 = &D_807A0878[sp60[i]];
+    for (i = 0; i < boxCount; i++, box++) {
+        box = &sBorderedBoxes[sortedBoxIndexes[i]];
 
         gSPDisplayList(gfx++, D_80149A0);
-        gDPSetFillColor(gfx++, var_s0->unk_1A << 16 | var_s0->unk_1A);
-        gDPFillRectangle(gfx++, var_s0->unk_08, var_s0->unk_0A, ((var_s0->unk_08 + var_s0->unk_10) - 1),
-                         ((var_s0->unk_0A + var_s0->unk_12) - 1));
+        gDPSetFillColor(gfx++, box->borderColor << 16 | box->borderColor);
+        gDPFillRectangle(gfx++, box->left, box->top, ((box->left + box->width) - 1), ((box->top + box->height) - 1));
 
         gDPPipeSync(gfx++);
-        gDPSetFillColor(gfx++, var_s0->unk_18 << 16 | var_s0->unk_18);
-        gDPFillRectangle(gfx++, var_s0->unk_08 + 1, var_s0->unk_0A + 1, ((var_s0->unk_08 + var_s0->unk_10) - 2),
-                         ((var_s0->unk_0A + var_s0->unk_12) - 2));
+        gDPSetFillColor(gfx++, box->boxColor << 16 | box->boxColor);
+        gDPFillRectangle(gfx++, box->left + 1, box->top + 1, ((box->left + box->width) - 2),
+                         ((box->top + box->height) - 2));
 
-        if ((var_s0->unk_20 != NULL) && (var_s0->unk_00 == 3)) {
-            gfx = var_s0->unk_20(gfx, var_s0->unk_08, var_s0->unk_0A);
+        if ((box->contentsDrawFunc != NULL) && (box->state == BORDERED_BOX_OPENED)) {
+            gfx = box->contentsDrawFunc(gfx, box->left, box->top);
         }
     }
     return gfx;
 }
 
-bool func_80711AC0(unk_800E51B8* arg0, s32 arg1) {
+bool BorderedBox_GetInfo(BorderedBoxWidget* box, s32 infoCondition) {
     bool ret = false;
 
-    switch (arg1) {
-        case 0:
-            ret = ((arg0 != NULL) && (arg0->unk_00 != 0)) ? true : false;
+    switch (infoCondition) {
+        case IS_BORDERED_BOX_ACTIVE:
+            ret = ((box != NULL) && (box->state != BORDERED_BOX_CLOSED)) ? true : false;
             break;
-        case 1:
-            ret = (arg0->unk_00 == 3) ? true : false;
+        case IS_BORDERED_BOX_OPENED:
+            ret = (box->state == BORDERED_BOX_OPENED) ? true : false;
             break;
         default:
             break;

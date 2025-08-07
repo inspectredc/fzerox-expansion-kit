@@ -43,7 +43,7 @@ u16 D_xk1_800300F0[] = {
 };
 // clang-format on
 
-void func_xk1_80026830(u8* arg0, s8* arg1) {
+void func_xk1_80026830(char* arg0, s8* arg1) {
     u16 temp_t9;
 
     while (true) {

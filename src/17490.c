@@ -1,5 +1,6 @@
 #include "global.h"
 #include "fzx_game.h"
+#include "fzx_ghost.h"
 #include "fzx_assets.h"
 #include "src/overlays/ovl_i4/ovl_i4.h"
 
@@ -969,11 +970,11 @@ const s8 kMachineSelectCharacterList[] = { CAPTAIN_FALCON,
                                            THE_SKULL,
                                            30 };
 
-s32 func_8070DBE0(s32 i) {
-    return kMachineSelectCharacterList[i];
+s32 Character_GetCharacterFromSlot(s32 characterSlot) {
+    return kMachineSelectCharacterList[characterSlot];
 }
 
-s32 func_8070DBF0(s32 character) {
+s32 Character_GetSlotFromCharacter(s32 character) {
     s32 i;
 
     for (i = 0; i < 30; i++) {

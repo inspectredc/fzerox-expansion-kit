@@ -19,7 +19,7 @@ CourseData D_800D0910 = {
     CREATOR_NINTENDO, 0, 0, 0, { 0 }, { 0 }, { 0 }, { 0 }, { 0 }, { 0 }, { 0 }, { 0 }, { 0 }, { 0 }, { 0 }, { 0 }
 };
 
-u8 gEditCupTrackNames[6 * 4][9] = { 0 };
+char gEditCupTrackNames[6 * 4][9] = { 0 };
 
 s32 D_800D11C8[] = { 1, 1, 1, 1, 4, 0 };
 

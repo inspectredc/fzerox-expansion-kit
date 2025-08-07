@@ -3,46 +3,48 @@
 
 #include "libultra/ultra64.h"
 #include "PR/leo.h"
+#include "fzx_machine.h"
+#include "other_types.h"
 
 typedef struct unk_807C6F10 {
     s32 unk_00;
     s32 lba;
-    s32 unk_08;
-    s32 unk_0C;
-    OSPiHandle* unk_10;
-    OSIoMesg* unk_14;
+    void* vAddr;
+    s32 nLBAs;
+    OSPiHandle* piHandle;
+    OSIoMesg* ioMesg;
     s32 direction;
     LEOCmd* cmdBlock;
     OSMesgQueue* mq;
 } unk_807C6F10;
 
 typedef struct unk_807C6EA8 {
-    s32 unk_00;
-    u8 unk_04;
-    s32 unk_08;
-    s32 unk_0C;
-    s32 unk_10;
-    s16 unk_14;
-    u16 unk_16;
-    u8* unk_18;
-    u8* unk_1C;
-    void* unk_20;
-    s32 unk_24;
-    s32 unk_28;
-    s32 unk_2C;
-    s32 unk_30;
-    s32 unk_34;
-    void* unk_38;
-    u8* unk_3C;
-    u8* unk_40;
-    u8* unk_44;
-    u8* unk_48;
-    s32 unk_4C;
-    s32 unk_50;
-    u8 unk_54;
-    s32 unk_58;
-    s32 unk_5C;
-    s32 unk_60;
+    /* 0x00 */ s32 unk_00;
+    /* 0x04 */ u8 unk_04;
+    /* 0x08 */ s32 unk_08;
+    /* 0x0C */ s32 unk_0C;
+    /* 0x10 */ s32 unk_10;
+    /* 0x14 */ s16 unk_14;
+    /* 0x16 */ u16 dirId;
+    /* 0x18 */ char* name;
+    /* 0x1C */ char* extension;
+    /* 0x20 */ void* writeBuf;
+    /* 0x24 */ s32 offset;
+    /* 0x28 */ s32 fileSize;
+    /* 0x2C */ s32 attr;
+    /* 0x30 */ s32 copyCount;
+    /* 0x34 */ bool writeChanges;
+    /* 0x38 */ void* readBuf;
+    /* 0x3C */ char* oldName;
+    /* 0x40 */ char* oldExtension;
+    /* 0x44 */ char* newName;
+    /* 0x48 */ char* newExtension;
+    /* 0x4C */ s32 attributeToAdd;
+    /* 0x50 */ s32 attributeToRemove;
+    /* 0x54 */ u8 unk_54;
+    /* 0x58 */ s32 startLba;
+    /* 0x5C */ s32 lbaBuf;
+    /* 0x60 */ s32 bssSize;
 } unk_807C6EA8;
 
 typedef struct unk_80225800 {
@@ -139,57 +141,6 @@ typedef struct CourseSegment {
     /* 0x9C */ f32 halfMarkLength;
     /* 0xA0 */ f32 threeQuarterMarkLength;
 } CourseSegment; // size = 0xA4
-
-typedef struct MachineInfo {
-    /* 0x00 */ u8 character;
-    /* 0x01 */ u8 customType;
-    /* 0x02 */ u8 frontType;
-    /* 0x03 */ u8 rearType;
-    /* 0x04 */ u8 wingType;
-    /* 0x05 */ u8 logo;
-    /* 0x06 */ u8 number;
-    /* 0x07 */ u8 decal;
-    /* 0x08 */ u8 bodyR;
-    /* 0x09 */ u8 bodyG;
-    /* 0x0A */ u8 bodyB;
-    /* 0x0B */ u8 numberR;
-    /* 0x0C */ u8 numberG;
-    /* 0x0D */ u8 numberB;
-    /* 0x0E */ u8 decalR;
-    /* 0x0F */ u8 decalG;
-    /* 0x10 */ u8 decalB;
-    /* 0x11 */ u8 cockpitR;
-    /* 0x12 */ u8 cockpitG;
-    /* 0x13 */ u8 cockpitB;
-} MachineInfo; // size = 0x14
-
-typedef struct unk_80141C88_unk_1D {
-    MachineInfo unk_00;
-    s8 unk_14[12];
-} unk_80141C88_unk_1D; // size = 0x20
-
-typedef struct GhostInfo {
-    /* 0x00 */ s32 courseIndex;
-    /* 0x04 */ s32 encodedCourseIndex;
-    /* 0x08 */ s32 raceTime;
-    /* 0x0C */ s32 replayChecksum;
-    /* 0x10 */ u16 ghostType;
-    /* 0x12 */ u16 unk_12;
-    /* 0x14 */ char trackName[9];
-    /* 0x1D */ unk_80141C88_unk_1D unk_1D;
-} GhostInfo; // size = 0x40
-
-typedef struct Ghost {
-    /* 0x0000 */ s32 encodedCourseIndex;
-    /* 0x0004 */ s32 raceTime;
-    /* 0x0008 */ s32 lapTimes[3];
-    /* 0x0014 */ s32 replayEnd;
-    /* 0x0018 */ s32 replaySize;
-    /* 0x001C */ s8 replayData[16200];
-    /* 0x3F64 */ s32 replayChecksum;
-    /* 0x3F68 */ s16 ghostType;
-    /* 0x3F6A */ MachineInfo machineInfo;
-} Ghost; // size = 0x3F80
 
 typedef struct CourseInfo {
     /* 0x00 */ s32 encodedCourseIndex;
@@ -486,21 +437,6 @@ typedef struct Racer {
     s32 unk_3A4;
 } Racer; // size = 0x3A8
 
-typedef struct GhostRacer {
-    s32 frameCount;
-    Ghost* ghost;
-    s8* replayPtr;
-    s32 replayIndex;
-    s16 initialized;
-    s16 exists;
-    s32 replayPosX;
-    s32 replayPosY;
-    s32 replayPosZ;
-    Vec3f pos;
-    f32 scale;
-    Racer* racer;
-} GhostRacer; // size 0x34
-
 typedef struct RaceStats {
     s32 raceTime;
     f32 maxSpeed;
@@ -509,26 +445,6 @@ typedef struct RaceStats {
     s16 racersKOd;
     s8 unk_0E[0x2];
 } RaceStats; // size = 0x10
-
-typedef Gfx* (*unk_800E51B8_unk_1C_func)(Gfx*, s32, s32);
-
-typedef struct unk_800E51B8 {
-    s32 unk_00;
-    s16 unk_04;
-    s16 unk_06;
-    s16 unk_08;
-    s16 unk_0A;
-    s16 unk_0C;
-    s16 unk_0E;
-    s16 unk_10;
-    s16 unk_12;
-    s16 unk_14;
-    s16 unk_16;
-    u16 unk_18;
-    u16 unk_1A;
-    u16 unk_1C;
-    unk_800E51B8_unk_1C_func unk_20;
-} unk_800E51B8; // size = 0x20
 
 typedef struct unk_struct_20 {
     Vec3f unk_00;
@@ -739,7 +655,7 @@ typedef struct unk_800E4068 {
     TexturePtr unk_04;
 } unk_800E4068; // size = 0x8
 
-typedef struct unk_806F2400_unk_00 {
+typedef struct CustomMachine {
     u8 body;
     u8 boost;
     u8 grip;
@@ -761,15 +677,15 @@ typedef struct unk_806F2400_unk_00 {
     u8 cockpitR;
     u8 cockpitG;
     u8 cockpitB;
-    u8 machineName[9];
+    char machineName[9];
     u16 checksum;
-} unk_806F2400_unk_00; // size = 0x20
+} CustomMachine; // size = 0x20
 
-typedef struct unk_806F2400 {
-    unk_806F2400_unk_00 unk_00[30];
-    s8 unk_3C0[30];
-    u16 unk_3DE;
-} unk_806F2400; // size = 0x3E0
+typedef struct CustomMachinesInfo {
+    CustomMachine customMachines[30];
+    s8 characterCustomState[30];
+    u16 checksum;
+} CustomMachinesInfo; // size = 0x3E0
 
 typedef struct unk_80144F74 {
     void* unk_00;
@@ -796,11 +712,11 @@ typedef struct unk_8009E224 {
 } unk_8009E224; // size = 0x10
 
 typedef struct unk_8003A5D8 {
-    char unk_00[16];
-    s32 unk_10;
+    char name[16];
+    s32 attr;
     s8 unk_14[0x8];
     char unk_1C;
-    char unk_1D[5];
+    char extension[5];
     u8 unk_22;
     s8 unk_23;
 } unk_8003A5D8; //size = 0x24
@@ -827,34 +743,34 @@ typedef struct unk_80128C94 {
     Gfx unk_110C8[0x13C8];
 } unk_80128C94; // size = 0x1AF08
 
-typedef struct unk_80026914_unk_1C {
-    void* unk_00;
-    void* unk_04;
-    void* unk_08;
-    void* unk_0C;
-    struct unk_80026914* unk_10;
-    void (*unk_14)(void);
-    u16 unk_18;
-    u16 unk_1A;
+typedef struct MenuDropItem {
+    void* backgroundTex;
+    void* backgroundSelectedTex;
+    void* contentsTex;
+    void* subContentsRGBATex;
+    struct MenuWidget* widget;
+    void (*action)(void);
+    u16 contentsWidth;
+    u16 contentsHeight;
     void* unk_1C;
-    void* unk_20;
-} unk_80026914_unk_1C; // size = 0x24
+    void* subContentsI4Tex;
+} MenuDropItem; // size = 0x24
 
-typedef struct unk_80026914 {
-    s32 unk_00;
-    s32 unk_04;
-    s32 unk_08;
-    s32 unk_0C;
-    s32 unk_10;
-    s32 unk_14;
-    s32 unk_18;
-    unk_80026914_unk_1C* unk_1C;
-    s32 unk_20;
-    s32 unk_24;
-    s32 unk_28;
-    s32 unk_2C;
-    s32* unk_30;
-} unk_80026914; // size = 0x34
+typedef struct MenuWidget {
+    s32 numItems;
+    s32 openIndex;
+    s32 highlightedIndex;
+    s32 left;
+    s32 top;
+    s32 itemXOffset;
+    s32 itemYOffset;
+    MenuDropItem* menuItems;
+    s32 cursorMinPosX;
+    s32 cursorMinPosY;
+    s32 cursorMaxPosX;
+    s32 cursorMaxPosY;
+    s32* option;
+} MenuWidget; // size = 0x34
 
 typedef struct unk_80140E60 {
     s32 unk_00; // type

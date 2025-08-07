@@ -1,10 +1,12 @@
 #include "global.h"
+#include "leo/unk_leo.h"
 #include "fzx_course.h"
 #include "fzx_save.h"
+#include "segment_symbols.h"
 
 char D_i2_800BF030[] = "GHOST00";
 
-extern OSMesgQueue D_8079F998;
+extern OSMesgQueue gMFSMesgQ;
 extern u8 gEditCupTrackNames[][9];
 
 void func_i2_800A9CE0(s32 courseIndex, GhostRecord* ghostRecord) {
@@ -27,9 +29,9 @@ void func_i2_800A9CE0(s32 courseIndex, GhostRecord* ghostRecord) {
         return;
     }
     func_i2_800AA80C();
-    func_807684AC(0xFFFB, D_i2_800BF030, "GOST", COURSE_CONTEXT()->ghostSave, 0x7E0,
-                  3 * sizeof(GhostSave) + sizeof(SaveCourseRecords));
-    osRecvMesg(&D_8079F998, NULL, OS_MESG_BLOCK);
+    func_807684AC(MFS_ENTRY_WORKING_DIR, D_i2_800BF030, "GOST", COURSE_CONTEXT()->ghostSave,
+                  offsetof(CourseContext, ghostSave), 3 * sizeof(GhostSave) + sizeof(SaveCourseRecords));
+    osRecvMesg(&gMFSMesgQ, NULL, OS_MESG_BLOCK);
     for (i = 0; i < 3; i++, ghostRecord++, ghostSave++) {
         PRINTF("Ghost Name %s\n");
         if (ghostSave->record.checksum != Save_CalculateGhostRecordChecksum(&ghostSave->record) * 1) {
@@ -53,9 +55,9 @@ void func_i2_800A9ED0(s32 courseIndex, GhostRecord* ghostRecord) {
             PRINTF("GHOST_INFO_DATA_BROKEN\n");
             func_i2_800A7C84(&ghostSave->record);
             func_i2_800A7CB8(courseRecords);
-            PRINTF("ghost time %d:%d:%d\n");
         }
         *ghostRecord = ghostSave->record;
+        PRINTF("ghost time %d:%d:%d\n");
     }
 }
 
@@ -71,7 +73,7 @@ bool func_i2_800A9F98(void) {
         }
     }
 
-    if (courseRecord->checksum != Save_CalculateSaveCourseRecordChecksum(courseRecord) * 1) {
+    if (courseRecord->checksum != Save_CalculateSaveCourseRecordChecksum(courseRecord)) {
         PRINTF("RECORD_DATA_BROKEN\n");
         return true;
     }
@@ -90,8 +92,9 @@ void func_i2_800AA024(s32 courseIndex, s32 ghostIndex, GhostData* ghostData) {
         return;
     }
     func_i2_800AA80C();
-    func_807684AC(0xFFFB, D_i2_800BF030, "GOST", COURSE_CONTEXT()->ghostSave, 0x7E0, 3 * sizeof(GhostSave));
-    osRecvMesg(&D_8079F998, NULL, OS_MESG_BLOCK);
+    func_807684AC(MFS_ENTRY_WORKING_DIR, D_i2_800BF030, "GOST", COURSE_CONTEXT()->ghostSave,
+                  offsetof(CourseContext, ghostSave), 3 * sizeof(GhostSave));
+    osRecvMesg(&gMFSMesgQ, NULL, OS_MESG_BLOCK);
     *ghostData = ghostSave[ghostIndex].data;
 }
 
@@ -116,7 +119,7 @@ void func_i2_800AA220(s32 courseIndex, s32 ghostIndex, Ghost* ghost) {
     }
     *ghostSave = gSaveContext.ghostSave;
 
-    func_807680EC(0xFFFB, D_i2_800BF030, "GOST", COURSE_CONTEXT(), 0xC830, 0, 0xFF, 1);
+    func_807680EC(MFS_ENTRY_WORKING_DIR, D_i2_800BF030, "GOST", COURSE_CONTEXT(), 0xC830, 0, 0xFF, 1);
 }
 
 void func_i2_800AA368(s32 courseIndex, s32 ghostIndex, Ghost* ghost) {
@@ -133,12 +136,12 @@ void func_i2_800AA368(s32 courseIndex, s32 ghostIndex, Ghost* ghost) {
     *ghostSave = gSaveContext.ghostSave;
     if ((courseIndex >= COURSE_EDIT_1) && (courseIndex <= COURSE_EDIT_6)) {
         if (gEditCupTrackNames[courseIndex - COURSE_EDIT_1][0] != '\0') {
-            func_807680EC(0xFFFB, gEditCupTrackNames[courseIndex - COURSE_EDIT_1], "CRSD", COURSE_CONTEXT(), 0xC830, 0,
-                          0xFF, 1);
+            func_807680EC(MFS_ENTRY_WORKING_DIR, gEditCupTrackNames[courseIndex - COURSE_EDIT_1], "CRSD",
+                          COURSE_CONTEXT(), 0xC830, 0, 0xFF, 1);
             return;
         }
     }
-    func_807680EC(0xFFFB, &D_i2_800BF030, "GOST", COURSE_CONTEXT(), 0xC830, 0, 0xFF, 1);
+    func_807680EC(MFS_ENTRY_WORKING_DIR, &D_i2_800BF030, "GOST", COURSE_CONTEXT(), 0xC830, 0, 0xFF, 1);
     PRINTF("ERASE DISK GHOST %d\n");
 }
 
@@ -157,12 +160,12 @@ void func_i2_800AA520(s32 courseIndex) {
     if ((courseIndex >= COURSE_EDIT_1) && (courseIndex <= COURSE_EDIT_6)) {
         if (gEditCupTrackNames[courseIndex - COURSE_EDIT_1][0] != '\0') {
             COURSE_CONTEXT()->courseData = D_i2_800D0130;
-            func_807680EC(0xFFFB, gEditCupTrackNames[courseIndex - COURSE_EDIT_1], "CRSD", COURSE_CONTEXT(), 0xC830, 0,
-                          0xFF, 1);
+            func_807680EC(MFS_ENTRY_WORKING_DIR, gEditCupTrackNames[courseIndex - COURSE_EDIT_1], "CRSD",
+                          COURSE_CONTEXT(), 0xC830, 0, 0xFF, 1);
             return;
         }
     }
-    func_807680EC(0xFFFB, D_i2_800BF030, "GOST", COURSE_CONTEXT(), 0xC830, 0, 0xFF, 1);
+    func_807680EC(MFS_ENTRY_WORKING_DIR, D_i2_800BF030, "GOST", COURSE_CONTEXT(), 0xC830, 0, 0xFF, 1);
 }
 
 void func_i2_800AA694(s32 courseIndex) {
@@ -175,13 +178,13 @@ void func_i2_800AA694(s32 courseIndex) {
     if ((courseIndex >= COURSE_EDIT_1) && (courseIndex <= COURSE_EDIT_6)) {
         if (gEditCupTrackNames[courseIndex - COURSE_EDIT_1][0] != '\0') {
             COURSE_CONTEXT()->courseData = D_i2_800D0130;
-            func_807680EC(0xFFFB, gEditCupTrackNames[courseIndex - COURSE_EDIT_1], "CRSD", COURSE_CONTEXT(), 0xC830, 0,
-                          0xFF, 1);
+            func_807680EC(MFS_ENTRY_WORKING_DIR, gEditCupTrackNames[courseIndex - COURSE_EDIT_1], "CRSD",
+                          COURSE_CONTEXT(), 0xC830, 0, 0xFF, 1);
             func_i2_800A8CE4(courseRecords, courseIndex);
             return;
         }
     }
-    func_807680EC(0xFFFB, D_i2_800BF030, "GOST", COURSE_CONTEXT(), 0xC830, 0, 0xFF, 1);
+    func_807680EC(MFS_ENTRY_WORKING_DIR, D_i2_800BF030, "GOST", COURSE_CONTEXT(), 0xC830, 0, 0xFF, 1);
     func_i2_800A8CE4(courseRecords, courseIndex);
 }
 
@@ -212,12 +215,12 @@ void func_i2_800AA864(s32 courseIndex) {
 
     if ((courseIndex >= COURSE_EDIT_1) && (courseIndex <= COURSE_EDIT_6)) {
         if (gEditCupTrackNames[courseIndex - COURSE_EDIT_1][0] != '\0') {
-            func_807680EC(0xFFFB, gEditCupTrackNames[courseIndex - COURSE_EDIT_1], "CRSD", COURSE_CONTEXT(), 0xC830, 0,
-                          0xFF, 1);
+            func_807680EC(MFS_ENTRY_WORKING_DIR, gEditCupTrackNames[courseIndex - COURSE_EDIT_1], "CRSD",
+                          COURSE_CONTEXT(), 0xC830, 0, 0xFF, 1);
             return;
         }
     }
-    func_807680EC(0xFFFB, &D_i2_800BF030, "GOST", COURSE_CONTEXT(), 0xC830, 0, 0xFF, 1);
+    func_807680EC(MFS_ENTRY_WORKING_DIR, &D_i2_800BF030, "GOST", COURSE_CONTEXT(), 0xC830, 0, 0xFF, 1);
 }
 
 void func_i2_800AA994(void) {
@@ -253,15 +256,13 @@ void func_i2_800AAA64(s32 ghostIndex, GhostData* ghostData) {
     *ghostData = ghostSave[ghostIndex].data;
 }
 
-extern u8 D_342[];
-
 void func_i2_800AAAC0(s32 courseIndex) {
 
-    courseIndex -= COURSE_EDIT_6 + 1;
+    courseIndex -= COURSE_SILENCE_3;
     if (courseIndex < 0) {
         courseIndex = 0;
     }
-    func_80703B40(D_342 + courseIndex, COURSE_CONTEXT()->ghostSave, 0xBF40, 0);
+    func_80703B40(SEGMENT_DISK_START(silence_3_staff_ghost) + courseIndex, COURSE_CONTEXT()->ghostSave, 0xBF40, 0);
 }
 
 void func_i2_800AAB0C(s32 courseIndex) {
@@ -280,6 +281,6 @@ void func_i2_800AAB0C(s32 courseIndex) {
     func_i2_800A7C84(&ghostSave->record);
     func_80704050(1);
     PRINTF("ERASE DISK GHOST %d\n");
-    SLMFSDeleteFile(0xFFFB, D_i2_800BF030, "GOST", 0);
+    SLMFSDeleteFile(MFS_ENTRY_WORKING_DIR, D_i2_800BF030, "GOST", false);
     func_80704050(0);
 }

@@ -1,15 +1,8 @@
 #ifndef FZX_SAVE_H
 #define FZX_SAVE_H
 
-#include "unk_structs.h"
-
-typedef enum GhostType {
-    /* 0 */ GHOST_NONE,
-    /* 1 */ GHOST_PLAYER,
-    /* 2 */ GHOST_STAFF,
-    /* 3 */ GHOST_CELEBRITY,
-    /* 4 */ GHOST_CHAMP,
-} GhostType;
+#include "libc/stdbool.h"
+#include "fzx_ghost.h"
 
 typedef struct SaveCourseRecords {
     u16 checksum;
@@ -160,16 +153,16 @@ void Save_LoadCharacterSave(CharacterSave* characterSave, s32 courseIndex);
 void Save_LoadCupSave(CupSave* cupSave, u8* arg1);
 void Save_LoadEditCup2(ProfileSave* profileSaves, u8* arg1, u16* arg2);
 
-s32 Save_CalculateSaveSettingsChecksum(ProfileSave* profileSave);
-s32 Save_CalculateSaveDeathRaceChecksum(ProfileSave* profileSave);
-s32 Save_CalculateProfileSaveCourseRecordChecksum(ProfileSave* profileSave, s32 courseIndex);
-s32 Save_CalculateSaveCourseRecordChecksum(SaveCourseRecords* courseRecords);
-s32 Save_CalculateSaveEditCupChecksum(ProfileSave* profileSave);
-s32 Save_CalculateSaveEditCup2Checksum(ProfileSave* profileSave);
-s32 Save_CalculateGhostRecordChecksum(GhostRecord* ghostRecord);
-s32 Save_CalculateGhostDataChecksum(GhostData* ghostData);
-s32 Save_CalculateCharacterSaveChecksum(CharacterSave* characterSave);
-s32 Save_CalculateCupSaveChecksum(CupSave* cupSave);
+u16 Save_CalculateSaveSettingsChecksum(ProfileSave* profileSave);
+u16 Save_CalculateSaveDeathRaceChecksum(ProfileSave* profileSave);
+u16 Save_CalculateProfileSaveCourseRecordChecksum(ProfileSave* profileSave, s32 courseIndex);
+u16 Save_CalculateSaveCourseRecordChecksum(SaveCourseRecords* courseRecords);
+u16 Save_CalculateSaveEditCupChecksum(ProfileSave* profileSave);
+u16 Save_CalculateSaveEditCup2Checksum(ProfileSave* profileSave);
+u16 Save_CalculateGhostRecordChecksum(GhostRecord* ghostRecord);
+u16 Save_CalculateGhostDataChecksum(GhostData* ghostData);
+u16 Save_CalculateCharacterSaveChecksum(CharacterSave* characterSave);
+u16 Save_CalculateCupSaveChecksum(CupSave* cupSave);
 
 void Save_ClearData(void* data, s32 size);
 

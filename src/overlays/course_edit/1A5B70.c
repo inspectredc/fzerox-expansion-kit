@@ -1,4 +1,7 @@
 #include "global.h"
+#include "leo/unk_leo.h"
+#include "assets/segment_1FB850.h"
+#include "assets/segment_21C170.h"
 
 u16 D_xk2_80105540[228 * 180] = { 0 };
 
@@ -14,10 +17,7 @@ s32 D_xk2_8011961C[][2] = {
     { 2, 17 }, { 19, 30 }, { 49, 17 }, { 66, 16 }, { 82, 17 }, { 99, 16 },
 };
 
-extern u8 D_7014B14[];
-extern u8 D_7019D74[];
-
-extern s32 D_800D11C8[];
+extern s32 D_800D11C8[6];
 extern unk_800D6CA0 D_800D6CA0;
 
 void func_xk2_800F40B0(void) {
@@ -105,7 +105,7 @@ void func_xk2_800F40B0(void) {
             case 1:
                 func_8074122C(0x24);
                 {
-                    u8* sp38[2] = { D_7014B14, D_7019D74 };
+                    u8* sp38[2] = { aExpansionKitEditControlHelpTex, aExpansionKitCameraControlHelpTex };
 
                     mio0Decode(Segment_SegmentedToVirtual(sp38[D_xk2_801195E8]), D_xk2_80105540);
                 }
@@ -124,7 +124,7 @@ void func_xk2_800F40B0(void) {
         switch (D_xk2_801195E0) {
             case 0:
                 func_8074122C(0x25);
-                func_807683B8(0xFFFB, "OPTION", "OPT", D_800D11C8, 0x18, 0, 0xFF, 1);
+                func_807683B8(MFS_ENTRY_WORKING_DIR, "OPTION", "OPT", D_800D11C8, sizeof(D_800D11C8), 0, 0xFF, true);
                 D_800D6CA0.unk_08 = 0x38;
                 break;
             case 1:
@@ -143,7 +143,6 @@ void func_xk2_800F40B0(void) {
     }
 }
 
-extern u8 D_7013990[];
 extern Gfx D_8014940[];
 extern Gfx D_80149A0[];
 
@@ -173,8 +172,9 @@ void func_xk2_800F4580(Gfx** gfxP) {
 
     for (i = 0; i < 56; i++) {
 
-        gDPLoadTextureBlock_4b(gfx++, D_7013990 + ((i * 160) / 2), G_IM_FMT_I, 160, 1, 0, G_TX_NOMIRROR | G_TX_CLAMP,
-                               G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+        gDPLoadTextureBlock_4b(gfx++, aExpansionKitPointSelectHelpTex + ((i * 160) / 2), G_IM_FMT_I, 160, 1, 0,
+                               G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK,
+                               G_TX_NOLOD, G_TX_NOLOD);
 
         gSPTextureRectangle(gfx++, left << 2, top << 2, (left + 160) << 2, (top + 1) << 2, 0, 0, 0, 1 << 10, 1 << 10);
         top++;
@@ -231,8 +231,6 @@ void func_xk2_800F47FC(Gfx** gfxP) {
     *gfxP = gfx;
 }
 
-extern u8 D_7013060[];
-
 void func_xk2_800F4AF8(Gfx** gfxP) {
     Gfx* gfx;
     s32 left;
@@ -260,8 +258,9 @@ void func_xk2_800F4AF8(Gfx** gfxP) {
     left = 104;
 
     for (i = 0; i < 42; i++) {
-        gDPLoadTextureBlock_4b(gfx++, D_7013060 + ((i * 112) / 2), G_IM_FMT_I, 112, 1, 0, G_TX_NOMIRROR | G_TX_CLAMP,
-                               G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+        gDPLoadTextureBlock_4b(gfx++, aExpansionKitHelpMenuTex + ((i * 112) / 2), G_IM_FMT_I, 112, 1, 0,
+                               G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK,
+                               G_TX_NOLOD, G_TX_NOLOD);
 
         gSPTextureRectangle(gfx++, left << 2, top << 2, (left + 112) << 2, (top + 1) << 2, 0, 0, 0, 1 << 10, 1 << 10);
         top++;
@@ -271,9 +270,9 @@ void func_xk2_800F4AF8(Gfx** gfxP) {
     gfx = func_i3_80059EC0(gfx, 3);
     gDPSetCombineMode(gfx++, G_CC_MODULATEIDECALA_PRIM, G_CC_MODULATEIDECALA_PRIM);
 
-    gDPLoadTextureBlock_4b(gfx++, D_7013060 + (((D_xk2_801195E8 * 0x10 + 4) * 112) / 2), G_IM_FMT_I, 112, 16, 0,
-                           G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
-                           G_TX_NOLOD);
+    gDPLoadTextureBlock_4b(gfx++, aExpansionKitHelpMenuTex + (((D_xk2_801195E8 * 0x10 + 4) * 112) / 2), G_IM_FMT_I, 112,
+                           16, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK,
+                           G_TX_NOLOD, G_TX_NOLOD);
 
     gSPTextureRectangle(gfx++, 104 << 2, ((D_xk2_801195E8 * 0x10) + 138) << 2, 216 << 2,
                         ((D_xk2_801195E8 * 0x10) + 138 + 16) << 2, 0, 0, 0, 1 << 10, 1 << 10);
@@ -282,8 +281,6 @@ void func_xk2_800F4AF8(Gfx** gfxP) {
 }
 
 extern s32 D_800D11C8[];
-extern u8 D_9000000[];
-extern u8 D_9000540[];
 extern s32 D_xk2_801195E0;
 
 void func_xk2_800F4EB8(Gfx** gfxP) {
@@ -311,7 +308,7 @@ void func_xk2_800F4EB8(Gfx** gfxP) {
     left = 104;
     top = 138;
 
-    gDPLoadTextureBlock_4b(gfx++, D_9000000, G_IM_FMT_I, 112, 24, 0, G_TX_NOMIRROR | G_TX_CLAMP,
+    gDPLoadTextureBlock_4b(gfx++, aCourseEditCursorSpeedSliderTex, G_IM_FMT_I, 112, 24, 0, G_TX_NOMIRROR | G_TX_CLAMP,
                            G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
     gSPTextureRectangle(gfx++, left << 2, top << 2, (left + 112) << 2, (top + 24) << 2, 0, 0, 0, 1 << 10, 1 << 10);
@@ -323,7 +320,7 @@ void func_xk2_800F4EB8(Gfx** gfxP) {
     gDPSetPrimColor(gfx++, 0, 0, 255, 0, 0, 255);
     gDPSetCombineMode(gfx++, G_CC_MODULATEIDECALA_PRIM, G_CC_MODULATEIDECALA_PRIM);
 
-    gDPLoadTextureBlock_4b(gfx++, D_9000540, G_IM_FMT_I, 16, 12, 0, G_TX_NOMIRROR | G_TX_CLAMP,
+    gDPLoadTextureBlock_4b(gfx++, aCourseEditCursorSpeedMarkerTex, G_IM_FMT_I, 16, 12, 0, G_TX_NOMIRROR | G_TX_CLAMP,
                            G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
     // FAKE
@@ -341,9 +338,6 @@ void func_xk2_800F4EB8(Gfx** gfxP) {
     *gfxP = gfx;
 }
 
-extern u8 D_7010D80[];
-extern u8 D_7012E20[];
-extern u8 D_7012F40[];
 extern Gfx D_3000540[];
 
 void func_xk2_800F5250(Gfx** gfxP) {
@@ -371,7 +365,7 @@ void func_xk2_800F5250(Gfx** gfxP) {
 
     if (D_xk2_801195E0 != 2) {
         for (i = 0; i < 19; i++) {
-            gDPLoadTextureBlock_4b(gfx++, D_7010D80 + (i * (144 * 6)) / 2, G_IM_FMT_I, 144, 6, 0,
+            gDPLoadTextureBlock_4b(gfx++, aExpansionKitOptionsMenuTex + (i * (144 * 6)) / 2, G_IM_FMT_I, 144, 6, 0,
                                    G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK,
                                    G_TX_NOLOD, G_TX_NOLOD);
 
@@ -383,9 +377,9 @@ void func_xk2_800F5250(Gfx** gfxP) {
     gDPPipeSync(gfx++);
     gDPSetPrimColor(gfx++, 0, 0, 145, 140, 255, 255);
 
-    gDPLoadTextureBlock_4b(gfx++, D_7010D80 + (144 * D_xk2_8011961C[5][0]) / 2, G_IM_FMT_I, 144, D_xk2_8011961C[5][1],
-                           0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK,
-                           G_TX_NOLOD, G_TX_NOLOD);
+    gDPLoadTextureBlock_4b(gfx++, aExpansionKitOptionsMenuTex + (144 * D_xk2_8011961C[5][0]) / 2, G_IM_FMT_I, 144,
+                           D_xk2_8011961C[5][1], 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK,
+                           G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
     gSPTextureRectangle(gfx++, left << 2, (D_xk2_8011961C[5][0] + 62) << 2, (left + 144) << 2,
                         (D_xk2_8011961C[5][0] + D_xk2_8011961C[5][1] + 62) << 2, 0, 0, 0, 1 << 10, 1 << 10);
@@ -398,9 +392,9 @@ void func_xk2_800F5250(Gfx** gfxP) {
         gDPSetPrimColor(gfx++, 0, 0, 255, 210, 0, 255);
     }
 
-    gDPLoadTextureBlock_4b(gfx++, D_7010D80 + (144 * D_xk2_8011961C[D_xk2_801195E4][0]) / 2, G_IM_FMT_I, 144,
-                           D_xk2_8011961C[D_xk2_801195E4][1], 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
-                           G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    gDPLoadTextureBlock_4b(gfx++, aExpansionKitOptionsMenuTex + (144 * D_xk2_8011961C[D_xk2_801195E4][0]) / 2,
+                           G_IM_FMT_I, 144, D_xk2_8011961C[D_xk2_801195E4][1], 0, G_TX_NOMIRROR | G_TX_CLAMP,
+                           G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
     gSPTextureRectangle(gfx++, left << 2, (D_xk2_8011961C[D_xk2_801195E4][0] + 62) << 2, (left + 144) << 2,
                         (D_xk2_8011961C[D_xk2_801195E4][0] + D_xk2_8011961C[D_xk2_801195E4][1] + 62) << 2, 0, 0, 0,
@@ -411,13 +405,13 @@ void func_xk2_800F5250(Gfx** gfxP) {
         if (D_800D11C8[i] != 0) {
             gDPSetPrimColor(gfx++, 0, 0, 255, 40, 75, 255);
 
-            gDPLoadTextureBlock_4b(gfx++, D_7012E20, G_IM_FMT_I, 48, 12, 0, G_TX_NOMIRROR | G_TX_CLAMP,
+            gDPLoadTextureBlock_4b(gfx++, aExpansionKitOptionOnTex, G_IM_FMT_I, 48, 12, 0, G_TX_NOMIRROR | G_TX_CLAMP,
                                    G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
         } else {
             gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, 255);
 
-            gDPLoadTextureBlock_4b(gfx++, D_7012F40, G_IM_FMT_I, 48, 12, 0, G_TX_NOMIRROR | G_TX_CLAMP,
+            gDPLoadTextureBlock_4b(gfx++, aExpansionKitOptionOffTex, G_IM_FMT_I, 48, 12, 0, G_TX_NOMIRROR | G_TX_CLAMP,
                                    G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
         }
 

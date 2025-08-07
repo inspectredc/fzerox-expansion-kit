@@ -88,9 +88,9 @@ DECLARE_SEGMENT(framebuffer_unused);
 DECLARE_SEGMENT(audio_context);
 DECLARE_SEGMENT(unk_context);
 
-DECLARE_SEGMENT(course_edit_textures);
+DECLARE_SEGMENT(segment_21C170);
 DECLARE_SEGMENT(create_machine_textures);
-DECLARE_SEGMENT(segment_145B70);
+DECLARE_SEGMENT(segment_1FB850);
 DECLARE_SEGMENT(segment_16C8A0);
 DECLARE_SEGMENT(segment_17B1E0);
 DECLARE_SEGMENT(segment_17B960);
@@ -99,5 +99,31 @@ DECLARE_SEGMENT(segment_1E23F0);
 DECLARE_SEGMENT(segment_22B0A0);
 DECLARE_SEGMENT(segment_235130);
 DECLARE_SEGMENT(segment_2738A0);
+
+DECLARE_SEGMENT(silence_3);
+DECLARE_SEGMENT(sand_ocean_3);
+DECLARE_SEGMENT(devils_forest_4);
+DECLARE_SEGMENT(port_town_3);
+DECLARE_SEGMENT(devils_forest_5);
+DECLARE_SEGMENT(big_blue_3);
+DECLARE_SEGMENT(mute_city_4);
+DECLARE_SEGMENT(space_plant_2);
+DECLARE_SEGMENT(port_town_4);
+DECLARE_SEGMENT(fire_field_2);
+DECLARE_SEGMENT(white_land_3);
+DECLARE_SEGMENT(big_foot);
+
+DECLARE_SEGMENT(silence_3_staff_ghost);
+DECLARE_SEGMENT(sand_ocean_3_staff_ghost);
+DECLARE_SEGMENT(devils_forest_4_staff_ghost);
+DECLARE_SEGMENT(port_town_3_staff_ghost);
+DECLARE_SEGMENT(devils_forest_5_staff_ghost);
+DECLARE_SEGMENT(big_blue_3_staff_ghost);
+DECLARE_SEGMENT(mute_city_4_staff_ghost);
+DECLARE_SEGMENT(space_plant_2_staff_ghost);
+DECLARE_SEGMENT(port_town_4_staff_ghost);
+DECLARE_SEGMENT(fire_field_2_staff_ghost);
+DECLARE_SEGMENT(white_land_3_staff_ghost);
+DECLARE_SEGMENT(big_foot_staff_ghost);
 
 #endif

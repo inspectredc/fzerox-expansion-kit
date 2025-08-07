@@ -1,7 +1,33 @@
 #ifndef FZX_MACHINE_H
 #define FZX_MACHINE_H
 
-#include "unk_structs.h"
+typedef struct MachineInfo {
+    /* 0x00 */ u8 character;
+    /* 0x01 */ u8 customType;
+    /* 0x02 */ u8 frontType;
+    /* 0x03 */ u8 rearType;
+    /* 0x04 */ u8 wingType;
+    /* 0x05 */ u8 logo;
+    /* 0x06 */ u8 number;
+    /* 0x07 */ u8 decal;
+    /* 0x08 */ u8 bodyR;
+    /* 0x09 */ u8 bodyG;
+    /* 0x0A */ u8 bodyB;
+    /* 0x0B */ u8 numberR;
+    /* 0x0C */ u8 numberG;
+    /* 0x0D */ u8 numberB;
+    /* 0x0E */ u8 decalR;
+    /* 0x0F */ u8 decalG;
+    /* 0x10 */ u8 decalB;
+    /* 0x11 */ u8 cockpitR;
+    /* 0x12 */ u8 cockpitG;
+    /* 0x13 */ u8 cockpitB;
+} MachineInfo; // size = 0x14
+
+typedef struct unk_80141C88_unk_1D {
+    MachineInfo unk_00;
+    s8 unk_14[12];
+} unk_80141C88_unk_1D; // size = 0x20
 
 typedef struct CustomMachineInfo {
     /* 0x0 */ u8 frontType;
