@@ -585,9 +585,9 @@ void func_xk2_800F3164(Gfx** gfxP) {
     gSPDisplayList(gfx++, D_8014940);
 
     for (i = 0; i < 32; i++) {
-        gDPLoadTextureBlock(gfx++, aExpansionKitPauseInstructionsTex + i * width, G_IM_FMT_RGBA, G_IM_SIZ_16b, 224, 1, 0,
-                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
-                            G_TX_NOLOD);
+        gDPLoadTextureBlock(gfx++, aExpansionKitPauseInstructionsTex + i * width, G_IM_FMT_RGBA, G_IM_SIZ_16b, 224, 1,
+                            0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
+                            G_TX_NOLOD, G_TX_NOLOD);
 
         gSPTextureRectangle(gfx++, left << 2, top << 2, (left + width) << 2, (top + 1) << 2, 0, 0, 0, 1 << 10, 1 << 10);
         top++;
@@ -651,7 +651,7 @@ void func_xk2_800F335C(Gfx** gfxP, s32 top, s8* arg2) {
 }
 
 extern s32 D_8076C96C;
-extern s32 D_xk2_800F705C;
+extern s32 gCourseEditHighlightedIconIndex;
 
 void func_xk2_800F3548(Gfx** gfxP) {
     s32 top = 194;
@@ -661,7 +661,7 @@ void func_xk2_800F3548(Gfx** gfxP) {
         return;
     }
     gfx = *gfxP;
-    switch (D_xk2_800F705C) {
+    switch (gCourseEditHighlightedIconIndex) {
         case 0:
             func_xk2_800F335C(&gfx, top, D_xk2_80104F74);
             break;
@@ -677,14 +677,14 @@ void func_xk2_800F3548(Gfx** gfxP) {
     *gfxP = gfx;
 }
 
-extern MenuWidget D_xk1_80032880;
-extern MenuWidget D_xk1_80031870;
-extern MenuWidget D_xk1_80032160;
-extern MenuWidget D_xk1_8003226C;
-extern MenuWidget D_xk1_80032354;
-extern MenuWidget D_xk1_80032484;
-extern MenuWidget D_xk1_800325FC;
-extern MenuWidget D_xk1_80032774;
+extern MenuWidget gCourseEditWidget;
+extern MenuWidget gCourseEditEntryWidget;
+extern MenuWidget gCourseEditFileWidget;
+extern MenuWidget gCreateWidget;
+extern MenuWidget gPointWidget;
+extern MenuWidget gMoveWidget;
+extern MenuWidget gDesignStyleWidget;
+extern MenuWidget gPartsStyleWidget;
 
 void func_xk2_800F3600(Gfx** gfxP) {
     s32 pad;
@@ -694,11 +694,11 @@ void func_xk2_800F3600(Gfx** gfxP) {
     if ((D_8076C96C == 0) || (D_800D6CA0.unk_08 != 1)) {
         return;
     }
-    sp2C = func_xk1_80026914(&D_xk1_80032880);
+    sp2C = func_xk1_80026914(&gCourseEditWidget);
 
     gfx = *gfxP;
-    if (sp2C == &D_xk1_8003226C) {
-        switch (sp2C->unk_08) {
+    if (sp2C == &gCreateWidget) {
+        switch (sp2C->highlightedIndex) {
             case 0:
                 func_xk2_800F335C(&gfx, 24, D_xk2_80104FD4);
                 func_xk2_800EECD4(&gfx, 0, 156, D_xk1_800331F0[25], 25);
@@ -723,8 +723,8 @@ void func_xk2_800F3600(Gfx** gfxP) {
                 break;
         }
     }
-    if (sp2C == &D_xk1_80032354) {
-        switch (sp2C->unk_08) {
+    if (sp2C == &gPointWidget) {
+        switch (sp2C->highlightedIndex) {
             case 0:
                 func_xk2_800F335C(&gfx, 24, D_xk2_80105078);
                 break;
@@ -742,8 +742,8 @@ void func_xk2_800F3600(Gfx** gfxP) {
                 break;
         }
     }
-    if (sp2C == &D_xk1_80032484) {
-        switch (sp2C->unk_08) {
+    if (sp2C == &gMoveWidget) {
+        switch (sp2C->highlightedIndex) {
             case 0:
                 func_xk2_800F335C(&gfx, 24, D_xk2_801050FC);
                 break;
@@ -767,8 +767,8 @@ void func_xk2_800F3600(Gfx** gfxP) {
                 break;
         }
     }
-    if (sp2C == &D_xk1_80032160) {
-        switch (sp2C->unk_08) {
+    if (sp2C == &gCourseEditFileWidget) {
+        switch (sp2C->highlightedIndex) {
             case 0:
                 func_xk2_800F335C(&gfx, 24, D_xk2_801053B4);
                 break;
@@ -786,8 +786,8 @@ void func_xk2_800F3600(Gfx** gfxP) {
                 break;
         }
     }
-    if (sp2C == &D_xk1_80031870) {
-        switch (sp2C->unk_08) {
+    if (sp2C == &gCourseEditEntryWidget) {
+        switch (sp2C->highlightedIndex) {
             case 0:
                 func_xk2_800F335C(&gfx, 24, D_xk2_80105428);
                 break;
@@ -799,8 +799,8 @@ void func_xk2_800F3600(Gfx** gfxP) {
                 break;
         }
     }
-    if (sp2C == &D_xk1_800325FC) {
-        switch (sp2C->unk_08) {
+    if (sp2C == &gDesignStyleWidget) {
+        switch (sp2C->highlightedIndex) {
             case 0:
                 func_xk2_800F335C(&gfx, 24, D_xk2_801051D0);
                 break;
@@ -830,8 +830,8 @@ void func_xk2_800F3600(Gfx** gfxP) {
                 break;
         }
     }
-    if (sp2C == &D_xk1_80032774) {
-        switch (sp2C->unk_08) {
+    if (sp2C == &gPartsStyleWidget) {
+        switch (sp2C->highlightedIndex) {
             case 0:
                 func_xk2_800F335C(&gfx, 24, D_xk2_801052E0);
                 break;
@@ -864,7 +864,7 @@ void func_xk2_800F3600(Gfx** gfxP) {
     *gfxP = gfx;
 }
 
-extern u16* D_8076C970[];
+extern u16* gCourseEditIconTextures[];
 extern s32 D_8076C95C;
 extern s32 D_8076C960;
 
@@ -872,7 +872,7 @@ void func_xk2_800F3D10(void) {
 
     if (gControllers[gPlayerControlPorts[0]].buttonPressed & BTN_A) {
         D_8076C96C = 1;
-        D_8076C970[3] = D_9002988;
+        gCourseEditIconTextures[3] = aCourseEditGoldQuestionIconTex;
         D_8076C95C = 0;
         D_8076C960 = 0;
         D_800D6CA0.unk_08 = 0;
@@ -914,8 +914,9 @@ void func_xk2_800F3DAC(Gfx** gfxP) {
 
     gSPDisplayList(gfx++, D_8014940);
 
-    gDPLoadTextureBlock(gfx++, D_9002788, G_IM_FMT_RGBA, G_IM_SIZ_16b, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    gDPLoadTextureBlock(gfx++, aCourseEditQuestionIconTex, G_IM_FMT_RGBA, G_IM_SIZ_16b, 16, 16, 0,
+                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                        G_TX_NOLOD);
 
     gSPTextureRectangle(gfx++, left << 2, top << 2, (left + width) << 2, (top + height) << 2, 0, 0, 0, 1 << 10,
                         1 << 10);
@@ -926,7 +927,7 @@ void func_xk2_800F3DAC(Gfx** gfxP) {
 
     gDPSetPrimColor(gfx++, 0, 0, 255, 64, 64, 255);
 
-    gDPLoadTextureBlock(gfx++, D_9001C88, G_IM_FMT_IA, G_IM_SIZ_8b, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
+    gDPLoadTextureBlock(gfx++, aCourseEditMouseClickTex, G_IM_FMT_IA, G_IM_SIZ_8b, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                         G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
     func_xk2_800E92E4(&gfx, 0x120, 0xCC);

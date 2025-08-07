@@ -137,11 +137,11 @@ extern volatile u8 D_80794E10;
 extern s32 D_xk2_800F7060;
 extern s32 D_xk2_800F7064;
 extern CourseSegment D_802D0620[];
-extern s32 D_xk1_8003066C;
-extern s32 D_xk1_80030670;
-extern s32 D_xk1_80030674;
-extern s32 D_xk1_800328B4[];
-extern MenuWidget D_xk1_80031140;
+extern s32 gVenueOption;
+extern s32 gSkyboxOption;
+extern s32 gBGMOption;
+extern s32 gBGMOptionToCourseBGM[];
+extern MenuWidget gVenueWidget;
 extern s32 D_xk2_800F7040;
 
 void func_xk2_800EACB0(void) {
@@ -157,7 +157,7 @@ void func_xk2_800EACB0(void) {
         *COURSE_CONTEXT() = D_xk2_800F7408;
     }
     if ((Course_CalculateChecksum() != COURSE_CONTEXT()->courseData.checksum) ||
-        (COURSE_CONTEXT()->courseData.creatorId != CREATOR_NINTENDO) || (COURSE_CONTEXT()->courseData.unk_1F >= 0xE)) {
+        (COURSE_CONTEXT()->courseData.creatorId != CREATOR_NINTENDO) || (COURSE_CONTEXT()->courseData.bgm >= 0xE)) {
         PRINTF("COURSE DATA CHECK SUM ERROR 0x%x(DATA WAS BROKEN 0x%x)\n");
         func_xk2_800EE664(0xA);
         func_xk2_800EF8B0();
@@ -169,11 +169,11 @@ void func_xk2_800EACB0(void) {
     PRINTF("LOAD TYPE %c%c%c%c\n");
     PRINTF("WAIT GET FILE NAMES\n");
 
-    D_xk1_80031140.unk_08 = D_xk1_8003066C = COURSE_CONTEXT()->courseData.venue;
-    D_xk1_80030670 = COURSE_CONTEXT()->courseData.skybox;
-    D_xk1_80030674 = D_xk1_800328B4[COURSE_CONTEXT()->courseData.unk_1F];
+    gVenueWidget.highlightedIndex = gVenueOption = COURSE_CONTEXT()->courseData.venue;
+    gSkyboxOption = COURSE_CONTEXT()->courseData.skybox;
+    gBGMOption = gBGMOptionToCourseBGM[COURSE_CONTEXT()->courseData.bgm];
     func_80709A38(COURSE_CONTEXT()->courseData.venue);
-    func_80702FF4(D_xk1_8003066C);
+    func_80702FF4(gVenueOption);
     func_80702BC4(0);
 
     courseInfo = &gCourseInfos[0];
@@ -217,8 +217,8 @@ s32 func_xk2_800EAFA8(unk_8003A5D8* arg0) {
     return 0;
 }
 
-extern s32 D_xk1_80030610;
-extern s32 D_xk1_80030678;
+extern s32 gCourseEditFileOption;
+extern s32 gCourseEditEntryOption;
 extern s32 D_xk1_80032BF8;
 extern s32 D_xk2_800F684C;
 extern s32 D_xk1_8003A550;
@@ -232,8 +232,8 @@ void func_xk2_800EB018(void) {
         D_xk1_80032BF8 = 0;
         D_xk2_800F7400 = 0xFF;
         if ((func_xk1_8002BFA4() == 0) && (D_80119880 != 1)) {
-            D_xk1_80030610 = -1;
-            D_xk1_80030678 = -1;
+            gCourseEditFileOption = -1;
+            gCourseEditEntryOption = -1;
             D_800D6CA0.unk_08 = 0;
             return;
         }
@@ -312,11 +312,10 @@ void func_xk2_800EB3B4(void) {
     }
     func_xk1_8002BD34();
     D_800D6CA0.unk_08 = 0;
-    D_xk1_80030610 = -1;
-    D_xk1_80030678 = -1;
+    gCourseEditFileOption = -1;
+    gCourseEditEntryOption = -1;
 }
 
-extern s32 D_xk1_80030610;
 extern u8 gExpansionKitNameEntryStr[];
 extern s32 D_xk2_80103F10;
 extern s32 D_xk2_80104378;
@@ -345,7 +344,7 @@ void func_xk2_800EB400(void) {
                 }
                 D_80030060[0] = 0;
                 func_xk2_800EACB0();
-                D_xk1_80030610 = -1;
+                gCourseEditFileOption = -1;
                 D_800D6CA0.unk_08 = 0;
                 D_xk2_800F7040 = 3;
                 D_xk2_800F7060 = Math_Rand2() % 30;
@@ -359,7 +358,7 @@ void func_xk2_800EB400(void) {
         case 8:
             func_80701E90(courseIndex);
             func_xk2_800EACB0();
-            D_xk1_80030610 = -1;
+            gCourseEditFileOption = -1;
             D_800D6CA0.unk_08 = 0x30;
             D_80119880 = 7;
             D_xk2_800F7040 = 3;
@@ -373,7 +372,7 @@ void func_xk2_800EB400(void) {
             } else if (D_807B3C20.unk_2900 == 0) {
                 func_xk2_800F5C50();
                 func_xk2_800EAF24(&D_xk1_8003A5D8[courseIndex]);
-                D_xk1_80030610 = -1;
+                gCourseEditFileOption = -1;
                 D_800D6CA0.unk_08 = 0x13;
             } else {
                 D_xk2_80104378 = 1;
@@ -435,7 +434,7 @@ void func_xk2_800EB400(void) {
             break;
         case 4:
             func_xk2_800EB304(D_xk1_8003A5D8[courseIndex].name, D_xk1_8003A5D8[courseIndex].attr);
-            D_xk1_80030610 = -1;
+            gCourseEditFileOption = -1;
             D_800D6CA0.unk_08 = 0;
             break;
         case 5:
@@ -452,7 +451,7 @@ void func_xk2_800EB400(void) {
             func_xk1_800294AC();
             mfsStrCpy(gExpansionKitNameEntryStr, D_xk1_8003A5D8[courseIndex].name);
             func_xk2_800EAFA8(D_xk1_8003A5D8[courseIndex].name);
-            D_xk1_80030610 = -1;
+            gCourseEditFileOption = -1;
             D_800D6CA0.unk_08 = 0x33;
             break;
         default:

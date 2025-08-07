@@ -6,39 +6,39 @@
 
 s32 gWorksMachineMode = MACHINE_MODE_0;
 
-extern s32 D_xk1_800318B4;
+extern s32 gMachineRegistrationOption;
 
 void func_xk3_801326C0(void) {
-    D_xk1_800318B4 = 0;
+    gMachineRegistrationOption = 0;
     PRINTF("WORKS MACHINE MODE : MENU\n");
     gWorksMachineMode = MACHINE_MODE_MENU;
 }
 
-extern s32 D_xk1_800318A4;
+extern s32 gMachineDesignOption;
 
 void func_xk3_801326D8(void) {
-    D_xk1_800318A4 = 0;
+    gMachineDesignOption = 0;
     PRINTF("WORKS MACHINE MODE : MENU\n");
     gWorksMachineMode = MACHINE_MODE_MENU;
 }
 
-extern s32 D_xk1_800318B0;
+extern s32 gColorOption;
 extern volatile unk_807C6EA8 D_807C6EA8;
 extern CustomMachine gCustomMachine;
 extern CustomMachine gCustomMachineWork;
 
 void func_xk3_801326F0(void) {
     D_807C6EA8.unk_08 = 0;
-    D_xk1_800318B0 = 0;
+    gColorOption = 0;
     gCustomMachineWork = gCustomMachine;
     PRINTF("WORKS MACHINE MODE : MENU_COLOR\n");
     gWorksMachineMode = MACHINE_MODE_MENU_COLOR;
 }
 
-extern s32 D_xk1_800318B8;
+extern s32 gMachineCreateEntryOption;
 
 void func_xk3_80132764(void) {
-    D_xk1_800318B8 = 0;
+    gMachineCreateEntryOption = 0;
     PRINTF("WORKS MACHINE MODE : MENU\n");
     gWorksMachineMode = MACHINE_MODE_MENU;
 }
@@ -95,11 +95,11 @@ void func_xk3_80132884(void) {
     D_xk3_80136540 = -7000.0f;
 }
 
-extern s32 D_xk1_800318A8;
+extern s32 gDecalOption;
 
 void func_xk3_80132910(void) {
     D_807C6EA8.unk_08 = 0;
-    D_xk1_800318A8 = gCustomMachine.decal - 1;
+    gDecalOption = gCustomMachine.decal - 1;
     PRINTF("WORKS MACHINE MODE : SELECT_LINE\n");
     gWorksMachineMode = MACHINE_MODE_SELECT_LINE;
     gCustomMachineWork = gCustomMachine;
@@ -135,11 +135,11 @@ void func_xk3_801329EC(void) {
     gWorksMachineMode = MACHINE_MODE_0;
 }
 
-extern s32 D_xk1_800318AC;
+extern s32 gLogoOption;
 
 void func_xk3_80132A04(void) {
     D_807C6EA8.unk_08 = 0;
-    D_xk1_800318AC = gCustomMachine.logo - 1;
+    gLogoOption = gCustomMachine.logo - 1;
     PRINTF("WORKS MACHINE MODE : SELECT_MARK\n");
     gWorksMachineMode = MACHINE_MODE_SELECT_MARK;
     gCustomMachineWork = gCustomMachine;
@@ -278,5 +278,6 @@ void func_xk3_80132E84(void) {
     gWorksMachineMode = MACHINE_MODE_SETTING;
     D_xk3_80140E70.unk_00 = 0;
     D_xk3_80140E70.unk_04 = 0;
-    gMachineCreateStatsBox = BorderedBox_Init(1, 122, 38, 174, 79, 1, GPACK_RGBA5551(0, 0, 0, 1), MachineCreate_DrawStatSelection);
+    gMachineCreateStatsBox =
+        BorderedBox_Init(1, 122, 38, 174, 79, 1, GPACK_RGBA5551(0, 0, 0, 1), MachineCreate_DrawStatSelection);
 }

@@ -95,7 +95,7 @@ s32 MachineCreate_Update(void) {
         gWorksMachineMode = MACHINE_MODE_0;
         func_xk1_8002FBB0();
         func_8071E0C0();
-        func_xk1_80026908(1);
+        ExpansionKit_SetMenuHighlightDrawFlag(true);
         func_80704810(1);
         osViSetSpecialFeatures(OS_VI_DITHER_FILTER_OFF);
         return GAMEMODE_FLX_MAIN_MENU;

@@ -220,8 +220,9 @@ void func_xk2_800EE67C(Gfx** gfxP) {
 
     if (D_8076C960 != 0) {
         gSPDisplayList(gfx++, D_8014940);
-        gDPLoadTextureBlock(gfx++, D_9002788, G_IM_FMT_RGBA, G_IM_SIZ_16b, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+        gDPLoadTextureBlock(gfx++, aCourseEditQuestionIconTex, G_IM_FMT_RGBA, G_IM_SIZ_16b, 16, 16, 0,
+                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                            G_TX_NOLOD);
 
         gSPTextureRectangle(gfx++, left << 2, top << 2, (left + width) << 2, (top + height) << 2, 0, 0, 0, 1 << 10,
                             1 << 10);

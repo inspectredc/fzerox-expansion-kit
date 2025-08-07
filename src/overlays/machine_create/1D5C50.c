@@ -115,7 +115,8 @@ s32 func_xk3_801363F8(unk_8003A5D8* arg0) {
     u8 i;
 
     for (i = 0; i < 30; i++) {
-        if ((gCustomMachinesInfo.characterCustomState[i] > 0 && mfsStrCmp(arg0->name, gCustomMachinesInfo.customMachines[i].machineName) == 0) ||
+        if ((gCustomMachinesInfo.characterCustomState[i] > 0 &&
+             mfsStrCmp(arg0->name, gCustomMachinesInfo.customMachines[i].machineName) == 0) ||
             (gCustomMachinesInfo.characterCustomState[i] == -1 && mfsStrCmp(arg0->name, gSuperMachineNames[i]) == 0)) {
             if (arg0->unk_22 == 0) {
                 return 1;

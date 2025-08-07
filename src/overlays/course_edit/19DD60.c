@@ -127,14 +127,14 @@ extern s32 D_xk1_80032BF8;
 extern s32 D_xk2_800F7058;
 extern s32 D_xk2_80119800;
 extern u8* sCourseMinimapTex;
-extern MenuWidget D_xk1_80032880;
+extern MenuWidget gCourseEditWidget;
 extern s32 gNumPlayers;
 extern s32 gCourseIndex;
-extern s32 D_xk1_8003061C;
-extern s32 D_xk1_8003066C;
-extern s32 D_xk1_80030670;
-extern s32 D_xk1_80030674;
-extern s32 D_xk1_800328B4[];
+extern s32 gPointOption;
+extern s32 gVenueOption;
+extern s32 gSkyboxOption;
+extern s32 gBGMOption;
+extern s32 gBGMOptionToCourseBGM[];
 extern s32 D_xk2_800F7060;
 extern s32 D_xk2_800F7064;
 extern s32 D_xk2_800F7040;
@@ -153,7 +153,7 @@ extern GfxPool* gGfxPool;
 extern Vtx* D_800D65D0;
 
 void CourseEdit_Init(void) {
-    D_xk1_80032880.unk_08 = -1;
+    gCourseEditWidget.highlightedIndex = -1;
     gNumPlayers = 1;
     gCourseIndex = 0;
     func_xk2_800F6290();
@@ -175,7 +175,7 @@ void CourseEdit_Init(void) {
     func_xk1_8002E9D0(3);
     func_i2_800B91AC(0);
     D_8076C954 = 1;
-    D_xk1_8003061C = 0;
+    gPointOption = 0;
     D_80030608 = 0x1F4;
     D_xk2_800F704C = -1;
     D_xk2_80119800 = -1;
@@ -196,10 +196,10 @@ void CourseEdit_Init(void) {
     func_xk1_8002D880(0x18);
     func_xk2_800E77F0();
     COURSE_CONTEXT()->courseData = D_800D0910;
-    D_xk1_8003066C = COURSE_CONTEXT()->courseData.venue;
-    D_xk1_80030670 = COURSE_CONTEXT()->courseData.skybox;
-    D_xk1_80030674 = D_xk1_800328B4[COURSE_CONTEXT()->courseData.unk_1F];
-    func_80702FF4(D_xk1_8003066C);
+    gVenueOption = COURSE_CONTEXT()->courseData.venue;
+    gSkyboxOption = COURSE_CONTEXT()->courseData.skybox;
+    gBGMOption = gBGMOptionToCourseBGM[COURSE_CONTEXT()->courseData.bgm];
+    func_80702FF4(gVenueOption);
     func_xk2_800E7028(D_80030608);
     func_xk2_800F5C5C();
     func_xk1_8002AF10(4);
@@ -255,11 +255,11 @@ void func_xk2_800EC91C(void) {
 extern s32 D_xk1_8003A550;
 extern s32 D_xk1_8003A554;
 extern s32 D_800D11D0;
-extern s32 D_xk1_800305F4;
+extern s32 gLastCourseBGM;
 
 void func_xk2_800EC9BC(void) {
     func_xk2_800DE758();
-    func_xk1_80027CFC(&D_xk1_80032880, &D_xk1_8003A550, &D_xk1_8003A554);
+    func_xk1_80027CFC(&gCourseEditWidget, &D_xk1_8003A550, &D_xk1_8003A554);
     if (D_80794E14 == 1) {
         return;
     }
@@ -271,12 +271,12 @@ void func_xk2_800EC9BC(void) {
                 func_80741B84();
             }
         }
-        func_xk1_80027B74(&D_xk1_80032880);
-        D_xk1_800305F4 = -1;
+        func_xk1_80027B74(&gCourseEditWidget);
+        gLastCourseBGM = -1;
         D_800D6CA0.unk_08 = 0;
     }
     if (gControllers[gPlayerControlPorts[0]].buttonPressed & BTN_A) {
-        func_xk1_80027DC8(&D_xk1_80032880, &D_xk1_8003A550, &D_xk1_8003A554);
+        func_xk1_80027DC8(&gCourseEditWidget, &D_xk1_8003A550, &D_xk1_8003A554);
     }
     func_xk1_80028064();
     func_xk1_80028250();
@@ -354,7 +354,7 @@ void func_xk2_800ECD60(void) {
     func_xk2_800EBE14();
 }
 
-extern s32 D_xk1_80030610;
+extern s32 gCourseEditFileOption;
 extern s32 gExpansionKitNameEntryStrLength;
 extern u8 gExpansionKitNameEntryStr[];
 extern s32 D_80119880;
@@ -371,11 +371,11 @@ void func_xk2_800ECD90(void) {
     if (gControllers[gPlayerControlPorts[0]].buttonPressed & BTN_B) {
         func_8074122C(0x25);
         D_800D6CA0.unk_08 = 0;
-        D_xk1_80030610 = -1;
+        gCourseEditFileOption = -1;
     }
 }
 
-extern s32 D_xk1_80030678;
+extern s32 gCourseEditEntryOption;
 extern s32 D_xk1_80032BF8;
 extern s32 D_xk2_80119918;
 extern unk_8003A5D8 D_xk1_8003A598;
@@ -573,7 +573,7 @@ s32 CourseEdit_Update(void) {
             break;
         case 0x24:
             if (D_80794E14 == 0) {
-                D_xk1_80030678 = -1;
+                gCourseEditEntryOption = -1;
                 func_8074122C(5);
                 func_8070405C(1);
                 D_800D6CA0.unk_08 = 0;

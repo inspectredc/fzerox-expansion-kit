@@ -450,41 +450,41 @@ aExpansionKitMenuCopyTex:
   offset: 0x1EFA0
   symbol: aExpansionKitMenuCopyTex
 
-D_701F120:
+aExpansionKitReverseTex:
   type: TEXTURE
   ctype: u8
   format: I4
   width: 48
   height: 16
   offset: 0x1F120
-  symbol: D_701F120
+  symbol: aExpansionKitReverseTex
 
-D_701F2A0:
+aExpansionKitMenuAcceptTex:
   type: TEXTURE
   ctype: u8
   format: I4
   width: 48
   height: 16
   offset: 0x1F2A0
-  symbol: D_701F2A0
+  symbol: aExpansionKitMenuAcceptTex
 
-D_701F420:
+aExpansionKitMenuClearTex:
   type: TEXTURE
   ctype: u8
   format: I4
   width: 48
   height: 16
   offset: 0x1F420
-  symbol: D_701F420
+  symbol: aExpansionKitMenuClearTex
 
-D_701F5A0:
+aExpansionKitScrollArrowIndicatorTex:
   type: TEXTURE
   ctype: u16
   format: RGBA16
   width: 32
   height: 16
   offset: 0x1F5A0
-  symbol: D_701F5A0
+  symbol: aExpansionKitScrollArrowIndicatorTex
 
 aExpansionKitMenuExitTex:
   type: TEXTURE
@@ -495,23 +495,23 @@ aExpansionKitMenuExitTex:
   offset: 0x1F9A0
   symbol: aExpansionKitMenuExitTex
 
-D_701FDA0:
+aExpansionKitHelpTex:
   type: TEXTURE
   ctype: u16
   format: RGBA16
   width: 32
   height: 16
   offset: 0x1FDA0
-  symbol: D_701FDA0
+  symbol: aExpansionKitHelpTex
 
-D_70201A0:
+aExpansionKitMenuHighlightTex:
   type: TEXTURE
   ctype: u16
   format: RGBA16
   width: 48
   height: 16
   offset: 0x201A0
-  symbol: D_70201A0
+  symbol: aExpansionKitMenuHighlightTex
 
 D_70207A0:
   type: GFX

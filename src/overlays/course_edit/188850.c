@@ -2,6 +2,7 @@
 #include "leo/leo_functions.h"
 #include "fzx_racer.h"
 #include "fzx_course.h"
+#include "fzx_expansion_kit.h"
 #include "assets/segment_21C170.h"
 
 Controller* D_80119720;
@@ -238,28 +239,28 @@ extern s32 D_xk2_80104CB0;
 extern unk_800D6CA0 D_800D6CA0;
 
 void func_xk2_800D78A0(void) {
-    u16 var_v0;
+    u16 directionButton;
 
-    var_v0 = gControllers[gPlayerControlPorts[0]].buttonCurrent & (BTN_UP | BTN_DOWN | BTN_LEFT | BTN_RIGHT);
+    directionButton = gControllers[gPlayerControlPorts[0]].buttonCurrent & (BTN_UP | BTN_DOWN | BTN_LEFT | BTN_RIGHT);
     if (D_xk2_80119918 != 0) {
         if (ABS(D_80119720->stickX) > ABS(D_80119720->stickY)) {
             if (D_80119720->stickX < -60) {
-                var_v0 |= BTN_LEFT;
+                directionButton |= BTN_LEFT;
             }
             if (D_80119720->stickX > 60) {
-                var_v0 |= BTN_RIGHT;
+                directionButton |= BTN_RIGHT;
             }
         } else {
             if (D_80119720->stickY < -60) {
-                var_v0 |= BTN_DOWN;
+                directionButton |= BTN_DOWN;
             }
             if (D_80119720->stickY > 60) {
-                var_v0 |= BTN_UP;
+                directionButton |= BTN_UP;
             }
         }
     }
 
-    switch (var_v0) {
+    switch (directionButton) {
         case BTN_UP:
             D_xk2_80104CB0 += 6;
             break;
@@ -270,7 +271,7 @@ void func_xk2_800D78A0(void) {
             D_800D6CA0.unk_14 = (D_800D6CA0.unk_14 + 6) % 360;
             break;
         case BTN_RIGHT:
-            D_800D6CA0.unk_14 = (D_800D6CA0.unk_14 + 0x162) % 360;
+            D_800D6CA0.unk_14 = (D_800D6CA0.unk_14 + (360 - 6)) % 360;
             break;
         default:
             break;
@@ -287,15 +288,15 @@ void func_xk2_800D78A0(void) {
 
 extern s32 D_xk2_800F7040;
 
-extern s32 D_xk1_80030628;
-extern s32 D_xk1_80030648;
-extern s32 D_xk1_8003064C;
-extern s32 D_xk1_80030650;
-extern s32 D_xk1_80030654;
+extern s32 gPartsStyleOption;
+extern s32 gPitTypeOption;
+extern s32 gDashTypeOption;
+extern s32 gDirtTypeOption;
+extern s32 gIceTypeOption;
 
 extern u8 D_xk2_80104CA0[];
 
-void func_xk2_800D7A4C(s32 arg0) {
+void func_xk2_800D7A4C(s32 trackPartStyle) {
     s32 var_v0;
     s32 var_v1;
     s32 var_a2;
@@ -310,34 +311,34 @@ void func_xk2_800D7A4C(s32 arg0) {
     var_v1 = D_xk2_800F6850[var_v1];
     var_a2 = D_xk2_800F6874[var_a2];
     var_a3 = D_xk2_800F6888[var_a3];
-    switch (arg0) {
-        case 0:
-            var_v0 = ~D_xk2_800F6860[D_xk1_80030648 + 1];
+    switch (trackPartStyle) {
+        case TRACK_PART_STYLE_PIT:
+            var_v0 = ~D_xk2_800F6860[gPitTypeOption + 1];
             var_v1 &= var_v0;
             var_a2 &= var_v0;
             var_a3 &= var_v0;
-            var_v0 = D_xk2_800F6860[D_xk1_80030648 + 1];
+            var_v0 = D_xk2_800F6860[gPitTypeOption + 1];
             break;
-        case 1:
-            var_v1 = ~D_xk2_800F6850[D_xk1_8003064C + 1];
+        case TRACK_PART_STYLE_DASH:
+            var_v1 = ~D_xk2_800F6850[gDashTypeOption + 1];
             var_v0 &= var_v1;
             var_a2 &= var_v1;
             var_a3 &= var_v1;
-            var_v1 = D_xk2_800F6850[D_xk1_8003064C + 1];
+            var_v1 = D_xk2_800F6850[gDashTypeOption + 1];
             break;
-        case 2:
-            var_a2 = ~D_xk2_800F6874[D_xk1_80030650 + 1];
+        case TRACK_PART_STYLE_DIRT:
+            var_a2 = ~D_xk2_800F6874[gDirtTypeOption + 1];
             var_v0 &= var_a2;
             var_v1 &= var_a2;
             var_a3 &= var_a2;
-            var_a2 = D_xk2_800F6874[D_xk1_80030650 + 1];
+            var_a2 = D_xk2_800F6874[gDirtTypeOption + 1];
             break;
-        case 3:
-            var_a3 = ~D_xk2_800F6888[D_xk1_80030654 + 1];
+        case TRACK_PART_STYLE_SLIP:
+            var_a3 = ~D_xk2_800F6888[gIceTypeOption + 1];
             var_v0 &= var_a3;
             var_v1 &= var_a3;
             var_a2 &= var_a3;
-            var_a3 = D_xk2_800F6888[D_xk1_80030654 + 1];
+            var_a3 = D_xk2_800F6888[gIceTypeOption + 1];
             break;
     }
 
@@ -351,7 +352,7 @@ void func_xk2_800D7A4C(s32 arg0) {
         func_8074122C(0x27);
         COURSE_CONTEXT()->courseData.dash[D_800D6CA0.unk_0C] = D_xk2_800F68B8[var_v1];
         D_xk2_800F7040 = 3;
-        if (D_xk1_80030628 != 1) {
+        if (gPartsStyleOption != TRACK_PART_STYLE_DASH) {
             func_xk2_800EE664(0x14);
         }
     }
@@ -374,7 +375,7 @@ extern unk_807B3C20 D_807B3C20;
 
 void func_xk2_800D7D80(void) {
 
-    if (D_xk1_80030628 != 0) {
+    if (gPartsStyleOption != TRACK_PART_STYLE_PIT) {
         return;
     }
 
@@ -387,31 +388,31 @@ void func_xk2_800D7D80(void) {
             return;
     }
 
-    if ((D_xk2_80104CA0[7] != 0) && (D_xk1_80030648 != 4)) {
+    if ((D_xk2_80104CA0[7] != 0) && (gPitTypeOption != PIT_MAX)) {
         func_8074122C(0x20);
         return;
     }
-    if (D_xk1_80030648 == 4) {
-        if (COURSE_CONTEXT()->courseData.pit[D_800D6CA0.unk_0C] != -1) {
+    if (gPitTypeOption == PIT_MAX) {
+        if (COURSE_CONTEXT()->courseData.pit[D_800D6CA0.unk_0C] != PIT_NONE) {
             func_8074122C(0x27);
             func_xk2_800EF78C();
-            COURSE_CONTEXT()->courseData.pit[D_800D6CA0.unk_0C] = -1;
+            COURSE_CONTEXT()->courseData.pit[D_800D6CA0.unk_0C] = PIT_NONE;
             D_xk2_800F7040 = 3;
         }
-    } else if (D_xk1_80030648 != COURSE_CONTEXT()->courseData.pit[D_800D6CA0.unk_0C]) {
+    } else if (gPitTypeOption != COURSE_CONTEXT()->courseData.pit[D_800D6CA0.unk_0C]) {
         func_xk2_800EF78C();
-        func_xk2_800D7A4C(0);
+        func_xk2_800D7A4C(TRACK_PART_STYLE_PIT);
     }
 }
 
 extern unk_807B3C20 D_807B3C20;
 
 void func_xk2_800D7EB8(void) {
-    s32 var_v1;
+    s32 dashCount;
     s32 i;
 
-    var_v1 = 0;
-    if (D_xk1_80030628 != 1) {
+    dashCount = 0;
+    if (gPartsStyleOption != TRACK_PART_STYLE_DASH) {
         return;
     }
 
@@ -422,30 +423,30 @@ void func_xk2_800D7EB8(void) {
     }
 
     for (i = 0; i < D_807B3C20.unk_2900; i++) {
-        if (COURSE_CONTEXT()->courseData.dash[i] != -1) {
-            var_v1++;
+        if (COURSE_CONTEXT()->courseData.dash[i] != DASH_NONE) {
+            dashCount++;
         }
     }
-    if (D_xk1_8003064C == 3) {
-        if (COURSE_CONTEXT()->courseData.dash[D_800D6CA0.unk_0C] != -1) {
+    if (gDashTypeOption == DASH_MAX) {
+        if (COURSE_CONTEXT()->courseData.dash[D_800D6CA0.unk_0C] != DASH_NONE) {
             func_8074122C(0x27);
             func_xk2_800EF78C();
-            COURSE_CONTEXT()->courseData.dash[D_800D6CA0.unk_0C] = -1;
+            COURSE_CONTEXT()->courseData.dash[D_800D6CA0.unk_0C] = DASH_NONE;
             D_xk2_800F7040 = 3;
         }
     } else {
-        if ((var_v1 >= 32) && (COURSE_CONTEXT()->courseData.dash[D_800D6CA0.unk_0C] == -1)) {
+        if ((dashCount >= 32) && (COURSE_CONTEXT()->courseData.dash[D_800D6CA0.unk_0C] == DASH_NONE)) {
             func_8074122C(0x20);
-        } else if (D_xk1_8003064C != COURSE_CONTEXT()->courseData.dash[D_800D6CA0.unk_0C]) {
+        } else if (gDashTypeOption != COURSE_CONTEXT()->courseData.dash[D_800D6CA0.unk_0C]) {
             func_xk2_800EF78C();
-            func_xk2_800D7A4C(1);
+            func_xk2_800D7A4C(TRACK_PART_STYLE_DASH);
         }
     }
 }
 
 void func_xk2_800D8018(void) {
 
-    if (D_xk1_80030628 != 2) {
+    if (gPartsStyleOption != TRACK_PART_STYLE_DIRT) {
         return;
     }
 
@@ -458,26 +459,26 @@ void func_xk2_800D8018(void) {
             return;
     }
 
-    if ((D_xk2_80104CA0[7] != 0) && (D_xk1_80030650 != 4)) {
+    if ((D_xk2_80104CA0[7] != 0) && (gDirtTypeOption != DIRT_MAX)) {
         func_8074122C(0x20);
         return;
     }
-    if (D_xk1_80030650 == 4) {
-        if (COURSE_CONTEXT()->courseData.dirt[D_800D6CA0.unk_0C] != -1) {
+    if (gDirtTypeOption == DIRT_MAX) {
+        if (COURSE_CONTEXT()->courseData.dirt[D_800D6CA0.unk_0C] != DIRT_NONE) {
             func_8074122C(0x27);
             func_xk2_800EF78C();
-            COURSE_CONTEXT()->courseData.dirt[D_800D6CA0.unk_0C] = -1;
+            COURSE_CONTEXT()->courseData.dirt[D_800D6CA0.unk_0C] = DIRT_NONE;
             D_xk2_800F7040 = 3;
         }
-    } else if (D_xk1_80030650 != COURSE_CONTEXT()->courseData.dirt[D_800D6CA0.unk_0C]) {
+    } else if (gDirtTypeOption != COURSE_CONTEXT()->courseData.dirt[D_800D6CA0.unk_0C]) {
         func_xk2_800EF78C();
-        func_xk2_800D7A4C(2);
+        func_xk2_800D7A4C(TRACK_PART_STYLE_DIRT);
     }
 }
 
 void func_xk2_800D8154(void) {
 
-    if (D_xk1_80030628 != 3) {
+    if (gPartsStyleOption != TRACK_PART_STYLE_SLIP) {
         return;
     }
     switch (D_807B3C20.unk_0000[D_800D6CA0.unk_0C].trackSegmentInfo & TRACK_SHAPE_MASK) {
@@ -489,35 +490,35 @@ void func_xk2_800D8154(void) {
             return;
     }
 
-    if ((D_xk2_80104CA0[7] != 0) && (D_xk1_80030654 != 4)) {
+    if ((D_xk2_80104CA0[7] != 0) && (gIceTypeOption != ICE_MAX)) {
         func_8074122C(0x20);
         return;
     }
-    if (D_xk1_80030654 == 4) {
-        if (COURSE_CONTEXT()->courseData.ice[D_800D6CA0.unk_0C] != -1) {
+    if (gIceTypeOption == ICE_MAX) {
+        if (COURSE_CONTEXT()->courseData.ice[D_800D6CA0.unk_0C] != ICE_NONE) {
             func_8074122C(0x27);
             func_xk2_800EF78C();
-            COURSE_CONTEXT()->courseData.ice[D_800D6CA0.unk_0C] = -1;
+            COURSE_CONTEXT()->courseData.ice[D_800D6CA0.unk_0C] = ICE_NONE;
             D_xk2_800F7040 = 3;
         }
-    } else if (D_xk1_80030654 != COURSE_CONTEXT()->courseData.ice[D_800D6CA0.unk_0C]) {
+    } else if (gIceTypeOption != COURSE_CONTEXT()->courseData.ice[D_800D6CA0.unk_0C]) {
         func_xk2_800EF78C();
-        func_xk2_800D7A4C(3);
+        func_xk2_800D7A4C(TRACK_PART_STYLE_SLIP);
     }
 }
 
-extern s32 D_xk1_80030658;
-extern s32 D_xk1_8003065C;
-extern s32 D_xk1_80030660;
-extern s32 D_xk1_80030664;
-extern s32 D_xk1_80030668;
+extern s32 gJumpTypeOption;
+extern s32 gLandmineTypeOption;
+extern s32 gGateTypeOption;
+extern s32 gBuildingTypeOption;
+extern s32 gSignTypeOption;
 
 void func_xk2_800D8290(void) {
-    s32 var_v1;
+    s32 jumpCount;
     s32 i;
 
-    var_v1 = 0;
-    if (D_xk1_80030628 != 4) {
+    jumpCount = 0;
+    if (gPartsStyleOption != TRACK_PART_STYLE_JUMP) {
         return;
     }
 
@@ -531,33 +532,33 @@ void func_xk2_800D8290(void) {
     }
 
     for (i = 0; i < D_807B3C20.unk_2900; i++) {
-        if (COURSE_CONTEXT()->courseData.jump[i] != -1) {
-            var_v1++;
+        if (COURSE_CONTEXT()->courseData.jump[i] != JUMP_NONE) {
+            jumpCount++;
         }
     }
-    if (D_xk1_80030658 == 3) {
-        if (COURSE_CONTEXT()->courseData.jump[D_800D6CA0.unk_0C] != -1) {
+    if (gJumpTypeOption == JUMP_MAX) {
+        if (COURSE_CONTEXT()->courseData.jump[D_800D6CA0.unk_0C] != JUMP_NONE) {
             func_xk2_800EF78C();
             func_8074122C(0x27);
-            COURSE_CONTEXT()->courseData.jump[D_800D6CA0.unk_0C] = -1;
+            COURSE_CONTEXT()->courseData.jump[D_800D6CA0.unk_0C] = JUMP_NONE;
         }
     } else {
-        if ((var_v1 >= 8) && (COURSE_CONTEXT()->courseData.jump[D_800D6CA0.unk_0C] == -1)) {
+        if ((jumpCount >= 8) && (COURSE_CONTEXT()->courseData.jump[D_800D6CA0.unk_0C] == JUMP_NONE)) {
             func_8074122C(0x20);
-        } else if (D_xk1_80030658 != COURSE_CONTEXT()->courseData.jump[D_800D6CA0.unk_0C]) {
+        } else if (gJumpTypeOption != COURSE_CONTEXT()->courseData.jump[D_800D6CA0.unk_0C]) {
             func_xk2_800EF78C();
             func_8074122C(0x27);
-            COURSE_CONTEXT()->courseData.jump[D_800D6CA0.unk_0C] = D_xk1_80030658;
+            COURSE_CONTEXT()->courseData.jump[D_800D6CA0.unk_0C] = gJumpTypeOption;
         }
     }
 }
 
 void func_xk2_800D8418(void) {
-    s32 var_v1;
+    s32 landmineCount;
     s32 i;
 
-    var_v1 = 0;
-    if (D_xk1_80030628 != 5) {
+    landmineCount = 0;
+    if (gPartsStyleOption != TRACK_PART_STYLE_TRAP) {
         return;
     }
 
@@ -571,33 +572,33 @@ void func_xk2_800D8418(void) {
     }
 
     for (i = 0; i < D_807B3C20.unk_2900; i++) {
-        if (COURSE_CONTEXT()->courseData.landmine[i] != -1) {
-            var_v1++;
+        if (COURSE_CONTEXT()->courseData.landmine[i] != LANDMINE_NONE) {
+            landmineCount++;
         }
     }
-    if (D_xk1_8003065C == 3) {
-        if (COURSE_CONTEXT()->courseData.landmine[D_800D6CA0.unk_0C] != -1) {
+    if (gLandmineTypeOption == LANDMINE_MAX) {
+        if (COURSE_CONTEXT()->courseData.landmine[D_800D6CA0.unk_0C] != LANDMINE_NONE) {
             func_xk2_800EF78C();
             func_8074122C(0x27);
-            COURSE_CONTEXT()->courseData.landmine[D_800D6CA0.unk_0C] = -1;
+            COURSE_CONTEXT()->courseData.landmine[D_800D6CA0.unk_0C] = LANDMINE_NONE;
         }
     } else {
-        if ((var_v1 >= 8) && (COURSE_CONTEXT()->courseData.landmine[D_800D6CA0.unk_0C] == -1)) {
+        if ((landmineCount >= 8) && (COURSE_CONTEXT()->courseData.landmine[D_800D6CA0.unk_0C] == LANDMINE_NONE)) {
             func_8074122C(0x20);
-        } else if (D_xk1_8003065C != COURSE_CONTEXT()->courseData.landmine[D_800D6CA0.unk_0C]) {
+        } else if (gLandmineTypeOption != COURSE_CONTEXT()->courseData.landmine[D_800D6CA0.unk_0C]) {
             func_xk2_800EF78C();
             func_8074122C(0x27);
-            COURSE_CONTEXT()->courseData.landmine[D_800D6CA0.unk_0C] = D_xk1_8003065C;
+            COURSE_CONTEXT()->courseData.landmine[D_800D6CA0.unk_0C] = gLandmineTypeOption;
         }
     }
 }
 
 void func_xk2_800D85A0(void) {
-    s32 var_v1;
+    s32 decorationalFeatureCount;
     s32 i;
 
-    var_v1 = 0;
-    if (D_xk1_80030628 != 6) {
+    decorationalFeatureCount = 0;
+    if (gPartsStyleOption != TRACK_PART_STYLE_GATE) {
         return;
     }
 
@@ -621,81 +622,82 @@ void func_xk2_800D85A0(void) {
     }
 
     for (i = 0; i < D_807B3C20.unk_2900; i++) {
-        if (COURSE_CONTEXT()->courseData.gate[i] != -1) {
-            var_v1++;
+        if (COURSE_CONTEXT()->courseData.gate[i] != GATE_NONE) {
+            decorationalFeatureCount++;
         }
-        if (COURSE_CONTEXT()->courseData.building[i] != -1) {
-            var_v1++;
+        if (COURSE_CONTEXT()->courseData.building[i] != BUILDING_NONE) {
+            decorationalFeatureCount++;
         }
-        if (COURSE_CONTEXT()->courseData.sign[i] != -1) {
-            var_v1++;
+        if (COURSE_CONTEXT()->courseData.sign[i] != SIGN_NONE) {
+            decorationalFeatureCount++;
         }
     }
 
-    if (D_xk1_80030660 == 3) {
-        if (COURSE_CONTEXT()->courseData.gate[D_800D6CA0.unk_0C] != -1) {
+    if (gGateTypeOption == GATE_MAX) {
+        if (COURSE_CONTEXT()->courseData.gate[D_800D6CA0.unk_0C] != GATE_NONE) {
             func_xk2_800EF78C();
             func_8074122C(0x27);
-            COURSE_CONTEXT()->courseData.gate[D_800D6CA0.unk_0C] = -1;
+            COURSE_CONTEXT()->courseData.gate[D_800D6CA0.unk_0C] = GATE_NONE;
         }
     } else {
-        if ((var_v1 >= 16) && (COURSE_CONTEXT()->courseData.gate[D_800D6CA0.unk_0C] == -1)) {
+        if ((decorationalFeatureCount >= 16) && (COURSE_CONTEXT()->courseData.gate[D_800D6CA0.unk_0C] == GATE_NONE)) {
             func_8074122C(0x20);
             return;
         }
-        if (D_xk1_80030660 != COURSE_CONTEXT()->courseData.gate[D_800D6CA0.unk_0C]) {
+        if (gGateTypeOption != COURSE_CONTEXT()->courseData.gate[D_800D6CA0.unk_0C]) {
             func_xk2_800EF78C();
             func_8074122C(0x27);
-            COURSE_CONTEXT()->courseData.gate[D_800D6CA0.unk_0C] = D_xk1_80030660;
+            COURSE_CONTEXT()->courseData.gate[D_800D6CA0.unk_0C] = gGateTypeOption;
         }
     }
 }
 
 void func_xk2_800D8778(void) {
-    s32 var_v1;
+    s32 decorationalFeatureCount;
     s32 i;
 
-    var_v1 = 0;
-    if (D_xk1_80030628 != 7) {
+    decorationalFeatureCount = 0;
+    if (gPartsStyleOption != TRACK_PART_STYLE_BUILDING) {
         return;
     }
 
     for (i = 0; i < D_807B3C20.unk_2900; i++) {
-        if (COURSE_CONTEXT()->courseData.gate[i] != -1) {
-            var_v1++;
+        if (COURSE_CONTEXT()->courseData.gate[i] != GATE_NONE) {
+            decorationalFeatureCount++;
         }
-        if (COURSE_CONTEXT()->courseData.building[i] != -1) {
-            var_v1++;
+        if (COURSE_CONTEXT()->courseData.building[i] != BUILDING_NONE) {
+            decorationalFeatureCount++;
         }
-        if (COURSE_CONTEXT()->courseData.sign[i] != -1) {
-            var_v1++;
+        if (COURSE_CONTEXT()->courseData.sign[i] != SIGN_NONE) {
+            decorationalFeatureCount++;
         }
     }
-    if (D_xk1_80030664 == 15) {
-        if (COURSE_CONTEXT()->courseData.building[D_800D6CA0.unk_0C] != -1) {
+    if (gBuildingTypeOption == BUILDING_MAX) {
+        if (COURSE_CONTEXT()->courseData.building[D_800D6CA0.unk_0C] != BUILDING_NONE) {
             func_xk2_800EF78C();
             func_8074122C(0x27);
-            COURSE_CONTEXT()->courseData.building[D_800D6CA0.unk_0C] = -1;
+            COURSE_CONTEXT()->courseData.building[D_800D6CA0.unk_0C] = BUILDING_NONE;
         }
     } else {
-        if ((var_v1 >= 0x10) && (COURSE_CONTEXT()->courseData.building[D_800D6CA0.unk_0C] == -1)) {
+        if ((decorationalFeatureCount >= 16) &&
+            (COURSE_CONTEXT()->courseData.building[D_800D6CA0.unk_0C] == BUILDING_NONE)) {
             func_8074122C(0x20);
             return;
         }
-        if (D_xk1_80030664 != COURSE_CONTEXT()->courseData.building[D_800D6CA0.unk_0C]) {
+        if (gBuildingTypeOption != COURSE_CONTEXT()->courseData.building[D_800D6CA0.unk_0C]) {
             func_xk2_800EF78C();
             func_8074122C(0x27);
-            COURSE_CONTEXT()->courseData.building[D_800D6CA0.unk_0C] = D_xk1_80030664;
+            COURSE_CONTEXT()->courseData.building[D_800D6CA0.unk_0C] = gBuildingTypeOption;
         }
     }
 }
 
 void func_xk2_800D88D8(void) {
-    s32 var_v1;
+    s32 decorationalFeatureCount;
     s32 i;
 
-    var_v1 = 0;
-    if (D_xk1_80030628 != 8) {
+    decorationalFeatureCount = 0;
+    if (gPartsStyleOption != TRACK_PART_STYLE_SIGN) {
         return;
     }
 
@@ -719,32 +721,32 @@ void func_xk2_800D88D8(void) {
     }
 
     for (i = 0; i < D_807B3C20.unk_2900; i++) {
-        if (COURSE_CONTEXT()->courseData.gate[i] != -1) {
-            var_v1++;
+        if (COURSE_CONTEXT()->courseData.gate[i] != GATE_NONE) {
+            decorationalFeatureCount++;
         }
-        if (COURSE_CONTEXT()->courseData.building[i] != -1) {
-            var_v1++;
+        if (COURSE_CONTEXT()->courseData.building[i] != BUILDING_NONE) {
+            decorationalFeatureCount++;
         }
-        if (COURSE_CONTEXT()->courseData.sign[i] != -1) {
-            var_v1++;
+        if (COURSE_CONTEXT()->courseData.sign[i] != SIGN_NONE) {
+            decorationalFeatureCount++;
         }
     }
 
-    if (D_xk1_80030668 == 5) {
-        if (COURSE_CONTEXT()->courseData.sign[D_800D6CA0.unk_0C] != -1) {
+    if (gSignTypeOption == SIGN_MAX) {
+        if (COURSE_CONTEXT()->courseData.sign[D_800D6CA0.unk_0C] != SIGN_NONE) {
             func_xk2_800EF78C();
             func_8074122C(0x27);
-            COURSE_CONTEXT()->courseData.sign[D_800D6CA0.unk_0C] = -1;
+            COURSE_CONTEXT()->courseData.sign[D_800D6CA0.unk_0C] = SIGN_NONE;
         }
     } else {
-        if ((var_v1 >= 16) && (COURSE_CONTEXT()->courseData.sign[D_800D6CA0.unk_0C] == -1)) {
+        if ((decorationalFeatureCount >= 16) && (COURSE_CONTEXT()->courseData.sign[D_800D6CA0.unk_0C] == SIGN_NONE)) {
             func_8074122C(0x20);
             return;
         }
-        if (D_xk1_80030668 != COURSE_CONTEXT()->courseData.sign[D_800D6CA0.unk_0C]) {
+        if (gSignTypeOption != COURSE_CONTEXT()->courseData.sign[D_800D6CA0.unk_0C]) {
             func_xk2_800EF78C();
             func_8074122C(0x27);
-            COURSE_CONTEXT()->courseData.sign[D_800D6CA0.unk_0C] = D_xk1_80030668;
+            COURSE_CONTEXT()->courseData.sign[D_800D6CA0.unk_0C] = gSignTypeOption;
         }
     }
 }
@@ -752,8 +754,8 @@ void func_xk2_800D88D8(void) {
 void func_xk2_800D8AB0(void) {
 }
 
-extern s32 D_xk1_80030614;
-extern s32 D_xk1_80030624;
+extern s32 gCreateOption;
+extern s32 gDesignStyleOption;
 
 void func_xk2_800D8AB8(void) {
     s32 temp_a1;
@@ -763,7 +765,7 @@ void func_xk2_800D8AB8(void) {
                    TRACK_SHAPE_PIPE, TRACK_SHAPE_HALF_PIPE,   TRACK_SHAPE_CYLINDER,        TRACK_SHAPE_AIR };
 
     if ((D_80119720->buttonPressed & BTN_A) && (gCourseEditCursorYPos >= 0x38) && (D_800D6CA0.unk_08 != 3) &&
-        (D_xk1_80030614 == 2)) {
+        (gCreateOption == CREATE_OPTION_DESIGN)) {
         if (D_807B3C20.unk_2900 < 4) {
             func_8074122C(0x20);
             return;
@@ -776,7 +778,7 @@ void func_xk2_800D8AB8(void) {
             temp_v0 = &D_807B3C20.unk_0000[D_800D6CA0.unk_0C];
             func_807032B0(temp_v0->pos, temp_v0->next->pos);
 
-            temp_a1 = D_xk1_80030624;
+            temp_a1 = gDesignStyleOption;
             temp_v1 = sp2C[temp_a1];
             if (((temp_v0->prev->trackSegmentInfo & TRACK_SHAPE_MASK) != sp2C[temp_a1]) &&
                 ((temp_v0->next->trackSegmentInfo & TRACK_SHAPE_MASK) == sp2C[temp_a1])) {
@@ -787,21 +789,21 @@ void func_xk2_800D8AB8(void) {
                 }
             }
             switch (temp_a1) {
-                case 0:
-                case 1:
-                case 2:
-                case 7:
+                case TRACK_DESIGN_STYLE_ROAD:
+                case TRACK_DESIGN_STYLE_H_ROAD:
+                case TRACK_DESIGN_STYLE_T_ROAD:
+                case TRACK_DESIGN_STYLE_SPACE:
                     func_xk2_800DCF2C();
                     func_xk2_800DCFE0();
                     func_xk2_800DD0AC();
                     func_xk2_800DD568();
                     break;
-                case 3:
+                case TRACK_DESIGN_STYLE_TUNNEL:
                     func_xk2_800DD178();
                     break;
-                case 4:
-                case 5:
-                case 6:
+                case TRACK_DESIGN_STYLE_PIPE:
+                case TRACK_DESIGN_STYLE_HALF_PIPE:
+                case TRACK_DESIGN_STYLE_CYLINDER:
                     func_xk2_800DD244();
                     func_xk2_800DD350();
                     func_xk2_800DD45C();
@@ -825,7 +827,7 @@ void func_xk2_800D8CC4(void) {
         return;
     }
 
-    if (D_xk1_80030614 != 3) {
+    if (gCreateOption != CREATE_OPTION_PARTS) {
         return;
     }
 
@@ -881,14 +883,14 @@ void func_xk2_800D8DAC(void) {
 extern s32 D_8076C950;
 extern s32 D_8076C964;
 extern volatile u8 D_80794E14;
-extern s32 D_xk1_800305F8;
+extern bool gMenuWidgetOpen;
 extern s32 D_xk1_8003A550;
 extern s32 D_xk1_8003A554;
 extern s32 D_xk2_800F703C;
 extern s32 D_xk2_800F7044;
 extern s32 D_xk2_800F704C;
-extern s32 D_xk2_800F705C;
-extern MenuWidget D_xk1_80032880;
+extern s32 gCourseEditHighlightedIconIndex;
+extern MenuWidget gCourseEditWidget;
 
 void func_xk2_800D8F04(void) {
     s32 pad[37];
@@ -912,7 +914,7 @@ void func_xk2_800D8F04(void) {
         D_xk1_8003A554 = gCourseEditCursorYPos;
     }
     if (D_80794E14 == 1) {
-        func_xk1_80027CFC(&D_xk1_80032880, &D_xk1_8003A550, &D_xk1_8003A554);
+        func_xk1_80027CFC(&gCourseEditWidget, &D_xk1_8003A550, &D_xk1_8003A554);
         return;
     }
     func_xk2_800D8AB0();
@@ -936,9 +938,9 @@ void func_xk2_800D8F04(void) {
         func_xk2_800D78A0();
     }
     func_xk2_800DF2EC();
-    sp1C = D_xk2_800F705C;
-    func_xk2_800E9A58();
-    if ((sp1C != -1) && (D_xk2_800F705C == -1)) {
+    sp1C = gCourseEditHighlightedIconIndex;
+    CourseEdit_UpdateHighlightedIconIndex();
+    if ((sp1C != -1) && (gCourseEditHighlightedIconIndex == -1)) {
         func_8074122C(0x23);
     }
     func_xk2_800DEC1C();
@@ -951,7 +953,8 @@ void func_xk2_800D8F04(void) {
             D_xk2_800F7044 = 0;
         }
     }
-    if ((gCourseEditCursorXPos < 230) || (gCourseEditCursorXPos >= 298) || (gCourseEditCursorYPos < 202) || (gCourseEditCursorYPos >= 222)) {
+    if ((gCourseEditCursorXPos < 230) || (gCourseEditCursorXPos >= 298) || (gCourseEditCursorYPos < 202) ||
+        (gCourseEditCursorYPos >= 222)) {
         func_xk2_800D8AB8();
         func_xk2_800D8CC4();
         func_xk2_800DC67C();
@@ -966,12 +969,12 @@ void func_xk2_800D8F04(void) {
     func_xk2_800DC018();
     func_xk2_800DC428();
     func_xk2_800DCDD0();
-    func_xk1_80027CFC(&D_xk1_80032880, &D_xk1_8003A550, &D_xk1_8003A554);
+    func_xk1_80027CFC(&gCourseEditWidget, &D_xk1_8003A550, &D_xk1_8003A554);
     if ((D_80119720->buttonPressed & BTN_A) && (D_800D6CA0.unk_08 == 0)) {
         D_xk1_8003A550 = gCourseEditCursorXPos;
         D_xk1_8003A554 = gCourseEditCursorYPos;
-        func_xk1_80027DC8(&D_xk1_80032880, &D_xk1_8003A550, &D_xk1_8003A554);
-        if (D_xk1_800305F8 != 0) {
+        func_xk1_80027DC8(&gCourseEditWidget, &D_xk1_8003A550, &D_xk1_8003A554);
+        if (gMenuWidgetOpen) {
             D_800D6CA0.unk_08 = 1;
         }
     }
@@ -1701,18 +1704,18 @@ void func_xk2_800DB550(void) {
     func_807034F0(gCurrentCourseInfo);
 }
 
-extern s32 D_xk1_80030614;
-extern s32 D_xk1_8003061C;
-extern s32 D_xk1_80030620;
-extern MenuWidget D_xk1_80032354;
-extern MenuDropItem D_xk1_800327A8[];
-extern s32* D_xk1_8003067C[];
+extern s32 gPointOption;
+extern s32 gMoveOption;
+extern MenuWidget gPointWidget;
+extern MenuDropItem gCourseEditMenuItems[];
+extern s32* gCourseEditMenuOptions[];
 
 void func_xk2_800DB924(void) {
     s32 i;
     s32 j;
 
-    if ((D_xk1_80030614 != 1) || (D_xk1_80030620 != 5) || !(D_80119720->buttonPressed & BTN_A)) {
+    if ((gCreateOption != CREATE_OPTION_POINT) || (gMoveOption != MOVE_OPTION_CLEAR) ||
+        !(D_80119720->buttonPressed & BTN_A)) {
         return;
     }
 
@@ -1765,13 +1768,13 @@ void func_xk2_800DB924(void) {
         D_800D6CA0.unk_0C = -1;
     }
     if (D_807B3C20.unk_2900 < 4) {
-        D_xk1_80030614 = 0;
-        D_xk1_800327A8[1].contentsTex = D_9004888;
-        D_xk1_800327A8[1].widget = &D_xk1_80032354;
-        D_xk1_8003067C[1] = &D_xk1_8003061C;
-        D_xk1_800327A8[2].contentsTex = NULL;
-        D_xk1_800327A8[2].widget = NULL;
-        D_xk1_8003061C = 0;
+        gCreateOption = CREATE_OPTION_COURSE;
+        gCourseEditMenuItems[1].contentsTex = aCourseEditPointBoldTex;
+        gCourseEditMenuItems[1].widget = &gPointWidget;
+        gCourseEditMenuOptions[1] = &gPointOption;
+        gCourseEditMenuItems[2].contentsTex = NULL;
+        gCourseEditMenuItems[2].widget = NULL;
+        gPointOption = POINT_OPTION_SET;
     }
     D_xk2_800F704C = -1;
     D_xk2_800F7040 = 3;
@@ -1816,19 +1819,19 @@ void func_xk2_800DBCF8(void) {
     }
 
     var_a2 = sqrtf(SQ(temp_v1) + SQ(temp_a1));
-    switch (D_xk1_80030620) {
-        case 1:
+    switch (gMoveOption) {
+        case MOVE_OPTION_MOVE_Y:
             if (ABS(temp_v1) > ABS(temp_a1)) {
                 return;
             }
             break;
-        case 2:
-        case 3:
+        case MOVE_OPTION_WIDTH:
+        case MOVE_OPTION_BANK:
             if (ABS(temp_v1) < ABS(temp_a1)) {
                 return;
             }
             break;
-        case 4:
+        case MOVE_OPTION_CENTER:
             if (ABS(temp_v1) < ABS(temp_a1)) {
                 return;
             }
@@ -1855,11 +1858,11 @@ void func_xk2_800DBEE4(void) {
         return;
     }
 
-    switch (D_xk1_80030614) {
-        case 0:
+    switch (gCreateOption) {
+        case CREATE_OPTION_COURSE:
             func_xk2_800DEB04();
             break;
-        case 1:
+        case CREATE_OPTION_POINT:
             if (D_800D6CA0.unk_00 != 0) {
                 func_xk2_800DBCF8();
             }
@@ -1868,20 +1871,20 @@ void func_xk2_800DBEE4(void) {
                     func_xk2_800DEB04();
                     break;
                 case 1:
-                    switch (D_xk1_80030620) {
-                        case 0:
+                    switch (gMoveOption) {
+                        case MOVE_OPTION_MOVE_XZ:
                             func_xk2_800D9670();
                             break;
-                        case 1:
+                        case MOVE_OPTION_MOVE_Y:
                             func_xk2_800DA288();
                             break;
-                        case 2:
+                        case MOVE_OPTION_WIDTH:
                             func_xk2_800DA984();
                             break;
-                        case 3:
+                        case MOVE_OPTION_BANK:
                             func_xk2_800DADEC();
                             break;
-                        case 4:
+                        case MOVE_OPTION_CENTER:
                             func_xk2_800DB154();
                             break;
                         default:
@@ -1892,10 +1895,10 @@ void func_xk2_800DBEE4(void) {
                     break;
             }
             break;
-        case 2:
-        case 3:
-        case 4:
-        case 5:
+        case CREATE_OPTION_DESIGN:
+        case CREATE_OPTION_PARTS:
+        case CREATE_OPTION_BACKGROUND:
+        case CREATE_OPTION_BGM:
             func_xk2_800DEB04();
             break;
         default:
@@ -1907,8 +1910,8 @@ void func_xk2_800DC018(void) {
     if (D_800D6CA0.unk_00 == 1) {
         return;
     }
-    if ((gCourseEditCursorYPos < 56) ||
-        ((gCourseEditCursorXPos >= 232) && (gCourseEditCursorXPos <= 295) && (gCourseEditCursorYPos >= 204) && (gCourseEditCursorYPos < 220))) {
+    if ((gCourseEditCursorYPos < 56) || ((gCourseEditCursorXPos >= 232) && (gCourseEditCursorXPos <= 295) &&
+                                         (gCourseEditCursorYPos >= 204) && (gCourseEditCursorYPos < 220))) {
         return;
     }
 
@@ -1938,7 +1941,7 @@ s32 func_xk2_800DC0F8(void) {
     s32 sp5C;
 
     j = 0;
-    if (D_xk1_80030614 != 1) {
+    if (gCreateOption != CREATE_OPTION_POINT) {
         return 0;
     }
 
@@ -1980,7 +1983,7 @@ void func_xk2_800DC2D0(void) {
     s32 temp_v0;
     s32 temp_v0_2;
 
-    if ((D_xk1_80030614 != 1) || (D_800D6CA0.unk_00 == 1)) {
+    if ((gCreateOption != CREATE_OPTION_POINT) || (D_800D6CA0.unk_00 == 1)) {
         return;
     }
     func_8074122C(0x45);
@@ -2017,7 +2020,7 @@ void func_xk2_800DC3F8(void) {
 }
 
 void func_xk2_800DC428(void) {
-    if ((D_xk1_80030614 != 1) || (D_800D6CA0.unk_00 != 1)) {
+    if ((gCreateOption != CREATE_OPTION_POINT) || (D_800D6CA0.unk_00 != 1)) {
         return;
     }
 
@@ -2032,8 +2035,8 @@ void func_xk2_800DC428(void) {
 }
 
 void func_xk2_800DC4E4(void) {
-    if ((D_80119720->buttonPressed & BTN_A) && (D_800D6CA0.unk_08 == 0) && (D_xk1_8003061C == 1) &&
-        (D_xk1_80030614 == 0) && (gCourseEditCursorYPos >= 0x38) && (func_xk2_800DEFCC() == 0)) {
+    if ((D_80119720->buttonPressed & BTN_A) && (D_800D6CA0.unk_08 == 0) && (gPointOption == POINT_OPTION_START) &&
+        (gCreateOption == CREATE_OPTION_COURSE) && (gCourseEditCursorYPos >= 0x38) && (func_xk2_800DEFCC() == 0)) {
         D_xk2_800F7040 = 3;
         D_800D6CA0.unk_0C = 1;
         func_xk2_800DEB38();
@@ -2042,7 +2045,8 @@ void func_xk2_800DC4E4(void) {
 }
 
 void func_xk2_800DC58C(void) {
-    if ((D_800D6CA0.unk_00 == 1) || (D_800D6CA0.unk_08 != 0) || (D_xk1_80030614 != 1) || (gCourseEditCursorYPos < 56)) {
+    if ((D_800D6CA0.unk_00 == 1) || (D_800D6CA0.unk_08 != 0) || (gCreateOption != CREATE_OPTION_POINT) ||
+        (gCourseEditCursorYPos < 56)) {
         return;
     }
     if (D_800D11C8[0] == 1) {
@@ -2072,8 +2076,8 @@ void func_xk2_800DC67C(void) {
     s32 temp_a1;
     s32 var_v1;
 
-    if ((D_800D6CA0.unk_08 != 0) || (D_xk1_8003061C != 0) || (D_xk1_80030614 != 0) || (gCourseEditCursorYPos < 0x38) ||
-        (D_800D6CA0.unk_00 != 0)) {
+    if ((D_800D6CA0.unk_08 != 0) || (gPointOption != POINT_OPTION_SET) || (gCreateOption != CREATE_OPTION_COURSE) ||
+        (gCourseEditCursorYPos < 0x38) || (D_800D6CA0.unk_00 != 0)) {
         return;
     }
     if (D_800D11C8[0] == 1) {
@@ -2093,7 +2097,7 @@ void func_xk2_800DC67C(void) {
         }
         func_8074122C(0x24);
         D_xk2_800F704C = D_xk2_800F703C;
-        if ((D_xk1_80030614 == 0) && (D_xk2_80104CA0[1] == 0) && (D_xk2_80104CA0[10] == 0)) {
+        if ((gCreateOption == CREATE_OPTION_COURSE) && (D_xk2_80104CA0[1] == 0) && (D_xk2_80104CA0[10] == 0)) {
             spC0 = D_800D6CA0.unk_28;
             if ((spC0.pos.x < -15000.0f) || (spC0.pos.x > 15000.0f) || (spC0.pos.y < 0.0f) || (spC0.pos.y > 5000.0f) ||
                 (spC0.pos.z < -15000.0f) || (spC0.pos.z > 15000.0f)) {
@@ -2163,15 +2167,15 @@ void func_xk2_800DCCD8(void) {
     CourseSegment* temp_at = &D_800D6CA0.unk_28;
     CourseSegment* temp_v0_2;
 
-    if ((D_xk1_80030614 != 1) || (D_800D6CA0.unk_00 != 1)) {
+    if ((gCreateOption != CREATE_OPTION_POINT) || (D_800D6CA0.unk_00 != 1)) {
         return;
     }
-    if ((D_xk1_80030620 != 5) && (D_80119720->buttonPressed & BTN_A)) {
+    if ((gMoveOption != MOVE_OPTION_CLEAR) && (D_80119720->buttonPressed & BTN_A)) {
         D_xk2_800F7040 = 3;
         if (D_8076C968 != 0) {
             func_xk2_800DE4F8();
         }
-        if (D_xk1_80030620 != 6) {
+        if (gMoveOption != MOVE_OPTION_STRAIGHT) {
             func_8074122C(0x27);
         }
         func_xk2_800DC3F8();
@@ -2198,7 +2202,8 @@ void func_xk2_800DCDD0(void) {
     // FAKE
     if (var_v1) {}
 
-    if (((D_xk1_80030614 == 0) || (D_xk1_80030614 == 2) || (D_xk1_80030614 == 3)) &&
+    if (((gCreateOption == CREATE_OPTION_COURSE) || (gCreateOption == CREATE_OPTION_DESIGN) ||
+         (gCreateOption == CREATE_OPTION_PARTS)) &&
         (gControllers[gPlayerControlPorts[0]].buttonPressed & BTN_Z) && (D_807B3C20.unk_2900 != 0)) {
         sp18 = func_xk2_800DD76C(400.0f);
         if (sp18 != -1) {
@@ -2221,7 +2226,7 @@ void func_xk2_800DCDD0(void) {
     }
 }
 
-extern s32 D_xk1_8003062C;
+extern s32 gRoadTypeOption;
 
 s32 D_xk2_800F6950[] = {
     (TRACK_FLAG_JOINABLE | TRACK_FLAG_8000000 | TRACK_SHAPE_ROAD | ROAD_2),
@@ -2234,21 +2239,21 @@ s32 D_xk2_800F6950[] = {
 void func_xk2_800DCF2C(void) {
     CourseSegment* sp1C;
 
-    if (D_xk1_80030624 != 0) {
+    if (gDesignStyleOption != TRACK_DESIGN_STYLE_ROAD) {
         return;
     }
 
     sp1C = &D_807B3C20.unk_0000[D_800D6CA0.unk_0C];
     if ((sp1C->trackSegmentInfo & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK)) !=
-        (D_xk2_800F6950[D_xk1_8003062C] & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK))) {
+        (D_xk2_800F6950[gRoadTypeOption] & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK))) {
         func_xk2_800EF78C();
         func_8074122C(0x27);
-        sp1C->trackSegmentInfo = D_xk2_800F6950[D_xk1_8003062C];
+        sp1C->trackSegmentInfo = D_xk2_800F6950[gRoadTypeOption];
         D_xk2_800F7040 = 3;
     }
 }
 
-extern s32 D_xk1_80030630;
+extern s32 gHRoadTypeOption;
 
 s32 D_xk2_800F6964[] = {
     (TRACK_FLAG_8000000 | TRACK_SHAPE_WALLED_ROAD | WALLED_ROAD_0),
@@ -2259,22 +2264,22 @@ s32 D_xk2_800F6964[] = {
 void func_xk2_800DCFE0(void) {
     CourseSegment* sp1C;
 
-    if (D_xk1_80030624 != 1) {
+    if (gDesignStyleOption != TRACK_DESIGN_STYLE_H_ROAD) {
         return;
     }
 
     sp1C = &D_807B3C20.unk_0000[D_800D6CA0.unk_0C];
     if (!func_xk2_800DD688(TRACK_SHAPE_WALLED_ROAD) &&
         (sp1C->trackSegmentInfo & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK)) !=
-            (D_xk2_800F6964[D_xk1_80030630] & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK))) {
+            (D_xk2_800F6964[gHRoadTypeOption] & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK))) {
         func_8074122C(0x27);
         func_xk2_800EF78C();
-        sp1C->trackSegmentInfo = D_xk2_800F6964[D_xk1_80030630];
+        sp1C->trackSegmentInfo = D_xk2_800F6964[gHRoadTypeOption];
         D_xk2_800F7040 = 3;
     }
 }
 
-extern s32 D_xk1_80030634;
+extern s32 gTRoadTypeOption;
 
 s32 D_xk2_800F6970[] = {
     (TRACK_FLAG_8000000 | TRACK_SHAPE_BORDERLESS_ROAD | BORDERLESS_ROAD_0),
@@ -2285,22 +2290,22 @@ s32 D_xk2_800F6970[] = {
 void func_xk2_800DD0AC(void) {
     CourseSegment* sp1C;
 
-    if (D_xk1_80030624 != 2) {
+    if (gDesignStyleOption != TRACK_DESIGN_STYLE_T_ROAD) {
         return;
     }
 
     sp1C = &D_807B3C20.unk_0000[D_800D6CA0.unk_0C];
     if (!func_xk2_800DD688(TRACK_SHAPE_BORDERLESS_ROAD) &&
         (sp1C->trackSegmentInfo & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK)) !=
-            (D_xk2_800F6970[D_xk1_80030634] & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK))) {
+            (D_xk2_800F6970[gTRoadTypeOption] & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK))) {
         func_8074122C(0x27);
         func_xk2_800EF78C();
-        sp1C->trackSegmentInfo = D_xk2_800F6970[D_xk1_80030634];
+        sp1C->trackSegmentInfo = D_xk2_800F6970[gTRoadTypeOption];
         D_xk2_800F7040 = 3;
     }
 }
 
-extern s32 D_xk1_80030638;
+extern s32 gTunnelTypeOption;
 
 s32 D_xk2_800F697C[] = {
     (TRACK_FLAG_20000000 | TRACK_FLAG_8000000 | TRACK_SHAPE_TUNNEL | TUNNEL_0),
@@ -2312,22 +2317,22 @@ s32 D_xk2_800F697C[] = {
 void func_xk2_800DD178(void) {
     CourseSegment* sp1C;
 
-    if (D_xk1_80030624 != 3) {
+    if (gDesignStyleOption != TRACK_DESIGN_STYLE_TUNNEL) {
         return;
     }
 
     sp1C = &D_807B3C20.unk_0000[D_800D6CA0.unk_0C];
     if (!func_xk2_800DD688(TRACK_SHAPE_TUNNEL) &&
         (sp1C->trackSegmentInfo & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK)) !=
-            (D_xk2_800F697C[D_xk1_80030638] & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK))) {
+            (D_xk2_800F697C[gTunnelTypeOption] & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK))) {
         func_8074122C(0x27);
         func_xk2_800EF78C();
-        sp1C->trackSegmentInfo = D_xk2_800F697C[D_xk1_80030638];
+        sp1C->trackSegmentInfo = D_xk2_800F697C[gTunnelTypeOption];
         D_xk2_800F7040 = 3;
     }
 }
 
-extern s32 D_xk1_8003063C;
+extern s32 gPipeTypeOption;
 
 s32 D_xk2_800F698C[] = {
     (TRACK_FLAG_20000000 | TRACK_SHAPE_PIPE | PIPE_0),
@@ -2340,17 +2345,17 @@ void func_xk2_800DD244(void) {
     f32 temp_fv0;
     CourseSegment* sp1C;
 
-    if (D_xk1_80030624 != 4) {
+    if (gDesignStyleOption != TRACK_DESIGN_STYLE_PIPE) {
         return;
     }
 
     sp1C = &D_807B3C20.unk_0000[D_800D6CA0.unk_0C];
     if (!func_xk2_800DD688(TRACK_SHAPE_PIPE) &&
         (sp1C->trackSegmentInfo & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK)) !=
-            (D_xk2_800F698C[D_xk1_8003063C] & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK))) {
+            (D_xk2_800F698C[gPipeTypeOption] & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK))) {
         func_8074122C(0x27);
         func_xk2_800EF78C();
-        sp1C->trackSegmentInfo = D_xk2_800F698C[D_xk1_8003063C];
+        sp1C->trackSegmentInfo = D_xk2_800F698C[gPipeTypeOption];
         temp_fv0 = (sp1C->radiusLeft + sp1C->radiusRight) * 0.5f;
         sp1C->radiusLeft = temp_fv0;
         sp1C->radiusRight = temp_fv0;
@@ -2363,7 +2368,7 @@ void func_xk2_800DD244(void) {
     }
 }
 
-extern s32 D_xk1_80030640;
+extern s32 gHalfPipeTypeOption;
 
 s32 D_xk2_800F699C[] = {
     (TRACK_SHAPE_HALF_PIPE | HALF_PIPE_0),
@@ -2376,17 +2381,17 @@ void func_xk2_800DD350(void) {
     f32 temp_fv0;
     CourseSegment* sp1C;
 
-    if (D_xk1_80030624 != 5) {
+    if (gDesignStyleOption != TRACK_DESIGN_STYLE_HALF_PIPE) {
         return;
     }
 
     sp1C = &D_807B3C20.unk_0000[D_800D6CA0.unk_0C];
     if (!func_xk2_800DD688(TRACK_SHAPE_HALF_PIPE) &&
         (sp1C->trackSegmentInfo & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK)) !=
-            (D_xk2_800F699C[D_xk1_80030640] & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK))) {
+            (D_xk2_800F699C[gHalfPipeTypeOption] & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK))) {
         func_8074122C(0x27);
         func_xk2_800EF78C();
-        sp1C->trackSegmentInfo = D_xk2_800F699C[D_xk1_80030640];
+        sp1C->trackSegmentInfo = D_xk2_800F699C[gHalfPipeTypeOption];
         temp_fv0 = (sp1C->radiusLeft + sp1C->radiusRight) * 0.5f;
         sp1C->radiusLeft = temp_fv0;
         sp1C->radiusRight = temp_fv0;
@@ -2399,7 +2404,7 @@ void func_xk2_800DD350(void) {
     }
 }
 
-extern s32 D_xk1_80030644;
+extern s32 gCylinderTypeOption;
 
 s32 D_xk2_800F69AC[] = {
     (TRACK_SHAPE_CYLINDER | CYLINDER_0),
@@ -2412,17 +2417,17 @@ void func_xk2_800DD45C(void) {
     f32 temp_fv0;
     CourseSegment* sp1C;
 
-    if (D_xk1_80030624 != 6) {
+    if (gDesignStyleOption != TRACK_DESIGN_STYLE_CYLINDER) {
         return;
     }
 
     sp1C = &D_807B3C20.unk_0000[D_800D6CA0.unk_0C];
     if (!func_xk2_800DD688(TRACK_SHAPE_CYLINDER) &&
         (sp1C->trackSegmentInfo & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK)) !=
-            (D_xk2_800F69AC[D_xk1_80030644] & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK))) {
+            (D_xk2_800F69AC[gCylinderTypeOption] & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK))) {
         func_8074122C(0x27);
         func_xk2_800EF78C();
-        sp1C->trackSegmentInfo = D_xk2_800F69AC[D_xk1_80030644];
+        sp1C->trackSegmentInfo = D_xk2_800F69AC[gCylinderTypeOption];
         temp_fv0 = (sp1C->radiusLeft + sp1C->radiusRight) * 0.5f;
         sp1C->radiusLeft = temp_fv0;
         sp1C->radiusRight = temp_fv0;
@@ -2438,7 +2443,7 @@ void func_xk2_800DD45C(void) {
 void func_xk2_800DD568(void) {
     CourseSegment* sp1C;
 
-    if (D_xk1_80030624 != 7) {
+    if (gDesignStyleOption != TRACK_DESIGN_STYLE_SPACE) {
         return;
     }
 
@@ -2525,10 +2530,9 @@ s32 func_xk2_800DD76C(f32 arg0) {
     return var_fp;
 }
 
-extern s32 D_xk1_80030614;
-
 void func_xk2_800DD8C8(void) {
-    if ((D_xk1_80030614 != 1) || (D_xk1_80030620 != 6) || (gCourseEditCursorYPos <= 56)) {
+    if ((gCreateOption != CREATE_OPTION_POINT) || (gMoveOption != MOVE_OPTION_STRAIGHT) ||
+        (gCourseEditCursorYPos <= 56)) {
         return;
     }
     if (D_80119720->buttonPressed & BTN_A) {
@@ -2615,8 +2619,8 @@ void func_xk2_800DD8C8(void) {
 }
 
 extern u8 D_80030060[];
-extern s32 D_xk1_80030610;
-extern s32 D_xk1_80030678;
+extern s32 gCourseEditFileOption;
+extern s32 gCourseEditEntryOption;
 extern s32 D_xk1_80032C20;
 extern u8 D_xk1_8003A570[];
 extern unk_8003A5D8 D_xk1_8003A5D8[];
@@ -2633,8 +2637,8 @@ void func_xk2_800DD938(void) {
     if (D_80119720->buttonPressed & BTN_B) {
         func_8074122C(0x25);
         D_800D6CA0.unk_08 = 0;
-        D_xk1_80030610 = -1;
-        D_xk1_80030678 = -1;
+        gCourseEditFileOption = -1;
+        gCourseEditEntryOption = -1;
         return;
     }
     if (!(D_80119720->buttonPressed & BTN_A)) {
@@ -2644,8 +2648,8 @@ void func_xk2_800DD938(void) {
     if (D_xk1_80032C20 == 0) {
         func_8074122C(0x25);
         D_800D6CA0.unk_08 = 0;
-        D_xk1_80030610 = -1;
-        D_xk1_80030678 = -1;
+        gCourseEditFileOption = -1;
+        gCourseEditEntryOption = -1;
         return;
     }
     if (D_xk2_80104378 == 6) {
@@ -2674,7 +2678,7 @@ void func_xk2_800DD938(void) {
         case 0:
             func_xk2_800F5C50();
             func_xk2_800EAF24(sp1C);
-            D_xk1_80030610 = -1;
+            gCourseEditFileOption = -1;
             D_800D6CA0.unk_08 = 0x13;
             return;
         case -1:
@@ -2722,7 +2726,7 @@ void func_xk2_800DD938(void) {
             if (!(sp1C->attr & MFS_FILE_ATTR_FORBID_W)) {
                 func_xk2_800EBFE8(sp1C->name);
                 func_807688D0(MFS_ENTRY_WORKING_DIR, sp1C->name, sp1C->extension, true);
-                D_xk1_80030610 = -1;
+                gCourseEditFileOption = -1;
                 D_800D6CA0.unk_08 = 0x22;
                 return;
             }
@@ -2733,7 +2737,7 @@ void func_xk2_800DD938(void) {
         default:
             break;
     }
-    D_xk1_80030610 = -1;
+    gCourseEditFileOption = -1;
     D_800D6CA0.unk_08 = 0;
 }
 
@@ -2748,8 +2752,8 @@ void func_xk2_800DDC2C(Vec3f* arg0) {
     sp18 = Math_Round(arg0->y);
     sp14 = Math_Round(arg0->z);
 
-    switch (D_xk1_80030620) {
-        case 0:
+    switch (gMoveOption) {
+        case MOVE_OPTION_MOVE_XZ:
             var_a0 = ABS(sp1C);
             temp_a1 = D_xk1_80030608 / 2;
 
@@ -2769,7 +2773,7 @@ void func_xk2_800DDC2C(Vec3f* arg0) {
                 sp14 = ((sp14 - temp_a1) / D_xk1_80030608) * D_xk1_80030608;
             }
             break;
-        case 1:
+        case MOVE_OPTION_MOVE_Y:
             var_a0 = ABS(sp18);
             temp_a1 = D_xk1_80030608 / 2;
             if (var_a0 < temp_a1) {
@@ -2871,7 +2875,7 @@ void func_xk2_800DE4F8(void) {
     CourseSegment* temp_s0;
     s32 i;
 
-    if ((D_xk1_80030620 != 0) && (D_xk1_80030620 != 1)) {
+    if ((gMoveOption != MOVE_OPTION_MOVE_XZ) && (gMoveOption != MOVE_OPTION_MOVE_Y)) {
         return;
     }
 
@@ -2892,11 +2896,11 @@ void func_xk2_800DE4F8(void) {
             continue;
         }
         temp_s0 = &D_807B3C20.unk_0000[i];
-        switch (D_xk1_80030620) {
-            case 0:
+        switch (gMoveOption) {
+            case MOVE_OPTION_MOVE_XZ:
                 func_xk2_800DDEF4(&sp8C, temp_s0->prev->pos, temp_s0->pos, temp_s0->next->pos);
                 break;
-            case 1:
+            case MOVE_OPTION_MOVE_Y:
                 func_xk2_800DE210(&sp8C, temp_s0->prev->pos, temp_s0->pos, temp_s0->next->pos);
                 break;
         }
@@ -2909,7 +2913,7 @@ void func_xk2_800DE4F8(void) {
 }
 
 extern s32 D_xk1_800305FC;
-extern MenuWidget D_xk1_8003226C;
+extern MenuWidget gCreateWidget;
 
 void func_xk2_800DE758(void) {
     s32 pad[4];
@@ -2922,7 +2926,7 @@ void func_xk2_800DE758(void) {
         return;
     }
 
-    sp18 = func_xk1_80026914(&D_xk1_80032880);
+    sp18 = func_xk1_80026914(&gCourseEditWidget);
     temp_v1 = sp18->numItems;
     sp1C = D_xk1_800305FC;
     if (D_80119720->buttonCurrent & BTN_Z) {
@@ -2930,16 +2934,16 @@ void func_xk2_800DE758(void) {
     } else {
         func_xk1_8002DBD4(&D_xk1_800305FC, temp_v1 - 1, 0);
     }
-    if ((sp18 == &D_xk1_8003226C) && (D_xk1_800305FC != 0) && (D_807B3C20.unk_2900 < 4)) {
+    if ((sp18 == &gCreateWidget) && (D_xk1_800305FC != 0) && (D_807B3C20.unk_2900 < 4)) {
         D_xk1_800305FC = 0;
         func_xk1_8002820C();
-        D_xk1_8003A554 = D_xk1_8003226C.unk_10 + 0xC;
+        D_xk1_8003A554 = gCreateWidget.top + 12;
         if (sp1C == 0) {
             func_8074122C(0x20);
         }
     }
 
-    temp_a0 = ((sp18->unk_10 + (D_xk1_800305FC * sp18->unk_18)) - func_xk1_800290B4()) + 0xC;
+    temp_a0 = ((sp18->top + (D_xk1_800305FC * sp18->itemYOffset)) - func_xk1_800290B4()) + 12;
     if (D_xk1_8003A554 < temp_a0) {
         D_xk1_8003A554 += 16;
         if (D_xk1_8003A554 > temp_a0) {
@@ -2953,23 +2957,23 @@ void func_xk2_800DE758(void) {
             D_xk1_8003A554 = temp_a0;
         }
     }
-    func_xk1_800269F4(&D_xk1_80032880, &D_xk1_8003A550, &D_xk1_8003A554);
+    func_xk1_800269F4(&gCourseEditWidget, &D_xk1_8003A550, &D_xk1_8003A554);
 }
 
-extern u16* D_8076C970[];
+extern u16* gCourseEditIconTextures[];
 
 void func_xk2_800DE8D0(void) {
 
     if (D_80119720->buttonPressed & BTN_A) {
-        if ((D_800D6CA0.unk_00 == 1) || (D_xk2_800F705C != 2)) {
+        if ((D_800D6CA0.unk_00 == 1) || (gCourseEditHighlightedIconIndex != 2)) {
             return;
         }
         func_8074122C(0x24);
         D_8076C968 = (D_8076C968 + 1) % 2;
         if (D_8076C968 != 0) {
-            D_8076C970[2] = D_9002D88;
+            gCourseEditIconTextures[2] = aCourseEditGoldGridAlignIconTex;
         } else {
-            D_8076C970[2] = D_9002B88;
+            gCourseEditIconTextures[2] = aCourseEditGridAlignIconTex;
         }
     }
 }
@@ -2981,8 +2985,8 @@ s32 func_xk2_800DE980(void) {
     if (D_800D6CA0.unk_08 != 0) {
         return 0;
     }
-    if ((gCourseEditCursorXPos >= 264) && (gCourseEditCursorXPos < 296) && (gCourseEditCursorYPos >= 20) && (gCourseEditCursorYPos < 36) &&
-        (D_80119720->buttonPressed & BTN_A)) {
+    if ((gCourseEditCursorXPos >= 264) && (gCourseEditCursorXPos < 296) && (gCourseEditCursorYPos >= 20) &&
+        (gCourseEditCursorYPos < 36) && (D_80119720->buttonPressed & BTN_A)) {
         return 1;
     }
     return 0;
@@ -3034,13 +3038,13 @@ void func_xk2_800DEB38(void) {
 
 void func_xk2_800DEC1C(void) {
     if (gControllers[gPlayerControlPorts[0]].buttonPressed & BTN_A) {
-        if ((D_xk2_800F705C != 1) || (D_800D6CA0.unk_00 == 1)) {
+        if ((gCourseEditHighlightedIconIndex != 1) || (D_800D6CA0.unk_00 == 1)) {
             return;
         }
         func_8074122C(0x24);
         if (D_8076C964 != 0) {
             D_8076C964 = 0;
-            D_8076C970[1] = D_9002588;
+            gCourseEditIconTextures[1] = aCourseEditGoldLineModeIconTex;
             return;
         }
         if (D_xk2_80104CA0[2] != 0) {
@@ -3048,7 +3052,7 @@ void func_xk2_800DEC1C(void) {
             return;
         }
         D_8076C964 = 1;
-        D_8076C970[1] = D_9002388;
+        gCourseEditIconTextures[1] = aCourseEditLineModeIconTex;
     }
 }
 
@@ -3057,15 +3061,15 @@ extern s32 D_8076C96C;
 void func_xk2_800DECF0(void) {
 
     if (gControllers[gPlayerControlPorts[0]].buttonPressed & BTN_A) {
-        if ((D_xk2_800F705C != 3) || (D_800D6CA0.unk_00 == 1)) {
+        if ((gCourseEditHighlightedIconIndex != 3) || (D_800D6CA0.unk_00 == 1)) {
             return;
         }
         func_8074122C(0x24);
         D_8076C96C ^= 1;
         if (D_8076C96C != 0) {
-            D_8076C970[3] = D_9002988;
+            gCourseEditIconTextures[3] = aCourseEditGoldQuestionIconTex;
         } else {
-            D_8076C970[3] = D_9002788;
+            gCourseEditIconTextures[3] = aCourseEditQuestionIconTex;
         }
     }
 }
@@ -3090,7 +3094,7 @@ extern s32 D_xk2_80103FF8;
 
 void func_xk2_800DEE20(void) {
     if ((D_8076C950 != 0) || (gControllers[gPlayerControlPorts[0]].buttonPressed & BTN_A)) {
-        if ((D_800D6CA0.unk_00 == 1) || (D_xk2_800F705C != 0)) {
+        if ((D_800D6CA0.unk_00 == 1) || (gCourseEditHighlightedIconIndex != 0)) {
             return;
         }
         if ((D_807B3C20.unk_2900 < 4) || (D_800D6CA0.unk_20 != -1) || (func_xk2_800DEDA8() != 0)) {
@@ -3200,8 +3204,6 @@ void func_xk2_800DF2EC(void) {
     }
 }
 
-extern s32 D_xk1_80030678;
-
 void func_xk2_800DF370(void) {
 
     if (D_80119720->buttonPressed & BTN_A) {
@@ -3213,15 +3215,15 @@ void func_xk2_800DF370(void) {
         }
         func_8074122C(0x25);
         D_800D6CA0.unk_08 = 0;
-        D_xk1_8003061C = 0;
-        D_xk1_80030678 = -1;
+        gPointOption = POINT_OPTION_SET;
+        gCourseEditEntryOption = -1;
         return;
     }
     if (D_80119720->buttonPressed & BTN_B) {
         func_8074122C(0x25);
         D_800D6CA0.unk_08 = 0;
-        D_xk1_8003061C = 0;
-        D_xk1_80030678 = -1;
+        gPointOption = POINT_OPTION_SET;
+        gCourseEditEntryOption = -1;
         return;
     }
     func_xk1_8002D2F0();
@@ -3251,13 +3253,13 @@ void func_xk2_800DF42C(void) {
         }
         func_8074122C(0x25);
         D_800D6CA0.unk_08 = 0;
-        D_xk1_80030678 = -1;
+        gCourseEditEntryOption = -1;
         return;
     }
     if (D_80119720->buttonPressed & BTN_B) {
         func_8074122C(0x25);
         D_800D6CA0.unk_08 = 0;
-        D_xk1_80030678 = -1;
+        gCourseEditEntryOption = -1;
         return;
     }
     func_xk1_8002D2F0();

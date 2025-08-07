@@ -257,7 +257,7 @@ void ExpansionKit_NameEntryHandleStartPress(void) {
     }
 }
 
-extern s32 D_xk1_80030610;
+extern s32 gCourseEditFileOption;
 
 void ExpansionKit_NameEntryHandleBPress(void) {
 
@@ -271,7 +271,7 @@ void ExpansionKit_NameEntryHandleBPress(void) {
         if (sNameEntryCallbackFunc != NULL) {
             sNameEntryCallbackFunc();
         }
-        D_xk1_80030610 = -1;
+        gCourseEditFileOption = -1;
     }
 }
 
@@ -373,8 +373,8 @@ Gfx* ExpansionKit_NameEntryDraw(Gfx* gfx, s32* arg1, s32* arg2) {
     if (letter != '\0') {
         gDPPipeSync(gfx++);
         gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, 255);
-        gSPTextureRectangle(gfx++, ((xPos * 16) + 80) << 2, ((yPos * 16) + 80) << 2,
-                            (((xPos + 1) * 16) + 80) << 2, (((yPos + 1) * 16) + 80) << 2, 0, 0, 0, 1 << 10, 1 << 10);
+        gSPTextureRectangle(gfx++, ((xPos * 16) + 80) << 2, ((yPos * 16) + 80) << 2, (((xPos + 1) * 16) + 80) << 2,
+                            (((yPos + 1) * 16) + 80) << 2, 0, 0, 0, 1 << 10, 1 << 10);
     }
 
     // Draw whole name entry
@@ -396,8 +396,7 @@ Gfx* ExpansionKit_NameEntryDraw(Gfx* gfx, s32* arg1, s32* arg2) {
                                 G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
                                 G_TX_NOLOD, G_TX_NOLOD);
 
-            gSPTextureRectangle(var_v0++, 80 << 2, (i + 80) << 2, 240 << 2, (i + 81) << 2, 0, 0, 0, 1 << 10,
-                                1 << 10);
+            gSPTextureRectangle(var_v0++, 80 << 2, (i + 80) << 2, 240 << 2, (i + 81) << 2, 0, 0, 0, 1 << 10, 1 << 10);
         }
         gSPEndDisplayList(var_v0++);
         gSPDisplayList(gfx++, D_6000000.unk_110C8);
@@ -442,13 +441,14 @@ Gfx* ExpansionKit_NameEntryDraw(Gfx* gfx, s32* arg1, s32* arg2) {
         gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, 255);
     }
     if (gExpansionKitNameEntryStrLength < 8) {
-        gDPLoadTextureTile(gfx++, aExpansionKitNameEntryTex, G_IM_FMT_CI, G_IM_SIZ_8b, 160, 120, (gExpansionKitNameEntryStrLength * 16) + 31, 96,
-                           ((gExpansionKitNameEntryStrLength + 1) * 16) + 31, 116, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
-                           G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+        gDPLoadTextureTile(gfx++, aExpansionKitNameEntryTex, G_IM_FMT_CI, G_IM_SIZ_8b, 160, 120,
+                           (gExpansionKitNameEntryStrLength * 16) + 31, 96,
+                           ((gExpansionKitNameEntryStrLength + 1) * 16) + 31, 116, 0, G_TX_NOMIRROR | G_TX_CLAMP,
+                           G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
         gSPTextureRectangle(gfx++, ((gExpansionKitNameEntryStrLength * 16) + 111) << 2, 176 << 2,
-                            (((gExpansionKitNameEntryStrLength + 1) * 16) + 111) << 2, 196 << 2, 0, ((gExpansionKitNameEntryStrLength * 16) + 31) << 5,
-                            96 << 5, 1 << 10, 1 << 10);
+                            (((gExpansionKitNameEntryStrLength + 1) * 16) + 111) << 2, 196 << 2, 0,
+                            ((gExpansionKitNameEntryStrLength * 16) + 31) << 5, 96 << 5, 1 << 10, 1 << 10);
     }
 
     // Flash over "END"
@@ -503,7 +503,7 @@ void func_xk1_8002AC70(void) {
                 D_xk2_80104378 = 4;
                 D_xk1_80032C20 = 0;
                 D_800D6CA0.unk_08 = 0x10;
-                D_xk1_80030610 = -1;
+                gCourseEditFileOption = -1;
                 return;
             case 1:
                 break;
@@ -511,7 +511,7 @@ void func_xk1_8002AC70(void) {
                 D_xk2_80104378 = 5;
                 D_xk1_80032C20 = 0;
                 D_800D6CA0.unk_08 = 0x10;
-                D_xk1_80030610 = -1;
+                gCourseEditFileOption = -1;
                 return;
         }
     }
@@ -519,9 +519,9 @@ void func_xk1_8002AC70(void) {
     switch (D_80119880) {
         case -1:
             if (func_xk2_800EAA1C(gExpansionKitNameEntryStr) != 0) {
-                D_xk1_80030610 = -1;
+                gCourseEditFileOption = -1;
             } else {
-                D_xk1_80030610 = -1;
+                gCourseEditFileOption = -1;
             }
             return;
         case 1:
@@ -532,9 +532,9 @@ void func_xk1_8002AC70(void) {
                 D_xk1_80032C20 = 0;
                 D_800D6CA0.unk_08 = 0x10;
             } else if (func_xk2_800EAA1C(D_xk1_8003A570) != 0) {
-                D_xk1_80030610 = -1;
+                gCourseEditFileOption = -1;
             } else {
-                D_xk1_80030610 = -1;
+                gCourseEditFileOption = -1;
             }
             return;
         case 9:
@@ -544,14 +544,14 @@ void func_xk1_8002AC70(void) {
                 D_800D6CA0.unk_08 = 0x10;
             } else {
                 func_xk2_800EAC28(gExpansionKitNameEntryStr);
-                D_xk1_80030610 = -1;
+                gCourseEditFileOption = -1;
             }
             return;
         case 3:
             func_xk2_800EBFE8(D_xk1_8003A598.name);
-            func_80768844(MFS_ENTRY_WORKING_DIR, D_xk1_8003A598.name, D_xk1_8003A598.extension, gExpansionKitNameEntryStr,
-                          D_xk1_8003A598.extension, true);
-            D_xk1_80030610 = -1;
+            func_80768844(MFS_ENTRY_WORKING_DIR, D_xk1_8003A598.name, D_xk1_8003A598.extension,
+                          gExpansionKitNameEntryStr, D_xk1_8003A598.extension, true);
+            gCourseEditFileOption = -1;
             D_800D6CA0.unk_08 = 0x22;
             return;
     }
