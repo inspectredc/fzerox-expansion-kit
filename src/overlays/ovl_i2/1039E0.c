@@ -813,19 +813,19 @@ Gfx* func_i2_800A380C(Gfx* gfx, unk_8010D778* arg1) {
     gSPDisplayList(gfx++, D_80147B0);
 
     for (i = 0; i < 8; i++) {
-        if (0) {}
         for (j = 0; j < 8; j++) {
             temp_t1 = (unk_8010D778_unk_18*) arg1->unk_18 + (i * 8 + j);
-            if (temp_t1->unk_00 != 2) {
-                gDPPipeSync(gfx++);
-                gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, temp_t1->unk_01);
-
-                gDPLoadTextureTile(gfx++, arg1->unk_14, G_IM_FMT_RGBA, G_IM_SIZ_16b, 296, 0, (j * 37), (i * 28),
-                                   (j * 37) + 36, (i * 28) + 27, 0, G_TX_NOMIRROR | G_TX_CLAMP,
-                                   G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-                gSPTextureRectangle(gfx++, ((j * 37) + 12) << 2, ((i * 28) + 8) << 2, ((j * 37) + 49) << 2,
-                                    ((i * 28) + 36) << 2, 0, (j * 37) << 5, (i * 28) << 5, 1 << 10, 1 << 10);
+            if (temp_t1->unk_00 == 2) {
+                continue;
             }
+            gDPPipeSync(gfx++);
+            gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, temp_t1->unk_01);
+
+            gDPLoadTextureTile(gfx++, arg1->unk_14, G_IM_FMT_RGBA, G_IM_SIZ_16b, 296, 0, (j * 37), (i * 28),
+                               (j * 37) + 36, (i * 28) + 27, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
+                               G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+            gSPTextureRectangle(gfx++, ((j * 37) + 12) << 2, ((i * 28) + 8) << 2, ((j * 37) + 49) << 2,
+                                ((i * 28) + 36) << 2, 0, (j * 37) << 5, (i * 28) << 5, 1 << 10, 1 << 10);
         }
     }
     return gfx;

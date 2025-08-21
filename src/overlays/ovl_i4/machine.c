@@ -1436,36 +1436,34 @@ void MachineSettings_OkInit(Object* okObj) {
 
 #define PACK_5551(r, g, b, a) (((((r) << 11) | ((g) << 6)) | ((b) << 1)) | (a))
 
-#ifdef NON_MATCHING
 Gfx* MachineSelect_BackgroundDraw(Gfx* gfx) {
     s32 color;
     s32 i;
+    s32 r, g, b;
+    s32 temp_a1;
+    s32 temp_t1 = 224;
+    s32 rmul2 = 0;
+    s32 gmul2 = 0;
+    s32 bmul2 = 0;
     s32 rmul = 10;
     s32 gmul = 0;
     s32 bmul = 60;
-    s32 r, g, b;
 
     gDPSetCycleType(gfx++, G_CYC_FILL);
 
     for (i = 0; i < 224; i++) {
-        r = ((i * rmul) / 224) >> 3;
-        g = ((i * gmul) / 224) >> 3;
-        b = ((i * bmul) / 224) >> 3;
-        if (1) {
-            gDPPipeSync(gfx++);
-            gDPSetFillColor(gfx++, PACK_5551(r, g, b, 1) << 0x10 | PACK_5551(r, g, b, 1));
-            gDPFillRectangle(gfx++, 12, i + 8, 307, i + 8);
-        }
-    }
-    r = ((i * rmul) / 224) >> 3;
-    g = ((i * gmul) / 224) >> 3;
-    b = ((i * bmul) / 224) >> 3;
+        s32 temp_t6 = 224;
+        temp_a1 = temp_t6 - i;
+        r = ((((rmul2 * temp_a1) + (rmul * i)) / temp_t1) >> 3);
+        g = ((((gmul2 * temp_a1) + (gmul * i)) / temp_t1) >> 3);
+        b = ((((bmul2 * temp_a1) + (bmul * i)) / temp_t1) >> 3);
 
+        gDPPipeSync(gfx++);
+        gDPSetFillColor(gfx++, PACK_5551(r, g, b, 1) << 0x10 | PACK_5551(r, g, b, 1));
+        gDPFillRectangle(gfx++, 12, i + 8, 307, i + 8);
+    }
     return gfx;
 }
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i4/machine/MachineSelect_BackgroundDraw.s")
-#endif
 
 Gfx* MachineSelect_HeaderDraw(Gfx* gfx, Object* headerObj) {
     gDPSetPrimColor(gfx++, 0, 0, 250, 250, 0, 255);
