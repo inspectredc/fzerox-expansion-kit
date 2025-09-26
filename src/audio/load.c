@@ -1091,7 +1091,7 @@ extern AudioHeapInitSizes gAudioHeapInitSizes;
 extern AudioTable gSequenceTable;
 extern AudioTable gSoundFontTable;
 
-/* 
+/*
 AudioTable gSoundFontTable = {
     { 23, 0, 0, 0 },
     {

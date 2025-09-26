@@ -241,11 +241,10 @@ void Audio_PlayerLevelSEStart(u8 playerIndex, u8 sfxId) {
         return;
     }
 
-    if ((sfxId != sActivePlayerLevelSE[playerIndex][0]) &&
-        (sfxId != sActivePlayerLevelSE[playerIndex][1]) && (sfxId != sActivePlayerLevelSE[playerIndex][2]) &&
-        (sfxId != sActivePlayerLevelSE[playerIndex][3]) && (sfxId != sActivePlayerLevelSE[playerIndex][4]) &&
-        (sfxId != sActivePlayerLevelSE[playerIndex][5]) && (sfxId != sActivePlayerLevelSE[playerIndex][6]) &&
-        (sfxId != sActivePlayerLevelSE[playerIndex][7])) {
+    if ((sfxId != sActivePlayerLevelSE[playerIndex][0]) && (sfxId != sActivePlayerLevelSE[playerIndex][1]) &&
+        (sfxId != sActivePlayerLevelSE[playerIndex][2]) && (sfxId != sActivePlayerLevelSE[playerIndex][3]) &&
+        (sfxId != sActivePlayerLevelSE[playerIndex][4]) && (sfxId != sActivePlayerLevelSE[playerIndex][5]) &&
+        (sfxId != sActivePlayerLevelSE[playerIndex][6]) && (sfxId != sActivePlayerLevelSE[playerIndex][7])) {
         if (sAudioLevelSEStack[playerIndex][0] != NA_LEVEL_SE_NONE) {
             if (sAudioLevelSEStack[playerIndex][1] != NA_LEVEL_SE_NONE) {
                 if (sAudioLevelSEStack[playerIndex][2] != NA_LEVEL_SE_NONE) {
@@ -358,8 +357,8 @@ void Audio_PlayerLevelSEStop(u8 playerIndex, u8 sfxId) {
 
 void Audio_PlayerTriggerSE(u8 racerId, u8 sfxId) {
 
-    if (sfxId != sAudioPlayerSEStack[racerId][0] && sfxId != sAudioPlayerSEStack[racerId][1] && sfxId != sAudioPlayerSEStack[racerId][2] &&
-        sfxId != sAudioPlayerSEStack[racerId][3]) {
+    if (sfxId != sAudioPlayerSEStack[racerId][0] && sfxId != sAudioPlayerSEStack[racerId][1] &&
+        sfxId != sAudioPlayerSEStack[racerId][2] && sfxId != sAudioPlayerSEStack[racerId][3]) {
         if (sAudioPlayerSEStack[racerId][0] != NA_SE_NONE) {
             if (sAudioPlayerSEStack[racerId][1] != NA_SE_NONE) {
                 if (sAudioPlayerSEStack[racerId][2] != NA_SE_NONE) {
@@ -428,7 +427,8 @@ void Audio_SystemSEStart(u8 ioData) {
 
 void Audio_TriggerVoiceSEStart(u8 sfxId, u16 time) {
 
-    if ((sfxId != sVoiceSEStack1) && (sfxId != sVoiceSEStack2) && (sfxId != sVoiceSEStack3) && (sfxId != sVoiceSEStack4)) {
+    if ((sfxId != sVoiceSEStack1) && (sfxId != sVoiceSEStack2) && (sfxId != sVoiceSEStack3) &&
+        (sfxId != sVoiceSEStack4)) {
         if (sVoiceSEStackTimer1 != 0) {
             if (sVoiceSEStackTimer2 != 0) {
                 if (sVoiceSEStackTimer3 != 0) {
@@ -543,7 +543,7 @@ void Audio_PlayerEngineStop(u8 playerIndex) {
 
 // Na_PlyEng_Start
 void Audio_PlayerEngineStart(u8 playerIndex) {
-    
+
     PRINTF("==BANDO== Na_PlyEng_Start Called player = %02x\n", playerIndex);
     switch (sAudioPlayerMode) {
         case 0:
@@ -960,7 +960,8 @@ void Audio_PauseSet(u8 status) {
                     sp33 = true;
                     D_80771CAC = 1;
                     while (sp33) {
-                        if ((AudioThread_GetAsyncLoadStatus(&retMsg) == AUDIO_LOAD_BGM_READY_INTER) || (D_80771CB0 > 300)) {
+                        if ((AudioThread_GetAsyncLoadStatus(&retMsg) == AUDIO_LOAD_BGM_READY_INTER) ||
+                            (D_80771CB0 > 300)) {
                             PRINTF("==BANDO== in Na_PauseSet Wave Data Load End\n");
                             D_80771CB0 = 0;
                             sDDBgmReadyQueuedBgm = 0;
@@ -1170,7 +1171,7 @@ void func_807427C0(void) {
     u8 sampleLoadComplete;
     u8 fontLoadComplete;
     u8 seqLoadComplete;
-    
+
     switch (sSequenceLoadState) {
         case SEQ_LOAD_BANK:
             PRINTF("==BANDO== SE BANK LOAD START\n");
@@ -1199,7 +1200,8 @@ void func_807427C0(void) {
             sampleLoadComplete = AudioLoad_IsSampleLoadComplete(SAMPLE_GUITAR);
             fontLoadComplete = AudioLoad_IsFontLoadComplete(FONT_GUITAR);
             seqLoadComplete = AudioLoad_IsSeqLoadComplete(SEQ_GUITAR);
-            PRINTF("==BANDO== ALL GUITOR DATA LOAD END CHECKING... wav =%d bnk=%d seq=%d\n", sampleLoadComplete, fontLoadComplete, seqLoadComplete);
+            PRINTF("==BANDO== ALL GUITOR DATA LOAD END CHECKING... wav =%d bnk=%d seq=%d\n", sampleLoadComplete,
+                   fontLoadComplete, seqLoadComplete);
             if ((sampleLoadComplete == true) && (fontLoadComplete == true) && (seqLoadComplete == true)) {
                 PRINTF("==BANDO== ALL GUITOR DATA LOAD END\n");
                 D_80771C88 = 2;
@@ -1697,12 +1699,14 @@ void Audio_LevelSEStart(u8 playerIndex, u8 sfxId) {
             switch (playerIndex) {
                 case 0:
                     AUDIOCMD_CHANNEL_SET_PAN(0, 6, 0);
-                    PRINTF("==BANDO== LEVEL SE FINAL CALL! player=%02x SE Number= %02x \n", playerIndex, LEVEL_SE_2P(sfxId));
+                    PRINTF("==BANDO== LEVEL SE FINAL CALL! player=%02x SE Number= %02x \n", playerIndex,
+                           LEVEL_SE_2P(sfxId));
                     Audio_SEStart(6, LEVEL_SE_2P(sfxId));
                     break;
                 case 1:
                     AUDIOCMD_CHANNEL_SET_PAN(0, 7, 0x7F);
-                    PRINTF("==BANDO== LEVEL SE FINAL CALL! player=%02x SE Number= %02x \n", playerIndex, LEVEL_SE_2P(sfxId));
+                    PRINTF("==BANDO== LEVEL SE FINAL CALL! player=%02x SE Number= %02x \n", playerIndex,
+                           LEVEL_SE_2P(sfxId));
                     Audio_SEStart(7, LEVEL_SE_2P(sfxId));
                     break;
             }
@@ -1711,17 +1715,20 @@ void Audio_LevelSEStart(u8 playerIndex, u8 sfxId) {
             switch (playerIndex) {
                 case 0:
                     AUDIOCMD_CHANNEL_SET_PAN(0, 6, 0);
-                    PRINTF("==BANDO== LEVEL SE FINAL CALL! player=%02x SE Number= %02x \n", playerIndex, LEVEL_SE_MP(sfxId));
+                    PRINTF("==BANDO== LEVEL SE FINAL CALL! player=%02x SE Number= %02x \n", playerIndex,
+                           LEVEL_SE_MP(sfxId));
                     Audio_SEStart(6, LEVEL_SE_MP(sfxId));
                     break;
                 case 1:
                     AUDIOCMD_CHANNEL_SET_PAN(0, 7, 0);
-                    PRINTF("==BANDO== LEVEL SE FINAL CALL! player=%02x SE Number= %02x \n", playerIndex, LEVEL_SE_MP(sfxId));
+                    PRINTF("==BANDO== LEVEL SE FINAL CALL! player=%02x SE Number= %02x \n", playerIndex,
+                           LEVEL_SE_MP(sfxId));
                     Audio_SEStart(7, LEVEL_SE_MP(sfxId));
                     break;
                 case 2:
                     AUDIOCMD_CHANNEL_SET_PAN(0, 8, 0x7F);
-                    PRINTF("==BANDO== LEVEL SE FINAL CALL! player=%02x SE Number= %02x \n", playerIndex, LEVEL_SE_MP(sfxId));
+                    PRINTF("==BANDO== LEVEL SE FINAL CALL! player=%02x SE Number= %02x \n", playerIndex,
+                           LEVEL_SE_MP(sfxId));
                     Audio_SEStart(8, LEVEL_SE_MP(sfxId));
                     break;
             }
@@ -1730,22 +1737,26 @@ void Audio_LevelSEStart(u8 playerIndex, u8 sfxId) {
             switch (playerIndex) {
                 case 0:
                     AUDIOCMD_CHANNEL_SET_PAN(0, 6, 0);
-                    PRINTF("==BANDO== LEVEL SE FINAL CALL! player=%02x SE Number= %02x \n", playerIndex, LEVEL_SE_MP(sfxId));
+                    PRINTF("==BANDO== LEVEL SE FINAL CALL! player=%02x SE Number= %02x \n", playerIndex,
+                           LEVEL_SE_MP(sfxId));
                     Audio_SEStart(6, LEVEL_SE_MP(sfxId));
                     break;
                 case 1:
                     AUDIOCMD_CHANNEL_SET_PAN(0, 7, 0);
-                    PRINTF("==BANDO== LEVEL SE FINAL CALL! player=%02x SE Number= %02x \n", playerIndex, LEVEL_SE_MP(sfxId));
+                    PRINTF("==BANDO== LEVEL SE FINAL CALL! player=%02x SE Number= %02x \n", playerIndex,
+                           LEVEL_SE_MP(sfxId));
                     Audio_SEStart(7, LEVEL_SE_MP(sfxId));
                     break;
                 case 2:
                     AUDIOCMD_CHANNEL_SET_PAN(0, 8, 0x7F);
-                    PRINTF("==BANDO== LEVEL SE FINAL CALL! player=%02x SE Number= %02x \n", playerIndex, LEVEL_SE_MP(sfxId));
+                    PRINTF("==BANDO== LEVEL SE FINAL CALL! player=%02x SE Number= %02x \n", playerIndex,
+                           LEVEL_SE_MP(sfxId));
                     Audio_SEStart(8, LEVEL_SE_MP(sfxId));
                     break;
                 case 3:
                     AUDIOCMD_CHANNEL_SET_PAN(0, 9, 0x7F);
-                    PRINTF("==BANDO== LEVEL SE FINAL CALL! player=%02x SE Number= %02x \n", playerIndex, LEVEL_SE_MP(sfxId));
+                    PRINTF("==BANDO== LEVEL SE FINAL CALL! player=%02x SE Number= %02x \n", playerIndex,
+                           LEVEL_SE_MP(sfxId));
                     Audio_SEStart(9, LEVEL_SE_MP(sfxId));
                     break;
             }
@@ -1777,9 +1788,10 @@ void Audio_PlayerSEStart(u8 racerId, u8 sfxId) {
     Vec3f vec;
     u8 pan;
 
-    if ((sPlayerEngineSoundState[racerId] == 0) && !((sfxId == NA_SE_22) || (sfxId == NA_SE_16) || (sfxId == NA_SE_33) || (sfxId == NA_SE_30) ||
-        (sfxId == NA_SE_5) || (sfxId == NA_SE_8) || (sfxId == NA_SE_15) || (sfxId == NA_SE_48) || (sfxId == NA_SE_49) || (sfxId == NA_SE_52) ||
-        (sfxId == NA_SE_53) || (sfxId == NA_SE_62))) {
+    if ((sPlayerEngineSoundState[racerId] == 0) &&
+        !((sfxId == NA_SE_22) || (sfxId == NA_SE_16) || (sfxId == NA_SE_33) || (sfxId == NA_SE_30) ||
+          (sfxId == NA_SE_5) || (sfxId == NA_SE_8) || (sfxId == NA_SE_15) || (sfxId == NA_SE_48) ||
+          (sfxId == NA_SE_49) || (sfxId == NA_SE_52) || (sfxId == NA_SE_53) || (sfxId == NA_SE_62))) {
         PRINTF("==BANDO== Ouch!! UN-SUPORTED TRG SE NUM WAS CALLED !!!!!!! num = %02x\n", sfxId);
         return;
     }
@@ -2016,7 +2028,8 @@ void Audio_UpdateEnemyEngine(void) {
             sAudioPreviousClosestRacerDistance = sAudioClosestRacerDistance;
             sAudioPreviousClosestRacerId = sAudioClosestRacerId;
 
-            sEnemyEngineFreqScale = ((gRacers[sAudioClosestRacerId].speed + 0.01f) * (1.0f / 21.0f)) + 0.5f + D_80771B0C;
+            sEnemyEngineFreqScale =
+                ((gRacers[sAudioClosestRacerId].speed + 0.01f) * (1.0f / 21.0f)) + 0.5f + D_80771B0C;
             if (sEnemyEngineFreqScale < 0.1f) {
                 sEnemyEngineFreqScale = 0.1f;
             }
@@ -2137,7 +2150,7 @@ void func_80744BDC(u8 playerIndex) {
     if (sAudioPauseStatus == AUDIO_PAUSE_PAUSED || sAudioPauseStatus == AUDIO_PAUSE_TRANSITION) {
         return;
     }
-    
+
     if ((sPlayerEngineSoundState[playerIndex] == 0) || sAudioLevelFadeoutActive) {
         return;
     }
@@ -2263,7 +2276,8 @@ void Audio_UpdateReverb(u8 playerIndex) {
                 AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 14, 80);
                 AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 15, 80);
                 AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 2, 80);
-                if ((sRacerActiveSE[0] == NA_SE_19) || (sRacerActiveSE[0] == NA_SE_20) || (sRacerActiveSE[0] == NA_SE_21)) {
+                if ((sRacerActiveSE[0] == NA_SE_19) || (sRacerActiveSE[0] == NA_SE_20) ||
+                    (sRacerActiveSE[0] == NA_SE_21)) {
                     AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 10, 0);
                 } else {
                     AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 10, 80);
@@ -2290,7 +2304,8 @@ void Audio_UpdateReverb(u8 playerIndex) {
             }
             if (sPlayerEngineEchoSoundState[0] == 1) {
                 AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 2, 80);
-                if ((sRacerActiveSE[0] == NA_SE_19) || (sRacerActiveSE[0] == NA_SE_20) || (sRacerActiveSE[0] == NA_SE_21)) {
+                if ((sRacerActiveSE[0] == NA_SE_19) || (sRacerActiveSE[0] == NA_SE_20) ||
+                    (sRacerActiveSE[0] == NA_SE_21)) {
                     AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 10, 0);
                 } else {
                     AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 10, 80);
@@ -2307,7 +2322,8 @@ void Audio_UpdateReverb(u8 playerIndex) {
             }
             if (sPlayerEngineEchoSoundState[1] == 1) {
                 AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 3, 80);
-                if ((sRacerActiveSE[1] == NA_SE_19) || (sRacerActiveSE[1] == NA_SE_20) || (sRacerActiveSE[1] == NA_SE_21)) {
+                if ((sRacerActiveSE[1] == NA_SE_19) || (sRacerActiveSE[1] == NA_SE_20) ||
+                    (sRacerActiveSE[1] == NA_SE_21)) {
                     AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 11, 0);
                 } else {
                     AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 11, 80);
@@ -2324,14 +2340,16 @@ void Audio_UpdateReverb(u8 playerIndex) {
             }
             break;
         case 2:
-            if ((sPlayerEngineEchoSoundState[0] == 1) || (sPlayerEngineEchoSoundState[1] == 1) || (sPlayerEngineEchoSoundState[2] == 1)) {
+            if ((sPlayerEngineEchoSoundState[0] == 1) || (sPlayerEngineEchoSoundState[1] == 1) ||
+                (sPlayerEngineEchoSoundState[2] == 1)) {
                 gAudioCtx.synthesisReverbs[0].volume = 0x7FFF;
             } else {
                 gAudioCtx.synthesisReverbs[0].volume = 0;
             }
             if (sPlayerEngineEchoSoundState[0] == 1) {
                 AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 2, 80);
-                if ((sRacerActiveSE[0] == NA_SE_19) || (sRacerActiveSE[0] == NA_SE_20) || (sRacerActiveSE[0] == NA_SE_21)) {
+                if ((sRacerActiveSE[0] == NA_SE_19) || (sRacerActiveSE[0] == NA_SE_20) ||
+                    (sRacerActiveSE[0] == NA_SE_21)) {
                     AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 10, 0);
                 } else {
                     AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 10, 80);
@@ -2348,7 +2366,8 @@ void Audio_UpdateReverb(u8 playerIndex) {
             }
             if (sPlayerEngineEchoSoundState[1] == 1) {
                 AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 3, 80);
-                if ((sRacerActiveSE[1] == NA_SE_19) || (sRacerActiveSE[1] == NA_SE_20) || (sRacerActiveSE[1] == NA_SE_21)) {
+                if ((sRacerActiveSE[1] == NA_SE_19) || (sRacerActiveSE[1] == NA_SE_20) ||
+                    (sRacerActiveSE[1] == NA_SE_21)) {
                     AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 11, 0);
                 } else {
                     AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 11, 80);
@@ -2365,7 +2384,8 @@ void Audio_UpdateReverb(u8 playerIndex) {
             }
             if (sPlayerEngineEchoSoundState[2] == 1) {
                 AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 4, 80);
-                if ((sRacerActiveSE[2] == NA_SE_19) || (sRacerActiveSE[2] == NA_SE_20) || (sRacerActiveSE[2] == NA_SE_21)) {
+                if ((sRacerActiveSE[2] == NA_SE_19) || (sRacerActiveSE[2] == NA_SE_20) ||
+                    (sRacerActiveSE[2] == NA_SE_21)) {
                     AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 12, 0);
                 } else {
                     AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 12, 80);
@@ -2382,14 +2402,16 @@ void Audio_UpdateReverb(u8 playerIndex) {
             }
             break;
         case 3:
-            if ((sPlayerEngineEchoSoundState[0] == 1) || (sPlayerEngineEchoSoundState[1] == 1) || (sPlayerEngineEchoSoundState[2] == 1) || (sPlayerEngineEchoSoundState[3] == 1)) {
+            if ((sPlayerEngineEchoSoundState[0] == 1) || (sPlayerEngineEchoSoundState[1] == 1) ||
+                (sPlayerEngineEchoSoundState[2] == 1) || (sPlayerEngineEchoSoundState[3] == 1)) {
                 gAudioCtx.synthesisReverbs[0].volume = 0x7FFF;
             } else {
                 gAudioCtx.synthesisReverbs[0].volume = 0;
             }
             if (sPlayerEngineEchoSoundState[0] == 1) {
                 AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 2, 80);
-                if ((sRacerActiveSE[0] == NA_SE_19) || (sRacerActiveSE[0] == NA_SE_20) || (sRacerActiveSE[0] == NA_SE_21)) {
+                if ((sRacerActiveSE[0] == NA_SE_19) || (sRacerActiveSE[0] == NA_SE_20) ||
+                    (sRacerActiveSE[0] == NA_SE_21)) {
                     AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 10, 0);
                 } else {
                     AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 10, 80);
@@ -2406,7 +2428,8 @@ void Audio_UpdateReverb(u8 playerIndex) {
             }
             if (sPlayerEngineEchoSoundState[1] == 1) {
                 AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 3, 80);
-                if ((sRacerActiveSE[1] == NA_SE_19) || (sRacerActiveSE[1] == NA_SE_20) || (sRacerActiveSE[1] == NA_SE_21)) {
+                if ((sRacerActiveSE[1] == NA_SE_19) || (sRacerActiveSE[1] == NA_SE_20) ||
+                    (sRacerActiveSE[1] == NA_SE_21)) {
                     AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 11, 0);
                 } else {
                     AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 11, 80);
@@ -2423,7 +2446,8 @@ void Audio_UpdateReverb(u8 playerIndex) {
             }
             if (sPlayerEngineEchoSoundState[2] == 1) {
                 AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 4, 80);
-                if ((sRacerActiveSE[2] == NA_SE_19) || (sRacerActiveSE[2] == NA_SE_20) || (sRacerActiveSE[2] == NA_SE_21)) {
+                if ((sRacerActiveSE[2] == NA_SE_19) || (sRacerActiveSE[2] == NA_SE_20) ||
+                    (sRacerActiveSE[2] == NA_SE_21)) {
                     AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 12, 0);
                 } else {
                     AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 12, 80);
@@ -2440,7 +2464,8 @@ void Audio_UpdateReverb(u8 playerIndex) {
             }
             if (sPlayerEngineEchoSoundState[3] == 1) {
                 AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 5, 80);
-                if ((sRacerActiveSE[3] == NA_SE_19) || (sRacerActiveSE[3] == NA_SE_20) || (sRacerActiveSE[3] == NA_SE_21)) {
+                if ((sRacerActiveSE[3] == NA_SE_19) || (sRacerActiveSE[3] == NA_SE_20) ||
+                    (sRacerActiveSE[3] == NA_SE_21)) {
                     AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 13, 0);
                 } else {
                     AUDIOCMD_CHANNEL_SET_REVERB_VOLUME(0, 13, 80);
