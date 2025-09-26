@@ -329,7 +329,7 @@ void func_xk2_800EB400(void) {
     if (D_800D6CA0.unk_08 != 3) {
         return;
     }
-    func_8074122C(0x24);
+    Audio_TriggerSystemSE(NA_SE_36);
     courseIndex = func_xk1_8002BD14();
     D_xk2_80119884 = courseIndex;
     temp_v1 = &D_xk1_8003A5D8[D_xk2_80119884];
@@ -439,7 +439,7 @@ void func_xk2_800EB400(void) {
             break;
         case 5:
             if (D_xk1_8003A5D8[D_xk2_80119884].extension[3] == 'E') {
-                func_8074122C(0x20);
+                Audio_TriggerSystemSE(NA_SE_32);
                 func_xk1_8002D290();
                 break;
             }

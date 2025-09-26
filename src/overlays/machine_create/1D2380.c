@@ -256,7 +256,7 @@ void func_xk3_80132DDC(void) {
         D_807C6EA8.unk_08 = 0x17;
         PRINTF("WORKS MACHINE MODE : MESSAGE_BUTTON\n");
         gWorksMachineMode = MACHINE_MODE_MESSAGE_BUTTON;
-        func_8074122C(0x20);
+        Audio_TriggerSystemSE(NA_SE_32);
     } else {
         PRINTF("WORKS MACHINE MODE : MNAME\n");
         gWorksMachineMode = MACHINE_MODE_MNAME;

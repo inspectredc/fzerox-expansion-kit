@@ -88,7 +88,7 @@ s32 MachineCreate_Update(void) {
             return GAMEMODE_FLX_MAIN_MENU;
         }
         func_80705E18();
-        func_80742F04();
+        Audio_EditorExit();
         D_80794E10 = 0;
         D_8076C954 = 0;
         PRINTF("WORKS MACHINE MODE : 0\n");

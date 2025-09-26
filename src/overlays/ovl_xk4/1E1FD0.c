@@ -11,8 +11,8 @@ extern s32 D_8076C77C;
 extern s16 D_8076C7A8;
 
 void func_xk4_800D8260(void) {
-    func_807419F0(0x14);
-    func_80741A0C(0x14);
+    Audio_DDBgmReady(BGM_EAD_DEMO);
+    Audio_DDBgmStart(BGM_EAD_DEMO);
     func_xk4_800D6F38();
     D_8076C77C = 2;
     D_8076C7A8 = 3;
@@ -35,7 +35,7 @@ s32 func_xk4_800D82A4(void) {
     }
     Controller_SetGlobalInputs(&gSharedController);
     if (gInputButtonPressed & BTN_START) {
-        func_80741B84();
+        Audio_DDBgmStop();
         D_8076C77C = 1;
         return D_8076C7C0;
     }

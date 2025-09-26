@@ -892,48 +892,48 @@ s32 func_8070DA54(void) {
 }
 
 void func_8070DA84(void) {
-    func_807423F4(0);
+    Audio_ChangeSoundMode(0);
 }
 
-void func_8070DAA4(s32 arg0) {
+void func_8070DAA4(s32 bgm) {
 
-    if (arg0 == 0x1D) {
-        arg0 = 0x11;
+    if (bgm == BGM_DEATHRACE2) {
+        bgm = BGM_DEATHRACE;
     }
-    func_80741A0C(arg0);
+    Audio_DDBgmStart(bgm);
 }
 
-void func_8070DAD4(s32 arg0) {
-    func_80741CB4(arg0);
+void func_8070DAD4(s32 bgm) {
+    Audio_RomBgmStart(bgm);
     D_8076CCA0 = true;
 }
 
 void func_8070DAFC(void) {
-    func_80741BCC();
+    Audio_BetaBgmStop();
     if (D_8076CCA0) {
-        func_80741DD4();
+        Audio_RomBgmStop();
     } else {
-        func_80741B84();
+        Audio_DDBgmStop();
     }
     D_8076CCA0 = false;
 }
 
 void func_8070DB48(void) {
-    func_80741BCC();
+    Audio_BetaBgmStop();
     if (D_8076CCA0) {
-        func_80741E64();
+        Audio_RomBgmStop2();
     } else {
-        func_80741B84();
+        Audio_DDBgmStop();
     }
     D_8076CCA0 = false;
 }
 
 void func_8070DB94(void) {
-    func_80742004();
+    Audio_BetaBgmStop2();
     if (D_8076CCA0) {
-        func_80741DD4();
+        Audio_RomBgmStop();
     } else {
-        func_80741B84();
+        Audio_DDBgmStop();
     }
     D_8076CCA0 = false;
 }
