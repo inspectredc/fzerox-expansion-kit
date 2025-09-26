@@ -353,7 +353,7 @@ typedef struct SequenceChannel {
     /* 0xC4 */ s8 seqScriptIO[8]; // bridge between .seq script and audio lib, "io ports"
     /* 0xCC */ s16* filter;
     /* 0xD0 */ Stereo stereo;
-    /* 0xD4 */ s32 unk_D4;
+    /* 0xD4 */ s32 startSamplePos;
     /* 0xD8 */ s32 unk_D8;
 } SequenceChannel; // size = 0xDC
 

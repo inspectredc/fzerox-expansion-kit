@@ -67,6 +67,15 @@ Fault_DisplayChar = 0x8070FE6C;
 Fault_SetFrameBuffer = 0x80710A38;
 Fault_Init = 0x80710A60;
 
+Audio_PlayerFinished = 0x80740B98;
+Audio_PlayerLevelSEStart = 0x80740BF8;
+Audio_PlayerLevelSEStop = 0x80740CE8;
+Audio_PlayerTriggerSEStart = 0x80741014;
+Audio_TriggerSystemSE = 0x8074122C;
+Audio_PlayerEngineEchoStart = 0x8074151C;
+Audio_PlayerEngineEchoStop = 0x80741538;
+Audio_LevelSEFadeout = 0x80741EC4;
+
 // game data
 
 sSpTaskState = 0x8076C760;

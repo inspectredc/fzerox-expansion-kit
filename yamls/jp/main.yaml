@@ -330,7 +330,7 @@
       - [0x7F250, .data, audio/os]
       - [0x7F260, .data, audio/effects]
       - [0x7F270, .data, audio/seqplayer]
-      - [0x7F2C0, data, audio/general]
+      - [0x7F2C0, .data, audio/general]
       - [0x7F570, .data, audio/audio_context]
 
       - [0x7F5E0, data, libultra/os/exceptasm]
@@ -489,6 +489,8 @@
       - { type: .bss, vram: 0x807A0930, name: 1F320 }
       - { type: .bss, vram: 0x807A15D0, name: 27110 }
       - { type: bss, vram: 0x807B3C20, name: 807B3C20 }
+      - { type: .bss, vram: 0x807C1BE0, name: audio/general }
+      - { type: bss, vram: 0x807C1BF0, name: 807C1BF0 }
       - { type: .bss, vram: 0x807C1C00, name: libultra/io/sptask }
       - { type: .bss, vram: 0x807C1C40, name: libultra/io/motor }
       - { type: .bss, vram: 0x807C1D40, name: libultra/io/siacs }

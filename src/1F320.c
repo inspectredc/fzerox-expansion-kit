@@ -775,7 +775,7 @@ void func_8071370C(Player* arg0) {
         var_fv1 *= var_fa0;
     }
     if ((var_fv1 >= -1000.0f) && (var_fv1 <= 1000.0f)) {
-        func_80740BD8(((var_fv1 + 1000.0f) / 2000.0f) * 127.0f);
+        Audio_SetEnemyEnginePan(((var_fv1 + 1000.0f) / 2000.0f) * 127.0f);
     }
 }
 

@@ -1404,7 +1404,7 @@ void Credits_OldMachinesUpdate(Object* oldMachinesObj) {
     }
     if (sDebugCreditsOldMachines) {
         if (gInputPressed & BTN_LEFT) {
-            func_8074122C(30);
+            Audio_TriggerSystemSE(NA_SE_30);
             if (OBJECT_STATE(oldMachinesObj) != 0) {
                 OBJECT_STATE(oldMachinesObj)--;
             } else {
@@ -1414,7 +1414,7 @@ void Credits_OldMachinesUpdate(Object* oldMachinesObj) {
         }
 
         if (gInputPressed & BTN_RIGHT) {
-            func_8074122C(30);
+            Audio_TriggerSystemSE(NA_SE_30);
             OBJECT_STATE(oldMachinesObj)++;
             OBJECT_STATE(oldMachinesObj) = OBJECT_STATE(oldMachinesObj) % 30;
             var_v1++;
@@ -1802,7 +1802,7 @@ void Credits_MenuLadyUpdate(Object* menuLadyObj) {
                 OBJECT_STATE(menuLadyObj)++;
                 OBJECT_COUNTER(menuLadyObj) = 0;
                 Credits_ObjectInit(OBJECT_CREDITS_SEE_YOU_AGAIN, 0x80, 0x40, 8);
-                func_8074122C(0x2B);
+                Audio_TriggerSystemSE(NA_SE_43);
             }
             break;
         case 4:

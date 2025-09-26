@@ -460,7 +460,7 @@ void func_i7_80096DAC(void) {
                     temp_s4->unk_24 = 3;
                     var_s1 = 0;
                     if (temp_s4->unk_2C == 0x20) {
-                        func_80741470(0x40, 0x7F);
+                        Audio_Hanabi(0x40, 0x7F);
                     } else {
                         var_fs0_2 = temp_s4->unk_00;
                         temp_ft4 = temp_s4->unk_04;
@@ -474,7 +474,7 @@ void func_i7_80096DAC(void) {
                             var_fa0 *= var_fv1;
                         }
                         if ((var_fa0 >= -1000) && (var_fa0 <= 1000)) {
-                            func_80741470((s32) (f32) (u32) (((var_fa0 + 1000.0f) / 2000.0f) * 127.0f), 0x40);
+                            Audio_Hanabi((s32) (f32) (u32) (((var_fa0 + 1000.0f) / 2000.0f) * 127.0f), 0x40);
                         }
                     }
                     var_fs1_2 = sqrtf(SQ(gPlayers[0].unk_5C.z.x) + SQ(gPlayers[0].unk_5C.z.z));

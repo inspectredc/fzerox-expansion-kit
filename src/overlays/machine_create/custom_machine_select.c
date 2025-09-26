@@ -326,7 +326,7 @@ void MachineCreate_MachineSelectHandleStickInputs(void) {
         }
     }
     if (originalIndex != sMachineSelectIndex) {
-        func_8074122C(0x1E);
+        Audio_TriggerSystemSE(NA_SE_30);
     }
 }
 
@@ -353,7 +353,7 @@ void MachineCreate_MachineSelectHandleAPress(void) {
         D_xk3_80136F90 = 0;
         PRINTF("WORKS MACHINE MODE : 0\n");
         gWorksMachineMode = MACHINE_MODE_0;
-        func_8074122C(0x24);
+        Audio_TriggerSystemSE(NA_SE_36);
         gCustomMachine = gCustomMachineBackup;
         D_xk1_800333F0 = D_xk3_80141290;
         D_800333F4 = D_xk3_80141291;
@@ -379,7 +379,7 @@ void MachineCreate_MachineSelectHandleAPress(void) {
             gCustomMachine.number = kCharacterNumbers[sMachineSelectIndex];
             gCustomMachinesInfo.customMachines[sMachineSelectIndex] = gCustomMachine;
         }
-        func_8074122C(0x27);
+        Audio_TriggerSystemSE(NA_SE_39);
         sPreviousMachineSelectIndex = sMachineSelectIndex;
         sMachineSelectIndex = 30;
         D_xk3_80136F90 = 1;
@@ -420,7 +420,7 @@ void MachineCreate_MachineSelectHandleBPress(void) {
             sMachineSelectIndex = sPreviousMachineSelectIndex;
         }
     }
-    func_8074122C(0x25);
+    Audio_TriggerSystemSE(NA_SE_37);
     func_8071E0C0();
 }
 

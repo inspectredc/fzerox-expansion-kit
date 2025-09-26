@@ -209,22 +209,22 @@ void ExpansionKit_NameEntryHandleAPress(void) {
 
     if (gControllers[gPlayerControlPorts[0]].buttonPressed & BTN_A) {
         if (gExpansionKitNameEntryStrLength >= 9) {
-            func_8074122C(0x20);
+            Audio_TriggerSystemSE(NA_SE_32);
             return;
         }
         xPos = sNameEntryCursorXPos;
         yPos = sNameEntryCursorYPos;
         letter = sNameEntryKeyboardStr[yPos * 10 + xPos];
         if ((letter != '\0') && (gExpansionKitNameEntryStrLength >= 8)) {
-            func_8074122C(0x20);
+            Audio_TriggerSystemSE(NA_SE_32);
             return;
         }
 
         if (letter == '\0') {
             if (gExpansionKitNameEntryStrLength == 0) {
-                func_8074122C(0x20);
+                Audio_TriggerSystemSE(NA_SE_32);
             } else {
-                func_8074122C(0x21);
+                Audio_TriggerSystemSE(NA_SE_33);
                 gExpansionKitNameEntryStr[gExpansionKitNameEntryStrLength] = letter;
                 namePtr = &gExpansionKitNameEntryStr[gExpansionKitNameEntryStrLength];
                 namePtr--;
@@ -236,9 +236,9 @@ void ExpansionKit_NameEntryHandleAPress(void) {
                 gExpansionKitNameEntryStrLength++;
             }
         } else if ((gExpansionKitNameEntryStrLength == 0) && (letter == ' ')) {
-            func_8074122C(0x20);
+            Audio_TriggerSystemSE(NA_SE_32);
         } else {
-            func_8074122C(0x27);
+            Audio_TriggerSystemSE(NA_SE_39);
             gExpansionKitNameEntryStr[gExpansionKitNameEntryStrLength] = letter;
             gExpansionKitNameEntryStrLength++;
         }
@@ -262,7 +262,7 @@ extern s32 gCourseEditFileOption;
 void ExpansionKit_NameEntryHandleBPress(void) {
 
     if (gControllers[gPlayerControlPorts[0]].buttonPressed & BTN_B) {
-        func_8074122C(0x25);
+        Audio_TriggerSystemSE(NA_SE_37);
         if (gExpansionKitNameEntryStrLength != 0) {
             gExpansionKitNameEntryStrLength--;
             gExpansionKitNameEntryStr[gExpansionKitNameEntryStrLength] = 0;
@@ -277,11 +277,11 @@ void ExpansionKit_NameEntryHandleBPress(void) {
 
 void func_xk1_80029924(void) {
     if (sNameEntryCursorYPos != 4) {
-        func_8074122C(0x23);
+        Audio_TriggerSystemSE(NA_SE_35);
         return;
     }
     if ((sNameEntryCursorXPos >= 6) && (sNameEntryCursorXPos < 9)) {
-        func_8074122C(0x23);
+        Audio_TriggerSystemSE(NA_SE_35);
     }
 }
 
@@ -306,7 +306,7 @@ void ExpansionKit_NameEntryHandleStickInput(void) {
         oldPos = sNameEntryCursorYPos;
         func_xk1_8002DBD4(&sNameEntryCursorYPos, 4, 0);
         if (oldPos != sNameEntryCursorYPos) {
-            func_8074122C(0x23);
+            Audio_TriggerSystemSE(NA_SE_35);
         }
     }
     if (sNameEntryCursorYPos == 4) {
