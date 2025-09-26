@@ -729,7 +729,7 @@ void AudioThread_ProcessChannelCmd(SequenceChannel* channel, AudioCmd* cmd) {
             channel->stereo.asByte = cmd->asUbyte;
             break;
 
-        case 0xF:
+        case AUDIOCMD_OP_CHANNEL_SET_SET_START_POS:
             channel->startSamplePos = cmd->asUInt;
             break;
 
