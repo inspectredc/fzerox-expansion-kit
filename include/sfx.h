@@ -276,5 +276,4 @@ typedef enum AudioPauseState {
 #define LEVEL_SE_2P(sfxId) ((sfxId) + 10)
 #define LEVEL_SE_MP(sfxId) ((sfxId) + 20)
 
-
 #endif // SFX_H
