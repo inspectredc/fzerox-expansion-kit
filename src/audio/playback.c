@@ -706,10 +706,10 @@ void Audio_NoteInitForLayer(Note* note, SequenceLayer* layer) {
         sub->bitField1.isSyntheticWave = false;
     }
 
-    if (channel->unk_D4 == 1) {
+    if (channel->startSamplePos == 1) {
         playbackState->startSamplePos = sub->tunedSample->sample->loop->header.start;
     } else {
-        playbackState->startSamplePos = channel->unk_D4;
+        playbackState->startSamplePos = channel->startSamplePos;
         if (playbackState->startSamplePos >= sub->tunedSample->sample->loop->header.end) {
             playbackState->startSamplePos = 0;
         }

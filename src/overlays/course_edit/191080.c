@@ -2515,12 +2515,12 @@ Gfx* func_xk2_800E8080(Gfx* gfx) {
     if ((gCourseEditCursorXPos >= 264) && (gCourseEditCursorXPos < 296) && (gCourseEditCursorYPos >= 36) &&
         (gCourseEditCursorYPos < 52)) {
         if (!D_xk2_800F71F4) {
-            func_8074122C(0x23);
+            Audio_TriggerSystemSE(NA_SE_35);
         }
         D_xk2_800F71F4 = true;
     } else {
         if (D_xk2_800F71F4) {
-            func_8074122C(0x23);
+            Audio_TriggerSystemSE(NA_SE_35);
         }
         D_xk2_800F71F4 = false;
     }
@@ -2805,7 +2805,7 @@ s32 CourseEdit_UpdateHighlightedIconIndex(void) {
             return gCourseEditHighlightedIconIndex;
         }
         gCourseEditHighlightedIconIndex = (gCourseEditCursorXPos - COURSE_EDIT_ICONS_X_POS) / COURSE_EDIT_ICON_WIDTH;
-        func_8074122C(0x23);
+        Audio_TriggerSystemSE(NA_SE_35);
     } else {
         highlightedIconXPos =
             (gCourseEditHighlightedIconIndex * COURSE_EDIT_ICON_WIDTH) + (COURSE_EDIT_ICONS_X_POS - 2);
@@ -2825,7 +2825,7 @@ s32 CourseEdit_UpdateHighlightedIconIndex(void) {
             gCourseEditHighlightedIconIndex = -1;
             return -1;
         }
-        func_8074122C(0x23);
+        Audio_TriggerSystemSE(NA_SE_35);
         gCourseEditHighlightedIconIndex = (gCourseEditCursorXPos - COURSE_EDIT_ICONS_X_POS) / COURSE_EDIT_ICON_WIDTH;
     }
     return gCourseEditHighlightedIconIndex;

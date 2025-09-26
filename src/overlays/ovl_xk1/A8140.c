@@ -243,7 +243,7 @@ void func_xk1_8002BBA4(void) {
     }
 
     if (sp1C != D_xk1_80032BDC) {
-        func_8074122C(0x23);
+        Audio_TriggerSystemSE(NA_SE_35);
     }
 
     if (D_xk1_80032BDC >= ((D_xk1_80032BEC / 8) + 13)) {
@@ -278,7 +278,7 @@ s32 func_xk1_8002BD14(void) {
 }
 
 void func_xk1_8002BD34(void) {
-    func_8074122C(0x25);
+    Audio_TriggerSystemSE(NA_SE_37);
     D_xk1_80032BD4 = 0;
 }
 
@@ -707,7 +707,7 @@ void func_xk1_8002D2F0(void) {
 
     func_xk1_8002DBD4(&D_xk1_80032C20, 1, 1);
     if (sp1C != D_xk1_80032C20) {
-        func_8074122C(0x23);
+        Audio_TriggerSystemSE(NA_SE_35);
     }
 }
 

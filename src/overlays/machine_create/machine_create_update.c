@@ -151,7 +151,7 @@ void func_xk3_8012BD84(void) {
             }
             func_xk1_8002DBD4(&D_xk3_80140E68.unk_04, 8, 0);
             if ((sp34 != D_xk3_80140E68.unk_00) || (sp30 != D_xk3_80140E68.unk_04)) {
-                func_8074122C(0x1E);
+                Audio_TriggerSystemSE(NA_SE_30);
             }
             break;
         }
@@ -165,7 +165,7 @@ void func_xk3_8012BD84(void) {
             }
             func_xk1_8002DBD4(&D_xk3_80140E60.unk_04, 3, 0);
             if ((sp2C != D_xk3_80140E60.unk_00) || (sp28 != D_xk3_80140E60.unk_04)) {
-                func_8074122C(0x1E);
+                Audio_TriggerSystemSE(NA_SE_30);
             }
             break;
         }
@@ -179,7 +179,7 @@ void func_xk3_8012BD84(void) {
             }
             func_xk1_8002DBD4(&D_xk3_80140E70.unk_04, 3, 0);
             if ((sp24 != D_xk3_80140E70.unk_00) || (sp20 != D_xk3_80140E70.unk_04)) {
-                func_8074122C(0x1E);
+                Audio_TriggerSystemSE(NA_SE_30);
             }
             break;
         }
@@ -222,7 +222,7 @@ void func_xk3_8012BD84(void) {
             D_xk3_80140E50 = (D_xk3_80136550 * 0x30) + 0x30;
             D_xk3_80140E54 = 0x1C;
             if (sp1C != D_xk3_80136550) {
-                func_8074122C(0x23);
+                Audio_TriggerSystemSE(NA_SE_35);
             }
             break;
         }
@@ -493,11 +493,11 @@ void func_xk3_8012CAC8(void) {
                 break;
             default:
                 if (D_xk3_80136548) {
-                    func_8074122C(0x44);
+                    Audio_TriggerSystemSE(NA_SE_68);
                     D_xk3_80136548 = false;
                     ExpansionKit_SetMenuHighlightDrawFlag(true);
                 } else if (gWorksMachineMode == MACHINE_MODE_0) {
-                    func_8074122C(0x44);
+                    Audio_TriggerSystemSE(NA_SE_68);
                     D_xk3_80136548 = true;
                     ExpansionKit_SetMenuHighlightDrawFlag(false);
                 }
@@ -535,7 +535,7 @@ void func_xk3_8012CC10(void) {
                 gCustomMachine = gCustomMachineWork;
                 PRINTF("WORKS MACHINE MODE : 0\n");
                 gWorksMachineMode = MACHINE_MODE_0;
-                func_8074122C(0x25);
+                Audio_TriggerSystemSE(NA_SE_37);
                 break;
             case MACHINE_MODE_BODY_COLOR:
             case MACHINE_MODE_LINE_COLOR:
@@ -543,10 +543,10 @@ void func_xk3_8012CC10(void) {
             case MACHINE_MODE_COCKPIT_COLOR:
                 gCustomMachine = gCustomMachineWork;
                 func_xk3_8012BC98();
-                func_8074122C(0x25);
+                Audio_TriggerSystemSE(NA_SE_37);
                 break;
             case MACHINE_MODE_MESSAGE_BUTTON:
-                func_8074122C(0x25);
+                Audio_TriggerSystemSE(NA_SE_37);
                 D_807C6EA8.unk_08 = 0;
                 PRINTF("WORKS MACHINE MODE : 0\n");
                 gWorksMachineMode = MACHINE_MODE_0;
@@ -558,7 +558,7 @@ void func_xk3_8012CC10(void) {
             case MACHINE_MODE_ENTRY_CLEAR_CONFIRM:
             case MACHINE_MODE_ENTRY_CLEAR_SUPER_CONFIRM:
             case MACHINE_MODE_CHECKSUM_ERROR:
-                func_8074122C(0x25);
+                Audio_TriggerSystemSE(NA_SE_37);
                 D_807C6EA8.unk_08 = 0;
                 PRINTF("WORKS MACHINE MODE : 0\n");
                 gWorksMachineMode = MACHINE_MODE_0;
@@ -570,7 +570,7 @@ void func_xk3_8012CC10(void) {
             case MACHINE_MODE_ENTRY_SELECT_SUPER:
             case MACHINE_MODE_ENTRY_CLEAR_SELECT_FILE:
             case MACHINE_MODE_ENTRY_CLEAR_SELECT_SUPER:
-                func_8074122C(0x25);
+                Audio_TriggerSystemSE(NA_SE_37);
                 PRINTF("WORKS MACHINE MODE : 0\n");
                 gWorksMachineMode = MACHINE_MODE_0;
                 func_xk1_8002BD34();
@@ -602,7 +602,7 @@ void func_xk3_8012CE44(void) {
                 case MACHINE_MODE_ENTRY_CLEAR_CONFIRM:
                 case MACHINE_MODE_ENTRY_CLEAR_SUPER_CONFIRM:
                 case MACHINE_MODE_CHECKSUM_ERROR:
-                    func_8074122C(0x25);
+                    Audio_TriggerSystemSE(NA_SE_37);
                     D_807C6EA8.unk_08 = 0;
                     PRINTF("WORKS MACHINE MODE : 0\n");
                     gWorksMachineMode = MACHINE_MODE_0;
@@ -622,7 +622,7 @@ void func_xk3_8012CE44(void) {
                     D_807C6EA8.unk_08 = 0x16;
                     PRINTF("WORKS MACHINE MODE : MESSAGE_BUTTON\n");
                     gWorksMachineMode = MACHINE_MODE_MESSAGE_BUTTON;
-                    func_8074122C(0x20);
+                    Audio_TriggerSystemSE(NA_SE_32);
                 } else {
                     func_xk1_80027DC8(&gMachineCreateWidget, &D_xk3_80140E50, &D_xk3_80140E54);
                     D_xk3_80140E58 = D_xk3_80140E54;
@@ -633,25 +633,25 @@ void func_xk3_8012CE44(void) {
                     case 0:
                         if (D_xk3_80140E60.unk_00 != gCustomMachine.frontType) {
                             gCustomMachine.frontType = D_xk3_80140E60.unk_00;
-                            func_8074122C(0x27);
+                            Audio_TriggerSystemSE(NA_SE_39);
                         }
                         break;
                     case 1:
                         if (D_xk3_80140E60.unk_00 != gCustomMachine.rearType) {
                             gCustomMachine.rearType = D_xk3_80140E60.unk_00;
-                            func_8074122C(0x27);
+                            Audio_TriggerSystemSE(NA_SE_39);
                         }
                         break;
                     case 2:
                         if (D_xk3_80140E60.unk_00 != gCustomMachine.wingType) {
                             gCustomMachine.wingType = D_xk3_80140E60.unk_00;
-                            func_8074122C(0x27);
+                            Audio_TriggerSystemSE(NA_SE_39);
                         }
                         break;
                     case 3:
                         PRINTF("WORKS MACHINE MODE : 0\n");
                         gWorksMachineMode = MACHINE_MODE_0;
-                        func_8074122C(0x24);
+                        Audio_TriggerSystemSE(NA_SE_36);
                         break;
                 }
                 break;
@@ -671,7 +671,7 @@ void func_xk3_8012CE44(void) {
                 func_xk3_80135E58(&gCustomMachine.cockpitR, &gCustomMachine.cockpitG, &gCustomMachine.cockpitB);
                 break;
             case MACHINE_MODE_LOAD_SELECT_FILE:
-                func_8074122C(0x24);
+                Audio_TriggerSystemSE(NA_SE_36);
                 if (func_xk1_8002BD14() == 0) {
                     PRINTF("WORKS MACHINE MODE : 0\n");
                     gWorksMachineMode = MACHINE_MODE_0;
@@ -690,20 +690,20 @@ void func_xk3_8012CE44(void) {
                 break;
             case MACHINE_MODE_ENTRY_CLEAR_SELECT_FILE:
                 if ((D_xk3_80137160 != 0) && (func_xk1_8002BD14() == 0)) {
-                    func_8074122C(0x24);
+                    Audio_TriggerSystemSE(NA_SE_36);
                     PRINTF("WORKS MACHINE MODE : ENTRY_CLEAR_SELECT_SUPER\n");
                     gWorksMachineMode = MACHINE_MODE_ENTRY_CLEAR_SELECT_SUPER;
                     func_xk3_80136320();
                 } else {
                     D_xk3_80141298 = func_xk1_8002BCC4();
-                    func_8074122C(0x24);
+                    Audio_TriggerSystemSE(NA_SE_36);
                     PRINTF("WORKS MACHINE MODE : ENTRY_CLEAR_CONFIRM\n");
                     gWorksMachineMode = MACHINE_MODE_ENTRY_CLEAR_CONFIRM;
                 }
                 break;
             case MACHINE_MODE_ENTRY_CLEAR_CONFIRM: {
                 u8 i;
-                func_8074122C(0x27);
+                Audio_TriggerSystemSE(NA_SE_39);
                 if (mfsStrCmp(D_xk3_80141298, &gCustomMachine.machineName) == 0) {
                     gCustomMachine.number = 31;
                 }
@@ -722,13 +722,13 @@ void func_xk3_8012CE44(void) {
             }
             case MACHINE_MODE_ENTRY_CLEAR_SELECT_SUPER:
                 D_xk3_80141298 = func_xk1_8002BCC4();
-                func_8074122C(0x24);
+                Audio_TriggerSystemSE(NA_SE_36);
                 PRINTF("WORKS MACHINE MODE : ENTRY_CLEAR_SUPER_CONFIRM\n");
                 gWorksMachineMode = MACHINE_MODE_ENTRY_CLEAR_SUPER_CONFIRM;
                 break;
             case MACHINE_MODE_ENTRY_CLEAR_SUPER_CONFIRM: {
                 u8 i;
-                func_8074122C(0x27);
+                Audio_TriggerSystemSE(NA_SE_39);
 
                 for (i = 0; i < 30; i++) {
                     if ((gCustomMachinesInfo.characterCustomState[i] == -1) &&
@@ -745,7 +745,7 @@ void func_xk3_8012CE44(void) {
                 break;
             }
             case MACHINE_MODE_ENTRY_SELECT_FILE:
-                func_8074122C(0x24);
+                Audio_TriggerSystemSE(NA_SE_36);
                 if ((D_xk3_80137160 != 0) && (func_xk1_8002BD14() == 0)) {
                     PRINTF("WORKS MACHINE MODE : ENTRY_SELECT_SUPER\n");
                     gWorksMachineMode = MACHINE_MODE_ENTRY_SELECT_SUPER;
@@ -765,7 +765,7 @@ void func_xk3_8012CE44(void) {
                 if (gWorksMachineMode == MACHINE_MODE_ENTRY_SELECT_SUPER) {
                     D_xk3_80141291 = D_800333F4;
                 }
-                func_8074122C(0x24);
+                Audio_TriggerSystemSE(NA_SE_36);
                 D_xk3_80141298 = func_xk1_8002BCC4();
 
                 for (i = 0; i < 30; i++) {
@@ -790,13 +790,13 @@ void func_xk3_8012CE44(void) {
                 break;
             }
             case MACHINE_MODE_DELETE_SELECT_FILE:
-                func_8074122C(0x24);
+                Audio_TriggerSystemSE(NA_SE_36);
                 PRINTF("WORKS MACHINE MODE : DELETE_CONFIRM\n");
                 gWorksMachineMode = MACHINE_MODE_DELETE_CONFIRM;
                 D_xk3_80141298 = func_xk1_8002BCC4();
                 break;
             case MACHINE_MODE_LOAD_CONFIRM:
-                func_8074122C(0x24);
+                Audio_TriggerSystemSE(NA_SE_36);
                 PRINTF("WORKS MACHINE MODE : LOAD_NOW\n");
                 gWorksMachineMode = MACHINE_MODE_LOAD_NOW;
                 func_80768574(MFS_ENTRY_WORKING_DIR, D_xk3_80141298, "CARD", &gCustomMachineWork,
@@ -819,14 +819,14 @@ void func_xk3_8012CE44(void) {
                     }
                 }
 
-                func_8074122C(0x24);
+                Audio_TriggerSystemSE(NA_SE_36);
                 PRINTF("WORKS MACHINE MODE : 0\n");
                 gWorksMachineMode = MACHINE_MODE_0;
                 func_807688D0(MFS_ENTRY_WORKING_DIR, D_xk3_80141298, "CARD", true);
                 break;
             }
             case MACHINE_MODE_OVERWRITE_CONFIRM:
-                func_8074122C(0x24);
+                Audio_TriggerSystemSE(NA_SE_36);
                 PRINTF("WORKS MACHINE MODE : OVERWRITE_GET_FILE\n");
                 gWorksMachineMode = MACHINE_MODE_OVERWRITE_GET_FILE;
                 func_807687E0(0, "CARD");
@@ -834,13 +834,13 @@ void func_xk3_8012CE44(void) {
             case MACHINE_MODE_ENTRY_ALLCLEAR_CONFIRM:
                 func_xk1_8002FC70();
                 D_807C6EA8.unk_08 = 0;
-                func_8074122C(5);
+                Audio_TriggerSystemSE(NA_SE_5);
                 PRINTF("WORKS MACHINE MODE : 0\n");
                 gWorksMachineMode = MACHINE_MODE_0;
                 break;
             case MACHINE_MODE_MESSAGE_BUTTON:
                 D_807C6EA8.unk_08 = 0;
-                func_8074122C(0x25);
+                Audio_TriggerSystemSE(NA_SE_37);
                 PRINTF("WORKS MACHINE MODE : 0\n");
                 gWorksMachineMode = MACHINE_MODE_0;
                 break;
@@ -1023,7 +1023,7 @@ void func_xk3_8012DBFC(void) {
                     D_xk3_80136544 = -1;
                     PRINTF("WORKS MACHINE MODE : 0\n");
                     gWorksMachineMode = MACHINE_MODE_0;
-                    func_8074122C(0x24);
+                    Audio_TriggerSystemSE(NA_SE_36);
                 } else {
                     D_xk3_80136544--;
                 }
@@ -1037,7 +1037,7 @@ void func_xk3_8012DBFC(void) {
                     D_xk3_80136544 = -1;
                     PRINTF("WORKS MACHINE MODE : 0\n");
                     gWorksMachineMode = MACHINE_MODE_0;
-                    func_8074122C(0x24);
+                    Audio_TriggerSystemSE(NA_SE_36);
                     BorderedBox_StartClose(gMachineCreateStatsBox);
                 } else {
                     D_xk3_80136544 -= 1;
@@ -1054,7 +1054,7 @@ void func_xk3_8012DBFC(void) {
                 if (D_xk3_80136544 == 0) {
                     D_xk3_80136544 = -1;
                     func_xk3_8012BC98();
-                    func_8074122C(0x24);
+                    Audio_TriggerSystemSE(NA_SE_36);
                 } else {
                     D_xk3_80136544 -= 1;
                 }

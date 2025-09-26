@@ -39,7 +39,7 @@ void func_xk2_800F40B0(void) {
             func_xk1_8002DBD4(&D_xk2_801195E4, 5, 1);
 
             if (sp54 != D_xk2_801195E4) {
-                func_8074122C(0x23);
+                Audio_TriggerSystemSE(NA_SE_35);
                 sp50 = false;
             }
             if ((D_xk2_801195E4 < 4) && sp50) {
@@ -48,16 +48,16 @@ void func_xk2_800F40B0(void) {
                 func_xk1_8002DAE0(&D_800D11C8[D_xk2_801195E4], 1, 1);
 
                 if (sp54 != D_800D11C8[D_xk2_801195E4]) {
-                    func_8074122C(0x1E);
+                    Audio_TriggerSystemSE(NA_SE_30);
                 }
                 if ((D_xk2_801195E4 == 0) && (sp54 == 1) && (D_800D11C8[0] == 0)) {
                     D_xk2_801195E0 = 3;
                 }
                 if ((D_xk2_801195E4 == 2) && (sp54 == 0) && (D_800D11C8[2] == 1)) {
-                    func_80742F68();
+                    Audio_EditorBgmRestart();
                 }
                 if ((D_xk2_801195E4 == 2) && (sp54 == 1) && (D_800D11C8[2] == 0)) {
-                    func_80742F44();
+                    Audio_EditorBgmStop();
                 }
             }
             break;
@@ -65,14 +65,14 @@ void func_xk2_800F40B0(void) {
             sp48 = D_xk2_801195E8;
             func_xk1_8002DBD4(&D_xk2_801195E8, 1, 1);
             if (sp48 != D_xk2_801195E8) {
-                func_8074122C(0x23);
+                Audio_TriggerSystemSE(NA_SE_35);
             }
             break;
         case 4:
             sp54 = D_800D11C8[4];
             func_xk1_8002DAE0(&D_800D11C8[4], 8, 0);
             if (sp54 != D_800D11C8[4]) {
-                func_8074122C(0x1E);
+                Audio_TriggerSystemSE(NA_SE_30);
             }
             break;
         case 3:
@@ -84,7 +84,7 @@ void func_xk2_800F40B0(void) {
             sp44 = D_800D11C8[D_xk2_801195E4];
             func_xk1_8002DAE0(&D_800D11C8[D_xk2_801195E4], 1, 1);
             if (sp44 != D_800D11C8[D_xk2_801195E4]) {
-                func_8074122C(0x1E);
+                Audio_TriggerSystemSE(NA_SE_30);
                 D_xk2_801195E0 = 0;
             }
             break;
@@ -93,17 +93,17 @@ void func_xk2_800F40B0(void) {
         switch (D_xk2_801195E0) {
             case 0:
                 if (D_xk2_801195E4 == 4) {
-                    func_8074122C(0x24);
+                    Audio_TriggerSystemSE(NA_SE_36);
                     D_xk2_801195E0 = 4;
                 }
                 if (D_xk2_801195E4 == 5) {
-                    func_8074122C(0x24);
+                    Audio_TriggerSystemSE(NA_SE_36);
                     D_xk2_801195E8 = 0;
                     D_xk2_801195E0 = 1;
                 }
                 break;
             case 1:
-                func_8074122C(0x24);
+                Audio_TriggerSystemSE(NA_SE_36);
                 {
                     u8* sp38[2] = { aExpansionKitEditControlHelpTex, aExpansionKitCameraControlHelpTex };
 
@@ -115,7 +115,7 @@ void func_xk2_800F40B0(void) {
                 D_xk2_801195E0 = 0;
                 break;
             case 4:
-                func_8074122C(0x24);
+                Audio_TriggerSystemSE(NA_SE_36);
                 D_xk2_801195E0 = 0;
                 break;
         }
@@ -123,17 +123,17 @@ void func_xk2_800F40B0(void) {
     if (sp4C->buttonPressed & BTN_B) {
         switch (D_xk2_801195E0) {
             case 0:
-                func_8074122C(0x25);
+                Audio_TriggerSystemSE(NA_SE_37);
                 func_807683B8(MFS_ENTRY_WORKING_DIR, "OPTION", "OPT", D_800D11C8, sizeof(D_800D11C8), 0, 0xFF, true);
                 D_800D6CA0.unk_08 = 0x38;
                 break;
             case 1:
             case 4:
-                func_8074122C(0x25);
+                Audio_TriggerSystemSE(NA_SE_37);
                 D_xk2_801195E0 = 0;
                 break;
             case 2:
-                func_8074122C(0x25);
+                Audio_TriggerSystemSE(NA_SE_37);
                 D_xk2_801195E0 = 1;
                 break;
             case 3:

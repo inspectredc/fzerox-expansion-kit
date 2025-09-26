@@ -519,7 +519,7 @@ s32 func_i7_8009318C(void) {
                 D_i7_8009AD2C++;
                 if (D_i7_8009AD2C == 0x3C) {
                     D_i7_8009AD3C = 1;
-                    func_80742028();
+                    Audio_BetaBgmStop3();
                 }
             }
             if (D_i7_8009AD2C >= 360) {
@@ -1094,7 +1094,7 @@ void func_i7_8009580C(void) {
                     var_s2->unk_14 = var_s4->unk_C0.x.x;
                     var_s2->unk_18 = var_s4->unk_C0.x.y;
                     var_s2->unk_1C = var_s4->unk_C0.x.z;
-                    func_8074122C(0x40);
+                    Audio_TriggerSystemSE(NA_SE_64);
                 }
                 break;
             case 2:

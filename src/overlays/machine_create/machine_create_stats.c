@@ -262,34 +262,34 @@ void func_xk3_8013571C(void) {
     if (D_xk3_80140E70.unk_04 == 3) {
         PRINTF("WORKS MACHINE MODE : 0\n");
         gWorksMachineMode = MACHINE_MODE_0;
-        func_8074122C(0x24);
+        Audio_TriggerSystemSE(NA_SE_36);
         BorderedBox_StartClose(gMachineCreateStatsBox);
     } else if (*sMachineStatSelectionStates[D_xk3_80140E70.unk_04][D_xk3_80140E70.unk_00] != MACHINE_STAT_INVALID) {
         switch (D_xk3_80140E70.unk_04) {
             case BODY_STAT:
                 if (D_xk3_80140E70.unk_00 != gCustomMachine.body) {
                     gCustomMachine.body = D_xk3_80140E70.unk_00;
-                    func_8074122C(0x27);
+                    Audio_TriggerSystemSE(NA_SE_39);
                     break;
                 }
                 break;
             case BOOST_STAT:
                 if (D_xk3_80140E70.unk_00 != gCustomMachine.boost) {
                     gCustomMachine.boost = D_xk3_80140E70.unk_00;
-                    func_8074122C(0x27);
+                    Audio_TriggerSystemSE(NA_SE_39);
                     break;
                 }
                 break;
             case GRIP_STAT:
                 if (D_xk3_80140E70.unk_00 != gCustomMachine.grip) {
                     gCustomMachine.grip = D_xk3_80140E70.unk_00;
-                    func_8074122C(0x27);
+                    Audio_TriggerSystemSE(NA_SE_39);
                     break;
                 }
                 break;
         }
     } else {
-        func_8074122C(0x20);
+        Audio_TriggerSystemSE(NA_SE_32);
     }
 }
 

@@ -174,7 +174,7 @@ extern OSMesgQueue D_8079A108;
 
 void func_806F37F0(void) {
     osRecvMesg(&D_8079A0F0, &D_8079A370, OS_MESG_BLOCK);
-    func_80745CB8();
+    Audio_Update();
     Gfx_InitBuffer();
     func_806F5310();
     Gfx_LoadSegments();
@@ -204,7 +204,7 @@ void func_806F3924(void) {
     Gfx_LoadSegments();
     gMasterDisp = func_806F59E0(gMasterDisp);
     Gfx_FullSync();
-    func_80745CB8();
+    Audio_Update();
     osRecvMesg(&D_8079A108, &D_8079A370, OS_MESG_BLOCK);
     func_i2_800A2CCC();
     osViSwapBuffer(gFrameBuffers[D_8079A368]);
@@ -245,7 +245,7 @@ void Game_ThreadEntry(void* entry) {
     OSMesg msgBuf[1];
 
     startTime = osGetTime();
-    func_8074279C();
+    Audio_GuitarSeqStart();
     osRecvMesg(&D_8079A0F0, msgBuf, OS_MESG_BLOCK);
 
     // Segment Start and End Pairs
@@ -451,9 +451,9 @@ void Game_ThreadEntry(void* entry) {
     func_i10_8012B520();
 
     if (gSettingSoundMode == 0) {
-        Audio_SetSoundMode(SOUNDMODE_SURROUND);
+        Audio_SetOutMode(SOUNDMODE_SURROUND);
     } else {
-        Audio_SetSoundMode(SOUNDMODE_MONO);
+        Audio_SetOutMode(SOUNDMODE_MONO);
     }
 
     while (true) {

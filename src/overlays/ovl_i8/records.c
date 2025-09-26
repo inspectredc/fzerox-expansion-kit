@@ -405,7 +405,7 @@ s32 Records_Update(void) {
     }
     var_v0 = D_i8_800A1F30;
     if ((gameMode == GAMEMODE_FLX_MAIN_MENU) && (var_v0 != 0)) {
-        func_80741BD4(0xF);
+        Audio_RomBgmReady(BGM_SELECT);
     }
     return gameMode;
 }
@@ -479,7 +479,7 @@ s32 func_i8_8009BB60(void) {
 
     if (lastCourseIndex != gCourseIndex) {
         sp30 = 1;
-        func_8074122C(0x1E);
+        Audio_TriggerSystemSE(NA_SE_30);
     } else {
         sp30 = 0;
     }
@@ -489,12 +489,12 @@ s32 func_i8_8009BB60(void) {
             if (D_i8_800A1F04 != NULL) {
                 D_800A1EF0 = 1;
                 D_i8_800A1F20 = 0;
-                func_8074122C(0x21);
+                Audio_TriggerSystemSE(NA_SE_33);
                 func_i3_80067118(0);
             }
         } else if (gInputButtonPressed & BTN_B) {
             sp30 = 2;
-            func_8074122C(0x10);
+            Audio_TriggerSystemSE(NA_SE_16);
         }
     }
     return sp30;
@@ -532,7 +532,7 @@ s32 func_i8_8009BE14(void) {
     }
     // clang-format on
     if (sp28 != D_i8_800A1F20) {
-        func_8074122C(0x1E);
+        Audio_TriggerSystemSE(NA_SE_30);
     }
     if (gInputButtonPressed & (BTN_A | BTN_START)) {
         var_t0 = false;
@@ -621,13 +621,13 @@ s32 func_i8_8009BE14(void) {
         }
 
         if (var_t0) {
-            func_8074122C(0x21);
+            Audio_TriggerSystemSE(NA_SE_33);
         }
     } else if (gInputButtonPressed & BTN_B) {
         D_800A1EF0 = 0;
         func_i3_80067118(1);
         BorderedBox_StartClose(D_i8_800A1F04);
-        func_8074122C(0x10);
+        Audio_TriggerSystemSE(NA_SE_16);
     }
     return sp2C;
 }
@@ -650,13 +650,13 @@ void func_i8_8009C26C(void) {
             }
         }
         if (sp1C != D_i8_800A1F26) {
-            func_8074122C(0x1E);
+            Audio_TriggerSystemSE(NA_SE_30);
         }
         sp18 = false;
         if (gInputButtonPressed & (BTN_A | BTN_START)) {
             sp18 = true;
             if (D_i8_800A1F26 == 0) {
-                func_8074122C(0x10);
+                Audio_TriggerSystemSE(NA_SE_16);
             } else {
                 if (D_i8_800A1F28 == 0) {
                     if ((gCourseIndex >= COURSE_MUTE_CITY) && (gCourseIndex <= COURSE_BIG_HAND)) {
@@ -672,11 +672,11 @@ void func_i8_8009C26C(void) {
                 }
                 D_i8_800A1EF8[D_i8_800A1F20] = 0;
                 D_i8_800A1F20 = D_i8_800A1F22;
-                func_8074122C(5);
+                Audio_TriggerSystemSE(NA_SE_5);
             }
         } else if (gInputButtonPressed & BTN_B) {
             sp18 = true;
-            func_8074122C(0x10);
+            Audio_TriggerSystemSE(NA_SE_16);
         }
         if (sp18) {
             D_800A1EF0 = 1;
@@ -690,7 +690,7 @@ void func_i8_8009C44C(void) {
         D_800A1EF0 = 0;
         func_i3_80067118(1);
         BorderedBox_StartClose(D_i8_800A1F0C);
-        func_8074122C(0x10);
+        Audio_TriggerSystemSE(NA_SE_16);
     }
 }
 
@@ -882,7 +882,7 @@ void func_i8_8009CE64(void) {
             if (gInputButtonPressed & BTN_B) {
                 D_800A1EF0 = 1;
                 BorderedBox_StartClose(D_i8_800A1F10);
-                func_8074122C(0x10);
+                Audio_TriggerSystemSE(NA_SE_16);
             }
         } else {
             if (gInputPressed & BTN_UP) {
@@ -911,7 +911,7 @@ void func_i8_8009CE64(void) {
                 } while (D_i8_800A2060[var_v1] == -1);
             }
             if (temp != D_i8_800A2050) {
-                func_8074122C(0x1E);
+                Audio_TriggerSystemSE(NA_SE_30);
             }
             if (gInputButtonPressed & (BTN_A | BTN_START)) {
                 D_i8_800A1F14 =
@@ -928,14 +928,14 @@ void func_i8_8009CE64(void) {
                     }
                     func_i8_8009DF6C(0);
                 }
-                func_8074122C(0x21);
+                Audio_TriggerSystemSE(NA_SE_33);
                 return;
             }
             if (gInputButtonPressed & BTN_B) {
                 D_800A1EF0 = 1;
                 func_80704810(1);
                 BorderedBox_StartClose(D_i8_800A1F10);
-                func_8074122C(0x10);
+                Audio_TriggerSystemSE(NA_SE_16);
             }
         }
     }
@@ -1026,7 +1026,7 @@ void func_i8_8009D430(void) {
             } while (sp20[D_i8_800A2052] == -1);
         }
         if (temp != D_i8_800A2052) {
-            func_8074122C(0x1E);
+            Audio_TriggerSystemSE(NA_SE_30);
         }
         if (gInputButtonPressed & (BTN_A | BTN_START)) {
             if (D_i8_800A2052 == 0) {
@@ -1035,13 +1035,13 @@ void func_i8_8009D430(void) {
             } else {
                 func_i8_8009D5B8(1);
             }
-            func_8074122C(0x21);
+            Audio_TriggerSystemSE(NA_SE_33);
             return;
         }
         if (gInputButtonPressed & BTN_B) {
             D_800A1EF0 = 4;
             BorderedBox_StartClose(D_i8_800A1F14);
-            func_8074122C(0x10);
+            Audio_TriggerSystemSE(NA_SE_16);
         }
     }
 }
@@ -1127,11 +1127,11 @@ void func_i8_8009D8A4(void) {
             }
         }
         if (temp != D_i8_800A2054) {
-            func_8074122C(0x1E);
+            Audio_TriggerSystemSE(NA_SE_30);
         }
         if (gInputButtonPressed & (BTN_A | BTN_START)) {
             func_i8_8009D5B8(0);
-            func_8074122C(0x21);
+            Audio_TriggerSystemSE(NA_SE_33);
             return;
         }
         if (gInputButtonPressed & BTN_B) {
@@ -1140,7 +1140,7 @@ void func_i8_8009D8A4(void) {
             BorderedBox_StartClose(D_i8_800A1F18);
             BorderedBox_StartClose(D_i8_800A1F14);
             BorderedBox_StartClose(D_i8_800A1F10);
-            func_8074122C(0x10);
+            Audio_TriggerSystemSE(NA_SE_16);
         }
     }
 }
@@ -1275,7 +1275,7 @@ void func_i8_8009DCC8(void) {
                         D_i8_800A2054 = 1;
                         BorderedBox_StartClose(D_i8_800A1F1C);
                     }
-                    func_8074122C(0x21);
+                    Audio_TriggerSystemSE(NA_SE_33);
                 }
                 break;
         }

@@ -37,7 +37,7 @@ void func_xk2_800EC2A0(void) {
             D_xk2_80104000++;
             if (D_xk2_80104000 == 10) {
                 D_xk2_80104000 = 0;
-                func_8074122C(0x2E);
+                Audio_TriggerSystemSE(NA_SE_46);
                 D_xk1_80032C20 = 0;
                 D_800D6CA0.unk_08 = 0xFF;
             }
@@ -82,7 +82,7 @@ void func_xk2_800EC3AC(void) {
     func_80705E18();
     func_80704810(1);
     func_xk1_8002FBB0();
-    func_80742F04();
+    Audio_EditorExit();
     D_8076C77C = 1;
     gCourseInfos->courseSegments = D_802D0620;
     gCourseInfos->segmentCount = D_807B3C20.unk_2900;
@@ -105,15 +105,15 @@ void func_xk2_800EC508(void) {
 
     if (gControllers[gPlayerControlPorts[0]].buttonPressed & BTN_A) {
         if (D_xk1_80032C20 != 0) {
-            func_8074122C(5);
+            Audio_TriggerSystemSE(NA_SE_5);
             func_80767FE4(1, 0x20, NULL);
             D_800D6CA0.unk_08 = 0xFE;
         } else {
-            func_8074122C(0x25);
+            Audio_TriggerSystemSE(NA_SE_37);
             D_800D6CA0.unk_08 = 0;
         }
     } else if (gControllers[gPlayerControlPorts[0]].buttonPressed & BTN_B) {
-        func_8074122C(0x25);
+        Audio_TriggerSystemSE(NA_SE_37);
         D_800D6CA0.unk_08 = 0;
     } else {
         func_xk1_8002D2F0();
@@ -224,8 +224,8 @@ extern s8 gGamePaused;
 
 void func_xk2_800EC8AC(void) {
     gGamePaused = 0;
-    func_8074122C(0xC);
-    func_8074204C(0);
+    Audio_TriggerSystemSE(NA_SE_12);
+    Audio_PauseSet(AUDIO_PAUSE_UNPAUSED);
     if ((gRacers->stateFlags & RACER_STATE_FLAGS_80000) && (D_xk2_80103FF8 == 0)) {
         D_xk2_80103FF4 = 0;
         D_xk2_80103FF8 = 1;
@@ -242,8 +242,8 @@ void func_xk2_800EC91C(void) {
     D_xk2_80103FF0 = 0;
     D_xk2_80103FF4 = 0;
     D_xk2_80103FF8 = 0;
-    func_8074204C(0);
-    func_80741FB4();
+    Audio_PauseSet(AUDIO_PAUSE_UNPAUSED);
+    Audio_TestRunEnd();
     D_8076C77C = 3;
     gPlayers->unk_94.x = 40.0f;
     func_xk2_800F13C4();
@@ -254,7 +254,7 @@ void func_xk2_800EC91C(void) {
 
 extern s32 D_xk1_8003A550;
 extern s32 D_xk1_8003A554;
-extern s32 D_800D11D0;
+extern s32 D_800D11C8[];
 extern s32 gLastCourseBGM;
 
 void func_xk2_800EC9BC(void) {
@@ -264,11 +264,11 @@ void func_xk2_800EC9BC(void) {
         return;
     }
     if ((gControllers[gPlayerControlPorts[0]].buttonPressed & BTN_B) && (func_807424CC() == 0)) {
-        if (func_80740B04() != 0x12) {
-            if (D_800D11D0 != 0) {
-                func_80741A0C(0x12);
+        if (Audio_GetActiveBgm() != BGM_COURSE_EDITOR) {
+            if (D_800D11C8[2] != 0) {
+                Audio_DDBgmStart(BGM_COURSE_EDITOR);
             } else {
-                func_80741B84();
+                Audio_DDBgmStop();
             }
         }
         func_xk1_80027B74(&gCourseEditWidget);
@@ -321,8 +321,8 @@ s32 func_xk2_800ECBC0(void) {
     if (gControllers[gPlayerControlPorts[0]].buttonPressed & BTN_START) {
         gGamePaused = 1;
         func_xk2_800F632C();
-        func_8074122C(0xC);
-        func_8074204C(1);
+        Audio_TriggerSystemSE(NA_SE_12);
+        Audio_PauseSet(AUDIO_PAUSE_PAUSED);
     } else {
         func_i2_800AB82C();
         func_80726554();
@@ -335,7 +335,7 @@ s32 func_xk2_800ECBC0(void) {
             D_xk2_80103FF0 = 0x78;
         }
         if ((D_xk2_80103FF0 <= 60) && (D_xk2_80103FF4 == 0)) {
-            func_80741EF4();
+            Audio_TestRunStart();
             func_8071D48C();
             func_807160A0();
             func_i2_800AB6B0();
@@ -369,7 +369,7 @@ void func_xk2_800ECD90(void) {
         func_xk1_8002AEB4(9, 4);
     }
     if (gControllers[gPlayerControlPorts[0]].buttonPressed & BTN_B) {
-        func_8074122C(0x25);
+        Audio_TriggerSystemSE(NA_SE_37);
         D_800D6CA0.unk_08 = 0;
         gCourseEditFileOption = -1;
     }
@@ -574,7 +574,7 @@ s32 CourseEdit_Update(void) {
         case 0x24:
             if (D_80794E14 == 0) {
                 gCourseEditEntryOption = -1;
-                func_8074122C(5);
+                Audio_TriggerSystemSE(NA_SE_5);
                 func_8070405C(1);
                 D_800D6CA0.unk_08 = 0;
             }

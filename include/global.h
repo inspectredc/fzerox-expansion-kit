@@ -11,4 +11,6 @@
 #include "fzx_math.h"
 #include "unk_structs.h"
 
+#include "sfx.h"
+
 #endif // GLOBAL_H

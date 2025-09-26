@@ -167,13 +167,13 @@ void func_xk3_80135E58(u8* red, u8* green, u8* blue) {
 
     if (D_xk3_80140E68.unk_04 == 8) {
         func_xk3_8012BC98();
-        func_8074122C(0x24);
+        Audio_TriggerSystemSE(NA_SE_36);
     } else if ((*red != sColorSelections[D_xk3_80140E68.unk_04][D_xk3_80140E68.unk_00][0]) ||
                (*green != sColorSelections[D_xk3_80140E68.unk_04][D_xk3_80140E68.unk_00][1]) ||
                (*blue != sColorSelections[D_xk3_80140E68.unk_04][D_xk3_80140E68.unk_00][2])) {
         *red = sColorSelections[D_xk3_80140E68.unk_04][D_xk3_80140E68.unk_00][0];
         *green = sColorSelections[D_xk3_80140E68.unk_04][D_xk3_80140E68.unk_00][1];
         *blue = sColorSelections[D_xk3_80140E68.unk_04][D_xk3_80140E68.unk_00][2];
-        func_8074122C(0x27);
+        Audio_TriggerSystemSE(NA_SE_39);
     }
 }

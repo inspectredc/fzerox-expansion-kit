@@ -243,7 +243,7 @@ s32 OptionsMenu_Update(void) {
                 if (D_800BEE14 == 0 && func_i6_80082DB4()) {
                     sOptionsDataAlreadyCleared = true;
                     D_8076C814 = 14;
-                    func_80741BD4(0xF);
+                    Audio_RomBgmReady(BGM_SELECT);
                 }
                 break;
             case OPTIONS_DATA_CLEAR_MENU_OPEN:
@@ -290,7 +290,7 @@ bool func_i6_80082DB4(void) {
         }
     }
     if (lastRow != gOptionsCurrentRow) {
-        func_8074122C(0x1E);
+        Audio_TriggerSystemSE(NA_SE_30);
         return false;
     }
     option = &gOptionsInfo[gOptionsCurrentRow];
@@ -311,11 +311,11 @@ bool func_i6_80082DB4(void) {
         }
         if (lastSelectionState != sOptionsSelectionState[gOptionsCurrentRow]) {
             updateSettings = true;
-            func_8074122C(0x21);
+            Audio_TriggerSystemSE(NA_SE_33);
         }
     }
     if (gInputButtonPressed & BTN_B) {
-        func_8074122C(0x10);
+        Audio_TriggerSystemSE(NA_SE_16);
         return true;
     }
 
@@ -353,10 +353,10 @@ bool func_i6_80082DB4(void) {
             if (updateSettings) {
                 if (sOptionsSelectionState[gOptionsCurrentRow] == 0) {
                     gSettingSoundMode = 0;
-                    Audio_SetSoundMode(SOUNDMODE_SURROUND); // Option says stereo, but sets surround anyway?
+                    Audio_SetOutMode(SOUNDMODE_SURROUND); // Option says stereo, but sets surround anyway?
                 } else {
                     gSettingSoundMode = 1;
-                    Audio_SetSoundMode(SOUNDMODE_MONO);
+                    Audio_SetOutMode(SOUNDMODE_MONO);
                 }
             }
             break;
@@ -367,13 +367,13 @@ bool func_i6_80082DB4(void) {
                 if (D_i6_8008A7A4 != NULL) {
                     sOptionsDataClearMenu = OPTIONS_DATA_CLEAR_MENU_OPEN;
                     sOptionsSelectionState[gOptionsCurrentRow] = 0;
-                    func_8074122C(0x21);
+                    Audio_TriggerSystemSE(NA_SE_33);
                 }
             }
             break;
         case OPTIONS_EXIT:
             if (gInputButtonPressed & (BTN_A | BTN_START)) {
-                func_8074122C(0x10);
+                Audio_TriggerSystemSE(NA_SE_16);
                 return true;
             }
             break;
@@ -409,7 +409,7 @@ void func_i6_800831E8(void) {
             }
         }
         if (lastSelectionState != sOptionsSelectionState[gOptionsCurrentRow]) {
-            func_8074122C(0x1E);
+            Audio_TriggerSystemSE(NA_SE_30);
         }
         updateSettings = false;
         if (gInputButtonPressed & (BTN_A | BTN_START)) {
@@ -422,14 +422,14 @@ void func_i6_800831E8(void) {
                     D_807A1610[i] = D_807A1620[i] = 0;
                 }
                 func_8070DE6C();
-                func_8074122C(5);
+                Audio_TriggerSystemSE(NA_SE_5);
                 func_xk1_8002FC70();
             } else {
-                func_8074122C(0x10);
+                Audio_TriggerSystemSE(NA_SE_16);
             }
         } else if (gInputButtonPressed & BTN_B) {
             updateSettings = true;
-            func_8074122C(0x10);
+            Audio_TriggerSystemSE(NA_SE_16);
         }
         if (updateSettings) {
             sOptionsDataClearMenu = OPTIONS_DATA_CLEAR_MENU_CLOSED;
