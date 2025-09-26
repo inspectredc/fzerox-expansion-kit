@@ -1026,7 +1026,7 @@ void func_xk1_80027B74(MenuWidget* arg0) {
         arg0 = arg0->menuItems[temp_v0].widget;
     }
     if (arg0 != &gBGMWidget) {
-        func_8074122C(0x25);
+        Audio_TriggerSystemSE(NA_SE_37);
     }
     gCourseEditFileOption = INVALID_OPTION;
     gCourseEditEntryOption = INVALID_OPTION;
@@ -1108,7 +1108,7 @@ void func_xk1_80027CFC(MenuWidget* rootWidget, s32* cursorPosXPtr, s32* cursorPo
 
     if ((var_a1 != widget->highlightedIndex) && (widget->highlightedIndex != INVALID_OPTION) &&
         (widget != &gBGMWidget)) {
-        func_8074122C(0x23);
+        Audio_TriggerSystemSE(NA_SE_35);
     }
     widget->highlightedIndex = var_a1;
 }
@@ -1136,7 +1136,7 @@ void func_xk1_80027DC8(MenuWidget* rootWidget, s32* cursorPosXPtr, s32* cursorPo
               (gCourseEditWidget.menuItems[2].widget == NULL)) &&
             !((widget == &gCourseEditWidget) && (selectedIndex == 5)) &&
             !((widget == &gCourseEditWidget) && (selectedIndex == 5)) && (widget != &gBGMWidget)) {
-            func_8074122C(0x24);
+            Audio_TriggerSystemSE(NA_SE_36);
         }
         if (widget != &gBGMWidget) {
             sMenuPageYOffset = 0;
@@ -1683,10 +1683,10 @@ void func_xk1_80028F94(void) {
     if ((gBGMWidget.openIndex != INVALID_OPTION) && (func_807424CC() == 0)) {
         if (gLastCourseBGM != gBGMOptionToCourseBGM[gBGMOption]) {
             if (D_800D11D4 != 0) {
-                func_8074122C(0x24);
+                Audio_TriggerSystemSE(NA_SE_36);
             }
             gLastCourseBGM = gBGMOptionToCourseBGM[gBGMOption];
-            func_80741AF4(gBGMOptionToCourseBGM[gBGMWidget.openIndex]);
+            Audio_DDBgmStart2(gBGMOptionToCourseBGM[gBGMWidget.openIndex]);
             gBGMWidget.openIndex = INVALID_OPTION;
             COURSE_CONTEXT()->courseData.bgm = gBGMOptionToCourseBGM[gBGMOption];
         }

@@ -253,8 +253,8 @@ void func_806F4BB4(void) {
 extern s8 D_8076C7D8;
 
 void func_806F4FC8(void) {
-    static u16 D_8076C92C = 0;
-    s32 var_v1 = D_8076C92C;
+    static u16 D_8076C92C = BGM_MUTE_CITY;
+    s32 bgm = D_8076C92C;
 
     switch (gGameMode) {
         case GAMEMODE_GP_RACE:
@@ -265,22 +265,22 @@ void func_806F4FC8(void) {
         case GAMEMODE_TIME_ATTACK:
         case GAMEMODE_DEATH_RACE:
             if (D_8076C7D8 == 0) {
-                D_8076C92C = 0;
+                D_8076C92C = BGM_MUTE_CITY;
             }
             return;
         case GAMEMODE_FLX_TITLE:
-            var_v1 = 0xE;
+            bgm = BGM_TITLE;
             break;
         case GAMEMODE_GP_END_CS:
-            var_v1 = 0x1A;
+            bgm = BGM_END_CS;
             break;
         case GAMEMODE_FLX_SKIPPABLE_CREDITS:
         case GAMEMODE_FLX_UNSKIPPABLE_CREDITS:
-            var_v1 = 0x1B;
+            bgm = BGM_CREDITS;
             break;
         case GAMEMODE_FLX_RECORDS_COURSE_SELECT:
         case GAMEMODE_FLX_OPTIONS_MENU:
-            var_v1 = 0x10;
+            bgm = BGM_OPTION;
             break;
         case GAMEMODE_LX_MACHINE_SETTINGS:
         case GAMEMODE_LX_GP_RACE_NEXT_MACHINE_SETTINGS:
@@ -288,24 +288,24 @@ void func_806F4FC8(void) {
         case GAMEMODE_FLX_MACHINE_SELECT:
         case GAMEMODE_FLX_COURSE_SELECT:
         case GAMEMODE_FLX_GP_RACE_NEXT_COURSE:
-            var_v1 = 0xF;
+            bgm = BGM_SELECT;
             break;
         case GAMEMODE_COURSE_EDIT:
         case GAMEMODE_CREATE_MACHINE:
         case GAMEMODE_16:
-            D_8076C92C = 0;
+            D_8076C92C = BGM_MUTE_CITY;
             return;
         default:
             break;
     }
-    if (D_8076C92C != var_v1) {
+    if (D_8076C92C != bgm) {
         func_8070DAFC();
         if (gGameMode != GAMEMODE_FLX_TITLE) {
             func_8070DA84();
         }
-        func_8070DAD4(var_v1);
+        func_8070DAD4(bgm);
     }
-    D_8076C92C = var_v1;
+    D_8076C92C = bgm;
 }
 
 s32 D_8076C930 = 15;
@@ -553,11 +553,11 @@ void func_806F5310(void) {
                     func_i3_UpdateCharacterPortraits();
                     if (D_8076C7D8 == 0) {
                         if (gCurrentCourseInfo->courseIndex < COURSE_EDIT_1) {
-                            func_807419F0(D_i2_800BF044[gCurrentCourseInfo->courseIndex]);
+                            Audio_DDBgmReady(D_i2_800BF044[gCurrentCourseInfo->courseIndex]);
                         } else if (gCurrentCourseInfo->courseIndex == COURSE_DEATH_RACE) {
-                            func_807419F0(0x11);
+                            Audio_DDBgmReady(BGM_DEATHRACE);
                         } else {
-                            func_807419F0(func_80703228());
+                            Audio_DDBgmReady(func_80703228());
                         }
                     }
                     break;

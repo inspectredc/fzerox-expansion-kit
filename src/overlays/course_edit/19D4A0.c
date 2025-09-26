@@ -97,7 +97,7 @@ extern s32 gCourseEditEntryOption;
 
 void func_xk2_800EBE14(void) {
     if ((gControllers[gPlayerControlPorts[0]].buttonPressed & BTN_B) && (D_800D6CA0.unk_08 == 0x20)) {
-        func_8074122C(0x25);
+        Audio_TriggerSystemSE(NA_SE_37);
         D_800D6CA0.unk_08 = 0;
         gCourseEditEntryOption = -1;
     }
@@ -110,7 +110,7 @@ void func_xk2_800EBE90(void) {
     func_xk1_8002DBD4(&D_xk2_80103F14, 5, 0);
 
     if (sp1C != D_xk2_80103F14) {
-        func_8074122C(0x23);
+        Audio_TriggerSystemSE(NA_SE_35);
     }
     D_xk1_8003A554 = (D_xk2_80103F14 * 8) + 0x38;
 }
@@ -122,7 +122,7 @@ extern u8 D_xk2_800F7400;
 
 void func_xk2_800EBEF4(void) {
     if ((gControllers[gPlayerControlPorts[0]].buttonPressed & 0x8000) && (D_800D6CA0.unk_08 == 0x20)) {
-        func_8074122C(0x24);
+        Audio_TriggerSystemSE(NA_SE_36);
         D_xk2_80103F10 = (D_xk1_8003A554 - 0x34) / 8;
         switch (D_80119890) {
             case 0:

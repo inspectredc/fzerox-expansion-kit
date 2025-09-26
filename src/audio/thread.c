@@ -473,12 +473,10 @@ void AudioThread_ProcessCmds(u32 msg) {
     }
 }
 
-extern OSMesgQueue D_806EE200;
-
 u32 AudioThread_GetAsyncLoadStatus(u32* outData) {
     u32 loadStatus;
 
-    if (osRecvMesg(&D_806EE200, (OSMesg*) &loadStatus, OS_MESG_NOBLOCK) == -1) {
+    if (osRecvMesg(&gAudioCtx.externalLoadQueue, (OSMesg*) &loadStatus, OS_MESG_NOBLOCK) == -1) {
         *outData = 0;
         return 0;
     }
@@ -732,7 +730,7 @@ void AudioThread_ProcessChannelCmd(SequenceChannel* channel, AudioCmd* cmd) {
             break;
 
         case 0xF:
-            channel->unk_D4 = cmd->asUInt;
+            channel->startSamplePos = cmd->asUInt;
             break;
 
         default:

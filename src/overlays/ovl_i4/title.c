@@ -240,12 +240,12 @@ s32 Title_Update(void) {
     }
 
     if ((D_8076C810 == 0) && (gInputButtonPressed & (BTN_A | BTN_START))) {
-        func_8074122C(0x3E);
+        Audio_TriggerSystemSE(NA_SE_62);
         func_8070DAFC();
-        func_80741BD4(0xF);
+        Audio_RomBgmReady(BGM_SELECT);
         D_i4_80077070 = -1;
         if ((D_8079A32C != 0) && (OBJECT_STATE(Object_Get(OBJECT_TITLE_DISK_DRIVE)) == 1)) {
-            func_807423C4();
+            Audio_SESeqStart();
         }
         return GAMEMODE_FLX_MAIN_MENU;
     } else {

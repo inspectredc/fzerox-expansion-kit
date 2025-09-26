@@ -52,7 +52,7 @@ void func_xk2_800EF8B0(void) {
         return;
     }
     D_xk2_80104BC0 = 0;
-    func_8074122C(0x25);
+    Audio_TriggerSystemSE(NA_SE_37);
     D_xk2_800F703C = -1;
     for (i = 0; i < 64; i++) {
         D_80128690[i] = D_xk2_80128990[i];
@@ -94,18 +94,18 @@ void func_xk2_800EFA94(CourseSegment* arg0, CourseSegment* arg1) {
     for (j = 0; j < i; j++) {}
 
     if (i < 3) {
-        func_8074122C(0x20);
+        Audio_TriggerSystemSE(NA_SE_32);
         return;
     }
 
     for (j = 0; j < i - 1; j++) {
         if (func_807032B0(sp64[j], sp64[j + 1]) < 498.0f) {
-            func_8074122C(0x20);
+            Audio_TriggerSystemSE(NA_SE_32);
             return;
         }
     }
 
-    func_8074122C(0x27);
+    Audio_TriggerSystemSE(NA_SE_39);
     var_s0 = arg0;
     while (var_s0 != arg1) {
         func_xk2_800F267C(&var_s0->pos, var_s0->pos, arg0->pos, arg1->pos);
@@ -388,15 +388,15 @@ void func_xk2_800F07A4(void) {
         return;
     }
     if (D_807B3C20.unk_2900 >= 60) {
-        func_8074122C(0x20);
+        Audio_TriggerSystemSE(NA_SE_32);
         return;
     }
     if (gCurrentCourseInfo->length > 300000.0f) {
-        func_8074122C(0x20);
+        Audio_TriggerSystemSE(NA_SE_32);
         return;
     }
     func_xk2_800EF78C();
-    func_8074122C(0x27);
+    Audio_TriggerSystemSE(NA_SE_39);
     sp1C0 = D_800D6CA0.unk_0C;
     temp_s2 = &D_807B3C20.unk_0000[D_800D6CA0.unk_0C];
 
@@ -418,7 +418,7 @@ void func_xk2_800F07A4(void) {
     func_i2_800B2824(temp_s2, 0.5f, &spCC, func_i2_800B20D0(temp_s2, 0.5f, &sp1BC));
 
     if (func_xk2_800F01C4(spF0, spCC) != 0) {
-        func_8074122C(0x20);
+        Audio_TriggerSystemSE(NA_SE_32);
         return;
     }
     sp108.radiusLeft = temp_s2->radiusLeft;
