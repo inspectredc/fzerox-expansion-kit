@@ -549,9 +549,9 @@ void Audio_PlayerEngineStart(u8 playerIndex) {
         case 0:
             AUDIOCMD_CHANNEL_SET_PAN(0, 2, 0x3F);
             if (D_80771B74[playerIndex] == 0) {
-                Audio_SEStart(playerIndex + 2, 2);
+                Audio_SEStart(playerIndex + 2, NA_LEVEL_SE_2);
             } else {
-                Audio_SEStart(playerIndex + 2, 7);
+                Audio_SEStart(playerIndex + 2, NA_LEVEL_SE_7);
             }
             break;
         case 1:
@@ -564,9 +564,9 @@ void Audio_PlayerEngineStart(u8 playerIndex) {
                     break;
             }
             if (D_80771B74[playerIndex] == 0) {
-                Audio_SEStart(playerIndex + 2, 0xC);
+                Audio_SEStart(playerIndex + 2, LEVEL_SE_2P(NA_LEVEL_SE_2));
             } else {
-                Audio_SEStart(playerIndex + 2, 0x11);
+                Audio_SEStart(playerIndex + 2, LEVEL_SE_2P(NA_LEVEL_SE_7));
             }
             break;
         case 2:
@@ -582,9 +582,9 @@ void Audio_PlayerEngineStart(u8 playerIndex) {
                     break;
             }
             if (D_80771B74[playerIndex] == 0) {
-                Audio_SEStart(playerIndex + 2, 0x16);
+                Audio_SEStart(playerIndex + 2, LEVEL_SE_MP(NA_LEVEL_SE_2));
             } else {
-                Audio_SEStart(playerIndex + 2, 0x1B);
+                Audio_SEStart(playerIndex + 2, LEVEL_SE_MP(NA_LEVEL_SE_7));
             }
             break;
         case 3:
@@ -603,9 +603,9 @@ void Audio_PlayerEngineStart(u8 playerIndex) {
                     break;
             }
             if (D_80771B74[playerIndex] == 0) {
-                Audio_SEStart(playerIndex + 2, 0x16);
+                Audio_SEStart(playerIndex + 2, LEVEL_SE_MP(NA_LEVEL_SE_2));
             } else {
-                Audio_SEStart(playerIndex + 2, 0x1B);
+                Audio_SEStart(playerIndex + 2, LEVEL_SE_MP(NA_LEVEL_SE_7));
             }
     }
     AudioThread_ScheduleProcessCmds();
@@ -1999,7 +1999,7 @@ void Audio_UpdateEnemyEngine(void) {
                     if (gAudioPlayerFinishedState[0] == 0) {
                         if (!sAudioDisableEnemyEngineSound) {
                             PRINTF("==BANDO== ENEMY ENGINE START MACHINE No.= %02x\n", sAudioClosestRacerId);
-                            Audio_SEStart(14, 1);
+                            Audio_SEStart(14, NA_LEVEL_SE_1);
                         }
                         sAudioEnemyEngineStatus = 2;
                     }
