@@ -150,6 +150,7 @@ typedef enum SeqId {
     /* 20 */ SEQ_DDBGM_COURSE_EDITOR,
     /* 21 */ SEQ_DDBGM_MACHINE_EDITOR,
     /* 22 */ SEQ_DDBGM_EAD_DEMO,
+    /* 23 */ SEQ_MAX,
 } SeqId;
 
 typedef enum FontId {
@@ -176,11 +177,14 @@ typedef enum FontId {
     /* 20 */ FONT_DDBGM_COURSE_EDITOR,
     /* 21 */ FONT_DDBGM_MACHINE_EDITOR,
     /* 22 */ FONT_DDBGM_EAD_DEMO,
+    /* 23 */ FONT_MAX,
 } FontId;
 
 typedef enum SampleBankId {
-    /*  2 */ SAMPLE_GUITAR = 2,
-    /*  3 */ SAMPLE_SOUND_EFFECTS,
+    /*  0 */ SAMPLE_SOUND_EFFECTS,
+    /*  1 */ SAMPLE_BGM,
+    /*  2 */ SAMPLE_GUITAR,
+    /*  3 */ SAMPLE_DD_SOUND_EFFECTS,
     /*  4 */ SAMPLE_DDBGM_MUTE_CITY,
     /*  5 */ SAMPLE_DDBGM_SILENCE,
     /*  6 */ SAMPLE_DDBGM_SAND_OCEAN,
@@ -202,6 +206,7 @@ typedef enum SampleBankId {
     /* 22 */ SAMPLE_DDBGM_COURSE_EDITOR,
     /* 23 */ SAMPLE_DDBGM_MACHINE_EDITOR,
     /* 24 */ SAMPLE_DDBGM_EAD_DEMO,
+    /* 25 */ SAMPLE_MAX,
 } SampleBankId;
 
 typedef enum AudioLoadState {

@@ -726,7 +726,7 @@ typedef struct AudioTableEntry {
 
 typedef struct AudioTable {
     /* 0x00 */ AudioTableHeader header;
-    /* 0x10 */ AudioTableEntry entries[1]; // (dynamic size)
+    /* 0x10 */ AudioTableEntry entries[]; // (dynamic size)
 } AudioTable; // size >= 0x20
 
 typedef struct {

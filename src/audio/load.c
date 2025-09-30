@@ -1090,38 +1090,6 @@ extern AudioHeapInitSizes gAudioHeapInitSizes;
 
 extern AudioTable gSequenceTable;
 extern AudioTable gSoundFontTable;
-
-/*
-AudioTable gSoundFontTable = {
-    { 23, 0, 0, 0 },
-    {
-    //    Offset, Size,   Medium,     CachePolicy,    sampleBankId1 | sampleBankId2, numInstruments | numDrums, numSfx
-        { 0,      0xB0,   MEDIUM_LBA, CACHE_POLICY_0, (2 << 8)      | 0xFF,          (1 << 8)       | 0,        0 },
-        { 0xB0,   0x2CF0, MEDIUM_LBA, CACHE_POLICY_0, (3 << 8)      | 1,             (71 << 8)      | 0,        0 },
-        { 0x2DA0, 0x180,  MEDIUM_LBA, CACHE_POLICY_0, (4 << 8)      | 0xFF,          (2 << 8)       | 0,        0 },
-        { 0x2F20, 0x180,  MEDIUM_LBA, CACHE_POLICY_0, (5 << 8)      | 0xFF,          (2 << 8)       | 0,        0 },
-        { 0x30A0, 0x180,  MEDIUM_LBA, CACHE_POLICY_0, (6 << 8)      | 0xFF,          (2 << 8)       | 0,        0 },
-        { 0x3220, 0x180,  MEDIUM_LBA, CACHE_POLICY_0, (7 << 8)      | 0xFF,          (2 << 8)       | 0,        0 },
-        { 0x33A0, 0x180,  MEDIUM_LBA, CACHE_POLICY_0, (8 << 8)      | 0xFF,          (2 << 8)       | 0,        0 },
-        { 0x3520, 0x180,  MEDIUM_LBA, CACHE_POLICY_0, (9 << 8)      | 0xFF,          (2 << 8)       | 0,        0 },
-        { 0x36A0, 0x180,  MEDIUM_LBA, CACHE_POLICY_0, (10 << 8)     | 0xFF,          (2 << 8)       | 0,        0 },
-        { 0x3820, 0x180,  MEDIUM_LBA, CACHE_POLICY_0, (11 << 8)     | 0xFF,          (2 << 8)       | 0,        0 },
-        { 0x39A0, 0x180,  MEDIUM_LBA, CACHE_POLICY_0, (12 << 8)     | 0xFF,          (2 << 8)       | 0,        0 },
-        { 0x3B20, 0x180,  MEDIUM_LBA, CACHE_POLICY_0, (13 << 8)     | 0xFF,          (2 << 8)       | 0,        0 },
-        { 0x3CA0, 0x180,  MEDIUM_LBA, CACHE_POLICY_0, (14 << 8)     | 0xFF,          (2 << 8)       | 0,        0 },
-        { 0x3E20, 0x180,  MEDIUM_LBA, CACHE_POLICY_0, (15 << 8)     | 0xFF,          (2 << 8)       | 0,        0 },
-        { 0x3FA0, 0x180,  MEDIUM_LBA, CACHE_POLICY_0, (16 << 8)     | 0xFF,          (2 << 8)       | 0,        0 },
-        { 0x4120, 0x180,  MEDIUM_LBA, CACHE_POLICY_0, (17 << 8)     | 0xFF,          (2 << 8)       | 0,        0 },
-        { 0x42A0, 0xD0,   MEDIUM_LBA, CACHE_POLICY_0, (18 << 8)     | 0xFF,          (1 << 8)       | 0,        0 },
-        { 0x4370, 0xD0,   MEDIUM_LBA, CACHE_POLICY_0, (19 << 8)     | 0xFF,          (1 << 8)       | 0,        0 },
-        { 0x4440, 0xD0,   MEDIUM_LBA, CACHE_POLICY_0, (20 << 8)     | 0xFF,          (1 << 8)       | 0,        0 },
-        { 0x4510, 0x180,  MEDIUM_LBA, CACHE_POLICY_0, (21 << 8)     | 0xFF,          (2 << 8)       | 0,        0 },
-        { 0x4690, 0x890,  MEDIUM_LBA, CACHE_POLICY_0, (22 << 8)     | 0xFF,          (11 << 8)      | 0,        0 },
-        { 0x4F20, 0x950,  MEDIUM_LBA, CACHE_POLICY_0, (23 << 8)     | 0xFF,          (6 << 8)       | 0,        0 },
-        { 0x5870, 0x180,  MEDIUM_LBA, CACHE_POLICY_0, (24 << 8)     | 0xFF,          (2 << 8)       | 0,        0 },
-    }
-};
-*/
 extern AudioTable gSampleBankTable;
 extern u8 gSequenceFontTable[];
 
