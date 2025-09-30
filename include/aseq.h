@@ -128,6 +128,7 @@
 #define ASEQ_OP_CHAN_VIBRESET       0xEC
 #define ASEQ_OP_CHAN_GAIN           0xED
 #define ASEQ_OP_CHAN_BENDFINE       0xEE
+#define ASEQ_OP_CHAN_EF             0xEF
 #define ASEQ_OP_CHAN_FREENOTELIST   0xF0
 #define ASEQ_OP_CHAN_ALLOCNOTELIST  0xF1
 
@@ -283,5 +284,8 @@
 #define PITCH_GF0      125
 #define PITCH_G0       126
 #define PITCH_AF0      127
+
+#define S16(x) (x >> 8), (x & 0xFF)
+#define CS16(x) ((x >> 8) | 0x80), (x & 0xFF)
 
 #endif // ASEQ_H

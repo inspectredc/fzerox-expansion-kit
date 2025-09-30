@@ -232,4 +232,21 @@
     subsegments:
       - [0x262B70, .data, big_foot_staff_ghost/big_foot_staff_ghost]
 
-  - [0x266B30]
+  - name: audio_bank_dd
+    type: bin
+    start: 0x266B30
+
+  - name: audio_seq_dd
+    exclusive_ram_id: course
+    type: code
+    dir: assets
+    vram: 0x0
+    start: 0x26C520
+    subsegments:
+      - [0x26C520, .data, audio_seq_dd/audio_seq_dd]
+
+  - name: audio_table_dd
+    type: bin
+    start: 0x270210
+
+  - [0x200C000]
