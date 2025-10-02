@@ -233,8 +233,13 @@
       - [0x262B70, .data, big_foot_staff_ghost/big_foot_staff_ghost]
 
   - name: audio_bank_dd
-    type: bin
+    exclusive_ram_id: course
+    type: code
+    dir: assets
+    vram: 0x0
     start: 0x266B30
+    subsegments:
+      - [0x266B30, .data, audio_bank_dd/audio_bank_dd]
 
   - name: audio_seq_dd
     exclusive_ram_id: course
