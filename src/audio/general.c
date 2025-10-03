@@ -464,7 +464,7 @@ void Audio_TriggerSystemSE(u8 sfxId) {
         return;
     }
 
-    if (sfxId == 0xB) {
+    if (sfxId == NA_SE_11) {
         D_80771CA8 = 0;
         for (i = 0; i < sAudioPlayerMode + 1; i++) {
             if (sAudioRetireStatus == 0) {
@@ -472,34 +472,34 @@ void Audio_TriggerSystemSE(u8 sfxId) {
             }
         }
     }
-    if (sfxId == 0x11) {
-        Audio_TriggerVoiceSEStart(sfxId, 0x83);
-    } else if (sfxId == 0x12) {
-        Audio_TriggerVoiceSEStart(sfxId, 0xB3);
-    } else if (sfxId == 0x2A) {
-        Audio_TriggerVoiceSEStart(sfxId, 0xBE);
-    } else if (sfxId == 0x2C) {
-        Audio_TriggerVoiceSEStart(sfxId, 0xC6);
-    } else if (sfxId == 0x30) {
-        Audio_TriggerVoiceSEStart(sfxId, 0x9A);
-    } else if (sfxId == 0x33) {
-        Audio_TriggerVoiceSEStart(sfxId, 0x9B);
-    } else if (sfxId == 0x34) {
-        Audio_TriggerVoiceSEStart(sfxId, 0xE9);
-    } else if (sfxId == 0x35) {
-        Audio_TriggerVoiceSEStart(sfxId, 0xCD);
-    } else if (sfxId == 0x38) {
-        Audio_TriggerVoiceSEStart(sfxId, 0x71);
-    } else if (sfxId == 0x3A) {
-        Audio_TriggerVoiceSEStart(sfxId, 0x68);
-    } else if (sfxId == 0x3B) {
-        Audio_TriggerVoiceSEStart(sfxId, 0xB5);
-    } else if (sfxId == 0x3C) {
-        Audio_TriggerVoiceSEStart(sfxId, 0x99);
-    } else if (sfxId == 0x3D) {
-        Audio_TriggerVoiceSEStart(sfxId, 0x83);
-    } else if (sfxId == 0x43) {
-        Audio_TriggerVoiceSEStart(sfxId, 0x9B);
+    if (sfxId == NA_SE_17) {
+        Audio_TriggerVoiceSEStart(sfxId, 131);
+    } else if (sfxId == NA_SE_18) {
+        Audio_TriggerVoiceSEStart(sfxId, 179);
+    } else if (sfxId == NA_SE_42) {
+        Audio_TriggerVoiceSEStart(sfxId, 190);
+    } else if (sfxId == NA_SE_44) {
+        Audio_TriggerVoiceSEStart(sfxId, 198);
+    } else if (sfxId == NA_SE_48) {
+        Audio_TriggerVoiceSEStart(sfxId, 154);
+    } else if (sfxId == NA_SE_51) {
+        Audio_TriggerVoiceSEStart(sfxId, 155);
+    } else if (sfxId == NA_SE_52) {
+        Audio_TriggerVoiceSEStart(sfxId, 233);
+    } else if (sfxId == NA_SE_53) {
+        Audio_TriggerVoiceSEStart(sfxId, 205);
+    } else if (sfxId == NA_SE_56) {
+        Audio_TriggerVoiceSEStart(sfxId, 113);
+    } else if (sfxId == NA_SE_58) {
+        Audio_TriggerVoiceSEStart(sfxId, 104);
+    } else if (sfxId == NA_SE_59) {
+        Audio_TriggerVoiceSEStart(sfxId, 181);
+    } else if (sfxId == NA_SE_60) {
+        Audio_TriggerVoiceSEStart(sfxId, 153);
+    } else if (sfxId == NA_SE_61) {
+        Audio_TriggerVoiceSEStart(sfxId, 131);
+    } else if (sfxId == NA_SE_67) {
+        Audio_TriggerVoiceSEStart(sfxId, 155);
     } else {
         Audio_SystemSEStart(sfxId);
     }
@@ -1177,7 +1177,7 @@ void func_807427C0(void) {
             PRINTF("==BANDO== SE BANK LOAD START\n");
             AUDIOCMD_GLOBAL_SYNC_LOAD_SEQ_PARTS(SEQ_SOUND_EFFECTS, 2);
             AUDIOCMD_GLOBAL_ASYNC_LOAD_SAMPLE_BANK(SAMPLE_GUITAR, 0, AUDIO_LOAD_GUITAR_WAVE);
-            AUDIOCMD_GLOBAL_ASYNC_LOAD_SAMPLE_BANK(SAMPLE_SOUND_EFFECTS, 0, AUDIO_LOAD_SE_WAVE);
+            AUDIOCMD_GLOBAL_ASYNC_LOAD_SAMPLE_BANK(SAMPLE_DD_SOUND_EFFECTS, 0, AUDIO_LOAD_SE_WAVE);
             sSEBankLoadStatus = 0;
             sSequenceLoadState = SEQ_LOAD_WAVE;
             break;

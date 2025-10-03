@@ -470,8 +470,7 @@
       - [0xA2610, rodata]
       - [0xA2630, .rodata, 75000]
       - [0xA2690, data, aspmain]
-      - [0xA2970, data]
-      - [0xA2B50, data] # audio tables?
+      - [0xA2970, .data, audio/audio_tables]
       - { type: .bss, vram: 0x80795670, name: 60 }
       - { type: .bss, vram: 0x8079A350, name: CE0 }
       - { type: .bss, vram: 0x8079A4A0, name: 2260 }

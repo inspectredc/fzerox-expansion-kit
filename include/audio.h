@@ -75,7 +75,7 @@ typedef struct AdpcmBookHeader {
  */
 typedef struct AdpcmBook {
     /* 0x00 */ AdpcmBookHeader header;
-    /* 0x08 */ s16 book[1]; // size 8 * order * numPredictors. 8-byte aligned
+    /* 0x08 */ s16 book[]; // size 8 * order * numPredictors. 8-byte aligned
 } AdpcmBook; // size >= 0x8
 
 typedef struct Sample {
@@ -726,7 +726,7 @@ typedef struct AudioTableEntry {
 
 typedef struct AudioTable {
     /* 0x00 */ AudioTableHeader header;
-    /* 0x10 */ AudioTableEntry entries[1]; // (dynamic size)
+    /* 0x10 */ AudioTableEntry entries[]; // (dynamic size)
 } AudioTable; // size >= 0x20
 
 typedef struct {
