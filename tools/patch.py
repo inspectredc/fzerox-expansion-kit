@@ -11,7 +11,7 @@ import spimdisasm
 # todo: generate this list from splat yaml
 patchedEntries = [
     "main",
-    "ovl_xk1",
+    "expansion_kit",
     "ovl_i3",
     "ovl_i4",
     "course_select",
@@ -23,7 +23,7 @@ patchedEntries = [
     "ovl_i10",
     "course_edit",
     "machine_create",
-    "ovl_xk4",
+    "ead_demo",
     "segment_1FB850",
     "segment_21C170",
     "silence_3",
@@ -54,7 +54,7 @@ patchedEntries = [
 
 diskRomAddrs = {
     "main" : 0x60,
-    "ovl_xk1" : 0xA2E70,
+    "expansion_kit" : 0xA2E70,
     "ovl_i3" : 0xB0AB0,
     "ovl_i4" : 0xDE7C0,
     "course_select" : 0xE6660,
@@ -66,7 +66,7 @@ diskRomAddrs = {
     "ovl_i10" : 0x1872B0,
     "course_edit" : 0x188850,
     "machine_create" : 0x1CB1E0,
-    "ovl_xk4" : 0x1E0B00,
+    "ead_demo" : 0x1E0B00,
     "segment_1FB850" : 0x1FB850,
     "segment_21C170" : 0x21C170,
     "silence_3" : 0x230FB0,
@@ -97,7 +97,7 @@ diskRomAddrs = {
 
 diskSegments = {
     "main" : 560,
-    "ovl_xk1" : 598,
+    "expansion_kit" : 598,
     "ovl_i3" : 602,
     "ovl_i4" : 613,
     "course_select" : 615,
@@ -109,7 +109,7 @@ diskSegments = {
     "ovl_i10" : 655,
     "course_edit" : 656,
     "machine_create" : 672,
-    "ovl_xk4" : 677,
+    "ead_demo" : 677,
     "segment_1FB850" : 684,
     "segment_21C170" : 692,
     "silence_3" : 800,

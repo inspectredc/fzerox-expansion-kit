@@ -78,10 +78,10 @@ tools:
           name: main.libultra
           paths:
             - libultra
-        - id: ovl_xk1
-          name: ovl_xk1
+        - id: expansion_kit
+          name: expansion_kit
           paths:
-            - overlays/ovl_xk1
+            - overlays/expansion_kit
         - id: ovl_i3
           name: ovl_i3
           paths:
@@ -127,6 +127,6 @@ tools:
           paths:
             - overlays/machine_create
         - id: ovl_xk4
-          name: ovl_xk4
+          name: ead_demo
           paths:
-            - overlays/ovl_xk4
+            - overlays/ead_demo

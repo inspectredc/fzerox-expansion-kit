@@ -350,11 +350,12 @@ void Game_ThreadEntry(void* entry) {
 
     D_8076CB40 = D_8076C770;
 
-    CLEAR_OVERLAY_CACHE(SEGMENT_TEXT_START(ovl_xk1), SEGMENT_TEXT_SIZE(ovl_xk1), SEGMENT_DATA_START(ovl_xk1),
-                        SEGMENT_DATA_END(ovl_xk1) - SEGMENT_DATA_START(ovl_xk1));
+    CLEAR_OVERLAY_CACHE(SEGMENT_TEXT_START(expansion_kit), SEGMENT_TEXT_SIZE(expansion_kit),
+                        SEGMENT_DATA_START(expansion_kit),
+                        SEGMENT_DATA_END(expansion_kit) - SEGMENT_DATA_START(expansion_kit));
 
-    func_80703E08(SEGMENT_DISK_START(ovl_xk1), SEGMENT_VRAM_START(ovl_xk1), SEGMENT_DISK_SIZE(ovl_xk1),
-                  SEGMENT_BSS_SIZE(ovl_xk1));
+    func_80703E08(SEGMENT_DISK_START(expansion_kit), SEGMENT_VRAM_START(expansion_kit),
+                  SEGMENT_DISK_SIZE(expansion_kit), SEGMENT_BSS_SIZE(expansion_kit));
 
     CLEAR_OVERLAY_CACHE(SEGMENT_TEXT_START(ovl_i3), SEGMENT_TEXT_SIZE(ovl_i3), SEGMENT_DATA_START(ovl_i3),
                         SEGMENT_DATA_SIZE(ovl_i3));

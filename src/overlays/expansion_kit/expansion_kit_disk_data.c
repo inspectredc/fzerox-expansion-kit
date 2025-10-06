@@ -1,6 +1,6 @@
 #include "global.h"
 
-#include "src/assets/overlays/ovl_xk1/dd_fault/dd_fault.c"
+#include "src/assets/overlays/expansion_kit/dd_fault/dd_fault.c"
 
 char D_xk1_80033680[] = "セーブ中です。";
 

@@ -1,7 +1,7 @@
-  - name: ovl_xk1
-    exclusive_ram_id: ovl_xk1
+  - name: expansion_kit
+    exclusive_ram_id: expansion_kit
     type: code
-    dir: overlays/ovl_xk1
+    dir: overlays/expansion_kit
     start: 0xA2E70
     vram: 0x80025C00
     bss_size: 0x8380
@@ -31,14 +31,14 @@
       - [0xAFE40, .data, A8140]
       - [0xAFEA0, .rodata, A8140]
       - [0xAFEF0, .data, AAA80]
-      - [0xAFF10, .data, ovl_xk1_text]
-      - [0xB0640, .data, ovl_xk1_data]
+      - [0xAFF10, .data, expansion_kit_text]
+      - [0xB0640, .data, expansion_kit_data]
       - [0xB0670, .data, AB150]
       - [0xB0680, .rodata, AB150]
       - [0xB0770, .data, ABC40]
       - [0xB0790, .rodata, ABC40]
-      - [0xB0860, .data, ovl_xk1_disk_data]
-      - { type: .bss, vram: 0x80033840, name: ovl_xk1_bss }
+      - [0xB0860, .data, expansion_kit_disk_data]
+      - { type: .bss, vram: 0x80033840, name: expansion_kit_bss }
       - { type: .bss, vram: 0x8003A470, name: A2E90 }
       - { type: .bss, vram: 0x8003A550, name: A3AE0 }
       - { type: .bss, vram: 0x8003A560, name: A6340 }
@@ -341,18 +341,18 @@
       - { type: .bss, vram: 0x801414C0, name: custom_machine_select }
       - { type: .bss, vram: 0x801414D0, name: machine_create_color_select }
 
-  - name: ovl_xk4
+  - name: ead_demo
     exclusive_ram_id: overlay_800D6D90
     type: code
-    dir: overlays/ovl_xk4
+    dir: overlays/ead_demo
     start: 0x1E0B00
     vram: 0x800D6D90
     bss_size: 0x5080
     symbol_name_format: xk4_$VRAM
     subsegments:
-      - [0x1E0B00, c]
-      - [0x1E1FD0, c]
-      - [0x1E27D0, .data, 1E0B00]
-      - [0x1FB800, .data, 1E1FD0]
-      - [0x1FB840, .rodata, 1E1FD0]
-      - { type: .bss, vram: 0x800F1AE0, name: 1E0B00 }
+      - [0x1E0B00, c, ead_demo_engine]
+      - [0x1E1FD0, c, ead_demo]
+      - [0x1E27D0, .data, ead_demo_engine]
+      - [0x1FB800, .data, ead_demo]
+      - [0x1FB840, .rodata, ead_demo]
+      - { type: .bss, vram: 0x800F1AE0, name: ead_demo_engine }
