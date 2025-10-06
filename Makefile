@@ -361,8 +361,8 @@ $(BUILD_DIR)/src/libultra/libc/llcvt.o: OPTFLAGS := -O1 -g0
 $(BUILD_DIR)/src/libultra/libc/llcvt.o: MIPS_VERSION := -mips3 -32
 
 $(BUILD_DIR)/src/leo_fault.o: OUT_ENCODING := shift-jis
-$(BUILD_DIR)/src/overlays/ovl_xk1/ovl_xk1_disk_data.o: OUT_ENCODING := shift-jis
-$(BUILD_DIR)/src/overlays/ovl_xk1/ovl_xk1_text.o: OUT_ENCODING := shift-jis
+$(BUILD_DIR)/src/overlays/expansion_kit/expansion_kit_disk_data.o: OUT_ENCODING := shift-jis
+$(BUILD_DIR)/src/overlays/expansion_kit/expansion_kit_text.o: OUT_ENCODING := shift-jis
 $(BUILD_DIR)/src/overlays/machine_create/machine_create_text.o: OUT_ENCODING := shift-jis
 
 # cc & asm-processor

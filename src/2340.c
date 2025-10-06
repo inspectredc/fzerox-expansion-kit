@@ -54,7 +54,7 @@ void (*sGamemodeInitFuncs[])(void) = {
     CourseSelect_Init,     // GAMEMODE_RECORDS_COURSE_SELECT
     OptionsMenu_Init,      // GAMEMODE_OPTIONS_MENU
     Race_Init,             // GAMEMODE_DEATH_RACE
-    func_xk4_800D8260,     // GAMEMODE_16
+    EADDemo_Init,          // GAMEMODE_EAD_DEMO
 };
 
 s32 (*sGamemodeUpdateFuncs[])(void) = {
@@ -80,7 +80,7 @@ s32 (*sGamemodeUpdateFuncs[])(void) = {
     CourseSelect_Update,     // GAMEMODE_RECORDS_COURSE_SELECT
     OptionsMenu_Update,      // GAMEMODE_OPTIONS_MENU
     Race_Update,             // GAMEMODE_DEATH_RACE
-    func_xk4_800D82A4,       // GAMEMODE_16
+    EADDemo_Update,          // GAMEMODE_EAD_DEMO
 };
 
 Gfx* (*sGamemodeDrawFuncs[])(Gfx*) = {
@@ -106,7 +106,7 @@ Gfx* (*sGamemodeDrawFuncs[])(Gfx*) = {
     CourseSelect_Draw,    // GAMEMODE_RECORDS_COURSE_SELECT
     OptionsMenu_Draw,     // GAMEMODE_OPTIONS_MENU
     Race_Draw,            // GAMEMODE_DEATH_RACE
-    func_xk4_800D8348,    // GAMEMODE_16
+    EADDemo_Draw,         // GAMEMODE_EAD_DEMO
 };
 
 extern s32 gGameMode;
@@ -139,7 +139,7 @@ void func_806F4BB4(void) {
             if (D_8076C7C4 != 0) {
                 D_8076C7C0 = GAMEMODE_TIME_ATTACK;
                 D_8076C810 = 1;
-                gQueuedGameMode = GAMEMODE_16;
+                gQueuedGameMode = GAMEMODE_EAD_DEMO;
                 D_8076C7C4 = 2;
             } else {
                 D_8076C810 = 5;
@@ -149,7 +149,7 @@ void func_806F4BB4(void) {
             if (D_8076C7C4 != 0) {
                 D_8076C7C0 = GAMEMODE_FLX_TITLE;
                 D_8076C810 = 1;
-                gQueuedGameMode = GAMEMODE_16;
+                gQueuedGameMode = GAMEMODE_EAD_DEMO;
                 D_8076C7C4 = 2;
             } else {
                 D_8076C810 = 1;
@@ -160,7 +160,7 @@ void func_806F4BB4(void) {
             if (D_8076C7C4 != 0) {
                 D_8076C7C0 = GAMEMODE_FLX_COURSE_SELECT;
                 D_8076C810 = 1;
-                gQueuedGameMode = GAMEMODE_16;
+                gQueuedGameMode = GAMEMODE_EAD_DEMO;
                 D_8076C7C4 = 2;
             } else {
                 D_8076C810 = 1;
@@ -171,7 +171,7 @@ void func_806F4BB4(void) {
             if (D_8076C7C4 != 0) {
                 D_8076C7C0 = GAMEMODE_FLX_MACHINE_SELECT;
                 D_8076C810 = 1;
-                gQueuedGameMode = GAMEMODE_16;
+                gQueuedGameMode = GAMEMODE_EAD_DEMO;
                 D_8076C7C4 = 2;
             } else {
                 D_8076C810 = 1;
@@ -227,7 +227,7 @@ void func_806F4BB4(void) {
             if (D_8076C7C4 != 0) {
                 D_8076C7C0 = GAMEMODE_LX_MACHINE_SETTINGS;
                 D_8076C810 = 1;
-                gQueuedGameMode = GAMEMODE_16;
+                gQueuedGameMode = GAMEMODE_EAD_DEMO;
                 D_8076C7C4 = 2;
             } else {
                 D_8076C810 = 11;
@@ -292,7 +292,7 @@ void func_806F4FC8(void) {
             break;
         case GAMEMODE_COURSE_EDIT:
         case GAMEMODE_CREATE_MACHINE:
-        case GAMEMODE_16:
+        case GAMEMODE_EAD_DEMO:
             D_8076C92C = BGM_MUTE_CITY;
             return;
         default:
@@ -477,7 +477,7 @@ void func_806F5310(void) {
                 case GAMEMODE_TIME_ATTACK:
                 case GAMEMODE_CREATE_MACHINE:
                 case GAMEMODE_DEATH_RACE:
-                case GAMEMODE_16:
+                case GAMEMODE_EAD_DEMO:
                     if (D_8076C7D8 == 0) {
                         func_8070DA84();
                     }

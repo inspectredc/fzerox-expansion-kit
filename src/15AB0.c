@@ -346,7 +346,7 @@ bool func_80708D88(void) {
     size_t segmentDataSize;
     size_t segmentBssSize;
 
-    if (gGameMode == GAMEMODE_16) {
+    if (gGameMode == GAMEMODE_EAD_DEMO) {
         D_8076CC40 = 1;
         return 0;
     }
@@ -477,18 +477,18 @@ void func_80708F4C(void) {
             segmentVramSize = SEGMENT_VRAM_SIZE(machine_create);
             segmentBssSize = SEGMENT_BSS_SIZE(machine_create);
             break;
-        case GAMEMODE_16:
+        case GAMEMODE_EAD_DEMO:
             var_t1 = true;
-            vramTextStart = SEGMENT_TEXT_START(ovl_xk4);
-            vramStart = SEGMENT_VRAM_START(ovl_xk4);
-            vramDataStart = SEGMENT_DATA_START(ovl_xk4);
-            vramBssStart = SEGMENT_BSS_START(ovl_xk4);
-            diskStart = SEGMENT_DISK_START(ovl_xk4);
-            segmentTextSize = SEGMENT_TEXT_SIZE(ovl_xk4);
-            segmentDataSize = SEGMENT_DATA_SIZE(ovl_xk4);
-            segmentRomSize = SEGMENT_BSS_START(ovl_xk4) - SEGMENT_VRAM_START(ovl_xk4);
-            segmentVramSize = SEGMENT_VRAM_SIZE(ovl_xk4);
-            segmentBssSize = SEGMENT_BSS_SIZE(ovl_xk4);
+            vramTextStart = SEGMENT_TEXT_START(ead_demo);
+            vramStart = SEGMENT_VRAM_START(ead_demo);
+            vramDataStart = SEGMENT_DATA_START(ead_demo);
+            vramBssStart = SEGMENT_BSS_START(ead_demo);
+            diskStart = SEGMENT_DISK_START(ead_demo);
+            segmentTextSize = SEGMENT_TEXT_SIZE(ead_demo);
+            segmentDataSize = SEGMENT_DATA_SIZE(ead_demo);
+            segmentRomSize = SEGMENT_BSS_START(ead_demo) - SEGMENT_VRAM_START(ead_demo);
+            segmentVramSize = SEGMENT_VRAM_SIZE(ead_demo);
+            segmentBssSize = SEGMENT_BSS_SIZE(ead_demo);
             break;
         default:
             return;
