@@ -3,7 +3,7 @@
 #include "fzx_segmentA.h"
 #include "assets/segment_1FB850.h"
 #include "assets/segment_21C170.h"
-#include "assets/overlays/ovl_xk1/aA3AE0.h"
+#include "assets/overlays/expansion_kit/aA3AE0.h"
 #include "assets/overlays/machine_create/machine_create_assets.h"
 
 extern s32 D_80119890;
@@ -37,7 +37,7 @@ extern u16 aCreateMachineSettingsTex[];
 s32 D_xk1_8003A550;
 s32 D_xk1_8003A554;
 
-#include "src/assets/overlays/ovl_xk1/aA3AE0/aA3AE0.c"
+#include "src/assets/overlays/expansion_kit/aA3AE0/aA3AE0.c"
 
 bool sShouldDrawMenuHighlight = true;
 s32 gLastCourseBGM = -1;
