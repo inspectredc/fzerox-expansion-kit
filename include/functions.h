@@ -1073,10 +1073,6 @@ void func_xk3_801360B8(void);
 u8 func_xk3_8013618C(s32);
 u8 func_xk3_80136320(void);
 
-void func_xk4_800D6F38(void);
-Gfx* func_xk4_800D7530(Gfx*, FrameBuffer*, s32, s32, s32, s32, s32, s32);
-void func_xk4_800D81F4(Gfx** gfxP);
-
 void Title_BackgroundInit(Object*);
 void func_i4_80074708(void);
 void Title_LogoInit(Object*);
@@ -1217,7 +1213,7 @@ void NextCourseSelect_Init(void);
 void MachineCreate_Init(void);
 void EndingCutscene_Init(void);
 void OptionsMenu_Init(void);
-void func_xk4_800D8260(void);
+void EADDemo_Init(void);
 
 s32 Title_Update(void);
 s32 Race_Update(void);
@@ -1232,7 +1228,7 @@ s32 NextCourseSelect_Update(void);
 s32 MachineCreate_Update(void);
 s32 EndingCutscene_Update(void);
 s32 OptionsMenu_Update(void);
-s32 func_xk4_800D82A4(void);
+s32 EADDemo_Update(void);
 
 Gfx* Title_Draw(Gfx* gfx);
 Gfx* Race_Draw(Gfx* gfx);
@@ -1246,7 +1242,7 @@ Gfx* CourseEdit_Draw(Gfx* gfx);
 Gfx* MachineCreate_Draw(Gfx* gfx);
 Gfx* EndingCutscene_Draw(Gfx* gfx);
 Gfx* OptionsMenu_Draw(Gfx* gfx);
-Gfx* func_xk4_800D8348(Gfx* gfx);
+Gfx* EADDemo_Draw(Gfx* gfx);
 
 
 #endif // FUNCTIONS_H

@@ -59,7 +59,7 @@
 
 DECLARE_SEGMENT(main);
 
-DECLARE_SEGMENT(ovl_xk1);
+DECLARE_SEGMENT(expansion_kit);
 DECLARE_SEGMENT(ovl_i3);
 DECLARE_SEGMENT(ovl_i4);
 DECLARE_SEGMENT(course_select);
@@ -72,7 +72,7 @@ DECLARE_SEGMENT(ovl_i10);
 
 DECLARE_SEGMENT(course_edit);
 DECLARE_SEGMENT(machine_create);
-DECLARE_SEGMENT(ovl_xk4);
+DECLARE_SEGMENT(ead_demo);
 
 
 // Todo: Create sections in splat for all of these

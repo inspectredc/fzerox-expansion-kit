@@ -1,5 +1,5 @@
 #include "global.h"
-#include "assets/overlays/ovl_xk1/dd_fault.h"
+#include "assets/overlays/expansion_kit/dd_fault.h"
 
 u16 D_xk1_8003BBA0;
 u16 D_xk1_8003BBA8[4];

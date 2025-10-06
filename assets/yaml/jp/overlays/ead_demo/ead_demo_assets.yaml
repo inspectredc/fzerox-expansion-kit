@@ -3,9 +3,25 @@
     [0x800D6D90, 0x1E0B00]
   header:
     code:
-      - '#include "assets/overlays/ovl_xk4/a1E0B00.h"'
+      - '#include "assets/overlays/ead_demo/ead_demo_assets.h"'
     header:
       - '#include "libultra/ultra64.h"'
+      - '#include "src/overlays/ead_demo/ead_demo.h"'
+
+D_xk4_800DA20C:
+  type: ARRAY
+  array_type: f32
+  count: 8
+  offset: 0x1E3F7C
+  symbol: D_xk4_800DA20C
+
+aEADDemoAnimationInfo:
+  type: FZX:ANIM
+  scale_count: 3
+  rot_count: 1372
+  pos_count: 108
+  offset: 0x1E3F9C
+  symbol: aEADDemoAnimationInfo
 
 D_xk4_800DA250:
   type: TEXTURE
@@ -1699,3 +1715,230 @@ D_xk4_800EC078:
   type: GFX
   offset: 0x1F5DE8
   symbol: D_xk4_800EC078
+
+aEADDemoSkeletonLimb41:
+  type: FZX:LIMB
+  offset: 0x1F5E10
+  symbol: aEADDemoSkeletonLimb41
+
+aEADDemoSkeletonLimb40:
+  type: FZX:LIMB
+  offset: 0x1F5E48
+  symbol: aEADDemoSkeletonLimb40
+
+aEADDemoSkeletonLimb39:
+  type: FZX:LIMB
+  offset: 0x1F5E80
+  symbol: aEADDemoSkeletonLimb39
+
+aEADDemoSkeletonLimb38:
+  type: FZX:LIMB
+  offset: 0x1F5EB8
+  symbol: aEADDemoSkeletonLimb38
+
+aEADDemoSkeletonLimb37:
+  type: FZX:LIMB
+  offset: 0x1F5EF0
+  symbol: aEADDemoSkeletonLimb37
+
+aEADDemoSkeletonLimb36:
+  type: FZX:LIMB
+  offset: 0x1F5F28
+  symbol: aEADDemoSkeletonLimb36
+
+aEADDemoSkeletonLimb35:
+  type: FZX:LIMB
+  offset: 0x1F5F60
+  symbol: aEADDemoSkeletonLimb35
+
+aEADDemoSkeletonLimb34:
+  type: FZX:LIMB
+  offset: 0x1F5F98
+  symbol: aEADDemoSkeletonLimb34
+
+aEADDemoSkeletonLimb33:
+  type: FZX:LIMB
+  offset: 0x1F5FD0
+  symbol: aEADDemoSkeletonLimb33
+
+aEADDemoSkeletonLimb32:
+  type: FZX:LIMB
+  offset: 0x1F6008
+  symbol: aEADDemoSkeletonLimb32
+
+aEADDemoSkeletonLimb31:
+  type: FZX:LIMB
+  offset: 0x1F6040
+  symbol: aEADDemoSkeletonLimb31
+
+aEADDemoSkeletonLimb30:
+  type: FZX:LIMB
+  offset: 0x1F6078
+  symbol: aEADDemoSkeletonLimb30
+
+aEADDemoSkeletonLimb29:
+  type: FZX:LIMB
+  offset: 0x1F60B0
+  symbol: aEADDemoSkeletonLimb29
+
+aEADDemoSkeletonLimb28:
+  type: FZX:LIMB
+  offset: 0x1F60E8
+  symbol: aEADDemoSkeletonLimb28
+
+aEADDemoSkeletonLimb27:
+  type: FZX:LIMB
+  offset: 0x1F6120
+  symbol: aEADDemoSkeletonLimb27
+
+aEADDemoSkeletonLimb26:
+  type: FZX:LIMB
+  offset: 0x1F6158
+  symbol: aEADDemoSkeletonLimb26
+
+aEADDemoSkeletonLimb25:
+  type: FZX:LIMB
+  offset: 0x1F6190
+  symbol: aEADDemoSkeletonLimb25
+
+aEADDemoSkeletonLimb24:
+  type: FZX:LIMB
+  offset: 0x1F61C8
+  symbol: aEADDemoSkeletonLimb24
+
+aEADDemoSkeletonLimb23:
+  type: FZX:LIMB
+  offset: 0x1F6200
+  symbol: aEADDemoSkeletonLimb23
+
+aEADDemoSkeletonLimb22:
+  type: FZX:LIMB
+  offset: 0x1F6238
+  symbol: aEADDemoSkeletonLimb22
+
+aEADDemoSkeletonLimb21:
+  type: FZX:LIMB
+  offset: 0x1F6270
+  symbol: aEADDemoSkeletonLimb21
+
+aEADDemoSkeletonLimb20:
+  type: FZX:LIMB
+  offset: 0x1F62A8
+  symbol: aEADDemoSkeletonLimb20
+
+aEADDemoSkeletonLimb19:
+  type: FZX:LIMB
+  offset: 0x1F62E0
+  symbol: aEADDemoSkeletonLimb19
+
+aEADDemoSkeletonLimb18:
+  type: FZX:LIMB
+  offset: 0x1F6318
+  symbol: aEADDemoSkeletonLimb18
+
+aEADDemoSkeletonLimb17:
+  type: FZX:LIMB
+  offset: 0x1F6350
+  symbol: aEADDemoSkeletonLimb17
+
+aEADDemoSkeletonLimb16:
+  type: FZX:LIMB
+  offset: 0x1F6388
+  symbol: aEADDemoSkeletonLimb16
+
+aEADDemoSkeletonLimb15:
+  type: FZX:LIMB
+  offset: 0x1F63C0
+  symbol: aEADDemoSkeletonLimb15
+
+aEADDemoSkeletonLimb14:
+  type: FZX:LIMB
+  offset: 0x1F63F8
+  symbol: aEADDemoSkeletonLimb14
+
+aEADDemoSkeletonLimb13:
+  type: FZX:LIMB
+  offset: 0x1F6430
+  symbol: aEADDemoSkeletonLimb13
+
+aEADDemoSkeletonLimb12:
+  type: FZX:LIMB
+  offset: 0x1F6468
+  symbol: aEADDemoSkeletonLimb12
+
+aEADDemoSkeletonLimb11:
+  type: FZX:LIMB
+  offset: 0x1F64A0
+  symbol: aEADDemoSkeletonLimb11
+
+aEADDemoSkeletonLimb10:
+  type: FZX:LIMB
+  offset: 0x1F64D8
+  symbol: aEADDemoSkeletonLimb10
+
+aEADDemoSkeletonLimb9:
+  type: FZX:LIMB
+  offset: 0x1F6510
+  symbol: aEADDemoSkeletonLimb9
+
+aEADDemoSkeletonLimb8:
+  type: FZX:LIMB
+  offset: 0x1F6548
+  symbol: aEADDemoSkeletonLimb8
+
+aEADDemoSkeletonLimb7:
+  type: FZX:LIMB
+  offset: 0x1F6580
+  symbol: aEADDemoSkeletonLimb7
+
+aEADDemoSkeletonLimb6:
+  type: FZX:LIMB
+  offset: 0x1F65B8
+  symbol: aEADDemoSkeletonLimb6
+
+aEADDemoSkeletonLimb5:
+  type: FZX:LIMB
+  offset: 0x1F65F0
+  symbol: aEADDemoSkeletonLimb5
+
+aEADDemoSkeletonLimb4:
+  type: FZX:LIMB
+  offset: 0x1F6628
+  symbol: aEADDemoSkeletonLimb4
+
+aEADDemoSkeletonLimb3:
+  type: FZX:LIMB
+  offset: 0x1F6660
+  symbol: aEADDemoSkeletonLimb3
+
+aEADDemoSkeletonLimb2:
+  type: FZX:LIMB
+  offset: 0x1F6698
+  symbol: aEADDemoSkeletonLimb2
+
+aEADDemoSkeletonLimb1:
+  type: FZX:LIMB
+  offset: 0x1F66D0
+  symbol: aEADDemoSkeletonLimb1
+
+aEADDemoSkeletonLimb0:
+  type: FZX:LIMB
+  offset: 0x1F6708
+  symbol: aEADDemoSkeletonLimb0
+
+aEADDemoSkeleton:
+  type: ASSET_ARRAY
+  assetType: EADDemoLimb
+  factoryType: FZX:LIMB
+  count: 42
+  offset: 0x1F6740
+  symbol: aEADDemoSkeleton
+
+aEADDemoSugoiTex:
+  type: TEXTURE
+  ctype: u16
+  format: RGBA16
+  width: 160
+  height: 64
+  offset: 0x1F67E8
+  symbol: aEADDemoSugoiTex

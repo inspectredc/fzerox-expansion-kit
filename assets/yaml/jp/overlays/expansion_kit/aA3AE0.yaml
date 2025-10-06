@@ -1,7 +1,7 @@
 :config:
   header:
     code:
-      - '#include "assets/overlays/ovl_xk1/aA3AE0.h"'
+      - '#include "assets/overlays/expansion_kit/aA3AE0.h"'
     header:
       - '#include "libultra/ultra64.h"'
 

@@ -29,7 +29,7 @@ unk_8014BE28 D_i7_8009AD48[10];
 unk_8014BEC8 D_i7_8009ADE8[3];
 u16 D_i7_8009AE48;
 Vec3f D_i7_8009AE50[7];
-s16 D_i7_8009AEA4;
+s16 sHasBeatenEveryMasterCup;
 UNUSED s16 D_i7_8009AEA6;
 UNUSED s32 D_i7_8009AEA8;
 UNUSED s32 D_i7_8009AEAC;
@@ -94,7 +94,7 @@ const char* sCupNames[] = { "JACK CUP", "QUEEN CUP", "KING CUP", "JOKER CUP",
 
 char sThanksForPlayingStr[] = "THANKS FOR PLAYING!!";
 
-s32 func_i7_GetEndScreenIndex(s32 difficulty, s16 character, s8 customType) {
+s32 EndingCutscene_GetEndScreenIndex(s32 difficulty, s16 character, s8 customType) {
     s32 endScreenCharacterIndex;
 
     switch (character) {
@@ -134,26 +134,26 @@ s32 func_i7_GetEndScreenIndex(s32 difficulty, s16 character, s8 customType) {
     return endScreenCharacterIndex;
 }
 
-bool func_i7_80092880(void) {
-    s8* sp1C;
+bool EndingCutscene_HasBeatenEveryMasterCup(void) {
+    s8* cupDataPtr;
     s32 i;
-    bool var_a1;
+    bool beatenEveryMasterCup;
 
-    sp1C = func_807084E4(0, 4 * 30 * 7);
-    Save_UpdateCupSave(sp1C);
+    cupDataPtr = func_807084E4(0, 4 * 30 * 7);
+    Save_UpdateCupSave(cupDataPtr);
 
-    var_a1 = false;
-    sp1C += 3 * 30 * 7;
-    for (i = 0; i < 30 * 7; i++, sp1C++) {
-        if (*sp1C == 0) {
+    beatenEveryMasterCup = false;
+    cupDataPtr += 3 * 30 * 7;
+    for (i = 0; i < 30 * 7; i++, cupDataPtr++) {
+        if (*cupDataPtr == 0) {
             break;
         }
     }
     if (i == 30 * 7) {
-        var_a1 = true;
+        beatenEveryMasterCup = true;
     }
 
-    return var_a1;
+    return beatenEveryMasterCup;
 }
 
 extern s16 D_8079FC7C;
@@ -325,7 +325,7 @@ void EndingCutscene_Init(void) {
         var_v1++;
     }
     D_i7_8009AD40 = var_v1 - D_i7_8009AD48;
-    D_i7_8009AEA4 = func_i7_80092880();
+    sHasBeatenEveryMasterCup = EndingCutscene_HasBeatenEveryMasterCup();
     func_i2_800AE7C4(aCongratulationsTex, TEX_SIZE(aCongratulationsTex, sizeof(u16)), 0, 0, 0);
     func_i2_800AE7C4(aFinalResultPosition0Tex, TEX_SIZE(aFinalResultPosition0Tex, sizeof(u16)), 0, 0, 0);
     func_i2_800AE7C4(aFinalResultPosition1Tex, TEX_SIZE(aFinalResultPosition1Tex, sizeof(u16)), 0, 0, 0);
@@ -344,8 +344,8 @@ void EndingCutscene_Init(void) {
 
     if (D_8009AD16 & 0x20) {
 
-        endingTextures =
-            sEndingTextures[func_i7_GetEndScreenIndex(sCupDifficulty, playerRacer->character, playerRacer->customType)];
+        endingTextures = sEndingTextures[EndingCutscene_GetEndScreenIndex(sCupDifficulty, playerRacer->character,
+                                                                          playerRacer->customType)];
 
         sEndingTex = func_i2_800AE7C4(endingTextures[0], 168 * 99 * sizeof(u16), 0, 1, 0);
 
@@ -383,9 +383,9 @@ s32 EndingCutscene_Update(void) {
         case 1:
             return GAMEMODE_FLX_MAIN_MENU;
         case 2:
-            if (D_i7_8009AEA4 != 0) {
+            if (sHasBeatenEveryMasterCup) {
                 D_8076C7C0 = GAMEMODE_FLX_UNSKIPPABLE_CREDITS;
-                return GAMEMODE_16;
+                return GAMEMODE_EAD_DEMO;
             }
             return GAMEMODE_FLX_UNSKIPPABLE_CREDITS;
         case 0:
