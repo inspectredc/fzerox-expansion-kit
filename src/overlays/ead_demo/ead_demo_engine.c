@@ -201,7 +201,7 @@ Gfx* EADDemo_DrawBackground(Gfx* gfx, FrameBuffer* fb, s32 topR, s32 topG, s32 t
     return gfx;
 }
 
-extern u32 gSegments[];
+extern uintptr_t gSegments[];
 
 intptr_t EADDemo_SegmentedToVirtual(uintptr_t segmentedAddr) {
     return PHYSICAL_TO_VIRTUAL(gSegments[SEGMENT_NUMBER(segmentedAddr)] + SEGMENT_OFFSET(segmentedAddr));

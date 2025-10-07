@@ -139,7 +139,7 @@ bool EndingCutscene_HasBeatenEveryMasterCup(void) {
     s32 i;
     bool beatenEveryMasterCup;
 
-    cupDataPtr = func_807084E4(0, 4 * 30 * 7);
+    cupDataPtr = Arena_Allocate(ALLOC_FRONT, 4 * 30 * 7);
     Save_UpdateCupSave(cupDataPtr);
 
     beatenEveryMasterCup = false;

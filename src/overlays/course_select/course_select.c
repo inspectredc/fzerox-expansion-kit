@@ -313,7 +313,7 @@ void CourseSelect_Init(void) {
         D_i5_8007B9EC[i] = 0;
     }
 
-    sp20 = func_807084E4(0, 4 * 30 * 7);
+    sp20 = Arena_Allocate(ALLOC_FRONT, 4 * 30 * 7);
     Save_UpdateCupSave(sp20);
 
     for (i = 0; i < 2; i++) {

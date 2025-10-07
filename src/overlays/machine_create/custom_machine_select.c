@@ -498,7 +498,7 @@ void func_xk3_80133BD4(Object* machineObj) {
     s32 i;
     s32 j;
 
-    vp = func_807084E4(0, 30 * sizeof(Vp));
+    vp = Arena_Allocate(ALLOC_FRONT, 30 * sizeof(Vp));
     MACHINE_VIEWPORT(machineObj) = vp;
     for (i = 0; i < 30; i++) {
         vp[i].vp.vscale[0] = (SCREEN_WIDTH / 2) << 2;

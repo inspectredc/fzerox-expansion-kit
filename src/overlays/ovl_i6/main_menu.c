@@ -475,7 +475,7 @@ void MainMenu_BackgroundInit(Object* backgroundObj) {
     s32 i;
 
     //! @bug This only allocates half the size needed
-    D_80085AE0 = func_807084E4(0, 240);
+    D_80085AE0 = Arena_Allocate(ALLOC_FRONT, 240);
     OBJECT_STATE(backgroundObj) = D_8076CC94;
     func_i2_800AE17C(sTitleBackgroundCompTexInfos[OBJECT_STATE(backgroundObj)], 0, true);
 

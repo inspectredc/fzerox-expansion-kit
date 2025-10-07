@@ -1290,7 +1290,7 @@ void MachineSelect_MachineInit(Object* machineObj) {
     s32 i;
     s32 j;
 
-    vp = (Vp*) func_807084E4(0, 30 * sizeof(Vp));
+    vp = (Vp*) Arena_Allocate(ALLOC_FRONT, 30 * sizeof(Vp));
     MACHINE_VIEWPORT(machineObj) = vp;
 
     for (i = 0; i < 30; i++) {
@@ -1324,7 +1324,7 @@ void MachineSettings_MachineInit(Object* machineObj) {
     s32 j;
     s32 k;
 
-    vp = (Vp*) func_807084E4(0, 2 * 4 * sizeof(Vp));
+    vp = (Vp*) Arena_Allocate(ALLOC_FRONT, 2 * 4 * sizeof(Vp));
     MACHINE_VIEWPORT(machineObj) = vp;
 
     for (i = 0; i < 2; i++) {
@@ -1399,7 +1399,7 @@ void MachineSettings_SliderInit(void) {
 void MachineSelect_DifficultyCupsInit(Object* difficultyCupsObj) {
     s32 i;
 
-    OBJECT_BUFFER(difficultyCupsObj) = func_807084E4(0, 4 * 30 * 7);
+    OBJECT_BUFFER(difficultyCupsObj) = Arena_Allocate(ALLOC_FRONT, 4 * 30 * 7);
 
     Save_UpdateCupSave(OBJECT_BUFFER(difficultyCupsObj));
 
