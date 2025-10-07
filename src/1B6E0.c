@@ -1,7 +1,7 @@
 #include "global.h"
 #include "fzx_assets.h"
 
-Gfx* func_8070DEE0(Gfx* gfx, TexturePtr texture, TexturePtr tlutTexture, s32 format, s32 unkTmemFlag, s32 left, s32 top,
+Gfx* func_8070DEE0(Gfx* gfx, TexturePtr texture, TexturePtr palette, s32 format, s32 unkTmemFlag, s32 left, s32 top,
                    s32 width, s32 height, u16 unkDrawFlag) {
     bool usedPrimitives;
     u8* texPtr;
@@ -39,12 +39,12 @@ Gfx* func_8070DEE0(Gfx* gfx, TexturePtr texture, TexturePtr tlutTexture, s32 for
         }
         gDPSetCombineMode(gfx++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
     }
-    if (tlutTexture != NULL) {
+    if (palette != NULL) {
         if (!usedPrimitives) {
             gDPPipeSync(gfx++);
         }
 
-        gDPLoadTLUT_pal256(gfx++, tlutTexture);
+        gDPLoadTLUT_pal256(gfx++, palette);
     }
 
     for (row = 0, texPtr = texture; row < numBlocks; row++) {
@@ -81,7 +81,7 @@ void func_8070E79C(u16* arg0, s32 arg1) {
         blue = ((*arg0 & 0x3E) >> 1) * 29;
         alpha = *arg0 & 0x1;
 
-        colorBlend = (0x1F00 - red - green - blue) >> 8;
+        colorBlend = (0x1F00 - (red + green + blue)) >> 8;
 
         *arg0 = (colorBlend << 1) + (colorBlend << 6) + (colorBlend << 11) + alpha;
     }

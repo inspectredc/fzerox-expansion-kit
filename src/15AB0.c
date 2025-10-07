@@ -2,8 +2,10 @@
 #include "fzx_game.h"
 #include "fzx_course.h"
 
-extern uintptr_t D_8079FA80[];
-extern uintptr_t D_8079FA90[];
+uintptr_t gSegments[16];
+uintptr_t gArenaStartPtrs[4];
+uintptr_t gArenaEndPtrs[4];
+
 extern u8 D_800D6D90[];
 extern u8 D_8012CAC0[];
 extern u8 D_8023F020[];
@@ -14,11 +16,11 @@ extern s32 gSegment17B1E0VramEnd;
 extern s32 gSegment17B960VramEnd;
 extern s32 gGameMode;
 
-void func_807082B0(void) {
-    uintptr_t* block1 = &D_8079FA80[0];
-    uintptr_t* block2 = &D_8079FA80[1];
-    uintptr_t* block3 = &D_8079FA80[2];
-    uintptr_t* block4 = &D_8079FA80[3];
+void Arena_StartInit(void) {
+    uintptr_t* block1 = &gArenaStartPtrs[0];
+    uintptr_t* block2 = &gArenaStartPtrs[1];
+    uintptr_t* block3 = &gArenaStartPtrs[2];
+    uintptr_t* block4 = &gArenaStartPtrs[3];
 
     *block1 = ALIGN16((uintptr_t) D_800D6D90);
     *block3 = ALIGN16((uintptr_t) D_8024E200);
@@ -48,103 +50,101 @@ void func_807082B0(void) {
     }
 }
 
-void func_807083D8(void) {
-    D_8079FA80[0] = ALIGN16((uintptr_t) D_8012CAC0);
-    D_8079FA80[1] = 0x803DD000;
-    D_8079FA80[2] = ALIGN16((uintptr_t) D_8024E200);
-    D_8079FA80[3] = ALIGN16((uintptr_t) D_807C7190);
+void Arena_DefaultStartInit(void) {
+    gArenaStartPtrs[0] = ALIGN16((uintptr_t) D_8012CAC0);
+    gArenaStartPtrs[1] = 0x803DD000;
+    gArenaStartPtrs[2] = ALIGN16((uintptr_t) D_8024E200);
+    gArenaStartPtrs[3] = ALIGN16((uintptr_t) D_807C7190);
 }
 
-void func_80708430(void) {
-    D_8079FA90[0] = 0x801D9800;
-    D_8079FA90[1] = 0x803DD000;
-    D_8079FA90[2] = ALIGN16((uintptr_t) D_8024E200);
-    D_8079FA90[3] = 0x80800000;
+void Arena_EndInit(void) {
+    gArenaEndPtrs[0] = 0x801D9800;
+    gArenaEndPtrs[1] = 0x803DD000;
+    gArenaEndPtrs[2] = ALIGN16((uintptr_t) D_8024E200);
+    gArenaEndPtrs[3] = 0x80800000;
 }
 
 // Add to memory start and return start of newly allocated block
-void* func_80708474(s32 arg0, size_t arg1) {
-    void* ret = D_8079FA80[arg0];
+void* Arena_AllocateFront(s32 arenaIndex, size_t size) {
+    void* ret = gArenaStartPtrs[arenaIndex];
 
-    arg1 = ALIGN16(arg1);
-    D_8079FA80[arg0] += arg1;
+    size = ALIGN16(size);
+    gArenaStartPtrs[arenaIndex] += size;
 
     return ret;
 }
 
 // Get memory block (non-allocating mode, used for compressed blocks)
-void* func_807084A0(s32 arg0, size_t arg1) {
-    void* ret = D_8079FA80[arg0];
+void* Arena_GetStartPtr(s32 arenaIndex, size_t size) {
+    void* ret = gArenaStartPtrs[arenaIndex];
 
     return ret;
 }
 
 // Take from memory end and return new memory end
-void* func_807084B8(s32 arg0, size_t arg1) {
+void* Arena_AllocateBack(s32 arenaIndex, size_t size) {
 
-    arg1 = ALIGN16(arg1);
-    D_8079FA90[arg0] -= arg1;
+    size = ALIGN16(size);
+    gArenaEndPtrs[arenaIndex] -= size;
 
-    return (u8*) D_8079FA90[arg0];
+    return (u8*) gArenaEndPtrs[arenaIndex];
 }
 
-void* func_807084E4(s32 arg0, size_t arg1) {
-    size_t sp54[4];
-    s8 sp50[4];
-    u8* sp4C;
+void* Arena_Allocate(s32 allocationType, size_t size) {
+    size_t arenaSizes[4];
+    s8 sortedArenaIndices[4];
+    u8* allocatePtr;
     s32 i;
     s32 j;
     s32 temp;
 
     // Sets initial array of memory indexes and the sizes left in the 3 memory blocks
     for (i = 0; i < 4; i++) {
-        sp50[i] = i;
-        sp54[i] = D_8079FA90[i] - D_8079FA80[i];
+        sortedArenaIndices[i] = i;
+        arenaSizes[i] = gArenaEndPtrs[i] - gArenaStartPtrs[i];
     }
 
     // Sort memory indexes in order of size (without disturbing order of memory blocks)
     // Smallest -> Largest
     for (i = 3; i > 0; i--) {
         for (j = 0; j < i; j++) {
-            if (sp54[sp50[j]] >= sp54[sp50[j + 1]]) {
-                temp = sp50[j];
-                sp50[j] = sp50[j + 1];
-                sp50[j + 1] = temp;
+            if (arenaSizes[sortedArenaIndices[j]] >= arenaSizes[sortedArenaIndices[j + 1]]) {
+                temp = sortedArenaIndices[j];
+                sortedArenaIndices[j] = sortedArenaIndices[j + 1];
+                sortedArenaIndices[j + 1] = temp;
             }
         }
     }
 
     // Check the smallest memory block this can be allocated into
     for (i = 0; i < 4; i++) {
-        if (arg1 < sp54[sp50[i]]) {
+        if (size < arenaSizes[sortedArenaIndices[i]]) {
             break;
         }
     }
 
     // If not enough size in any block, default to memory block with largest available space
-    // Exit with NULL under a certain condition (todo)
+    // Exit with NULL when allocating from back (memory must be guaranteed for these)
     if (i >= 4) {
         i = 3;
-        if (arg0 == 2) {
+        if (allocationType == ALLOC_BACK) {
             return NULL;
         }
     }
 
-    switch (arg0) {
-        case 0:
-            sp4C = func_80708474(sp50[i], arg1);
+    switch (allocationType) {
+        case ALLOC_FRONT:
+            allocatePtr = Arena_AllocateFront(sortedArenaIndices[i], size);
             break;
-        case 1:
-            sp4C = func_807084A0(sp50[i], arg1);
+        case ALLOC_PEEK:
+            allocatePtr = Arena_GetStartPtr(sortedArenaIndices[i], size);
             break;
-        case 2:
-            sp4C = func_807084B8(sp50[i], arg1);
+        case ALLOC_BACK:
+            allocatePtr = Arena_AllocateBack(sortedArenaIndices[i], size);
             break;
     }
-    return sp4C;
+    return allocatePtr;
 }
-
-extern u32 gSegments[];
 
 s32 Segment_SetPhysicalAddress(s32 segment, s32 addr) {
     gSegments[segment] = K0_TO_PHYS(addr);
@@ -200,7 +200,7 @@ void func_807088A8(void) {
         case GAMEMODE_COURSE_EDIT:
             D_8076CBD0 = 2;
             segmentSize = SEGMENT_VRAM_SIZE(segment_1B8550);
-            D_80128C90 = func_80708474(1, 2 * sizeof(unk_80128C94));
+            D_80128C90 = Arena_AllocateFront(1, 2 * sizeof(unk_80128C94));
             break;
         case GAMEMODE_RECORDS:
         case GAMEMODE_LX_MACHINE_SETTINGS:
@@ -214,7 +214,7 @@ void func_807088A8(void) {
             Segment_SetAddress(4, gSegment1B8550VramStart);
             return;
     }
-    gSegment1B8550VramStart = osVirtualToPhysical(func_807084E4(0, segmentSize));
+    gSegment1B8550VramStart = osVirtualToPhysical(Arena_Allocate(ALLOC_FRONT, segmentSize));
     gSegment1B8550VramEnd = ALIGN16(gSegment1B8550VramStart + segmentSize);
     Segment_SetAddress(4, gSegment1B8550VramStart);
 }
@@ -247,7 +247,7 @@ void func_80708A44(void) {
             return;
     }
 
-    gSegment1E23F0VramStart = osVirtualToPhysical(func_807084E4(0, ramSize));
+    gSegment1E23F0VramStart = osVirtualToPhysical(Arena_Allocate(ALLOC_FRONT, ramSize));
     gSegment1E23F0VramEnd = ALIGN16(gSegment1E23F0VramStart + ramSize);
     Segment_SetAddress(7, gSegment1E23F0VramStart);
 }
@@ -275,7 +275,7 @@ void func_80708B34(void) {
             Segment_SetAddress(9, gSegment22B0A0VramStart);
             return;
     }
-    gSegment22B0A0VramStart = osVirtualToPhysical(func_807084E4(0, segmentSize));
+    gSegment22B0A0VramStart = osVirtualToPhysical(Arena_Allocate(ALLOC_FRONT, segmentSize));
     gSegment22B0A0VramEnd = ALIGN16(gSegment22B0A0VramStart + segmentSize);
     Segment_SetAddress(9, gSegment22B0A0VramStart);
 }
@@ -306,7 +306,7 @@ void func_80708C1C(void) {
             Segment_SetAddress(10, D_8079A44C);
             return;
     }
-    D_8079A44C = osVirtualToPhysical(func_807084E4(0, segmentSize));
+    D_8079A44C = osVirtualToPhysical(Arena_Allocate(ALLOC_FRONT, segmentSize));
     D_8079A450 = ALIGN16(D_8079A44C + segmentSize);
     Segment_SetAddress(10, D_8079A44C);
 }
@@ -325,7 +325,7 @@ void func_80708CE0(void) {
         return;
     }
     segmentSize = SEGMENT_DATA_SIZE_CONST(segment_2738A0);
-    D_8079A454 = osVirtualToPhysical(func_807084E4(0, segmentSize));
+    D_8079A454 = osVirtualToPhysical(Arena_Allocate(ALLOC_FRONT, segmentSize));
     D_8079A458 = ALIGN16(D_8079A454 + segmentSize);
     Segment_SetAddress(5, D_8079A454);
 }
@@ -358,7 +358,7 @@ bool func_80708D88(void) {
                       SEGMENT_BSS_START(ovl_i9) - SEGMENT_VRAM_START(ovl_i9), SEGMENT_BSS_SIZE(ovl_i9));
         D_8076CC40 = 1;
     } else {
-        func_80708474(0, SEGMENT_VRAM_SIZE(ovl_i9));
+        Arena_AllocateFront(0, SEGMENT_VRAM_SIZE(ovl_i9));
         if (D_8076CC40 == 1) {
             CLEAR_TEXT_CACHE(SEGMENT_TEXT_START(ovl_i9), SEGMENT_TEXT_SIZE(ovl_i9));
             CLEAR_DATA_CACHE(SEGMENT_DATA_START(ovl_i9), SEGMENT_DATA_SIZE(ovl_i9));
@@ -495,7 +495,7 @@ void func_80708F4C(void) {
     }
 
     if (var_t1) {
-        func_80708474(0, segmentVramSize);
+        Arena_AllocateFront(0, segmentVramSize);
         CLEAR_TEXT_CACHE(vramTextStart, segmentTextSize);
         CLEAR_DATA_CACHE(vramDataStart, segmentDataSize);
         func_80703CA4(diskStart, vramStart, segmentRomSize, segmentBssSize);
@@ -639,7 +639,7 @@ void func_80709760(void) {
             func_8070818C(romOffset, osPhysicalToVirtual(gSegment22B0A0VramStart), ramSize);
         }
     } else {
-        sp1C = func_807084E4(1, ramSize);
+        sp1C = Arena_Allocate(ALLOC_PEEK, ramSize);
         CLEAR_DATA_CACHE(sp1C, ramSize);
 
         if (loadFromDisk) {
@@ -690,7 +690,7 @@ void func_80709914(void) {
             D_8076CBDC = 0;
             return;
     }
-    sp20 = func_807084E4(1, ramSize);
+    sp20 = Arena_Allocate(ALLOC_PEEK, ramSize);
 
     CLEAR_DATA_CACHE(sp20, ramSize);
     func_8070818C(romOffset, sp20, ramSize);
@@ -731,7 +731,7 @@ void func_80709A64(void) {
             return;
     }
 
-    sp18 = func_807084E4(1, ramSize);
+    sp18 = Arena_Allocate(ALLOC_PEEK, ramSize);
 
     CLEAR_DATA_CACHE(sp18, ramSize);
     func_8070818C(romOffset, sp18, ramSize);
@@ -764,7 +764,7 @@ void func_80709B5C(void) {
             return;
     }
 
-    sp24 = func_807084E4(1, ramSize);
+    sp24 = Arena_Allocate(ALLOC_PEEK, ramSize);
 
     CLEAR_DATA_CACHE(sp24, ramSize);
     func_8070818C(romOffset, sp24, ramSize);

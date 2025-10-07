@@ -39,6 +39,12 @@
         osSetIntMask(prevMask);                \
     }
 
+typedef enum AllocType {
+    ALLOC_FRONT,
+    ALLOC_PEEK,
+    ALLOC_BACK,
+} AllocType;
+
 // FAKE!!
 typedef struct unk_Light_t {
     s8 unk_00[0x8];

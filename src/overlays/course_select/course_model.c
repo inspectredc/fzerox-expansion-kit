@@ -11,7 +11,7 @@ s32 D_i5_8007B074 = 0;
 s32 gCourseModelCupCourseNo = 0;
 
 void func_i5_80077080(void) {
-    D_i5_8007C290 = func_807084E4(0, 0x3600 * sizeof(Vtx));
+    D_i5_8007C290 = Arena_Allocate(ALLOC_FRONT, 0x3600 * sizeof(Vtx));
     func_i5_800778E8();
 }
 

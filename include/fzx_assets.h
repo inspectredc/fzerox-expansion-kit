@@ -2063,7 +2063,7 @@ extern Vp D_8014738;
 extern Vp D_8014748;
 extern Vp D_8014758;
 extern Vp D_8014768;
-extern Gfx D_8014780[];
+extern Gfx aSetupFillBlackDL[];
 extern Gfx D_80147B0[];
 extern Gfx D_8014810[];
 extern Gfx D_8014888[];

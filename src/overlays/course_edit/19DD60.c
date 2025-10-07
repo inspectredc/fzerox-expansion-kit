@@ -216,7 +216,7 @@ void CourseEdit_Init(void) {
         D_xk2_800F7044 = 0;
     }
     D_xk2_800F7058 = 0;
-    sCourseMinimapTex = func_807084E4(0, 0x1000);
+    sCourseMinimapTex = Arena_Allocate(ALLOC_FRONT, 0x1000);
     D_800D6CA0.unk_08 = 0;
 }
 

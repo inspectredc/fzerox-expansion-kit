@@ -36,7 +36,7 @@ void func_i3_InitCourseMinimap(void) {
     CourseInfo* sp74;
 
     if (D_8076C954 == 0) {
-        sCourseMinimapTex = func_807084E4(0, 0x1000);
+        sCourseMinimapTex = Arena_Allocate(ALLOC_FRONT, 0x1000);
     }
 
     sp74 = gCurrentCourseInfo;

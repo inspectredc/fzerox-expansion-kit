@@ -335,8 +335,8 @@ extern u8 D_xk1_80033808[];
 void func_xk1_8002FA50(void) {
     u16 i;
 
-    D_8003BBC0 = func_807084E4(0, 20 * 0x80);
-    D_8003BBB0 = func_807084E4(0, 20 * sizeof(s32));
+    D_8003BBC0 = Arena_Allocate(ALLOC_FRONT, 20 * 0x80);
+    D_8003BBB0 = Arena_Allocate(ALLOC_FRONT, 20 * sizeof(s32));
 
     for (i = 0; i < 20; i++) {
         D_8003BBB0[i] = (D_xk1_80033808[i * 2] << 8) + D_xk1_80033808[i * 2 + 1];
