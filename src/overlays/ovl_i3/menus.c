@@ -1655,7 +1655,8 @@ Gfx* func_i3_8004B1C8(Gfx* gfx, s32 playerIndex) {
     gSPClearGeometryMode(gfx++, G_ZBUFFER | G_CULL_BACK);
     gDPPipeSync(gfx++);
     gDPSetRenderMode(gfx++, G_RM_OPA_SURF, G_RM_OPA_SURF2);
-    func_806F7FCC(gGfxPool->unk_33988, NULL, 0.07f, 0.07f, 0.07f, 0, spA0, spA4, 0, spAC, spB0, spC0, spC4, spC8);
+    Matrix_SetLockedLookAt(gGfxPool->unk_33988, NULL, 0.07f, 0.07f, 0.07f, 0, spA0, spA4, 0, spAC, spB0, spC0, spC4,
+                           spC8);
     gSPMatrix(gfx++, gGfxPool->unk_33988, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
     gSPDisplayList(gfx++, aFinishDL);
     gSPPopMatrix(gfx++, G_MTX_MODELVIEW);
@@ -1827,8 +1828,8 @@ Gfx* func_i3_8004B7D8(Gfx* gfx, s32 playerIndex) {
         }
     }
 
-    func_806F7FCC(gGfxPool->unk_33988, NULL, D_i3_8006D4E4, D_i3_8006D4E4, D_i3_8006D4E4, sp5C, 0.0f, sp64, 0.0f, 1.0f,
-                  0.0f, sp80, sp84, sp88);
+    Matrix_SetLockedLookAt(gGfxPool->unk_33988, NULL, D_i3_8006D4E4, D_i3_8006D4E4, D_i3_8006D4E4, sp5C, 0.0f, sp64,
+                           0.0f, 1.0f, 0.0f, sp80, sp84, sp88);
     gSPMatrix(gfx++, gGfxPool->unk_33988, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
     gSPDisplayList(gfx++, aExecuteGameoverDL);
     gSPPopMatrix(gfx++, G_MTX_MODELVIEW);

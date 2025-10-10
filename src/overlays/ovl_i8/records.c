@@ -763,7 +763,7 @@ void func_i8_8009C708(void) {
             break;
     }
 
-    func_806F9628(&D_i8_800A1F34->unk_00, NULL, 1.0f, 0.0f, 319.0f, 239.0f, 0.0f, -100.0f, 100.0f);
+    Matrix_SetOrtho(&D_i8_800A1F34->unk_00, NULL, 1.0f, 0.0f, 319.0f, 239.0f, 0.0f, -100.0f, 100.0f);
 
     vtx = D_i8_800A1F34->unk_40;
     temp = -16;

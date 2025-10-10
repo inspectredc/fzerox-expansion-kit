@@ -595,7 +595,7 @@ void func_i6_80083A20(void) {
     }
 
     D_i6_8008A618 = D_i6_80085B18[D_8079A35C];
-    func_806F9628(gGfxPool->unk_35248, NULL, 1.0f, 0.0f, 319.0f, 239.0f, 0.0f, -100.0f, 100.0f);
+    Matrix_SetOrtho(gGfxPool->unk_35248, NULL, 1.0f, 0.0f, 319.0f, 239.0f, 0.0f, -100.0f, 100.0f);
     vtx = D_i6_8008A618;
 
     var_s0 = 32;

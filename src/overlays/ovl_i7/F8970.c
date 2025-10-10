@@ -268,7 +268,7 @@ void func_i7_800967D8(void) {
     if (D_i7_8009AF64 == 1) {
         for (i = 0; i < gTotalRacers; i++) {
             racer = &gRacers[i];
-            func_806F7FCC(
+            Matrix_SetLockedLookAt(
                 &D_i7_8009AD10->unk_3F0[i], NULL, 0.04f, 0.04f, 0.04f, -gPlayers[0].unk_5C.x.x, -gPlayers[0].unk_5C.x.y,
                 -gPlayers[0].unk_5C.x.z, racer->unk_C0.y.x, racer->unk_C0.y.y, racer->unk_C0.y.z,
                 racer->unk_168.x + ((racer->unk_C0.x.x * 23.0f * 3.0f) / 2) + (racer->unk_C0.z.x * 23.0f * 0.8f),

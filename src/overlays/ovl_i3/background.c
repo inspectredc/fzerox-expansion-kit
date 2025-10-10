@@ -1061,8 +1061,8 @@ void func_i3_80063F88(void) {
 
         if ((sp94.x <= 23000.0f) && (sp94.x >= -23000.0f) && (sp94.z <= 23000.0f) && (sp94.z >= -23000.0f)) {
             var_s2->unk_02 = 1;
-            func_806F8314(&gGfxPool->unk_36368[i], NULL, D_i3_8006BDC0, D_i3_8006BDC0, D_i3_8006BDC0, &spA0, &sp88,
-                          &sp94);
+            Matrix_SetLockedLookAtFromVectors(&gGfxPool->unk_36368[i], NULL, D_i3_8006BDC0, D_i3_8006BDC0,
+                                              D_i3_8006BDC0, &spA0, &sp88, &sp94);
         } else {
             var_s2->unk_02 = 0;
         }

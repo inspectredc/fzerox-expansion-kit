@@ -98,8 +98,8 @@ Gfx* func_xk2_800DF5FC(Gfx* gfx) {
     switch (D_xk2_800F7030) {
         case 0:
             D_xk2_800F7030 = 1;
-            func_806F7FCC(&D_xk2_80119838, NULL, 0.3f, 0.3f, 0.3f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f,
-                          0.0f);
+            Matrix_SetLockedLookAt(&D_xk2_80119838, NULL, 0.3f, 0.3f, 0.3f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+                                   0.0f, 0.0f);
             break;
         case 1:
             func_xk2_800DF5C0();
@@ -2980,8 +2980,8 @@ Gfx* func_xk2_800EA4E4(Gfx* gfx) {
     temp_fs0 = func_i2_800B20D0(temp_a0, D_xk2_800F7234, &spDC);
     func_i2_800B26B8(temp_a0, D_xk2_800F7234, &spC8);
     func_i2_800B2824(temp_a0, D_xk2_800F7234, &sp98, temp_fs0);
-    func_806F7FCC(&D_80128C94->unk_0100, NULL, 1.0f, 1.0f, 1.0f, sp98.x.x, sp98.x.y, sp98.x.z, sp98.y.x, sp98.y.y,
-                  sp98.y.z, spC8.x, spC8.y, spC8.z);
+    Matrix_SetLockedLookAt(&D_80128C94->unk_0100, NULL, 1.0f, 1.0f, 1.0f, sp98.x.x, sp98.x.y, sp98.x.z, sp98.y.x,
+                           sp98.y.y, sp98.y.z, spC8.x, spC8.y, spC8.z);
     func_i2_800B2500(temp_a0, D_xk2_800F7234, &spBC);
     var_fs0 = 250.0f;
 
