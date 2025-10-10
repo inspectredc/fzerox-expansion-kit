@@ -775,8 +775,9 @@ void func_xk3_80134B04(Object* machineObj) {
         racer->unk_C0.x.y += var_fv0 * racer->unk_C0.z.y;
         racer->unk_C0.x.z += var_fv0 * racer->unk_C0.z.z;
         func_806F6D8C(&racer->unk_C0);
-        func_806F7FCC(&gGfxPool->unk_32308[i], NULL, D_8076E568, D_8076E56C, D_8076E570, racer->unk_C0.x.x,
-                      racer->unk_C0.x.y, racer->unk_C0.x.z, racer->unk_C0.y.x, racer->unk_C0.y.y, racer->unk_C0.y.z,
-                      racer->unk_0C.unk_34.x, racer->unk_0C.unk_34.y, racer->unk_0C.unk_34.z);
+        Matrix_SetLockedLookAt(&gGfxPool->unk_32308[i], NULL, D_8076E568, D_8076E56C, D_8076E570, racer->unk_C0.x.x,
+                               racer->unk_C0.x.y, racer->unk_C0.x.z, racer->unk_C0.y.x, racer->unk_C0.y.y,
+                               racer->unk_C0.y.z, racer->unk_0C.unk_34.x, racer->unk_0C.unk_34.y,
+                               racer->unk_0C.unk_34.z);
     }
 }

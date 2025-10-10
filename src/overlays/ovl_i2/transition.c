@@ -3,9 +3,9 @@
 #include "fzx_game.h"
 #include "fzx_assets.h"
 
-s16 D_800D11F0;
-u16 D_i2_800D11F2;
-s16 D_i2_800D11F4;
+s16 sWipePos;
+u16 sTiledPerspectiveScale;
+s16 sTransitionAppearingFromBlack;
 Transition sTransition;
 s16 D_i2_800D1228;
 s16 D_i2_800D122A;
@@ -23,7 +23,7 @@ UNUSED Gfx D_i2_800BEE28[] = {
     gsSPEndDisplayList(),
 };
 
-f32 D_i2_800BEE30 = 3.25f;
+f32 sStripMoveSpeed = 3.25f;
 
 s32 sSurroundingTileSkipChanceMask[] = { 7, 3, 3, 1, 1, 0, 0, 0 };
 
@@ -39,8 +39,8 @@ void Transition_Init(void) {
     transition->workBuffer = NULL;
     D_i2_800D1228 = 0;
     D_i2_800D122A = 0;
-    D_800D11F0 = 0;
-    D_i2_800D11F4 = 0;
+    sWipePos = 0;
+    sTransitionAppearingFromBlack = 0;
 }
 
 extern s32 gNumPlayers;
@@ -155,16 +155,16 @@ void Transition_HideSet(void) {
         case GAMEMODE_FLX_RECORDS_COURSE_SELECT:
         case GAMEMODE_FLX_OPTIONS_MENU:
             if (D_8076C810 == 23) {
-                func_i2_800A26C0(TRANSITION_TYPE_WIPE_LEFT, 2);
-                Transition_Queue(TRANSITION_HIDE, TRANSITION_TYPE_WIPE_LEFT);
+                func_i2_800A26C0(TRANSITION_TYPE_WIPE, 2);
+                Transition_Queue(TRANSITION_HIDE, TRANSITION_TYPE_WIPE);
             } else {
                 Transition_QueueRandom(TRANSITION_HIDE, true);
             }
             break;
         case GAMEMODE_FLX_MAIN_MENU:
             if (D_8076C810 == 23) {
-                func_i2_800A26C0(TRANSITION_TYPE_WIPE_LEFT, 3);
-                Transition_Queue(TRANSITION_HIDE, TRANSITION_TYPE_WIPE_LEFT);
+                func_i2_800A26C0(TRANSITION_TYPE_WIPE, 3);
+                Transition_Queue(TRANSITION_HIDE, TRANSITION_TYPE_WIPE);
             } else {
                 Transition_Queue(TRANSITION_HIDE, TRANSITION_TYPE_PHASED_STRIPS);
             }
@@ -173,7 +173,7 @@ void Transition_HideSet(void) {
             if (D_8076C810 != 23) {
                 Transition_QueueRandom(TRANSITION_HIDE, true);
             } else {
-                Transition_Queue(TRANSITION_HIDE, TRANSITION_TYPE_WIPE_LEFT);
+                Transition_Queue(TRANSITION_HIDE, TRANSITION_TYPE_WIPE);
             }
             break;
         case GAMEMODE_FLX_UNSKIPPABLE_CREDITS:
@@ -211,23 +211,23 @@ s32 Transition_Queue(s32 appearType, s32 transitionType) {
             break;
         case TRANSITION_TYPE_LARGE_TILES:
             backgroundBufferSize = TRANSITION_BACKGROUND_WIDTH * TRANSITION_BACKGROUND_HEIGHT * sizeof(u16);
-            workBufferSize = 0x80;
+            workBufferSize = LARGE_TILES_COUNT * sizeof(LargeTile);
             break;
         case TRANSITION_TYPE_TILED_WHIRL:
             backgroundBufferSize = TRANSITION_BACKGROUND_WIDTH * TRANSITION_BACKGROUND_HEIGHT * sizeof(u16);
-            workBufferSize = 0x700;
+            workBufferSize = TILED_COUNT * sizeof(WhirlTile);
             transition->unk_0E = gGameFrameCount % 2;
             break;
         case TRANSITION_TYPE_TILED_SPIRAL:
             backgroundBufferSize = TRANSITION_BACKGROUND_WIDTH * TRANSITION_BACKGROUND_HEIGHT * sizeof(u16);
-            workBufferSize = 0x500;
+            workBufferSize = TILED_COUNT * sizeof(SpiralTile);
             break;
         case TRANSITION_TYPE_FADE:
         case TRANSITION_TYPE_STATIC_FADE:
             backgroundBufferSize = 0;
             workBufferSize = 0;
             break;
-        case TRANSITION_TYPE_WIPE_LEFT:
+        case TRANSITION_TYPE_WIPE:
             backgroundBufferSize = TRANSITION_BACKGROUND_WIDTH * TRANSITION_BACKGROUND_HEIGHT * sizeof(u16);
             workBufferSize = 0;
             break;
@@ -237,7 +237,7 @@ s32 Transition_Queue(s32 appearType, s32 transitionType) {
             break;
         case TRANSITION_TYPE_GREYSCALE_PALETTE:
             if (appearType != TRANSITION_APPEAR) {
-                if (D_i2_800D11F4 != 0) {
+                if (sTransitionAppearingFromBlack) {
                     transition->queuedTransitionType = TRANSITION_TYPE_STATIC_FADE;
                     backgroundBufferSize = 0;
                     workBufferSize = 0;
@@ -275,26 +275,26 @@ const s32 kTransitionRandomSelection[] = { TRANSITION_TYPE_SMALL_TILES,  TRANSIT
                                            TRANSITION_TYPE_PHASED_STRIPS };
 
 s32 Transition_QueueRandom(s32 appearType, bool instantTransitionAllowed) {
-    s32 temp;
-    u32 temp2;
+    s32 instantTransitionChance;
+    u32 randomTransition;
     s32 var_v0;
 
     if (appearType == TRANSITION_APPEAR) {
-        temp = (Math_Rand1() % 8);
+        instantTransitionChance = Math_Rand1() % 8;
         if (instantTransitionAllowed) {
-            if (temp < 2) {
-                temp2 = Math_Rand1();
-                var_v0 = Transition_Queue(appearType, kTransitionRandomSelection[temp2 % 7]);
+            if (instantTransitionChance < 2) {
+                randomTransition = Math_Rand1();
+                var_v0 = Transition_Queue(appearType, kTransitionRandomSelection[randomTransition % 7]);
             } else {
                 var_v0 = Transition_Queue(appearType, TRANSITION_TYPE_INSTANT);
             }
         } else {
-            temp2 = Math_Rand1();
-            var_v0 = Transition_Queue(appearType, kTransitionRandomSelection[temp2 % 7]);
+            randomTransition = Math_Rand1();
+            var_v0 = Transition_Queue(appearType, kTransitionRandomSelection[randomTransition % 7]);
         }
     } else {
-        temp2 = Math_Rand1();
-        var_v0 = Transition_Queue(appearType, kTransitionRandomSelection[temp2 % 7]);
+        randomTransition = Math_Rand1();
+        var_v0 = Transition_Queue(appearType, kTransitionRandomSelection[randomTransition % 7]);
     }
     return var_v0;
 }
@@ -325,8 +325,8 @@ s32 Transition_Update(void) {
         case TRANSITION_TYPE_STATIC_FADE:
             Transition_FadeUpdate(transition);
             break;
-        case TRANSITION_TYPE_WIPE_LEFT:
-            Transition_WipeLeftUpdate(transition);
+        case TRANSITION_TYPE_WIPE:
+            Transition_WipeUpdate(transition);
             break;
         case TRANSITION_TYPE_PHASED_STRIPS:
             Transition_PhasedStripsUpdate(transition);
@@ -370,61 +370,61 @@ void Transition_PopQueue(Transition* transition) {
             if (transition->appearType == TRANSITION_APPEAR) {
                 transition->flags |= TRANSITION_FLAG_FILL_BLACK;
             }
-            transition->state = 1;
+            transition->state = LARGE_TILES_START;
             Transition_LargeTilesInit(transition);
             break;
         case TRANSITION_TYPE_TILED_WHIRL:
             if (transition->appearType == TRANSITION_APPEAR) {
                 transition->flags |= TRANSITION_FLAG_FILL_BLACK;
             }
-            transition->state = 1;
+            transition->state = TILED_WHIRL_START;
             Transition_TiledWhirlInit(transition);
             break;
         case TRANSITION_TYPE_TILED_SPIRAL:
             if (transition->appearType == TRANSITION_APPEAR) {
                 transition->flags |= TRANSITION_FLAG_FILL_BLACK;
             }
-            transition->state = 1;
+            transition->state = TILED_SPIRAL_START;
             Transition_TiledSpiralInit(transition);
             break;
         case TRANSITION_TYPE_FADE:
         case TRANSITION_TYPE_STATIC_FADE:
             if (transition->appearType != TRANSITION_APPEAR) {
-                transition->state = 3;
+                transition->state = FADE_IN_START;
                 Transition_FadeInit(transition, 255, 20);
             } else {
-                transition->state = 1;
+                transition->state = FADE_OUT_START;
                 Transition_FadeInit(transition, 0, 20);
             }
             break;
-        case TRANSITION_TYPE_WIPE_LEFT:
+        case TRANSITION_TYPE_WIPE:
             if (transition->appearType == TRANSITION_APPEAR) {
                 transition->flags |= TRANSITION_FLAG_FILL_BLACK;
             }
-            transition->state = 1;
-            Transition_WipeLeftInit(transition);
+            transition->state = WIPE_START;
+            Transition_WipeInit(transition);
             break;
         case TRANSITION_TYPE_PHASED_STRIPS:
             if (transition->appearType == TRANSITION_APPEAR) {
                 transition->flags |= TRANSITION_FLAG_FILL_BLACK;
             }
-            transition->state = 1;
+            transition->state = PHASED_STRIPS_START;
             Transition_PhasedStripsInit(transition);
             break;
         case TRANSITION_TYPE_GREYSCALE_PALETTE:
             if (transition->appearType == TRANSITION_APPEAR) {
                 transition->flags |= TRANSITION_FLAG_FILL_BLACK;
             }
-            transition->state = 1;
+            transition->state = GREYSCALE_PALETTE_START;
             Transition_GreyscalePaletteInit(transition);
             break;
     }
 
     if (transition->appearType == TRANSITION_APPEAR) {
         if (transition->flags & TRANSITION_FLAG_FILL_BLACK) {
-            D_i2_800D11F4 = 1;
+            sTransitionAppearingFromBlack = true;
         } else {
-            D_i2_800D11F4 = 0;
+            sTransitionAppearingFromBlack = false;
         }
     }
 }
@@ -463,8 +463,8 @@ Gfx* Transition_Draw(Gfx* gfx) {
         case TRANSITION_TYPE_STATIC_FADE:
             gfx = Transition_FadeDraw(gfx, transition);
             break;
-        case TRANSITION_TYPE_WIPE_LEFT:
-            gfx = Transition_WipeLeftDraw(gfx, transition);
+        case TRANSITION_TYPE_WIPE:
+            gfx = Transition_WipeDraw(gfx, transition);
             break;
         case TRANSITION_TYPE_PHASED_STRIPS:
             gfx = Transition_PhasedStripsDraw(gfx, transition);
@@ -537,12 +537,12 @@ void Transition_SetBackgroundBuffer(void) {
 
 void Transition_SmallTilesInit(Transition* transition) {
     s32 i;
-    u8* ptr = transition->workBuffer;
+    u8* tileStateBufferPtr = transition->workBuffer;
     s32 tileColumn;
     s32 tileRow;
 
     for (i = 0; i < SMALL_TILES_WORK_SIZE; i++) {
-        *ptr++ = SMALL_TILES_TILE_UNSET;
+        *tileStateBufferPtr++ = SMALL_TILES_TILE_UNSET;
     }
 
     for (i = 0; i < 5; i++) {
@@ -747,14 +747,15 @@ Gfx* Transition_SmallTilesDraw(Gfx* gfx, Transition* transition) {
 
 void Transition_LargeTilesInit(Transition* transition) {
     s32 i;
-    u8* var_v1;
+    LargeTile* tile;
+    TransitionInfo* tilesInfo = &transition->transitionInfo;
 
-    transition->unk_1C.unk_00 = 0x40;
+    LARGE_TILES_REMAINING(tilesInfo) = LARGE_TILES_COUNT;
     transition->flags |= TRANSITION_FLAG_SET_BACKGROUND_BUFFER;
 
-    for (i = 0, var_v1 = transition->workBuffer; i < 0x40; i++) {
-        *var_v1++ = 0;
-        *var_v1++ = -1;
+    for (i = 0, tile = transition->workBuffer; i < LARGE_TILES_COUNT; i++, tile++) {
+        tile->state = LARGE_TILES_TILE_UNSET;
+        tile->alpha = 0xFF;
     }
 }
 
@@ -762,86 +763,90 @@ void Transition_LargeTilesUpdate(Transition* transition) {
     switch (transition->state) {
         case TRANSITION_STATE_INACTIVE:
             break;
-        case 1:
-            if (func_i2_800A3620(transition)) {
-                transition->state = 2;
+        case LARGE_TILES_START:
+            if (Transition_LargeTilesUpdateState(transition)) {
+                transition->state = LARGE_TILES_FINISHED;
             }
             break;
-        case 2:
+        case LARGE_TILES_FINISHED:
             transition->flags |= TRANSITION_FLAG_FINISHED;
             break;
     }
 }
 
-bool func_i2_800A3620(Transition* transition) {
-    bool ret;
+bool Transition_LargeTilesUpdateState(Transition* transition) {
+    bool finishedAllTiles;
     s32 i;
-    s32 var_v0;
-    s32 var_v1;
-    unk_8010D778_unk_1C* var_a2;
-    unk_8010D778_unk_18* var_a1;
+    s32 alpha;
+    s32 tileIndexToSet;
+    TransitionInfo* tilesInfo;
+    LargeTile* tile;
 
-    var_a1 = transition->workBuffer;
-    var_a2 = &transition->unk_1C;
+    tile = transition->workBuffer;
+    tilesInfo = &transition->transitionInfo;
     transition->timer++;
     if (transition->timer > 0) {
         transition->timer = 0;
         for (i = 0; i < 2; i++) {
-            if (var_a2->unk_00 > 0) {
-                var_v1 = Math_Rand1() % 64;
-                while ((var_a1 + var_v1)->unk_00) {
-                    var_v1++;
-                    var_v1 %= 64;
+            if (LARGE_TILES_REMAINING(tilesInfo) > 0) {
+                tileIndexToSet = Math_Rand1() % LARGE_TILES_COUNT;
+                while ((tile + tileIndexToSet)->state != LARGE_TILES_TILE_UNSET) {
+                    tileIndexToSet++;
+                    tileIndexToSet %= LARGE_TILES_COUNT;
                 }
 
-                (var_a1 + var_v1)->unk_00 = 1;
-                var_a2->unk_00--;
+                (tile + tileIndexToSet)->state = LARGE_TILES_TILE_SET;
+                LARGE_TILES_REMAINING(tilesInfo)--;
             }
         }
     }
 
-    var_a1 = transition->workBuffer;
-    ret = true;
+    tile = transition->workBuffer;
+    finishedAllTiles = true;
 
-    for (i = 0; i < 64; i++, var_a1++) {
-        if (var_a1->unk_00 != 2) {
-            ret = false;
+    for (i = 0; i < LARGE_TILES_COUNT; i++, tile++) {
+        if (tile->state != LARGE_TILES_TILE_FINISHED) {
+            finishedAllTiles = false;
         }
-        if (var_a1->unk_00 == 1) {
-            var_v0 = var_a1->unk_01 - 8;
-            if (var_v0 < 0) {
-                var_a1->unk_00 = 2;
-                var_v0 = 0;
+        if (tile->state == LARGE_TILES_TILE_SET) {
+            alpha = tile->alpha - 8;
+            if (alpha < 0) {
+                tile->state = LARGE_TILES_TILE_FINISHED;
+                alpha = 0;
             }
-            var_a1->unk_01 = var_v0;
+            tile->alpha = alpha;
         }
     }
 
-    return ret;
+    return finishedAllTiles;
 }
 
 Gfx* Transition_LargeTilesDraw(Gfx* gfx, Transition* transition) {
-    s32 i;
-    s32 j;
-    unk_8010D778_unk_18* temp_t1;
+    s32 row;
+    s32 column;
+    LargeTile* tile;
 
     gSPDisplayList(gfx++, D_80147B0);
 
-    for (i = 0; i < 8; i++) {
-        for (j = 0; j < 8; j++) {
-            temp_t1 = (unk_8010D778_unk_18*) transition->workBuffer + (i * 8 + j);
-            if (temp_t1->unk_00 == 2) {
+    for (row = 0; row < LARGE_TILES_ROWS; row++) {
+        for (column = 0; column < LARGE_TILES_COLUMNS; column++) {
+            tile = (LargeTile*) transition->workBuffer + (row * LARGE_TILES_COLUMNS + column);
+            if (tile->state == LARGE_TILES_TILE_FINISHED) {
                 continue;
             }
             gDPPipeSync(gfx++);
-            gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, temp_t1->unk_01);
+            gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, tile->alpha);
 
             gDPLoadTextureTile(gfx++, transition->backgroundBuffer, G_IM_FMT_RGBA, G_IM_SIZ_16b,
-                               TRANSITION_BACKGROUND_WIDTH, TRANSITION_BACKGROUND_HEIGHT, (j * 37), (i * 28),
-                               (j * 37) + 36, (i * 28) + 27, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
-                               G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-            gSPTextureRectangle(gfx++, ((j * 37) + 12) << 2, ((i * 28) + 8) << 2, ((j * 37) + 49) << 2,
-                                ((i * 28) + 36) << 2, 0, (j * 37) << 5, (i * 28) << 5, 1 << 10, 1 << 10);
+                               TRANSITION_BACKGROUND_WIDTH, TRANSITION_BACKGROUND_HEIGHT, (column * LARGE_TILES_WIDTH),
+                               (row * LARGE_TILES_HEIGHT), ((column + 1) * LARGE_TILES_WIDTH) - 1,
+                               ((row + 1) * LARGE_TILES_HEIGHT) - 1, 0, G_TX_NOMIRROR | G_TX_CLAMP,
+                               G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+            gSPTextureRectangle(gfx++, ((column * LARGE_TILES_WIDTH) + TRANSITION_BORDER_WIDTH) << 2,
+                                ((row * LARGE_TILES_HEIGHT) + TRANSITION_BORDER_HEIGHT) << 2,
+                                (((column + 1) * LARGE_TILES_WIDTH) + TRANSITION_BORDER_WIDTH) << 2,
+                                (((row + 1) * LARGE_TILES_HEIGHT) + TRANSITION_BORDER_HEIGHT) << 2, 0,
+                                (column * LARGE_TILES_WIDTH) << 5, (row * LARGE_TILES_HEIGHT) << 5, 1 << 10, 1 << 10);
         }
     }
     return gfx;
@@ -855,63 +860,64 @@ void Transition_TiledWhirlInit(Transition* transition) {
     f32 spF4[4];
     f32 spE4[4];
     f32 spD4[4];
-    s32 pad2[5];
+    s32 pad2[4];
     s32 i;
-    s32 j;
-    s32 k;
-    s32 m;
+    s32 row;
+    s32 column;
+    s32 vtxCorner;
     Vtx* vtx;
-    s32 temp_ft0;
-    s32 temp_ft3;
-    s32 temp_s4;
-    s32 temp_v0;
+    s32 s;
+    s32 t;
+    s32 x;
+    s32 y;
     s32 var_a1;
-    unk_8010D778_unk_18_2* temp_v0_2;
+    WhirlTile* whirlTile;
+    TransitionInfo* tiledWhirlInfo = &transition->transitionInfo;
 
     transition->flags |= TRANSITION_FLAG_SET_BACKGROUND_BUFFER;
-    transition->unk_1C.unk_00 = -1;
+    tiledWhirlInfo->work0 = -1;
 
     for (i = 0; i < 2; i++) {
-        vtx = D_8024E260[i].unk_34248;
+        vtx = D_8024E260[i].backgroundTileVtx;
         sp104[0] = sp104[2] = -33.3f;
         sp104[1] = sp104[3] = sp104[0] + 66.6f + 1.0f;
         spF4[0] = spF4[1] = 25.199999f;
         spF4[2] = spF4[3] = spF4[0] - 50.399998f;
 
-        for (j = 0; j < 8; j++) {
-            for (k = 0; k < 8; k++) {
-                for (m = 0; m < 4; m++) {
-                    if (m & 1) {
-                        spE4[m] = (k + 1) * 37;
+        for (row = 0; row < TILED_ROWS; row++) {
+            for (column = 0; column < TILED_COLUMNS; column++) {
+                for (vtxCorner = 0; vtxCorner < 4; vtxCorner++) {
+                    if (vtxCorner & 1) {
+                        spE4[vtxCorner] = (column + 1) * TILED_WIDTH;
                     } else {
-                        spE4[m] = k * 37;
+                        spE4[vtxCorner] = column * TILED_WIDTH;
                     }
-                    if (m >= 2) {
-                        spD4[m] = (j + 1) * 28;
+                    if (vtxCorner >= 2) {
+                        spD4[vtxCorner] = (row + 1) * TILED_HEIGHT;
                     } else {
-                        spD4[m] = j * 28;
+                        spD4[vtxCorner] = row * TILED_HEIGHT;
                     }
-                    temp_s4 = Math_Round(sp104[m]);
-                    temp_v0 = Math_Round(spF4[m]);
-                    temp_ft0 = spE4[m] * 32.0f;
-                    temp_ft3 = spD4[m] * 32.0f;
-                    SET_VTX(vtx, temp_s4, temp_v0, 0, temp_ft0, temp_ft3, 0, 0, 0, 0);
+                    x = Math_Round(sp104[vtxCorner]);
+                    y = Math_Round(spF4[vtxCorner]);
+                    s = spE4[vtxCorner] * 32.0f;
+                    t = spD4[vtxCorner] * 32.0f;
+                    SET_VTX(vtx, x, y, 0, s, t, 0, 0, 0, 0);
                     vtx++;
                 }
             }
         }
     }
 
-    for (i = 0; i < 8; i++) {
-        for (j = 0; j < 8; j++) {
-            temp_v0_2 = (unk_8010D778_unk_18_2*) transition->workBuffer + (j + i * 8);
-            temp_v0_2->unk_00 = 0;
-            temp_v0_2->unk_04 = (j * 66.6f) + -233.09999f;
-            temp_v0_2->unk_08 = 176.4f - (i * 50.399998f);
-            temp_v0_2->unk_0C = 0.0f;
-            temp_v0_2->unk_10 = 0.0f;
-            temp_v0_2->unk_14 = 0.0f;
-            temp_v0_2->unk_18 = 0.0f;
+    for (row = 0; row < TILED_ROWS; row++) {
+        for (column = 0; column < TILED_COLUMNS; column++) {
+            whirlTile = (WhirlTile*) transition->workBuffer + (column + row * TILED_COLUMNS);
+            whirlTile->state = WHIRL_TILES_TILE_UNSET;
+            whirlTile->pos.x = (column * 66.6f) + -233.09999f;
+            whirlTile->pos.y = 176.4f - (row * 50.399998f);
+            whirlTile->pos.z = 0.0f;
+            whirlTile->velocity.x = 0.0f;
+            whirlTile->velocity.y = 0.0f;
+            whirlTile->velocity.z = 0.0f;
         }
     }
 }
@@ -921,95 +927,95 @@ extern GfxPool* gGfxPool;
 void Transition_TiledWhirlUpdate(Transition* transition) {
     s32 i;
     s32 temp_v0;
-    s32 var_s0;
-    unk_8010D778_unk_18_2* var_s0_2;
-    MtxF sp70;
+    bool isDrawing;
+    WhirlTile* whirlTile;
+    MtxF mtxF;
 
-    var_s0 = 0;
+    isDrawing = false;
 
     switch (transition->state) {
         case TRANSITION_STATE_INACTIVE:
             break;
-        case 1:
-            var_s0 = 1;
-            if (func_i2_800A4078(transition) != 0) {
-                transition->state = 2;
+        case TILED_WHIRL_START:
+            isDrawing = true;
+            if (Transition_TiledWhirlUpdateState(transition) != 0) {
+                transition->state = TILED_WHIRL_WAIT;
                 transition->timer = 0;
             }
             break;
-        case 2:
-            var_s0 = 1;
+        case TILED_WHIRL_WAIT:
+            isDrawing = true;
             transition->timer++;
             if (transition->timer >= 3) {
-                transition->state = 3;
+                transition->state = TILED_WHIRL_FINISHED;
                 transition->timer = 0;
             }
             break;
-        case 3:
+        case TILED_WHIRL_FINISHED:
             transition->flags |= TRANSITION_FLAG_FINISHED;
             break;
     }
-    if (var_s0 != 0) {
-        func_806F9384(gGfxPool->unk_35248, &sp70, 60.0f, 16.0f, 8129.0f, 320.0f, 0.0f, 240.0f, 0.0f, &D_i2_800D11F2);
-        func_806F8FE0(gGfxPool->unk_35288, &sp70, 0.0f, 0.0f, 500.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+    if (isDrawing) {
+        Matrix_SetFrustrum(gGfxPool->unk_35248, &mtxF, 60.0f, 16.0f, 8129.0f, SCREEN_WIDTH, 0.0f, SCREEN_HEIGHT, 0.0f,
+                           &sTiledPerspectiveScale);
+        Matrix_SetLookAt(gGfxPool->unk_35288, &mtxF, 0.0f, 0.0f, 500.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 
-        var_s0_2 = transition->workBuffer;
-        for (i = 0; i < 64; i++) {
-            func_806F7FCC(&gGfxPool->unk_352C8[i], &sp70, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
-                          var_s0_2->unk_04, var_s0_2->unk_08, var_s0_2->unk_0C);
-            var_s0_2++;
+        whirlTile = transition->workBuffer;
+        for (i = 0; i < TILED_COUNT; i++) {
+            Matrix_SetLockedLookAt(&gGfxPool->unk_352C8[i], &mtxF, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
+                                   whirlTile->pos.x, whirlTile->pos.y, whirlTile->pos.z);
+            whirlTile++;
         }
     }
 }
 
-bool func_i2_800A4078(Transition* transition) {
-    bool var_a0;
+bool Transition_TiledWhirlUpdateState(Transition* transition) {
+    bool whirlFinished;
     s32 j;
     s32 i;
     s32 var_v1;
     s32 var_v1_2;
     s32 var_v1_4;
-    unk_8010D778_unk_1C* temp_v0;
-    unk_8010D778_unk_18_2* var_a3;
+    TransitionInfo* tiledWhirlInfo = &transition->transitionInfo;
+    WhirlTile* whirlTile;
 
-    temp_v0 = &transition->unk_1C;
     transition->timer++;
     if (transition->timer >= 2) {
         transition->timer = 0;
         var_v1 = 0;
 
-        if (temp_v0->unk_00 < 0xF) {
-            temp_v0->unk_00++;
+        if (tiledWhirlInfo->work0 < 0xF) {
+            tiledWhirlInfo->work0++;
         }
 
         if (transition->unk_0E != 0) {
-            for (i = temp_v0->unk_00; i >= 0; i--, var_v1++) {
-                if (i >= 8) {
+            for (i = tiledWhirlInfo->work0; i >= 0; i--, var_v1++) {
+                if (i >= TILED_COLUMNS) {
                     continue;
                 }
 
                 for (j = 0; j < var_v1 + 1; j++) {
-                    var_v1_2 = 7 - j;
+                    var_v1_2 = (TILED_ROWS - 1) - j;
                     if (var_v1_2 >= 0) {
-                        var_a3 = (unk_8010D778_unk_18_2*) transition->workBuffer + ((var_v1_2 * 8) + i);
-                        if (var_a3->unk_00 == 0) {
-                            var_a3->unk_00 = 1;
+                        whirlTile = (WhirlTile*) transition->workBuffer + ((var_v1_2 * TILED_COLUMNS) + i);
+                        if (whirlTile->state == WHIRL_TILES_TILE_UNSET) {
+                            whirlTile->state = WHIRL_TILES_TILE_SET;
                         }
                     }
                 }
             }
         } else {
             var_v1_4 = 0;
-            for (i = 7 - temp_v0->unk_00; i < 8; i++, var_v1_4++) {
+            for (i = (TILED_COLUMNS - 1) - tiledWhirlInfo->work0; i < TILED_COLUMNS; i++, var_v1_4++) {
                 if (i < 0) {
                     continue;
                 }
 
                 for (j = 0; j < var_v1_4 + 1; j++) {
-                    if (j < 8) {
-                        var_a3 = (unk_8010D778_unk_18_2*) transition->workBuffer + ((j * 8) + i);
-                        if (var_a3->unk_00 == 0) {
-                            var_a3->unk_00 = 1;
+                    if (j < TILED_ROWS) {
+                        whirlTile = (WhirlTile*) transition->workBuffer + ((j * TILED_COLUMNS) + i);
+                        if (whirlTile->state == WHIRL_TILES_TILE_UNSET) {
+                            whirlTile->state = WHIRL_TILES_TILE_SET;
                         }
                     }
                 }
@@ -1017,70 +1023,71 @@ bool func_i2_800A4078(Transition* transition) {
         }
     }
 
-    for (i = 0, var_a3 = transition->workBuffer; i < 64; i++, var_a3++) {
-        if (var_a3->unk_00 == 1) {
-            var_a3->unk_10 += 0.0f;
-            var_a3->unk_14 += 0.0f;
-            var_a3->unk_18 += -60.0f;
-            var_a3->unk_04 += var_a3->unk_10;
-            var_a3->unk_08 += var_a3->unk_14;
-            var_a3->unk_0C += var_a3->unk_18;
-            if (var_a3->unk_0C < -10000.0f) {
-                var_a3->unk_00 = 2;
-                var_a3->unk_0C = -10000.0f;
+    for (i = 0, whirlTile = transition->workBuffer; i < TILED_COUNT; i++, whirlTile++) {
+        if (whirlTile->state == WHIRL_TILES_TILE_SET) {
+            whirlTile->velocity.x += 0.0f;
+            whirlTile->velocity.y += 0.0f;
+            whirlTile->velocity.z += -60.0f;
+            whirlTile->pos.x += whirlTile->velocity.x;
+            whirlTile->pos.y += whirlTile->velocity.y;
+            whirlTile->pos.z += whirlTile->velocity.z;
+            if (whirlTile->pos.z < -10000.0f) {
+                whirlTile->state = WHIRL_TILES_TILE_FINISHED;
+                whirlTile->pos.z = -10000.0f;
             }
         }
     }
 
-    var_a0 = true;
-    for (i = 0, var_a3 = transition->workBuffer; i < 64; i++, var_a3++) {
-        if (var_a3->unk_00 != 2) {
-            var_a0 = false;
+    whirlFinished = true;
+    for (i = 0, whirlTile = transition->workBuffer; i < TILED_COUNT; i++, whirlTile++) {
+        if (whirlTile->state != WHIRL_TILES_TILE_FINISHED) {
+            whirlFinished = false;
         }
     }
-    return var_a0;
+    return whirlFinished;
 }
 
 extern GfxPool D_1000000;
 
 Gfx* Transition_TiledDraw(Gfx* gfx, Transition* transition) {
     s32 pad[2];
-    s32 i;
-    s32 j;
-    f32 var_fv0;
-    unk_8010D778_unk_18_2* spA8;
-    s32 var_t3;
+    s32 row;
+    s32 column;
+    f32 alphaScale;
+    WhirlTile* whirlTile;
+    s32 tileIndex;
 
     gSPDisplayList(gfx++, D_8014810);
 
     if (transition->activeTransitionType == TRANSITION_TYPE_TILED_WHIRL) {
         gDPSetRenderMode(gfx++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
         gDPSetCombineLERP(gfx++, 0, 0, 0, TEXEL0, 0, 0, 0, PRIMITIVE, 0, 0, 0, TEXEL0, 0, 0, 0, PRIMITIVE);
-        spA8 = transition->workBuffer;
+        whirlTile = transition->workBuffer;
     }
-    gSPPerspNormalize(gfx++, D_i2_800D11F2);
+    gSPPerspNormalize(gfx++, sTiledPerspectiveScale);
     gSPMatrix(gfx++, D_1000000.unk_35248, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
     gSPMatrix(gfx++, D_1000000.unk_35288, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_PROJECTION);
 
-    for (i = 0; i < 8; i++) {
-        for (j = 0; j < 8; j++) {
-            var_t3 = (i * 8) + j;
+    for (row = 0; row < TILED_ROWS; row++) {
+        for (column = 0; column < TILED_COLUMNS; column++) {
+            tileIndex = (row * TILED_COLUMNS) + column;
             if (transition->activeTransitionType == TRANSITION_TYPE_TILED_WHIRL) {
-                var_fv0 = 1.0f - (spA8 + var_t3)->unk_0C / -10000.0f;
-                if (var_fv0 < 0.0f) {
-                    var_fv0 = 0.0f;
+                alphaScale = 1.0f - (whirlTile + tileIndex)->pos.z / -10000.0f;
+                if (alphaScale < 0.0f) {
+                    alphaScale = 0.0f;
                 }
                 gDPPipeSync(gfx++);
-                gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, (s32) (255.0f * var_fv0));
+                gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, (s32) (255.0f * alphaScale));
             }
 
-            gSPMatrix(gfx++, &D_1000000.unk_352C8[var_t3], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPVertex(gfx++, &D_1000000.unk_34248[var_t3 * 4], 4, 0);
+            gSPMatrix(gfx++, &D_1000000.unk_352C8[tileIndex], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPVertex(gfx++, &D_1000000.backgroundTileVtx[tileIndex * 4], 4, 0);
 
             gDPLoadTextureTile(gfx++, transition->backgroundBuffer, G_IM_FMT_RGBA, G_IM_SIZ_16b,
-                               TRANSITION_BACKGROUND_WIDTH, TRANSITION_BACKGROUND_HEIGHT, (j * 37), (i * 28),
-                               (j * 37) + 36, (i * 28) + 27, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
-                               G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+                               TRANSITION_BACKGROUND_WIDTH, TRANSITION_BACKGROUND_HEIGHT, (column * TILED_WIDTH),
+                               (row * TILED_HEIGHT), ((column + 1) * TILED_WIDTH) - 1, ((row + 1) * TILED_HEIGHT) - 1,
+                               0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK,
+                               G_TX_NOLOD, G_TX_NOLOD);
 
             gSP2Triangles(gfx++, 0, 3, 1, 0, 0, 2, 3, 0);
         }
@@ -1090,240 +1097,245 @@ Gfx* Transition_TiledDraw(Gfx* gfx, Transition* transition) {
 
 void Transition_TiledSpiralInit(Transition* transition) {
     s32 i;
-    s32 j;
-    s32 k;
-    s32 m;
+    s32 row;
+    s32 column;
+    s32 vtxCorner;
     Vtx* vtx;
-    s32 temp_ft0;
-    s32 temp_ft3;
-    s32 temp_s4;
-    s32 temp_v0;
-    s32 var_a1;
-    unk_8010D778_unk_18_3* temp_v0_2;
+    s32 s;
+    s32 t;
+    s32 x;
+    s32 y;
+    SpiralTile* spiralTile;
+    TransitionInfo* tiledSpiralInfo = &transition->transitionInfo;
     f32 spC4[4];
     f32 spB4[4];
     f32 spA4[4];
     f32 sp94[4];
 
     transition->flags |= TRANSITION_FLAG_SET_BACKGROUND_BUFFER;
-    transition->unk_1C.unk_00 = 0x40;
-    transition->unk_1C.unk_04 = -1;
-    transition->unk_1C.unk_08 = 0;
-    transition->unk_1C.unk_0C = 0;
+    SPIRAL_TILE_SET_COUNT(tiledSpiralInfo) = TILED_COUNT;
+    SPIRAL_TILE_COLUMN(tiledSpiralInfo) = -1;
+    SPIRAL_TILE_ROW(tiledSpiralInfo) = 0;
+    SPIRAL_TILE_DIRECTION(tiledSpiralInfo) = 0;
 
     for (i = 0; i < 2; i++) {
-        vtx = D_8024E260[i].unk_34248;
+        vtx = D_8024E260[i].backgroundTileVtx;
         spC4[0] = spC4[2] = -33.3f;
         spC4[1] = spC4[3] = spC4[0] + 66.6f + 1;
         spB4[0] = spB4[1] = 25.199999f;
         spB4[2] = spB4[3] = spB4[0] - 50.399998f;
 
-        for (j = 0; j < 8; j++) {
-            for (k = 0; k < 8; k++) {
-                for (m = 0; m < 4; m++) {
-                    temp_s4 = Math_Round(spC4[m]);
-                    temp_v0 = Math_Round(spB4[m]);
-                    if (m & 1) {
-                        spA4[m] = (k + 1) * 37;
+        for (row = 0; row < TILED_ROWS; row++) {
+            for (column = 0; column < TILED_COLUMNS; column++) {
+                for (vtxCorner = 0; vtxCorner < 4; vtxCorner++) {
+                    x = Math_Round(spC4[vtxCorner]);
+                    y = Math_Round(spB4[vtxCorner]);
+                    if (vtxCorner & 1) {
+                        spA4[vtxCorner] = (column + 1) * TILED_WIDTH;
                     } else {
-                        spA4[m] = k * 37;
+                        spA4[vtxCorner] = column * TILED_WIDTH;
                     }
-                    if (m >= 2) {
-                        sp94[m] = (j + 1) * 28;
+                    if (vtxCorner >= 2) {
+                        sp94[vtxCorner] = (row + 1) * TILED_HEIGHT;
                     } else {
-                        sp94[m] = j * 28;
+                        sp94[vtxCorner] = row * TILED_HEIGHT;
                     }
-                    temp_ft0 = spA4[m] * 32.0f;
-                    temp_ft3 = sp94[m] * 32.0f;
-                    SET_VTX(vtx, temp_s4, temp_v0, 0, temp_ft0, temp_ft3, 0, 0, 0, 0);
+                    s = spA4[vtxCorner] * 32.0f;
+                    t = sp94[vtxCorner] * 32.0f;
+                    SET_VTX(vtx, x, y, 0, s, t, 0, 0, 0, 0);
                     vtx++;
                 }
             }
         }
     }
 
-    for (j = 0; j < 8; j++) {
-        for (k = 0; k < 8; k++) {
-            temp_v0_2 = (unk_8010D778_unk_18_3*) transition->workBuffer + (k + j * 8);
-            temp_v0_2->unk_00 = 0;
-            temp_v0_2->unk_04 = (k * 66.6f) + -233.09999f;
-            temp_v0_2->unk_08 = 176.4f - (j * 50.399998f);
-            temp_v0_2->unk_0C = 0.0f;
-            temp_v0_2->unk_10 = 1.0f;
-            temp_v0_2->unk_01 = 0;
+    for (row = 0; row < TILED_ROWS; row++) {
+        for (column = 0; column < TILED_COLUMNS; column++) {
+            spiralTile = (SpiralTile*) transition->workBuffer + (column + row * TILED_COLUMNS);
+            spiralTile->state = SPIRAL_TILES_TILE_UNSET;
+            spiralTile->pos.x = (column * 66.6f) + -233.09999f;
+            spiralTile->pos.y = 176.4f - (row * 50.399998f);
+            spiralTile->pos.z = 0.0f;
+            spiralTile->scale = 1.0f;
+            spiralTile->scaleTimer = 0;
         }
     }
 }
 
 void Transition_TiledSpiralUpdate(Transition* transition) {
     s32 i;
-    bool var_s0;
-    unk_8010D778_unk_18_3* var_s0_2;
-    MtxF sp74;
+    bool isDrawing;
+    SpiralTile* spiralTile;
+    MtxF mtxF;
 
-    var_s0 = false;
+    isDrawing = false;
     switch (transition->state) {
         case TRANSITION_STATE_INACTIVE:
             break;
-        case 1:
-            var_s0 = true;
-            if (func_i2_800A4E1C(transition)) {
-                transition->state = 2;
+        case TILED_SPIRAL_START:
+            isDrawing = true;
+            if (Transition_TiledSpiralUpdateState(transition)) {
+                transition->state = TILED_SPIRAL_WAIT;
                 transition->timer = 0;
             }
             break;
-        case 2:
-            var_s0 = true;
+        case TILED_SPIRAL_WAIT:
+            isDrawing = true;
             transition->timer++;
             if (transition->timer >= 3) {
-                transition->state = 3;
+                transition->state = TILED_SPIRAL_FINISHED;
                 transition->timer = 0;
             }
             break;
-        case 3:
+        case TILED_SPIRAL_FINISHED:
             transition->flags |= TRANSITION_FLAG_FINISHED;
             break;
     }
 
-    if (var_s0) {
-        func_806F9384(gGfxPool->unk_35248, &sp74, 60.0f, 16.0f, 8129.0f, 320.0f, 0.0f, 240.0f, 0.0f, &D_i2_800D11F2);
-        func_806F8FE0(gGfxPool->unk_35288, &sp74, 0.0f, 0.0f, 500.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+    if (isDrawing) {
+        Matrix_SetFrustrum(gGfxPool->unk_35248, &mtxF, 60.0f, 16.0f, 8129.0f, SCREEN_WIDTH, 0.0f, SCREEN_HEIGHT, 0.0f,
+                           &sTiledPerspectiveScale);
+        Matrix_SetLookAt(gGfxPool->unk_35288, &mtxF, 0.0f, 0.0f, 500.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 
-        var_s0_2 = transition->workBuffer;
-        for (i = 0; i < 64; i++) {
-            func_806F7FCC(&gGfxPool->unk_352C8[i], &sp74, var_s0_2->unk_10, var_s0_2->unk_10, var_s0_2->unk_10, 0.0f,
-                          0.0f, 1.0f, 0.0f, 1.0f, 0.0f, var_s0_2->unk_04, var_s0_2->unk_08, var_s0_2->unk_0C);
-            var_s0_2++;
+        spiralTile = transition->workBuffer;
+        for (i = 0; i < TILED_COUNT; i++) {
+            Matrix_SetLockedLookAt(&gGfxPool->unk_352C8[i], &mtxF, spiralTile->scale, spiralTile->scale,
+                                   spiralTile->scale, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, spiralTile->pos.x,
+                                   spiralTile->pos.y, spiralTile->pos.z);
+            spiralTile++;
         }
     }
 }
 
-bool func_i2_800A4E1C(Transition* transition) {
-    bool var_a0;
+bool Transition_TiledSpiralUpdateState(Transition* transition) {
+    bool spiralFinished;
     s32 i;
     s32 j;
-    unk_8010D778_unk_1C* temp_v0;
-    unk_8010D778_unk_18_3* var_a3;
-
-    temp_v0 = &transition->unk_1C;
+    TransitionInfo* tiledSpiralInfo = &transition->transitionInfo;
+    SpiralTile* spiralTile;
 
     for (i = 0; i < 2; i++) {
-        if (temp_v0->unk_00 <= 0) {
+        if (SPIRAL_TILE_SET_COUNT(tiledSpiralInfo) <= 0) {
             continue;
         }
 
-        temp_v0->unk_00--;
+        SPIRAL_TILE_SET_COUNT(tiledSpiralInfo)--;
 
-        switch (temp_v0->unk_0C) {
-            case 0:
-                temp_v0->unk_04++;
-                var_a3 = (unk_8010D778_unk_18_3*) transition->workBuffer + (temp_v0->unk_08 * 8 + temp_v0->unk_04);
-                if (temp_v0->unk_04 >= 8 || var_a3->unk_00 != 0) {
-                    temp_v0->unk_04--;
-                    temp_v0->unk_08++;
-                    temp_v0->unk_0C = 1;
+        switch (SPIRAL_TILE_DIRECTION(tiledSpiralInfo)) {
+            case TILED_SPIRAL_RIGHT:
+                SPIRAL_TILE_COLUMN(tiledSpiralInfo)++;
+                spiralTile = (SpiralTile*) transition->workBuffer +
+                             (SPIRAL_TILE_ROW(tiledSpiralInfo) * TILED_COLUMNS + SPIRAL_TILE_COLUMN(tiledSpiralInfo));
+                if (SPIRAL_TILE_COLUMN(tiledSpiralInfo) >= TILED_COLUMNS ||
+                    spiralTile->state != SPIRAL_TILES_TILE_UNSET) {
+                    SPIRAL_TILE_COLUMN(tiledSpiralInfo)--;
+                    SPIRAL_TILE_ROW(tiledSpiralInfo)++;
+                    SPIRAL_TILE_DIRECTION(tiledSpiralInfo) = TILED_SPIRAL_DOWN;
                 }
                 break;
-            case 1:
-                temp_v0->unk_08++;
-                var_a3 = (unk_8010D778_unk_18_3*) transition->workBuffer + (temp_v0->unk_08 * 8 + temp_v0->unk_04);
-                if (temp_v0->unk_08 >= 8 || var_a3->unk_00 != 0) {
-                    temp_v0->unk_08--;
-                    temp_v0->unk_04--;
-                    temp_v0->unk_0C = 2;
+            case TILED_SPIRAL_DOWN:
+                SPIRAL_TILE_ROW(tiledSpiralInfo)++;
+                spiralTile = (SpiralTile*) transition->workBuffer +
+                             (SPIRAL_TILE_ROW(tiledSpiralInfo) * TILED_COLUMNS + SPIRAL_TILE_COLUMN(tiledSpiralInfo));
+                if (SPIRAL_TILE_ROW(tiledSpiralInfo) >= TILED_ROWS || spiralTile->state != SPIRAL_TILES_TILE_UNSET) {
+                    SPIRAL_TILE_ROW(tiledSpiralInfo)--;
+                    SPIRAL_TILE_COLUMN(tiledSpiralInfo)--;
+                    SPIRAL_TILE_DIRECTION(tiledSpiralInfo) = TILED_SPIRAL_LEFT;
                 }
                 break;
-            case 2:
-                temp_v0->unk_04--;
-                var_a3 = (unk_8010D778_unk_18_3*) transition->workBuffer + (temp_v0->unk_08 * 8 + temp_v0->unk_04);
-                if (temp_v0->unk_04 < 0 || var_a3->unk_00 != 0) {
-                    temp_v0->unk_04++;
-                    temp_v0->unk_08--;
-                    temp_v0->unk_0C = 3;
+            case TILED_SPIRAL_LEFT:
+                SPIRAL_TILE_COLUMN(tiledSpiralInfo)--;
+                spiralTile = (SpiralTile*) transition->workBuffer +
+                             (SPIRAL_TILE_ROW(tiledSpiralInfo) * TILED_COLUMNS + SPIRAL_TILE_COLUMN(tiledSpiralInfo));
+                if (SPIRAL_TILE_COLUMN(tiledSpiralInfo) < 0 || spiralTile->state != SPIRAL_TILES_TILE_UNSET) {
+                    SPIRAL_TILE_COLUMN(tiledSpiralInfo)++;
+                    SPIRAL_TILE_ROW(tiledSpiralInfo)--;
+                    SPIRAL_TILE_DIRECTION(tiledSpiralInfo) = TILED_SPIRAL_UP;
                 }
                 break;
-            case 3:
-                temp_v0->unk_08--;
-                var_a3 = (unk_8010D778_unk_18_3*) transition->workBuffer + (temp_v0->unk_08 * 8 + temp_v0->unk_04);
-                if (temp_v0->unk_08 < 0 || var_a3->unk_00 != 0) {
-                    temp_v0->unk_08++;
-                    temp_v0->unk_04++;
-                    temp_v0->unk_0C = 0;
+            case TILED_SPIRAL_UP:
+                SPIRAL_TILE_ROW(tiledSpiralInfo)--;
+                spiralTile = (SpiralTile*) transition->workBuffer +
+                             (SPIRAL_TILE_ROW(tiledSpiralInfo) * TILED_COLUMNS + SPIRAL_TILE_COLUMN(tiledSpiralInfo));
+                if (SPIRAL_TILE_ROW(tiledSpiralInfo) < 0 || spiralTile->state != SPIRAL_TILES_TILE_UNSET) {
+                    SPIRAL_TILE_ROW(tiledSpiralInfo)++;
+                    SPIRAL_TILE_COLUMN(tiledSpiralInfo)++;
+                    SPIRAL_TILE_DIRECTION(tiledSpiralInfo) = TILED_SPIRAL_RIGHT;
                 }
                 break;
             default:
                 break;
         }
-        var_a3 = (unk_8010D778_unk_18_3*) transition->workBuffer + (temp_v0->unk_08 * 8 + temp_v0->unk_04);
-        var_a3->unk_00 = 1;
+        spiralTile = (SpiralTile*) transition->workBuffer +
+                     (SPIRAL_TILE_ROW(tiledSpiralInfo) * TILED_COLUMNS + SPIRAL_TILE_COLUMN(tiledSpiralInfo));
+        spiralTile->state = SPIRAL_TILES_TILE_SET;
     }
 
-    for (i = 0, var_a3 = transition->workBuffer; i < 64; i++, var_a3++) {
-        if (var_a3->unk_00 == 1) {
-            if (var_a3->unk_01 < 11) {
-                var_a3->unk_10 = (10 - var_a3->unk_01) / 10.0f;
-                var_a3->unk_01++;
+    for (i = 0, spiralTile = transition->workBuffer; i < TILED_COUNT; i++, spiralTile++) {
+        if (spiralTile->state == SPIRAL_TILES_TILE_SET) {
+            if (spiralTile->scaleTimer <= 10) {
+                spiralTile->scale = (10 - spiralTile->scaleTimer) / 10.0f;
+                spiralTile->scaleTimer++;
 
             } else {
-                var_a3->unk_00 = 2;
-                var_a3->unk_10 = 0.0f;
+                spiralTile->state = SPIRAL_TILES_TILE_FINISHED;
+                spiralTile->scale = 0.0f;
             }
         }
     }
 
-    var_a0 = true;
-    for (i = 0, var_a3 = transition->workBuffer; i < 64; i++, var_a3++) {
-        if (var_a3->unk_00 != 2) {
-            var_a0 = false;
+    spiralFinished = true;
+    for (i = 0, spiralTile = transition->workBuffer; i < TILED_COUNT; i++, spiralTile++) {
+        if (spiralTile->state != SPIRAL_TILES_TILE_FINISHED) {
+            spiralFinished = false;
         }
     }
-    return var_a0;
+    return spiralFinished;
 }
 
-void Transition_FadeInit(Transition* transition, s32 arg1, s32 arg2) {
+void Transition_FadeInit(Transition* transition, s32 alpha, s32 fadeTime) {
+    TransitionInfo* fadeInfo = &transition->transitionInfo;
 
-    transition->unk_1C.unk_00 = transition->unk_1C.unk_04 = transition->unk_1C.unk_08 = 0;
-    transition->unk_1C.unk_0C = arg1;
+    FADE_RED(fadeInfo) = FADE_GREEN(fadeInfo) = FADE_BLUE(fadeInfo) = 0;
+    FADE_ALPHA(fadeInfo) = alpha;
 
     if (transition->unk_0E != 0) {
-        transition->unk_1C.unk_10 = transition->unk_0E;
+        FADE_TIMER(fadeInfo) = transition->unk_0E;
     } else {
-        transition->unk_1C.unk_10 = arg2;
+        FADE_TIMER(fadeInfo) = fadeTime;
     }
 }
 
 void Transition_FadeUpdate(Transition* transition) {
-    unk_8010D778_unk_1C* temp_v0;
-
-    temp_v0 = &transition->unk_1C;
+    TransitionInfo* fadeInfo = &transition->transitionInfo;
 
     switch (transition->state) {
-        case 1:
-            temp_v0->unk_0C = (transition->timer * 255.0f) / temp_v0->unk_10;
+        case FADE_OUT_START:
+            FADE_ALPHA(fadeInfo) = (transition->timer * 255.0f) / FADE_TIMER(fadeInfo);
             transition->timer++;
-            if (temp_v0->unk_10 < transition->timer) {
-                transition->state = 2;
+            if (FADE_TIMER(fadeInfo) < transition->timer) {
+                transition->state = FADE_WAIT;
                 transition->timer = 0;
-                temp_v0->unk_0C = 255;
+                FADE_ALPHA(fadeInfo) = 255;
             }
             break;
-        case 2:
+        case FADE_WAIT:
             transition->timer++;
             if (transition->timer >= 2) {
-                transition->state = 4;
+                transition->state = FADE_FINISHED;
             }
             break;
-        case 3:
-            temp_v0->unk_0C = ((temp_v0->unk_10 - transition->timer) * 255.0f) / temp_v0->unk_10;
+        case FADE_IN_START:
+            FADE_ALPHA(fadeInfo) = ((FADE_TIMER(fadeInfo) - transition->timer) * 255.0f) / FADE_TIMER(fadeInfo);
             transition->timer++;
 
-            if (temp_v0->unk_10 < transition->timer) {
-                transition->state = 4;
+            if (FADE_TIMER(fadeInfo) < transition->timer) {
+                transition->state = FADE_FINISHED;
                 transition->timer = 0;
-                temp_v0->unk_0C = 0;
+                FADE_ALPHA(fadeInfo) = 0;
             }
             break;
-        case 4:
+        case FADE_FINISHED:
             transition->flags |= TRANSITION_FLAG_FINISHED;
             break;
         case TRANSITION_STATE_INACTIVE:
@@ -1333,7 +1345,7 @@ void Transition_FadeUpdate(Transition* transition) {
 }
 
 Gfx* Transition_FadeDraw(Gfx* gfx, Transition* transition) {
-    unk_8010D778_unk_1C* temp_v1 = &transition->unk_1C;
+    TransitionInfo* fadeInfo = &transition->transitionInfo;
 
     gSPDisplayList(gfx++, D_8014888);
 
@@ -1341,87 +1353,94 @@ Gfx* Transition_FadeDraw(Gfx* gfx, Transition* transition) {
         gDPSetAlphaCompare(gfx++, G_AC_DITHER);
     }
 
-    gDPSetPrimColor(gfx++, 0, 0, temp_v1->unk_00, temp_v1->unk_04, temp_v1->unk_08, temp_v1->unk_0C);
+    gDPSetPrimColor(gfx++, 0, 0, FADE_RED(fadeInfo), FADE_GREEN(fadeInfo), FADE_BLUE(fadeInfo), FADE_ALPHA(fadeInfo));
 
-    gDPFillRectangle(gfx++, 12, 8, 308, 232);
+    gDPFillRectangle(gfx++, TRANSITION_BORDER_WIDTH, TRANSITION_BORDER_HEIGHT, SCREEN_WIDTH - TRANSITION_BORDER_WIDTH,
+                     SCREEN_HEIGHT - TRANSITION_BORDER_HEIGHT);
 
     return gfx;
 }
 
-void Transition_WipeLeftInit(Transition* transition) {
+void Transition_WipeInit(Transition* transition) {
+    TransitionInfo* wipeInfo = &transition->transitionInfo;
 
-    transition->unk_1C.unk_00 = 0xC;
-    transition->unk_1C.unk_04 = 8;
+    WIPE_LEFT(wipeInfo) = TRANSITION_BORDER_WIDTH;
+    WIPE_TOP(wipeInfo) = TRANSITION_BORDER_HEIGHT;
     transition->flags |= TRANSITION_FLAG_SET_BACKGROUND_BUFFER;
 
     switch (transition->unk_0E) {
-        case 0:
-        case 1:
-            D_800D11F0 = transition->unk_1C.unk_00;
+        case WIPE_DIRECTION_LEFT:
+        case WIPE_DIRECTION_RIGHT:
+            sWipePos = WIPE_LEFT(wipeInfo);
             break;
-        case 2:
-        case 3:
-            D_800D11F0 = transition->unk_1C.unk_04;
+        case WIPE_DIRECTION_UP:
+        case WIPE_DIRECTION_DOWN:
+            sWipePos = WIPE_TOP(wipeInfo);
             break;
     }
 }
 
-void Transition_WipeLeftUpdate(Transition* transition) {
-    unk_8010D778_unk_1C* temp_v0 = &transition->unk_1C;
+void Transition_WipeUpdate(Transition* transition) {
+    TransitionInfo* wipeInfo = &transition->transitionInfo;
 
     switch (transition->state) {
         case TRANSITION_STATE_INACTIVE:
             break;
-        case 1:
+        case WIPE_START:
             switch (transition->unk_0E) {
-                case 0:
-                    temp_v0->unk_00 = 12 - (s32) ((transition->timer * (f32) TRANSITION_BACKGROUND_WIDTH) / 20.0f);
-                    D_800D11F0 = temp_v0->unk_00;
+                case WIPE_DIRECTION_LEFT:
+                    WIPE_LEFT(wipeInfo) = TRANSITION_BORDER_WIDTH -
+                                          (s32) ((transition->timer * (f32) TRANSITION_BACKGROUND_WIDTH) / 20.0f);
+                    sWipePos = WIPE_LEFT(wipeInfo);
                     break;
-                case 1:
-                    temp_v0->unk_00 = (s32) ((transition->timer * (f32) TRANSITION_BACKGROUND_WIDTH) / 20.0f) + 12;
-                    D_800D11F0 = temp_v0->unk_00;
+                case WIPE_DIRECTION_RIGHT:
+                    WIPE_LEFT(wipeInfo) = TRANSITION_BORDER_WIDTH +
+                                          (s32) ((transition->timer * (f32) TRANSITION_BACKGROUND_WIDTH) / 20.0f);
+                    sWipePos = WIPE_LEFT(wipeInfo);
                     break;
-                case 2:
-                    temp_v0->unk_04 = 8 - (s32) ((transition->timer * (f32) TRANSITION_BACKGROUND_HEIGHT) / 20.0f);
-                    D_800D11F0 = temp_v0->unk_04;
+                case WIPE_DIRECTION_UP:
+                    WIPE_TOP(wipeInfo) = TRANSITION_BORDER_HEIGHT -
+                                         (s32) ((transition->timer * (f32) TRANSITION_BACKGROUND_HEIGHT) / 20.0f);
+                    sWipePos = WIPE_TOP(wipeInfo);
                     break;
-                case 3:
-                    temp_v0->unk_04 = (s32) ((transition->timer * (f32) TRANSITION_BACKGROUND_HEIGHT) / 20.0f) + 8;
-                    D_800D11F0 = temp_v0->unk_04;
+                case WIPE_DIRECTION_DOWN:
+                    WIPE_TOP(wipeInfo) = TRANSITION_BORDER_HEIGHT +
+                                         (s32) ((transition->timer * (f32) TRANSITION_BACKGROUND_HEIGHT) / 20.0f);
+                    sWipePos = WIPE_TOP(wipeInfo);
                     break;
             }
 
             transition->timer++;
-            if (transition->timer >= 0x15) {
-                transition->state = 2;
+            if (transition->timer > 20) {
+                transition->state = WIPE_FINISHED;
                 transition->timer = 0;
-                transition->unk_1C.unk_00 = 0x134;
+                WIPE_LEFT(wipeInfo) = SCREEN_WIDTH - TRANSITION_BORDER_WIDTH;
             }
             break;
-        case 2:
+        case WIPE_FINISHED:
             transition->flags |= TRANSITION_FLAG_FINISHED;
             break;
     }
 }
 
-Gfx* Transition_WipeLeftDraw(Gfx* gfx, Transition* transition) {
+Gfx* Transition_WipeDraw(Gfx* gfx, Transition* transition) {
+    TransitionInfo* wipeInfo = &transition->transitionInfo;
 
     gDPSetTextureLUT(gfx++, G_TT_NONE);
 
-    return func_8070A99C(gfx, transition->backgroundBuffer, transition->unk_1C.unk_00, transition->unk_1C.unk_04,
+    return func_8070A99C(gfx, transition->backgroundBuffer, WIPE_LEFT(wipeInfo), WIPE_TOP(wipeInfo),
                          TRANSITION_BACKGROUND_WIDTH, TRANSITION_BACKGROUND_HEIGHT, G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0,
                          0, 0);
 }
 
 void Transition_PhasedStripsInit(Transition* transition) {
     s32 i;
-    f32* var_v1;
+    f32* stripLeftPtr;
 
     transition->flags |= TRANSITION_FLAG_SET_BACKGROUND_BUFFER;
 
-    for (i = 0, var_v1 = transition->workBuffer; i < TRANSITION_BACKGROUND_HEIGHT; i++, var_v1++) {
-        *var_v1 = 12.0f;
+    for (i = 0, stripLeftPtr = transition->workBuffer; i < TRANSITION_BACKGROUND_HEIGHT; i++, stripLeftPtr++) {
+        *stripLeftPtr = TRANSITION_BORDER_WIDTH;
     }
 }
 
@@ -1430,108 +1449,110 @@ void Transition_PhasedStripsUpdate(Transition* transition) {
     switch (transition->state) {
         case TRANSITION_STATE_INACTIVE:
             break;
-        case 1:
-            if (func_i2_800A56D4(transition)) {
-                transition->state = 2;
+        case PHASED_STRIPS_START:
+            if (Transition_PhasedStripsUpdateState(transition)) {
+                transition->state = PHASED_STRIPS_WAIT;
                 transition->timer = 0;
             }
             break;
-        case 2:
+        case PHASED_STRIPS_WAIT:
             transition->timer++;
             if (transition->timer >= 2) {
-                transition->state = 3;
+                transition->state = PHASED_STRIPS_FINISHED;
                 transition->timer = 0;
             }
             break;
-        case 3:
+        case PHASED_STRIPS_FINISHED:
             transition->flags |= TRANSITION_FLAG_FINISHED;
             break;
     }
 }
 
-bool func_i2_800A56D4(Transition* transition) {
-    f32 var_fv0;
-    s32 var_a2;
-    s32 var_a3;
-    s32 i;
-    bool var_v1;
-    f32* var_a1;
-    s32 var = TRANSITION_BACKGROUND_HEIGHT / 2;
+bool Transition_PhasedStripsUpdateState(Transition* transition) {
+    f32 stripMoveDistance;
+    s32 distanceOffset;
+    s32 stripMoveDistanceScale;
+    s32 row;
+    bool phasedStripsFinished;
+    f32* stripLeftPtr;
+    s32 centralRow = TRANSITION_BACKGROUND_HEIGHT / 2;
 
-    var_v1 = true;
+    phasedStripsFinished = true;
 
-    for (i = 0, var_a1 = transition->workBuffer; i < TRANSITION_BACKGROUND_HEIGHT; i++, var_a1++) {
-        var_a2 = var - i;
+    for (row = 0, stripLeftPtr = transition->workBuffer; row < TRANSITION_BACKGROUND_HEIGHT; row++, stripLeftPtr++) {
+        distanceOffset = centralRow - row;
 
-        if (var_a2 < 0) {
-            var_a2 = -var_a2;
+        if (distanceOffset < 0) {
+            distanceOffset = -distanceOffset;
         }
 
-        var_a2 = var - var_a2;
-        var_a3 = (transition->timer * D_i2_800BEE30) - var_a2;
+        distanceOffset = centralRow - distanceOffset;
+        stripMoveDistanceScale = (transition->timer * sStripMoveSpeed) - distanceOffset;
 
-        if (var_a3 < 0) {
-            var_a3 = 0;
+        if (stripMoveDistanceScale < 0) {
+            stripMoveDistanceScale = 0;
         }
-        var_fv0 = var_a3 * 0.5f;
+        stripMoveDistance = stripMoveDistanceScale * 0.5f;
 
-        if (i & 1) {
-            var_fv0 = 0.0f - var_fv0;
+        if (row & 1) {
+            stripMoveDistance = 0.0f - stripMoveDistance;
         }
-        *var_a1 += var_fv0;
-        if ((*var_a1 >= 12.0f) && (*var_a1 < 308.0f)) {
-            var_v1 = false;
+        *stripLeftPtr += stripMoveDistance;
+        if ((*stripLeftPtr >= TRANSITION_BORDER_WIDTH) && (*stripLeftPtr < SCREEN_WIDTH - TRANSITION_BORDER_WIDTH)) {
+            phasedStripsFinished = false;
         }
     }
     transition->timer++;
 
-    return var_v1;
+    return phasedStripsFinished;
 }
 
 #ifdef NON_EQUIVALENT
 Gfx* Transition_PhasedStripsDraw(Gfx* gfx, Transition* transition) {
-    f32* var_t3;
-    u16* var_s5;
-    s32 i;
-    s32 j;
+    f32* stripLeftPtr;
+    u16* backgroundTexture;
+    s32 strip;
+    s32 stripRow;
     s32 sp30[2];
     s32 width = TRANSITION_BACKGROUND_WIDTH;
-    s32 tileHeight = 4;
-    s32 var;
+    s32 top;
     s32 xl;
     s32 xh;
     s32 yl;
     s32 yh;
-    s32 var_t5;
+    s32 stripHeight;
 
     gSPDisplayList(gfx++, D_8014940);
 
-    sp30[1] = 0x38;
+    sp30[1] = TRANSITION_BACKGROUND_HEIGHT / PHASED_STRIP_HEIGHT;
     sp30[0] = 0;
 
-    var_t5 = 4;
-    var_s5 = transition->backgroundBuffer;
-    var_t3 = transition->workBuffer;
+    stripHeight = PHASED_STRIP_HEIGHT;
+    backgroundTexture = transition->backgroundBuffer;
+    stripLeftPtr = transition->workBuffer;
 
-    for (i = 0; i < sp30[1]; i++) {
+    for (strip = 0; strip < sp30[1]; strip++) {
         gDPPipeSync(gfx++);
-        gDPLoadTextureTile(gfx++, var_s5 + i * 0x4A0, G_IM_FMT_RGBA, G_IM_SIZ_16b, TRANSITION_BACKGROUND_WIDTH, 4, 0, 0,
-                           TRANSITION_BACKGROUND_WIDTH - 1, 4 - 1, 0, G_TX_NOMIRROR | G_TX_CLAMP,
+        gDPLoadTextureTile(gfx++, backgroundTexture + strip * (TRANSITION_BACKGROUND_WIDTH * PHASED_STRIP_HEIGHT),
+                           G_IM_FMT_RGBA, G_IM_SIZ_16b, TRANSITION_BACKGROUND_WIDTH, PHASED_STRIP_HEIGHT, 0, 0,
+                           TRANSITION_BACKGROUND_WIDTH - 1, PHASED_STRIP_HEIGHT - 1, 0, G_TX_NOMIRROR | G_TX_CLAMP,
                            G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
-        for (j = 0; j < var_t5; j++) {
-            if ((*var_t3 < -284.0f) || (*var_t3 > 308.0f)) {
-                var_t3++;
+        for (stripRow = 0; stripRow < stripHeight; stripRow++) {
+            if ((*stripLeftPtr < -TRANSITION_BACKGROUND_WIDTH + TRANSITION_BORDER_WIDTH) ||
+                (*stripLeftPtr > TRANSITION_BACKGROUND_WIDTH + TRANSITION_BORDER_WIDTH)) {
+                stripLeftPtr++;
                 continue;
             }
 
-            var = (i * 4) + j;
-            xl = *var_t3 * 4.0f;
-            xh = (*var_t3 + width) * 4.0f;
+            top = (strip * PHASED_STRIP_HEIGHT) + stripRow;
+            xl = *stripLeftPtr * 4.0f;
+            xh = (*stripLeftPtr + width) * 4.0f;
 
-            var_t3++;
+            stripLeftPtr++;
 
-            gSPScisTextureRectangle(gfx++, xl, (var + 8) << 2, xh, (var + 9) << 2, 0, 0, j << 5, 1 << 10, 1 << 10);
+            gSPScisTextureRectangle(gfx++, xl, (top + TRANSITION_BORDER_HEIGHT) << 2, xh,
+                                    (top + (TRANSITION_BORDER_HEIGHT + 1)) << 2, 0, 0, stripRow << 5, 1 << 10, 1 << 10);
         }
     }
 
@@ -1542,10 +1563,12 @@ Gfx* Transition_PhasedStripsDraw(Gfx* gfx, Transition* transition) {
 #endif
 
 void Transition_GreyscalePaletteInit(Transition* transition) {
+    TransitionInfo* greyscalePaletteInfo = &transition->transitionInfo;
+
     transition->flags |= TRANSITION_FLAG_SET_BACKGROUND_BUFFER;
     transition->flags |= TRANSITION_FLAG_GREYSCALE;
     transition->flags |= TRANSITION_FLAG_CONVERT_TO_PALETTE;
-    transition->unk_1C.unk_00 = -8;
+    GREYSCALE_PALETTE_INDEX(greyscalePaletteInfo) = -8;
 }
 
 void Transition_GreyscalePaletteUpdate(Transition* transition) {
@@ -1553,44 +1576,45 @@ void Transition_GreyscalePaletteUpdate(Transition* transition) {
     switch (transition->state) {
         case TRANSITION_STATE_INACTIVE:
             break;
-        case 1:
-            if (func_i2_800A5C70(transition)) {
-                transition->state = 2;
+        case GREYSCALE_PALETTE_START:
+            if (Transition_GreyscalePaletteUpdateState(transition)) {
+                transition->state = GREYSCALE_PALETTE_WAIT;
                 transition->timer = 0;
             }
             break;
-        case 2:
+        case GREYSCALE_PALETTE_WAIT:
             transition->timer++;
             if (transition->timer >= 4) {
-                transition->state = 3;
+                transition->state = GREYSCALE_PALETTE_FINISHED;
                 transition->timer = 0;
             }
             break;
-        case 3:
+        case GREYSCALE_PALETTE_FINISHED:
             transition->flags |= TRANSITION_FLAG_FINISHED;
             break;
     }
 }
 
-bool func_i2_800A5C70(Transition* transition) {
-    bool var_v1 = false;
+bool Transition_GreyscalePaletteUpdateState(Transition* transition) {
+    bool greyscalePaletteFinished = false;
 
-    if (transition->unk_1C.unk_00 >= 0) {
-        sTransitionPalette[transition->unk_1C.unk_00] = 0;
+    if (GREYSCALE_PALETTE_INDEX(&transition->transitionInfo) >= 0) {
+        sTransitionPalette[GREYSCALE_PALETTE_INDEX(&transition->transitionInfo)] = 0;
     }
     transition->timer++;
     if (transition->timer >= 2) {
         transition->timer = 0;
-        transition->unk_1C.unk_00++;
-        if (transition->unk_1C.unk_00 > 31) {
-            transition->unk_1C.unk_00 = 31;
-            var_v1 = true;
+        GREYSCALE_PALETTE_INDEX(&transition->transitionInfo)++;
+        if (GREYSCALE_PALETTE_INDEX(&transition->transitionInfo) > 31) {
+            GREYSCALE_PALETTE_INDEX(&transition->transitionInfo) = 31;
+            greyscalePaletteFinished = true;
         }
     }
-    return var_v1;
+    return greyscalePaletteFinished;
 }
 
 Gfx* Transition_GreyscalePaletteDraw(Gfx* gfx, Transition* transition) {
-    return func_8070DEE0(gfx, transition->backgroundBuffer, sTransitionPalettePtr, G_IM_FMT_CI, 1, 12, 8,
-                         TRANSITION_BACKGROUND_WIDTH, TRANSITION_BACKGROUND_HEIGHT, 5);
+    return func_8070DEE0(gfx, transition->backgroundBuffer, sTransitionPalettePtr, G_IM_FMT_CI, 1,
+                         TRANSITION_BORDER_WIDTH, TRANSITION_BORDER_HEIGHT, TRANSITION_BACKGROUND_WIDTH,
+                         TRANSITION_BACKGROUND_HEIGHT, 5);
 }

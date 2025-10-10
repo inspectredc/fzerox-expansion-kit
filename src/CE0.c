@@ -446,7 +446,7 @@ void Game_ThreadEntry(void* entry) {
         func_80702A68();
     }
     func_80702A94();
-    func_806F86C0(&D_80225800.unk_000, 0, 1.0f, 0, 0, 0, 0.0f, 0.0f, 0.0f);
+    Matrix_SetTransRot(&D_80225800.unk_000, 0, 1.0f, 0, 0, 0, 0.0f, 0.0f, 0.0f);
 
     Math_Rand1Init(osGetTime(), osGetTime() + osGetTime());
     func_i10_8012B520();

@@ -723,13 +723,13 @@ void func_807134AC(GfxPool* arg0, Player* player) {
     f32 temp_fa0;
     s32 pad[2];
 
-    func_806F9384(&arg0->unk_1A008[player->id], &player->unk_11C, player->unk_94.x, player->unk_A0, player->unk_A4,
-                  player->unk_A8, player->unk_94.y, player->unk_AC, player->unk_94.z, &player->unk_118);
+    Matrix_SetFrustrum(&arg0->unk_1A008[player->id], &player->unk_11C, player->unk_94.x, player->unk_A0, player->unk_A4,
+                       player->unk_A8, player->unk_94.y, player->unk_AC, player->unk_94.z, &player->unk_118);
     sp68 = player->unk_50;
     sp74 = player->unk_88;
 
-    func_806F8FE0(&arg0->unk_1A108[player->id], &player->unk_15C, sp68.x, sp68.y, sp68.z, sp74.x, sp74.y, sp74.z,
-                  player->unk_5C.y.x, player->unk_5C.y.y, player->unk_5C.y.z);
+    Matrix_SetLookAt(&arg0->unk_1A108[player->id], &player->unk_15C, sp68.x, sp68.y, sp68.z, sp74.x, sp74.y, sp74.z,
+                     player->unk_5C.y.x, player->unk_5C.y.y, player->unk_5C.y.z);
     func_80713204(&player->unk_19C, &player->unk_11C, &player->unk_15C);
     if (gNumPlayers != 2) {
         if (player->unk_19C.m[3][1] >= 0.0f) {
@@ -745,8 +745,8 @@ void func_807134AC(GfxPool* arg0, Player* player) {
             }
             temp_fa0 = player->unk_94.x + ((85.0f - player->unk_94.x) * var_fv0);
 
-            func_806F9384(&arg0->unk_1A008[player->id], &player->unk_11C, temp_fa0, player->unk_A0, player->unk_A4,
-                          player->unk_A8, player->unk_94.y, player->unk_AC, player->unk_94.z, &player->unk_118);
+            Matrix_SetFrustrum(&arg0->unk_1A008[player->id], &player->unk_11C, temp_fa0, player->unk_A0, player->unk_A4,
+                               player->unk_A8, player->unk_94.y, player->unk_AC, player->unk_94.z, &player->unk_118);
             func_80713204(&player->unk_19C, &player->unk_11C, &player->unk_15C);
         }
     }

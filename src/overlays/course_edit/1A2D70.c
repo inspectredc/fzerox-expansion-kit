@@ -89,11 +89,11 @@ Gfx* func_xk2_800F1428(Gfx* gfx) {
         return func_80719890(gfx);
     }
     if (D_8076C950 != 0) {
-        func_806F9384(&D_80128C94->unk_0000, NULL, (gPlayers[0].unk_94.x * 320.0f) / 240.0f, 32.0f, 4096.0f, 320.0f,
-                      0.0f, 240.0f, 0.0f, &sp13E);
+        Matrix_SetFrustrum(&D_80128C94->unk_0000, NULL, (gPlayers[0].unk_94.x * 320.0f) / 240.0f, 32.0f, 4096.0f,
+                           320.0f, 0.0f, 240.0f, 0.0f, &sp13E);
     } else {
-        func_806F9384(&D_80128C94->unk_0000, NULL, (gPlayers[0].unk_94.x * 320.0f) / 240.0f, 128.0f, 32768.0f, 320.0f,
-                      0.0f, 240.0f, 0.0f, &sp13E);
+        Matrix_SetFrustrum(&D_80128C94->unk_0000, NULL, (gPlayers[0].unk_94.x * 320.0f) / 240.0f, 128.0f, 32768.0f,
+                           320.0f, 0.0f, 240.0f, 0.0f, &sp13E);
         sp13E = 0x10;
     }
     gSPPerspNormalize(gfx++, sp13E);
@@ -124,15 +124,15 @@ Gfx* func_xk2_800F1428(Gfx* gfx) {
     gPlayers[0].unk_5C.z.x = (D_xk2_80128D68 * gPlayers[0].unk_5C.y.y) - (D_xk2_80128D64 * gPlayers[0].unk_5C.y.z);
     gPlayers[0].unk_5C.z.y = (D_xk2_80128D60 * gPlayers[0].unk_5C.y.z) - (D_xk2_80128D68 * gPlayers[0].unk_5C.y.x);
     gPlayers[0].unk_5C.z.z = (D_xk2_80128D64 * gPlayers[0].unk_5C.y.x) - (D_xk2_80128D60 * gPlayers[0].unk_5C.y.y);
-    func_806F8FE0(&D_80128C94->unk_0040, NULL, gPlayers[0].unk_50.x, gPlayers[0].unk_50.y, gPlayers[0].unk_50.z,
-                  D_xk2_80104CB8, D_xk2_80104CBC, D_xk2_80104CC0, gPlayers[0].unk_5C.y.x, gPlayers[0].unk_5C.y.y,
-                  gPlayers[0].unk_5C.y.z);
+    Matrix_SetLookAt(&D_80128C94->unk_0040, NULL, gPlayers[0].unk_50.x, gPlayers[0].unk_50.y, gPlayers[0].unk_50.z,
+                     D_xk2_80104CB8, D_xk2_80104CBC, D_xk2_80104CC0, gPlayers[0].unk_5C.y.x, gPlayers[0].unk_5C.y.y,
+                     gPlayers[0].unk_5C.y.z);
 
     gSPMatrix(gfx++, &D_6000000.unk_0040, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_PROJECTION);
     gSPMatrix(gfx++, D_2000000, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     Matrix_FromMtx(&D_80128C94->unk_0040, &gPlayers[0].unk_15C);
     func_80713204(&gPlayers[0].unk_19C, &gPlayers[0].unk_11C, &gPlayers[0].unk_15C);
-    func_806F7FCC(&spC8, NULL, 0.3f, 0.3f, 0.3f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+    Matrix_SetLockedLookAt(&spC8, NULL, 0.3f, 0.3f, 0.3f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f);
     Matrix_FromMtx(&spC8, &sp88);
     func_xk2_800F1FF0(&sp88, &gPlayers[0].unk_19C, &gPlayers[0].unk_19C);
     return gfx;

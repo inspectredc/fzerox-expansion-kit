@@ -507,7 +507,7 @@ Gfx* func_xk3_80130698(Gfx* gfx, s32 arg1) {
             gSPLookAt(gfx++, &gGfxPool->unk_33B28);
             break;
         case 1:
-            func_806F8FE0(NULL, &spC0, D_xk3_80136540, 0.0f, 1320.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+            Matrix_SetLookAt(NULL, &spC0, D_xk3_80136540, 0.0f, 1320.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
             Light_SetLookAtSource(&D_xk3_801414B0->unk_40, &spC0);
             gSPLookAt(gfx++, &D_xk3_801414B0->unk_40);
             break;
@@ -540,12 +540,12 @@ Gfx* func_xk3_80130920(Gfx* gfx) {
     gDPSetRenderMode(gfx++, G_RM_PASS, G_RM_AA_ZB_OPA_SURF2);
     gSPDisplayList(gfx++, D_xk3_80137538);
 
-    func_806F9384(gGfxPool->unk_1A008, NULL, 44.0f, 10.0f, 12800.0f, 320.0f, 0.0f, 240.0f, 0.0f, &spBE);
-    func_806F8FE0(gGfxPool->unk_1A108, NULL, 0.0f, 880.0f, 1320.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
-    func_806F86C0(&gGfxPool->unk_32308[1], NULL, 1.0f, Math_Round(DEG_TO_FZXANG2(D_xk3_80140E78)), 0, 0, 0.0f, 0.0f,
-                  0.0f);
-    func_806F86C0(&gGfxPool->unk_32308[2], NULL, 1.0f, 0, Math_Round(DEG_TO_FZXANG2(D_xk3_80140E7C)), 0, 0.0f, 0.0f,
-                  0.0f);
+    Matrix_SetFrustrum(gGfxPool->unk_1A008, NULL, 44.0f, 10.0f, 12800.0f, 320.0f, 0.0f, 240.0f, 0.0f, &spBE);
+    Matrix_SetLookAt(gGfxPool->unk_1A108, NULL, 0.0f, 880.0f, 1320.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+    Matrix_SetTransRot(&gGfxPool->unk_32308[1], NULL, 1.0f, Math_Round(DEG_TO_FZXANG2(D_xk3_80140E78)), 0, 0, 0.0f,
+                       0.0f, 0.0f);
+    Matrix_SetTransRot(&gGfxPool->unk_32308[2], NULL, 1.0f, 0, Math_Round(DEG_TO_FZXANG2(D_xk3_80140E7C)), 0, 0.0f,
+                       0.0f, 0.0f);
 
     gSPMatrix(gfx++, &D_1000000.unk_1A008, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
     gSPMatrix(gfx++, &D_1000000.unk_1A108, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_PROJECTION);
@@ -607,9 +607,9 @@ Gfx* func_xk3_80130EE0(Gfx* gfx) {
     gSPDisplayList(gfx++, D_xk3_80137570);
     gfx = Machine_DrawLoadCustomTextures(gfx, gCustomMachine.logo - 1, gCustomMachine.number - 1,
                                          gCustomMachine.decal - 1);
-    func_806F8FE0(&gGfxPool->unk_1A108[1], NULL, 0.0f, 0.0f, 2000.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
-    func_806F86C0(&gGfxPool->unk_32308[3], NULL, 1.0f, 0x400, 0, 0, 0.0f, 0.0f, 0.0f);
-    func_806F9628(&D_xk3_801414B0->unk_00, NULL, 1.0f, -1550.0f, 1550.0f, -1550.0f, 1550.0f, 10.0f, 12800.0f);
+    Matrix_SetLookAt(&gGfxPool->unk_1A108[1], NULL, 0.0f, 0.0f, 2000.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+    Matrix_SetTransRot(&gGfxPool->unk_32308[3], NULL, 1.0f, 0x400, 0, 0, 0.0f, 0.0f, 0.0f);
+    Matrix_SetOrtho(&D_xk3_801414B0->unk_00, NULL, 1.0f, -1550.0f, 1550.0f, -1550.0f, 1550.0f, 10.0f, 12800.0f);
 
     gSPMatrix(gfx++, &D_xk3_801414B0->unk_00, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
     gSPMatrix(gfx++, &D_1000000.unk_1A108[1], G_MTX_NOPUSH | G_MTX_MUL | G_MTX_PROJECTION);

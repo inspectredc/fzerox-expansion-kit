@@ -4802,14 +4802,15 @@ void func_80726554(void) {
             }
             var_fs0 = (1500.0f * var_fs0 * var_fs0) + 33.0f;
             var_fs2 = var_fs0 - racer2->unk_A0;
-            func_806F7FCC(&gGfxPool->unk_33988[i], NULL, 0.2f, 0.2f, 0.2f, spCC.x.x, spCC.x.y, spCC.x.z, spCC.y.x,
-                          spCC.y.y, spCC.y.z,
-                          (racer2->unk_0C.unk_34.x + (var_fs2 * racer2->unk_C0.y.x) + (50.0f * racer2->unk_C0.x.x)) -
-                              (var_fs0 * var_s1_2->unk_5C.x.x),
-                          (racer2->unk_0C.unk_34.y + (var_fs2 * racer2->unk_C0.y.y) + (50.0f * racer2->unk_C0.x.y)) -
-                              (var_fs0 * var_s1_2->unk_5C.x.y),
-                          (racer2->unk_0C.unk_34.z + (var_fs2 * racer2->unk_C0.y.z) + (50.0f * racer2->unk_C0.x.z)) -
-                              (var_fs0 * var_s1_2->unk_5C.x.z));
+            Matrix_SetLockedLookAt(
+                &gGfxPool->unk_33988[i], NULL, 0.2f, 0.2f, 0.2f, spCC.x.x, spCC.x.y, spCC.x.z, spCC.y.x, spCC.y.y,
+                spCC.y.z,
+                (racer2->unk_0C.unk_34.x + (var_fs2 * racer2->unk_C0.y.x) + (50.0f * racer2->unk_C0.x.x)) -
+                    (var_fs0 * var_s1_2->unk_5C.x.x),
+                (racer2->unk_0C.unk_34.y + (var_fs2 * racer2->unk_C0.y.y) + (50.0f * racer2->unk_C0.x.y)) -
+                    (var_fs0 * var_s1_2->unk_5C.x.y),
+                (racer2->unk_0C.unk_34.z + (var_fs2 * racer2->unk_C0.y.z) + (50.0f * racer2->unk_C0.x.z)) -
+                    (var_fs0 * var_s1_2->unk_5C.x.z));
         }
     }
 
@@ -5552,9 +5553,9 @@ Gfx* func_80727F54(Gfx* gfx, s32 playerIndex) {
                         var_fs0 = D_8076E570;
                     }
 
-                    func_806F8314(&gGfxPool->unk_32A88[racer->id], NULL, racer->shadowColorStrength * D_8076E568, 0.1f,
-                                  racer->shadowColorStrength * var_fs0, &racer->unk_E8.x, &racer->unk_19C,
-                                  &racer->unk_168);
+                    Matrix_SetLockedLookAtFromVectors(
+                        &gGfxPool->unk_32A88[racer->id], NULL, racer->shadowColorStrength * D_8076E568, 0.1f,
+                        racer->shadowColorStrength * var_fs0, &racer->unk_E8.x, &racer->unk_19C, &racer->unk_168);
                     racer->unk_165 = 1;
                 }
                 gSPMatrix(gfx++, &D_1000000.unk_32A88[racer->id], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -5582,8 +5583,9 @@ Gfx* func_80727F54(Gfx* gfx, s32 playerIndex) {
                 if (sp4F8->exists) {
                     racer = sp4F8->racer;
                     if ((racer->unk_2B2 != 0) && (racer->unk_168.y != -54321.0f)) {
-                        func_806F8314(&gGfxPool->unk_32A88[racer->id], NULL, sp4F8->scale * D_8076E568, 0.1f,
-                                      sp4F8->scale * D_8076E570, &racer->unk_E8.x, &racer->unk_19C, &racer->unk_168);
+                        Matrix_SetLockedLookAtFromVectors(&gGfxPool->unk_32A88[racer->id], NULL,
+                                                          sp4F8->scale * D_8076E568, 0.1f, sp4F8->scale * D_8076E570,
+                                                          &racer->unk_E8.x, &racer->unk_19C, &racer->unk_168);
                         gSPMatrix(gfx++, &D_1000000.unk_32A88[racer->id], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                         gDPLoadTextureBlock_4b(gfx++, D_8076DA74[racer->shadowType], G_IM_FMT_I, 32, 64, 0,
                                                G_TX_MIRROR | G_TX_CLAMP, G_TX_MIRROR | G_TX_CLAMP, 5, 6, G_TX_NOLOD,
@@ -5604,9 +5606,9 @@ Gfx* func_80727F54(Gfx* gfx, s32 playerIndex) {
         if (racer->unk_178 != 0.0f) {
             if ((racer->machineLod != 0) && (racer->machineLod < 6)) {
                 if (racer->unk_166 == 0) {
-                    func_806F85C0(&gGfxPool->unk_33208[racer->id], NULL, racer->unk_178 * D_8076E568,
-                                  racer->unk_178 * D_8076E56C, racer->unk_178 * D_8076E570, &racer->unk_E8,
-                                  &racer->unk_10C);
+                    Matrix_ScaleFrom3DMatrix(&gGfxPool->unk_33208[racer->id], NULL, racer->unk_178 * D_8076E568,
+                                             racer->unk_178 * D_8076E56C, racer->unk_178 * D_8076E570, &racer->unk_E8,
+                                             &racer->unk_10C);
                     racer->unk_166 = 1;
                 }
                 gSPMatrix(gfx++, &D_1000000.unk_33208[racer->id], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -5698,8 +5700,8 @@ block_115:
     for (racer = sLastRacer; racer >= gRacers; racer--) {
         if (racer->machineLod != 0) {
             if (racer->unk_164 == 0) {
-                func_806F85C0(&gGfxPool->unk_32308[racer->id], &racer->unk_124, D_8076E568, D_8076E56C, D_8076E570,
-                              &racer->unk_E8, &racer->unk_10C);
+                Matrix_ScaleFrom3DMatrix(&gGfxPool->unk_32308[racer->id], &racer->unk_124, D_8076E568, D_8076E56C,
+                                         D_8076E570, &racer->unk_E8, &racer->unk_10C);
                 racer->unk_164 = 1;
             }
             if (!(racer->stateFlags & RACER_STATE_CRASHED)) {
@@ -5776,9 +5778,9 @@ block_115:
             if (sp4F8->exists) {
                 racer = sp4F8->racer;
                 if (racer->machineLod != 0) {
-                    func_806F85C0(&gGfxPool->unk_32308[racer->id], &racer->unk_124, sp4F8->scale * D_8076E568,
-                                  sp4F8->scale * D_8076E56C, sp4F8->scale * D_8076E570, &racer->unk_E8,
-                                  &racer->unk_10C);
+                    Matrix_ScaleFrom3DMatrix(&gGfxPool->unk_32308[racer->id], &racer->unk_124,
+                                             sp4F8->scale * D_8076E568, sp4F8->scale * D_8076E56C,
+                                             sp4F8->scale * D_8076E570, &racer->unk_E8, &racer->unk_10C);
                     gSPMatrix(gfx++, &D_1000000.unk_32308[racer->id], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                     gSPDisplayList(gfx++, D_8076DB58[racer->machineIndex]);
                     gDPSetEnvColor(gfx++, racer->bodyR, racer->bodyG, racer->bodyB, 240);
