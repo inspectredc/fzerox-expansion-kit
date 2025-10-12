@@ -76,8 +76,8 @@ void func_i3_80064F20(void) {
         D_i3_8006EF68 = 0;
         D_i3_8006EF6C = 0;
     }
-    func_806F7FCC(&D_8024E200, NULL, 0.7f * D_8076E568, 0.7f * D_8076E56C, 0.7f * D_8076E570, 0.0f, 0.0f, 1.0f, 0.0f,
-                  1.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+    Matrix_SetLockedLookAt(&D_8024E200, NULL, 0.7f * D_8076E568, 0.7f * D_8076E56C, 0.7f * D_8076E570, 0.0f, 0.0f, 1.0f,
+                           0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f);
     Lights_SetSource(&D_8024E240, 0, 0, 0, 255, 255, 255, 100, 50, 69);
     func_i2_800AE7C4(aBestTex, TEX_SIZE(aBestTex, sizeof(u16)), 0, 0, 0);
 
@@ -881,10 +881,10 @@ void func_i3_800678D8(void) {
             spB8 = 500.0f;
         }
 
-        func_806F9384(&gGfxPool->unk_352C8[1], &sp74, 60.0f, 16.0f, 8129.0f, 320.0f, 0.0f, 240.0f, 0.0f,
-                      &D_i3_8006F1A0);
-        func_806F8FE0(&gGfxPool->unk_352C8[2], &sp74, 0.0f, 0.0f, spB8, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
-        func_806F86C0(&gGfxPool->unk_352C8[3], &sp74, spB8, 0, i, i, 0.0f, 0.0f, 0.0f);
+        Matrix_SetFrustrum(&gGfxPool->unk_352C8[1], &sp74, 60.0f, 16.0f, 8129.0f, 320.0f, 0.0f, 240.0f, 0.0f,
+                           &D_i3_8006F1A0);
+        Matrix_SetLookAt(&gGfxPool->unk_352C8[2], &sp74, 0.0f, 0.0f, spB8, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+        Matrix_SetTransRot(&gGfxPool->unk_352C8[3], &sp74, spB8, 0, i, i, 0.0f, 0.0f, 0.0f);
     }
 }
 

@@ -5,7 +5,7 @@ extern OSPiHandle* gSramPiHandlePtr;
 
 s32 func_i10_8012B520(void) {
     gSramPiHandlePtr = Sram_Init();
-    func_i10_8012B5E8(func_807084E4(1, sizeof(SaveContext)));
+    func_i10_8012B5E8(Arena_Allocate(ALLOC_PEEK, sizeof(SaveContext)));
     if (D_8079A32C != 0) {
         func_xk1_8002FBC8();
     }

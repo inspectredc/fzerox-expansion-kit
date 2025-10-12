@@ -1,3 +1,4 @@
+Transition_PhasedStripsDraw = 0x800A5874; //segment:ovl_i2
 Font_GetStringWidth = 0x800AD4A4; //segment:ovl_i2
 Font_DrawScaledString = 0x800ADA1C; //segment:ovl_i2
 func_i2_800AEA90 = 0x800AEA90; //segment:ovl_i2

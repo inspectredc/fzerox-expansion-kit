@@ -14,8 +14,8 @@ void func_xk2_800F5C50(void) {
 }
 
 void func_xk2_800F5C5C(void) {
-    func_806F9628(&D_xk2_8013A758, NULL, 1.0f, -160.0f, 160.0f, -120.0f, 120.0f, 16.0f, 256.0f);
-    func_806F8FE0(&D_xk2_8013A798, NULL, 0.0f, 0.0f, 128.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+    Matrix_SetOrtho(&D_xk2_8013A758, NULL, 1.0f, -160.0f, 160.0f, -120.0f, 120.0f, 16.0f, 256.0f);
+    Matrix_SetLookAt(&D_xk2_8013A798, NULL, 0.0f, 0.0f, 128.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 }
 
 s32 func_xk2_800F5D10(void) {

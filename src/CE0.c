@@ -186,7 +186,7 @@ void func_806F37F0(void) {
            (DPC_STATUS_DMA_BUSY | DPC_STATUS_CMD_BUSY | DPC_STATUS_PIPE_BUSY | DPC_STATUS_TMEM_BUSY)) {}
 
     func_80709C3C();
-    func_i2_800A2CCC();
+    Transition_SetBackgroundBuffer();
     osViSwapBuffer(gFrameBuffers[D_8079A360]);
 
     while (osViGetCurrentFramebuffer() != gFrameBuffers[D_8079A360]) {}
@@ -206,7 +206,7 @@ void func_806F3924(void) {
     Gfx_FullSync();
     Audio_Update();
     osRecvMesg(&D_8079A108, &D_8079A370, OS_MESG_BLOCK);
-    func_i2_800A2CCC();
+    Transition_SetBackgroundBuffer();
     osViSwapBuffer(gFrameBuffers[D_8079A368]);
     func_80709C3C();
 
@@ -335,8 +335,8 @@ void Game_ThreadEntry(void* entry) {
     Segment_SetPhysicalAddress(6, &D_80128C90[D_8079A35C]);
 
     Controller_Init();
-    func_807083D8();
-    func_80708430();
+    Arena_DefaultStartInit();
+    Arena_EndInit();
 
     while (func_80742790() != 2) {}
 
@@ -446,7 +446,7 @@ void Game_ThreadEntry(void* entry) {
         func_80702A68();
     }
     func_80702A94();
-    func_806F86C0(&D_80225800.unk_000, 0, 1.0f, 0, 0, 0, 0.0f, 0.0f, 0.0f);
+    Matrix_SetTransRot(&D_80225800.unk_000, 0, 1.0f, 0, 0, 0, 0.0f, 0.0f, 0.0f);
 
     Math_Rand1Init(osGetTime(), osGetTime() + osGetTime());
     func_i10_8012B520();

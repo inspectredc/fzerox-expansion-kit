@@ -139,7 +139,7 @@ bool EndingCutscene_HasBeatenEveryMasterCup(void) {
     s32 i;
     bool beatenEveryMasterCup;
 
-    cupDataPtr = func_807084E4(0, 4 * 30 * 7);
+    cupDataPtr = Arena_Allocate(ALLOC_FRONT, 4 * 30 * 7);
     Save_UpdateCupSave(cupDataPtr);
 
     beatenEveryMasterCup = false;
@@ -1139,13 +1139,14 @@ void func_i7_8009580C(void) {
         }
 
         if (var_s2->unk_02 & 2) {
-            func_806F7FCC(&D_i7_8009AD10->unk_C0[i], NULL, D_i7_80098ED8, D_i7_80098ED8, D_i7_80098ED8, var_s2->unk_14,
-                          var_s2->unk_18, var_s2->unk_1C, 0.0f, 1.0f, 0.0f, var_s2->unk_08, 0.0f, var_s2->unk_10);
+            Matrix_SetLockedLookAt(&D_i7_8009AD10->unk_C0[i], NULL, D_i7_80098ED8, D_i7_80098ED8, D_i7_80098ED8,
+                                   var_s2->unk_14, var_s2->unk_18, var_s2->unk_1C, 0.0f, 1.0f, 0.0f, var_s2->unk_08,
+                                   0.0f, var_s2->unk_10);
         }
         if (var_s2->unk_02 & 1) {
-            func_806F7FCC(&D_i7_8009AD10->unk_00[i], NULL, D_i7_80098ED4, D_i7_80098ED4, D_i7_80098ED4, var_s2->unk_14,
-                          var_s2->unk_18, var_s2->unk_1C, 0.0f, 1.0f, 0.0f, var_s2->unk_08, var_s2->unk_0C,
-                          var_s2->unk_10);
+            Matrix_SetLockedLookAt(&D_i7_8009AD10->unk_00[i], NULL, D_i7_80098ED4, D_i7_80098ED4, D_i7_80098ED4,
+                                   var_s2->unk_14, var_s2->unk_18, var_s2->unk_1C, 0.0f, 1.0f, 0.0f, var_s2->unk_08,
+                                   var_s2->unk_0C, var_s2->unk_10);
         }
     }
 }

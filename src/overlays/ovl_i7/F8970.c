@@ -185,9 +185,9 @@ void func_i7_800960B0(void) {
     D_i7_8009AF64 = 0;
     if ((sCupDifficulty > NOVICE) && (gPlayer1OverallPosition < 4)) {
         D_i7_8009AF64 = 1;
-        D_i7_8009AF58 = func_807084E4(0, 0xA80);
-        D_i7_8009AF5C = func_807084E4(0, 0xA80);
-        D_i7_8009AF60 = func_807084E4(0, 0xA80);
+        D_i7_8009AF58 = Arena_Allocate(ALLOC_FRONT, 0xA80);
+        D_i7_8009AF5C = Arena_Allocate(ALLOC_FRONT, 0xA80);
+        D_i7_8009AF60 = Arena_Allocate(ALLOC_FRONT, 0xA80);
 
         for (j = 0; j < 0x540; j++) {
             D_i7_8009AF58[j] = D_i7_8009AF5C[j] = D_i7_8009AF60[j] = 0;
@@ -268,7 +268,7 @@ void func_i7_800967D8(void) {
     if (D_i7_8009AF64 == 1) {
         for (i = 0; i < gTotalRacers; i++) {
             racer = &gRacers[i];
-            func_806F7FCC(
+            Matrix_SetLockedLookAt(
                 &D_i7_8009AD10->unk_3F0[i], NULL, 0.04f, 0.04f, 0.04f, -gPlayers[0].unk_5C.x.x, -gPlayers[0].unk_5C.x.y,
                 -gPlayers[0].unk_5C.x.z, racer->unk_C0.y.x, racer->unk_C0.y.y, racer->unk_C0.y.z,
                 racer->unk_168.x + ((racer->unk_C0.x.x * 23.0f * 3.0f) / 2) + (racer->unk_C0.z.x * 23.0f * 0.8f),
@@ -310,8 +310,8 @@ void func_i7_80096BB0(void) {
     gRacersRemaining = gTotalRacers;
     if (gPlayer1OverallPosition < 4) {
         func_i7_800960B0();
-        D_i7_8009AEB4 = func_807084E4(0, 0xCB20);
-        D_i7_8009AEB8 = func_807084E4(0, 0x280);
+        D_i7_8009AEB4 = Arena_Allocate(ALLOC_FRONT, 0xCB20);
+        D_i7_8009AEB8 = Arena_Allocate(ALLOC_FRONT, 0x280);
         D_i7_8009AEB0 = 10;
 
         for (i = 0; i < D_i7_8009AEB0; i++) {

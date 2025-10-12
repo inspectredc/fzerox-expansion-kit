@@ -3,8 +3,8 @@
 #include "fzx_assets.h"
 
 f32 gSinTable[0x1000];
-Mtx D_8079E8A0;
-MtxF D_8079E8E0;
+Mtx sDefaultMtx;
+MtxF sDefaultMtxF;
 
 Controller* Controller_GetMouse(void) {
     s32 i;
@@ -20,17 +20,17 @@ Controller* Controller_GetMouse(void) {
 
 extern RomOffset D_807C70A0[];
 
-void func_806F62AC(u64* arg0) {
-    u64* var_s0 = &arg0[19199];
+void func_806F62AC(FrameBuffer* fb) {
+    u64* var_s0 = &fb->array[SCREEN_HEIGHT - 1][SCREEN_WIDTH - 4];
     s32 var_s1;
 
     // FAKE?
-    while (var_s0 >= arg0) {
+    while (var_s0 >= fb->buffer) {
         *(--var_s0 + 1) = 0x1000100010001;
     }
-    osWritebackDCache(arg0, SCREEN_HEIGHT * SCREEN_WIDTH * sizeof(u16));
+    osWritebackDCache(fb, sizeof(FrameBuffer));
 
-    var_s0 = &arg0[5624];
+    var_s0 = &fb->array[70][96];
 
     for (var_s1 = 0; var_s1 < 0x6A00; var_s1 += 0x100, var_s0 += 80) {
         func_80701C04(D_807C70A0[6] + var_s1 + sizeof(Gfx), var_s0, 0x100);
@@ -385,7 +385,7 @@ void Lights_SetSource(Lights1* light, s32 ambientR, s32 ambientG, s32 ambientB, 
     Lights_SetDirection(&light->l[0], x, y, z);
 }
 
-void Light_SetLookAtSource(LookAt* lookAt, MtxF* mtx) {
+void Light_SetLookAtSource(LookAt* lookAt, MtxF* mtxF) {
 
     // FAKE
     ((s8*) lookAt)[3] = ((s8*) lookAt)[7] = ((s8*) lookAt)[19] = ((s8*) lookAt)[23] = 0;
@@ -394,23 +394,23 @@ void Light_SetLookAtSource(LookAt* lookAt, MtxF* mtx) {
     Lights_SetColor(&lookAt->l[0], 0, 0, 0);
     Lights_SetColor(&lookAt->l[1], 0, 128, 0);
 
-    Lights_SetDirection(&lookAt->l[0], Math_Round(mtx->m[0][0] * 120.0f), Math_Round(mtx->m[1][0] * 120.0f),
-                        Math_Round(mtx->m[2][0] * 120.0f));
-    Lights_SetDirection(&lookAt->l[1], Math_Round(mtx->m[0][1] * 120.0f), Math_Round(mtx->m[1][1] * 120.0f),
-                        Math_Round(mtx->m[2][1] * 120.0f));
+    Lights_SetDirection(&lookAt->l[0], Math_Round(mtxF->m[0][0] * 120.0f), Math_Round(mtxF->m[1][0] * 120.0f),
+                        Math_Round(mtxF->m[2][0] * 120.0f));
+    Lights_SetDirection(&lookAt->l[1], Math_Round(mtxF->m[0][1] * 120.0f), Math_Round(mtxF->m[1][1] * 120.0f),
+                        Math_Round(mtxF->m[2][1] * 120.0f));
 }
 
-void func_806F74E0(LookAt* lookAt, s32* arg1, MtxF* arg2, f32 arg3, f32 arg4, f32 arg5, s32 arg6, s32 arg7) {
+void func_806F74E0(LookAt* lookAt, s32* arg1, MtxF* mtxF, f32 arg3, f32 arg4, f32 arg5, s32 arg6, s32 arg7) {
     f32 temp_fa0;
     f32 temp_fa1;
     f32 temp_ft4;
     f32 temp_ft5;
     f32 temp_fv1;
 
-    Light_SetLookAtSource(lookAt, arg2);
-    temp_fa1 = arg2->m[0][2] + arg3;
-    temp_ft4 = arg2->m[1][2] + arg4;
-    temp_ft5 = arg2->m[2][2] + arg5;
+    Light_SetLookAtSource(lookAt, mtxF);
+    temp_fa1 = mtxF->m[0][2] + arg3;
+    temp_ft4 = mtxF->m[1][2] + arg4;
+    temp_ft5 = mtxF->m[2][2] + arg5;
     temp_fa0 = SQ(temp_fa1) + SQ(temp_ft4) + SQ(temp_ft5);
     if (temp_fa0 > 0.01f) {
         temp_fv1 = 1.0f / sqrtf(temp_fa0);
@@ -419,9 +419,9 @@ void func_806F74E0(LookAt* lookAt, s32* arg1, MtxF* arg2, f32 arg3, f32 arg4, f3
         temp_ft5 *= temp_fv1;
 
         arg1[0] =
-            (temp_fa1 * arg2->m[0][0] + temp_ft4 * arg2->m[1][0] + temp_ft5 * arg2->m[2][0]) * (arg6 * 2) + arg6 * 4;
+            (temp_fa1 * mtxF->m[0][0] + temp_ft4 * mtxF->m[1][0] + temp_ft5 * mtxF->m[2][0]) * (arg6 * 2) + arg6 * 4;
         arg1[1] =
-            (temp_fa1 * arg2->m[0][1] + temp_ft4 * arg2->m[1][1] + temp_ft5 * arg2->m[2][1]) * (arg7 * 2) + arg7 * 4;
+            (temp_fa1 * mtxF->m[0][1] + temp_ft4 * mtxF->m[1][1] + temp_ft5 * mtxF->m[2][1]) * (arg7 * 2) + arg7 * 4;
     } else {
         arg1[0] = arg6 * 2;
         arg1[1] = arg7 * 2;
@@ -431,7 +431,7 @@ void func_806F74E0(LookAt* lookAt, s32* arg1, MtxF* arg2, f32 arg3, f32 arg4, f3
 #define FTO32(x) (long) ((x) *65536.0f)
 #define MTXTOMTXF(mtx, i1, i2) ((((s16) mtx->u.i[(i1)][(i2)] << 0x10) | mtx->u.f[(i1)][(i2)]) / 65536.0f)
 
-void func_806F7684(Mtx* arg0, Mtx* arg1, Mtx* dest, f32 arg3) {
+void Matrix_Interpolate(Mtx* src, Mtx* target, Mtx* dest, f32 t) {
     f32 temp_fa0;
     f32 temp_fv1;
     s32 x2;
@@ -447,17 +447,17 @@ void func_806F7684(Mtx* arg0, Mtx* arg1, Mtx* dest, f32 arg3) {
     f32 y4;
     f32 z4;
 
-    temp_fa0 = MTXTOMTXF(arg0, 1, 0);
-    temp_fv1 = MTXTOMTXF(arg1, 1, 0);
-    x1 = ((temp_fv1 - temp_fa0) * arg3) + temp_fa0;
+    temp_fa0 = MTXTOMTXF(src, 1, 0);
+    temp_fv1 = MTXTOMTXF(target, 1, 0);
+    x1 = ((temp_fv1 - temp_fa0) * t) + temp_fa0;
 
-    temp_fa0 = MTXTOMTXF(arg0, 1, 1);
-    temp_fv1 = MTXTOMTXF(arg1, 1, 1);
-    y1 = ((temp_fv1 - temp_fa0) * arg3) + temp_fa0;
+    temp_fa0 = MTXTOMTXF(src, 1, 1);
+    temp_fv1 = MTXTOMTXF(target, 1, 1);
+    y1 = ((temp_fv1 - temp_fa0) * t) + temp_fa0;
 
-    temp_fa0 = MTXTOMTXF(arg0, 1, 2);
-    temp_fv1 = MTXTOMTXF(arg1, 1, 2);
-    z1 = ((temp_fv1 - temp_fa0) * arg3) + temp_fa0;
+    temp_fa0 = MTXTOMTXF(src, 1, 2);
+    temp_fv1 = MTXTOMTXF(target, 1, 2);
+    z1 = ((temp_fv1 - temp_fa0) * t) + temp_fa0;
 
     temp_fa0 = SQ(x1) + SQ(y1) + SQ(z1);
     if (temp_fa0 == 0.0f) {
@@ -474,17 +474,17 @@ void func_806F7684(Mtx* arg0, Mtx* arg1, Mtx* dest, f32 arg3) {
     dest->m[2][2] = (x2 << 0x10) | (y2 & 0xFFFF);
     dest->m[2][3] = z2 << 0x10;
 
-    temp_fa0 = MTXTOMTXF(arg0, 2, 0);
-    temp_fv1 = MTXTOMTXF(arg1, 2, 0);
-    x4 = ((temp_fv1 - temp_fa0) * arg3) + temp_fa0;
+    temp_fa0 = MTXTOMTXF(src, 2, 0);
+    temp_fv1 = MTXTOMTXF(target, 2, 0);
+    x4 = ((temp_fv1 - temp_fa0) * t) + temp_fa0;
 
-    temp_fa0 = MTXTOMTXF(arg0, 2, 1);
-    temp_fv1 = MTXTOMTXF(arg1, 2, 1);
-    y4 = ((temp_fv1 - temp_fa0) * arg3) + temp_fa0;
+    temp_fa0 = MTXTOMTXF(src, 2, 1);
+    temp_fv1 = MTXTOMTXF(target, 2, 1);
+    y4 = ((temp_fv1 - temp_fa0) * t) + temp_fa0;
 
-    temp_fa0 = MTXTOMTXF(arg0, 2, 2);
-    temp_fv1 = MTXTOMTXF(arg1, 2, 2);
-    z4 = ((temp_fv1 - temp_fa0) * arg3) + temp_fa0;
+    temp_fa0 = MTXTOMTXF(src, 2, 2);
+    temp_fv1 = MTXTOMTXF(target, 2, 2);
+    z4 = ((temp_fv1 - temp_fa0) * t) + temp_fa0;
 
     x5 = ((z4 - z1) * y1) - (z1 * (y4 - y1));
     y5 = ((x4 - x1) * z1) - (x1 * (z4 - z1));
@@ -528,17 +528,17 @@ void func_806F7684(Mtx* arg0, Mtx* arg1, Mtx* dest, f32 arg3) {
     dest->m[3][0] = (x2 << 0x10) | (y2 & 0xFFFF);
     dest->m[3][1] = z2 << 0x10;
 
-    temp_fa0 = MTXTOMTXF(arg0, 3, 0);
-    temp_fv1 = MTXTOMTXF(arg1, 3, 0);
-    x2 = FTO32(((temp_fv1 - temp_fa0) * arg3) + temp_fa0);
+    temp_fa0 = MTXTOMTXF(src, 3, 0);
+    temp_fv1 = MTXTOMTXF(target, 3, 0);
+    x2 = FTO32(((temp_fv1 - temp_fa0) * t) + temp_fa0);
 
-    temp_fa0 = MTXTOMTXF(arg0, 3, 1);
-    temp_fv1 = MTXTOMTXF(arg1, 3, 1);
-    y2 = FTO32(((temp_fv1 - temp_fa0) * arg3) + temp_fa0);
+    temp_fa0 = MTXTOMTXF(src, 3, 1);
+    temp_fv1 = MTXTOMTXF(target, 3, 1);
+    y2 = FTO32(((temp_fv1 - temp_fa0) * t) + temp_fa0);
 
-    temp_fa0 = MTXTOMTXF(arg0, 3, 2);
-    temp_fv1 = MTXTOMTXF(arg1, 3, 2);
-    z2 = FTO32(((temp_fv1 - temp_fa0) * arg3) + temp_fa0);
+    temp_fa0 = MTXTOMTXF(src, 3, 2);
+    temp_fv1 = MTXTOMTXF(target, 3, 2);
+    z2 = FTO32(((temp_fv1 - temp_fa0) * t) + temp_fa0);
 
     dest->m[1][2] = (x2 & 0xFFFF0000) | ((u32) y2 >> 0x10);
     dest->m[1][3] = (z2 & 0xFFFF0000) | 1;
@@ -546,30 +546,30 @@ void func_806F7684(Mtx* arg0, Mtx* arg1, Mtx* dest, f32 arg3) {
     dest->m[3][3] = z2 << 0x10;
 }
 
-void func_806F7C50(MtxF* arg0, MtxF* arg1, MtxF* arg2) {
-    arg2->m[0][0] = arg0->m[0][0] * arg1->m[0][0] + arg0->m[1][0] * arg1->m[0][1] + arg0->m[2][0] * arg1->m[0][2];
-    arg2->m[0][1] = arg0->m[0][1] * arg1->m[0][0] + arg0->m[1][1] * arg1->m[0][1] + arg0->m[2][1] * arg1->m[0][2];
-    arg2->m[0][2] = arg0->m[0][2] * arg1->m[0][0] + arg0->m[1][2] * arg1->m[0][1] + arg0->m[2][2] * arg1->m[0][2];
+void Matrix_AffineMultiply(MtxF* dest, MtxF* mtxFA, MtxF* mtxFB) {
+    mtxFB->m[0][0] = dest->m[0][0] * mtxFA->m[0][0] + dest->m[1][0] * mtxFA->m[0][1] + dest->m[2][0] * mtxFA->m[0][2];
+    mtxFB->m[0][1] = dest->m[0][1] * mtxFA->m[0][0] + dest->m[1][1] * mtxFA->m[0][1] + dest->m[2][1] * mtxFA->m[0][2];
+    mtxFB->m[0][2] = dest->m[0][2] * mtxFA->m[0][0] + dest->m[1][2] * mtxFA->m[0][1] + dest->m[2][2] * mtxFA->m[0][2];
 
-    arg2->m[1][0] = arg0->m[0][0] * arg1->m[1][0] + arg0->m[1][0] * arg1->m[1][1] + arg0->m[2][0] * arg1->m[1][2];
-    arg2->m[1][1] = arg0->m[0][1] * arg1->m[1][0] + arg0->m[1][1] * arg1->m[1][1] + arg0->m[2][1] * arg1->m[1][2];
-    arg2->m[1][2] = arg0->m[0][2] * arg1->m[1][0] + arg0->m[1][2] * arg1->m[1][1] + arg0->m[2][2] * arg1->m[1][2];
+    mtxFB->m[1][0] = dest->m[0][0] * mtxFA->m[1][0] + dest->m[1][0] * mtxFA->m[1][1] + dest->m[2][0] * mtxFA->m[1][2];
+    mtxFB->m[1][1] = dest->m[0][1] * mtxFA->m[1][0] + dest->m[1][1] * mtxFA->m[1][1] + dest->m[2][1] * mtxFA->m[1][2];
+    mtxFB->m[1][2] = dest->m[0][2] * mtxFA->m[1][0] + dest->m[1][2] * mtxFA->m[1][1] + dest->m[2][2] * mtxFA->m[1][2];
 
-    arg2->m[2][0] = arg0->m[0][0] * arg1->m[2][0] + arg0->m[1][0] * arg1->m[2][1] + arg0->m[2][0] * arg1->m[2][2];
-    arg2->m[2][1] = arg0->m[0][1] * arg1->m[2][0] + arg0->m[1][1] * arg1->m[2][1] + arg0->m[2][1] * arg1->m[2][2];
-    arg2->m[2][2] = arg0->m[0][2] * arg1->m[2][0] + arg0->m[1][2] * arg1->m[2][1] + arg0->m[2][2] * arg1->m[2][2];
+    mtxFB->m[2][0] = dest->m[0][0] * mtxFA->m[2][0] + dest->m[1][0] * mtxFA->m[2][1] + dest->m[2][0] * mtxFA->m[2][2];
+    mtxFB->m[2][1] = dest->m[0][1] * mtxFA->m[2][0] + dest->m[1][1] * mtxFA->m[2][1] + dest->m[2][1] * mtxFA->m[2][2];
+    mtxFB->m[2][2] = dest->m[0][2] * mtxFA->m[2][0] + dest->m[1][2] * mtxFA->m[2][1] + dest->m[2][2] * mtxFA->m[2][2];
 
-    arg2->m[3][0] =
-        arg0->m[0][0] * arg1->m[3][0] + arg0->m[1][0] * arg1->m[3][1] + arg0->m[2][0] * arg1->m[3][2] + arg0->m[3][0];
-    arg2->m[3][1] =
-        arg0->m[0][1] * arg1->m[3][0] + arg0->m[1][1] * arg1->m[3][1] + arg0->m[2][1] * arg1->m[3][2] + arg0->m[3][1];
-    arg2->m[3][2] =
-        arg0->m[0][2] * arg1->m[3][0] + arg0->m[1][2] * arg1->m[3][1] + arg0->m[2][2] * arg1->m[3][2] + arg0->m[3][2];
+    mtxFB->m[3][0] = dest->m[0][0] * mtxFA->m[3][0] + dest->m[1][0] * mtxFA->m[3][1] + dest->m[2][0] * mtxFA->m[3][2] +
+                     dest->m[3][0];
+    mtxFB->m[3][1] = dest->m[0][1] * mtxFA->m[3][0] + dest->m[1][1] * mtxFA->m[3][1] + dest->m[2][1] * mtxFA->m[3][2] +
+                     dest->m[3][1];
+    mtxFB->m[3][2] = dest->m[0][2] * mtxFA->m[3][0] + dest->m[1][2] * mtxFA->m[3][1] + dest->m[2][2] * mtxFA->m[3][2] +
+                     dest->m[3][2];
 
-    arg2->m[0][3] = 0.0f;
-    arg2->m[1][3] = 0.0f;
-    arg2->m[2][3] = 0.0f;
-    arg2->m[3][3] = 1.0f;
+    mtxFB->m[0][3] = 0.0f;
+    mtxFB->m[1][3] = 0.0f;
+    mtxFB->m[2][3] = 0.0f;
+    mtxFB->m[3][3] = 1.0f;
 }
 
 void Matrix_FromMtx(Mtx* src2, MtxF* dest) {
@@ -606,414 +606,394 @@ void Matrix_ToMtx(MtxF* src, Mtx* dest2) {
     }
 }
 
-extern Mtx D_8079E8A0;
-extern MtxF D_8079E8E0;
+void Matrix_SetLockedLookAt(Mtx* mtx, MtxF* mtxF, f32 scaleZ, f32 scaleY, f32 scaleX, f32 lookAtX, f32 lookAtY,
+                            f32 lookAtZ, f32 upX, f32 upY, f32 upZ, f32 xPos, f32 yPos, f32 zPos) {
+    f32 magnitude;
+    f32 normalX;
+    f32 normalY;
+    f32 normalZ;
+    f32 trueUpX;
+    f32 trueUpY;
+    f32 trueUpZ;
+    f32 normalizedScale;
 
-void func_806F7FCC(Mtx* arg0, MtxF* arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6, f32 arg7, f32 arg8,
-                   f32 arg9, f32 argA, f32 argB, f32 argC, f32 argD) {
-    f32 sp7C;
-    f32 sp78;
-    f32 sp74;
-    f32 sp70;
-    f32 sp6C;
-    f32 sp68;
-    f32 sp64;
-    f32 sp60;
-
-    if (arg0 == NULL) {
-        arg0 = &D_8079E8A0;
+    if (mtx == NULL) {
+        mtx = &sDefaultMtx;
     }
-    if (arg1 == NULL) {
-        arg1 = &D_8079E8E0;
+    if (mtxF == NULL) {
+        mtxF = &sDefaultMtxF;
     }
-    sp7C = SQ(arg5) + SQ(arg6) + SQ(arg7);
-    if (sp7C < 0.001f) {
-        func_806F86C0(arg0, arg1, arg2, 0, 0, 0, argB, argC, argD);
+    magnitude = SQ(lookAtX) + SQ(lookAtY) + SQ(lookAtZ);
+    if (magnitude < 0.001f) {
+        Matrix_SetTransRot(mtx, mtxF, scaleZ, 0, 0, 0, xPos, yPos, zPos);
         return;
     }
-    sp60 = arg2 / sqrtf(sp7C);
-    arg1->m[2][0] = sp60 * arg5;
-    arg1->m[2][1] = sp60 * arg6;
-    arg1->m[2][2] = sp60 * arg7;
-    sp78 = (arg9 * arg7) - (argA * arg6);
-    sp74 = (argA * arg5) - (arg8 * arg7);
-    sp70 = (arg8 * arg6) - (arg9 * arg5);
+    normalizedScale = scaleZ / sqrtf(magnitude);
+    mtxF->m[2][0] = normalizedScale * lookAtX;
+    mtxF->m[2][1] = normalizedScale * lookAtY;
+    mtxF->m[2][2] = normalizedScale * lookAtZ;
+    normalX = (upY * lookAtZ) - (upZ * lookAtY);
+    normalY = (upZ * lookAtX) - (upX * lookAtZ);
+    normalZ = (upX * lookAtY) - (upY * lookAtX);
 
-    sp7C = SQ(sp78) + SQ(sp74) + SQ(sp70);
-    if (sp7C < 0.001f) {
-        func_806F86C0(arg0, arg1, arg2, 0, 0, 0, argB, argC, argD);
+    magnitude = SQ(normalX) + SQ(normalY) + SQ(normalZ);
+    if (magnitude < 0.001f) {
+        Matrix_SetTransRot(mtx, mtxF, scaleZ, 0, 0, 0, xPos, yPos, zPos);
         return;
     }
 
-    sp60 = arg4 / sqrtf(sp7C);
-    arg1->m[0][0] = sp60 * sp78;
-    arg1->m[0][1] = sp60 * sp74;
-    arg1->m[0][2] = sp60 * sp70;
+    normalizedScale = scaleX / sqrtf(magnitude);
+    mtxF->m[0][0] = normalizedScale * normalX;
+    mtxF->m[0][1] = normalizedScale * normalY;
+    mtxF->m[0][2] = normalizedScale * normalZ;
 
-    sp6C = (arg6 * sp70) - (arg7 * sp74);
-    sp68 = (arg7 * sp78) - (arg5 * sp70);
-    sp64 = (arg5 * sp74) - (arg6 * sp78);
-    sp7C = SQ(sp6C) + SQ(sp68) + SQ(sp64);
-    if (sp7C < 0.001f) {
-        func_806F86C0(arg0, arg1, arg2, 0, 0, 0, argB, argC, argD);
+    trueUpX = (lookAtY * normalZ) - (lookAtZ * normalY);
+    trueUpY = (lookAtZ * normalX) - (lookAtX * normalZ);
+    trueUpZ = (lookAtX * normalY) - (lookAtY * normalX);
+    magnitude = SQ(trueUpX) + SQ(trueUpY) + SQ(trueUpZ);
+    if (magnitude < 0.001f) {
+        Matrix_SetTransRot(mtx, mtxF, scaleZ, 0, 0, 0, xPos, yPos, zPos);
         return;
     }
-    sp60 = arg3 / sqrtf(sp7C);
-    arg1->m[1][0] = sp60 * sp6C;
-    arg1->m[1][1] = sp60 * sp68;
-    arg1->m[1][2] = sp60 * sp64;
-    arg1->m[3][0] = argB;
-    arg1->m[3][1] = argC;
-    arg1->m[3][2] = argD;
-    arg1->m[0][3] = 0.0f;
-    arg1->m[1][3] = 0.0f;
-    arg1->m[2][3] = 0.0f;
-    arg1->m[3][3] = 1.0f;
-    Matrix_ToMtx(arg1, arg0);
+    normalizedScale = scaleY / sqrtf(magnitude);
+    mtxF->m[1][0] = normalizedScale * trueUpX;
+    mtxF->m[1][1] = normalizedScale * trueUpY;
+    mtxF->m[1][2] = normalizedScale * trueUpZ;
+    mtxF->m[3][0] = xPos;
+    mtxF->m[3][1] = yPos;
+    mtxF->m[3][2] = zPos;
+    mtxF->m[0][3] = 0.0f;
+    mtxF->m[1][3] = 0.0f;
+    mtxF->m[2][3] = 0.0f;
+    mtxF->m[3][3] = 1.0f;
+    Matrix_ToMtx(mtxF, mtx);
 }
 
-void func_806F8314(Mtx* arg0, MtxF* arg1, f32 arg2, f32 arg3, f32 arg4, Vec3f* arg5, Vec3f* arg6, Vec3f* arg7) {
-    f32 sp84;
-    f32 sp80;
-    f32 sp6C;
-    f32 sp5C;
-    f32 sp68;
-    f32 sp64;
-    f32 sp60;
+void Matrix_SetLockedLookAtFromVectors(Mtx* mtx, MtxF* mtxF, f32 scaleZ, f32 scaleY, f32 scaleX, Vec3f* lookAt,
+                                       Vec3f* up, Vec3f* pos) {
+    f32 normalizedScale;
+    f32 normalX;
+    f32 normalY;
+    f32 normalZ;
+    f32 trueUpX;
+    f32 trueUpY;
+    f32 trueUpZ;
     s32 pad;
 
-    if (arg0 == NULL) {
-        arg0 = &D_8079E8A0;
+    if (mtx == NULL) {
+        mtx = &sDefaultMtx;
     }
-    if (arg1 == NULL) {
-        arg1 = &D_8079E8E0;
+    if (mtxF == NULL) {
+        mtxF = &sDefaultMtxF;
     }
-    arg1->m[2][0] = arg5->x * arg2;
-    arg1->m[2][1] = arg5->y * arg2;
-    arg1->m[2][2] = arg5->z * arg2;
+    mtxF->m[2][0] = lookAt->x * scaleZ;
+    mtxF->m[2][1] = lookAt->y * scaleZ;
+    mtxF->m[2][2] = lookAt->z * scaleZ;
 
-    sp80 = (arg6->y * arg5->z) - (arg6->z * arg5->y);
-    sp6C = (arg6->z * arg5->x) - (arg6->x * arg5->z);
-    sp5C = (arg6->x * arg5->y) - (arg6->y * arg5->x);
-    sp84 = SQ(sp80) + SQ(sp6C) + SQ(sp5C);
-    if (sp84 < 0.001f) {
-        func_806F86C0(arg0, arg1, arg2, 0, 0, 0, arg7->x, arg7->y, arg7->z);
+    normalX = (up->y * lookAt->z) - (up->z * lookAt->y);
+    normalY = (up->z * lookAt->x) - (up->x * lookAt->z);
+    normalZ = (up->x * lookAt->y) - (up->y * lookAt->x);
+    normalizedScale = SQ(normalX) + SQ(normalY) + SQ(normalZ);
+    if (normalizedScale < 0.001f) {
+        Matrix_SetTransRot(mtx, mtxF, scaleZ, 0, 0, 0, pos->x, pos->y, pos->z);
         return;
     }
 
-    sp84 = arg4 / sqrtf(sp84);
-    arg1->m[0][0] = sp84 * sp80;
-    arg1->m[0][1] = sp84 * sp6C;
-    arg1->m[0][2] = sp84 * sp5C;
+    normalizedScale = scaleX / sqrtf(normalizedScale);
+    mtxF->m[0][0] = normalizedScale * normalX;
+    mtxF->m[0][1] = normalizedScale * normalY;
+    mtxF->m[0][2] = normalizedScale * normalZ;
 
-    sp68 = (arg5->y * sp5C) - (arg5->z * sp6C);
-    sp64 = (arg5->z * sp80) - (arg5->x * sp5C);
-    sp60 = (arg5->x * sp6C) - (arg5->y * sp80);
+    trueUpX = (lookAt->y * normalZ) - (lookAt->z * normalY);
+    trueUpY = (lookAt->z * normalX) - (lookAt->x * normalZ);
+    trueUpZ = (lookAt->x * normalY) - (lookAt->y * normalX);
 
-    sp84 = SQ(sp68) + SQ(sp64) + SQ(sp60);
-    if (sp84 < 0.001f) {
-        func_806F86C0(arg0, arg1, arg2, 0, 0, 0, arg7->x, arg7->y, arg7->z);
+    normalizedScale = SQ(trueUpX) + SQ(trueUpY) + SQ(trueUpZ);
+    if (normalizedScale < 0.001f) {
+        Matrix_SetTransRot(mtx, mtxF, scaleZ, 0, 0, 0, pos->x, pos->y, pos->z);
         return;
     }
-    sp84 = arg3 / sqrtf(sp84);
-    arg1->m[1][0] = sp84 * sp68;
-    arg1->m[1][1] = sp84 * sp64;
-    arg1->m[1][2] = sp84 * sp60;
-    arg1->m[3][0] = arg7->x;
-    arg1->m[3][1] = arg7->y;
-    arg1->m[3][2] = arg7->z;
-    arg1->m[0][3] = 0.0f;
-    arg1->m[1][3] = 0.0f;
-    arg1->m[2][3] = 0.0f;
-    arg1->m[3][3] = 1.0f;
-    Matrix_ToMtx(arg1, arg0);
+    normalizedScale = scaleY / sqrtf(normalizedScale);
+    mtxF->m[1][0] = normalizedScale * trueUpX;
+    mtxF->m[1][1] = normalizedScale * trueUpY;
+    mtxF->m[1][2] = normalizedScale * trueUpZ;
+    mtxF->m[3][0] = pos->x;
+    mtxF->m[3][1] = pos->y;
+    mtxF->m[3][2] = pos->z;
+    mtxF->m[0][3] = 0.0f;
+    mtxF->m[1][3] = 0.0f;
+    mtxF->m[2][3] = 0.0f;
+    mtxF->m[3][3] = 1.0f;
+    Matrix_ToMtx(mtxF, mtx);
 }
 
-void func_806F85C0(Mtx* arg0, MtxF* arg1, f32 arg2, f32 arg3, f32 arg4, Mtx3F* arg5, Vec3f* arg6) {
+void Matrix_ScaleFrom3DMatrix(Mtx* mtx, MtxF* mtxF, f32 xScale, f32 yScale, f32 zScale, Mtx3F* matrix3D, Vec3f* pos) {
 
-    if (arg0 == NULL) {
-        arg0 = &D_8079E8A0;
+    if (mtx == NULL) {
+        mtx = &sDefaultMtx;
     }
-    if (arg1 == NULL) {
-        arg1 = &D_8079E8E0;
+    if (mtxF == NULL) {
+        mtxF = &sDefaultMtxF;
     }
-    arg1->m[2][0] = arg5->x.x * arg2;
-    arg1->m[2][1] = arg5->x.y * arg2;
-    arg1->m[2][2] = arg5->x.z * arg2;
-    arg1->m[0][0] = arg5->z.x * arg4;
-    arg1->m[0][1] = arg5->z.y * arg4;
-    arg1->m[0][2] = arg5->z.z * arg4;
-    arg1->m[1][0] = arg5->y.x * arg3;
-    arg1->m[1][1] = arg5->y.y * arg3;
-    arg1->m[1][2] = arg5->y.z * arg3;
-    arg1->m[3][0] = arg6->x;
-    arg1->m[3][1] = arg6->y;
-    arg1->m[3][2] = arg6->z;
-    arg1->m[0][3] = 0.0f;
-    arg1->m[1][3] = 0.0f;
-    arg1->m[2][3] = 0.0f;
-    arg1->m[3][3] = 1.0f;
+    mtxF->m[2][0] = matrix3D->x.x * xScale;
+    mtxF->m[2][1] = matrix3D->x.y * xScale;
+    mtxF->m[2][2] = matrix3D->x.z * xScale;
+    mtxF->m[0][0] = matrix3D->z.x * zScale;
+    mtxF->m[0][1] = matrix3D->z.y * zScale;
+    mtxF->m[0][2] = matrix3D->z.z * zScale;
+    mtxF->m[1][0] = matrix3D->y.x * yScale;
+    mtxF->m[1][1] = matrix3D->y.y * yScale;
+    mtxF->m[1][2] = matrix3D->y.z * yScale;
+    mtxF->m[3][0] = pos->x;
+    mtxF->m[3][1] = pos->y;
+    mtxF->m[3][2] = pos->z;
+    mtxF->m[0][3] = 0.0f;
+    mtxF->m[1][3] = 0.0f;
+    mtxF->m[2][3] = 0.0f;
+    mtxF->m[3][3] = 1.0f;
 
-    Matrix_ToMtx(arg1, arg0);
+    Matrix_ToMtx(mtxF, mtx);
 }
 
-void func_806F86C0(Mtx* arg0, MtxF* arg1, f32 arg2, s32 arg3, s32 arg4, s32 arg5, f32 arg6, f32 arg7, f32 arg8) {
-    f32 temp_fv1;
-    f32 sp28;
-    f32 sp24;
-    f32 temp_ft5;
-    f32 temp_fv0;
-    f32 sp18;
-    f32 temp;
-    f32 temp2;
-    f32 temp3;
-    f32 temp4;
+void Matrix_SetTransRot(Mtx* mtx, MtxF* mtxF, f32 scale, s32 xRot, s32 yRot, s32 zRot, f32 xPos, f32 yPos, f32 zPos) {
+    f32 sinX;
+    f32 sinY;
+    f32 sinZ;
+    f32 cosX;
+    f32 cosY;
+    f32 cosZ;
+    f32 sinYsinZ;
+    f32 sinYcosZ;
+    f32 sinZcosY;
+    f32 cosYcosZ;
 
-    if (arg0 == NULL) {
-        arg0 = &D_8079E8A0;
+    if (mtx == NULL) {
+        mtx = &sDefaultMtx;
     }
-    if (arg1 == NULL) {
-        arg1 = &D_8079E8E0;
+    if (mtxF == NULL) {
+        mtxF = &sDefaultMtxF;
     }
 
-    arg1->yz = -(temp_fv1 = SIN(arg3));
-    sp28 = SIN(arg4);
-    arg1->xz = (sp28 = SIN(arg4)) * (temp_fv0 = COS(arg3));
-    arg1->zz = (temp_ft5 = COS(arg4)) * temp_fv0;
-    arg1->yx = (sp24 = SIN(arg5)) * temp_fv0;
-    arg1->yy = (sp18 = COS(arg5)) * temp_fv0;
+    mtxF->m[2][1] = -(sinX = SIN(xRot));
+    mtxF->m[2][0] = (sinY = SIN(yRot)) * (cosX = COS(xRot));
+    mtxF->m[2][2] = (cosY = COS(yRot)) * cosX;
+    mtxF->m[0][1] = (sinZ = SIN(zRot)) * cosX;
+    mtxF->m[1][1] = (cosZ = COS(zRot)) * cosX;
 
-    // FAKE
-    temp = sp28 * sp24;
-    temp4 = temp_ft5 * sp18;
-    temp2 = sp28 * sp18;
-    temp3 = sp24 * temp_ft5;
-    arg1->xx = (temp_ft5 * sp18) + temp_fv1 * (sp28 * sp24);
-    arg1->xy = temp_fv1 * temp2 - temp3;
-    arg1->zx = temp_fv1 * temp3 - temp2;
-    arg1->zy = temp_fv1 * temp4 + temp;
+    mtxF->m[0][0] = sinX * (sinYsinZ = (sinY * sinZ)) + (cosYcosZ = (cosY * cosZ));
+    mtxF->m[1][0] = sinX * (sinYcosZ = (sinY * cosZ)) - (sinZcosY = (sinZ * cosY));
+    mtxF->m[0][2] = sinX * sinZcosY - sinYcosZ;
+    mtxF->m[1][2] = sinX * cosYcosZ + sinYsinZ;
 
-    arg1->xw = arg6;
-    arg1->yw = arg7;
-    arg1->zw = arg8;
-    arg1->wx = arg1->wy = arg1->wz = 0.0f;
-    arg1->ww = 1.0f;
-    Matrix_ToMtx(arg1, arg0);
+    mtxF->m[3][0] = xPos;
+    mtxF->m[3][1] = yPos;
+    mtxF->m[3][2] = zPos;
+    mtxF->m[0][3] = mtxF->m[1][3] = mtxF->m[2][3] = 0.0f;
+    mtxF->m[3][3] = 1.0f;
+    Matrix_ToMtx(mtxF, mtx);
 }
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/3A10/func_806F8868.s")
 
-void func_806F8E54(Mtx* arg0, MtxF* arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6, f32 arg7, f32 arg8,
-                   f32 arg9, f32 argA) {
-    f32 temp_fv0;
-    f32 temp_fv1;
-    f32 temp;
+void Matrix_SetShadowProjection(Mtx* mtx, MtxF* mtxF, f32 lightProjectionX, f32 lightProjectionY, f32 lightProjectionZ,
+                                f32 planePointX, f32 planePointY, f32 planePointZ, f32 planeNormalX, f32 planeNormalY,
+                                f32 planeNormalZ) {
+    f32 planeDistanceScale;
+    f32 inverseDotProduct;
 
-    if (arg0 == NULL) {
-        arg0 = &D_8079E8A0;
+    if (mtx == NULL) {
+        mtx = &sDefaultMtx;
     }
-    if (arg1 == NULL) {
-        arg1 = &D_8079E8E0;
+    if (mtxF == NULL) {
+        mtxF = &sDefaultMtxF;
     }
-    temp_fv1 = (arg2 * arg8) + (arg3 * arg9) + (arg4 * argA);
+    inverseDotProduct =
+        (lightProjectionX * planeNormalX) + (lightProjectionY * planeNormalY) + (lightProjectionZ * planeNormalZ);
 
-    if (SQ(temp_fv1) < 0.01) {
+    if (SQ(inverseDotProduct) < 0.01) {
         return;
     }
 
-    temp_fv1 = -1.0f / temp_fv1;
-    temp_fv0 = (((-arg8 * arg5) - (arg9 * arg6)) - (argA * arg7)) * temp_fv1;
-    arg8 *= temp_fv1;
-    arg9 *= temp_fv1;
-    argA *= temp_fv1;
-    arg1->xx = arg8 * arg2 + 1.0f;
-    arg1->yx = arg8 * arg3;
-    arg1->zx = arg8 * arg4;
-    arg1->xy = arg9 * arg2;
-    arg1->yy = arg9 * arg3 + 1.0f;
-    arg1->zy = arg9 * arg4;
-    arg1->xz = argA * arg2;
-    arg1->yz = argA * arg3;
-    arg1->zz = argA * arg4 + 1.0f;
-    arg1->xw = temp_fv0 * arg2;
-    arg1->yw = temp_fv0 * arg3;
-    arg1->zw = temp_fv0 * arg4;
-    arg1->wx = arg1->wy = arg1->wz = 0.0f;
-    arg1->ww = 1.0f;
-    Matrix_ToMtx(arg1, arg0);
+    inverseDotProduct = -1.0f / inverseDotProduct;
+    planeDistanceScale =
+        (((-planeNormalX * planePointX) - (planeNormalY * planePointY)) - (planeNormalZ * planePointZ)) *
+        inverseDotProduct;
+    planeNormalX *= inverseDotProduct;
+    planeNormalY *= inverseDotProduct;
+    planeNormalZ *= inverseDotProduct;
+    mtxF->m[0][0] = planeNormalX * lightProjectionX + 1.0f;
+    mtxF->m[0][1] = planeNormalX * lightProjectionY;
+    mtxF->m[0][2] = planeNormalX * lightProjectionZ;
+    mtxF->m[1][0] = planeNormalY * lightProjectionX;
+    mtxF->m[1][1] = planeNormalY * lightProjectionY + 1.0f;
+    mtxF->m[1][2] = planeNormalY * lightProjectionZ;
+    mtxF->m[2][0] = planeNormalZ * lightProjectionX;
+    mtxF->m[2][1] = planeNormalZ * lightProjectionY;
+    mtxF->m[2][2] = planeNormalZ * lightProjectionZ + 1.0f;
+    mtxF->m[3][0] = planeDistanceScale * lightProjectionX;
+    mtxF->m[3][1] = planeDistanceScale * lightProjectionY;
+    mtxF->m[3][2] = planeDistanceScale * lightProjectionZ;
+    mtxF->m[0][3] = mtxF->m[1][3] = mtxF->m[2][3] = 0.0f;
+    mtxF->m[3][3] = 1.0f;
+    Matrix_ToMtx(mtxF, mtx);
 }
 
-void func_806F8FE0(Mtx* arg0, MtxF* arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6, f32 arg7, f32 arg8,
-                   f32 arg9, f32 argA) {
-    f32 temp_fa0;
-    f32 sp68;
-    f32 sp64;
-    f32 sp60;
-    f32 sp8C;
-    f32 sp88;
-    f32 sp84;
-    f32 sp80;
-    f32 sp7C;
-    f32 sp78;
+void Matrix_SetLookAt(Mtx* mtx, MtxF* mtxF, f32 eyeX, f32 eyeY, f32 eyeZ, f32 atX, f32 atY, f32 atZ, f32 upX, f32 upY,
+                      f32 upZ) {
+    f32 normalizeFactor;
+    f32 lookAtX;
+    f32 lookAtY;
+    f32 lookAtZ;
+    f32 normalX;
+    f32 normalY;
+    f32 normalZ;
+    f32 trueUpX;
+    f32 trueUpY;
+    f32 trueUpZ;
 
-    if (arg0 == NULL) {
-        arg0 = &D_8079E8A0;
+    if (mtx == NULL) {
+        mtx = &sDefaultMtx;
     }
-    if (arg1 == NULL) {
-        arg1 = &D_8079E8E0;
+    if (mtxF == NULL) {
+        mtxF = &sDefaultMtxF;
     }
 
-    sp68 = arg2 - arg5;
-    sp64 = arg3 - arg6;
-    sp60 = arg4 - arg7;
+    lookAtX = eyeX - atX;
+    lookAtY = eyeY - atY;
+    lookAtZ = eyeZ - atZ;
 
-    temp_fa0 = SQ(sp68) + SQ(sp64) + SQ(sp60);
-    if (temp_fa0 <= 0.0f) {
+    normalizeFactor = SQ(lookAtX) + SQ(lookAtY) + SQ(lookAtZ);
+    if (normalizeFactor <= 0.0f) {
         return;
     }
 
-    temp_fa0 = 1.0f / sqrtf(temp_fa0);
-    {
-        MtxF* mtxF = arg1;
-        mtxF->zy = sp64 * temp_fa0;
-        mtxF->zx = sp68 * temp_fa0;
-        mtxF->zz = sp60 * temp_fa0;
+    normalizeFactor = 1.0f / sqrtf(normalizeFactor);
+    mtxF->m[3][2] = -eyeX * (mtxF->m[0][2] = lookAtX * normalizeFactor) -
+                    eyeY * (mtxF->m[1][2] = lookAtY * normalizeFactor) -
+                    eyeZ * (mtxF->m[2][2] = lookAtZ * normalizeFactor);
 
-        mtxF->zw = -arg2 * mtxF->zx - arg3 * mtxF->zy - mtxF->zz * arg4;
-    }
+    normalX = (upY * lookAtZ) - (upZ * lookAtY);
+    normalY = (upZ * lookAtX) - (upX * lookAtZ);
+    normalZ = (upX * lookAtY) - (upY * lookAtX);
 
-    sp8C = (arg9 * sp60) - (argA * sp64);
-    sp88 = (argA * sp68) - (arg8 * sp60);
-    sp84 = (arg8 * sp64) - (arg9 * sp68);
-
-    temp_fa0 = SQ(sp8C) + SQ(sp88) + SQ(sp84);
-    if (temp_fa0 <= 0.0f) {
+    normalizeFactor = SQ(normalX) + SQ(normalY) + SQ(normalZ);
+    if (normalizeFactor <= 0.0f) {
         return;
     }
 
-    temp_fa0 = 1.0f / sqrtf(temp_fa0);
-    {
-        MtxF* mtxF = arg1;
-        mtxF->xy = sp88 * temp_fa0;
-        mtxF->xx = sp8C * temp_fa0;
-        mtxF->xz = sp84 * temp_fa0;
+    normalizeFactor = 1.0f / sqrtf(normalizeFactor);
+    mtxF->m[3][0] = -eyeX * (mtxF->m[0][0] = normalX * normalizeFactor) -
+                    eyeY * (mtxF->m[1][0] = normalY * normalizeFactor) -
+                    eyeZ * (mtxF->m[2][0] = normalZ * normalizeFactor);
 
-        mtxF->xw = -arg2 * mtxF->xx - arg3 * mtxF->xy - mtxF->xz * arg4;
-    }
+    trueUpX = (lookAtY * normalZ) - (lookAtZ * normalY);
+    trueUpY = (lookAtZ * normalX) - (lookAtX * normalZ);
+    trueUpZ = (lookAtX * normalY) - (lookAtY * normalX);
 
-    sp80 = (sp64 * sp84) - (sp60 * sp88);
-    sp7C = (sp60 * sp8C) - (sp68 * sp84);
-    sp78 = (sp68 * sp88) - (sp64 * sp8C);
-
-    temp_fa0 = SQ(sp80) + SQ(sp7C) + SQ(sp78);
-    if (temp_fa0 <= 0.0f) {
+    normalizeFactor = SQ(trueUpX) + SQ(trueUpY) + SQ(trueUpZ);
+    if (normalizeFactor <= 0.0f) {
         return;
     }
 
-    temp_fa0 = 1.0f / sqrtf(temp_fa0);
-    {
-        MtxF* mtxF = arg1;
-        mtxF->yy = sp7C * temp_fa0;
-        mtxF->yx = sp80 * temp_fa0;
-        mtxF->yz = sp78 * temp_fa0;
+    normalizeFactor = 1.0f / sqrtf(normalizeFactor);
+    mtxF->m[3][1] = -eyeX * (mtxF->m[0][1] = trueUpX * normalizeFactor) -
+                    eyeY * (mtxF->m[1][1] = trueUpY * normalizeFactor) -
+                    eyeZ * (mtxF->m[2][1] = trueUpZ * normalizeFactor);
 
-        mtxF->yw = -arg2 * mtxF->yx - arg3 * mtxF->yy - mtxF->yz * arg4;
-    }
-
-    arg1->wx = 0.0f;
-    arg1->wy = 0.0f;
-    arg1->wz = 0.0f;
-    arg1->ww = 1.0f;
-    Matrix_ToMtx(arg1, arg0);
+    mtxF->m[0][3] = 0.0f;
+    mtxF->m[1][3] = 0.0f;
+    mtxF->m[2][3] = 0.0f;
+    mtxF->m[3][3] = 1.0f;
+    Matrix_ToMtx(mtxF, mtx);
 }
 
-void func_806F9384(Mtx* arg0, MtxF* arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6, f32 arg7, f32 arg8,
-                   u16* arg9) {
-    s32 angle;
-    f32 sp58;
-    f32 temp_fv1;
-    f32 sp50;
-    f32 sp4C;
-    f32 sp48;
-    f32 sp44;
+void Matrix_SetFrustrum(Mtx* mtx, MtxF* mtxF, f32 fovAngle, f32 near, f32 far, f32 fovScaleX, f32 frustumCenterX,
+                        f32 fovScaleY, f32 frustumCenterY, u16* perspectiveScale) {
+    s32 halfAngle;
+    f32 frustrumRadius;
+    s32 pad;
+    f32 left;
+    f32 right;
+    f32 top;
+    f32 bottom;
 
-    if (arg0 == NULL) {
-        arg0 = &D_8079E8A0;
+    if (mtx == NULL) {
+        mtx = &sDefaultMtx;
     }
-    if (arg1 == NULL) {
-        arg1 = &D_8079E8E0;
+    if (mtxF == NULL) {
+        mtxF = &sDefaultMtxF;
     }
 
-    angle = Math_Round(arg2 * ((0x1000 / 360.0f) / 2));
-    sp58 = TAN(angle) * arg3;
-    arg6 *= (sp58 + sp58) / arg5;
+    halfAngle = Math_Round(fovAngle * ((0x1000 / 360.0f) / 2));
+    frustrumRadius = TAN(halfAngle) * near;
+    frustumCenterX *= (2.0f * frustrumRadius) / fovScaleX;
 
-    sp4C = arg6 + sp58;
-    sp50 = arg6 - sp58;
+    right = frustumCenterX + frustrumRadius;
+    left = frustumCenterX - frustrumRadius;
 
-    angle = Math_Round(arg2 * ((0x1000 / 360.0f) / 2));
+    halfAngle = Math_Round(fovAngle * ((0x1000 / 360.0f) / 2));
 
-    sp58 *= arg7 / arg5;
-    arg8 *= (sp58 + sp58) / arg7;
+    frustrumRadius *= fovScaleY / fovScaleX;
+    frustumCenterY *= (2.0f * frustrumRadius) / fovScaleY;
 
-    sp48 = arg8 + sp58;
-    sp44 = arg8 - sp58;
+    top = frustumCenterY + frustrumRadius;
+    bottom = frustumCenterY - frustrumRadius;
 
-    arg1->m[0][0] = (arg3 + arg3) * (1.0f / (sp4C - sp50));
-    arg1->m[2][0] = (sp4C + sp50) * (1.0f / (sp4C - sp50));
+    mtxF->m[0][0] = 2.0f * near * (1.0f / (right - left));
+    mtxF->m[2][0] = (right + left) * (1.0f / (right - left));
 
     // Unused
-    sp58 *= arg7 / arg5;
+    frustrumRadius *= fovScaleY / fovScaleX;
 
-    arg1->m[1][1] = (arg3 + arg3) * (1.0f / (sp48 - sp44));
-    arg1->m[2][1] = (sp48 + sp44) * (1.0f / (sp48 - sp44));
+    mtxF->m[1][1] = 2.0f * near * (1.0f / (top - bottom));
+    mtxF->m[2][1] = (top + bottom) * (1.0f / (top - bottom));
 
-    arg1->m[3][2] = (arg3 + arg3) * arg4 * (1.0f / (arg3 - arg4));
-    arg1->m[2][2] = (arg3 + arg4) * (1.0f / (arg3 - arg4));
+    mtxF->m[3][2] = 2.0f * near * far * (1.0f / (near - far));
+    mtxF->m[2][2] = (near + far) * (1.0f / (near - far));
 
-    if ((arg3 + arg4) > 2.0f) {
-        u16 temp_v0;
+    if ((near + far) > 2.0f) {
+        u16 scale;
 
-        *arg9 = temp_v0 = 131072.0f / (arg3 + arg4);
-        if (!temp_v0) {
-            *arg9 = 1;
+        *perspectiveScale = scale = 0x20000 / (near + far);
+        if (scale == 0) {
+            *perspectiveScale = 1;
         }
     } else {
-        *arg9 = -1;
+        *perspectiveScale = -1;
     }
 
-    arg1->m[0][1] = arg1->m[0][2] = arg1->m[0][3] = arg1->m[1][0] = arg1->m[1][2] = arg1->m[1][3] = arg1->m[3][0] =
-        arg1->m[3][1] = arg1->m[3][3] = 0.0f;
-    arg1->m[2][3] = -1.0f;
-    Matrix_ToMtx(arg1, arg0);
+    mtxF->m[0][1] = mtxF->m[0][2] = mtxF->m[0][3] = mtxF->m[1][0] = mtxF->m[1][2] = mtxF->m[1][3] = mtxF->m[3][0] =
+        mtxF->m[3][1] = mtxF->m[3][3] = 0.0f;
+    mtxF->m[2][3] = -1.0f;
+    Matrix_ToMtx(mtxF, mtx);
 }
 
-void func_806F9628(Mtx* arg0, MtxF* arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6, f32 arg7, f32 arg8) {
-    f32 temp_fa0;
-    f32 temp_fv0;
-    f32 temp_fv1;
+void Matrix_SetOrtho(Mtx* mtx, MtxF* mtxF, f32 scale, f32 left, f32 right, f32 top, f32 bottom, f32 near, f32 far) {
+    f32 verticalFactor;
+    f32 depthFactor;
+    f32 horizontalFactor;
 
-    if (arg0 == NULL) {
-        arg0 = &D_8079E8A0;
+    if (mtx == NULL) {
+        mtx = &sDefaultMtx;
     }
-    if (arg1 == NULL) {
-        arg1 = &D_8079E8E0;
+    if (mtxF == NULL) {
+        mtxF = &sDefaultMtxF;
     }
 
-    temp_fv1 = arg2 / (arg3 - arg4);
-    arg1->m[0][0] = temp_fv1 * -2.0f;
-    arg1->m[3][0] = (arg4 + arg3) * temp_fv1;
+    horizontalFactor = scale / (left - right);
+    mtxF->m[0][0] = horizontalFactor * -2.0f;
+    mtxF->m[3][0] = (right + left) * horizontalFactor;
 
-    temp_fa0 = arg2 / (arg5 - arg6);
-    arg1->m[1][1] = temp_fa0 * -2.0f;
-    arg1->m[3][1] = (arg6 + arg5) * temp_fa0;
+    verticalFactor = scale / (top - bottom);
+    mtxF->m[1][1] = verticalFactor * -2.0f;
+    mtxF->m[3][1] = (bottom + top) * verticalFactor;
 
-    temp_fv0 = arg2 / (arg7 - arg8);
-    arg1->m[2][2] = 2.0f * temp_fv0;
-    arg1->m[3][2] = (arg8 + arg7) * temp_fv0;
+    depthFactor = scale / (near - far);
+    mtxF->m[2][2] = 2.0f * depthFactor;
+    mtxF->m[3][2] = (far + near) * depthFactor;
 
-    arg1->m[3][3] = arg2;
-    arg1->m[0][1] = arg1->m[0][2] = arg1->m[0][3] = arg1->m[1][0] = arg1->m[1][2] = arg1->m[1][3] = arg1->m[2][0] =
-        arg1->m[2][1] = arg1->m[2][3] = 0.0f;
-    Matrix_ToMtx(arg1, arg0);
+    mtxF->m[3][3] = scale;
+    mtxF->m[0][1] = mtxF->m[0][2] = mtxF->m[0][3] = mtxF->m[1][0] = mtxF->m[1][2] = mtxF->m[1][3] = mtxF->m[2][0] =
+        mtxF->m[2][1] = mtxF->m[2][3] = 0.0f;
+    Matrix_ToMtx(mtxF, mtx);
 }

@@ -1,6 +1,7 @@
 #include "global.h"
 #include "ead_demo.h"
 #include "fzx_assets.h"
+#include "src/overlays/ovl_i2/transition.h"
 
 Lights1 D_xk4_800F1A90 = gdSPDefLights1(50, 50, 30, 255, 200, 160, 0, 84, 84);
 
@@ -19,7 +20,7 @@ void EADDemo_Init(void) {
     D_8076C7A8 = 3;
 }
 
-extern s32 D_800BEE14;
+extern s32 gTransitionState;
 extern s32 D_8076C77C;
 
 extern GfxPool D_8024E260[];
@@ -31,7 +32,7 @@ extern GfxPool* gGfxPool;
 
 s32 EADDemo_Update(void) {
     gGfxPool = &D_8024E260[D_8079A35C];
-    if (D_800BEE14 != 0) {
+    if (gTransitionState != TRANSITION_INACTIVE) {
         return gGameMode;
     }
     Controller_SetGlobalInputs(&gSharedController);
@@ -80,8 +81,8 @@ Gfx* EADDemo_Draw(Gfx* gfx) {
         D_xk4_800F1AC0 = 0;
     }
     angle = (s32) (D_xk4_800F1AC0 * 0x1000) / 360;
-    func_806F7FCC(gGfxPool->unk_36628, NULL, 1.0f, 1.0f, 1.0f, SIN(angle), 0.0f, COS(angle), 0.0f, 1.0f, 0.0f, 0.0f,
-                  0.0f, 0.0f);
+    Matrix_SetLockedLookAt(gGfxPool->unk_36628, NULL, 1.0f, 1.0f, 1.0f, SIN(angle), 0.0f, COS(angle), 0.0f, 1.0f, 0.0f,
+                           0.0f, 0.0f, 0.0f);
 
     if (gControllers[gPlayerControlPorts[0]].buttonCurrent & BTN_L) {
         D_xk4_800F1AB8 += 50;
@@ -100,14 +101,14 @@ Gfx* EADDemo_Draw(Gfx* gfx) {
 
     gSPViewport(gfx++, &sEADDemoVp);
 
-    func_806F9384(gGfxPool->unk_1A008, NULL, 60.0f, 64.0f, 8192.0f, 320.0f, -80.0f, 240.0f, 0.0f, &spFE);
+    Matrix_SetFrustrum(gGfxPool->unk_1A008, NULL, 60.0f, 64.0f, 8192.0f, 320.0f, -80.0f, 240.0f, 0.0f, &spFE);
 
     gSPPerspNormalize(gfx++, spFE);
 
     gSPMatrix(gfx++, D_1000000.unk_1A008, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
 
-    func_806F8FE0(gGfxPool->unk_1A108, NULL, 500.0f, D_xk4_800F1ABC, D_xk4_800F1AB8, 500.0f, D_xk4_800F1ABC, 0, 0, 1,
-                  0);
+    Matrix_SetLookAt(gGfxPool->unk_1A108, NULL, 500.0f, D_xk4_800F1ABC, D_xk4_800F1AB8, 500.0f, D_xk4_800F1ABC, 0, 0, 1,
+                     0);
 
     gSPMatrix(gfx++, D_1000000.unk_1A108, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_PROJECTION);
 

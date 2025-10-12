@@ -119,9 +119,9 @@ void Game_Init(void) {
     func_8071ED34();
     func_i2_800B904C();
     func_80715F9C();
-    func_i2_800A20A0();
+    Transition_Init();
     func_8070F0D0();
-    func_80708430();
+    Arena_EndInit();
     func_8070D358();
     func_i2_800AA994();
     D_8076C93C = 1;
@@ -403,13 +403,13 @@ void func_806F5310(void) {
         case 11:
         case 21:
         case 31:
-            func_i2_800A20EC();
+            Transition_AppearSet();
             if (D_8076C938 != 0) {
                 Controller_UpdateInputs();
                 D_8076C938 = 0;
             }
             sGamemodeUpdateFuncs[GET_MODE(gGameMode)]();
-            func_i2_800A27C4();
+            Transition_Update();
             if (D_8076C93C != 0) {
                 osContStartReadData(&gSerialEventQueue);
                 D_8076C938 = 1;
@@ -425,7 +425,7 @@ void func_806F5310(void) {
                 D_8076C938 = 0;
             }
             sGamemodeUpdateFuncs[GET_MODE(gGameMode)]();
-            if (func_i2_800A27C4() != 0) {
+            if (Transition_Update() != 0) {
                 if (gGameMode == GAMEMODE_GP_RACE) {
                     func_i3_ResetLivesChangeCounter();
                 }
@@ -465,7 +465,7 @@ void func_806F5310(void) {
                 D_8076C7D8 = 0;
             }
             gGamePaused = false;
-            func_807082B0();
+            Arena_StartInit();
 
             switch (gGameMode) {
                 case GAMEMODE_GP_RACE:
@@ -512,7 +512,7 @@ void func_806F5310(void) {
 
             if (sp20 != 0) {
                 if (sp20 < 4) {
-                    if ((D_8076C810 == 0x17) && (sp20 == 3)) {
+                    if ((D_8076C810 == 23) && (sp20 == 3)) {
                         OSTime time = osGetTime();
 
                         while (osGetTime() - time < 6100000) {}
@@ -563,17 +563,17 @@ void func_806F5310(void) {
                     break;
             }
             func_806F4FC8();
-            func_i2_800A231C();
+            Transition_HideSet();
             D_8076C810 = sp20;
             break;
         case 5:
-            func_i2_800A20EC();
-            func_i2_800A27C4();
+            Transition_AppearSet();
+            Transition_Update();
             D_8076C810 = 6;
             break;
         case 6:
-            if (func_i2_800A27C4() != 0) {
-                func_i2_800A231C();
+            if (Transition_Update() != 0) {
+                Transition_HideSet();
                 if (gGameMode != GAMEMODE_RECORDS) {
                     func_8070DA84();
                 }
@@ -598,7 +598,7 @@ void func_806F5310(void) {
         case 6:
             break;
         case 0:
-            func_i2_800A27C4();
+            Transition_Update();
             break;
     }
     if (D_8076C93C != 0) {
@@ -611,8 +611,8 @@ extern s16 D_i2_800BEE10;
 
 Gfx* func_806F59E0(Gfx* gfx) {
 
-    if ((D_8076C810 != 3) && (D_i2_800BEE10 != 0)) {
+    if ((D_8076C810 != 3) && D_i2_800BEE10) {
         gfx = sGamemodeDrawFuncs[GET_MODE(gGameMode)](gfx);
     }
-    return func_i2_800A2B0C(gfx);
+    return Transition_Draw(gfx);
 }
