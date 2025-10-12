@@ -399,31 +399,32 @@ void func_806FBBC8(void) {
             case COURSE_FEATURE_SIGN_TV_LEFT:
             case COURSE_FEATURE_SIGN_2_LEFT:
             case COURSE_FEATURE_SIGN_1_LEFT:
-                func_806F7FCC(mtx, &spDC, var_s0->unk_30, var_s0->unk_30, var_s0->unk_30, var_s0->unk_0C.x.x * -1.0f,
-                              var_s0->unk_0C.x.y * -1.0f, var_s0->unk_0C.x.z * -1.0f, var_s0->unk_0C.y.x,
-                              var_s0->unk_0C.y.y, var_s0->unk_0C.y.z, var_s0->unk_00.x, var_s0->unk_00.y,
-                              var_s0->unk_00.z);
+                Matrix_SetLockedLookAt(mtx, &spDC, var_s0->unk_30, var_s0->unk_30, var_s0->unk_30,
+                                       var_s0->unk_0C.x.x * -1.0f, var_s0->unk_0C.x.y * -1.0f,
+                                       var_s0->unk_0C.x.z * -1.0f, var_s0->unk_0C.y.x, var_s0->unk_0C.y.y,
+                                       var_s0->unk_0C.y.z, var_s0->unk_00.x, var_s0->unk_00.y, var_s0->unk_00.z);
                 break;
             case COURSE_FEATURE_SIGN_NINTEX_RIGHT:
-                func_806F7FCC(mtx, &spDC, var_s0->unk_30, var_s0->unk_30, var_s0->unk_30, var_s0->unk_0C.x.x,
-                              var_s0->unk_0C.x.y, var_s0->unk_0C.x.z, var_s0->unk_0C.y.x, var_s0->unk_0C.y.y,
-                              var_s0->unk_0C.y.z, var_s0->unk_00.x + (var_s0->unk_0C.y.x * 50.0f),
-                              var_s0->unk_00.y + (var_s0->unk_0C.y.y * 50.0f),
-                              var_s0->unk_00.z + (var_s0->unk_0C.y.z * 50.0f));
+                Matrix_SetLockedLookAt(mtx, &spDC, var_s0->unk_30, var_s0->unk_30, var_s0->unk_30, var_s0->unk_0C.x.x,
+                                       var_s0->unk_0C.x.y, var_s0->unk_0C.x.z, var_s0->unk_0C.y.x, var_s0->unk_0C.y.y,
+                                       var_s0->unk_0C.y.z, var_s0->unk_00.x + (var_s0->unk_0C.y.x * 50.0f),
+                                       var_s0->unk_00.y + (var_s0->unk_0C.y.y * 50.0f),
+                                       var_s0->unk_00.z + (var_s0->unk_0C.y.z * 50.0f));
                 break;
             case COURSE_FEATURE_SIGN_OVERHEAD:
-                func_806F7FCC(mtx, &spDC, var_s0->unk_30, var_s0->unk_30, var_s0->unk_30, var_s0->unk_0C.x.x,
-                              var_s0->unk_0C.x.y, var_s0->unk_0C.x.z, var_s0->unk_0C.y.x, var_s0->unk_0C.y.y,
-                              var_s0->unk_0C.y.z, var_s0->unk_00.x + (var_s0->unk_0C.y.x * 100.0f * var_s0->unk_30),
-                              var_s0->unk_00.y + (var_s0->unk_0C.y.y * 100.0f * var_s0->unk_30),
-                              var_s0->unk_00.z + (var_s0->unk_0C.y.z * 100.0f * var_s0->unk_30));
+                Matrix_SetLockedLookAt(mtx, &spDC, var_s0->unk_30, var_s0->unk_30, var_s0->unk_30, var_s0->unk_0C.x.x,
+                                       var_s0->unk_0C.x.y, var_s0->unk_0C.x.z, var_s0->unk_0C.y.x, var_s0->unk_0C.y.y,
+                                       var_s0->unk_0C.y.z,
+                                       var_s0->unk_00.x + (var_s0->unk_0C.y.x * 100.0f * var_s0->unk_30),
+                                       var_s0->unk_00.y + (var_s0->unk_0C.y.y * 100.0f * var_s0->unk_30),
+                                       var_s0->unk_00.z + (var_s0->unk_0C.y.z * 100.0f * var_s0->unk_30));
                 break;
             case COURSE_FEATURE_SIGN_NINTEX_LEFT:
-                func_806F7FCC(mtx, &spDC, var_s0->unk_30, var_s0->unk_30, var_s0->unk_30, var_s0->unk_0C.x.x * -1.0f,
-                              var_s0->unk_0C.x.y * -1.0f, var_s0->unk_0C.x.z * -1.0f, var_s0->unk_0C.y.x,
-                              var_s0->unk_0C.y.y, var_s0->unk_0C.y.z, var_s0->unk_00.x + (var_s0->unk_0C.y.x * 50.0f),
-                              var_s0->unk_00.y + (var_s0->unk_0C.y.y * 50.0f),
-                              var_s0->unk_00.z + (var_s0->unk_0C.y.z * 50.0f));
+                Matrix_SetLockedLookAt(
+                    mtx, &spDC, var_s0->unk_30, var_s0->unk_30, var_s0->unk_30, var_s0->unk_0C.x.x * -1.0f,
+                    var_s0->unk_0C.x.y * -1.0f, var_s0->unk_0C.x.z * -1.0f, var_s0->unk_0C.y.x, var_s0->unk_0C.y.y,
+                    var_s0->unk_0C.y.z, var_s0->unk_00.x + (var_s0->unk_0C.y.x * 50.0f),
+                    var_s0->unk_00.y + (var_s0->unk_0C.y.y * 50.0f), var_s0->unk_00.z + (var_s0->unk_0C.y.z * 50.0f));
                 break;
             case COURSE_FEATURE_BUILDING_TALL_LEFT:
             case COURSE_FEATURE_BUILDING_TALL_RIGHT:
@@ -435,14 +436,14 @@ void func_806FBBC8(void) {
             case COURSE_FEATURE_BUILDING_MOUNTAIN_RIGHT:
             case COURSE_FEATURE_BUILDING_TALL_GOLD_LEFT:
             case COURSE_FEATURE_BUILDING_TALL_GOLD_RIGHT:
-                func_806F7FCC(mtx, &spDC, var_s0->unk_30, var_s0->unk_30, var_s0->unk_30, var_s0->unk_0C.x.x,
-                              var_s0->unk_0C.x.y, var_s0->unk_0C.x.z, 0.0f, 1.0f, 0.0f, var_s0->unk_00.x, -750.0f,
-                              var_s0->unk_00.z);
+                Matrix_SetLockedLookAt(mtx, &spDC, var_s0->unk_30, var_s0->unk_30, var_s0->unk_30, var_s0->unk_0C.x.x,
+                                       var_s0->unk_0C.x.y, var_s0->unk_0C.x.z, 0.0f, 1.0f, 0.0f, var_s0->unk_00.x,
+                                       -750.0f, var_s0->unk_00.z);
                 break;
             default:
-                func_806F7FCC(mtx, &spDC, var_s0->unk_30, var_s0->unk_30, var_s0->unk_30, var_s0->unk_0C.x.x,
-                              var_s0->unk_0C.x.y, var_s0->unk_0C.x.z, var_s0->unk_0C.y.x, var_s0->unk_0C.y.y,
-                              var_s0->unk_0C.y.z, var_s0->unk_00.x, var_s0->unk_00.y, var_s0->unk_00.z);
+                Matrix_SetLockedLookAt(mtx, &spDC, var_s0->unk_30, var_s0->unk_30, var_s0->unk_30, var_s0->unk_0C.x.x,
+                                       var_s0->unk_0C.x.y, var_s0->unk_0C.x.z, var_s0->unk_0C.y.x, var_s0->unk_0C.y.y,
+                                       var_s0->unk_0C.y.z, var_s0->unk_00.x, var_s0->unk_00.y, var_s0->unk_00.z);
                 break;
         }
         mtx++;

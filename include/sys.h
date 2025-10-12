@@ -39,6 +39,12 @@
         osSetIntMask(prevMask);                \
     }
 
+typedef enum AllocType {
+    ALLOC_FRONT,
+    ALLOC_PEEK,
+    ALLOC_BACK,
+} AllocType;
+
 // FAKE!!
 typedef struct unk_Light_t {
     s8 unk_00[0x8];
@@ -69,7 +75,7 @@ typedef struct GfxPool {
     Vtx unk_33B48[28];
     Vtx unk_33D08[4];
     s8 pad_33D48[0x500];
-    Vtx unk_34248[256];
+    Vtx backgroundTileVtx[256];
     Mtx unk_35248[1];
     Mtx unk_35288[1];
     Mtx unk_352C8[64];

@@ -85,6 +85,7 @@
       "sfx.h": "c",
       "ead_demo.h": "c",
       "ead_demo_assets.h": "c",
+      "transition.h": "c"
     },
     "C_Cpp_Runner.msvcBatchPath": "",
     "C_Cpp.errorSquiggles": "enabled"

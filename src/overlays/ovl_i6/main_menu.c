@@ -5,6 +5,7 @@
 #include "fzx_object.h"
 #include "fzx_course.h"
 #include "fzx_assets.h"
+#include "src/overlays/ovl_i2/transition.h"
 
 s16* D_80085AE0;
 
@@ -215,7 +216,7 @@ void MainMenu_Init(void) {
 extern s32 gGameMode;
 extern s32 gSelectedMode;
 extern s32 gAntiPiracyAddedDifficulty;
-extern s32 D_800BEE14;
+extern s32 gTransitionState;
 extern u16 gInputPressed;
 extern u16 gInputButtonPressed;
 extern char* gCurrentTrackName;
@@ -235,7 +236,7 @@ s32 MainMenu_Update(void) {
     s32 previous;
     bool var_v1_2;
 
-    if (D_800BEE14 != 0) {
+    if (gTransitionState != TRANSITION_INACTIVE) {
         return gGameMode;
     }
 
@@ -475,7 +476,7 @@ void MainMenu_BackgroundInit(Object* backgroundObj) {
     s32 i;
 
     //! @bug This only allocates half the size needed
-    D_80085AE0 = func_807084E4(0, 240);
+    D_80085AE0 = Arena_Allocate(ALLOC_FRONT, 240);
     OBJECT_STATE(backgroundObj) = D_8076CC94;
     func_i2_800AE17C(sTitleBackgroundCompTexInfos[OBJECT_STATE(backgroundObj)], 0, true);
 

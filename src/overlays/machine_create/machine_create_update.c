@@ -3,6 +3,7 @@
 #include "leo/leo_functions.h"
 #include "fzx_machine.h"
 #include "fzx_bordered_box.h"
+#include "src/overlays/ovl_i2/transition.h"
 
 s32 D_xk3_80140E50;
 s32 D_xk3_80140E54;
@@ -1068,7 +1069,7 @@ void func_xk3_8012DBFC(void) {
     }
 }
 
-extern s32 D_800BEE14;
+extern s32 gTransitionState;
 extern volatile u8 D_80794E14;
 
 bool func_xk3_8012DF04(void) {
@@ -1080,7 +1081,7 @@ bool func_xk3_8012DF04(void) {
         func_8076869C(MFS_ENTRY_WORKING_DIR, gCustomMachine.machineName, "CARD");
     }
     func_xk1_8002D974();
-    if ((D_80794E14 == 0) && (D_800BEE14 == 0) && !D_xk3_80136548) {
+    if ((D_80794E14 == 0) && (gTransitionState == TRANSITION_INACTIVE) && !D_xk3_80136548) {
         func_xk3_8012BD84();
     }
     if (gWorksMachineMode != MACHINE_MODE_PARTS) {
@@ -1090,10 +1091,10 @@ bool func_xk3_8012DF04(void) {
     }
     func_xk3_8012C744();
     if (gWorksMachineMode != MACHINE_MODE_MNAME) {
-        if (D_800BEE14 == 0) {
+        if (gTransitionState == TRANSITION_INACTIVE) {
             func_xk3_8012CAC8();
         }
-        if ((D_80794E14 == 0) && (D_800BEE14 == 0) && !D_xk3_80136548 &&
+        if ((D_80794E14 == 0) && (gTransitionState == TRANSITION_INACTIVE) && !D_xk3_80136548 &&
             (!(gControllers[gPlayerControlPorts[0]].buttonPressed & BTN_A) ||
              !(gControllers[gPlayerControlPorts[0]].buttonPressed & BTN_B))) {
             func_xk3_8012CC10();

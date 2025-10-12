@@ -137,7 +137,7 @@ UNUSED s8 D_8076C794 = 1;
 
 extern LEODiskID leoBootID;
 
-void func_806F33D0(FrameBuffer* arg0);
+void func_806F33D0(FrameBuffer* fb);
 
 void Main_ThreadEntry(void* arg0) {
     OSMesg msg;
@@ -352,19 +352,19 @@ void Reset_ThreadEntry(void* arg0) {
 
 extern u64 D_80769DF0[];
 
-void func_806F33D0(FrameBuffer* arg0) {
-    u64* var_s0 = &arg0->buffer[19199];
+void func_806F33D0(FrameBuffer* fb) {
+    u64* var_s0 = &fb->array[SCREEN_HEIGHT - 1][SCREEN_WIDTH - 4];
     u64* var;
     s32 i;
     s32 j;
 
     // Very FAKE Throughout
-    while (var_s0 >= arg0->buffer) {
+    while (var_s0 >= fb->buffer) {
         *(--var_s0 + 1) = 0x1000100010001;
     }
-    osWritebackDCache(arg0, SCREEN_HEIGHT * SCREEN_WIDTH * sizeof(u16));
+    osWritebackDCache(fb, sizeof(FrameBuffer));
 
-    var_s0 = &arg0->buffer[8023];
+    var_s0 = &fb->array[100][92];
 
     for (i = 0; i < 39; i++) {
         for (j = 0; j < 34; j++) {

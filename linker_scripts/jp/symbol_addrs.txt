@@ -35,6 +35,13 @@ Lights_SetSource = 0x806F7364;
 Light_SetLookAtSource = 0x806F73D0;
 Matrix_FromMtx = 0x806F7EC8;
 Matrix_ToMtx = 0x806F7F30;
+Matrix_SetLockedLookAt = 0x806F7FCC;
+Matrix_SetLockedLookAtFromVectors = 0x806F8314;
+Matrix_ScaleFrom3DMatrix = 0x806F85C0;
+Matrix_SetTransRot = 0x806F86C0;
+Matrix_SetLookAt = 0x806F8FE0;
+Matrix_SetFrustrum = 0x806F9384;
+Matrix_SetOrtho = 0x806F9628;
 
 CourseFeature_IsDecorational = 0x806F9750;
 
@@ -177,6 +184,9 @@ gPlayerControlPorts = 0x8079A888; // size:0x10
 gControllersConnected = 0x8079A898;
 
 gSinTable = 0x8079A8A0; // size:0x4000
+
+sDefaultMtx = 0x8079E8A0;
+sDefaultMtxF = 0x8079E8E0;
 
 gSegments = 0x8079FA40;
 

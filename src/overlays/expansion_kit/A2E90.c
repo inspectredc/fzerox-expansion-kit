@@ -142,10 +142,10 @@ void func_xk1_80025F98(void) {
     s32 i;
 
     D_xk1_80030080 = func_xk1_80025C58();
-    D_xk1_8003A54C = func_807084E4(0, D_xk1_80030080 * sizeof(u16));
-    D_xk1_8003A548 = func_807084E4(0, D_xk1_80030080 * sizeof(s32));
+    D_xk1_8003A54C = Arena_Allocate(ALLOC_FRONT, D_xk1_80030080 * sizeof(u16));
+    D_xk1_8003A548 = Arena_Allocate(ALLOC_FRONT, D_xk1_80030080 * sizeof(s32));
     D_xk1_8003A494 = func_xk1_80025DE4();
-    D_xk1_8003A488 = func_807084E4(0, (D_xk1_8003A494 << 7) + 0xE00);
+    D_xk1_8003A488 = Arena_Allocate(ALLOC_FRONT, (D_xk1_8003A494 << 7) + 0xE00);
     D_xk1_8003A490 += 0xE00;
     func_xk1_800267C4(D_xk1_8003A54C);
     D_xk1_80030080 = 0;

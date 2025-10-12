@@ -5,6 +5,7 @@
 #include "fzx_object.h"
 #include "fzx_bordered_box.h"
 #include "fzx_assets.h"
+#include "src/overlays/ovl_i2/transition.h"
 
 SaveContext* sSaveContextPtr;
 Vtx D_i6_80085B18[2][0x258]; // Some kind of vtx buffer space?
@@ -230,7 +231,7 @@ void func_i6_80082A24(void) {
     }
 }
 
-extern s32 D_800BEE14;
+extern s32 gTransitionState;
 extern s16 D_8076C814;
 
 s32 OptionsMenu_Update(void) {
@@ -240,7 +241,7 @@ s32 OptionsMenu_Update(void) {
     if (!sOptionsDataAlreadyCleared) {
         switch (sOptionsDataClearMenu) {
             case OPTIONS_DATA_CLEAR_MENU_CLOSED:
-                if (D_800BEE14 == 0 && func_i6_80082DB4()) {
+                if (gTransitionState == TRANSITION_INACTIVE && func_i6_80082DB4()) {
                     sOptionsDataAlreadyCleared = true;
                     D_8076C814 = 14;
                     Audio_RomBgmReady(BGM_SELECT);
@@ -595,7 +596,7 @@ void func_i6_80083A20(void) {
     }
 
     D_i6_8008A618 = D_i6_80085B18[D_8079A35C];
-    func_806F9628(gGfxPool->unk_35248, NULL, 1.0f, 0.0f, 319.0f, 239.0f, 0.0f, -100.0f, 100.0f);
+    Matrix_SetOrtho(gGfxPool->unk_35248, NULL, 1.0f, 0.0f, 319.0f, 239.0f, 0.0f, -100.0f, 100.0f);
     vtx = D_i6_8008A618;
 
     var_s0 = 32;

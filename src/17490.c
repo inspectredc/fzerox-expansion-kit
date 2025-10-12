@@ -129,12 +129,12 @@ Gfx* func_80709C90(Gfx* gfx, s32 left, s32 top, s32 right, s32 bottom, s32 red, 
     return gfx;
 }
 
-void func_80709DEC(u16* arg0, s32 arg1) {
+void func_80709DEC(u16* arg0, s32 size) {
     u32 i;
     u32 colorBlend;
     u32 red, green, blue, alpha;
 
-    for (i = 0; i < (arg1 / 2); i++, arg0++) {
+    for (i = 0; i < (size / (s32) sizeof(u16)); i++, arg0++) {
         red = ((*arg0 & 0xF800) >> 11) * 77;
         green = ((*arg0 & 0x7C0) >> 6) * 150;
         blue = ((*arg0 & 0x3E) >> 1) * 29;

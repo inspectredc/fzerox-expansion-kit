@@ -691,7 +691,7 @@ void func_i3_8003FF5C(Racer* arg0) {
 extern s16* D_i3_80069E70;
 
 void func_i3_80040158(void) {
-    D_i3_80069E70 = func_807084E4(0, 0x200 * sizeof(s16));
+    D_i3_80069E70 = Arena_Allocate(ALLOC_FRONT, 0x200 * sizeof(s16));
 }
 
 extern s32 gCupType;

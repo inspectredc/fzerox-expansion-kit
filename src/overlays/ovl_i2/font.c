@@ -1,5 +1,4 @@
 #include "global.h"
-#include "ovl_i2.h"
 #include "fzx_font.h"
 #include "fzx_assets.h"
 

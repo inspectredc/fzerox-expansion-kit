@@ -11,7 +11,7 @@ s32 D_i5_8007B074 = 0;
 s32 gCourseModelCupCourseNo = 0;
 
 void func_i5_80077080(void) {
-    D_i5_8007C290 = func_807084E4(0, 0x3600 * sizeof(Vtx));
+    D_i5_8007C290 = Arena_Allocate(ALLOC_FRONT, 0x3600 * sizeof(Vtx));
     func_i5_800778E8();
 }
 
@@ -126,7 +126,8 @@ Gfx* func_i5_800774F0(Gfx* gfx) {
     gSPMatrix(gfx++, D_1000000.unk_1A008, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
     gSPMatrix(gfx++, D_1000000.unk_1A108, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    func_806F7FCC(gGfxPool->unk_32308, NULL, 0.25f, 0.25f, 0.25f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+    Matrix_SetLockedLookAt(gGfxPool->unk_32308, NULL, 0.25f, 0.25f, 0.25f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+                           0.0f, 0.0f);
     gSPMatrix(gfx++, K0_TO_PHYS(gGfxPool->unk_32308), G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
 
     if (D_i5_8007B074 < 6) {

@@ -7,6 +7,7 @@
 #include "fzx_machine.h"
 #include "fzx_font.h"
 #include "fzx_assets.h"
+#include "src/overlays/ovl_i2/transition.h"
 #include "assets/overlays/ovl_i4/machine.h"
 
 UNUSED s32 D_80077050;
@@ -1080,7 +1081,7 @@ s32 MachineSelect_Update(void) {
     return gGameMode;
 }
 
-extern s32 D_800BEE14;
+extern s32 gTransitionState;
 
 s32 MachineSettings_Update(void) {
     s32 i;
@@ -1093,7 +1094,7 @@ s32 MachineSettings_Update(void) {
     s32 stickX;
 
     func_80717294();
-    if (D_800BEE14 != 0) {
+    if (gTransitionState != TRANSITION_INACTIVE) {
         return gGameMode;
     }
 
@@ -1290,7 +1291,7 @@ void MachineSelect_MachineInit(Object* machineObj) {
     s32 i;
     s32 j;
 
-    vp = (Vp*) func_807084E4(0, 30 * sizeof(Vp));
+    vp = (Vp*) Arena_Allocate(ALLOC_FRONT, 30 * sizeof(Vp));
     MACHINE_VIEWPORT(machineObj) = vp;
 
     for (i = 0; i < 30; i++) {
@@ -1324,7 +1325,7 @@ void MachineSettings_MachineInit(Object* machineObj) {
     s32 j;
     s32 k;
 
-    vp = (Vp*) func_807084E4(0, 2 * 4 * sizeof(Vp));
+    vp = (Vp*) Arena_Allocate(ALLOC_FRONT, 2 * 4 * sizeof(Vp));
     MACHINE_VIEWPORT(machineObj) = vp;
 
     for (i = 0; i < 2; i++) {
@@ -1399,7 +1400,7 @@ void MachineSettings_SliderInit(void) {
 void MachineSelect_DifficultyCupsInit(Object* difficultyCupsObj) {
     s32 i;
 
-    OBJECT_BUFFER(difficultyCupsObj) = func_807084E4(0, 4 * 30 * 7);
+    OBJECT_BUFFER(difficultyCupsObj) = Arena_Allocate(ALLOC_FRONT, 4 * 30 * 7);
 
     Save_UpdateCupSave(OBJECT_BUFFER(difficultyCupsObj));
 
@@ -2129,9 +2130,10 @@ void MachineSelect_MachineUpdate(Object* machineObj) {
         var_s0->unk_C0.x.y += var_fv0 * var_s0->unk_C0.z.y;
         var_s0->unk_C0.x.z += var_fv0 * var_s0->unk_C0.z.z;
         func_806F6D8C(&var_s0->unk_C0);
-        func_806F7FCC(&gGfxPool->unk_32308[i], NULL, D_8076E568, D_8076E56C, D_8076E570, var_s0->unk_C0.x.x,
-                      var_s0->unk_C0.x.y, var_s0->unk_C0.x.z, var_s0->unk_C0.y.x, var_s0->unk_C0.y.y,
-                      var_s0->unk_C0.y.z, var_s0->unk_0C.unk_34.x, var_s0->unk_0C.unk_34.y, var_s0->unk_0C.unk_34.z);
+        Matrix_SetLockedLookAt(&gGfxPool->unk_32308[i], NULL, D_8076E568, D_8076E56C, D_8076E570, var_s0->unk_C0.x.x,
+                               var_s0->unk_C0.x.y, var_s0->unk_C0.x.z, var_s0->unk_C0.y.x, var_s0->unk_C0.y.y,
+                               var_s0->unk_C0.y.z, var_s0->unk_0C.unk_34.x, var_s0->unk_0C.unk_34.y,
+                               var_s0->unk_0C.unk_34.z);
         var_s0--;
         i--;
     }
@@ -2217,18 +2219,19 @@ void MachineSettings_MachineUpdate(Object* machineObj) {
         var_s0->unk_C0.y.y += var_fs0 * var_s0->unk_C0.z.y;
         var_s0->unk_C0.y.z += var_fs0 * var_s0->unk_C0.z.z;
         func_806F6D8C(&var_s0->unk_C0);
-        func_806F7FCC(&gGfxPool->unk_32308[i], NULL, var_fs2 * D_8076E568, var_fs2 * D_8076E56C, var_fs2 * D_8076E570,
-                      var_s0->unk_C0.x.x, var_s0->unk_C0.x.y, var_s0->unk_C0.x.z, var_s0->unk_C0.y.x,
-                      var_s0->unk_C0.y.y, var_s0->unk_C0.y.z, var_s0->unk_0C.unk_34.x, var_s0->unk_0C.unk_34.y,
-                      var_s0->unk_0C.unk_34.z);
-        func_806F7FCC(&gGfxPool->unk_33208[i], NULL, (var_fs2 * 1.05f) * D_8076E568, (var_fs2 * 1.05f) * D_8076E56C,
-                      (var_fs2 * 1.05f) * D_8076E570, var_s0->unk_C0.x.x, var_s0->unk_C0.x.y, var_s0->unk_C0.x.z,
-                      var_s0->unk_C0.y.x, var_s0->unk_C0.y.y, var_s0->unk_C0.y.z, var_s0->unk_0C.unk_34.x,
-                      var_s0->unk_0C.unk_34.y, var_s0->unk_0C.unk_34.z);
-        func_806F7FCC(&gGfxPool->unk_32A88[i], NULL, var_fs2 * D_8076E568, var_fs2 * D_8076E56C, var_fs2 * D_8076E570,
-                      var_s0->unk_C0.x.x, var_s0->unk_C0.x.y, var_s0->unk_C0.x.z, var_s0->unk_C0.y.x,
-                      var_s0->unk_C0.y.y, var_s0->unk_C0.y.z, var_s0->unk_0C.unk_34.x, var_s0->unk_0C.unk_34.y,
-                      var_s0->unk_0C.unk_34.z);
+        Matrix_SetLockedLookAt(&gGfxPool->unk_32308[i], NULL, var_fs2 * D_8076E568, var_fs2 * D_8076E56C,
+                               var_fs2 * D_8076E570, var_s0->unk_C0.x.x, var_s0->unk_C0.x.y, var_s0->unk_C0.x.z,
+                               var_s0->unk_C0.y.x, var_s0->unk_C0.y.y, var_s0->unk_C0.y.z, var_s0->unk_0C.unk_34.x,
+                               var_s0->unk_0C.unk_34.y, var_s0->unk_0C.unk_34.z);
+        Matrix_SetLockedLookAt(&gGfxPool->unk_33208[i], NULL, (var_fs2 * 1.05f) * D_8076E568,
+                               (var_fs2 * 1.05f) * D_8076E56C, (var_fs2 * 1.05f) * D_8076E570, var_s0->unk_C0.x.x,
+                               var_s0->unk_C0.x.y, var_s0->unk_C0.x.z, var_s0->unk_C0.y.x, var_s0->unk_C0.y.y,
+                               var_s0->unk_C0.y.z, var_s0->unk_0C.unk_34.x, var_s0->unk_0C.unk_34.y,
+                               var_s0->unk_0C.unk_34.z);
+        Matrix_SetLockedLookAt(&gGfxPool->unk_32A88[i], NULL, var_fs2 * D_8076E568, var_fs2 * D_8076E56C,
+                               var_fs2 * D_8076E570, var_s0->unk_C0.x.x, var_s0->unk_C0.x.y, var_s0->unk_C0.x.z,
+                               var_s0->unk_C0.y.x, var_s0->unk_C0.y.y, var_s0->unk_C0.y.z, var_s0->unk_0C.unk_34.x,
+                               var_s0->unk_0C.unk_34.y, var_s0->unk_0C.unk_34.z);
         var_s0--;
         i--;
     }
