@@ -1,6 +1,7 @@
 #include "global.h"
 #include "ead_demo.h"
 #include "fzx_assets.h"
+#include "src/overlays/ovl_i2/transition.h"
 
 Lights1 D_xk4_800F1A90 = gdSPDefLights1(50, 50, 30, 255, 200, 160, 0, 84, 84);
 
@@ -19,7 +20,7 @@ void EADDemo_Init(void) {
     D_8076C7A8 = 3;
 }
 
-extern s32 D_800BEE14;
+extern s32 gTransitionState;
 extern s32 D_8076C77C;
 
 extern GfxPool D_8024E260[];
@@ -31,7 +32,7 @@ extern GfxPool* gGfxPool;
 
 s32 EADDemo_Update(void) {
     gGfxPool = &D_8024E260[D_8079A35C];
-    if (D_800BEE14 != 0) {
+    if (gTransitionState != TRANSITION_INACTIVE) {
         return gGameMode;
     }
     Controller_SetGlobalInputs(&gSharedController);

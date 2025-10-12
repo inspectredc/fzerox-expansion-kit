@@ -611,7 +611,7 @@ extern s16 D_i2_800BEE10;
 
 Gfx* func_806F59E0(Gfx* gfx) {
 
-    if ((D_8076C810 != 3) && (D_i2_800BEE10 != 0)) {
+    if ((D_8076C810 != 3) && D_i2_800BEE10) {
         gfx = sGamemodeDrawFuncs[GET_MODE(gGameMode)](gfx);
     }
     return Transition_Draw(gfx);

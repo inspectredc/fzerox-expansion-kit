@@ -1,5 +1,4 @@
 #include "global.h"
-#include "ovl_i2.h"
 #include "fzx_game.h"
 #include "fzx_object.h"
 

@@ -370,8 +370,8 @@ void Save_WriteGhostData(GhostData* ghostData);
 OSPiHandle* Sram_Init(void);
 
 void Transition_Init(void);
-void func_i2_800A26C0(s32, s32);
-Gfx* Transition_Draw(Gfx*);
+void Transition_SetArgument(s32 transitionType, s32 argument);
+Gfx* Transition_Draw(Gfx* gfx);
 void Transition_SetBackgroundBuffer(void);
 void Transition_AppearSet(void);
 void Transition_HideSet(void);
