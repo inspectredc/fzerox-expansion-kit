@@ -5,6 +5,7 @@
 #include "fzx_object.h"
 #include "fzx_course.h"
 #include "fzx_assets.h"
+#include "src/overlays/ovl_i2/transition.h"
 #include "assets/overlays/course_select/course_select.h"
 
 s32 sCourseSelectCup;
@@ -464,7 +465,7 @@ extern s16 D_8076C810;
 extern s16 D_8076C814;
 extern s32 D_8076CC88;
 extern s32 D_8076CC8C;
-extern s32 D_800BEE14;
+extern s32 gTransitionState;
 extern u16 gInputPressed;
 extern s32 gCupType;
 extern u16 gInputButtonPressed;
@@ -491,7 +492,7 @@ s32 CourseSelect_Update(void) {
     }
 
     func_80717294();
-    if (D_800BEE14 != 0) {
+    if (gTransitionState != TRANSITION_INACTIVE) {
         return gGameMode;
     }
     if ((gSelectedMode == MODE_TIME_ATTACK) && (gGameMode != GAMEMODE_FLX_RECORDS_COURSE_SELECT)) {
@@ -739,7 +740,7 @@ s32 CourseSelect_Update(void) {
 
 s32 NextCourseSelect_Update(void) {
     func_80717294();
-    if (D_800BEE14 != 0) {
+    if (gTransitionState != TRANSITION_INACTIVE) {
         return gGameMode;
     }
     Controller_SetGlobalInputs(&gSharedController);

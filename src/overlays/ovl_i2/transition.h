@@ -1,5 +1,5 @@
-#ifndef OVL_I2_H
-#define OVL_I2_H
+#ifndef TRANSITION_H
+#define TRANSITION_H
 
 #include "libultra/ultra64.h"
 #include "other_types.h"
@@ -35,13 +35,19 @@ typedef struct Transition {
     s32 queuedTransitionType;
     s32 state;
     s16 timer;
-    s16 unk_0E;
+    s16 argument;
     u16 appearType;
     u16 flags;
     TexturePtr backgroundBuffer;
     void* workBuffer;
     TransitionInfo transitionInfo;
 } Transition; // size = 0x30
+
+typedef enum TransitionState {
+    /* 0 */ TRANSITION_INACTIVE,
+    /* 1 */ TRANSITION_HIDING,
+    /* 2 */ TRANSITION_APPEARING,
+} TransitionState;
 
 typedef enum TransitionAppearType {
     /* 0 */ TRANSITION_APPEAR,
@@ -133,6 +139,8 @@ typedef enum WhirlTilesTileState {
     /* 2 */ WHIRL_TILES_TILE_FINISHED,
 } WhirlTilesTileState;
 
+#define WHIRL_CORNER_ARG(transition) ((transition)->argument)
+
 typedef enum TransitionTiledSpiralState {
     /* 1 */ TILED_SPIRAL_START = 1,
     /* 2 */ TILED_SPIRAL_WAIT,
@@ -164,6 +172,7 @@ typedef enum TransitionFadeState {
     /* 4 */ FADE_FINISHED,
 } TransitionFadeState;
 
+#define FADE_TIMER_ARG(transition) ((transition)->argument)
 #define FADE_RED(info) ((info)->work0)
 #define FADE_GREEN(info) ((info)->work1)
 #define FADE_BLUE(info) ((info)->work2)
@@ -182,6 +191,7 @@ typedef enum WipeDirection {
     /* 3 */ WIPE_DIRECTION_DOWN,
 } WipeDirection;
 
+#define WIPE_DIRECTION_ARG(transition) ((transition)->argument)
 #define WIPE_LEFT(info) ((info)->work0)
 #define WIPE_TOP(info) ((info)->work1)
 
@@ -201,8 +211,8 @@ typedef enum TransitionGreyscaleState {
 
 #define GREYSCALE_PALETTE_INDEX(info) ((info)->work0)
 
-s32 Transition_Queue(s32 appearType, s32 transitionType);
-s32 Transition_QueueRandom(s32 appearType, bool instantTransitionAllowed);
+bool Transition_Queue(s32 appearType, s32 transitionType);
+bool Transition_QueueRandom(s32 appearType, bool instantTransitionAllowed);
 s32 Transition_Update(void);
 void Transition_PopQueue(Transition* transition);
 void Transition_SmallTilesInit(Transition* transition);
@@ -238,4 +248,4 @@ void Transition_GreyscalePaletteUpdate(Transition* transition);
 bool Transition_GreyscalePaletteUpdateState(Transition* transition);
 Gfx* Transition_GreyscalePaletteDraw(Gfx* gfx, Transition* transition);
 
-#endif // OVL_I2_H
+#endif // TRANSITION_H

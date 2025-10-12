@@ -7,6 +7,7 @@
 #include "fzx_machine.h"
 #include "fzx_font.h"
 #include "fzx_assets.h"
+#include "src/overlays/ovl_i2/transition.h"
 #include "assets/overlays/ovl_i4/machine.h"
 
 UNUSED s32 D_80077050;
@@ -1080,7 +1081,7 @@ s32 MachineSelect_Update(void) {
     return gGameMode;
 }
 
-extern s32 D_800BEE14;
+extern s32 gTransitionState;
 
 s32 MachineSettings_Update(void) {
     s32 i;
@@ -1093,7 +1094,7 @@ s32 MachineSettings_Update(void) {
     s32 stickX;
 
     func_80717294();
-    if (D_800BEE14 != 0) {
+    if (gTransitionState != TRANSITION_INACTIVE) {
         return gGameMode;
     }
 

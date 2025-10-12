@@ -4,6 +4,7 @@
 #include "fzx_course.h"
 #include "fzx_bordered_box.h"
 #include "fzx_assets.h"
+#include "src/overlays/ovl_i2/transition.h"
 #include "assets/overlays/ovl_i8/records.h"
 
 s32 D_800A1EF0;
@@ -410,7 +411,7 @@ s32 Records_Update(void) {
     return gameMode;
 }
 
-extern s32 D_800BEE14;
+extern s32 gTransitionState;
 extern u16 gInputPressed;
 extern u16 gInputButtonPressed;
 
@@ -419,7 +420,7 @@ s32 func_i8_8009BB60(void) {
     s32 sp30;
     s32 lastCourseIndex;
 
-    if (D_800BEE14 != 0) {
+    if (gTransitionState != TRANSITION_INACTIVE) {
         return 0;
     }
     if (BorderedBox_GetInfo(D_i8_800A1F04, IS_BORDERED_BOX_ACTIVE)) {
@@ -453,7 +454,7 @@ s32 func_i8_8009BB60(void) {
                 gCourseIndex++;
             }
         }
-        func_i2_800A26C0(9, 0);
+        Transition_SetArgument(TRANSITION_TYPE_WIPE, WIPE_DIRECTION_LEFT);
     } else if (gInputPressed & BTN_LEFT) {
         D_i8_800A1D6C = 2;
         if (gCourseIndex == 0) {
@@ -474,7 +475,7 @@ s32 func_i8_8009BB60(void) {
                 gCourseIndex--;
             }
         }
-        func_i2_800A26C0(9, 1);
+        Transition_SetArgument(TRANSITION_TYPE_WIPE, WIPE_DIRECTION_RIGHT);
     }
 
     if (lastCourseIndex != gCourseIndex) {

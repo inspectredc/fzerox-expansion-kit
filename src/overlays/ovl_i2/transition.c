@@ -1,5 +1,5 @@
 #include "global.h"
-#include "ovl_i2.h"
+#include "transition.h"
 #include "fzx_game.h"
 #include "fzx_assets.h"
 
@@ -7,13 +7,13 @@ s16 sWipePos;
 u16 sTiledPerspectiveScale;
 s16 sTransitionAppearingFromBlack;
 Transition sTransition;
-s16 D_i2_800D1228;
-s16 D_i2_800D122A;
+s16 sTransitionTypeArgument;
+s16 sTransitionTypeWithArgument;
 u16* sTransitionPalettePtr;
 u16 sTransitionPalette[32];
 
-s16 D_i2_800BEE10 = 1;
-s32 D_800BEE14 = 0;
+s16 D_i2_800BEE10 = true;
+s32 gTransitionState = TRANSITION_INACTIVE;
 s16 sSurroundingTilesRelativeIndex[] = {
     -SMALL_TILES_COLUMNS - 1, -SMALL_TILES_COLUMNS, -SMALL_TILES_COLUMNS + 1, -1, 1,
     SMALL_TILES_COLUMNS - 1,  SMALL_TILES_COLUMNS,  SMALL_TILES_COLUMNS + 1
@@ -33,12 +33,12 @@ void Transition_Init(void) {
     transition->activeTransitionType = transition->queuedTransitionType = 0;
     transition->state = 0;
     transition->timer = 0;
-    transition->unk_0E = 0;
+    transition->argument = 0;
     transition->flags = 0;
     transition->backgroundBuffer = NULL;
     transition->workBuffer = NULL;
-    D_i2_800D1228 = 0;
-    D_i2_800D122A = 0;
+    sTransitionTypeArgument = 0;
+    sTransitionTypeWithArgument = 0;
     sWipePos = 0;
     sTransitionAppearingFromBlack = 0;
 }
@@ -48,7 +48,7 @@ extern s16 D_8076C810;
 extern s32 gGameMode;
 
 void Transition_AppearSet(void) {
-    D_800BEE14 = 2;
+    gTransitionState = TRANSITION_APPEARING;
 
     if (D_8076C810 == 31) {
         Transition_Queue(TRANSITION_APPEAR, TRANSITION_TYPE_INSTANT);
@@ -60,7 +60,7 @@ void Transition_AppearSet(void) {
             Transition_Queue(TRANSITION_APPEAR, TRANSITION_TYPE_PHASED_STRIPS);
             break;
         case GAMEMODE_GP_END_CS:
-            func_i2_800A26C0(TRANSITION_TYPE_FADE, 120);
+            Transition_SetArgument(TRANSITION_TYPE_FADE, 120);
             Transition_Queue(TRANSITION_APPEAR, TRANSITION_TYPE_FADE);
             break;
         case GAMEMODE_COURSE_EDIT:
@@ -70,7 +70,7 @@ void Transition_AppearSet(void) {
             Transition_Queue(TRANSITION_APPEAR, TRANSITION_TYPE_STATIC_FADE);
             break;
         case GAMEMODE_FLX_COURSE_SELECT:
-            func_i2_800A26C0(TRANSITION_TYPE_FADE, 40);
+            Transition_SetArgument(TRANSITION_TYPE_FADE, 40);
             Transition_Queue(TRANSITION_APPEAR, TRANSITION_TYPE_FADE);
             break;
         case GAMEMODE_FLX_MACHINE_SELECT:
@@ -120,7 +120,7 @@ void Transition_AppearSet(void) {
 extern s32 gQueuedGameMode;
 
 void Transition_HideSet(void) {
-    D_800BEE14 = 1;
+    gTransitionState = TRANSITION_HIDING;
 
     if (D_8076C810 == 33) {
         Transition_Queue(TRANSITION_HIDE, TRANSITION_TYPE_INSTANT);
@@ -155,7 +155,7 @@ void Transition_HideSet(void) {
         case GAMEMODE_FLX_RECORDS_COURSE_SELECT:
         case GAMEMODE_FLX_OPTIONS_MENU:
             if (D_8076C810 == 23) {
-                func_i2_800A26C0(TRANSITION_TYPE_WIPE, 2);
+                Transition_SetArgument(TRANSITION_TYPE_WIPE, WIPE_DIRECTION_UP);
                 Transition_Queue(TRANSITION_HIDE, TRANSITION_TYPE_WIPE);
             } else {
                 Transition_QueueRandom(TRANSITION_HIDE, true);
@@ -163,7 +163,7 @@ void Transition_HideSet(void) {
             break;
         case GAMEMODE_FLX_MAIN_MENU:
             if (D_8076C810 == 23) {
-                func_i2_800A26C0(TRANSITION_TYPE_WIPE, 3);
+                Transition_SetArgument(TRANSITION_TYPE_WIPE, WIPE_DIRECTION_DOWN);
                 Transition_Queue(TRANSITION_HIDE, TRANSITION_TYPE_WIPE);
             } else {
                 Transition_Queue(TRANSITION_HIDE, TRANSITION_TYPE_PHASED_STRIPS);
@@ -177,7 +177,7 @@ void Transition_HideSet(void) {
             }
             break;
         case GAMEMODE_FLX_UNSKIPPABLE_CREDITS:
-            func_i2_800A26C0(TRANSITION_TYPE_FADE, 60);
+            Transition_SetArgument(TRANSITION_TYPE_FADE, 60);
             Transition_Queue(TRANSITION_HIDE, TRANSITION_TYPE_FADE);
             break;
         default:
@@ -188,19 +188,19 @@ void Transition_HideSet(void) {
 
 extern u32 gGameFrameCount;
 
-s32 Transition_Queue(s32 appearType, s32 transitionType) {
+bool Transition_Queue(s32 appearType, s32 transitionType) {
     size_t backgroundBufferSize;
     size_t workBufferSize;
     Transition* transition = &sTransition;
 
     transition->queuedTransitionType = transitionType;
     transition->appearType = appearType;
-    if (transition->queuedTransitionType != D_i2_800D122A) {
-        transition->unk_0E = 0;
+    if (transition->queuedTransitionType != sTransitionTypeWithArgument) {
+        transition->argument = 0;
     } else {
-        transition->unk_0E = D_i2_800D1228;
-        D_i2_800D122A = TRANSITION_TYPE_NONE;
-        D_i2_800D1228 = 0;
+        transition->argument = sTransitionTypeArgument;
+        sTransitionTypeWithArgument = TRANSITION_TYPE_NONE;
+        sTransitionTypeArgument = 0;
     }
     sTransitionPalettePtr = NULL;
 
@@ -216,7 +216,7 @@ s32 Transition_Queue(s32 appearType, s32 transitionType) {
         case TRANSITION_TYPE_TILED_WHIRL:
             backgroundBufferSize = TRANSITION_BACKGROUND_WIDTH * TRANSITION_BACKGROUND_HEIGHT * sizeof(u16);
             workBufferSize = TILED_COUNT * sizeof(WhirlTile);
-            transition->unk_0E = gGameFrameCount % 2;
+            transition->argument = gGameFrameCount % 2;
             break;
         case TRANSITION_TYPE_TILED_SPIRAL:
             backgroundBufferSize = TRANSITION_BACKGROUND_WIDTH * TRANSITION_BACKGROUND_HEIGHT * sizeof(u16);
@@ -233,7 +233,7 @@ s32 Transition_Queue(s32 appearType, s32 transitionType) {
             break;
         case TRANSITION_TYPE_PHASED_STRIPS:
             backgroundBufferSize = TRANSITION_BACKGROUND_WIDTH * TRANSITION_BACKGROUND_HEIGHT * sizeof(u16);
-            workBufferSize = 0x380;
+            workBufferSize = TRANSITION_BACKGROUND_HEIGHT * sizeof(f32);
             break;
         case TRANSITION_TYPE_GREYSCALE_PALETTE:
             if (appearType != TRANSITION_APPEAR) {
@@ -256,17 +256,17 @@ s32 Transition_Queue(s32 appearType, s32 transitionType) {
     if (((transition->backgroundBuffer = Arena_Allocate(ALLOC_BACK, backgroundBufferSize)) == NULL) ||
         ((transition->workBuffer = Arena_Allocate(ALLOC_BACK, workBufferSize)) == NULL)) {
         transition->queuedTransitionType = TRANSITION_TYPE_FADE;
-        return 1;
+        return true;
     }
     if (transition->queuedTransitionType == TRANSITION_TYPE_GREYSCALE_PALETTE) {
         sTransitionPalettePtr = sTransitionPalette;
     }
-    return 0;
+    return false;
 }
 
-void func_i2_800A26C0(s32 transitionType, s32 arg1) {
-    D_i2_800D122A = transitionType;
-    D_i2_800D1228 = arg1;
+void Transition_SetArgument(s32 transitionType, s32 argument) {
+    sTransitionTypeWithArgument = transitionType;
+    sTransitionTypeArgument = argument;
 }
 
 const s32 kTransitionRandomSelection[] = { TRANSITION_TYPE_SMALL_TILES,  TRANSITION_TYPE_LARGE_TILES,
@@ -274,29 +274,29 @@ const s32 kTransitionRandomSelection[] = { TRANSITION_TYPE_SMALL_TILES,  TRANSIT
                                            TRANSITION_TYPE_FADE,         TRANSITION_TYPE_STATIC_FADE,
                                            TRANSITION_TYPE_PHASED_STRIPS };
 
-s32 Transition_QueueRandom(s32 appearType, bool instantTransitionAllowed) {
+bool Transition_QueueRandom(s32 appearType, bool instantTransitionAllowed) {
     s32 instantTransitionChance;
     u32 randomTransition;
-    s32 var_v0;
+    bool allocFailed;
 
     if (appearType == TRANSITION_APPEAR) {
         instantTransitionChance = Math_Rand1() % 8;
         if (instantTransitionAllowed) {
             if (instantTransitionChance < 2) {
                 randomTransition = Math_Rand1();
-                var_v0 = Transition_Queue(appearType, kTransitionRandomSelection[randomTransition % 7]);
+                allocFailed = Transition_Queue(appearType, kTransitionRandomSelection[randomTransition % 7]);
             } else {
-                var_v0 = Transition_Queue(appearType, TRANSITION_TYPE_INSTANT);
+                allocFailed = Transition_Queue(appearType, TRANSITION_TYPE_INSTANT);
             }
         } else {
             randomTransition = Math_Rand1();
-            var_v0 = Transition_Queue(appearType, kTransitionRandomSelection[randomTransition % 7]);
+            allocFailed = Transition_Queue(appearType, kTransitionRandomSelection[randomTransition % 7]);
         }
     } else {
         randomTransition = Math_Rand1();
-        var_v0 = Transition_Queue(appearType, kTransitionRandomSelection[randomTransition % 7]);
+        allocFailed = Transition_Queue(appearType, kTransitionRandomSelection[randomTransition % 7]);
     }
-    return var_v0;
+    return allocFailed;
 }
 
 s32 Transition_Update(void) {
@@ -339,8 +339,8 @@ s32 Transition_Update(void) {
             break;
     }
 
-    if (D_800BEE14 != 0 && transition->flags & TRANSITION_FLAG_FINISHED) {
-        D_800BEE14 = 0;
+    if (gTransitionState != TRANSITION_INACTIVE && transition->flags & TRANSITION_FLAG_FINISHED) {
+        gTransitionState = TRANSITION_INACTIVE;
     }
 
     return transition->flags & TRANSITION_FLAG_FINISHED;
@@ -988,7 +988,7 @@ bool Transition_TiledWhirlUpdateState(Transition* transition) {
             tiledWhirlInfo->work0++;
         }
 
-        if (transition->unk_0E != 0) {
+        if (WHIRL_CORNER_ARG(transition) != 0) {
             for (i = tiledWhirlInfo->work0; i >= 0; i--, var_v1++) {
                 if (i >= TILED_COLUMNS) {
                     continue;
@@ -1299,8 +1299,8 @@ void Transition_FadeInit(Transition* transition, s32 alpha, s32 fadeTime) {
     FADE_RED(fadeInfo) = FADE_GREEN(fadeInfo) = FADE_BLUE(fadeInfo) = 0;
     FADE_ALPHA(fadeInfo) = alpha;
 
-    if (transition->unk_0E != 0) {
-        FADE_TIMER(fadeInfo) = transition->unk_0E;
+    if (FADE_TIMER_ARG(transition) != 0) {
+        FADE_TIMER(fadeInfo) = FADE_TIMER_ARG(transition);
     } else {
         FADE_TIMER(fadeInfo) = fadeTime;
     }
@@ -1368,7 +1368,7 @@ void Transition_WipeInit(Transition* transition) {
     WIPE_TOP(wipeInfo) = TRANSITION_BORDER_HEIGHT;
     transition->flags |= TRANSITION_FLAG_SET_BACKGROUND_BUFFER;
 
-    switch (transition->unk_0E) {
+    switch (WIPE_DIRECTION_ARG(transition)) {
         case WIPE_DIRECTION_LEFT:
         case WIPE_DIRECTION_RIGHT:
             sWipePos = WIPE_LEFT(wipeInfo);
@@ -1387,7 +1387,7 @@ void Transition_WipeUpdate(Transition* transition) {
         case TRANSITION_STATE_INACTIVE:
             break;
         case WIPE_START:
-            switch (transition->unk_0E) {
+            switch (WIPE_DIRECTION_ARG(transition)) {
                 case WIPE_DIRECTION_LEFT:
                     WIPE_LEFT(wipeInfo) = TRANSITION_BORDER_WIDTH -
                                           (s32) ((transition->timer * (f32) TRANSITION_BACKGROUND_WIDTH) / 20.0f);
