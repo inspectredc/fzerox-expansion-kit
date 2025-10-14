@@ -161,10 +161,10 @@
       - { type: .bss, vram: 0x8009AD00, name: ending }
       - { type: .bss, vram: 0x8009AEB0, name: F8970 }
 
-  - name: ovl_i8
-    exclusive_ram_id: ovl_i8
+  - name: records
+    exclusive_ram_id: records
     type: code
-    dir: overlays/ovl_i8
+    dir: overlays/records
     start: 0xFCC60
     vram: 0x8009B170
     bss_size: 0x1B0

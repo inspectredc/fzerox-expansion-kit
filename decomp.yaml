@@ -103,9 +103,9 @@ tools:
           paths:
             - overlays/ovl_i7
         - id: ovl_i8
-          name: ovl_i8
+          name: records
           paths:
-            - overlays/ovl_i8
+            - overlays/records
         - id: ovl_i2
           name: ovl_i2
           paths:

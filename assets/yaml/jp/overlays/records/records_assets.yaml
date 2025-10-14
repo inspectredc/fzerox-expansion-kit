@@ -1,7 +1,7 @@
 :config:
   header:
     code:
-      - '#include "assets/overlays/ovl_i8/records_assets.h"'
+      - '#include "assets/overlays/records/records_assets.h"'
     header:
       - '#include "libultra/ultra64.h"'
 

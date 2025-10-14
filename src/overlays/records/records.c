@@ -6,7 +6,7 @@
 #include "fzx_assets.h"
 #include "records.h"
 #include "src/overlays/ovl_i2/transition.h"
-#include "assets/overlays/ovl_i8/records_assets.h"
+#include "assets/overlays/records/records_assets.h"
 
 s32 sRecordsState;
 s32 sUnlockedCourseCount;
@@ -102,7 +102,7 @@ UNUSED const char* sStaffGhostNames[] = {
     "hiroki sotoike",   "hajime wakai",   "tsutomu kaneshige",
 };
 
-#include "src/assets/overlays/ovl_i8/records_assets/records_assets.c"
+#include "src/assets/overlays/records/records_assets/records_assets.c"
 
 s32 sRecordsMoveDirection = 0;
 
