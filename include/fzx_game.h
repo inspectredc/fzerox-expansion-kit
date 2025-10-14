@@ -61,6 +61,39 @@ typedef enum ModeSelect {
     /* 7 */ MODE_CREATE_MACHINE,
 } ModeSelect;
 
+typedef enum GameModeChangeState {
+    /* 0 */ GAMEMODE_UPDATE,
+    /* 1 */ GAMEMODE_CHANGE_START,
+    /* 2 */ GAMEMODE_CHANGE_WAIT_TRANSITION,
+    /* 3 */ GAMEMODE_CHANGE_INIT,
+    /* 5 */ GAMEMODE_CHANGE_START_RELOAD = 5,
+    /* 6 */ GAMEMODE_CHANGE_WAIT_TRANSITION_RELOAD,
+} GameModeChangeState;
+
+#define GAMEMODE_CHANGE_UNK10(state) (state + 10)
+#define GAMEMODE_CHANGE_FAST(state) (state + 20)
+#define GAMEMODE_CHANGE_INSTANT(state) (state + 30)
+
+typedef enum MenuChangeMode {
+    /*  0 */ MENU_CHANGE_INACTIVE,
+    /*  1 */ MENU_CHANGE_RETRY,
+    /*  2 */ MENU_CHANGE_QUIT,
+    /*  3 */ MENU_CHANGE_CHANGE_COURSE,
+    /*  4 */ MENU_CHANGE_NEXT_COURSE,
+    /*  5 */ MENU_CHANGE_CRASH_RESTART,
+    /*  6 */ MENU_CHANGE_6,
+    /*  7 */ MENU_CHANGE_CHANGE_MACHINE,
+    /*  8 */ MENU_CHANGE_CHANGE_RECORD_COURSE,
+    /*  9 */ MENU_CHANGE_TO_RECORDS,
+    /* 10 */ MENU_CHANGE_EXIT_RECORDS,
+    /* 11 */ MENU_CHANGE_TO_COURSE_SELECT,
+    /* 12 */ MENU_CHANGE_EXIT_COURSE_SELECT,
+    /* 13 */ MENU_CHANGE_TO_OPTIONS,
+    /* 14 */ MENU_CHANGE_EXIT_OPTIONS,
+    /* 15 */ MENU_CHANGE_SETTINGS,
+    /* 16 */ MENU_CHANGE_16,
+} MenuChangeMode;
+
 typedef enum Difficulty {
     /* 0 */ NOVICE,
     /* 1 */ STANDARD,

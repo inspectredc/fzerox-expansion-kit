@@ -225,8 +225,8 @@ extern s32 gDifficulty;
 extern s32 gCourseIndex;
 extern s8 gUnlockableLevel;
 extern s32 gModeSubOption[];
-extern s16 D_8076C810;
-extern s16 D_8076C814;
+extern s16 gGameModeChangeState;
+extern s16 gMenuChangeMode;
 extern s8 gSettingEverythingUnlocked;
 
 const s32 gDefaultSubOptionLimits[] = { 2, 1, 0, 2, 0, 2, 0, 0 };
@@ -307,7 +307,7 @@ s32 MainMenu_Update(void) {
                     case MODE_OPTIONS:
                         Audio_RomBgmReady(BGM_OPTION);
                         D_8076CC54 = 5;
-                        D_8076C814 = 13;
+                        gMenuChangeMode = MENU_CHANGE_TO_OPTIONS;
                         break;
                     case MODE_COURSE_EDIT:
                         D_8076CC54 = 5;
@@ -366,7 +366,7 @@ s32 MainMenu_Update(void) {
                     case MODE_TIME_ATTACK:
                         if (gModeSubOption[MODE_TIME_ATTACK] != 0) {
                             D_8076CC54 = 6;
-                            D_8076C814 = 9;
+                            gMenuChangeMode = MENU_CHANGE_TO_RECORDS;
                             Audio_TriggerSystemSE(NA_SE_62);
                             Audio_RomBgmReady(BGM_OPTION);
                         } else {
@@ -456,8 +456,8 @@ s32 MainMenu_Update(void) {
             }
             break;
         case 4:
-            if (D_8076C810 == 0) {
-                D_8076C814 = 11;
+            if (gGameModeChangeState == GAMEMODE_UPDATE) {
+                gMenuChangeMode = MENU_CHANGE_TO_COURSE_SELECT;
             }
             break;
         default:
@@ -475,8 +475,12 @@ extern s8 D_8076CC94;
 void MainMenu_BackgroundInit(Object* backgroundObj) {
     s32 i;
 
+#ifdef AVOID_UB
+    D_80085AE0 = Arena_Allocate(ALLOC_FRONT, SCREEN_HEIGHT * sizeof(s16));
+#else
     //! @bug This only allocates half the size needed
-    D_80085AE0 = Arena_Allocate(ALLOC_FRONT, 240);
+    D_80085AE0 = Arena_Allocate(ALLOC_FRONT, SCREEN_HEIGHT * sizeof(s16) / 2);
+#endif
     OBJECT_STATE(backgroundObj) = D_8076CC94;
     func_i2_800AE17C(sTitleBackgroundCompTexInfos[OBJECT_STATE(backgroundObj)], 0, true);
 
@@ -485,7 +489,7 @@ void MainMenu_BackgroundInit(Object* backgroundObj) {
             OBJECT_LEFT(backgroundObj) = 8;
             /* fallthrough */
         case 1:
-            for (i = 0; i < 240; i++) {
+            for (i = 0; i < SCREEN_HEIGHT; i++) {
                 D_80085AE0[i] = 0;
             }
 
@@ -498,7 +502,7 @@ void MainMenu_SignInit(Object* signObj) {
     s32 index = signObj->cmdId - OBJECT_MAIN_MENU_MODE_SIGN_0;
 
     func_i2_800AE17C(sMenuSignCompTexInfos[index], 0, true);
-    if (D_8076C810 == 33) {
+    if (gGameModeChangeState == GAMEMODE_CHANGE_INSTANT(GAMEMODE_CHANGE_INIT)) {
         OBJECT_COUNTER(signObj) = 12;
     }
 }
@@ -506,7 +510,7 @@ void MainMenu_SignInit(Object* signObj) {
 void MainMenu_HeaderInit(Object* headerObj) {
 
     func_i2_800AE17C(sSelectModeCompTexInfo, 0, true);
-    if (D_8076C810 == 33) {
+    if (gGameModeChangeState == GAMEMODE_CHANGE_INSTANT(GAMEMODE_CHANGE_INIT)) {
         OBJECT_COUNTER(headerObj) = 12;
     }
 }
@@ -662,7 +666,7 @@ Gfx* MainMenu_BackgroundDraw(Gfx* gfx, Object* backgroundObj) {
                 OBJECT_COUNTER(backgroundObj)++;
                 i = 0;
                 while (i <= 100) {
-                    j = Math_Rand1() % 240;
+                    j = Math_Rand1() % SCREEN_HEIGHT;
                     if (D_80085AE0[j] == 0) {
                         D_80085AE0[j] = 1;
                         alpha++;
@@ -674,7 +678,7 @@ Gfx* MainMenu_BackgroundDraw(Gfx* gfx, Object* backgroundObj) {
                     i++;
                 }
 
-                for (j = 0; j < 240; j++) {
+                for (j = 0; j < SCREEN_HEIGHT; j++) {
                     if (D_80085AE0[j] == 0) {
                         D_80085AE0[j] = 1;
                         alpha++;
@@ -693,7 +697,7 @@ Gfx* MainMenu_BackgroundDraw(Gfx* gfx, Object* backgroundObj) {
                 break;
         }
 
-        for (var_t1 = 0; var_t1 < 240; var_t1++) {
+        for (var_t1 = 0; var_t1 < SCREEN_HEIGHT; var_t1++) {
 
             switch (OBJECT_STATE(backgroundObj)) {
                 case 10:

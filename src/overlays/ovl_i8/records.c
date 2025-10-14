@@ -4,94 +4,109 @@
 #include "fzx_course.h"
 #include "fzx_bordered_box.h"
 #include "fzx_assets.h"
+#include "records.h"
 #include "src/overlays/ovl_i2/transition.h"
-#include "assets/overlays/ovl_i8/records.h"
+#include "assets/overlays/ovl_i8/records_assets.h"
 
-s32 D_800A1EF0;
+s32 sRecordsState;
 s32 sUnlockedCourseCount;
-s16 D_i8_800A1EF8[5];
-BorderedBoxWidget* D_i8_800A1F04;
-BorderedBoxWidget* D_i8_800A1F08;
-BorderedBoxWidget* D_i8_800A1F0C;
-BorderedBoxWidget* D_i8_800A1F10;
-BorderedBoxWidget* D_i8_800A1F14;
-BorderedBoxWidget* D_i8_800A1F18;
-BorderedBoxWidget* D_i8_800A1F1C;
-s16 D_i8_800A1F20;
-s16 D_i8_800A1F22;
-s16 D_i8_800A1F24;
-s16 D_i8_800A1F26;
-s16 D_i8_800A1F28;
-s16 D_i8_800A1F2A;
-s16 D_i8_800A1F2C;
-s16 D_i8_800A1F2E;
-s16 D_i8_800A1F30;
-s16 D_i8_800A1F32;
-unk_80144FE0* D_i8_800A1F34;
-unk_80144FE0 D_i8_800A1F38[2];
+s16 sRecordsMenuIndexValid[5];
+BorderedBoxWidget* sRecordsMenuBox;
+BorderedBoxWidget* sRecordsClearConfirmBox;
+BorderedBoxWidget* sRecordsState3Box;
+BorderedBoxWidget* sRecordsGhostCopyBox;
+BorderedBoxWidget* sRecordsCopyWhereBox;
+BorderedBoxWidget* sRecordsCopyToDiskBox;
+BorderedBoxWidget* sRecordsCopyingInfoBox;
+s16 sRecordsHighlightedMenuIndex;
+s16 sRecordsToCourseSelectMenuIndex;
+s16 sRecordsCopyGhostMenuIndex;
+s16 sRecordsYesNoIndex;
+s16 sRecordsClearType;
+s16 sGhostMarkerState;
+s16 sGhostMarkerTopAlpha;
+s16 sGhostMarkerBottomAlpha;
+s16 sRecordsStopStateUpdate;
+s16 sRecordsRetireCleanupTimer;
+GhostMarkerRenderInfo* sGhostMarkerRenderInfo;
+GhostMarkerRenderInfo sGhostMarkerRenderInfos[2];
 UNUSED s32 D_i8_800A2038[6];
-s16 D_i8_800A2050;
-s16 D_i8_800A2052;
-s16 D_i8_800A2054;
-s16 D_i8_800A2056;
-s16 D_i8_800A2058;
-s32 D_i8_800A2060[4];
-s32 D_i8_800A2070[4];
-s32 D_i8_800A2080[4];
-s32 D_i8_800A2090[4];
+s16 sRecordsCopyFromGhostTypeIndex;
+s16 sRecordsCopyWhereMenuIndex;
+s16 sRecordsCopyToGhostTypeIndex;
+s16 sGhostCopiedTimer;
+s16 sGhostCopyingState;
+s32 sGhostCourseRecordTimes[4];
+s32 sSortedDiskGhostRecordTimeIndices[4];
+s32 sSortedDiskGhostRecordTimeIndices2[4];
+s32 sDiskGhostCourseRecordTimes[4];
 
-s32 D_i8_8009E1B0 = 0;
+s32 sRecordsCourseIndex = 0;
 
-unk_80144F44 D_i8_8009E1B4[] = {
-    { 3, { aMenuChangeCourseTex, TEX_WIDTH(aMenuChangeCourseTex), TEX_HEIGHT(aMenuChangeCourseTex) }, NULL },
-    { 2, { aMenuQuitTex, TEX_WIDTH(aMenuQuitTex), TEX_HEIGHT(aMenuQuitTex) }, NULL },
-    { 0, { aMenuClearRecordTex, TEX_WIDTH(aMenuClearRecordTex), TEX_HEIGHT(aMenuClearRecordTex) }, NULL },
-    { 1, { aMenuClearGhostTex, TEX_WIDTH(aMenuClearGhostTex), TEX_HEIGHT(aMenuClearGhostTex) }, NULL },
-    { 4, { D_i8_8009F360, TEX_WIDTH(D_i8_8009F360), TEX_HEIGHT(D_i8_8009F360) }, D_i8_8009F768 },
+RecordsMenuInfo sRecordsMenuInfo[] = {
+    { RECORDS_MENU_CHANGE_COURSE,
+      { aMenuChangeCourseTex, TEX_WIDTH(aMenuChangeCourseTex), TEX_HEIGHT(aMenuChangeCourseTex) },
+      NULL },
+    { RECORDS_MENU_QUIT, { aMenuQuitTex, TEX_WIDTH(aMenuQuitTex), TEX_HEIGHT(aMenuQuitTex) }, NULL },
+    { RECORDS_MENU_CLEAR_RECORD,
+      { aMenuClearRecordTex, TEX_WIDTH(aMenuClearRecordTex), TEX_HEIGHT(aMenuClearRecordTex) },
+      NULL },
+    { RECORDS_MENU_CLEAR_GHOST,
+      { aMenuClearGhostTex, TEX_WIDTH(aMenuClearGhostTex), TEX_HEIGHT(aMenuClearGhostTex) },
+      NULL },
+    { RECORDS_MENU_COPY_GHOST,
+      { aMenuCopyGhostTex, TEX_WIDTH(aMenuCopyGhostTex), TEX_HEIGHT(aMenuCopyGhostTex) },
+      aMenuCopyGhostPalette },
 };
 
-unk_80144F74 D_i8_8009E204[] = {
+TextureInfo sRecordsClearTextureInfos[] = {
     { aMenuEraseCourseSavedData1Tex, TEX_WIDTH(aMenuEraseCourseSavedData1Tex),
-      TEX_HEIGHT(aMenuEraseCourseSavedData1Tex) }, // ERASE COURSE DATA? (1)
+      TEX_HEIGHT(aMenuEraseCourseSavedData1Tex) },
     { aMenuEraseCourseSavedData2Tex, TEX_WIDTH(aMenuEraseCourseSavedData2Tex),
-      TEX_HEIGHT(aMenuEraseCourseSavedData2Tex) }, // ERASE COURSE DATA? (2)
+      TEX_HEIGHT(aMenuEraseCourseSavedData2Tex) },
 };
 
-unk_80144F74 D_i8_8009E214[] = {
-    { aMenuNoTex, TEX_WIDTH(aMenuNoTex), TEX_HEIGHT(aMenuNoTex) },    // NO
-    { aMenuYesTex, TEX_WIDTH(aMenuYesTex), TEX_HEIGHT(aMenuYesTex) }, // YES
+TextureInfo sRecordsYesNoTextureInfos[] = {
+    { aMenuNoTex, TEX_WIDTH(aMenuNoTex), TEX_HEIGHT(aMenuNoTex) },
+    { aMenuYesTex, TEX_WIDTH(aMenuYesTex), TEX_HEIGHT(aMenuYesTex) },
 };
 
-unk_8009E224 D_i8_8009E224[] = {
-    { D_i8_8009FC00, D_i8_800A0008, TEX_WIDTH(D_i8_8009FC00), TEX_HEIGHT(D_i8_8009FC00) },
-    { D_i8_800A0050, D_i8_800A0458, TEX_WIDTH(D_i8_800A0050), TEX_HEIGHT(D_i8_800A0050) },
-    { D_i8_800A04A0, D_i8_800A08A8, TEX_WIDTH(D_i8_800A04A0), TEX_HEIGHT(D_i8_800A04A0) },
-    { D_i8_800A08F0, D_i8_800A0CF8, TEX_WIDTH(D_i8_800A08F0), TEX_HEIGHT(D_i8_800A08F0) },
+TexturePaletteInfo sRecordsGhostTypeTextureInfos[] = {
+    { aRecordsCassetteGhostTex, aRecordsCassetteGhostPalette, TEX_WIDTH(aRecordsCassetteGhostTex),
+      TEX_HEIGHT(aRecordsCassetteGhostTex) },
+    { aRecordsDiskGhost1Tex, aRecordsDiskGhost1Palette, TEX_WIDTH(aRecordsDiskGhost1Tex),
+      TEX_HEIGHT(aRecordsDiskGhost1Tex) },
+    { aRecordsDiskGhost2Tex, aRecordsDiskGhost2Palette, TEX_WIDTH(aRecordsDiskGhost2Tex),
+      TEX_HEIGHT(aRecordsDiskGhost2Tex) },
+    { aRecordsDiskGhost3Tex, aRecordsDiskGhost3Palette, TEX_WIDTH(aRecordsDiskGhost3Tex),
+      TEX_HEIGHT(aRecordsDiskGhost3Tex) },
 };
 
-unk_80144F74 D_i8_8009E254[] = {
-    { aMenuNoGamePakTex, TEX_WIDTH(aMenuNoGamePakTex), TEX_HEIGHT(aMenuNoGamePakTex) },
-    { aMenuNoDiskTex, TEX_WIDTH(aMenuNoDiskTex), TEX_HEIGHT(aMenuNoDiskTex) },
+TextureInfo sRecordsCopyLocationTextureInfos[] = {
+    { aMenuToGamePakTex, TEX_WIDTH(aMenuToGamePakTex), TEX_HEIGHT(aMenuToGamePakTex) },
+    { aMenuToDiskTex, TEX_WIDTH(aMenuToDiskTex), TEX_HEIGHT(aMenuToDiskTex) },
 };
 
-unk_8009E224 D_i8_8009E264[] = {
-    { D_i8_8009F7B0, D_i8_8009FBB8, TEX_WIDTH(D_i8_8009F7B0), TEX_HEIGHT(D_i8_8009F7B0) },
-    { D_i8_800A0D40, D_i8_800A1D48, TEX_WIDTH(D_i8_800A0D40), TEX_HEIGHT(D_i8_800A0D40) },
+TexturePaletteInfo sRecordsGhostCopyingInfoTextureInfos[] = {
+    { aRecordsGhostCopiedTex, aRecordsGhostCopiedPalette, TEX_WIDTH(aRecordsGhostCopiedTex),
+      TEX_HEIGHT(aRecordsGhostCopiedTex) },
+    { aRecordsInsertDiskToCopyToTex, aRecordsInsertDiskToCopyToPalette, TEX_WIDTH(aRecordsInsertDiskToCopyToTex),
+      TEX_HEIGHT(aRecordsInsertDiskToCopyToTex) },
 };
 
 UNUSED s32 D_i8_8009E27C = 0;
 
-UNUSED const char* D_i8_8009E280[] = {
+UNUSED const char* sStaffGhostNames[] = {
     "tadashi sugiyama", "takaya imamura", "yasuyuki oyagi",    "hideki konno",      "masanao arimoto",
     "taro bando",       "keizo ohta",     "masahiro kawano",   "daisuke tsujimura", "shiro mouri",
     "hiroki sotoike",   "hajime wakai",   "tsutomu kaneshige",
 };
 
-#include "src/assets/overlays/ovl_i8/records/records.c"
+#include "src/assets/overlays/ovl_i8/records_assets/records_assets.c"
 
-s32 D_i8_800A1D6C = 0;
+s32 sRecordsMoveDirection = 0;
 
-s32 D_i8_800A1D70[] = {
+s32 sExpansionKitCourses[] = {
     COURSE_SILENCE_3,    COURSE_SAND_OCEAN_3, COURSE_DEVILS_FOREST_4, COURSE_PORT_TOWN_3,   COURSE_DEVILS_FOREST_5,
     COURSE_BIG_BLUE_3,   COURSE_EDIT_1,       COURSE_EDIT_2,          COURSE_EDIT_3,        COURSE_EDIT_4,
     COURSE_EDIT_5,       COURSE_EDIT_6,       COURSE_MUTE_CITY_4,     COURSE_SPACE_PLANT_2, COURSE_PORT_TOWN_4,
@@ -106,45 +121,47 @@ extern s32 gCourseIndex;
 extern u8 gEditCupTrackNames[][9];
 
 void Records_Init(void) {
-    bool var_s0;
+    bool changingCourseIndex;
 
     D_8076C7A8 = D_i2_800BF040 = 3;
     gGamePaused = false;
     gDifficulty = MASTER;
     gRacers[0].character = CAPTAIN_FALCON;
-    var_s0 = true;
+    changingCourseIndex = true;
 
-    while (var_s0) {
+    while (changingCourseIndex) {
         func_i2_800B934C();
-        if (D_i8_800A1D6C != 0) {
+        if (sRecordsMoveDirection != RECORDS_FROM_MENU) {
             if ((gCourseIndex >= COURSE_EDIT_1) && (gCourseIndex <= COURSE_EDIT_6)) {
                 if (gEditCupTrackNames[gCourseIndex - COURSE_EDIT_1][0] == '\0') {
-                    if (D_i8_800A1D6C == 1) {
+                    if (sRecordsMoveDirection == RECORDS_MOVE_RIGHT) {
                         if (gCourseIndex == COURSE_EDIT_6) {
                             gCourseIndex = COURSE_MUTE_CITY_4;
-                            var_s0 = false;
+                            changingCourseIndex = false;
                             func_i2_800B934C();
                         } else {
                             gCourseIndex++;
                         }
-                    } else if (gCourseIndex == COURSE_EDIT_1) {
-                        gCourseIndex = COURSE_BIG_BLUE_3;
-                        var_s0 = false;
-                        func_i2_800B934C();
-                    } else {
-                        gCourseIndex--;
+                    } else { // RECORDS_MOVE_LEFT
+                        if (gCourseIndex == COURSE_EDIT_1) {
+                            gCourseIndex = COURSE_BIG_BLUE_3;
+                            changingCourseIndex = false;
+                            func_i2_800B934C();
+                        } else {
+                            gCourseIndex--;
+                        }
                     }
                 } else {
-                    var_s0 = false;
+                    changingCourseIndex = false;
                 }
             } else {
-                var_s0 = false;
+                changingCourseIndex = false;
             }
-            if (!var_s0) {
-                D_i8_800A1D6C = 0;
+            if (!changingCourseIndex) {
+                sRecordsMoveDirection = RECORDS_FROM_MENU;
             }
         } else {
-            var_s0 = false;
+            changingCourseIndex = false;
         }
     }
 
@@ -157,71 +174,73 @@ void Records_Init(void) {
     func_806FB3AC();
     func_806FBBC8();
     func_806FE8F8(0);
-    func_i8_8009B348();
+    Records_InitData();
 }
 
 extern s8 gUnlockableLevel;
 extern s8 gSettingEverythingUnlocked;
 
-void func_i8_8009B348(void) {
+void Records_InitData(void) {
     s32 i;
-    unk_80144F44* var_s0;
+    RecordsMenuInfo* recordsOption;
 
-    D_i8_8009E1B0 = gCourseIndex;
+    sRecordsCourseIndex = gCourseIndex;
     if ((gUnlockableLevel == 0) && !gSettingEverythingUnlocked) {
         sUnlockedCourseCount = 18;
     } else {
         sUnlockedCourseCount = 24;
     }
-    D_i8_800A1F32 = -1;
+    sRecordsRetireCleanupTimer = -1;
     for (i = 0; i < 4; i++) {
-        D_i8_800A2060[i] = D_i8_800A2090[i] = -1;
+        sGhostCourseRecordTimes[i] = sDiskGhostCourseRecordTimes[i] = -1;
     }
 
     for (i = 0; i < 5; i++) {
-        switch (D_i8_8009E1B4[i].unk_00) {
-            case 0:
-                if (func_i8_8009B704(D_i8_8009E1B0)) {
-                    D_i8_800A1EF8[i] = 0;
+        switch (sRecordsMenuInfo[i].menuOption) {
+            case RECORDS_MENU_CLEAR_RECORD:
+                if (Records_CourseHasNoRecords(sRecordsCourseIndex)) {
+                    sRecordsMenuIndexValid[i] = false;
                 } else {
-                    D_i8_800A1EF8[i] = 1;
+                    sRecordsMenuIndexValid[i] = true;
                 }
                 break;
-            case 1:
-                if (func_i8_8009B758(D_i8_8009E1B0)) {
-                    D_i8_800A1EF8[i] = 1;
-                    D_i8_800A1F2A = 1;
-                    D_i8_800A1F2C = D_i8_800A1F2E = 255;
+            case RECORDS_MENU_CLEAR_GHOST:
+                if (Records_CourseHasGhost(sRecordsCourseIndex)) {
+                    sRecordsMenuIndexValid[i] = true;
+                    sGhostMarkerState = GHOST_MARKER_SHOWN;
+                    sGhostMarkerTopAlpha = sGhostMarkerBottomAlpha = 255;
                 } else {
-                    D_i8_800A1EF8[i] = 0;
-                    D_i8_800A1F2A = 0;
+                    sRecordsMenuIndexValid[i] = false;
+                    sGhostMarkerState = GHOST_MARKER_NONE;
                 }
                 break;
-            case 3:
-                D_i8_800A1F22 = i;
-                D_i8_800A1EF8[i] = 1;
+            case RECORDS_MENU_CHANGE_COURSE:
+                sRecordsToCourseSelectMenuIndex = i;
+                sRecordsMenuIndexValid[i] = true;
                 break;
-            case 4:
-                D_i8_800A1F24 = i;
-                if ((D_i8_800A1F2A != 0) && !((gCourseIndex >= COURSE_EDIT_1) && (gCourseIndex <= COURSE_EDIT_6))) {
-                    D_i8_800A1EF8[i] = 1;
+            case RECORDS_MENU_COPY_GHOST:
+                sRecordsCopyGhostMenuIndex = i;
+                if ((sGhostMarkerState != GHOST_MARKER_NONE) &&
+                    !((gCourseIndex >= COURSE_EDIT_1) && (gCourseIndex <= COURSE_EDIT_6))) {
+                    sRecordsMenuIndexValid[i] = true;
                 } else {
-                    D_i8_800A1EF8[i] = 0;
+                    sRecordsMenuIndexValid[i] = false;
                 }
                 break;
             default:
-                D_i8_800A1EF8[i] = 1;
+                sRecordsMenuIndexValid[i] = true;
                 break;
         }
     }
-    D_800A1EF0 = 0;
-    D_i8_800A1F30 = 0;
+    sRecordsState = RECORDS_STATE_VIEW_RECORDS;
+    sRecordsStopStateUpdate = false;
     func_i2_800AE7C4(aMenuTextTLUT, TEX_SIZE(aMenuTextTLUT, sizeof(u16)), 0, 0, false);
 
-    var_s0 = D_i8_8009E1B4;
-    for (i = 0; i < 5; i++, var_s0++) {
-        if (var_s0->tlut == NULL) {
-            func_i2_800AE7C4(var_s0->unk_04.unk_00, var_s0->unk_04.width * var_s0->unk_04.height * sizeof(u8), 0, 1,
+    recordsOption = sRecordsMenuInfo;
+    for (i = 0; i < 5; i++, recordsOption++) {
+        if (recordsOption->tlut == NULL) {
+            func_i2_800AE7C4(recordsOption->textureInfo.texture,
+                             recordsOption->textureInfo.width * recordsOption->textureInfo.height * sizeof(u8), 0, 1,
                              false);
         }
     }
@@ -232,180 +251,180 @@ void func_i8_8009B348(void) {
     func_i2_800AE7C4(aMenuNoTex, TEX_SIZE(aMenuNoTex, sizeof(u8)), 0, 1, false);
     func_i2_800AE7C4(aMenuYesTex, TEX_SIZE(aMenuYesTex, sizeof(u8)), 0, 1, false);
     func_i2_800AE7C4(aHasGhostMarkerTex, TEX_SIZE_4B(aHasGhostMarkerTex), 0, 0, false);
-    func_i2_800AE7C4(aMenuNoGamePakTex, TEX_SIZE(aMenuNoGamePakTex, sizeof(u8)), 0, 1, false);
-    func_i2_800AE7C4(aMenuNoDiskTex, TEX_SIZE(aMenuNoDiskTex, sizeof(u8)), 0, 1, false);
+    func_i2_800AE7C4(aMenuToGamePakTex, TEX_SIZE(aMenuToGamePakTex, sizeof(u8)), 0, 1, false);
+    func_i2_800AE7C4(aMenuToDiskTex, TEX_SIZE(aMenuToDiskTex, sizeof(u8)), 0, 1, false);
     func_i3_80064F20();
-    BorderedBox_CleanWidget(&D_i8_800A1F04);
-    BorderedBox_CleanWidget(&D_i8_800A1F08);
-    BorderedBox_CleanWidget(&D_i8_800A1F10);
-    BorderedBox_CleanWidget(&D_i8_800A1F14);
-    BorderedBox_CleanWidget(&D_i8_800A1F18);
-    BorderedBox_CleanWidget(&D_i8_800A1F1C);
-    BorderedBox_CleanWidget(&D_i8_800A1F0C);
+    BorderedBox_CleanWidget(&sRecordsMenuBox);
+    BorderedBox_CleanWidget(&sRecordsClearConfirmBox);
+    BorderedBox_CleanWidget(&sRecordsGhostCopyBox);
+    BorderedBox_CleanWidget(&sRecordsCopyWhereBox);
+    BorderedBox_CleanWidget(&sRecordsCopyToDiskBox);
+    BorderedBox_CleanWidget(&sRecordsCopyingInfoBox);
+    BorderedBox_CleanWidget(&sRecordsState3Box);
     BorderedBox_ClearAll();
 }
 
-bool func_i8_8009B704(s32 courseIndex) {
+bool Records_CourseHasNoRecords(s32 courseIndex) {
     s32 i;
-    bool ret = true;
+    bool hasNoRecords = true;
 
     for (i = 0; i < 5; i++) {
         if (gCourseInfos[courseIndex].timeRecord[i] != MAX_TIMER) {
-            ret = false;
+            hasNoRecords = false;
             break;
         }
     }
 
-    return ret;
+    return hasNoRecords;
 }
 
-bool func_i8_8009B758(s32 courseIndex) {
+bool Records_CourseHasGhost(s32 courseIndex) {
     CourseInfo* courseInfo = &gCourseInfos[courseIndex];
     s32 i;
-    bool ret = false;
+    bool hasGhost = false;
     s32 pad[4];
-    GhostInfo spE4;
-    GhostRecord sp24[3];
+    GhostInfo ghostInfo;
+    GhostRecord ghostRecords[3];
 
-    Save_LoadGhostInfo(&spE4);
+    Save_LoadGhostInfo(&ghostInfo);
 
-    if (spE4.encodedCourseIndex == courseInfo->encodedCourseIndex) {
-        ret = true;
+    if (ghostInfo.encodedCourseIndex == courseInfo->encodedCourseIndex) {
+        hasGhost = true;
     }
 
-    if (!ret) {
-        func_i2_800A9CE0(courseIndex, sp24);
+    if (!hasGhost) {
+        func_i2_800A9CE0(courseIndex, ghostRecords);
         for (i = 0; i < 3; i++) {
-            if (sp24[i].encodedCourseIndex == courseInfo->encodedCourseIndex) {
-                D_i8_800A2060[i + 1] = sp24[i].raceTime;
-                ret = true;
+            if (ghostRecords[i].encodedCourseIndex == courseInfo->encodedCourseIndex) {
+                sGhostCourseRecordTimes[i + 1] = ghostRecords[i].raceTime;
+                hasGhost = true;
             }
         }
     }
 
-    return ret;
+    return hasGhost;
 }
 
-void func_i8_8009B81C(s32* raceTimes, bool arg1) {
+void Records_LoadGhostRaceTimes(s32* raceTimes, bool loadCassetteGhost) {
     s32 i;
     CourseInfo* courseInfo = &gCourseInfos[gCourseIndex];
-    GhostInfo spE8;
-    GhostRecord sp28[3];
+    GhostInfo ghostInfo;
+    GhostRecord ghostRecords[3];
     s32 courseIndex;
 
-    if (arg1) {
-        Save_LoadGhostInfo(&spE8);
-        if (spE8.encodedCourseIndex == courseInfo->encodedCourseIndex) {
-            *raceTimes = spE8.raceTime;
+    if (loadCassetteGhost) {
+        Save_LoadGhostInfo(&ghostInfo);
+        if (ghostInfo.encodedCourseIndex == courseInfo->encodedCourseIndex) {
+            *raceTimes = ghostInfo.raceTime;
         } else {
             *raceTimes = -1;
         }
     }
     raceTimes++;
 
-    func_i2_800A9CE0(gCourseIndex, sp28);
+    func_i2_800A9CE0(gCourseIndex, ghostRecords);
 
     for (i = 0; i < 3; i++, raceTimes++) {
-        if (courseInfo->encodedCourseIndex == sp28[i].encodedCourseIndex) {
-            *raceTimes = sp28[i].raceTime;
+        if (courseInfo->encodedCourseIndex == ghostRecords[i].encodedCourseIndex) {
+            *raceTimes = ghostRecords[i].raceTime;
         } else {
             *raceTimes = -1;
         }
     }
 }
 
-extern s16 D_8076C814;
-extern s32 D_8076CC8C;
+extern s16 gMenuChangeMode;
+extern s32 gLastRecordsCourseIndex;
 extern s32 D_8079A35C;
 
 s32 Records_Update(void) {
-    s32 temp_v0;
+    s32 updateState;
     s32 gameMode;
-    s32 sp1C;
-    s32 var_v0;
+    bool reloadRecords;
+    bool stopStateUpdate;
 
     Controller_SetGlobalInputs(&gSharedController);
-    D_i8_800A1F34 = &D_i8_800A1F38[D_8079A35C];
+    sGhostMarkerRenderInfo = &sGhostMarkerRenderInfos[D_8079A35C];
     func_8070D220();
     func_80726554();
     func_80717294();
     func_i3_80061C2C();
     func_800B94D8();
     func_8070304C();
-    if (D_i8_800A1F2A != 0) {
-        func_i8_8009C708();
+    if (sGhostMarkerState != GHOST_MARKER_NONE) {
+        Records_UpdateGhostMarker();
     }
     func_i3_80065204();
     BorderedBox_Update();
     gameMode = GAMEMODE_RECORDS;
-    sp1C = 0;
-    if (D_i8_800A1F30 == 0) {
-        switch (D_800A1EF0) {
-            case 0:
-                temp_v0 = func_i8_8009BB60();
-                if (temp_v0 == 1) {
-                    sp1C = 1;
-                } else if (temp_v0 == 2) {
+    reloadRecords = false;
+    if (!sRecordsStopStateUpdate) {
+        switch (sRecordsState) {
+            case RECORDS_STATE_VIEW_RECORDS:
+                updateState = Records_ViewRecordsUpdate();
+                if (updateState == 1) {
+                    reloadRecords = true;
+                } else if (updateState == 2) {
                     gameMode = GAMEMODE_FLX_RECORDS_COURSE_SELECT;
                 }
-                if (temp_v0 != 0) {
-                    D_i8_800A1F30 = 1;
+                if (updateState != 0) {
+                    sRecordsStopStateUpdate = true;
                 }
                 break;
-            case 1:
-                temp_v0 = func_i8_8009BE14();
-                if (temp_v0 == 1) {
+            case RECORDS_STATE_RECORDS_MENU:
+                updateState = Records_MenuUpdate();
+                if (updateState == 1) {
                     gameMode = GAMEMODE_FLX_RECORDS_COURSE_SELECT;
-                } else if (temp_v0 == 2) {
+                } else if (updateState == 2) {
                     gameMode = GAMEMODE_FLX_MAIN_MENU;
                 }
-                if (temp_v0 != 0) {
-                    D_i8_800A1F30 = 1;
+                if (updateState != 0) {
+                    sRecordsStopStateUpdate = true;
                 }
                 break;
-            case 2:
-                func_i8_8009C26C();
+            case RECORDS_STATE_CONFIRM_CLEAR:
+                Records_ClearConfirmUpdate();
                 break;
-            case 4:
-                func_i8_8009CE64();
+            case RECORDS_STATE_COPY_GHOST_MENU:
+                Records_CopyGhostMenuUpdate();
                 break;
-            case 5:
-                func_i8_8009D430();
+            case RECORDS_STATE_COPY_WHERE_MENU:
+                Records_CopyWhereMenuUpdate();
                 break;
-            case 6:
-                func_i8_8009D8A4();
+            case RECORDS_STATE_COPY_TO_DISK_MENU:
+                Records_CopyToDiskMenuUpdate();
                 break;
-            case 7:
-                func_i8_8009DCC8();
+            case RECORDS_STATE_SHOW_COPYING_INFO:
+                Records_CopyingStateUpdate();
                 break;
-            case 3:
-                func_i8_8009C44C();
+            case RECORDS_STATE_3:
+                Records_State3Update();
                 break;
         }
     }
 
-    switch (D_i8_800A1F32) {
+    switch (sRecordsRetireCleanupTimer) {
         case -1:
-            if (gRacers->stateFlags & 0x40000) {
-                D_i8_800A1F32 = 0x3C;
+            if (gRacers[0].stateFlags & RACER_STATE_RETIRED) {
+                sRecordsRetireCleanupTimer = 60;
             }
             break;
         case 0:
-            D_i8_800A1F32 = -1;
+            sRecordsRetireCleanupTimer = -1;
             func_8071D48C();
             func_807160A0();
             break;
         default:
-            D_i8_800A1F32 -= 1;
+            sRecordsRetireCleanupTimer--;
             break;
     }
 
-    if (sp1C != 0) {
-        D_8076CC8C = gCourseIndex;
-        D_8076C814 = 8;
+    if (reloadRecords) {
+        gLastRecordsCourseIndex = gCourseIndex;
+        gMenuChangeMode = MENU_CHANGE_CHANGE_RECORD_COURSE;
     }
-    var_v0 = D_i8_800A1F30;
-    if ((gameMode == GAMEMODE_FLX_MAIN_MENU) && (var_v0 != 0)) {
+    stopStateUpdate = sRecordsStopStateUpdate;
+    if ((gameMode == GAMEMODE_FLX_MAIN_MENU) && stopStateUpdate) {
         Audio_RomBgmReady(BGM_SELECT);
     }
     return gameMode;
@@ -415,7 +434,7 @@ extern s32 gTransitionState;
 extern u16 gInputPressed;
 extern u16 gInputButtonPressed;
 
-s32 func_i8_8009BB60(void) {
+s32 Records_ViewRecordsUpdate(void) {
     s32 i;
     s32 sp30;
     s32 lastCourseIndex;
@@ -423,30 +442,30 @@ s32 func_i8_8009BB60(void) {
     if (gTransitionState != TRANSITION_INACTIVE) {
         return 0;
     }
-    if (BorderedBox_GetInfo(D_i8_800A1F04, IS_BORDERED_BOX_ACTIVE)) {
+    if (BorderedBox_GetInfo(sRecordsMenuBox, IS_BORDERED_BOX_ACTIVE)) {
         return 0;
     }
-    if (BorderedBox_GetInfo(D_i8_800A1F10, IS_BORDERED_BOX_ACTIVE)) {
+    if (BorderedBox_GetInfo(sRecordsGhostCopyBox, IS_BORDERED_BOX_ACTIVE)) {
         return 0;
     }
-    if (BorderedBox_GetInfo(D_i8_800A1F0C, IS_BORDERED_BOX_ACTIVE)) {
+    if (BorderedBox_GetInfo(sRecordsState3Box, IS_BORDERED_BOX_ACTIVE)) {
         return 0;
     }
 
     lastCourseIndex = gCourseIndex;
     if (gInputPressed & BTN_RIGHT) {
-        D_i8_800A1D6C = 1;
+        sRecordsMoveDirection = RECORDS_MOVE_RIGHT;
         if (gCourseIndex == COURSE_BIG_FOOT) {
-            gCourseIndex = 0;
+            gCourseIndex = COURSE_MUTE_CITY;
         } else {
             if (gCourseIndex >= sUnlockedCourseCount - 1) {
                 for (i = 0; i < 18; i++) {
-                    if (gCourseIndex == D_i8_800A1D70[i]) {
+                    if (gCourseIndex == sExpansionKitCourses[i]) {
                         break;
                     }
                 }
                 if (i != 18) {
-                    gCourseIndex = D_i8_800A1D70[i + 1];
+                    gCourseIndex = sExpansionKitCourses[i + 1];
                 } else {
                     gCourseIndex = COURSE_SILENCE_3;
                 }
@@ -456,18 +475,18 @@ s32 func_i8_8009BB60(void) {
         }
         Transition_SetArgument(TRANSITION_TYPE_WIPE, WIPE_DIRECTION_LEFT);
     } else if (gInputPressed & BTN_LEFT) {
-        D_i8_800A1D6C = 2;
-        if (gCourseIndex == 0) {
+        sRecordsMoveDirection = RECORDS_MOVE_LEFT;
+        if (gCourseIndex == COURSE_MUTE_CITY) {
             gCourseIndex = COURSE_BIG_FOOT;
         } else {
             if (gCourseIndex >= sUnlockedCourseCount) {
                 for (i = 0; i < 18; i++) {
-                    if (gCourseIndex == D_i8_800A1D70[i]) {
+                    if (gCourseIndex == sExpansionKitCourses[i]) {
                         break;
                     }
                 }
                 if (i != 0) {
-                    gCourseIndex = D_i8_800A1D70[i - 1];
+                    gCourseIndex = sExpansionKitCourses[i - 1];
                 } else {
                     gCourseIndex = sUnlockedCourseCount - 1;
                 }
@@ -486,12 +505,13 @@ s32 func_i8_8009BB60(void) {
     }
     if (sp30 == 0) {
         if (gInputButtonPressed & (BTN_A | BTN_START)) {
-            D_i8_800A1F04 = BorderedBox_Init(0, 108, 50, 104, 120, 10, GPACK_RGBA5551(0, 255, 0, 1), func_i8_8009CA7C);
-            if (D_i8_800A1F04 != NULL) {
-                D_800A1EF0 = 1;
-                D_i8_800A1F20 = 0;
+            sRecordsMenuBox =
+                BorderedBox_Init(0, 108, 50, 104, 120, 10, GPACK_RGBA5551(0, 255, 0, 1), Records_MenuDraw);
+            if (sRecordsMenuBox != NULL) {
+                sRecordsState = RECORDS_STATE_RECORDS_MENU;
+                sRecordsHighlightedMenuIndex = 0;
                 Audio_TriggerSystemSE(NA_SE_33);
-                func_i3_80067118(0);
+                func_i3_80067118(false);
             }
         } else if (gInputButtonPressed & BTN_B) {
             sp30 = 2;
@@ -501,196 +521,197 @@ s32 func_i8_8009BB60(void) {
     return sp30;
 }
 
-s32 func_i8_8009BE14(void) {
+s32 Records_MenuUpdate(void) {
     s32 i;
-    bool var_t0;
+    bool successfulSelection;
     s32 sp2C;
-    s32 sp28;
+    s32 lastMenuIndex;
     s32 j;
-    s32 var_v0;
-    s32 var_v1;
-    s32 temp_a3;
-    bool var_a2;
+    s32 clearBoxTop;
+    s32 ghostIndex;
+    s32 ghostIndexTemp;
+    bool swapIndices;
 
-    if (!BorderedBox_GetInfo(D_i8_800A1F04, IS_BORDERED_BOX_OPENED)) {
+    if (!BorderedBox_GetInfo(sRecordsMenuBox, IS_BORDERED_BOX_OPENED)) {
         return 0;
     }
     sp2C = 0;
-    sp28 = D_i8_800A1F20;
+    lastMenuIndex = sRecordsHighlightedMenuIndex;
     // clang-format off
     if (gInputPressed & BTN_UP) {
-        if (--D_i8_800A1F20 < 0) { D_i8_800A1F20 = 4; }
+        if (--sRecordsHighlightedMenuIndex < 0) { sRecordsHighlightedMenuIndex = 4; }
 
-        while (D_i8_800A1EF8[D_i8_800A1F20] == 0) {
-            if (--D_i8_800A1F20 < 0) { D_i8_800A1F20 = 4; }
+        while (!sRecordsMenuIndexValid[sRecordsHighlightedMenuIndex]) {
+            if (--sRecordsHighlightedMenuIndex < 0) { sRecordsHighlightedMenuIndex = 4; }
         }
     } else if (gInputPressed & BTN_DOWN) {
-        if (++D_i8_800A1F20 > 4) { D_i8_800A1F20 = 0; }
+        if (++sRecordsHighlightedMenuIndex > 4) { sRecordsHighlightedMenuIndex = 0; }
 
-        while (D_i8_800A1EF8[D_i8_800A1F20] == 0) {
-            if (++D_i8_800A1F20 > 4) { D_i8_800A1F20 = 0; }
+        while (!sRecordsMenuIndexValid[sRecordsHighlightedMenuIndex]) {
+            if (++sRecordsHighlightedMenuIndex > 4) { sRecordsHighlightedMenuIndex = 0; }
         }
     }
     // clang-format on
-    if (sp28 != D_i8_800A1F20) {
+    if (lastMenuIndex != sRecordsHighlightedMenuIndex) {
         Audio_TriggerSystemSE(NA_SE_30);
     }
     if (gInputButtonPressed & (BTN_A | BTN_START)) {
-        var_t0 = false;
+        successfulSelection = false;
 
-        switch (D_i8_8009E1B4[D_i8_800A1F20].unk_00) {
-            case 3:
-                var_t0 = true;
+        switch (sRecordsMenuInfo[sRecordsHighlightedMenuIndex].menuOption) {
+            case RECORDS_MENU_CHANGE_COURSE:
+                successfulSelection = true;
                 sp2C = 1;
                 break;
-            case 2:
-                var_t0 = true;
+            case RECORDS_MENU_QUIT:
+                successfulSelection = true;
                 sp2C = 2;
                 break;
-            case 0:
-            case 1:
-                if (D_i8_8009E1B4[D_i8_800A1F20].unk_00 == 0) {
-                    D_i8_800A1F28 = 0;
-                    var_v0 = 120;
-                } else {
-                    D_i8_800A1F28 = 1;
-                    var_v0 = 142;
+            case RECORDS_MENU_CLEAR_RECORD:
+            case RECORDS_MENU_CLEAR_GHOST:
+                if (sRecordsMenuInfo[sRecordsHighlightedMenuIndex].menuOption == RECORDS_MENU_CLEAR_RECORD) {
+                    sRecordsClearType = RECORDS_CLEAR_RECORDS;
+                    clearBoxTop = 120;
+                } else { // RECORDS_MENU_CLEAR_GHOST
+                    sRecordsClearType = RECORDS_CLEAR_GHOST;
+                    clearBoxTop = 142;
                 }
 
-                D_i8_800A1F08 =
-                    BorderedBox_Init(1, 120, var_v0, 148, 80, 20, GPACK_RGBA5551(255, 0, 0, 1), func_i8_8009CC30);
+                sRecordsClearConfirmBox = BorderedBox_Init(1, 120, clearBoxTop, 148, 80, 20,
+                                                           GPACK_RGBA5551(255, 0, 0, 1), Records_DrawClearConfirm);
 
-                var_t0 = false;
-                if (D_i8_800A1F08 != NULL) {
-                    var_t0 = true;
-                    D_i8_800A1F26 = 0;
-                    D_800A1EF0 = 2;
+                successfulSelection = false;
+                if (sRecordsClearConfirmBox != NULL) {
+                    successfulSelection = true;
+                    sRecordsYesNoIndex = 0;
+                    sRecordsState = RECORDS_STATE_CONFIRM_CLEAR;
                 }
                 break;
-            case 4:
-                D_i8_800A1F10 =
-                    BorderedBox_Init(3, 40, 46, 168, 122, 30, GPACK_RGBA5551(0, 0, 255, 1), func_i8_8009D0E8);
+            case RECORDS_MENU_COPY_GHOST:
+                sRecordsGhostCopyBox =
+                    BorderedBox_Init(3, 40, 46, 168, 122, 30, GPACK_RGBA5551(0, 0, 255, 1), Records_DrawGhostCopyMenu);
 
-                var_t0 = false;
-                if (D_i8_800A1F10 != NULL) {
-                    var_t0 = true;
-                    D_800A1EF0 = 4;
-                    func_i8_8009B81C(D_i8_800A2060, 1);
+                successfulSelection = false;
+                if (sRecordsGhostCopyBox != NULL) {
+                    successfulSelection = true;
+                    sRecordsState = RECORDS_STATE_COPY_GHOST_MENU;
+                    Records_LoadGhostRaceTimes(sGhostCourseRecordTimes, true);
                     for (i = 0; i < 3; i++) {
-                        D_i8_800A2070[i] = i;
+                        sSortedDiskGhostRecordTimeIndices[i] = i;
                     }
 
                     for (i = 0; i < 2; i++) {
                         for (j = i + 1; j < 3; j++) {
-                            var_a2 = false;
+                            swapIndices = false;
 
-                            if (D_i8_800A2060[D_i8_800A2070[i] + 1] == -1) {
-                                if (D_i8_800A2060[D_i8_800A2070[j] + 1] != -1) {
-                                    var_a2 = true;
+                            if (sGhostCourseRecordTimes[sSortedDiskGhostRecordTimeIndices[i] + 1] == -1) {
+                                if (sGhostCourseRecordTimes[sSortedDiskGhostRecordTimeIndices[j] + 1] != -1) {
+                                    swapIndices = true;
                                 }
-                            } else if (D_i8_800A2060[D_i8_800A2070[j] + 1] != -1) {
-                                if (D_i8_800A2060[D_i8_800A2070[j] + 1] < D_i8_800A2060[D_i8_800A2070[i] + 1]) {
-                                    var_a2 = true;
+                            } else if (sGhostCourseRecordTimes[sSortedDiskGhostRecordTimeIndices[j] + 1] != -1) {
+                                if (sGhostCourseRecordTimes[sSortedDiskGhostRecordTimeIndices[j] + 1] <
+                                    sGhostCourseRecordTimes[sSortedDiskGhostRecordTimeIndices[i] + 1]) {
+                                    swapIndices = true;
                                 }
                             }
-                            if (var_a2) {
-                                temp_a3 = D_i8_800A2070[i];
-                                D_i8_800A2070[i] = D_i8_800A2070[j];
-                                D_i8_800A2070[j] = temp_a3;
+                            if (swapIndices) {
+                                ghostIndexTemp = sSortedDiskGhostRecordTimeIndices[i];
+                                sSortedDiskGhostRecordTimeIndices[i] = sSortedDiskGhostRecordTimeIndices[j];
+                                sSortedDiskGhostRecordTimeIndices[j] = ghostIndexTemp;
                             }
                         }
                     }
 
                     for (i = 0; i < 4; i++) {
 
-                        if (i == 0) {
-                            var_v1 = i;
+                        if (i == RECORDS_GHOST_CASSETTE) {
+                            ghostIndex = i;
                         } else {
-                            var_v1 = D_i8_800A2070[i - 1] + 1;
+                            ghostIndex = sSortedDiskGhostRecordTimeIndices[i - 1] + 1;
                         }
-                        if (D_i8_800A2060[var_v1] != -1) {
+                        if (sGhostCourseRecordTimes[ghostIndex] != -1) {
                             break;
                         }
                     }
                     if (i != 4) {
-                        D_i8_800A2050 = i;
+                        sRecordsCopyFromGhostTypeIndex = i;
                     } else {
-                        D_i8_800A2050 = -1;
+                        sRecordsCopyFromGhostTypeIndex = -1;
                     }
                 }
                 break;
         }
 
-        if (var_t0) {
+        if (successfulSelection) {
             Audio_TriggerSystemSE(NA_SE_33);
         }
     } else if (gInputButtonPressed & BTN_B) {
-        D_800A1EF0 = 0;
-        func_i3_80067118(1);
-        BorderedBox_StartClose(D_i8_800A1F04);
+        sRecordsState = RECORDS_STATE_VIEW_RECORDS;
+        func_i3_80067118(true);
+        BorderedBox_StartClose(sRecordsMenuBox);
         Audio_TriggerSystemSE(NA_SE_16);
     }
     return sp2C;
 }
 
-void func_i8_8009C26C(void) {
-    s32 sp1C;
-    bool sp18;
+void Records_ClearConfirmUpdate(void) {
+    s32 lastYesNoIndex;
+    bool selectionMade;
 
-    if (BorderedBox_GetInfo(D_i8_800A1F08, IS_BORDERED_BOX_OPENED)) {
-        sp1C = D_i8_800A1F26;
+    if (BorderedBox_GetInfo(sRecordsClearConfirmBox, IS_BORDERED_BOX_OPENED)) {
+        lastYesNoIndex = sRecordsYesNoIndex;
         if (gInputPressed & BTN_LEFT) {
-            D_i8_800A1F26--;
-            if (D_i8_800A1F26 < 0) {
-                D_i8_800A1F26 = 1;
+            sRecordsYesNoIndex--;
+            if (sRecordsYesNoIndex < RECORDS_CLEAR_NO) {
+                sRecordsYesNoIndex = RECORDS_CLEAR_YES;
             }
         } else if (gInputPressed & BTN_RIGHT) {
-            D_i8_800A1F26++;
-            if (D_i8_800A1F26 > 1) {
-                D_i8_800A1F26 = 0;
+            sRecordsYesNoIndex++;
+            if (sRecordsYesNoIndex > RECORDS_CLEAR_YES) {
+                sRecordsYesNoIndex = RECORDS_CLEAR_NO;
             }
         }
-        if (sp1C != D_i8_800A1F26) {
+        if (lastYesNoIndex != sRecordsYesNoIndex) {
             Audio_TriggerSystemSE(NA_SE_30);
         }
-        sp18 = false;
+        selectionMade = false;
         if (gInputButtonPressed & (BTN_A | BTN_START)) {
-            sp18 = true;
-            if (D_i8_800A1F26 == 0) {
+            selectionMade = true;
+            if (sRecordsYesNoIndex == RECORDS_CLEAR_NO) {
                 Audio_TriggerSystemSE(NA_SE_16);
             } else {
-                if (D_i8_800A1F28 == 0) {
+                if (sRecordsClearType == RECORDS_CLEAR_RECORDS) {
                     if ((gCourseIndex >= COURSE_MUTE_CITY) && (gCourseIndex <= COURSE_BIG_HAND)) {
                         func_i2_800A7660(gCourseIndex);
                     } else {
                         func_i2_800AA694(gCourseIndex);
                     }
-                } else if (D_i8_800A1F28 == 1) {
+                } else if (sRecordsClearType == RECORDS_CLEAR_GHOST) {
                     Save_InitGhost(gCourseIndex);
                     func_i2_800AA520(gCourseIndex);
-                    D_i8_800A1EF8[D_i8_800A1F24] = 0;
-                    D_i8_800A1F2A = 2;
+                    sRecordsMenuIndexValid[sRecordsCopyGhostMenuIndex] = false;
+                    sGhostMarkerState = GHOST_MARKER_FADE_OUT;
                 }
-                D_i8_800A1EF8[D_i8_800A1F20] = 0;
-                D_i8_800A1F20 = D_i8_800A1F22;
+                sRecordsMenuIndexValid[sRecordsHighlightedMenuIndex] = false;
+                sRecordsHighlightedMenuIndex = sRecordsToCourseSelectMenuIndex;
                 Audio_TriggerSystemSE(NA_SE_5);
             }
         } else if (gInputButtonPressed & BTN_B) {
-            sp18 = true;
+            selectionMade = true;
             Audio_TriggerSystemSE(NA_SE_16);
         }
-        if (sp18) {
-            D_800A1EF0 = 1;
-            BorderedBox_StartClose(D_i8_800A1F08);
+        if (selectionMade) {
+            sRecordsState = RECORDS_STATE_RECORDS_MENU;
+            BorderedBox_StartClose(sRecordsClearConfirmBox);
         }
     }
 }
 
-void func_i8_8009C44C(void) {
-    if (BorderedBox_GetInfo(D_i8_800A1F0C, IS_BORDERED_BOX_OPENED) && (gInputButtonPressed & BTN_B)) {
-        D_800A1EF0 = 0;
-        func_i3_80067118(1);
-        BorderedBox_StartClose(D_i8_800A1F0C);
+void Records_State3Update(void) {
+    if (BorderedBox_GetInfo(sRecordsState3Box, IS_BORDERED_BOX_OPENED) && (gInputButtonPressed & BTN_B)) {
+        sRecordsState = RECORDS_STATE_VIEW_RECORDS;
+        func_i3_80067118(true);
+        BorderedBox_StartClose(sRecordsState3Box);
         Audio_TriggerSystemSE(NA_SE_16);
     }
 }
@@ -730,94 +751,94 @@ Gfx* Records_Draw(Gfx* gfx) {
     gfx = func_i3_8006339C(gfx, 0, 0);
     gfx = func_i2_800BDE60(gfx, 0);
     gfx = func_806F9DB4(gfx, 0);
-    gfx = func_i3_80065560(gfx, D_i8_8009E1B0);
-    if (D_i8_800A1F2A != 0) {
-        gfx = func_i8_8009C900(gfx);
+    gfx = func_i3_80065560(gfx, sRecordsCourseIndex);
+    if (sGhostMarkerState != GHOST_MARKER_NONE) {
+        gfx = Records_DrawGhostMarker(gfx);
     }
     return BorderedBox_Draw(gfx);
 }
 
-void func_i8_8009C708(void) {
+void Records_UpdateGhostMarker(void) {
     Vtx* vtx;
-    u16 temp;
 
-    switch (D_i8_800A1F2A) {
-        case 1:
+    switch (sGhostMarkerState) {
+        case GHOST_MARKER_SHOWN:
             break;
-        case 2:
-            if (D_i8_800A1F2E > 0) {
-                D_i8_800A1F2E -= 10;
-                if (D_i8_800A1F2E < 0) {
-                    D_i8_800A1F2E = 0;
+        case GHOST_MARKER_FADE_OUT:
+            if (sGhostMarkerBottomAlpha > 0) {
+                sGhostMarkerBottomAlpha -= 10;
+                if (sGhostMarkerBottomAlpha < 0) {
+                    sGhostMarkerBottomAlpha = 0;
                 }
             }
-            if (D_i8_800A1F2E == 0) {
-                D_i8_800A1F2C -= 10;
-                if (D_i8_800A1F2C < 0) {
-                    D_i8_800A1F2C = 0;
+            if (sGhostMarkerBottomAlpha == 0) {
+                sGhostMarkerTopAlpha -= 10;
+                if (sGhostMarkerTopAlpha < 0) {
+                    sGhostMarkerTopAlpha = 0;
                 }
             }
-            if ((D_i8_800A1F2E == 0) && (D_i8_800A1F2C == 0)) {
-                D_i8_800A1F2A = 0;
+            if ((sGhostMarkerBottomAlpha == 0) && (sGhostMarkerTopAlpha == 0)) {
+                sGhostMarkerState = GHOST_MARKER_NONE;
                 return;
             }
             break;
     }
 
-    Matrix_SetOrtho(&D_i8_800A1F34->unk_00, NULL, 1.0f, 0.0f, 319.0f, 239.0f, 0.0f, -100.0f, 100.0f);
+    Matrix_SetOrtho(&sGhostMarkerRenderInfo->mtx, NULL, 1.0f, 0.0f, SCREEN_WIDTH - 1, SCREEN_HEIGHT - 1, 0.0f, -100.0f,
+                    100.0f);
 
-    vtx = D_i8_800A1F34->unk_40;
-    temp = -16;
+    vtx = sGhostMarkerRenderInfo->vtx;
 
-    SET_VTX(vtx, 236, 60, 0, temp, temp, 255, 255, 255, D_i8_800A1F2C);
+    SET_VTX(vtx, 236, 60, 0, -16, -16, 255, 255, 255, sGhostMarkerTopAlpha);
     vtx++;
-    SET_VTX(vtx, 267, 60, 0, 0x400, 0, 255, 255, 255, D_i8_800A1F2C);
+    SET_VTX(vtx, 236 + TEX_WIDTH(aHasGhostMarkerTex) - 1, 60, 0, 0x400, 0, 255, 255, 255, sGhostMarkerTopAlpha);
     vtx++;
-    SET_VTX(vtx, 236, 75, 0, 0, 0x200, 255, 255, 255, D_i8_800A1F2E);
+    SET_VTX(vtx, 236, 60 + TEX_HEIGHT(aHasGhostMarkerTex) - 1, 0, 0, 0x200, 255, 255, 255, sGhostMarkerBottomAlpha);
     vtx++;
-    SET_VTX(vtx, 267, 75, 0, 0x400, 0x200, 255, 255, 255, D_i8_800A1F2E);
+    SET_VTX(vtx, 236 + TEX_WIDTH(aHasGhostMarkerTex) - 1, 60 + TEX_HEIGHT(aHasGhostMarkerTex) - 1, 0, 0x400, 0x200, 255,
+            255, 255, sGhostMarkerBottomAlpha);
     vtx++;
 }
 
 extern Mtx D_2000000[];
 
-Gfx* func_i8_8009C900(Gfx* gfx) {
+Gfx* Records_DrawGhostMarker(Gfx* gfx) {
 
     gfx = func_806F6360(gfx, 0);
     gSPDisplayList(gfx++, D_8014810);
     gDPSetCombineLERP(gfx++, 0, 0, 0, TEXEL0, TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0, TEXEL0, 0, SHADE, 0);
     gDPSetRenderMode(gfx++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
 
-    gSPMatrix(gfx++, &D_i8_800A1F34->unk_00, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
+    gSPMatrix(gfx++, &sGhostMarkerRenderInfo->mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
     gSPMatrix(gfx++, D_2000000, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPVertex(gfx++, D_i8_800A1F34->unk_40, 4, 0);
+    gSPVertex(gfx++, sGhostMarkerRenderInfo->vtx, 4, 0);
 
-    gDPLoadTextureBlock_4b(gfx++, func_i2_800AEA90(aHasGhostMarkerTex), G_IM_FMT_I, 32, 16, 0,
-                           G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
-                           G_TX_NOLOD);
+    gDPLoadTextureBlock_4b(gfx++, func_i2_800AEA90(aHasGhostMarkerTex), G_IM_FMT_I, TEX_WIDTH(aHasGhostMarkerTex),
+                           TEX_HEIGHT(aHasGhostMarkerTex), 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
+                           G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
     gSP2Triangles(gfx++, 0, 3, 1, 0, 0, 2, 3, 0);
 
     return gfx;
 }
 
-Gfx* func_i8_8009CA7C(Gfx* gfx, s32 arg1, s32 arg2) {
-    s32 temp_s4;
+Gfx* Records_MenuDraw(Gfx* gfx, s32 left, s32 top) {
+    s32 boxCenteringOffset;
     s32 i;
-    unk_80144F74* temp_s1;
+    TextureInfo* textureInfo;
     TexturePtr tlut;
     TexturePtr texture;
-    unk_80144F44* var_s5;
+    RecordsMenuInfo* recordsOption;
 
     gSPDisplayList(gfx++, D_8014940);
 
-    var_s5 = D_i8_8009E1B4;
-    for (i = 0; i < 5; i++, var_s5++) {
+    recordsOption = sRecordsMenuInfo;
+    for (i = 0; i < 5; i++, recordsOption++) {
 
         gDPPipeSync(gfx++);
 
-        if (i != D_i8_800A1F20) {
-            if (D_i8_800A1EF8[i] != 0) {
+        if (i != sRecordsHighlightedMenuIndex) {
+            if (sRecordsMenuIndexValid[i]) {
                 gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, 255);
             } else {
                 gDPSetPrimColor(gfx++, 0, 0, 128, 128, 128, 255);
@@ -826,148 +847,149 @@ Gfx* func_i8_8009CA7C(Gfx* gfx, s32 arg1, s32 arg2) {
             gfx = func_8070D4A8(gfx, 0);
         }
 
-        temp_s1 = &var_s5->unk_04;
-        temp_s4 = ((104 - temp_s1->width) / 2) - 20;
-        if (var_s5->tlut == NULL) {
-            texture = func_i2_800AEA90(temp_s1->unk_00);
+        textureInfo = &recordsOption->textureInfo;
+        boxCenteringOffset = ((104 - textureInfo->width) / 2) - 20;
+        if (recordsOption->tlut == NULL) {
+            texture = func_i2_800AEA90(textureInfo->texture);
             tlut = func_i2_800AEA90(aMenuTextTLUT);
         } else {
-            texture = temp_s1->unk_00;
-            tlut = var_s5->tlut;
+            texture = textureInfo->texture;
+            tlut = recordsOption->tlut;
         }
 
-        gfx = func_8070DEE0(gfx, texture, tlut, G_IM_FMT_CI, 1, arg1 + temp_s4 + 20, arg2 + 10 + i * 20, temp_s1->width,
-                            temp_s1->height, 3);
+        gfx = func_8070DEE0(gfx, texture, tlut, G_IM_FMT_CI, 1, left + boxCenteringOffset + 20, top + 10 + i * 20,
+                            textureInfo->width, textureInfo->height, 3);
     }
 
     return gfx;
 }
 
-Gfx* func_i8_8009CC30(Gfx* gfx, s32 arg1, s32 arg2) {
-    unk_80144F74* temp_s0;
-    s32 sp58;
+Gfx* Records_DrawClearConfirm(Gfx* gfx, s32 left, s32 top) {
+    TextureInfo* textureInfo;
+    s32 boxCenteringOffset;
     s32 pad;
 
     gDPPipeSync(gfx++);
     gDPSetPrimColor(gfx++, 0, 0, 255, 255, 0, 255);
 
-    temp_s0 = &D_i8_8009E204[D_i8_800A1F28];
+    textureInfo = &sRecordsClearTextureInfos[sRecordsClearType];
 
-    gfx = func_8070DEE0(gfx, func_i2_800AEA90(temp_s0->unk_00), func_i2_800AEA90(aMenuTextTLUT), G_IM_FMT_CI, 1,
-                        arg1 + 12, arg2 + 10, temp_s0->width, temp_s0->height, 3);
+    gfx = func_8070DEE0(gfx, func_i2_800AEA90(textureInfo->texture), func_i2_800AEA90(aMenuTextTLUT), G_IM_FMT_CI, 1,
+                        left + 12, top + 10, textureInfo->width, textureInfo->height, 3);
 
     gDPPipeSync(gfx++);
     gfx = func_8070D4A8(gfx, 0);
+    gfx = func_8070DEE0(gfx, func_i2_800AEA90(aMenuLeftArrowTex), NULL, G_IM_FMT_CI, 1, left + 24, top + 50, 16, 16, 0);
     gfx =
-        func_8070DEE0(gfx, func_i2_800AEA90(aMenuLeftArrowTex), NULL, G_IM_FMT_CI, 1, arg1 + 24, arg2 + 50, 16, 16, 0);
-    gfx =
-        func_8070DEE0(gfx, func_i2_800AEA90(aMenuRightArrowTex), NULL, G_IM_FMT_CI, 1, arg1 + 99, arg2 + 50, 16, 16, 0);
+        func_8070DEE0(gfx, func_i2_800AEA90(aMenuRightArrowTex), NULL, G_IM_FMT_CI, 1, left + 99, top + 50, 16, 16, 0);
 
-    temp_s0 = &D_i8_8009E214[D_i8_800A1F26];
-    sp58 = (0x3B - temp_s0->width) / 2;
-    return func_8070DEE0(gfx, func_i2_800AEA90(temp_s0->unk_00), NULL, G_IM_FMT_CI, 1, arg1 + sp58 + 42, arg2 + 50,
-                         temp_s0->width, temp_s0->height, 0);
+    textureInfo = &sRecordsYesNoTextureInfos[sRecordsYesNoIndex];
+    boxCenteringOffset = (59 - textureInfo->width) / 2;
+    return func_8070DEE0(gfx, func_i2_800AEA90(textureInfo->texture), NULL, G_IM_FMT_CI, 1,
+                         left + boxCenteringOffset + 42, top + 50, textureInfo->width, textureInfo->height, 0);
 }
 
 void func_i8_8009CE5C(void) {
 }
 
-void func_i8_8009CE64(void) {
-    s32 temp;
-    s32 var_v1;
+void Records_CopyGhostMenuUpdate(void) {
+    s32 lastGhostTypeIndex;
+    s32 ghostIndex;
 
-    if ((BorderedBox_GetInfo(D_i8_800A1F10, IS_BORDERED_BOX_OPENED)) &&
-        (!BorderedBox_GetInfo(D_i8_800A1F14, IS_BORDERED_BOX_ACTIVE))) {
-        temp = D_i8_800A2050;
-        if (D_i8_800A2050 == -1) {
+    if ((BorderedBox_GetInfo(sRecordsGhostCopyBox, IS_BORDERED_BOX_OPENED)) &&
+        (!BorderedBox_GetInfo(sRecordsCopyWhereBox, IS_BORDERED_BOX_ACTIVE))) {
+        lastGhostTypeIndex = sRecordsCopyFromGhostTypeIndex;
+        if (sRecordsCopyFromGhostTypeIndex == -1) {
             if (gInputButtonPressed & BTN_B) {
-                D_800A1EF0 = 1;
-                BorderedBox_StartClose(D_i8_800A1F10);
+                sRecordsState = RECORDS_STATE_RECORDS_MENU;
+                BorderedBox_StartClose(sRecordsGhostCopyBox);
                 Audio_TriggerSystemSE(NA_SE_16);
             }
         } else {
             if (gInputPressed & BTN_UP) {
                 do {
-                    D_i8_800A2050--;
-                    if (D_i8_800A2050 < 0) {
-                        D_i8_800A2050 = 3;
+                    sRecordsCopyFromGhostTypeIndex--;
+                    if (sRecordsCopyFromGhostTypeIndex < RECORDS_GHOST_CASSETTE) {
+                        sRecordsCopyFromGhostTypeIndex = RECORDS_GHOST_DISK_3;
                     }
-                    if (D_i8_800A2050 == 0) {
-                        var_v1 = D_i8_800A2050;
+                    if (sRecordsCopyFromGhostTypeIndex == RECORDS_GHOST_CASSETTE) {
+                        ghostIndex = sRecordsCopyFromGhostTypeIndex;
                     } else {
-                        var_v1 = D_i8_800A2070[D_i8_800A2050 - 1] + 1;
+                        ghostIndex = sSortedDiskGhostRecordTimeIndices[sRecordsCopyFromGhostTypeIndex - 1] + 1;
                     }
-                } while (D_i8_800A2060[var_v1] == -1);
+                } while (sGhostCourseRecordTimes[ghostIndex] == -1);
             } else if (gInputPressed & BTN_DOWN) {
                 do {
-                    D_i8_800A2050++;
-                    if (D_i8_800A2050 > 3) {
-                        D_i8_800A2050 = 0;
+                    sRecordsCopyFromGhostTypeIndex++;
+                    if (sRecordsCopyFromGhostTypeIndex > RECORDS_GHOST_DISK_3) {
+                        sRecordsCopyFromGhostTypeIndex = RECORDS_GHOST_CASSETTE;
                     }
-                    if (D_i8_800A2050 == 0) {
-                        var_v1 = D_i8_800A2050;
+                    if (sRecordsCopyFromGhostTypeIndex == RECORDS_GHOST_CASSETTE) {
+                        ghostIndex = sRecordsCopyFromGhostTypeIndex;
                     } else {
-                        var_v1 = D_i8_800A2070[D_i8_800A2050 - 1] + 1;
+                        ghostIndex = sSortedDiskGhostRecordTimeIndices[sRecordsCopyFromGhostTypeIndex - 1] + 1;
                     }
-                } while (D_i8_800A2060[var_v1] == -1);
+                } while (sGhostCourseRecordTimes[ghostIndex] == -1);
             }
-            if (temp != D_i8_800A2050) {
+            if (lastGhostTypeIndex != sRecordsCopyFromGhostTypeIndex) {
                 Audio_TriggerSystemSE(NA_SE_30);
             }
             if (gInputButtonPressed & (BTN_A | BTN_START)) {
-                D_i8_800A1F14 =
-                    BorderedBox_Init(4, 120, 60, 148, 72, 40, GPACK_RGBA5551(0, 0, 255, 1), func_i8_8009D6A4);
+                sRecordsCopyWhereBox =
+                    BorderedBox_Init(4, 120, 60, 148, 72, 40, GPACK_RGBA5551(0, 0, 255, 1), Records_DrawCopyWhereMenu);
 
-                if (D_i8_800A1F14 != NULL) {
-                    D_800A1EF0 = 5;
-                    if ((D_i8_800A2050 != 0) && (gCourseIndex <= COURSE_BIG_HAND)) {
-                        D_i8_800A2090[0] = MAX_TIMER;
-                        D_i8_800A2052 = 0;
+                if (sRecordsCopyWhereBox != NULL) {
+                    sRecordsState = RECORDS_STATE_COPY_WHERE_MENU;
+                    if ((sRecordsCopyFromGhostTypeIndex != RECORDS_GHOST_CASSETTE) &&
+                        (gCourseIndex <= COURSE_BIG_HAND)) {
+                        sDiskGhostCourseRecordTimes[0] = MAX_TIMER;
+                        sRecordsCopyWhereMenuIndex = 0;
                     } else {
-                        D_i8_800A2090[0] = -1;
-                        D_i8_800A2052 = 1;
+                        sDiskGhostCourseRecordTimes[0] = -1;
+                        sRecordsCopyWhereMenuIndex = 1;
                     }
-                    func_i8_8009DF6C(0);
+                    Records_ReadWriteGhost(OS_READ);
                 }
                 Audio_TriggerSystemSE(NA_SE_33);
                 return;
             }
             if (gInputButtonPressed & BTN_B) {
-                D_800A1EF0 = 1;
+                sRecordsState = RECORDS_STATE_RECORDS_MENU;
                 func_80704810(1);
-                BorderedBox_StartClose(D_i8_800A1F10);
+                BorderedBox_StartClose(sRecordsGhostCopyBox);
                 Audio_TriggerSystemSE(NA_SE_16);
             }
         }
     }
 }
 
-Gfx* func_i8_8009D0E8(Gfx* gfx, s32 arg1, s32 arg2) {
-    unk_8009E224* var_s2;
+Gfx* Records_DrawGhostCopyMenu(Gfx* gfx, s32 left, s32 top) {
+    TexturePaletteInfo* textureInfo;
     s32 i;
-    s32 var_s4;
-    s32 var_s8;
-    s32 var_s3;
-    s32 var_v0;
+    s32 timeTexturesLoaded;
+    s32 ghostTypeLeft;
+    s32 ghostTypeTop;
+    s32 ghostIndex;
 
     gDPPipeSync(gfx++);
     gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, 255);
 
-    gfx = func_8070DEE0(gfx, D_i8_8009E2C0, D_i8_8009EAC8, G_IM_FMT_CI, 1, arg1 + 20, arg2 + 10, 128, 16, 3);
+    gfx = func_8070DEE0(gfx, aRecordsWhichGhostToCopyTex, aRecordsWhichGhostToCopyPalette, G_IM_FMT_CI, 1, left + 20,
+                        top + 10, 128, 16, 3);
 
     for (i = 0; i < 4; i++) {
-        var_s8 = arg1 + 10;
-        var_s3 = arg2 + 30 + i * 20;
-        var_s2 = &D_i8_8009E224[i];
+        ghostTypeLeft = left + 10;
+        ghostTypeTop = top + 30 + i * 20;
+        textureInfo = &sRecordsGhostTypeTextureInfos[i];
         gDPPipeSync(gfx++);
 
-        if (i != D_i8_800A2050) {
-            if (i == 0) {
-                var_v0 = i;
+        if (i != sRecordsCopyFromGhostTypeIndex) {
+            if (i == RECORDS_GHOST_CASSETTE) {
+                ghostIndex = i;
             } else {
-                var_v0 = D_i8_800A2070[i - 1] + 1;
+                ghostIndex = sSortedDiskGhostRecordTimeIndices[i - 1] + 1;
             }
-            if (D_i8_800A2060[var_v0] != -1) {
+            if (sGhostCourseRecordTimes[ghostIndex] != -1) {
                 gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, 255);
             } else {
                 gDPSetPrimColor(gfx++, 0, 0, 128, 128, 128, 255);
@@ -975,128 +997,130 @@ Gfx* func_i8_8009D0E8(Gfx* gfx, s32 arg1, s32 arg2) {
         } else {
             gfx = func_8070D4A8(gfx, 0);
         }
-        gfx = func_8070DEE0(gfx, var_s2->texture, var_s2->tlut, G_IM_FMT_CI, 1, var_s8, var_s3, var_s2->width,
-                            var_s2->height, 2);
+        gfx = func_8070DEE0(gfx, textureInfo->texture, textureInfo->tlut, G_IM_FMT_CI, 1, ghostTypeLeft, ghostTypeTop,
+                            textureInfo->width, textureInfo->height, 2);
     }
 
     gSPDisplayList(gfx++, D_8014940);
 
-    var_s4 = false;
+    timeTexturesLoaded = false;
     for (i = 0; i < 4; i++) {
         if (i == 0) {
-            var_v0 = i;
+            ghostIndex = i;
         } else {
-            var_v0 = D_i8_800A2070[i - 1] + 1;
+            ghostIndex = sSortedDiskGhostRecordTimeIndices[i - 1] + 1;
         }
 
-        if (D_i8_800A2060[var_v0] == -1) {
+        if (sGhostCourseRecordTimes[ghostIndex] == -1) {
             continue;
         }
-        if (!var_s4) {
-            var_s4 = true;
+        if (!timeTexturesLoaded) {
+            timeTexturesLoaded = true;
             gDPLoadTextureBlock(gfx++, D_303C3F0, G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 224, 0, G_TX_NOMIRROR | G_TX_WRAP,
                                 G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
         }
-        gfx = func_i3_DrawTimerScisThousandths(gfx, D_i8_800A2060[var_v0], arg1 + 84, arg2 + 30 + (i * 20), 1.0f);
+        gfx = func_i3_DrawTimerScisThousandths(gfx, sGhostCourseRecordTimes[ghostIndex], left + 84, top + 30 + (i * 20),
+                                               1.0f);
     }
     return gfx;
 }
 
-void func_i8_8009D430(void) {
-    s32 temp;
+void Records_CopyWhereMenuUpdate(void) {
+    s32 lastCopyWhereIndex;
     s16 sp20[2];
 
-    if (BorderedBox_GetInfo(D_i8_800A1F14, IS_BORDERED_BOX_OPENED) &&
-        !BorderedBox_GetInfo(D_i8_800A1F18, IS_BORDERED_BOX_ACTIVE)) {
-        sp20[0] = D_i8_800A2090[0];
-        sp20[1] = -0x1181;
-        temp = D_i8_800A2052;
+    if (BorderedBox_GetInfo(sRecordsCopyWhereBox, IS_BORDERED_BOX_OPENED) &&
+        !BorderedBox_GetInfo(sRecordsCopyToDiskBox, IS_BORDERED_BOX_ACTIVE)) {
+        sp20[0] = sDiskGhostCourseRecordTimes[0];
+        sp20[1] = 0xEE7F;
+        lastCopyWhereIndex = sRecordsCopyWhereMenuIndex;
         if (gInputPressed & BTN_UP) {
             do {
-                D_i8_800A2052--;
-                if (D_i8_800A2052 < 0) {
-                    D_i8_800A2052 = 1;
+                sRecordsCopyWhereMenuIndex--;
+                if (sRecordsCopyWhereMenuIndex < RECORDS_COPY_TO_GAME_PAK) {
+                    sRecordsCopyWhereMenuIndex = RECORDS_COPY_TO_DISK;
                 }
-            } while (sp20[D_i8_800A2052] == -1);
+            } while (sp20[sRecordsCopyWhereMenuIndex] == -1);
         } else if (gInputPressed & BTN_DOWN) {
             do {
-                D_i8_800A2052++;
-                if (D_i8_800A2052 > 1) {
-                    D_i8_800A2052 = 0;
+                sRecordsCopyWhereMenuIndex++;
+                if (sRecordsCopyWhereMenuIndex > RECORDS_COPY_TO_DISK) {
+                    sRecordsCopyWhereMenuIndex = RECORDS_COPY_TO_GAME_PAK;
                 }
-            } while (sp20[D_i8_800A2052] == -1);
+            } while (sp20[sRecordsCopyWhereMenuIndex] == -1);
         }
-        if (temp != D_i8_800A2052) {
+        if (lastCopyWhereIndex != sRecordsCopyWhereMenuIndex) {
             Audio_TriggerSystemSE(NA_SE_30);
         }
         if (gInputButtonPressed & (BTN_A | BTN_START)) {
-            if (D_i8_800A2052 == 0) {
-                D_i8_800A2054 = 0;
-                func_i8_8009D5B8(0);
+            if (sRecordsCopyWhereMenuIndex == RECORDS_COPY_TO_GAME_PAK) {
+                sRecordsCopyToGhostTypeIndex = RECORDS_COPY_TO_GAME_PAK;
+                Records_SetCopyingState(RECORDS_GHOST_COPIED);
             } else {
-                func_i8_8009D5B8(1);
+                Records_SetCopyingState(RECORDS_INSERT_DISK);
             }
             Audio_TriggerSystemSE(NA_SE_33);
             return;
         }
         if (gInputButtonPressed & BTN_B) {
-            D_800A1EF0 = 4;
-            BorderedBox_StartClose(D_i8_800A1F14);
+            sRecordsState = RECORDS_STATE_COPY_GHOST_MENU;
+            BorderedBox_StartClose(sRecordsCopyWhereBox);
             Audio_TriggerSystemSE(NA_SE_16);
         }
     }
 }
 
-void func_i8_8009D5B8(s32 arg0) {
-    s32 temp_v1;
-    s32 temp_t0;
-    unk_8009E224* temp_v0;
-    BorderedBoxWidget* temp_v0_2;
+void Records_SetCopyingState(s32 copyingState) {
+    s32 boxWidth;
+    s32 boxHeight;
+    TexturePaletteInfo* textureInfo;
 
-    D_i8_800A2058 = arg0;
-    temp_v0 = &D_i8_8009E264[D_i8_800A2058];
-    temp_v1 = temp_v0->width + 20;
-    temp_t0 = temp_v0->height + 20;
-    D_i8_800A1F1C = BorderedBox_Init(6, (SCREEN_WIDTH - temp_v1) / 2, (SCREEN_HEIGHT - temp_t0) / 2, temp_v1, temp_t0,
-                                     60, GPACK_RGBA5551(255, 255, 0, 1), func_i8_8009E0F0);
+    sGhostCopyingState = copyingState;
+    textureInfo = &sRecordsGhostCopyingInfoTextureInfos[sGhostCopyingState];
+    boxWidth = textureInfo->width + 20;
+    boxHeight = textureInfo->height + 20;
+    sRecordsCopyingInfoBox =
+        BorderedBox_Init(6, (SCREEN_WIDTH - boxWidth) / 2, (SCREEN_HEIGHT - boxHeight) / 2, boxWidth, boxHeight, 60,
+                         GPACK_RGBA5551(255, 255, 0, 1), Records_DrawCopyingInfo);
 
-    if (D_i8_800A1F1C != NULL) {
-        D_800A1EF0 = 7;
-        D_i8_800A2056 = 0;
+    if (sRecordsCopyingInfoBox != NULL) {
+        sRecordsState = RECORDS_STATE_SHOW_COPYING_INFO;
+        sGhostCopiedTimer = 0;
     }
 }
 
-Gfx* func_i8_8009D6A4(Gfx* gfx, s32 arg1, s32 arg2) {
-    unk_80144F74* var_s2;
+Gfx* Records_DrawCopyWhereMenu(Gfx* gfx, s32 left, s32 top) {
+    TextureInfo* textureInfo;
     TexturePtr tlut;
     s32 i;
-    s32 var_s6;
-    s32 var_s4;
-    s32 var_v0;
+    s32 copyLocationLeft;
+    s32 copyLocationTop;
+    s32 ghostIndex;
 
     gDPPipeSync(gfx++);
     gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, 255);
 
-    gfx = func_8070DEE0(gfx, D_i8_8009EB10, D_i8_8009F318, G_IM_FMT_CI, 1, arg1 + 10, arg2 + 10, 128, 16, 3);
+    gfx = func_8070DEE0(gfx, aRecordsWhereToCopyTex, aRecordsWhereToCopyPalette, G_IM_FMT_CI, 1, left + 10, top + 10,
+                        128, 16, 3);
 
     for (i = 0; i < 2; i++) {
-        var_s6 = arg1 + 20;
-        var_s4 = arg2 + 30 + i * 20;
-        var_s2 = &D_i8_8009E254[i];
+        copyLocationLeft = left + 20;
+        copyLocationTop = top + 30 + i * 20;
+        textureInfo = &sRecordsCopyLocationTextureInfos[i];
 
         gDPPipeSync(gfx++);
-        if (i != 0) {
+        if (i != RECORDS_COPY_TO_GAME_PAK) {
             tlut = NULL;
         } else {
             tlut = func_i2_800AEA90(aMenuTextTLUT);
         }
-        if (i != D_i8_800A2052) {
-            if (i == 0) {
-                var_v0 = i;
+        if (i != sRecordsCopyWhereMenuIndex) {
+            if (i == RECORDS_COPY_TO_GAME_PAK) {
+                ghostIndex = i;
             } else {
-                var_v0 = D_i8_800A2070[i + 3] + 1;
+                ghostIndex = sSortedDiskGhostRecordTimeIndices2[i - 1] + 1;
             }
-            if ((i == 0) && (D_i8_800A2090[var_v0] == -1)) {
+            if ((i == RECORDS_COPY_TO_GAME_PAK) && (sDiskGhostCourseRecordTimes[ghostIndex] == -1)) {
                 gDPSetPrimColor(gfx++, 0, 0, 128, 128, 128, 255);
             } else {
                 gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, 255);
@@ -1104,71 +1128,71 @@ Gfx* func_i8_8009D6A4(Gfx* gfx, s32 arg1, s32 arg2) {
         } else {
             gfx = func_8070D4A8(gfx, 0);
         }
-        gfx = func_8070DEE0(gfx, func_i2_800AEA90(var_s2->unk_00), tlut, G_IM_FMT_CI, 1, var_s6, var_s4, var_s2->width,
-                            var_s2->height, 2);
+        gfx = func_8070DEE0(gfx, func_i2_800AEA90(textureInfo->texture), tlut, G_IM_FMT_CI, 1, copyLocationLeft,
+                            copyLocationTop, textureInfo->width, textureInfo->height, 2);
     }
     return gfx;
 }
 
-void func_i8_8009D8A4(void) {
-    s32 temp;
+void Records_CopyToDiskMenuUpdate(void) {
+    s32 lastGhostTypeIndex;
 
-    if (BorderedBox_GetInfo(D_i8_800A1F18, IS_BORDERED_BOX_OPENED) &&
-        !BorderedBox_GetInfo(D_i8_800A1F1C, IS_BORDERED_BOX_ACTIVE)) {
-        temp = D_i8_800A2054;
+    if (BorderedBox_GetInfo(sRecordsCopyToDiskBox, IS_BORDERED_BOX_OPENED) &&
+        !BorderedBox_GetInfo(sRecordsCopyingInfoBox, IS_BORDERED_BOX_ACTIVE)) {
+        lastGhostTypeIndex = sRecordsCopyToGhostTypeIndex;
         if (gInputPressed & BTN_UP) {
-            D_i8_800A2054--;
-            if (D_i8_800A2054 < 1) {
-                D_i8_800A2054 = 3;
+            sRecordsCopyToGhostTypeIndex--;
+            if (sRecordsCopyToGhostTypeIndex < RECORDS_GHOST_DISK_1) {
+                sRecordsCopyToGhostTypeIndex = RECORDS_GHOST_DISK_3;
             }
         } else if (gInputPressed & BTN_DOWN) {
-            D_i8_800A2054++;
-            if (D_i8_800A2054 > 3) {
-                D_i8_800A2054 = 1;
+            sRecordsCopyToGhostTypeIndex++;
+            if (sRecordsCopyToGhostTypeIndex > RECORDS_GHOST_DISK_3) {
+                sRecordsCopyToGhostTypeIndex = RECORDS_GHOST_DISK_1;
             }
         }
-        if (temp != D_i8_800A2054) {
+        if (lastGhostTypeIndex != sRecordsCopyToGhostTypeIndex) {
             Audio_TriggerSystemSE(NA_SE_30);
         }
         if (gInputButtonPressed & (BTN_A | BTN_START)) {
-            func_i8_8009D5B8(0);
+            Records_SetCopyingState(RECORDS_GHOST_COPIED);
             Audio_TriggerSystemSE(NA_SE_33);
             return;
         }
         if (gInputButtonPressed & BTN_B) {
             func_80704810(1);
-            D_800A1EF0 = 1;
-            BorderedBox_StartClose(D_i8_800A1F18);
-            BorderedBox_StartClose(D_i8_800A1F14);
-            BorderedBox_StartClose(D_i8_800A1F10);
+            sRecordsState = RECORDS_STATE_RECORDS_MENU;
+            BorderedBox_StartClose(sRecordsCopyToDiskBox);
+            BorderedBox_StartClose(sRecordsCopyWhereBox);
+            BorderedBox_StartClose(sRecordsGhostCopyBox);
             Audio_TriggerSystemSE(NA_SE_16);
         }
     }
 }
 
-Gfx* func_i8_8009D9D8(Gfx* gfx, s32 arg1, s32 arg2) {
+Gfx* Records_DrawCopyToDiskMenu(Gfx* gfx, s32 left, s32 top) {
     s32 i;
-    unk_8009E224* var_s2;
-    s32 var_v0;
+    TexturePaletteInfo* textureInfo;
+    s32 ghostIndex;
     s32 var_s4;
-    s32 pad;
+    bool timeTexturesLoaded;
 
-    for (i = 1, var_s2 = &D_i8_8009E224[i]; i < 4; i++, var_s2++) {
+    for (i = 1, textureInfo = &sRecordsGhostTypeTextureInfos[i]; i < 4; i++, textureInfo++) {
 
         gDPPipeSync(gfx++);
 
-        if (i != 1) {
+        if (i != RECORDS_GHOST_DISK_1) {
             var_s4 = 2;
         } else {
             var_s4 = 3;
         }
-        if (i != D_i8_800A2054) {
-            if (i == 0) {
-                var_v0 = i;
+        if (i != sRecordsCopyToGhostTypeIndex) {
+            if (i == RECORDS_GHOST_CASSETTE) {
+                ghostIndex = i;
             } else {
-                var_v0 = D_i8_800A2070[i + 3] + 1;
+                ghostIndex = sSortedDiskGhostRecordTimeIndices2[i - 1] + 1;
             }
-            if (D_i8_800A2090[var_v0] != -1) {
+            if (sDiskGhostCourseRecordTimes[ghostIndex] != -1) {
                 gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, 255);
             } else {
                 gDPSetPrimColor(gfx++, 0, 0, 128, 128, 128, 255);
@@ -1176,105 +1200,107 @@ Gfx* func_i8_8009D9D8(Gfx* gfx, s32 arg1, s32 arg2) {
         } else {
             gfx = func_8070D4A8(gfx, 0);
         }
-        gfx = func_8070DEE0(gfx, var_s2->texture, var_s2->tlut, 2, 1, arg1 + 10, arg2 - 10 + i * 20, var_s2->width,
-                            var_s2->height, var_s4);
+        gfx = func_8070DEE0(gfx, textureInfo->texture, textureInfo->tlut, 2, 1, left + 10, top - 10 + i * 20,
+                            textureInfo->width, textureInfo->height, var_s4);
     }
 
     gSPDisplayList(gfx++, D_8014940);
 
-    var_s4 = false;
+    timeTexturesLoaded = false;
     for (i = 1; i < 4; i++) {
 
-        if (i == 0) {
-            var_v0 = i;
+        if (i == RECORDS_GHOST_CASSETTE) {
+            ghostIndex = i;
         } else {
-            var_v0 = D_i8_800A2070[i + 3] + 1;
+            ghostIndex = sSortedDiskGhostRecordTimeIndices2[i - 1] + 1;
         }
 
-        if (D_i8_800A2090[var_v0] == -1) {
+        if (sDiskGhostCourseRecordTimes[ghostIndex] == -1) {
             continue;
         }
-        if (!var_s4) {
-            var_s4 = true;
+        if (!timeTexturesLoaded) {
+            timeTexturesLoaded = true;
             gDPLoadTextureBlock(gfx++, D_303C3F0, G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 224, 0, G_TX_NOMIRROR | G_TX_WRAP,
                                 G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
         }
-        gfx = func_i3_DrawTimerScisThousandths(gfx, D_i8_800A2090[var_v0], arg1 + 84, arg2 - 10 + i * 20, 1.0f);
+        gfx = func_i3_DrawTimerScisThousandths(gfx, sDiskGhostCourseRecordTimes[ghostIndex], left + 84,
+                                               top - 10 + i * 20, 1.0f);
     }
     return gfx;
 }
 
 extern volatile u8 D_80794E14;
 
-void func_i8_8009DCC8(void) {
+void Records_CopyingStateUpdate(void) {
     s32 i;
     s32 j;
-    bool var_a2;
-    s32 temp_a3;
+    bool swapIndices;
+    s32 ghostIndexTemp;
 
-    if (BorderedBox_GetInfo(D_i8_800A1F1C, IS_BORDERED_BOX_OPENED)) {
-        switch (D_i8_800A2058) {
-            case 0:
-                if (D_i8_800A2056 < 1000) {
-                    D_i8_800A2056++;
+    if (BorderedBox_GetInfo(sRecordsCopyingInfoBox, IS_BORDERED_BOX_OPENED)) {
+        switch (sGhostCopyingState) {
+            case RECORDS_GHOST_COPIED:
+                if (sGhostCopiedTimer < 1000) {
+                    sGhostCopiedTimer++;
                 }
 
                 if (D_80794E14) {
                     break;
                 }
 
-                if (D_i8_800A2056 == 5) {
-                    D_i8_800A2056++;
-                    func_i8_8009DF6C(1);
+                if (sGhostCopiedTimer == 5) {
+                    sGhostCopiedTimer++;
+                    Records_ReadWriteGhost(OS_WRITE);
                 }
-                if (D_i8_800A2056 >= 60) {
+                if (sGhostCopiedTimer >= 60) {
                     func_80704810(1);
-                    D_800A1EF0 = 1;
-                    BorderedBox_StartClose(D_i8_800A1F1C);
-                    if (D_i8_800A2054 != 0) {
-                        BorderedBox_StartClose(D_i8_800A1F18);
+                    sRecordsState = RECORDS_STATE_RECORDS_MENU;
+                    BorderedBox_StartClose(sRecordsCopyingInfoBox);
+                    if (sRecordsCopyToGhostTypeIndex != RECORDS_GHOST_CASSETTE) {
+                        BorderedBox_StartClose(sRecordsCopyToDiskBox);
                     }
-                    BorderedBox_StartClose(D_i8_800A1F14);
-                    BorderedBox_StartClose(D_i8_800A1F10);
+                    BorderedBox_StartClose(sRecordsCopyWhereBox);
+                    BorderedBox_StartClose(sRecordsGhostCopyBox);
                 }
                 break;
-            case 1:
+            case RECORDS_INSERT_DISK:
                 if (gInputButtonPressed & (BTN_A | BTN_START)) {
                     func_80704810(0);
                     func_80704AA8();
-                    func_i8_8009B81C(D_i8_800A2090, 0);
+                    Records_LoadGhostRaceTimes(sDiskGhostCourseRecordTimes, false);
 
                     for (i = 0; i < 3; i++) {
-                        D_i8_800A2080[i] = i;
+                        sSortedDiskGhostRecordTimeIndices2[i] = i;
                     }
 
                     for (i = 0; i < 2; i++) {
                         for (j = i + 1; j < 3; j++) {
-                            var_a2 = false;
+                            swapIndices = false;
 
-                            if (D_i8_800A2090[D_i8_800A2080[i] + 1] == -1) {
-                                if (D_i8_800A2090[D_i8_800A2080[j] + 1] != -1) {
-                                    var_a2 = true;
+                            if (sDiskGhostCourseRecordTimes[sSortedDiskGhostRecordTimeIndices2[i] + 1] == -1) {
+                                if (sDiskGhostCourseRecordTimes[sSortedDiskGhostRecordTimeIndices2[j] + 1] != -1) {
+                                    swapIndices = true;
                                 }
-                            } else if (D_i8_800A2090[D_i8_800A2080[j] + 1] != -1) {
-                                if ((D_i8_800A2090[D_i8_800A2080[j] + 1] < D_i8_800A2090[D_i8_800A2080[i] + 1])) {
-                                    var_a2 = true;
+                            } else if (sDiskGhostCourseRecordTimes[sSortedDiskGhostRecordTimeIndices2[j] + 1] != -1) {
+                                if ((sDiskGhostCourseRecordTimes[sSortedDiskGhostRecordTimeIndices2[j] + 1] <
+                                     sDiskGhostCourseRecordTimes[sSortedDiskGhostRecordTimeIndices2[i] + 1])) {
+                                    swapIndices = true;
                                 }
                             }
-                            if (var_a2 != 0) {
-                                temp_a3 = D_i8_800A2080[i];
-                                D_i8_800A2080[i] = D_i8_800A2080[j];
-                                D_i8_800A2080[j] = temp_a3;
+                            if (swapIndices) {
+                                ghostIndexTemp = sSortedDiskGhostRecordTimeIndices2[i];
+                                sSortedDiskGhostRecordTimeIndices2[i] = sSortedDiskGhostRecordTimeIndices2[j];
+                                sSortedDiskGhostRecordTimeIndices2[j] = ghostIndexTemp;
                             }
                         }
                     }
-                    D_i8_800A1F18 =
-                        BorderedBox_Init(5, 130, 126, 168, 72, 50, GPACK_RGBA5551(0, 0, 255, 1), func_i8_8009D9D8);
+                    sRecordsCopyToDiskBox = BorderedBox_Init(5, 130, 126, 168, 72, 50, GPACK_RGBA5551(0, 0, 255, 1),
+                                                             Records_DrawCopyToDiskMenu);
 
-                    if (D_i8_800A1F18 != NULL) {
-                        D_800A1EF0 = 6;
-                        D_i8_800A2054 = 1;
-                        BorderedBox_StartClose(D_i8_800A1F1C);
+                    if (sRecordsCopyToDiskBox != NULL) {
+                        sRecordsState = RECORDS_STATE_COPY_TO_DISK_MENU;
+                        sRecordsCopyToGhostTypeIndex = RECORDS_GHOST_DISK_1;
+                        BorderedBox_StartClose(sRecordsCopyingInfoBox);
                     }
                     Audio_TriggerSystemSE(NA_SE_33);
                 }
@@ -1283,54 +1309,54 @@ void func_i8_8009DCC8(void) {
     }
 }
 
-void func_i8_8009DF6C(s32 arg0) {
+void Records_ReadWriteGhost(s32 direction) {
     s32 pad[3];
-    s32 temp;
-    GhostRecord sp20[3];
+    s32 ghostIndex;
+    GhostRecord ghostRecords[3];
 
     PRINTF("STAFF GHOST");
     PRINTF("STAFF GHOST");
     PRINTF("TIME");
     PRINTF("LAP%1d");
 
-    if (arg0 == 0) {
-        switch (D_i8_800A2050) {
-            case 0:
+    if (direction == OS_READ) {
+        switch (sRecordsCopyFromGhostTypeIndex) {
+            case RECORDS_GHOST_CASSETTE:
                 Save_LoadGhostInfo(NULL);
                 Save_ReadGhostData(&gSaveContext.ghostSave.data);
-                Save_LoadGhostData(&gSaveContext.ghostSave, &gSaveContext.ghostSave.data, 0, 1);
+                Save_LoadGhostData(&gSaveContext.ghostSave.record, &gSaveContext.ghostSave.data, NULL, true);
                 break;
-            case 1:
-            case 2:
-            case 3:
-                func_i2_800A9ED0(gCourseIndex, sp20);
-                temp = D_i8_800A2060[D_i8_800A2050 + 3];
-                gSaveContext.ghostSave.record = sp20[temp];
-                func_i2_800AA1C0(gCourseIndex, temp, &gSaveContext.ghostSave.data);
+            case RECORDS_GHOST_DISK_1:
+            case RECORDS_GHOST_DISK_2:
+            case RECORDS_GHOST_DISK_3:
+                func_i2_800A9ED0(gCourseIndex, ghostRecords);
+                ghostIndex = sSortedDiskGhostRecordTimeIndices[sRecordsCopyFromGhostTypeIndex - RECORDS_GHOST_DISK_1];
+                gSaveContext.ghostSave.record = ghostRecords[ghostIndex];
+                func_i2_800AA1C0(gCourseIndex, ghostIndex, &gSaveContext.ghostSave.data);
                 break;
         }
     } else {
-        switch (D_i8_800A2054) {
-            case 0:
-                Save_WriteGhostRecord(&gSaveContext.ghostSave);
+        switch (sRecordsCopyToGhostTypeIndex) {
+            case RECORDS_GHOST_CASSETTE:
+                Save_WriteGhostRecord(&gSaveContext.ghostSave.record);
                 Save_WriteGhostData(&gSaveContext.ghostSave.data);
                 break;
-            case 1:
-            case 2:
-            case 3:
-                temp = D_i8_800A2070[D_i8_800A2054 + 3];
-                func_i2_800AA220(gCourseIndex, temp, 0);
+            case RECORDS_GHOST_DISK_1:
+            case RECORDS_GHOST_DISK_2:
+            case RECORDS_GHOST_DISK_3:
+                ghostIndex = sSortedDiskGhostRecordTimeIndices2[sRecordsCopyToGhostTypeIndex - 1];
+                func_i2_800AA220(gCourseIndex, ghostIndex, NULL);
                 break;
         }
     }
 }
 
-Gfx* func_i8_8009E0F0(Gfx* gfx, s32 arg1, s32 arg2) {
-    unk_8009E224* temp_v0 = &D_i8_8009E264[D_i8_800A2058];
+Gfx* Records_DrawCopyingInfo(Gfx* gfx, s32 left, s32 top) {
+    TexturePaletteInfo* textureInfo = &sRecordsGhostCopyingInfoTextureInfos[sGhostCopyingState];
 
     gDPPipeSync(gfx++);
     gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, 255);
 
-    return func_8070DEE0(gfx, temp_v0->texture, temp_v0->tlut, G_IM_FMT_CI, 1, arg1 + 10, arg2 + 10, temp_v0->width,
-                         temp_v0->height, 3);
+    return func_8070DEE0(gfx, textureInfo->texture, textureInfo->tlut, G_IM_FMT_CI, 1, left + 10, top + 10,
+                         textureInfo->width, textureInfo->height, 3);
 }

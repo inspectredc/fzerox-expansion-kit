@@ -983,13 +983,10 @@ void func_i3_800639E0(void) {
     }
 
     for (i = 0, gfxPool = D_8024E260; i < 2; i++, gfxPool++) {
-        u16 minus32 = -32;
-        // FAKE! Not sure how to generate 0xFFE0 directly
-
-        SET_VTX(&gfxPool->unk_364E8[0], minus32, 32, 0, 0, 0, 255, 255, 255, 255);
+        SET_VTX(&gfxPool->unk_364E8[0], -32, 32, 0, 0, 0, 255, 255, 255, 255);
         SET_VTX(&gfxPool->unk_364E8[1], 32, 32, 0, 0x800, 0, 255, 255, 255, 255);
-        SET_VTX(&gfxPool->unk_364E8[2], minus32, minus32, 0, 0, 0x800, 255, 255, 255, 0);
-        SET_VTX(&gfxPool->unk_364E8[3], 32, minus32, 0, 0x800, 0x800, 255, 255, 255, 0);
+        SET_VTX(&gfxPool->unk_364E8[2], -32, -32, 0, 0, 0x800, 255, 255, 255, 0);
+        SET_VTX(&gfxPool->unk_364E8[3], 32, -32, 0, 0x800, 0x800, 255, 255, 255, 0);
     }
     D_i3_8006D958 = 0;
 

@@ -290,8 +290,8 @@ void func_i5_80077EEC(void) {
 }
 
 extern s16 D_8076C7A8;
-extern s32 D_8076CC88;
-extern s32 D_8076CC8C;
+extern s32 gLastCourseSelectCourseIndex;
+extern s32 gLastRecordsCourseIndex;
 extern s8 D_8079FB28[];
 extern s32 gCurrentGhostType;
 extern s32 gGameMode;
@@ -341,9 +341,9 @@ void CourseSelect_Init(void) {
     D_i5_8007C2AF = -1;
 
     if (gGameMode == GAMEMODE_FLX_COURSE_SELECT) {
-        k = D_8076CC88;
+        k = gLastCourseSelectCourseIndex;
     } else {
-        k = D_8076CC8C;
+        k = gLastRecordsCourseIndex;
     }
     if (k >= COURSE_X_1) {
         gCupSelectOption = 4;
@@ -461,10 +461,10 @@ void NextCourseSelect_Init(void) {
     Object_Init(OBJECT_COURSE_SELECT_NAME, 0, 0, 8);
 }
 
-extern s16 D_8076C810;
-extern s16 D_8076C814;
-extern s32 D_8076CC88;
-extern s32 D_8076CC8C;
+extern s16 gGameModeChangeState;
+extern s16 gMenuChangeMode;
+extern s32 gLastCourseSelectCourseIndex;
+extern s32 gLastRecordsCourseIndex;
 extern s32 gTransitionState;
 extern u16 gInputPressed;
 extern s32 gCupType;
@@ -592,13 +592,13 @@ s32 CourseSelect_Update(void) {
             if (gInputButtonPressed & BTN_B) {
                 Audio_TriggerSystemSE(NA_SE_16);
                 if (gGameMode == GAMEMODE_FLX_COURSE_SELECT) {
-                    D_8076CC88 = gCourseIndex;
+                    gLastCourseSelectCourseIndex = gCourseIndex;
                     sCourseSelectState = COURSE_SELECT_START_EXIT;
                 } else {
-                    D_8076CC8C = gCourseIndex;
+                    gLastRecordsCourseIndex = gCourseIndex;
                     sCourseSelectState = COURSE_SELECT_EXIT_RECORDS;
                     Audio_RomBgmReady(BGM_SELECT);
-                    D_8076C814 = 10;
+                    gMenuChangeMode = MENU_CHANGE_EXIT_RECORDS;
                 }
             } else if (gInputButtonPressed & (BTN_A | BTN_START)) {
                 Audio_TriggerSystemSE(NA_SE_33);
@@ -711,11 +711,12 @@ s32 CourseSelect_Update(void) {
                 Audio_TriggerSystemSE(NA_SE_62);
                 sCourseSelectState = COURSE_SELECT_CONTINUE;
                 if (gGameMode == GAMEMODE_FLX_COURSE_SELECT) {
-                    D_8076CC88 = gCourseIndex;
+                    gLastCourseSelectCourseIndex = gCourseIndex;
                     return GAMEMODE_FLX_MACHINE_SELECT;
+                } else {
+                    gLastRecordsCourseIndex = gCourseIndex;
+                    return GAMEMODE_RECORDS;
                 }
-                D_8076CC8C = gCourseIndex;
-                return GAMEMODE_RECORDS;
             }
             break;
         case COURSE_SELECT_START_EXIT:
@@ -725,8 +726,8 @@ s32 CourseSelect_Update(void) {
             }
             break;
         case COURSE_SELECT_EXIT:
-            if (D_8076C810 == 0) {
-                D_8076C814 = 12;
+            if (gGameModeChangeState == GAMEMODE_UPDATE) {
+                gMenuChangeMode = MENU_CHANGE_EXIT_COURSE_SELECT;
             }
             break;
         default:
@@ -817,7 +818,7 @@ void CourseSelect_CupInit(Object* cupObj) {
         func_i2_800AE17C(sCupClearedDifficultyCompTexInfos[i], 0, true);
     }
 
-    if (D_8076C810 == 33) {
+    if (gGameModeChangeState == GAMEMODE_CHANGE_INSTANT(GAMEMODE_CHANGE_INIT)) {
         OBJECT_COUNTER(cupObj) = 12;
     }
     OBJECT_LEFT(cupObj) = 0x80;

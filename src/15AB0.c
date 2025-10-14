@@ -348,7 +348,7 @@ bool func_80708D88(void) {
 
     if (gGameMode == GAMEMODE_EAD_DEMO) {
         D_8076CC40 = 1;
-        return 0;
+        return false;
     }
     sp54 = false;
     if (gGameMode == GAMEMODE_COURSE_EDIT) {

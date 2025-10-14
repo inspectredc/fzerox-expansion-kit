@@ -5,7 +5,7 @@
 
 s16 sWipePos;
 u16 sTiledPerspectiveScale;
-s16 sTransitionAppearingFromBlack;
+s16 sTransitionIntermediateFillBlack;
 Transition sTransition;
 s16 sTransitionTypeArgument;
 s16 sTransitionTypeWithArgument;
@@ -40,111 +40,28 @@ void Transition_Init(void) {
     sTransitionTypeArgument = 0;
     sTransitionTypeWithArgument = 0;
     sWipePos = 0;
-    sTransitionAppearingFromBlack = 0;
+    sTransitionIntermediateFillBlack = 0;
 }
 
 extern s32 gNumPlayers;
-extern s16 D_8076C810;
+extern s16 gGameModeChangeState;
 extern s32 gGameMode;
 
-void Transition_AppearSet(void) {
-    gTransitionState = TRANSITION_APPEARING;
+void Transition_HideSet(void) {
+    gTransitionState = TRANSITION_HIDING;
 
-    if (D_8076C810 == 31) {
-        Transition_Queue(TRANSITION_APPEAR, TRANSITION_TYPE_INSTANT);
+    if (gGameModeChangeState == GAMEMODE_CHANGE_INSTANT(GAMEMODE_CHANGE_START)) {
+        Transition_Queue(TRANSITION_HIDE, TRANSITION_TYPE_INSTANT);
         return;
     }
 
     switch (gGameMode) {
         case GAMEMODE_FLX_TITLE:
-            Transition_Queue(TRANSITION_APPEAR, TRANSITION_TYPE_PHASED_STRIPS);
+            Transition_Queue(TRANSITION_HIDE, TRANSITION_TYPE_PHASED_STRIPS);
             break;
         case GAMEMODE_GP_END_CS:
             Transition_SetArgument(TRANSITION_TYPE_FADE, 120);
-            Transition_Queue(TRANSITION_APPEAR, TRANSITION_TYPE_FADE);
-            break;
-        case GAMEMODE_COURSE_EDIT:
-            Transition_Queue(TRANSITION_APPEAR, TRANSITION_TYPE_INSTANT);
-            break;
-        case GAMEMODE_CREATE_MACHINE:
-            Transition_Queue(TRANSITION_APPEAR, TRANSITION_TYPE_STATIC_FADE);
-            break;
-        case GAMEMODE_FLX_COURSE_SELECT:
-            Transition_SetArgument(TRANSITION_TYPE_FADE, 40);
-            Transition_Queue(TRANSITION_APPEAR, TRANSITION_TYPE_FADE);
-            break;
-        case GAMEMODE_FLX_MACHINE_SELECT:
-            Transition_Queue(TRANSITION_APPEAR, TRANSITION_TYPE_STATIC_FADE);
-            break;
-        case GAMEMODE_FLX_MAIN_MENU:
-            if (D_8076C810 == 21) {
-                Transition_Queue(TRANSITION_APPEAR, TRANSITION_TYPE_INSTANT);
-            } else {
-                Transition_Queue(TRANSITION_APPEAR, TRANSITION_TYPE_SMALL_TILES);
-            }
-            break;
-        case GAMEMODE_FLX_RECORDS_COURSE_SELECT:
-        case GAMEMODE_FLX_OPTIONS_MENU:
-            if (D_8076C810 == 21) {
-                Transition_Queue(TRANSITION_APPEAR, TRANSITION_TYPE_INSTANT);
-            } else {
-                Transition_QueueRandom(TRANSITION_APPEAR, true);
-            }
-            break;
-        case GAMEMODE_GP_RACE:
-        case GAMEMODE_PRACTICE:
-        case GAMEMODE_VS_2P:
-        case GAMEMODE_VS_3P:
-        case GAMEMODE_VS_4P:
-        case GAMEMODE_TIME_ATTACK:
-        case GAMEMODE_DEATH_RACE:
-            Transition_Queue(TRANSITION_APPEAR, TRANSITION_TYPE_FADE);
-            break;
-        case GAMEMODE_LX_MACHINE_SETTINGS:
-        case GAMEMODE_LX_GP_RACE_NEXT_MACHINE_SETTINGS:
-            Transition_Queue(TRANSITION_APPEAR, TRANSITION_TYPE_STATIC_FADE);
-            break;
-        case GAMEMODE_RECORDS:
-            if (D_8076C810 != 21) {
-                Transition_QueueRandom(TRANSITION_APPEAR, true);
-            } else {
-                Transition_Queue(TRANSITION_APPEAR, TRANSITION_TYPE_INSTANT);
-            }
-            break;
-        default:
-            Transition_QueueRandom(TRANSITION_APPEAR, true);
-            break;
-    }
-}
-
-extern s32 gQueuedGameMode;
-
-void Transition_HideSet(void) {
-    gTransitionState = TRANSITION_HIDING;
-
-    if (D_8076C810 == 33) {
-        Transition_Queue(TRANSITION_HIDE, TRANSITION_TYPE_INSTANT);
-        return;
-    }
-
-    switch (gQueuedGameMode) {
-        case GAMEMODE_FLX_TITLE:
-            Transition_Queue(TRANSITION_HIDE, TRANSITION_TYPE_SMALL_TILES);
-            break;
-        case GAMEMODE_GP_END_CS:
             Transition_Queue(TRANSITION_HIDE, TRANSITION_TYPE_FADE);
-            break;
-        case GAMEMODE_GP_RACE:
-        case GAMEMODE_PRACTICE:
-        case GAMEMODE_VS_2P:
-        case GAMEMODE_VS_3P:
-        case GAMEMODE_VS_4P:
-        case GAMEMODE_TIME_ATTACK:
-        case GAMEMODE_DEATH_RACE:
-            Transition_Queue(TRANSITION_HIDE, TRANSITION_TYPE_FADE);
-            break;
-        case GAMEMODE_FLX_MACHINE_SELECT:
-            Transition_Queue(TRANSITION_HIDE, TRANSITION_TYPE_STATIC_FADE);
             break;
         case GAMEMODE_COURSE_EDIT:
             Transition_Queue(TRANSITION_HIDE, TRANSITION_TYPE_INSTANT);
@@ -152,36 +69,119 @@ void Transition_HideSet(void) {
         case GAMEMODE_CREATE_MACHINE:
             Transition_Queue(TRANSITION_HIDE, TRANSITION_TYPE_STATIC_FADE);
             break;
+        case GAMEMODE_FLX_COURSE_SELECT:
+            Transition_SetArgument(TRANSITION_TYPE_FADE, 40);
+            Transition_Queue(TRANSITION_HIDE, TRANSITION_TYPE_FADE);
+            break;
+        case GAMEMODE_FLX_MACHINE_SELECT:
+            Transition_Queue(TRANSITION_HIDE, TRANSITION_TYPE_STATIC_FADE);
+            break;
+        case GAMEMODE_FLX_MAIN_MENU:
+            if (gGameModeChangeState == GAMEMODE_CHANGE_FAST(GAMEMODE_CHANGE_START)) {
+                Transition_Queue(TRANSITION_HIDE, TRANSITION_TYPE_INSTANT);
+            } else {
+                Transition_Queue(TRANSITION_HIDE, TRANSITION_TYPE_SMALL_TILES);
+            }
+            break;
         case GAMEMODE_FLX_RECORDS_COURSE_SELECT:
         case GAMEMODE_FLX_OPTIONS_MENU:
-            if (D_8076C810 == 23) {
-                Transition_SetArgument(TRANSITION_TYPE_WIPE, WIPE_DIRECTION_UP);
-                Transition_Queue(TRANSITION_HIDE, TRANSITION_TYPE_WIPE);
+            if (gGameModeChangeState == GAMEMODE_CHANGE_FAST(GAMEMODE_CHANGE_START)) {
+                Transition_Queue(TRANSITION_HIDE, TRANSITION_TYPE_INSTANT);
             } else {
                 Transition_QueueRandom(TRANSITION_HIDE, true);
+            }
+            break;
+        case GAMEMODE_GP_RACE:
+        case GAMEMODE_PRACTICE:
+        case GAMEMODE_VS_2P:
+        case GAMEMODE_VS_3P:
+        case GAMEMODE_VS_4P:
+        case GAMEMODE_TIME_ATTACK:
+        case GAMEMODE_DEATH_RACE:
+            Transition_Queue(TRANSITION_HIDE, TRANSITION_TYPE_FADE);
+            break;
+        case GAMEMODE_LX_MACHINE_SETTINGS:
+        case GAMEMODE_LX_GP_RACE_NEXT_MACHINE_SETTINGS:
+            Transition_Queue(TRANSITION_HIDE, TRANSITION_TYPE_STATIC_FADE);
+            break;
+        case GAMEMODE_RECORDS:
+            if (gGameModeChangeState != GAMEMODE_CHANGE_FAST(GAMEMODE_CHANGE_START)) {
+                Transition_QueueRandom(TRANSITION_HIDE, true);
+            } else {
+                Transition_Queue(TRANSITION_HIDE, TRANSITION_TYPE_INSTANT);
+            }
+            break;
+        default:
+            Transition_QueueRandom(TRANSITION_HIDE, true);
+            break;
+    }
+}
+
+extern s32 gQueuedGameMode;
+
+void Transition_AppearSet(void) {
+    gTransitionState = TRANSITION_APPEARING;
+
+    if (gGameModeChangeState == GAMEMODE_CHANGE_INSTANT(GAMEMODE_CHANGE_INIT)) {
+        Transition_Queue(TRANSITION_APPEAR, TRANSITION_TYPE_INSTANT);
+        return;
+    }
+
+    switch (gQueuedGameMode) {
+        case GAMEMODE_FLX_TITLE:
+            Transition_Queue(TRANSITION_APPEAR, TRANSITION_TYPE_SMALL_TILES);
+            break;
+        case GAMEMODE_GP_END_CS:
+            Transition_Queue(TRANSITION_APPEAR, TRANSITION_TYPE_FADE);
+            break;
+        case GAMEMODE_GP_RACE:
+        case GAMEMODE_PRACTICE:
+        case GAMEMODE_VS_2P:
+        case GAMEMODE_VS_3P:
+        case GAMEMODE_VS_4P:
+        case GAMEMODE_TIME_ATTACK:
+        case GAMEMODE_DEATH_RACE:
+            Transition_Queue(TRANSITION_APPEAR, TRANSITION_TYPE_FADE);
+            break;
+        case GAMEMODE_FLX_MACHINE_SELECT:
+            Transition_Queue(TRANSITION_APPEAR, TRANSITION_TYPE_STATIC_FADE);
+            break;
+        case GAMEMODE_COURSE_EDIT:
+            Transition_Queue(TRANSITION_APPEAR, TRANSITION_TYPE_INSTANT);
+            break;
+        case GAMEMODE_CREATE_MACHINE:
+            Transition_Queue(TRANSITION_APPEAR, TRANSITION_TYPE_STATIC_FADE);
+            break;
+        case GAMEMODE_FLX_RECORDS_COURSE_SELECT:
+        case GAMEMODE_FLX_OPTIONS_MENU:
+            if (gGameModeChangeState == GAMEMODE_CHANGE_FAST(GAMEMODE_CHANGE_INIT)) {
+                Transition_SetArgument(TRANSITION_TYPE_WIPE, WIPE_DIRECTION_UP);
+                Transition_Queue(TRANSITION_APPEAR, TRANSITION_TYPE_WIPE);
+            } else {
+                Transition_QueueRandom(TRANSITION_APPEAR, true);
             }
             break;
         case GAMEMODE_FLX_MAIN_MENU:
-            if (D_8076C810 == 23) {
+            if (gGameModeChangeState == GAMEMODE_CHANGE_FAST(GAMEMODE_CHANGE_INIT)) {
                 Transition_SetArgument(TRANSITION_TYPE_WIPE, WIPE_DIRECTION_DOWN);
-                Transition_Queue(TRANSITION_HIDE, TRANSITION_TYPE_WIPE);
+                Transition_Queue(TRANSITION_APPEAR, TRANSITION_TYPE_WIPE);
             } else {
-                Transition_Queue(TRANSITION_HIDE, TRANSITION_TYPE_PHASED_STRIPS);
+                Transition_Queue(TRANSITION_APPEAR, TRANSITION_TYPE_PHASED_STRIPS);
             }
             break;
         case GAMEMODE_RECORDS:
-            if (D_8076C810 != 23) {
-                Transition_QueueRandom(TRANSITION_HIDE, true);
+            if (gGameModeChangeState != GAMEMODE_CHANGE_FAST(GAMEMODE_CHANGE_INIT)) {
+                Transition_QueueRandom(TRANSITION_APPEAR, true);
             } else {
-                Transition_Queue(TRANSITION_HIDE, TRANSITION_TYPE_WIPE);
+                Transition_Queue(TRANSITION_APPEAR, TRANSITION_TYPE_WIPE);
             }
             break;
         case GAMEMODE_FLX_UNSKIPPABLE_CREDITS:
             Transition_SetArgument(TRANSITION_TYPE_FADE, 60);
-            Transition_Queue(TRANSITION_HIDE, TRANSITION_TYPE_FADE);
+            Transition_Queue(TRANSITION_APPEAR, TRANSITION_TYPE_FADE);
             break;
         default:
-            Transition_QueueRandom(TRANSITION_HIDE, true);
+            Transition_QueueRandom(TRANSITION_APPEAR, true);
             break;
     }
 }
@@ -236,8 +236,8 @@ bool Transition_Queue(s32 appearType, s32 transitionType) {
             workBufferSize = TRANSITION_BACKGROUND_HEIGHT * sizeof(f32);
             break;
         case TRANSITION_TYPE_GREYSCALE_PALETTE:
-            if (appearType != TRANSITION_APPEAR) {
-                if (sTransitionAppearingFromBlack) {
+            if (appearType != TRANSITION_HIDE) {
+                if (sTransitionIntermediateFillBlack) {
                     transition->queuedTransitionType = TRANSITION_TYPE_STATIC_FADE;
                     backgroundBufferSize = 0;
                     workBufferSize = 0;
@@ -279,7 +279,7 @@ bool Transition_QueueRandom(s32 appearType, bool instantTransitionAllowed) {
     u32 randomTransition;
     bool allocFailed;
 
-    if (appearType == TRANSITION_APPEAR) {
+    if (appearType == TRANSITION_HIDE) {
         instantTransitionChance = Math_Rand1() % 8;
         if (instantTransitionAllowed) {
             if (instantTransitionChance < 2) {
@@ -359,29 +359,29 @@ void Transition_PopQueue(Transition* transition) {
             transition->flags |= TRANSITION_FLAG_FINISHED;
             break;
         case TRANSITION_TYPE_SMALL_TILES:
-            if (transition->appearType != TRANSITION_APPEAR) {
-                transition->state = SMALL_TILES_START_HIDE;
-            } else {
+            if (transition->appearType != TRANSITION_HIDE) {
                 transition->state = SMALL_TILES_START_APPEAR;
+            } else {
+                transition->state = SMALL_TILES_START_HIDE;
             }
             Transition_SmallTilesInit(transition);
             break;
         case TRANSITION_TYPE_LARGE_TILES:
-            if (transition->appearType == TRANSITION_APPEAR) {
+            if (transition->appearType == TRANSITION_HIDE) {
                 transition->flags |= TRANSITION_FLAG_FILL_BLACK;
             }
             transition->state = LARGE_TILES_START;
             Transition_LargeTilesInit(transition);
             break;
         case TRANSITION_TYPE_TILED_WHIRL:
-            if (transition->appearType == TRANSITION_APPEAR) {
+            if (transition->appearType == TRANSITION_HIDE) {
                 transition->flags |= TRANSITION_FLAG_FILL_BLACK;
             }
             transition->state = TILED_WHIRL_START;
             Transition_TiledWhirlInit(transition);
             break;
         case TRANSITION_TYPE_TILED_SPIRAL:
-            if (transition->appearType == TRANSITION_APPEAR) {
+            if (transition->appearType == TRANSITION_HIDE) {
                 transition->flags |= TRANSITION_FLAG_FILL_BLACK;
             }
             transition->state = TILED_SPIRAL_START;
@@ -389,7 +389,7 @@ void Transition_PopQueue(Transition* transition) {
             break;
         case TRANSITION_TYPE_FADE:
         case TRANSITION_TYPE_STATIC_FADE:
-            if (transition->appearType != TRANSITION_APPEAR) {
+            if (transition->appearType != TRANSITION_HIDE) {
                 transition->state = FADE_IN_START;
                 Transition_FadeInit(transition, 255, 20);
             } else {
@@ -398,21 +398,21 @@ void Transition_PopQueue(Transition* transition) {
             }
             break;
         case TRANSITION_TYPE_WIPE:
-            if (transition->appearType == TRANSITION_APPEAR) {
+            if (transition->appearType == TRANSITION_HIDE) {
                 transition->flags |= TRANSITION_FLAG_FILL_BLACK;
             }
             transition->state = WIPE_START;
             Transition_WipeInit(transition);
             break;
         case TRANSITION_TYPE_PHASED_STRIPS:
-            if (transition->appearType == TRANSITION_APPEAR) {
+            if (transition->appearType == TRANSITION_HIDE) {
                 transition->flags |= TRANSITION_FLAG_FILL_BLACK;
             }
             transition->state = PHASED_STRIPS_START;
             Transition_PhasedStripsInit(transition);
             break;
         case TRANSITION_TYPE_GREYSCALE_PALETTE:
-            if (transition->appearType == TRANSITION_APPEAR) {
+            if (transition->appearType == TRANSITION_HIDE) {
                 transition->flags |= TRANSITION_FLAG_FILL_BLACK;
             }
             transition->state = GREYSCALE_PALETTE_START;
@@ -420,11 +420,11 @@ void Transition_PopQueue(Transition* transition) {
             break;
     }
 
-    if (transition->appearType == TRANSITION_APPEAR) {
+    if (transition->appearType == TRANSITION_HIDE) {
         if (transition->flags & TRANSITION_FLAG_FILL_BLACK) {
-            sTransitionAppearingFromBlack = true;
+            sTransitionIntermediateFillBlack = true;
         } else {
-            sTransitionAppearingFromBlack = false;
+            sTransitionIntermediateFillBlack = false;
         }
     }
 }
@@ -556,7 +556,7 @@ void Transition_SmallTilesInit(Transition* transition) {
 void Transition_SmallTilesUpdate(Transition* transition) {
 
     switch (transition->state) {
-        case SMALL_TILES_START_APPEAR:
+        case SMALL_TILES_START_HIDE:
             if (Transition_SmallTilesUpdateState(transition)) {
                 transition->state = SMALL_TILES_WAIT;
                 transition->timer = 0;
@@ -568,7 +568,7 @@ void Transition_SmallTilesUpdate(Transition* transition) {
                 transition->state = SMALL_TILES_FINISHED;
             }
             break;
-        case SMALL_TILES_START_HIDE:
+        case SMALL_TILES_START_APPEAR:
             if (Transition_SmallTilesUpdateState(transition)) {
                 transition->state = SMALL_TILES_FINISHED;
             }
@@ -697,7 +697,7 @@ Gfx* Transition_SmallTilesDraw(Gfx* gfx, Transition* transition) {
     for (row = 0; row < SMALL_TILES_ROWS; row++) {
         groupedHiddenTileCount = 0;
         for (column = 0; column < SMALL_TILES_COLUMNS; column++, tileIndex++) {
-            if (transition->appearType != TRANSITION_APPEAR) {
+            if (transition->appearType != TRANSITION_HIDE) {
                 if (Transition_SmallTilesGetTileState(transition, tileIndex) != SMALL_TILES_TILE_UNSET) {
                     tileLeft = hiddenTileColumnStart * SMALL_TILES_WIDTH;
                     tileTop = (row * SMALL_TILES_HEIGHT) + TRANSITION_BORDER_HEIGHT;
