@@ -71,7 +71,7 @@ void MachineCreate_Init(void) {
     D_8076C954 = 1;
 }
 
-extern s16 D_8076C810;
+extern s16 gGameModeChangeState;
 extern s8 D_80794E10;
 extern s32 D_8079A35C;
 extern unk_801413F0 D_xk3_801413F0[];
@@ -84,7 +84,7 @@ s32 MachineCreate_Update(void) {
         return GAMEMODE_CREATE_MACHINE;
     }
     if (func_xk3_8012DF04()) {
-        if (D_8076C810 != 0) {
+        if (gGameModeChangeState != GAMEMODE_UPDATE) {
             return GAMEMODE_FLX_MAIN_MENU;
         }
         func_80705E18();

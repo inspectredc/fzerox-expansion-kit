@@ -210,7 +210,7 @@ void Title_Init(void) {
     }
 }
 
-extern s16 D_8076C810;
+extern s16 gGameModeChangeState;
 extern s32 gControllersConnected;
 extern s32 gGameMode;
 extern u16 gInputButtonPressed;
@@ -239,7 +239,7 @@ s32 Title_Update(void) {
         return gGameMode;
     }
 
-    if ((D_8076C810 == 0) && (gInputButtonPressed & (BTN_A | BTN_START))) {
+    if ((gGameModeChangeState == GAMEMODE_UPDATE) && (gInputButtonPressed & (BTN_A | BTN_START))) {
         Audio_TriggerSystemSE(NA_SE_62);
         func_8070DAFC();
         Audio_RomBgmReady(BGM_SELECT);
