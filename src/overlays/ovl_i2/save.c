@@ -134,7 +134,7 @@ s32 func_i2_800A5F58(s32 courseIndex, s32 encodedCourseIndex) {
         var_s3++;
     }
 
-    func_i2_800A9CE0(courseIndex, spA4);
+    DDSave_LoadCourseGhostRecords(courseIndex, spA4);
 
     for (i = 0; i < 3; i++) {
         func_i2_800A7438(&spA4[i], &sp164);
@@ -201,7 +201,7 @@ s32 func_i2_800A5F58(s32 courseIndex, s32 encodedCourseIndex) {
                 }
                 sp5C[j] = 1;
                 gSaveContext.ghostSave.record = spA4[var_s3->unk_02];
-                func_i2_800AA024(courseIndex, var_s3->unk_02, &gSaveContext.ghostSave.data);
+                DDSave_LoadCourseGhostData(courseIndex, var_s3->unk_02, &gSaveContext.ghostSave.data);
                 Save_LoadGhostRecord(&gSaveContext.ghostSave.record, &gSaveContext.ghostSave.data, &gGhosts[j], false);
                 Save_LoadGhostData(&gSaveContext.ghostSave.record, &gSaveContext.ghostSave.data, &gGhosts[j], false);
 
@@ -527,9 +527,9 @@ s32 Save_SaveCourseRecordProfiles(s32 courseIndex) {
         Save_SaveCourseRecord(gSaveContext.profileSaves[0].courses, courseIndex);
         gSaveContext.profileSaves[0].courses[0].checksum =
             Save_CalculateProfileSaveCourseRecordChecksum(gSaveContext.profileSaves, 0);
-        saveCourseRecord = func_i2_800AA84C();
+        saveCourseRecord = DDSave_GetCachedCourseRecord();
         *saveCourseRecord = gSaveContext.profileSaves[0].courses[0];
-        func_i2_800AA864(courseIndex);
+        DDSave_SaveCourseGhost(courseIndex);
     }
 
     return 0;
@@ -906,12 +906,12 @@ void Save_InitGhostRecord(GhostRecord* ghostRecord, bool shouldClear) {
     }
 }
 
-void func_i2_800A7C84(GhostRecord* ghostRecord) {
+void Save_ClearGhostRecord(GhostRecord* ghostRecord) {
     Save_InitGhostRecord(ghostRecord, true);
     ghostRecord->checksum = Save_CalculateGhostRecordChecksum(ghostRecord);
 }
 
-void func_i2_800A7CB8(SaveCourseRecords* courseRecords) {
+void Save_ClearCourseRecord(SaveCourseRecords* courseRecords) {
     Save_InitCourseRecord(courseRecords, true);
     courseRecords->checksum = Save_CalculateSaveCourseRecordChecksum(courseRecords);
 }
@@ -1718,8 +1718,8 @@ s32 func_i2_800A97B4(GhostInfo* ghostInfo, s32 courseIndex) {
     if (!(courseIndex >= COURSE_SILENCE_3 && courseIndex <= COURSE_BIG_FOOT)) {
         return 2;
     }
-    func_i2_800AAAC0(courseIndex);
-    func_i2_800AAA14(0, &gSaveContext.ghostSave.record);
+    DDSave_LoadDDCourseGhosts(courseIndex);
+    DDSave_LoadCachedGhostRecord(0, &gSaveContext.ghostSave.record);
     if (ghostInfo != 0) {
         func_i2_800A7438(&gSaveContext.ghostSave.record, ghostInfo);
     }
@@ -1779,7 +1779,7 @@ s32 Save_LoadStaffGhost(s32 courseIndex, s32 encodedCourseIndex) {
     ghostIndex = func_i2_800A634C(courseIndex, encodedCourseIndex);
 
     if (isEditCupCourse) {
-        func_i2_800AAA64(0, ghostData);
+        DDSave_LoadCachedGhostData(0, ghostData);
     } else {
         func_i2_800A9A54(ghostData, courseIndex);
     }

@@ -88,7 +88,7 @@ void func_i3_80064F20(void) {
                          0, 0, 0);
     }
     if (D_i3_8006EF60 & 0x10) {
-        func_i3_80067118(1);
+        func_i3_80067118(true);
         func_i2_800AE7C4(aYellowArrowTex, TEX_SIZE(aYellowArrowTex, sizeof(u16)), 0, 1, 0);
     }
 }
@@ -532,8 +532,8 @@ Gfx* func_i3_80066DF8(Gfx* gfx, s32 arg1, s32 arg2, f32 arg3) {
     return gfx;
 }
 
-void func_i3_80067118(s32 arg0) {
-    if (arg0 != 0) {
+void func_i3_80067118(bool arg0) {
+    if (arg0) {
         D_i3_8006EF60 |= 0x20;
     } else {
         D_i3_8006EF60 &= ~0x20;

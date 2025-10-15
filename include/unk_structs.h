@@ -28,13 +28,13 @@ typedef struct unk_807C6EA8 {
     /* 0x16 */ u16 dirId;
     /* 0x18 */ char* name;
     /* 0x1C */ char* extension;
-    /* 0x20 */ void* writeBuf;
+    /* 0x20 */ void* readBuf;
     /* 0x24 */ s32 offset;
     /* 0x28 */ s32 fileSize;
     /* 0x2C */ s32 attr;
     /* 0x30 */ s32 copyCount;
     /* 0x34 */ bool writeChanges;
-    /* 0x38 */ void* readBuf;
+    /* 0x38 */ void* writeBuf;
     /* 0x3C */ char* oldName;
     /* 0x40 */ char* oldExtension;
     /* 0x44 */ char* newName;
@@ -687,30 +687,6 @@ typedef struct CustomMachinesInfo {
     u16 checksum;
 } CustomMachinesInfo; // size = 0x3E0
 
-typedef struct unk_80144F74 {
-    void* unk_00;
-    s16 width;
-    s16 height;
-} unk_80144F74; // size = 0x8
-
-typedef struct unk_80144F44 {
-    s32 unk_00;
-    unk_80144F74 unk_04;
-    s32 tlut;
-} unk_80144F44; // size = 0x10
-
-typedef struct unk_80144FE0 {
-    Mtx unk_00;
-    Vtx unk_40[4];
-} unk_80144FE0; // size = 0x80
-
-typedef struct unk_8009E224 {
-    void* texture;
-    void* tlut;
-    s16 width;
-    s16 height;
-} unk_8009E224; // size = 0x10
-
 typedef struct unk_8003A5D8 {
     char name[16];
     s32 attr;
@@ -813,5 +789,18 @@ typedef struct unk_800D6CA0 {
     s32 unk_24;
     CourseSegment unk_28;
 } unk_800D6CA0; // size >= 0xCC
+
+typedef struct TextureInfo {
+    /* 0x00 */ TexturePtr texture;
+    /* 0x04 */ s16 width;
+    /* 0x06 */ s16 height;
+} TextureInfo; // size = 0x8
+
+typedef struct TexturePaletteInfo {
+    /* 0x00 */ TexturePtr texture;
+    /* 0x04 */ void* tlut;
+    /* 0x08 */ s16 width;
+    /* 0x0A */ s16 height;
+} TexturePaletteInfo; // size = 0xC
 
 #endif // UNK_STRUCTS_H
