@@ -293,7 +293,7 @@ bool Records_CourseHasGhost(s32 courseIndex) {
     }
 
     if (!hasGhost) {
-        func_i2_800A9CE0(courseIndex, ghostRecords);
+        DDSave_LoadCourseGhostRecords(courseIndex, ghostRecords);
         for (i = 0; i < 3; i++) {
             if (ghostRecords[i].encodedCourseIndex == courseInfo->encodedCourseIndex) {
                 sGhostCourseRecordTimes[i + 1] = ghostRecords[i].raceTime;
@@ -322,7 +322,7 @@ void Records_LoadGhostRaceTimes(s32* raceTimes, bool loadCassetteGhost) {
     }
     raceTimes++;
 
-    func_i2_800A9CE0(gCourseIndex, ghostRecords);
+    DDSave_LoadCourseGhostRecords(gCourseIndex, ghostRecords);
 
     for (i = 0; i < 3; i++, raceTimes++) {
         if (courseInfo->encodedCourseIndex == ghostRecords[i].encodedCourseIndex) {
@@ -684,11 +684,11 @@ void Records_ClearConfirmUpdate(void) {
                     if ((gCourseIndex >= COURSE_MUTE_CITY) && (gCourseIndex <= COURSE_BIG_HAND)) {
                         func_i2_800A7660(gCourseIndex);
                     } else {
-                        func_i2_800AA694(gCourseIndex);
+                        DDSave_EraseDiskCourseRecord(gCourseIndex);
                     }
                 } else if (sRecordsClearType == RECORDS_CLEAR_GHOST) {
                     Save_InitGhost(gCourseIndex);
-                    func_i2_800AA520(gCourseIndex);
+                    DDSave_EraseDiskGhostSave(gCourseIndex);
                     sRecordsMenuIndexValid[sRecordsCopyGhostMenuIndex] = false;
                     sGhostMarkerState = GHOST_MARKER_FADE_OUT;
                 }
@@ -1329,10 +1329,10 @@ void Records_ReadWriteGhost(s32 direction) {
             case RECORDS_GHOST_DISK_1:
             case RECORDS_GHOST_DISK_2:
             case RECORDS_GHOST_DISK_3:
-                func_i2_800A9ED0(gCourseIndex, ghostRecords);
+                DDSave_LoadCachedCourseGhostRecords(gCourseIndex, ghostRecords);
                 ghostIndex = sSortedDiskGhostRecordTimeIndices[sRecordsCopyFromGhostTypeIndex - RECORDS_GHOST_DISK_1];
                 gSaveContext.ghostSave.record = ghostRecords[ghostIndex];
-                func_i2_800AA1C0(gCourseIndex, ghostIndex, &gSaveContext.ghostSave.data);
+                DDSave_LoadCachedCourseGhostData(gCourseIndex, ghostIndex, &gSaveContext.ghostSave.data);
                 break;
         }
     } else {
@@ -1345,7 +1345,7 @@ void Records_ReadWriteGhost(s32 direction) {
             case RECORDS_GHOST_DISK_2:
             case RECORDS_GHOST_DISK_3:
                 ghostIndex = sSortedDiskGhostRecordTimeIndices2[sRecordsCopyToGhostTypeIndex - 1];
-                func_i2_800AA220(gCourseIndex, ghostIndex, NULL);
+                DDSave_SaveGhost(gCourseIndex, ghostIndex, NULL);
                 break;
         }
     }

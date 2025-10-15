@@ -189,12 +189,12 @@ s32 func_xk1_8002E368(void) {
                     }
                     break;
                 case 8:
-                    Mfs_SaveFile(D_807C6EA8.dirId, D_807C6EA8.name, D_807C6EA8.extension, D_807C6EA8.writeBuf,
+                    Mfs_SaveFile(D_807C6EA8.dirId, D_807C6EA8.name, D_807C6EA8.extension, D_807C6EA8.readBuf,
                                  D_807C6EA8.fileSize, D_807C6EA8.attr, D_807C6EA8.copyCount, D_807C6EA8.writeChanges);
                     break;
                 case 9:
                 case 10:
-                    Mfs_LoadFileInDir(D_807C6EA8.dirId, D_807C6EA8.name, D_807C6EA8.extension, D_807C6EA8.readBuf,
+                    Mfs_LoadFileInDir(D_807C6EA8.dirId, D_807C6EA8.name, D_807C6EA8.extension, D_807C6EA8.writeBuf,
                                       D_807C6EA8.fileSize);
                     break;
                 case 15:

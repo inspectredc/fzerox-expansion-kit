@@ -123,7 +123,7 @@ void Game_Init(void) {
     func_8070F0D0();
     Arena_EndInit();
     func_8070D358();
-    func_i2_800AA994();
+    DDSave_LoadBaseCourses();
     D_8076C93C = 1;
 }
 
