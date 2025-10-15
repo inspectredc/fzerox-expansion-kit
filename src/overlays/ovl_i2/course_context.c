@@ -3,10 +3,17 @@
 #include "macros.h"
 
 //! @bug gCourseCtx is treated as though it is size 0xC830 which overlaps with D_800CF950
+#ifdef AVOID_UB
+CourseContext gCourseCtx = {
+    { CREATOR_NINTENDO, 0, 0, 0, { 0 }, { 0 }, { 0 }, { 0 }, { 0 }, { 0 }, { 0 }, { 0 }, { 0 }, { 0 }, { 0 }, { 0 } },
+    { 0 }
+};
+#else
 CourseBuffer gCourseCtx = {
     { CREATOR_NINTENDO, 0, 0, 0, { 0 }, { 0 }, { 0 }, { 0 }, { 0 }, { 0 }, { 0 }, { 0 }, { 0 }, { 0 }, { 0 }, { 0 } },
     { 0 }
 };
+#endif
 
 CourseData D_800CF950 = {
     CREATOR_NINTENDO, 0, 0, 0, { 0 }, { 0 }, { 0 }, { 0 }, { 0 }, { 0 }, { 0 }, { 0 }, { 0 }, { 0 }, { 0 }, { 0 }

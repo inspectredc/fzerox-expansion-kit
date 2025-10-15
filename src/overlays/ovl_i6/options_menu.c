@@ -25,32 +25,32 @@ s16 D_i6_8008A7B0;
  */
 
 // 'WITH', 'W/O'
-OptionsTextureInfo gOptionsVsComSelection[] = {
+TextureInfo gOptionsVsComSelection[] = {
     { aMenuWithTex, 32, 16 },
     { aMenuWithoutTex, 32, 16 },
 };
 
 // 'WITH', 'W/O'
-OptionsTextureInfo gOptionsVsSlotSelection[] = {
+TextureInfo gOptionsVsSlotSelection[] = {
     { aMenuWithTex, 32, 16 },
     { aMenuWithoutTex, 32, 16 },
 };
 
 // 'W/O', '+1', '+2'
-OptionsTextureInfo gOptionsVsHandicapSelection[] = {
+TextureInfo gOptionsVsHandicapSelection[] = {
     { aMenuWithoutTex, 32, 16 },
     { aMenuPlusOneTex, 32, 16 },
     { aMenuPlusTwoTex, 32, 16 },
 };
 
 // 'Stereo', 'Mono'
-OptionsTextureInfo gOptionsSoundModeSelection[] = {
+TextureInfo gOptionsSoundModeSelection[] = {
     { aMenuStereoTex, 64, 16 },
     { aMenuMonoTex, 64, 16 },
 };
 
 // 'No', 'Yes'
-OptionsTextureInfo gOptionsAllDataClearSelection[] = {
+TextureInfo gOptionsAllDataClearSelection[] = {
     { aMenuNoTex, 32, 16 },
     { aMenuYesTex, 32, 16 },
 };
@@ -143,7 +143,7 @@ void OptionsMenu_Init(void) {
     func_i2_800AE7C4(aMenuYesTex, TEX_SIZE(aMenuYesTex, sizeof(u8)), 0, 1, false);
 
     for (i = 0, option = gOptionsInfo; i < OPTIONS_MAX; i++, option++) {
-        func_i2_800AE7C4(option->optionTextureInfo.textureOffset,
+        func_i2_800AE7C4(option->optionTextureInfo.texture,
                          option->optionTextureInfo.width * option->optionTextureInfo.height * sizeof(u8), 0, 1, 0);
     }
 
@@ -232,7 +232,7 @@ void func_i6_80082A24(void) {
 }
 
 extern s32 gTransitionState;
-extern s16 D_8076C814;
+extern s16 gMenuChangeMode;
 
 s32 OptionsMenu_Update(void) {
     Controller_SetGlobalInputs(&gSharedController);
@@ -243,7 +243,7 @@ s32 OptionsMenu_Update(void) {
             case OPTIONS_DATA_CLEAR_MENU_CLOSED:
                 if (gTransitionState == TRANSITION_INACTIVE && func_i6_80082DB4()) {
                     sOptionsDataAlreadyCleared = true;
-                    D_8076C814 = 14;
+                    gMenuChangeMode = MENU_CHANGE_EXIT_OPTIONS;
                     Audio_RomBgmReady(BGM_SELECT);
                 }
                 break;
@@ -443,7 +443,7 @@ void func_i6_80083390(void) {
     s32 i;
 
     for (i = 0; i < 42; i++) {
-        func_i2_800AAB0C(i);
+        DDSave_EraseCourseGhostFile(i);
     };
     func_8076805C();
 }
@@ -454,8 +454,8 @@ Gfx* OptionsMenu_Draw(Gfx* gfx) {
     s32 i;
     s32 var_s7;
     OptionsInfo* option;
-    OptionsTextureInfo* selectionStateTextureInfo;
-    OptionsTextureInfo* optionTextureInfo;
+    TextureInfo* selectionStateTextureInfo;
+    TextureInfo* optionTextureInfo;
 
     gfx = Object_UpdateAndDrawAll(gfx);
     if (D_i6_8008A7A8 != 1) {
@@ -494,7 +494,7 @@ Gfx* OptionsMenu_Draw(Gfx* gfx) {
             gfx = func_8070D4A8(gfx, 0);
         }
         optionTextureInfo = &option->optionTextureInfo;
-        gfx = func_8070DEE0(gfx, func_i2_800AEA90(optionTextureInfo->textureOffset), NULL, G_IM_FMT_CI, 1,
+        gfx = func_8070DEE0(gfx, func_i2_800AEA90(optionTextureInfo->texture), NULL, G_IM_FMT_CI, 1,
                             option->unk_0C + 0x1E, var_s5, optionTextureInfo->width, optionTextureInfo->height, 0);
 
         if (!(option->flags & OPTIONS_REQUIRE_SELECTING)) {
@@ -504,7 +504,7 @@ Gfx* OptionsMenu_Draw(Gfx* gfx) {
                                 0x10, 0);
             selectionStateTextureInfo = &option->selectionStateTextureInfo[sOptionsSelectionState[i]];
             temp_s4 = ((60 - selectionStateTextureInfo->width) / 2) + option->unk_10;
-            gfx = func_8070DEE0(gfx, func_i2_800AEA90(selectionStateTextureInfo->textureOffset), NULL, G_IM_FMT_CI, 1,
+            gfx = func_8070DEE0(gfx, func_i2_800AEA90(selectionStateTextureInfo->texture), NULL, G_IM_FMT_CI, 1,
                                 temp_s4 + 0xD0, var_s5, selectionStateTextureInfo->width,
                                 selectionStateTextureInfo->height, 0);
         }
@@ -516,7 +516,7 @@ Gfx* OptionsMenu_Draw(Gfx* gfx) {
 
 Gfx* func_i6_800837F4(Gfx* gfx, s32 arg1, s32 arg2) {
     s32 sp54;
-    OptionsTextureInfo* dataClearTextureInfo;
+    TextureInfo* dataClearTextureInfo;
 
     gDPPipeSync(gfx++);
     gDPSetPrimColor(gfx++, 0, 0, 255, 255, 0, 255);
@@ -532,8 +532,8 @@ Gfx* func_i6_800837F4(Gfx* gfx, s32 arg1, s32 arg2) {
                         16, 0);
     dataClearTextureInfo = &gOptionsAllDataClearSelection[sOptionsSelectionState[gOptionsCurrentRow]];
     sp54 = (60 - dataClearTextureInfo->width) / 2;
-    return func_8070DEE0(gfx, func_i2_800AEA90(dataClearTextureInfo->textureOffset), NULL, G_IM_FMT_CI, 1,
-                         arg1 + sp54 + 0x2A, arg2 + 0x32, dataClearTextureInfo->width, dataClearTextureInfo->height, 0);
+    return func_8070DEE0(gfx, func_i2_800AEA90(dataClearTextureInfo->texture), NULL, G_IM_FMT_CI, 1, arg1 + sp54 + 0x2A,
+                         arg2 + 0x32, dataClearTextureInfo->width, dataClearTextureInfo->height, 0);
 }
 
 extern s32 D_8079A35C;
@@ -596,7 +596,7 @@ void func_i6_80083A20(void) {
     }
 
     D_i6_8008A618 = D_i6_80085B18[D_8079A35C];
-    Matrix_SetOrtho(gGfxPool->unk_35248, NULL, 1.0f, 0.0f, 319.0f, 239.0f, 0.0f, -100.0f, 100.0f);
+    Matrix_SetOrtho(gGfxPool->unk_35248, NULL, 1.0f, 0.0f, SCREEN_WIDTH - 1, SCREEN_HEIGHT - 1, 0.0f, -100.0f, 100.0f);
     vtx = D_i6_8008A618;
 
     var_s0 = 32;

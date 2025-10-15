@@ -137,7 +137,7 @@ void Save_InitGhostData(GhostData* ghostData, bool shouldClear);
 void Save_InitCharacterSave(CharacterSave* characterSave, bool shouldClear);
 
 void func_i2_800A7438(GhostRecord* ghostRecord, GhostInfo* ghostInfo);
-void func_i2_800A7C84(GhostRecord* ghostRecord);
+void Save_ClearGhostRecord(GhostRecord* ghostRecord);
 
 void func_i2_800A88D8(unk_80141C88_unk_1D* arg0, MachineInfo* arg1);
 
@@ -173,12 +173,12 @@ void func_i2_800A98E4(GhostData* ghostData, s32 courseIndex);
 s32 Save_LoadStaffGhost(s32 courseIndex, s32 encodedCourseIndex);
 void func_i2_800A9A54(GhostData* ghostData, s32 courseIndex);
 
-void func_i2_800A9CE0(s32 courseIndex, GhostRecord* ghostRecord);
-void func_i2_800AA024(s32 courseIndex, s32 ghostIndex, GhostData* ghostData);
-void func_i2_800AA864(s32 courseIndex);
-void func_i2_800AAA14(s32 ghostIndex, GhostRecord* ghostRecord);
-void func_i2_800AAA64(s32 ghostIndex, GhostData* ghostData);
-void func_i2_800AAAC0(s32 courseIndex);
+void DDSave_LoadCourseGhostRecords(s32 courseIndex, GhostRecord* ghostRecord);
+void DDSave_LoadCourseGhostData(s32 courseIndex, s32 ghostIndex, GhostData* ghostData);
+void DDSave_SaveCourseGhost(s32 courseIndex);
+void DDSave_LoadCachedGhostRecord(s32 ghostIndex, GhostRecord* ghostRecord);
+void DDSave_LoadCachedGhostData(s32 ghostIndex, GhostData* ghostData);
+void DDSave_LoadDDCourseGhosts(s32 courseIndex);
 
 #define REPLAY_DATA_LARGE_FLAG -0x80
 #define REPLAY_DATA_LARGE(x) REPLAY_DATA_LARGE_FLAG, (((x) >> 8) & 0xFF), ((x) & 0xFF)

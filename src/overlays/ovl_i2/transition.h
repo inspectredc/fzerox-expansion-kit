@@ -45,13 +45,13 @@ typedef struct Transition {
 
 typedef enum TransitionState {
     /* 0 */ TRANSITION_INACTIVE,
-    /* 1 */ TRANSITION_HIDING,
-    /* 2 */ TRANSITION_APPEARING,
+    /* 1 */ TRANSITION_APPEARING,
+    /* 2 */ TRANSITION_HIDING,
 } TransitionState;
 
 typedef enum TransitionAppearType {
-    /* 0 */ TRANSITION_APPEAR,
-    /* 1 */ TRANSITION_HIDE,
+    /* 0 */ TRANSITION_HIDE,
+    /* 1 */ TRANSITION_APPEAR,
 } TransitionAppearType;
 
 #define TRANSITION_BORDER_WIDTH 12
@@ -84,9 +84,9 @@ typedef enum TransitionType {
 #define TRANSITION_FLAG_CONVERT_TO_PALETTE (1 << 6)
 
 typedef enum TransitionSmallTilesState {
-    /* 1 */ SMALL_TILES_START_APPEAR = 1,
+    /* 1 */ SMALL_TILES_START_HIDE = 1,
     /* 2 */ SMALL_TILES_WAIT,
-    /* 3 */ SMALL_TILES_START_HIDE,
+    /* 3 */ SMALL_TILES_START_APPEAR,
     /* 4 */ SMALL_TILES_FINISHED,
 } TransitionSmallTilesState;
 

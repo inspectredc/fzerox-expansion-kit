@@ -21,8 +21,8 @@ s8 gPlayerSelectionLock[] = { SELECTION_FREE, SELECTION_FREE, SELECTION_FREE, SE
 s8 D_8076CC7C[] = { 1, 1, 1, 1 };
 s32 gMachineSelectState = MACHINE_SELECT_ACTIVE;
 s32 gMachineSettingsState = MACHINE_SETTINGS_ACTIVE;
-s32 D_8076CC88 = 0;
-s32 D_8076CC8C = 0;
+s32 gLastCourseSelectCourseIndex = 0;
+s32 gLastRecordsCourseIndex = 0;
 s8 gUnlockableLevel = 0;
 s8 D_8076CC94 = 0;
 s8 gSettingEverythingUnlocked = false;
@@ -1066,7 +1066,7 @@ void func_8070DE6C(void) {
         gModeSubOption[i] = 0;
     }
 
-    D_8076CC88 = 0;
-    D_8076CC8C = 0;
+    gLastCourseSelectCourseIndex = 0;
+    gLastRecordsCourseIndex = 0;
     gCurrentGhostType = GHOST_PLAYER;
 }
