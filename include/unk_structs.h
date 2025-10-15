@@ -28,13 +28,13 @@ typedef struct unk_807C6EA8 {
     /* 0x16 */ u16 dirId;
     /* 0x18 */ char* name;
     /* 0x1C */ char* extension;
-    /* 0x20 */ void* writeBuf;
+    /* 0x20 */ void* readBuf;
     /* 0x24 */ s32 offset;
     /* 0x28 */ s32 fileSize;
     /* 0x2C */ s32 attr;
     /* 0x30 */ s32 copyCount;
     /* 0x34 */ bool writeChanges;
-    /* 0x38 */ void* readBuf;
+    /* 0x38 */ void* writeBuf;
     /* 0x3C */ char* oldName;
     /* 0x40 */ char* oldExtension;
     /* 0x44 */ char* newName;

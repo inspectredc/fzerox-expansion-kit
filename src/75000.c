@@ -103,25 +103,26 @@ void func_80767958(void* entry) {
         }
         D_80794E18 = 1;
         if (D_807C6EA8.unk_00 == 4) {
-            SLMFSSave(D_807C6EA8.dirId, D_807C6EA8.name, D_807C6EA8.extension, D_807C6EA8.writeBuf, D_807C6EA8.fileSize,
+            SLMFSSave(D_807C6EA8.dirId, D_807C6EA8.name, D_807C6EA8.extension, D_807C6EA8.readBuf, D_807C6EA8.fileSize,
                       D_807C6EA8.attr, D_807C6EA8.copyCount, D_807C6EA8.writeChanges);
             D_80794E14 = D_80794E18 = 0;
             continue;
         }
         if (D_807C6EA8.unk_00 == 5) {
-            func_xk2_800EB938(D_807C6EA8.dirId, D_807C6EA8.name, D_807C6EA8.extension, D_807C6EA8.writeBuf,
+            func_xk2_800EB938(D_807C6EA8.dirId, D_807C6EA8.name, D_807C6EA8.extension, D_807C6EA8.readBuf,
                               D_807C6EA8.fileSize, D_807C6EA8.attr, D_807C6EA8.copyCount, D_807C6EA8.writeChanges);
             func_80767940();
             D_80794E14 = D_80794E18 = 0;
             continue;
         }
         if (D_807C6EA8.unk_00 == 6) {
-            SLMFSLoad(D_807C6EA8.dirId, D_807C6EA8.name, D_807C6EA8.extension, D_807C6EA8.readBuf, D_807C6EA8.fileSize);
+            SLMFSLoad(D_807C6EA8.dirId, D_807C6EA8.name, D_807C6EA8.extension, D_807C6EA8.writeBuf,
+                      D_807C6EA8.fileSize);
             D_80794E14 = D_80794E18 = 0;
             continue;
         }
         if (D_807C6EA8.unk_00 == 7) {
-            SLMFSLoadHalfway(D_807C6EA8.dirId, D_807C6EA8.name, D_807C6EA8.extension, D_807C6EA8.readBuf,
+            SLMFSLoadHalfway(D_807C6EA8.dirId, D_807C6EA8.name, D_807C6EA8.extension, D_807C6EA8.writeBuf,
                              D_807C6EA8.offset, D_807C6EA8.fileSize);
             D_80794E14 = D_80794E18 = 0;
             continue;
@@ -212,7 +213,7 @@ void func_80767E98(u16 dirId, char* name, char* extension, void* buf, s32 fileSi
     D_807C6EA8.dirId = dirId;
     D_807C6EA8.name = name;
     D_807C6EA8.extension = extension;
-    D_807C6EA8.writeBuf = buf;
+    D_807C6EA8.readBuf = buf;
     D_807C6EA8.fileSize = fileSize;
     D_807C6EA8.attr = attr;
     D_807C6EA8.copyCount = copyCount;
@@ -224,7 +225,7 @@ void func_80767F14(u16 dirId, char* name, char* extension, void* buf, s32 fileSi
     D_807C6EA8.dirId = dirId;
     D_807C6EA8.name = name;
     D_807C6EA8.extension = extension;
-    D_807C6EA8.readBuf = buf;
+    D_807C6EA8.writeBuf = buf;
     D_807C6EA8.fileSize = fileSize;
     osSendMesg(&D_807C6E90, NULL, OS_MESG_BLOCK);
 }
@@ -344,7 +345,7 @@ void func_807684AC(u16 dirId, char* name, char* extension, void* buf, s32 offset
         D_807C6EA8.dirId = dirId;
         D_807C6EA8.name = name;
         D_807C6EA8.extension = extension;
-        D_807C6EA8.readBuf = buf;
+        D_807C6EA8.writeBuf = buf;
         D_807C6EA8.offset = offset;
         D_807C6EA8.fileSize = fileSize;
         osSendMesg(&D_807C6E90, NULL, OS_MESG_BLOCK);

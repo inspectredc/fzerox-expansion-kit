@@ -621,7 +621,7 @@ s32 CourseSelect_Update(void) {
                         if (D_i5_8007C2A8[temp_lo / 6] == 0) {
                             for (i = temp_lo; i < temp_lo + 6; i++) {
                                 courseInfo = &gCourseInfos[i];
-                                func_i2_800A9CE0(i, ghostRecords);
+                                DDSave_LoadCourseGhostRecords(i, ghostRecords);
                                 D_i5_8007B9EC[i] = 0;
                                 for (j = 0; j < 3; j++) {
                                     if (courseInfo->encodedCourseIndex == 0) {

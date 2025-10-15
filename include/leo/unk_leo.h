@@ -12,7 +12,7 @@ typedef struct MfsTimeFormat {
         struct {
             u16 unks0, unks2;
         };
-        u32 unki1;
+        u32 unki0;
     };
 } MfsTimeFormat;
 

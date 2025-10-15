@@ -3076,7 +3076,7 @@ void func_80701E90(s32 courseIndex) {
 
     PRINTF("============== COURSE LOAD %2d  ==============\n", courseIndex);
 
-    func_i2_800AA80C();
+    DDSave_ClearCachedGhostSaves();
     if (courseIndex >= COURSE_DEATH_RACE) {
         romAddr = D_807C70C8 + (courseIndex - 30) * sizeof(CourseData);
         func_80701D7C(romAddr, osVirtualToPhysical(&COURSE_CONTEXT()->courseData), sizeof(CourseData));
@@ -3096,17 +3096,17 @@ void func_80701E90(s32 courseIndex) {
 
             ghostName[5] = (courseIndex / 10) + '0';
             ghostName[6] = (courseIndex % 10) + '0';
-            func_i2_800A7CB8(func_i2_800AA84C());
+            Save_ClearCourseRecord(DDSave_GetCachedCourseRecord());
             func_8076852C(MFS_ENTRY_WORKING_DIR, ghostName, "GOST", COURSE_CONTEXT(), sizeof(CourseContext));
             osRecvMesg(&gMFSMesgQ, NULL, OS_MESG_BLOCK);
             Course_CalculateChecksum();
-            if (func_i2_800A9F98()) {
+            if (DDSave_ValidateCachedGhostRecords()) {
                 PRINTF("GHOST DATA WAS BROKEN\n");
-                func_i2_800AA80C();
-                func_i2_800A7CB8(func_i2_800AA84C());
+                DDSave_ClearCachedGhostSaves();
+                Save_ClearCourseRecord(DDSave_GetCachedCourseRecord());
             }
             PRINTF("DEF LOAD OK\n");
-            func_i2_800A8CE4(func_i2_800AA84C(), courseIndex);
+            func_i2_800A8CE4(DDSave_GetCachedCourseRecord(), courseIndex);
             func_80703B40(SEGMENT_DISK_START(silence_3) + diskCourseIndex, &COURSE_CONTEXT()->courseData,
                           sizeof(CourseData), 0);
             if ((Course_CalculateChecksum() != COURSE_CONTEXT()->courseData.checksum) ||
@@ -3127,18 +3127,18 @@ void func_80701E90(s32 courseIndex) {
                         char ghostName[8] = { "GHOST00" };
                         ghostName[5] = (courseIndex / 10) + '0';
                         ghostName[6] = (courseIndex % 10) + '0';
-                        func_i2_800A7CB8(func_i2_800AA84C());
+                        Save_ClearCourseRecord(DDSave_GetCachedCourseRecord());
                         func_8076852C(MFS_ENTRY_WORKING_DIR, ghostName, "GOST", COURSE_CONTEXT(),
                                       sizeof(CourseContext));
                         osRecvMesg(&gMFSMesgQ, NULL, OS_MESG_BLOCK);
                         Course_CalculateChecksum();
-                        if (func_i2_800A9F98()) {
+                        if (DDSave_ValidateCachedGhostRecords()) {
                             PRINTF("GHOST DATA WAS BROKEN\n");
-                            func_i2_800AA80C();
-                            func_i2_800A7CB8(func_i2_800AA84C());
+                            DDSave_ClearCachedGhostSaves();
+                            Save_ClearCourseRecord(DDSave_GetCachedCourseRecord());
                         }
                         PRINTF("DEF LOAD OK\n");
-                        func_i2_800A8CE4(func_i2_800AA84C(), courseIndex);
+                        func_i2_800A8CE4(DDSave_GetCachedCourseRecord(), courseIndex);
                         func_80703B40(SEGMENT_DISK_START(silence_3) + diskCourseIndex, &COURSE_CONTEXT()->courseData,
                                       sizeof(CourseData), 0);
                         if ((Course_CalculateChecksum() != COURSE_CONTEXT()->courseData.checksum) ||
@@ -3152,7 +3152,7 @@ void func_80701E90(s32 courseIndex) {
             } else {
                 PRINTF("ENTRY LOAD OK\n");
                 PRINTF("course ID is %d\n", courseIndex);
-                func_i2_800A8CE4(func_i2_800AA84C(), courseIndex);
+                func_i2_800A8CE4(DDSave_GetCachedCourseRecord(), courseIndex);
             }
         }
         gCourseInfos[courseIndex].encodedCourseIndex = (Course_CalculateChecksum() << 5) | COURSE_EDIT_1;
@@ -3160,7 +3160,7 @@ void func_80701E90(s32 courseIndex) {
         char ghostName[8] = { "GHOST00" };
         ghostName[5] = (courseIndex / 10) + '0';
         ghostName[6] = (courseIndex % 10) + '0';
-        func_i2_800A7CB8(func_i2_800AA84C());
+        Save_ClearCourseRecord(DDSave_GetCachedCourseRecord());
         if (D_8076C7D8 == 0) {
             func_8076852C(MFS_ENTRY_WORKING_DIR, ghostName, "GOST", COURSE_CONTEXT(), sizeof(CourseContext));
             osRecvMesg(&gMFSMesgQ, NULL, OS_MESG_BLOCK);
@@ -3188,7 +3188,7 @@ void func_80702448(s32 courseIndex) {
     RomOffset romAddr;
     s32 pad3[2];
 
-    func_i2_800AA80C();
+    DDSave_ClearCachedGhostSaves();
     if (courseIndex >= COURSE_DEATH_RACE) {
         PRINTF("ENTRY CHECK\n");
         PRINTF("INDEX %d\n");
@@ -3220,17 +3220,17 @@ void func_80702448(s32 courseIndex) {
 
             ghostName[5] = (courseIndex / 10) + '0';
             ghostName[6] = (courseIndex % 10) + '0';
-            func_i2_800A7CB8(func_i2_800AA84C());
+            Save_ClearCourseRecord(DDSave_GetCachedCourseRecord());
             func_8076852C(MFS_ENTRY_WORKING_DIR, ghostName, "GOST", COURSE_CONTEXT(), sizeof(CourseContext));
             osRecvMesg(&gMFSMesgQ, NULL, OS_MESG_BLOCK);
             Course_CalculateChecksum();
-            if (func_i2_800A9F98()) {
-                func_i2_800AA80C();
-                func_i2_800A7CB8(func_i2_800AA84C());
+            if (DDSave_ValidateCachedGhostRecords()) {
+                DDSave_ClearCachedGhostSaves();
+                Save_ClearCourseRecord(DDSave_GetCachedCourseRecord());
             }
             PRINTF("course index is %d\n", courseIndex);
             PRINTF("DEF LOAD OK\n");
-            func_i2_800A8CE4(func_i2_800AA84C(), courseIndex);
+            func_i2_800A8CE4(DDSave_GetCachedCourseRecord(), courseIndex);
             func_80703B40(SEGMENT_DISK_START(silence_3) + diskCourseIndex, &COURSE_CONTEXT()->courseData,
                           sizeof(CourseData), 0);
             if ((Course_CalculateChecksum() != COURSE_CONTEXT()->courseData.checksum) ||
@@ -3253,18 +3253,18 @@ void func_80702448(s32 courseIndex) {
 
                         ghostName[5] = (courseIndex / 10) + '0';
                         ghostName[6] = (courseIndex % 10) + '0';
-                        func_i2_800A7CB8(func_i2_800AA84C());
+                        Save_ClearCourseRecord(DDSave_GetCachedCourseRecord());
                         func_8076852C(MFS_ENTRY_WORKING_DIR, ghostName, "GOST", COURSE_CONTEXT(),
                                       sizeof(CourseContext));
                         osRecvMesg(&gMFSMesgQ, NULL, OS_MESG_BLOCK);
                         Course_CalculateChecksum();
-                        if (func_i2_800A9F98()) {
-                            func_i2_800AA80C();
-                            func_i2_800A7CB8(func_i2_800AA84C());
+                        if (DDSave_ValidateCachedGhostRecords()) {
+                            DDSave_ClearCachedGhostSaves();
+                            Save_ClearCourseRecord(DDSave_GetCachedCourseRecord());
                         }
                         PRINTF("course index is %d\n", courseIndex);
                         PRINTF("DEF LOAD OK\n");
-                        func_i2_800A8CE4(func_i2_800AA84C(), courseIndex);
+                        func_i2_800A8CE4(DDSave_GetCachedCourseRecord(), courseIndex);
                         func_80703B40(SEGMENT_DISK_START(silence_3) + diskCourseIndex, &COURSE_CONTEXT()->courseData,
                                       sizeof(CourseData), 0);
                         if ((Course_CalculateChecksum() != COURSE_CONTEXT()->courseData.checksum) ||
@@ -3278,7 +3278,7 @@ void func_80702448(s32 courseIndex) {
             } else {
                 PRINTF("ENTRY LOAD OK\n");
                 PRINTF("course ID is %d\n", courseIndex);
-                func_i2_800A8CE4(func_i2_800AA84C(), courseIndex);
+                func_i2_800A8CE4(DDSave_GetCachedCourseRecord(), courseIndex);
             }
         }
         gCourseInfos[courseIndex].encodedCourseIndex = (Course_CalculateChecksum() << 5) | COURSE_EDIT_1;

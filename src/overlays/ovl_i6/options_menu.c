@@ -443,7 +443,7 @@ void func_i6_80083390(void) {
     s32 i;
 
     for (i = 0; i < 42; i++) {
-        func_i2_800AAB0C(i);
+        DDSave_EraseCourseGhostFile(i);
     };
     func_8076805C();
 }

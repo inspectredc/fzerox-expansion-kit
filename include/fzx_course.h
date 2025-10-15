@@ -346,7 +346,11 @@ typedef enum BorderlessRoad {
 #define TRACK_FLAG_CONTINUOUS 0x40000000
 #define TRACK_FLAG_80000000 0x80000000
 
+#ifdef AVOID_UB
+extern CourseContext gCourseCtx;
+#else
 extern CourseBuffer gCourseCtx;
+#endif
 extern CourseInfo* gCurrentCourseInfo;
 extern CourseInfo gCourseInfos[56];
 

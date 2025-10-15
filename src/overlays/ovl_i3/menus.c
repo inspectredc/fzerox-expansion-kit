@@ -2037,7 +2037,7 @@ void func_i3_8004C6F0(void) {
 
     D_i3_8006D270[0].raceTime = D_i3_8006D270[1].raceTime = D_i3_8006D270[2].raceTime = MAX_TIMER;
 
-    func_i2_800A9ED0(gCourseIndex, D_i3_8006D270);
+    DDSave_LoadCachedCourseGhostRecords(gCourseIndex, D_i3_8006D270);
 
     for (i = 0; i < 3; i++) {
         D_i3_8006D340[i] = &D_i3_8006D270[i];
@@ -2191,7 +2191,7 @@ Gfx* func_i3_8004CE40(Gfx* gfx) {
     if (gControllers[gPlayerControlPorts[0]].buttonPressed & (BTN_A | BTN_START)) {
         if (D_i3_8006B498 == 1) {
             sGhostSaveTimer = 60;
-            func_i2_800AA368(gCourseIndex, D_i3_8006D368[2], gFastestGhost);
+            DDSave_SaveGhostWithCustomSupport(gCourseIndex, D_i3_8006D368[2], gFastestGhost);
             sSaveGhostMenuOpen = false;
             if (D_8076C7D8 == 0) {
                 Audio_TriggerSystemSE(NA_SE_33);
