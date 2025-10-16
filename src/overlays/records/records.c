@@ -130,7 +130,7 @@ void Records_Init(void) {
     changingCourseIndex = true;
 
     while (changingCourseIndex) {
-        func_i2_800B934C();
+        Course_Init();
         if (sRecordsMoveDirection != RECORDS_FROM_MENU) {
             if ((gCourseIndex >= COURSE_EDIT_1) && (gCourseIndex <= COURSE_EDIT_6)) {
                 if (gEditCupTrackNames[gCourseIndex - COURSE_EDIT_1][0] == '\0') {
@@ -138,7 +138,7 @@ void Records_Init(void) {
                         if (gCourseIndex == COURSE_EDIT_6) {
                             gCourseIndex = COURSE_MUTE_CITY_4;
                             changingCourseIndex = false;
-                            func_i2_800B934C();
+                            Course_Init();
                         } else {
                             gCourseIndex++;
                         }
@@ -146,7 +146,7 @@ void Records_Init(void) {
                         if (gCourseIndex == COURSE_EDIT_1) {
                             gCourseIndex = COURSE_BIG_BLUE_3;
                             changingCourseIndex = false;
-                            func_i2_800B934C();
+                            Course_Init();
                         } else {
                             gCourseIndex--;
                         }
@@ -170,10 +170,10 @@ void Records_Init(void) {
     func_807160A0();
     func_8070F0B0(COURSE_CONTEXT()->courseData.venue, COURSE_CONTEXT()->courseData.skybox);
     func_i3_800617A0();
-    func_806F9774();
-    func_806FB3AC();
-    func_806FBBC8();
-    func_806FE8F8(0);
+    Course_LandminesViewInteractDataInit();
+    Course_JumpsViewInteractDataInit();
+    Course_DecorationsViewInteractDataInit();
+    Course_EffectsViewInteractDataInit(false);
     Records_InitData();
 }
 
@@ -750,7 +750,7 @@ Gfx* Records_Draw(Gfx* gfx) {
     D_807A15E0 = &gGfxPool->unk_2A308[0x7FF];
     gfx = func_i3_8006339C(gfx, 0, 0);
     gfx = func_i2_800BDE60(gfx, 0);
-    gfx = func_806F9DB4(gfx, 0);
+    gfx = Course_FeaturesDraw(gfx, 0);
     gfx = func_i3_80065560(gfx, sRecordsCourseIndex);
     if (sGhostMarkerState != GHOST_MARKER_NONE) {
         gfx = Records_DrawGhostMarker(gfx);

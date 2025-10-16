@@ -197,7 +197,7 @@ void func_xk2_800F1938(void) {
     if (var_fv0 < 10.0f) {
         return;
     }
-    if (D_807B3C20.unk_2900 != 0) {
+    if (D_807B3C20.controlPointCount != 0) {
         temp_v1 = &D_807B3C20.unk_0000[D_800D6CA0.unk_0C];
         if (D_xk2_80104CB0 < 0) {
             var_fv1 = (((temp_v1->pos.y + temp_v1->next->pos.y) * 0.3f) / 2);
@@ -250,10 +250,10 @@ void func_xk2_800F1938(void) {
     D_800D6CA0.unk_28.radiusLeft = radiusLeft;
     D_800D6CA0.unk_28.radiusRight = radiusRight;
 
-    if ((D_807B3C20.unk_2900 == 1) && (D_807B3C20.unk_0000[0].trackSegmentInfo == 0x18000000) &&
+    if ((D_807B3C20.controlPointCount == 1) && (D_807B3C20.unk_0000[0].trackSegmentInfo == 0x18000000) &&
         (D_800D6CA0.unk_28.trackSegmentInfo == 0x18000000)) {
         D_800D6CA0.unk_28.trackSegmentInfo = (TRACK_FLAG_JOINABLE | TRACK_FLAG_8000000 | TRACK_SHAPE_ROAD | ROAD_2);
-    } else if (D_807B3C20.unk_2900 == 0) {
+    } else if (D_807B3C20.controlPointCount == 0) {
         D_800D6CA0.unk_28.trackSegmentInfo =
             (TRACK_FLAG_JOINABLE | TRACK_FLAG_8000000 | TRACK_SHAPE_ROAD | ROAD_START_LINE);
     }

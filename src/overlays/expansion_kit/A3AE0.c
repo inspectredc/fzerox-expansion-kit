@@ -1209,7 +1209,7 @@ void func_xk1_80028064(void) {
         case FILE_OPTION_SAVE:
             D_80119880 = 1;
             func_xk2_800F27DC(gCurrentCourseInfo);
-            if (D_807B3C20.unk_2900 < 4) {
+            if (D_807B3C20.controlPointCount < 4) {
                 D_xk1_80032C20 = 0;
                 D_800D6CA0.unk_08 = 16;
                 D_xk2_80104378 = 9;
@@ -1379,7 +1379,7 @@ extern s32 D_xk2_800F7044;
 extern s32 D_xk2_800F7058;
 extern f32 D_xk2_80119744;
 
-extern unk_802D1B60 D_807BCB58;
+extern CourseFeaturesInfo gCourseFeaturesInfo;
 extern s32 D_800D65C8;
 
 void func_xk1_8002860C(void) {
@@ -1391,7 +1391,7 @@ void func_xk1_8002860C(void) {
     D_xk2_80104CB0 = 90;
     D_800D6CA0.unk_14 = 0;
     D_xk2_800F7044 = 0;
-    D_807B3C20.unk_2900 = 0;
+    D_807B3C20.controlPointCount = 0;
     gCurrentCourseInfo->segmentCount = 0;
     COURSE_CONTEXT()->courseData.controlPointCount = 0;
     D_800D6CA0.unk_0C = -1;
@@ -1409,8 +1409,8 @@ void func_xk1_8002860C(void) {
     func_xk2_800DC3F8();
     func_8070299C();
     gCurrentCourseInfo->length = 0.0f;
-    D_807BCB58.unk_0C = 0;
-    D_807BCB58.unk_08 = 0;
+    gCourseFeaturesInfo.jumpCount = 0;
+    gCourseFeaturesInfo.landmineCount = 0;
 }
 
 extern s32 D_xk2_800F7040;

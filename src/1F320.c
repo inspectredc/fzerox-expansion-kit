@@ -586,14 +586,14 @@ f32 func_80712E68(CourseSegment** arg0, f32 arg1, f32 arg2) {
     Mtx3F sp5C;
 
     sp54 = (s32) arg2 / 20;
-    temp_fs3 = func_i2_800B2824(*arg0, arg1, &sp5C, 0.0f);
+    temp_fs3 = Course_SplineGetBasis(*arg0, arg1, &sp5C, 0.0f);
 
     for (i = 0; i < sp54; i++) {
         arg1 += 20.0f / temp_fs3;
         if (arg1 >= 1.0f) {
             *arg0 = (*arg0)->next;
             arg1 -= 1.0f;
-            arg1 *= (temp_fs3 / func_i2_800B2500(*arg0, 0.0f, &sp80));
+            arg1 *= (temp_fs3 / Course_SplineGetTangent(*arg0, 0.0f, &sp80));
         }
     }
 
@@ -601,7 +601,7 @@ f32 func_80712E68(CourseSegment** arg0, f32 arg1, f32 arg2) {
     if (arg1 >= 1.0f) {
         *arg0 = (*arg0)->next;
         arg1 -= 1.0f;
-        arg1 *= (temp_fs3 / func_i2_800B2500(*arg0, 0.0f, &sp80));
+        arg1 *= (temp_fs3 / Course_SplineGetTangent(*arg0, 0.0f, &sp80));
     }
     return arg1;
 }
@@ -611,7 +611,7 @@ Mtx3F* func_80712FE4(Mtx3F* arg0, CourseSegment* arg1, f32 arg2) {
     f32 sp40;
     Mtx3F sp1C;
 
-    func_i2_800B2824(arg1, arg2, &sp1C, func_i2_800B20D0(arg1, arg2, &sp40));
+    Course_SplineGetBasis(arg1, arg2, &sp1C, Course_SplineGetLengthInfo(arg1, arg2, &sp40));
     *arg0 = sp1C;
 
     return arg0;
@@ -1869,7 +1869,8 @@ void func_807166B8(Player* player, unk_struct_F8* arg1, unk_800E5D70* arg2) {
             }
 
             racer = &gRacers[player->id];
-            func_80718F58(&D_807A15A0[player->id], racer->unk_0C.courseSegment, racer->unk_0C.unk_04, &D_8076D788[0]);
+            func_80718F58(&D_807A15A0[player->id], racer->unk_0C.courseSegment, racer->unk_0C.segmentTValue,
+                          &D_8076D788[0]);
             break;
         case 9:
             racer = &gRacers[player->id];
@@ -2751,7 +2752,7 @@ void func_80718AFC(Player* player, unk_struct_F8* arg1, unk_800E5D70* arg2) {
                 temp_t0->unk_00.unk_18[3] = 0.0f;
                 temp_t0->unk_00.unk_18[4] = 1.0f;
                 temp_t0->unk_00.unk_18[5] = 0.0f;
-                func_80718F58(temp_s1, temp_t2->unk_0C.courseSegment, temp_t2->unk_0C.unk_04, temp_a3);
+                func_80718F58(temp_s1, temp_t2->unk_0C.courseSegment, temp_t2->unk_0C.segmentTValue, temp_a3);
                 temp_v1->unk_00.unk_00.unk_00.unk_00 = temp_t2->unk_180;
                 temp_v1->unk_00.unk_00.unk_00.unk_0C.x = temp_s1->x;
                 temp_v1->unk_00.unk_00.unk_00.unk_0C.y = temp_s1->y;
@@ -2785,7 +2786,7 @@ void func_80718F58(Vec3f* arg0, CourseSegment* arg1, f32 arg2, unk_800CD970* arg
 
     sp60 = func_80712E68(&arg1, arg2, sp28->unk_00.x);
 
-    func_i2_800B26B8(arg1, sp60, arg0);
+    Course_SplineGetPosition(arg1, sp60, arg0);
     func_80712FE4(&sp2C, arg1, sp60);
 
     temp_ft4 = arg1->radiusLeft * (1.0f - sp60) + arg1->next->radiusLeft * sp60;

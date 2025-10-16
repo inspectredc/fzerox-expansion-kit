@@ -292,10 +292,10 @@ extern Vtx* D_800D65D0;
 s32 func_xk2_800F2750(void) {
     D_800D65D0 = gGfxPool->unk_1A308;
     gCourseInfos->courseSegments = D_807B3C20.unk_0000;
-    gCourseInfos->segmentCount = D_807B3C20.unk_2900;
+    gCourseInfos->segmentCount = D_807B3C20.controlPointCount;
     if (D_800D6CA0.unk_20 == -1) {
-        func_i2_800B42E0(gCourseInfos);
-        func_i2_800B3F54(gCourseInfos);
+        Course_SegmentContinuousFlagInit(gCourseInfos);
+        Course_SegmentFormsInit(gCourseInfos);
         return func_i2_800B5CD8(gCourseInfos);
     }
     return 0;
@@ -318,7 +318,7 @@ void func_xk2_800F27DC(CourseInfo* courseInfo) {
     D_xk2_80104368 = 0;
     gCourseCtx.courseData.flag = 0;
     sp18 = 0;
-    if (D_807B3C20.unk_2900 < 4) {
+    if (D_807B3C20.controlPointCount < 4) {
         D_xk1_80032C20 = 0;
         D_800D6CA0.unk_08 = 0x10;
         D_xk2_80104378 = 9;
@@ -361,7 +361,7 @@ void func_xk2_800F27DC(CourseInfo* courseInfo) {
                 func_i2_800B91AC(0);
                 sp18 = 1;
             }
-            func_806FE8F8(0);
+            Course_EffectsViewInteractDataInit(false);
             if (D_xk2_80104CA0[7] != 0) {
                 D_xk1_80032C20 = 0;
                 D_800D6CA0.unk_08 = 0x10;
@@ -387,7 +387,7 @@ void func_xk2_800F27DC(CourseInfo* courseInfo) {
                 }
                 func_i2_800B91AC(0);
             }
-            func_806FE8F8(0);
+            Course_EffectsViewInteractDataInit(false);
             if (D_xk2_80104CA0[7] != 0) {
                 D_xk1_80032C20 = 0;
                 D_800D6CA0.unk_08 = 0x10;

@@ -2077,9 +2077,9 @@ extern u16 D_8014A20[];
 extern u16 D_8015220[];
 #define _D_8015220_WIDTH 0x20
 #define _D_8015220_HEIGHT 0x20
-extern u16 D_8015A20[];
-#define _D_8015A20_WIDTH 0x20
-#define _D_8015A20_HEIGHT 0x20
+extern u16 aJumpFeatureTex[];
+#define _aJumpFeatureTex_WIDTH 0x20
+#define _aJumpFeatureTex_HEIGHT 0x20
 extern u16 aPitEffectTex[];
 #define _aPitEffectTex_WIDTH 0x20
 #define _aPitEffectTex_HEIGHT 0x20
@@ -2181,7 +2181,7 @@ extern Vtx segment_16C8A0_seg8_vtx_21240[];
 extern u16 D_8021380[];
 #define _D_8021380_WIDTH 0x20
 #define _D_8021380_HEIGHT 0x40
-extern Gfx D_8022380[];
+extern Gfx aSetupLandmineTextureDL[];
 extern Gfx aSetupCourseEffectTextureDL[];
 
 extern Gfx D_4000000[];

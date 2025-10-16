@@ -192,17 +192,17 @@ void EndingCutscene_Init(void) {
         sTotalRacersKOd += gCupRaceStats[0][j].racersKOd;
     }
 
-    func_i2_800B934C();
+    Course_Init();
     func_i3_80040158();
     func_8071D48C();
     func_807160A0();
     func_8070F0B0(COURSE_CONTEXT()->courseData.venue, COURSE_CONTEXT()->courseData.skybox);
     func_i3_800617A0();
     func_i2_800AB6B0();
-    func_806F9774();
-    func_806FB3AC();
-    func_806FBBC8();
-    func_806FE8F8(0);
+    Course_LandminesViewInteractDataInit();
+    Course_JumpsViewInteractDataInit();
+    Course_DecorationsViewInteractDataInit();
+    Course_EffectsViewInteractDataInit(false);
     func_i7_80096BB0();
     func_i7_800956E8();
     sEndScreenState = END_SCREEN_INACTIVE;
@@ -594,7 +594,7 @@ Gfx* EndingCutscene_Draw(Gfx* gfx) {
     D_807A15E0 = &gGfxPool->unk_2A308[0x7FF];
     gfx = func_i3_8006339C(gfx, 0, 0);
     gfx = func_i2_800BDE60(gfx, 0);
-    gfx = func_806F9DB4(gfx, 0);
+    gfx = Course_FeaturesDraw(gfx, 0);
     gfx = func_i7_80095D14(gfx);
 
     gSPLoadUcodeL(gfx++, gspF3DLX2_Rej_fifo);

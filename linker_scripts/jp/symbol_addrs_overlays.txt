@@ -2,10 +2,10 @@ Transition_PhasedStripsDraw = 0x800A5874; //segment:ovl_i2
 Font_GetStringWidth = 0x800AD4A4; //segment:ovl_i2
 Font_DrawScaledString = 0x800ADA1C; //segment:ovl_i2
 func_i2_800AEA90 = 0x800AEA90; //segment:ovl_i2
-func_i2_800B20D0 = 0x800B20D0; //segment:ovl_i2
-func_i2_800B2500 = 0x800B2500; //segment:ovl_i2
-func_i2_800B26B8 = 0x800B26B8; //segment:ovl_i2
-func_i2_800B2824 = 0x800B2824; //segment:ovl_i2
+Course_SplineGetLengthInfo = 0x800B20D0; //segment:ovl_i2
+Course_SplineGetTangent = 0x800B2500; //segment:ovl_i2
+Course_SplineGetPosition = 0x800B26B8; //segment:ovl_i2
+Course_SplineGetBasis = 0x800B2824; //segment:ovl_i2
 
 gSettingVsSlot = 0x800BF060; //segment:ovl_i2
 gPlayer1OverallPosition = 0x800BF068; //segment:ovl_i2

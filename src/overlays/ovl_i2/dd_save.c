@@ -239,7 +239,7 @@ void DDSave_LoadBaseCourses(void) {
         } else {
             courseIndexToEncode = courseIndex;
         }
-        func_80701E90(courseIndex);
+        Course_Load(courseIndex);
 
         PRINTF("=========================================\n");
         PRINTF("courseID 0x%X -> right data is 0x7B4113D8\n");
