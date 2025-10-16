@@ -83,9 +83,9 @@ s32 func_xk2_800EAA1C(u8* arg0) {
         return -1;
     }
     COURSE_CONTEXT()->courseData.creatorId = CREATOR_NINTENDO;
-    COURSE_CONTEXT()->courseData.controlPointCount = D_807B3C20.unk_2900;
+    COURSE_CONTEXT()->courseData.controlPointCount = D_807B3C20.controlPointCount;
 
-    for (i = 0; i < D_807B3C20.unk_2900; i++) {
+    for (i = 0; i < D_807B3C20.controlPointCount; i++) {
         COURSE_CONTEXT()->courseData.controlPoint[i].pos = D_807B3C20.unk_0000[i].pos;
         COURSE_CONTEXT()->courseData.controlPoint[i].radiusLeft = D_807B3C20.unk_0000[i].radiusLeft;
         COURSE_CONTEXT()->courseData.controlPoint[i].radiusRight = D_807B3C20.unk_0000[i].radiusRight;
@@ -157,7 +157,8 @@ void func_xk2_800EACB0(void) {
         *COURSE_CONTEXT() = D_xk2_800F7408;
     }
     if ((Course_CalculateChecksum() != COURSE_CONTEXT()->courseData.checksum) ||
-        (COURSE_CONTEXT()->courseData.creatorId != CREATOR_NINTENDO) || (COURSE_CONTEXT()->courseData.bgm >= 0xE)) {
+        (COURSE_CONTEXT()->courseData.creatorId != CREATOR_NINTENDO) ||
+        (COURSE_CONTEXT()->courseData.bgm > BGM_NEW_04)) {
         PRINTF("COURSE DATA CHECK SUM ERROR 0x%x(DATA WAS BROKEN 0x%x)\n");
         func_xk2_800EE664(0xA);
         func_xk2_800EF8B0();
@@ -177,7 +178,7 @@ void func_xk2_800EACB0(void) {
     func_80702BC4(0);
 
     courseInfo = &gCourseInfos[0];
-    D_807B3C20.unk_2900 = courseInfo->segmentCount;
+    D_807B3C20.controlPointCount = courseInfo->segmentCount;
     for (i = 0; i < courseInfo->segmentCount; i++) {
         D_807B3C20.unk_0000[i] = D_802D0620[i];
         D_807B3C20.unk_0000[i].segmentIndex = i;
@@ -335,12 +336,12 @@ void func_xk2_800EB400(void) {
     temp_v1 = &D_xk1_8003A5D8[D_xk2_80119884];
     switch (D_80119880) {
         case 6:
-            if (D_807B3C20.unk_2900 == 0) {
+            if (D_807B3C20.controlPointCount == 0) {
                 func_xk2_800F5C50();
                 if (courseIndex >= COURSE_EDIT_1) {
-                    func_80701E90(courseIndex + 6);
+                    Course_Load(courseIndex + 6);
                 } else {
-                    func_80701E90(courseIndex);
+                    Course_Load(courseIndex);
                 }
                 D_80030060[0] = 0;
                 func_xk2_800EACB0();
@@ -356,7 +357,7 @@ void func_xk2_800EB400(void) {
             }
             break;
         case 8:
-            func_80701E90(courseIndex);
+            Course_Load(courseIndex);
             func_xk2_800EACB0();
             gCourseEditFileOption = -1;
             D_800D6CA0.unk_08 = 0x30;
@@ -369,7 +370,7 @@ void func_xk2_800EB400(void) {
             if (courseIndex == 0) {
                 func_xk1_8002D16C();
                 D_80119880 = 6;
-            } else if (D_807B3C20.unk_2900 == 0) {
+            } else if (D_807B3C20.controlPointCount == 0) {
                 func_xk2_800F5C50();
                 func_xk2_800EAF24(&D_xk1_8003A5D8[courseIndex]);
                 gCourseEditFileOption = -1;

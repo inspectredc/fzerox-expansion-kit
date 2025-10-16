@@ -188,21 +188,21 @@ typedef enum Ice {
     /*  4 */ ICE_MAX,
 } Ice;
 
-typedef enum Jump {
+typedef enum JumpType {
     /* -1 */ JUMP_NONE = -1,
     /*  0 */ JUMP_ALL,
     /*  1 */ JUMP_LEFT,
     /*  2 */ JUMP_RIGHT,
     /*  3 */ JUMP_MAX,
-} Jump;
+} JumpType;
 
-typedef enum Landmine {
+typedef enum LandmineType {
     /* -1 */ LANDMINE_NONE = -1,
     /*  0 */ LANDMINE_MIDDLE,
     /*  1 */ LANDMINE_LEFT,
     /*  2 */ LANDMINE_RIGHT,
     /*  3 */ LANDMINE_MAX,
-} Landmine;
+} LandmineType;
 
 typedef enum Gate {
     /* -1 */ GATE_NONE = -1,

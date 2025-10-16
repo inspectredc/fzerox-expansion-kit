@@ -85,8 +85,8 @@ void func_xk2_800EC3AC(void) {
     Audio_EditorExit();
     D_8076C77C = 1;
     gCourseInfos->courseSegments = D_802D0620;
-    gCourseInfos->segmentCount = D_807B3C20.unk_2900;
-    for (i = 0; i < D_807B3C20.unk_2900; i++) {
+    gCourseInfos->segmentCount = D_807B3C20.controlPointCount;
+    for (i = 0; i < D_807B3C20.controlPointCount; i++) {
         D_802D0620[i] = D_807B3C20.unk_0000[i];
 
         D_802D0620[i].segmentIndex = i;
@@ -94,8 +94,8 @@ void func_xk2_800EC3AC(void) {
         D_802D0620[i].next = &D_802D0620[i + 1];
     }
 
-    D_802D0620[0].prev = &D_802D0620[D_807B3C20.unk_2900 - 1];
-    D_802D0620[D_807B3C20.unk_2900 - 1].next = &D_802D0620[0];
+    D_802D0620[0].prev = &D_802D0620[D_807B3C20.controlPointCount - 1];
+    D_802D0620[D_807B3C20.controlPointCount - 1].next = &D_802D0620[0];
     func_80702D6C();
     D_800D0910 = COURSE_CONTEXT()->courseData;
     D_8076C954 = 0;
@@ -122,7 +122,7 @@ void func_xk2_800EC508(void) {
 
 extern s32 D_80030608;
 extern s32 D_8076C77C;
-extern unk_802D2D70* D_8079E930;
+extern CourseEffectsInfo* D_8079E930;
 extern s32 D_xk1_80032BF8;
 extern s32 D_xk2_800F7058;
 extern s32 D_xk2_80119800;
@@ -141,10 +141,10 @@ extern s32 D_xk2_800F7040;
 extern s32 D_xk2_800F7044;
 extern s32 D_xk2_800F7048;
 extern s32 D_xk2_800F704C;
-extern unk_802D1B60 D_807BCB58;
-extern unk_802D1B60_unk_00 D_807BBE38[];
-extern unk_802D2D70 D_807BDD68;
-extern unk_8006FF90_arg_1 D_807BCB68[];
+extern CourseFeaturesInfo gCourseFeaturesInfo;
+extern CourseFeature gCourseFeatures[];
+extern CourseEffectsInfo gCourseEffectsInfo;
+extern CourseEffect gCourseEffects[];
 extern unk_807B3C20 D_807B6528;
 extern Player gPlayers[];
 extern s16 D_8076C7A8;
@@ -183,9 +183,9 @@ void CourseEdit_Init(void) {
     gCourseInfos->courseSegments = D_807B3C20.unk_0000;
     gCurrentCourseInfo = gCourseInfos;
     gCurrentCourseInfo->length = 0.0f;
-    D_807BCB58.unk_00 = D_807BBE38;
-    D_807BDD68.unk_00 = D_807BCB68;
-    D_807B6528.unk_2900 = 0;
+    gCourseFeaturesInfo.features = gCourseFeatures;
+    gCourseEffectsInfo.effects = gCourseEffects;
+    D_807B6528.controlPointCount = 0;
     D_807B6528.unk_0000[0].prev = &D_807B3C20.unk_0000[0];
     D_807B6528.unk_0000[0].next = &D_807B3C20.unk_0000[0];
     func_xk2_800E6F9C();
@@ -204,10 +204,10 @@ void CourseEdit_Init(void) {
     func_xk2_800F5C5C();
     func_xk1_8002AF10(4);
     D_800D65D0 = gGfxPool->unk_1A308;
-    D_8079E930 = &D_807BDD68;
+    D_8079E930 = &gCourseEffectsInfo;
     func_xk2_800DC3F8();
     func_xk2_800DD638();
-    D_800D6CA0.unk_0C = D_807B3C20.unk_2900 - 1;
+    D_800D6CA0.unk_0C = D_807B3C20.controlPointCount - 1;
     func_xk2_800EF78C();
     func_xk2_800F0FE8();
     if (D_8076C964 == 1) {
@@ -411,7 +411,7 @@ s32 CourseEdit_Update(void) {
     if (D_8076C950 != 0) {
         return GAMEMODE_COURSE_EDIT;
     }
-    if (D_807B3C20.unk_2900 < 4) {
+    if (D_807B3C20.controlPointCount < 4) {
         gCurrentCourseInfo->length = 0.0f;
     }
     if (D_8076C950 == 0) {

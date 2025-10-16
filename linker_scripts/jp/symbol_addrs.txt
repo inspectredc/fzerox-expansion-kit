@@ -39,11 +39,14 @@ Matrix_SetLockedLookAt = 0x806F7FCC;
 Matrix_SetLockedLookAtFromVectors = 0x806F8314;
 Matrix_ScaleFrom3DMatrix = 0x806F85C0;
 Matrix_SetTransRot = 0x806F86C0;
+Matrix_SetAxisRotation = 0x806F8868;
 Matrix_SetLookAt = 0x806F8FE0;
 Matrix_SetFrustrum = 0x806F9384;
 Matrix_SetOrtho = 0x806F9628;
 
-CourseFeature_IsDecorational = 0x806F9750;
+Course_FeatureIsDecorational = 0x806F9750;
+Course_FeaturesDraw = 0x806F9DB4;
+Course_GetBgm = 0x80703228;
 
 SLForceWritebackDCacheAll = 0x80704D74;
 SLLeoReadDiskID = 0x80704FF4;
@@ -107,6 +110,9 @@ gRandSeed1 = 0x8076C940;
 gRandMask1 = 0x8076C944;
 gRandSeed2 = 0x8076C948;
 gRandMask2 = 0x8076C94C;
+
+sCourseDecorationTextureLoadState = 0x8079F938;
+sCourseDecorationDrawFuncs = 0x8076C980;
 
 gSelectedMode = 0x8076CC50;
 gPlayerSelectionLock = 0x8076CC78;
@@ -251,6 +257,14 @@ sRacerPairInfo = 0x807B15B0;
 D_807B37B8 = 0x807B37B8; // size:0x10
 gMachines = 0x807B37D8; // size:0x294
 sCustomMachineInfo = 0x807B3A70;
+
+gCourseDecorations = 0x807BB738;
+gCourseFeatures = 0x807BBE38;
+gCourseFeaturesInfo = 0x807BCB58;
+gCourseEffects = 0x807BCB68;
+gCourseEffectsInfo = 0x807BDD68;
+gLandmines = 0x807BF570;
+gJumps = 0x807BF870;
 
 D_807C6F0C = 0x807C6F0C;
 

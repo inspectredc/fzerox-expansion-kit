@@ -544,7 +544,7 @@ void func_80719958(void) {
     var_s2 = gCurrentCourseInfo->courseSegments->prev;
     var_fs0 = 1.0f;
     for (i = 20; i > 0; i--) {
-        var_fs0 -= 7.3f / func_i2_800B2500(var_s2, var_fs0, &gRacers[0].unk_0C.unk_0C);
+        var_fs0 -= 7.3f / Course_SplineGetTangent(var_s2, var_fs0, &gRacers[0].unk_0C.unk_0C);
     }
 
     if ((gGameMode != GAMEMODE_RECORDS) && (gGameMode != GAMEMODE_GP_END_CS) && (D_8076C7D8 == 0) &&
@@ -562,8 +562,8 @@ void func_80719958(void) {
         index = func_80719910(j);
         temp_s1 = &gRacers[index];
         temp_s1->unk_0C.courseSegment = var_s2;
-        temp_s1->unk_0C.unk_04 = var_fs0;
-        func_i2_800B26B8(var_s2, var_fs0, &temp_s1->unk_0C.unk_1C);
+        temp_s1->unk_0C.segmentTValue = var_fs0;
+        Course_SplineGetPosition(var_s2, var_fs0, &temp_s1->unk_0C.unk_1C);
         sp84 = temp_s1->unk_0C.unk_1C;
         temp_s1->unk_0C.unk_44 = sp84;
         temp_s1->unk_0C.unk_34 = sp84;
@@ -571,12 +571,12 @@ void func_80719958(void) {
         temp_s1->unk_0C.unk_28.y = 0.0f;
         temp_s1->unk_0C.unk_28.z = 0.0f;
         temp_s1->unk_0C.unk_40 = 0.0f;
-        temp_s1->unk_0C.unk_18 =
-            func_i2_800B2500(temp_s1->unk_0C.courseSegment, temp_s1->unk_0C.unk_04, &temp_s1->unk_0C.unk_0C);
-        temp_s1->unk_0C.unk_08 =
-            func_i2_800B20D0(temp_s1->unk_0C.courseSegment, temp_s1->unk_0C.unk_04, &temp_s1->lapDistance);
-        func_i2_800B2824(temp_s1->unk_0C.courseSegment, temp_s1->unk_0C.unk_04, &temp_s1->unk_24C,
-                         temp_s1->unk_0C.unk_08);
+        temp_s1->unk_0C.unk_18 = Course_SplineGetTangent(temp_s1->unk_0C.courseSegment, temp_s1->unk_0C.segmentTValue,
+                                                         &temp_s1->unk_0C.unk_0C);
+        temp_s1->unk_0C.unk_08 = Course_SplineGetLengthInfo(temp_s1->unk_0C.courseSegment,
+                                                            temp_s1->unk_0C.segmentTValue, &temp_s1->lapDistance);
+        Course_SplineGetBasis(temp_s1->unk_0C.courseSegment, temp_s1->unk_0C.segmentTValue, &temp_s1->unk_24C,
+                              temp_s1->unk_0C.unk_08);
 
         temp_v0 = temp_s1->unk_0C.courseSegment;
         temp_v1 = temp_v0->next;
@@ -610,7 +610,7 @@ void func_80719958(void) {
             var_fs0 -= (var_fv0 / 20.0f) / temp_s1->unk_0C.unk_18;
             if (var_fs0 < 0.0f) {
                 var_s2 = var_s2->prev;
-                var_fs0 *= (temp_s1->unk_0C.unk_18 / func_i2_800B2500(var_s2, 1.0f, &temp_s1->unk_0C.unk_0C));
+                var_fs0 *= (temp_s1->unk_0C.unk_18 / Course_SplineGetTangent(var_s2, 1.0f, &temp_s1->unk_0C.unk_0C));
                 var_fs0 += 1.0f;
             }
         }
@@ -1533,9 +1533,10 @@ void func_8071CE08(Racer* arg0) {
         (gGameMode == GAMEMODE_GP_END_CS) || (D_8076C7D8 != 0)) {
         arg0->stateFlags |= RACER_STATE_CPU_CONTROLLED;
     }
-    arg0->unk_0C.unk_08 = func_i2_800B20D0(arg0->unk_0C.courseSegment, arg0->unk_0C.unk_04, &arg0->lapDistance);
+    arg0->unk_0C.unk_08 =
+        Course_SplineGetLengthInfo(arg0->unk_0C.courseSegment, arg0->unk_0C.segmentTValue, &arg0->lapDistance);
 
-    func_i2_800B2824(arg0->unk_0C.courseSegment, arg0->unk_0C.unk_04, &arg0->unk_24C, arg0->unk_0C.unk_08);
+    Course_SplineGetBasis(arg0->unk_0C.courseSegment, arg0->unk_0C.segmentTValue, &arg0->unk_24C, arg0->unk_0C.unk_08);
     // FAKE spE8 is compiler stack from a chain struct copy
     spE8 = arg0->unk_24C;
     arg0->unk_C0 = spE8;
@@ -2470,11 +2471,11 @@ void func_8071FE44(Racer* arg0) {
     f32 sp58;
     f32 sp54;
 
-    if (arg0->unk_0C.unk_04 < arg0->unk_0C.courseSegment->unk_68) {
+    if (arg0->unk_0C.segmentTValue < arg0->unk_0C.courseSegment->unk_68) {
         var_fv0 = sp60 = arg0->unk_0C.unk_08 / arg0->unk_0C.courseSegment->unk_70;
         var_fv0 *= arg0->unk_270;
         var_fs0 = arg0->unk_270;
-    } else if (arg0->unk_0C.courseSegment->unk_6C < arg0->unk_0C.unk_04) {
+    } else if (arg0->unk_0C.courseSegment->unk_6C < arg0->unk_0C.segmentTValue) {
         var_fv0 = sp60 = (1.0f - arg0->unk_0C.unk_08) / arg0->unk_0C.courseSegment->unk_70;
         var_fv0 *= arg0->unk_270;
         var_fs0 = -arg0->unk_270;
@@ -2672,11 +2673,11 @@ void func_807206FC(Racer* arg0) {
     f32 sp4C;
     f32 temp_fv0;
 
-    if (arg0->unk_0C.unk_04 < arg0->unk_0C.courseSegment->unk_68) {
+    if (arg0->unk_0C.segmentTValue < arg0->unk_0C.courseSegment->unk_68) {
         sp5C = sp58 = arg0->unk_0C.unk_08 / arg0->unk_0C.courseSegment->unk_70;
         sp5C *= arg0->unk_270;
         var_fa1 = arg0->unk_270;
-    } else if (arg0->unk_0C.courseSegment->unk_6C < arg0->unk_0C.unk_04) {
+    } else if (arg0->unk_0C.courseSegment->unk_6C < arg0->unk_0C.segmentTValue) {
         var_fa1 = -arg0->unk_270;
         sp5C = sp58 = (1.0f - arg0->unk_0C.unk_08) / arg0->unk_0C.courseSegment->unk_70;
         sp5C *= arg0->unk_270;
@@ -2841,11 +2842,11 @@ void func_80720E2C(Racer* arg0) {
     f32 sp50;
     f32 sp4C;
 
-    if (arg0->unk_0C.unk_04 < arg0->unk_0C.courseSegment->unk_68) {
+    if (arg0->unk_0C.segmentTValue < arg0->unk_0C.courseSegment->unk_68) {
         var_fv0 = sp58 = arg0->unk_0C.unk_08 / arg0->unk_0C.courseSegment->unk_70;
         var_fv0 *= arg0->unk_270;
         var_fs0 = arg0->unk_270;
-    } else if (arg0->unk_0C.courseSegment->unk_6C < arg0->unk_0C.unk_04) {
+    } else if (arg0->unk_0C.courseSegment->unk_6C < arg0->unk_0C.segmentTValue) {
         var_fv0 = sp58 = (1.0f - arg0->unk_0C.unk_08) / arg0->unk_0C.courseSegment->unk_70;
         var_fv0 *= arg0->unk_270;
         var_fs0 = -arg0->unk_270;
@@ -3199,10 +3200,10 @@ void func_80721D78(Racer* racer, Controller* controller) {
     CourseSegment* temp_v1;
     unk_802D3E38* temp_a0;
     unk_802D3E38* var_v0;
-    unk_802D3978* var_v0_2;
-    unk_802D3978* temp2;
-    unk_802D3D38* var_v0_3;
-    unk_802D3D38* temp;
+    Landmine* var_v0_2;
+    Landmine* temp2;
+    Jump* var_v0_3;
+    Jump* temp;
     u16 buttonReleased; // spC6
     u16 buttonCurrent;
     u16 buttonPressed;
@@ -3258,10 +3259,10 @@ void func_80721D78(Racer* racer, Controller* controller) {
                 if (var_v0->unk_18.x < var_fa1) {
                     continue;
                 }
-                if (racer->unk_0C.unk_04 < var_v0->unk_04) {
+                if (racer->unk_0C.segmentTValue < var_v0->segmentTValueStart) {
                     continue;
                 }
-                if (var_v0->unk_08 < racer->unk_0C.unk_04) {
+                if (var_v0->segmentTValueEnd < racer->unk_0C.segmentTValue) {
                     continue;
                 }
                 racer->stateFlags |= var_v0->effectType;
@@ -3271,11 +3272,11 @@ void func_80721D78(Racer* racer, Controller* controller) {
         } else {
 
             do {
-                if (racer->unk_0C.unk_04 < var_v0->unk_04) {
+                if (racer->unk_0C.segmentTValue < var_v0->segmentTValueStart) {
                     continue;
                 }
 
-                if (var_v0->unk_08 < racer->unk_0C.unk_04) {
+                if (var_v0->segmentTValueEnd < racer->unk_0C.segmentTValue) {
                     continue;
                 }
 
@@ -3457,9 +3458,9 @@ void func_80721D78(Racer* racer, Controller* controller) {
         if (var_v0_2 != NULL) {
             temp2 = temp_v1->unk_50;
             do {
-                var_fs1 = var_v0_2->unk_04.x - racer->unk_0C.unk_34.x;
-                var_fs0 = var_v0_2->unk_04.y - racer->unk_0C.unk_34.y;
-                var_ft4 = var_v0_2->unk_04.z - racer->unk_0C.unk_34.z;
+                var_fs1 = var_v0_2->pos.x - racer->unk_0C.unk_34.x;
+                var_fs0 = var_v0_2->pos.y - racer->unk_0C.unk_34.y;
+                var_ft4 = var_v0_2->pos.z - racer->unk_0C.unk_34.z;
                 if ((SQ(var_fs1) + SQ(var_fs0) + SQ(var_ft4)) < 900.0f) {
                     racer->acceleration.x += (15.0f * racer->unk_B4.x);
                     racer->acceleration.y += (15.0f * racer->unk_B4.y);
@@ -3481,39 +3482,39 @@ void func_80721D78(Racer* racer, Controller* controller) {
         if (var_v0_3 != NULL) {
             temp = temp_v1->unk_48;
             do {
-                var_fs1 = racer->unk_0C.unk_34.x - var_v0_3->unk_00.x;
-                var_fs0 = racer->unk_0C.unk_34.y - var_v0_3->unk_00.y;
-                var_ft4 = racer->unk_0C.unk_34.z - var_v0_3->unk_00.z;
-                var_fa1 = (var_v0_3->unk_0C.x.x * var_fs1) + (var_v0_3->unk_0C.x.y * var_fs0) +
-                          (var_v0_3->unk_0C.x.z * var_ft4);
+                var_fs1 = racer->unk_0C.unk_34.x - var_v0_3->pos.x;
+                var_fs0 = racer->unk_0C.unk_34.y - var_v0_3->pos.y;
+                var_ft4 = racer->unk_0C.unk_34.z - var_v0_3->pos.z;
+                var_fa1 =
+                    (var_v0_3->basis.x.x * var_fs1) + (var_v0_3->basis.x.y * var_fs0) + (var_v0_3->basis.x.z * var_ft4);
 
                 if (var_fa1 < 0.0f) {
                     continue;
                 }
 
-                if (var_v0_3->unk_30.z < var_fa1) {
+                if (var_v0_3->dimensions.z < var_fa1) {
                     continue;
                 }
 
-                var_fa1 = (var_v0_3->unk_0C.z.x * var_fs1) + (var_v0_3->unk_0C.z.y * var_fs0) +
-                          (var_v0_3->unk_0C.z.z * var_ft4);
+                var_fa1 =
+                    (var_v0_3->basis.z.x * var_fs1) + (var_v0_3->basis.z.y * var_fs0) + (var_v0_3->basis.z.z * var_ft4);
 
                 if (var_fa1 < 0.0f) {
                     continue;
                 }
 
-                if (var_v0_3->unk_30.x < var_fa1) {
+                if (var_v0_3->dimensions.x < var_fa1) {
                     continue;
                 }
 
-                var_fa1 = (var_v0_3->unk_0C.y.x * var_fs1) + (var_v0_3->unk_0C.y.y * var_fs0) +
-                          (var_v0_3->unk_0C.y.z * var_ft4);
+                var_fa1 =
+                    (var_v0_3->basis.y.x * var_fs1) + (var_v0_3->basis.y.y * var_fs0) + (var_v0_3->basis.y.z * var_ft4);
 
                 if (var_fa1 < 0.0f) {
                     continue;
                 }
 
-                if (var_v0_3->unk_30.y < var_fa1) {
+                if (var_v0_3->dimensions.y < var_fa1) {
                     continue;
                 }
 
@@ -4052,12 +4053,9 @@ void func_80721D78(Racer* racer, Controller* controller) {
             racer->unk_24C.x.y = racer->unk_0C.unk_0C.y * var_fa1;
             racer->unk_24C.x.z = racer->unk_0C.unk_0C.z * var_fa1;
 
-            racer->unk_24C.y.x =
-                (racer->unk_0C.unk_08 * (temp_v1->next->unk_0C.x - temp_v1->unk_0C.x)) + temp_v1->unk_0C.x;
-            racer->unk_24C.y.y =
-                (racer->unk_0C.unk_08 * (temp_v1->next->unk_0C.y - temp_v1->unk_0C.y)) + temp_v1->unk_0C.y;
-            racer->unk_24C.y.z =
-                (racer->unk_0C.unk_08 * (temp_v1->next->unk_0C.z - temp_v1->unk_0C.z)) + temp_v1->unk_0C.z;
+            racer->unk_24C.y.x = (racer->unk_0C.unk_08 * (temp_v1->next->up.x - temp_v1->up.x)) + temp_v1->up.x;
+            racer->unk_24C.y.y = (racer->unk_0C.unk_08 * (temp_v1->next->up.y - temp_v1->up.y)) + temp_v1->up.y;
+            racer->unk_24C.y.z = (racer->unk_0C.unk_08 * (temp_v1->next->up.z - temp_v1->up.z)) + temp_v1->up.z;
 
             if ((racer->unk_24C.y.x == 0.0f) && (racer->unk_24C.y.y == 0.0f) && (racer->unk_24C.y.z == 0.0f)) {
                 func_i2_800B0FAC(temp_v1, &racer->unk_24C);
@@ -5052,11 +5050,11 @@ void func_80726554(void) {
                     0) {
                     var_s0->exists = var_s0->initialized = false;
                 } else {
-                    racer->unk_0C.unk_08 =
-                        func_i2_800B20D0(racer->unk_0C.courseSegment, racer->unk_0C.unk_04, &racer->lapDistance);
+                    racer->unk_0C.unk_08 = Course_SplineGetLengthInfo(racer->unk_0C.courseSegment,
+                                                                      racer->unk_0C.segmentTValue, &racer->lapDistance);
 
-                    func_i2_800B2824(racer->unk_0C.courseSegment, racer->unk_0C.unk_04, &racer->unk_24C,
-                                     racer->unk_0C.unk_08);
+                    Course_SplineGetBasis(racer->unk_0C.courseSegment, racer->unk_0C.segmentTValue, &racer->unk_24C,
+                                          racer->unk_0C.unk_08);
                     racer->unk_270 = (racer->unk_0C.unk_08 * (racer->unk_0C.courseSegment->next->radiusLeft -
                                                               racer->unk_0C.courseSegment->radiusLeft)) +
                                      racer->unk_0C.courseSegment->radiusLeft;
@@ -5627,9 +5625,9 @@ Gfx* func_80727F54(Gfx* gfx, s32 playerIndex) {
 
     temp_v0_6 = playerRacer->unk_0C.courseSegment;
     if (temp_v0_6->trackSegmentInfo & TRACK_FLAG_20000000) {
-        if (temp_v0_6->unk_6C < playerRacer->unk_0C.unk_04) {
+        if (temp_v0_6->unk_6C < playerRacer->unk_0C.segmentTValue) {
             var_fs0_2 = (1.0f - playerRacer->unk_0C.unk_08) / temp_v0_6->unk_70;
-        } else if (playerRacer->unk_0C.unk_04 < temp_v0_6->unk_68) {
+        } else if (playerRacer->unk_0C.segmentTValue < temp_v0_6->unk_68) {
             var_fs0_2 = playerRacer->unk_0C.unk_08 / temp_v0_6->unk_70;
         } else {
             var_s3 = 50;
@@ -6471,7 +6469,7 @@ block_115:
                         } else if (gCurrentCourseInfo->courseIndex == COURSE_DEATH_RACE) {
                             func_8070DAA4(BGM_DEATHRACE2);
                         } else {
-                            func_8070DAA4(func_80703228());
+                            func_8070DAA4(Course_GetBgm());
                         }
                     }
                 }

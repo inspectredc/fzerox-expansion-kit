@@ -49,9 +49,9 @@ typedef struct unk_807C6EA8 {
 
 typedef struct unk_80225800 {
     Mtx unk_000;
-    Vtx unk_040[4 * 6];
+    Vtx unk_040[4][6];
     s8 pad_1C0[0x180];
-    Vtx unk_1C0[48 * 5];
+    Vtx unk_1C0[48][5];
 } unk_80225800; // size = 0x10C0
 
 typedef struct Player {
@@ -111,7 +111,7 @@ typedef struct Player {
 
 typedef struct CourseSegment {
     /* 0x00 */ Vec3f pos;
-    /* 0x0C */ Vec3f unk_0C;
+    /* 0x0C */ Vec3f up;
     /* 0x18 */ f32 radiusLeft;
     /* 0x1C */ f32 radiusRight;
     /* 0x20 */ s32 trackSegmentInfo;
@@ -123,10 +123,10 @@ typedef struct CourseSegment {
     /* 0x38 */ struct CourseSegment* prev;
     /* 0x3C */ struct unk_36ED0* unk_3C;
     /* 0x40 */ struct unk_36ED0* unk_40;
-    /* 0x44 */ struct unk_802D3D38* unk_44;
-    /* 0x48 */ struct unk_802D3D38* unk_48;
-    /* 0x4C */ struct unk_802D3978* unk_4C;
-    /* 0x50 */ struct unk_802D3978* unk_50;
+    /* 0x44 */ struct Jump* unk_44;
+    /* 0x48 */ struct Jump* unk_48;
+    /* 0x4C */ struct Landmine* unk_4C;
+    /* 0x50 */ struct Landmine* unk_50;
     /* 0x54 */ struct unk_802D3E38* unk_54;
     /* 0x58 */ struct unk_802D3E38* unk_58;
     /* 0x5C */ s8 unk_5C[0x8]; // likely a pair of unk_802D2D78 struct ptrs
@@ -184,63 +184,68 @@ typedef struct unk_36ED0 {
     s16 unk_5E;
 } unk_36ED0; // size = 0x60
 
-typedef struct unk_802D3D38 {
-    Vec3f unk_00;
-    Mtx3F unk_0C;
-    Vec3f unk_30;
+typedef struct Jump {
+    Vec3f pos;
+    Mtx3F basis;
+    Vec3f dimensions; // width, height, depth
     s8 unk_3C[0x4];
-} unk_802D3D38; // size = 0x40
+} Jump; // size = 0x40
 
-typedef struct unk_802D3978 {
+typedef struct Landmine {
     // s32 unk_00; Field Removed in DD Version
-    Vec3f unk_04;
+    Vec3f pos;
     s8 unk_10[0x4];
-} unk_802D3978; // size = 0x10
+} Landmine; // size = 0x10
 
 typedef struct unk_802D3E38 {
     s32 effectType;
-    f32 unk_04;
-    f32 unk_08;
+    f32 segmentTValueStart;
+    f32 segmentTValueEnd;
     Vec3f unk_0C;
     Vec3f unk_18;
     s8 unk_24[0x4];
 } unk_802D3E38; // size = 0x28
 
-typedef struct unk_8006FF90_arg_1 {
+#define DASH_LATERAL_OFFSET(effect) ((effect)->rightEdgeDistance)
+#define DASH_LATERAL_OFFSET2(effect) ((effect)->leftEdgeDistance)
+#define DASH_ANGLE(effect) ((effect)->rightEdgeDistance)
+#define DASH_ANGLE2(effect) ((effect)->leftEdgeDistance)
+
+typedef struct CourseEffect {
     s32 segmentIndex;
     s32 effectType;
-    f32 unk_08;
-    f32 unk_0C;
-    f32 unk_10;
-    f32 unk_14;
-} unk_8006FF90_arg_1; // size = 0x18
+    f32 segmentTValueStart;
+    f32 segmentTValueEnd;
+    f32 rightEdgeDistance;
+    f32 leftEdgeDistance;
+} CourseEffect; // size = 0x18
 
-typedef struct unk_802D1B60_unk_00 {
+typedef struct CourseFeature {
     s32 featureType;
     s32 segmentIndex;
-    f32 unk_08;
-    f32 unk_0C;
-    Vec3f unk_10;
-} unk_802D1B60_unk_00; // size = 0x1C
+    f32 segmentTValue;
+    f32 lateralOffset;
+    Vec3f dimensions;
+} CourseFeature; // size = 0x1C
 
-typedef struct unk_802D1B60 {
-    unk_802D1B60_unk_00* unk_00;
-    s32 unk_04;
-    s32 unk_08;
-    s32 unk_0C;
-} unk_802D1B60;
+typedef struct CourseFeaturesInfo {
+    CourseFeature* features;
+    s32 featureCount;
+    s32 landmineCount;
+    s32 jumpCount;
+} CourseFeaturesInfo;
 
-typedef struct unk_802D08E0 {
-    Vec3f unk_00;
-    Mtx3F unk_0C;
-    f32 unk_30;
+typedef struct CourseDecoration {
+    Vec3f pos;
+    Mtx3F basis;
+    f32 scale;
     struct unk_36ED0* unk_34;
-} unk_802D08E0; // size = 0x38
+} CourseDecoration; // size = 0x38
 
-typedef struct unk_802D2D70 {
-    unk_8006FF90_arg_1* unk_00;
+typedef struct CourseEffectsInfo {
+    CourseEffect* effects;
     s32 count;
-} unk_802D2D70;
+} CourseEffectsInfo;
 
 typedef struct unk_802D2D78 {
     s32 effectType;
@@ -251,7 +256,7 @@ typedef struct unk_802D2D78 {
 
 typedef struct Racer_unk_C {
     CourseSegment* courseSegment;
-    f32 unk_04;
+    f32 segmentTValue;
     f32 unk_08;
     Vec3f unk_0C;
     f32 unk_18;
@@ -760,7 +765,7 @@ typedef struct unk_801413F0 {
 
 typedef struct unk_807B3C20 {
     CourseSegment unk_0000[64];
-    s32 unk_2900;
+    s32 controlPointCount;
 } unk_807B3C20; // size 0x2904
 
 typedef struct unk_80128690 {
@@ -772,8 +777,8 @@ typedef struct unk_80128690 {
 typedef struct unk_8011C220 {
     s32 unk_00;
     f32 unk_04;
-    Vec3f unk_08;
-    Mtx3F unk_14;
+    Vec3f pos;
+    Mtx3F basis;
 } unk_8011C220; // size = 0x38
 
 typedef struct unk_800D6CA0 {
