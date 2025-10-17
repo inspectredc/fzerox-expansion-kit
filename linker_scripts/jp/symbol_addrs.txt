@@ -265,6 +265,7 @@ gCourseEffects = 0x807BCB68;
 gCourseEffectsInfo = 0x807BDD68;
 gLandmines = 0x807BF570;
 gJumps = 0x807BF870;
+gEffects = 0x807BFA70;
 
 D_807C6F0C = 0x807C6F0C;
 

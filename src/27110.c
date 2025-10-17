@@ -3197,13 +3197,13 @@ void func_80721D78(Racer* racer, Controller* controller) {
     Vec3f sp10C;
     Mtx3F spE8;
     f32 spE4;
-    CourseSegment* temp_v1;
-    unk_802D3E38* temp_a0;
-    unk_802D3E38* var_v0;
-    Landmine* var_v0_2;
-    Landmine* temp2;
-    Jump* var_v0_3;
-    Jump* temp;
+    CourseSegment* segment;
+    Effect* effectsEnd;
+    Effect* effect;
+    Landmine* landmine;
+    Landmine* landminesEnd;
+    Jump* jump;
+    Jump* jumpsEnd;
     u16 buttonReleased; // spC6
     u16 buttonCurrent;
     u16 buttonPressed;
@@ -3242,68 +3242,68 @@ void func_80721D78(Racer* racer, Controller* controller) {
     sp10C.x = racer->unk_0C.unk_34.x + racer->velocity.x;
     sp10C.y = racer->unk_0C.unk_34.y + racer->velocity.y;
     sp10C.z = racer->unk_0C.unk_34.z + racer->velocity.z;
-    temp_v1 = racer->unk_0C.courseSegment;
+    segment = racer->unk_0C.courseSegment;
 
     racer->stateFlags &= ~COURSE_EFFECT_MASK;
-    var_v0 = temp_v1->unk_54;
-    if ((var_v0 != NULL) && !(racer->stateFlags & RACER_STATE_AIRBORNE)) {
-        temp_a0 = temp_v1->unk_58;
-        if (temp_v1->trackSegmentInfo & TRACK_FLAG_8000000) {
+    effect = segment->effectsStart;
+    if ((effect != NULL) && !(racer->stateFlags & RACER_STATE_AIRBORNE)) {
+        effectsEnd = segment->effectsEnd;
+        if (segment->trackSegmentInfo & TRACK_FLAG_8000000) {
             var_fa1 = (racer->unk_0C.unk_28.x * racer->unk_24C.z.x) + (racer->unk_0C.unk_28.y * racer->unk_24C.z.y) +
                       (racer->unk_0C.unk_28.z * racer->unk_24C.z.z) + (0.5f * (racer->unk_274 - racer->unk_270));
 
             do {
-                if (var_fa1 < var_v0->unk_0C.x) {
+                if (var_fa1 < effect->unk_0C.x) {
                     continue;
                 }
-                if (var_v0->unk_18.x < var_fa1) {
+                if (effect->unk_18.x < var_fa1) {
                     continue;
                 }
-                if (racer->unk_0C.segmentTValue < var_v0->segmentTValueStart) {
+                if (racer->unk_0C.segmentTValue < effect->segmentTValueStart) {
                     continue;
                 }
-                if (var_v0->segmentTValueEnd < racer->unk_0C.segmentTValue) {
+                if (effect->segmentTValueEnd < racer->unk_0C.segmentTValue) {
                     continue;
                 }
-                racer->stateFlags |= var_v0->effectType;
+                racer->stateFlags |= effect->effectType;
                 break;
-            } while (++var_v0 != temp_a0);
+            } while (++effect != effectsEnd);
 
         } else {
 
             do {
-                if (racer->unk_0C.segmentTValue < var_v0->segmentTValueStart) {
+                if (racer->unk_0C.segmentTValue < effect->segmentTValueStart) {
                     continue;
                 }
 
-                if (var_v0->segmentTValueEnd < racer->unk_0C.segmentTValue) {
+                if (effect->segmentTValueEnd < racer->unk_0C.segmentTValue) {
                     continue;
                 }
 
-                if ((((racer->unk_0C.unk_28.y * var_v0->unk_0C.z) - (racer->unk_0C.unk_28.z * var_v0->unk_0C.y)) *
+                if ((((racer->unk_0C.unk_28.y * effect->unk_0C.z) - (racer->unk_0C.unk_28.z * effect->unk_0C.y)) *
                      racer->unk_24C.x.x) +
-                        (((racer->unk_0C.unk_28.z * var_v0->unk_0C.x) - (racer->unk_0C.unk_28.x * var_v0->unk_0C.z)) *
+                        (((racer->unk_0C.unk_28.z * effect->unk_0C.x) - (racer->unk_0C.unk_28.x * effect->unk_0C.z)) *
                          racer->unk_24C.x.y) +
-                        (((racer->unk_0C.unk_28.x * var_v0->unk_0C.y) - (racer->unk_0C.unk_28.y * var_v0->unk_0C.x)) *
+                        (((racer->unk_0C.unk_28.x * effect->unk_0C.y) - (racer->unk_0C.unk_28.y * effect->unk_0C.x)) *
                          racer->unk_24C.x.z) <
                     0.0f) {
                     continue;
                 }
 
-                if ((((var_v0->unk_18.y * racer->unk_0C.unk_28.z) - (var_v0->unk_18.z * racer->unk_0C.unk_28.y)) *
+                if ((((effect->unk_18.y * racer->unk_0C.unk_28.z) - (effect->unk_18.z * racer->unk_0C.unk_28.y)) *
                      racer->unk_24C.x.x) +
-                        (((var_v0->unk_18.z * racer->unk_0C.unk_28.x) - (var_v0->unk_18.x * racer->unk_0C.unk_28.z)) *
+                        (((effect->unk_18.z * racer->unk_0C.unk_28.x) - (effect->unk_18.x * racer->unk_0C.unk_28.z)) *
                          racer->unk_24C.x.y) +
-                        (((var_v0->unk_18.x * racer->unk_0C.unk_28.y) - (var_v0->unk_18.y * racer->unk_0C.unk_28.x)) *
+                        (((effect->unk_18.x * racer->unk_0C.unk_28.y) - (effect->unk_18.y * racer->unk_0C.unk_28.x)) *
                          racer->unk_24C.x.z) <
                     0.0f) {
                     continue;
                 }
 
-                racer->stateFlags |= var_v0->effectType;
+                racer->stateFlags |= effect->effectType;
                 break;
 
-            } while (++var_v0 != temp_a0);
+            } while (++effect != effectsEnd);
         }
     }
     if ((sp12C > 0.1f) || (sp12C < -0.1f)) {
@@ -3452,86 +3452,86 @@ void func_80721D78(Racer* racer, Controller* controller) {
         }
     }
 
-    if (!(racer->stateFlags & RACER_STATE_FLAGS_10000)) {
-        temp_v1 = racer->unk_0C.courseSegment;
-        var_v0_2 = temp_v1->unk_4C;
-        if (var_v0_2 != NULL) {
-            temp2 = temp_v1->unk_50;
+    if (!(racer->stateFlags & RACER_STATE_TOUCHING_LANDMINE)) {
+        segment = racer->unk_0C.courseSegment;
+        landmine = segment->landminesStart;
+        if (landmine != NULL) {
+            landminesEnd = segment->landminesEnd;
             do {
-                var_fs1 = var_v0_2->pos.x - racer->unk_0C.unk_34.x;
-                var_fs0 = var_v0_2->pos.y - racer->unk_0C.unk_34.y;
-                var_ft4 = var_v0_2->pos.z - racer->unk_0C.unk_34.z;
+                var_fs1 = landmine->pos.x - racer->unk_0C.unk_34.x;
+                var_fs0 = landmine->pos.y - racer->unk_0C.unk_34.y;
+                var_ft4 = landmine->pos.z - racer->unk_0C.unk_34.z;
                 if ((SQ(var_fs1) + SQ(var_fs0) + SQ(var_ft4)) < 900.0f) {
                     racer->acceleration.x += (15.0f * racer->unk_B4.x);
                     racer->acceleration.y += (15.0f * racer->unk_B4.y);
                     racer->acceleration.z += (15.0f * racer->unk_B4.z);
-                    racer->stateFlags |= RACER_STATE_FLAGS_10000;
+                    racer->stateFlags |= RACER_STATE_TOUCHING_LANDMINE;
                     func_8071EE74(racer, 12.5f);
                     if (D_807A16E0 != 0) {
-                        Audio_PlayerTriggerSEStart(racer->id, NA_SE_1);
+                        Audio_PlayerTriggerSEStart(racer->id, NA_SE_HIT_LANDMINE);
                     }
                     break;
                 }
-            } while (++var_v0_2 != temp2);
+            } while (++landmine != landminesEnd);
         }
     }
 
-    if (!(racer->stateFlags & RACER_STATE_FLAGS_200000)) {
-        temp_v1 = racer->unk_0C.courseSegment;
-        var_v0_3 = temp_v1->unk_44;
-        if (var_v0_3 != NULL) {
-            temp = temp_v1->unk_48;
+    if (!(racer->stateFlags & RACER_STATE_JUMP_BOOST)) {
+        segment = racer->unk_0C.courseSegment;
+        jump = segment->jumpsStart;
+        if (jump != NULL) {
+            jumpsEnd = segment->jumpsEnd;
             do {
-                var_fs1 = racer->unk_0C.unk_34.x - var_v0_3->pos.x;
-                var_fs0 = racer->unk_0C.unk_34.y - var_v0_3->pos.y;
-                var_ft4 = racer->unk_0C.unk_34.z - var_v0_3->pos.z;
+                var_fs1 = racer->unk_0C.unk_34.x - jump->pos.x;
+                var_fs0 = racer->unk_0C.unk_34.y - jump->pos.y;
+                var_ft4 = racer->unk_0C.unk_34.z - jump->pos.z;
                 var_fa1 =
-                    (var_v0_3->basis.x.x * var_fs1) + (var_v0_3->basis.x.y * var_fs0) + (var_v0_3->basis.x.z * var_ft4);
+                    (jump->basis.x.x * var_fs1) + (jump->basis.x.y * var_fs0) + (jump->basis.x.z * var_ft4);
 
                 if (var_fa1 < 0.0f) {
                     continue;
                 }
 
-                if (var_v0_3->dimensions.z < var_fa1) {
+                if (jump->dimensions.z < var_fa1) {
                     continue;
                 }
 
                 var_fa1 =
-                    (var_v0_3->basis.z.x * var_fs1) + (var_v0_3->basis.z.y * var_fs0) + (var_v0_3->basis.z.z * var_ft4);
+                    (jump->basis.z.x * var_fs1) + (jump->basis.z.y * var_fs0) + (jump->basis.z.z * var_ft4);
 
                 if (var_fa1 < 0.0f) {
                     continue;
                 }
 
-                if (var_v0_3->dimensions.x < var_fa1) {
+                if (jump->dimensions.x < var_fa1) {
                     continue;
                 }
 
                 var_fa1 =
-                    (var_v0_3->basis.y.x * var_fs1) + (var_v0_3->basis.y.y * var_fs0) + (var_v0_3->basis.y.z * var_ft4);
+                    (jump->basis.y.x * var_fs1) + (jump->basis.y.y * var_fs0) + (jump->basis.y.z * var_ft4);
 
                 if (var_fa1 < 0.0f) {
                     continue;
                 }
 
-                if (var_v0_3->dimensions.y < var_fa1) {
+                if (jump->dimensions.y < var_fa1) {
                     continue;
                 }
 
-                racer->stateFlags |= RACER_STATE_FLAGS_200000;
+                racer->stateFlags |= RACER_STATE_JUMP_BOOST;
                 racer->unk_1DC = (racer->speed * 0.3f) + 0.5f;
                 if ((racer->id < gNumPlayers) && (D_807A16E0 != 0)) {
                     Audio_PlayerTriggerSEStart(racer->id, NA_SE_55);
                 }
                 break;
 
-            } while (++var_v0_3 != temp);
+            } while (++jump != jumpsEnd);
         }
     }
     racer->acceleration.x += (-1.0f * racer->unk_A8.x);
     racer->acceleration.y += (-1.0f * racer->unk_A8.y);
     racer->acceleration.z += (-1.0f * racer->unk_A8.z);
-    if (racer->stateFlags & RACER_STATE_FLAGS_200000) {
+    if (racer->stateFlags & RACER_STATE_JUMP_BOOST) {
         racer->acceleration.x += (racer->unk_1DC * racer->unk_B4.x);
         racer->acceleration.y += (racer->unk_1DC * racer->unk_B4.y);
         racer->acceleration.z += (racer->unk_1DC * racer->unk_B4.z);
@@ -3549,7 +3549,7 @@ void func_80721D78(Racer* racer, Controller* controller) {
             racer->acceleration.y += (racer->unk_198 * racer->unk_19C.y);
             racer->acceleration.z += (racer->unk_198 * racer->unk_19C.z);
             if (racer->unk_1DC < 0.5f) {
-                racer->stateFlags &= ~(RACER_STATE_FLAGS_200000 | RACER_STATE_FLAGS_10000);
+                racer->stateFlags &= ~(RACER_STATE_JUMP_BOOST | RACER_STATE_TOUCHING_LANDMINE);
             }
         } else {
             racer->unk_198 = 0.0f;
@@ -4041,24 +4041,24 @@ void func_80721D78(Racer* racer, Controller* controller) {
                              var_fa1) == 0) {
             sp128 = racer->lapDistance;
             racer->lapDistance = func_i2_800B1F68(&racer->unk_0C);
-            temp_v1 = racer->unk_0C.courseSegment;
+            segment = racer->unk_0C.courseSegment;
 
             racer->unk_270 =
-                (racer->unk_0C.unk_08 * (temp_v1->next->radiusLeft - temp_v1->radiusLeft)) + temp_v1->radiusLeft;
+                (racer->unk_0C.unk_08 * (segment->next->radiusLeft - segment->radiusLeft)) + segment->radiusLeft;
             racer->unk_274 =
-                (racer->unk_0C.unk_08 * (temp_v1->next->radiusRight - temp_v1->radiusRight)) + temp_v1->radiusRight;
+                (racer->unk_0C.unk_08 * (segment->next->radiusRight - segment->radiusRight)) + segment->radiusRight;
 
             var_fa1 = 1.0f / racer->unk_0C.unk_18;
             racer->unk_24C.x.x = racer->unk_0C.unk_0C.x * var_fa1;
             racer->unk_24C.x.y = racer->unk_0C.unk_0C.y * var_fa1;
             racer->unk_24C.x.z = racer->unk_0C.unk_0C.z * var_fa1;
 
-            racer->unk_24C.y.x = (racer->unk_0C.unk_08 * (temp_v1->next->up.x - temp_v1->up.x)) + temp_v1->up.x;
-            racer->unk_24C.y.y = (racer->unk_0C.unk_08 * (temp_v1->next->up.y - temp_v1->up.y)) + temp_v1->up.y;
-            racer->unk_24C.y.z = (racer->unk_0C.unk_08 * (temp_v1->next->up.z - temp_v1->up.z)) + temp_v1->up.z;
+            racer->unk_24C.y.x = (racer->unk_0C.unk_08 * (segment->next->up.x - segment->up.x)) + segment->up.x;
+            racer->unk_24C.y.y = (racer->unk_0C.unk_08 * (segment->next->up.y - segment->up.y)) + segment->up.y;
+            racer->unk_24C.y.z = (racer->unk_0C.unk_08 * (segment->next->up.z - segment->up.z)) + segment->up.z;
 
             if ((racer->unk_24C.y.x == 0.0f) && (racer->unk_24C.y.y == 0.0f) && (racer->unk_24C.y.z == 0.0f)) {
-                func_i2_800B0FAC(temp_v1, &racer->unk_24C);
+                func_i2_800B0FAC(segment, &racer->unk_24C);
             } else {
                 racer->unk_24C.z.x =
                     (racer->unk_24C.y.y * racer->unk_24C.x.z) - (racer->unk_24C.y.z * racer->unk_24C.x.y);

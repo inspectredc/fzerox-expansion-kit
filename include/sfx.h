@@ -5,7 +5,7 @@
 
 typedef enum SfxId {
     /*  0 */ NA_SE_NONE,
-    /*  1 */ NA_SE_1,
+    /*  1 */ NA_SE_HIT_LANDMINE,
     /*  2 */ NA_SE_2,
     /*  3 */ NA_SE_3,
     /*  4 */ NA_SE_4,

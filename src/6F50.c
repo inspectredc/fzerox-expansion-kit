@@ -118,8 +118,8 @@ void Course_LandminesViewInteractDataInit(void) {
     }
 
     for (i = 0; i < gCurrentCourseInfo->segmentCount; i++) {
-        gCurrentCourseInfo->courseSegments[i].unk_4C = NULL;
-        gCurrentCourseInfo->courseSegments[i].unk_50 = NULL;
+        gCurrentCourseInfo->courseSegments[i].landminesStart = NULL;
+        gCurrentCourseInfo->courseSegments[i].landminesEnd = NULL;
     }
 
     for (i = 0; i < gCurrentCourseInfo->segmentCount; i++) {
@@ -130,7 +130,7 @@ void Course_LandminesViewInteractDataInit(void) {
             }
 
             if (i == feature->segmentIndex) {
-                gCurrentCourseInfo->courseSegments[i].unk_50 = &gLandmines[j + 1];
+                gCurrentCourseInfo->courseSegments[i].landminesEnd = &gLandmines[j + 1];
             }
             j++;
         }
@@ -147,7 +147,7 @@ void Course_LandminesViewInteractDataInit(void) {
             }
 
             if (i == feature->segmentIndex) {
-                gCurrentCourseInfo->courseSegments[i].unk_4C = &gLandmines[j - 1];
+                gCurrentCourseInfo->courseSegments[i].landminesStart = &gLandmines[j - 1];
             }
             j--;
         }
@@ -195,7 +195,7 @@ extern unk_36ED0 D_802BE5C0[];
 extern CourseDecoration gCourseDecorations[];
 extern CourseFeature gCourseFeatures[];
 extern Mtx D_8022F640[];
-extern unk_802D2D78 D_807BDD70[][0xC0];
+extern unk_802D2D78 D_807BDD70[2][0xC0];
 extern CourseEffect gCourseEffects[];
 extern CourseEffectsInfo gCourseEffectsInfo;
 extern s32 D_8079A35C;
@@ -358,7 +358,7 @@ Gfx* Course_FeaturesDraw(Gfx* gfx, s32 arg1) {
             sp1BC = D_80128C94->unk_E5A0;
             sp1D4 = -1;
             for (i = 0; i < sp1A8->count; i++) {
-                var_s4 = &D_807BDD70[D_8079A35C * 0xC0 + i];
+                var_s4 = &D_807BDD70[D_8079A35C][i];
                 if (D_800D6CA0.unk_0C == gCourseEffects[i].segmentIndex && gCreateOption == CREATE_OPTION_PARTS) {
                     if (sp1D4 != 1) {
                         gSPDisplayList(gfx++, D_9014C20);
@@ -682,8 +682,8 @@ void Course_JumpsViewInteractDataInit(void) {
     }
 
     for (i = 0; i < gCurrentCourseInfo->segmentCount; i++) {
-        gCurrentCourseInfo->courseSegments[i].unk_44 = NULL;
-        gCurrentCourseInfo->courseSegments[i].unk_48 = NULL;
+        gCurrentCourseInfo->courseSegments[i].jumpsStart = NULL;
+        gCurrentCourseInfo->courseSegments[i].jumpsEnd = NULL;
     }
 
     for (i = 0; i < gCurrentCourseInfo->segmentCount; i++) {
@@ -694,7 +694,7 @@ void Course_JumpsViewInteractDataInit(void) {
             }
 
             if (i == feature->segmentIndex) {
-                gCurrentCourseInfo->courseSegments[i].unk_48 = &gJumps[j + 1];
+                gCurrentCourseInfo->courseSegments[i].jumpsEnd = &gJumps[j + 1];
             }
             j++;
         }
@@ -710,7 +710,7 @@ void Course_JumpsViewInteractDataInit(void) {
             }
 
             if (i == feature->segmentIndex) {
-                gCurrentCourseInfo->courseSegments[i].unk_44 = &gJumps[j - 1];
+                gCurrentCourseInfo->courseSegments[i].jumpsStart = &gJumps[j - 1];
             }
             j--;
         }
@@ -1175,7 +1175,7 @@ f32 sDashScaleForward = 150.0f;
 f32 sDashScaleWidth = 50.0f;
 f32 sDashArrowPointScale = 50.0f;
 
-extern unk_802D3E38 D_807BFA70[];
+extern Effect gEffects[];
 
 void Course_FlatDashVerticesInit(s32 effectIndex, CourseEffect* effect, Vtx** vtxs) {
     Vtx* vtx;
@@ -1221,9 +1221,9 @@ void Course_FlatDashVerticesInit(s32 effectIndex, CourseEffect* effect, Vtx** vt
     vtx->v.tc[1] = 0;
 
     t += sDashScaleForward / forwardMagnitude;
-    D_807BFA70[effectIndex].segmentTValueEnd = t;
-    D_807BFA70[effectIndex].unk_0C.x = DASH_LATERAL_OFFSET(effect) - sDashScaleWidth;
-    D_807BFA70[effectIndex].unk_18.x = DASH_LATERAL_OFFSET(effect) + sDashScaleWidth;
+    gEffects[effectIndex].segmentTValueEnd = t;
+    gEffects[effectIndex].unk_0C.x = DASH_LATERAL_OFFSET(effect) - sDashScaleWidth;
+    gEffects[effectIndex].unk_18.x = DASH_LATERAL_OFFSET(effect) + sDashScaleWidth;
 
     pos.x = pos.x + segmentBasis.x.x * sDashScaleForward;
     pos.y = pos.y + segmentBasis.x.y * sDashScaleForward;
@@ -1332,7 +1332,7 @@ void Course_CurvedDashVerticesInit(s32 effectIndex, CourseEffect* effect, Vtx** 
     spB0.z = vtx->v.ob[2] - spD4.z;
     Math_VectorSetScale(&spB0, 1.0f);
 
-    D_807BFA70[effectIndex].unk_0C = spB0;
+    gEffects[effectIndex].unk_0C = spB0;
     vtx++;
 
     vtx->v.ob[0] = Math_Round(pos.x - (segmentBasis.z.x * 50.0f));
@@ -1344,10 +1344,10 @@ void Course_CurvedDashVerticesInit(s32 effectIndex, CourseEffect* effect, Vtx** 
     spB0.y = vtx->v.ob[1] - spD4.y;
     spB0.z = vtx->v.ob[2] - spD4.z;
     Math_VectorSetScale(&spB0, 1.0f);
-    D_807BFA70[effectIndex].unk_18 = spB0;
-    D_807BFA70[effectIndex].segmentTValueStart = t;
+    gEffects[effectIndex].unk_18 = spB0;
+    gEffects[effectIndex].segmentTValueStart = t;
     t += (150.0f / forwardMagnitude);
-    D_807BFA70[effectIndex].segmentTValueEnd = t;
+    gEffects[effectIndex].segmentTValueEnd = t;
     pos.x = pos.x + segmentBasis.x.x * 150.0f;
     pos.y = pos.y + segmentBasis.x.y * 150.0f;
     pos.z = pos.z + segmentBasis.x.z * 150.0f;
@@ -1675,11 +1675,11 @@ void Course_EffectsViewInteractDataInit(bool arg0) {
 
         D_807BDD70[D_8079F93C][i].effectType = effect->effectType;
         D_807BDD70[D_8079F93C][i].vtxStart = vtx;
-        D_807BFA70[i].effectType = effect->effectType;
-        D_807BFA70[i].segmentTValueStart = effect->segmentTValueStart;
-        D_807BFA70[i].segmentTValueEnd = effect->segmentTValueEnd;
-        D_807BFA70[i].unk_0C.x = effect->rightEdgeDistance;
-        D_807BFA70[i].unk_18.x = effect->leftEdgeDistance;
+        gEffects[i].effectType = effect->effectType;
+        gEffects[i].segmentTValueStart = effect->segmentTValueStart;
+        gEffects[i].segmentTValueEnd = effect->segmentTValueEnd;
+        gEffects[i].unk_0C.x = effect->rightEdgeDistance;
+        gEffects[i].unk_18.x = effect->leftEdgeDistance;
         t = effect->segmentTValueStart;
 
         if (effect->effectType == COURSE_EFFECT_DASH) {
@@ -1740,15 +1740,15 @@ void Course_EffectsViewInteractDataInit(bool arg0) {
     }
 
     for (i = 0; i < gCurrentCourseInfo->segmentCount; i++) {
-        gCurrentCourseInfo->courseSegments[i].unk_54 = NULL;
-        gCurrentCourseInfo->courseSegments[i].unk_58 = NULL;
+        gCurrentCourseInfo->courseSegments[i].effectsStart = NULL;
+        gCurrentCourseInfo->courseSegments[i].effectsEnd = NULL;
     }
 
     for (i = 0; i < gCurrentCourseInfo->segmentCount; i++) {
         for (j = 0; j < effectsInfo->count; j++) {
             effect = &effectsInfo->effects[j];
             if (i == effect->segmentIndex) {
-                gCurrentCourseInfo->courseSegments[i].unk_58 = &D_807BFA70[j + 1];
+                gCurrentCourseInfo->courseSegments[i].effectsEnd = &gEffects[j + 1];
             }
         }
     }
@@ -1757,7 +1757,7 @@ void Course_EffectsViewInteractDataInit(bool arg0) {
         for (j = effectsInfo->count - 1; j >= 0; j--) {
             effect = &effectsInfo->effects[j];
             if (i == effect->segmentIndex) {
-                gCurrentCourseInfo->courseSegments[i].unk_54 = &D_807BFA70[j];
+                gCurrentCourseInfo->courseSegments[i].effectsStart = &gEffects[j];
             }
         }
     }
