@@ -45,7 +45,7 @@ Matrix_SetFrustrum = 0x806F9384;
 Matrix_SetOrtho = 0x806F9628;
 
 Course_FeatureIsDecorational = 0x806F9750;
-Course_FeaturesDraw = 0x806F9DB4;
+Course_GadgetsDraw = 0x806F9DB4;
 Course_GetBgm = 0x80703228;
 
 SLForceWritebackDCacheAll = 0x80704D74;
@@ -111,7 +111,8 @@ gRandMask1 = 0x8076C944;
 gRandSeed2 = 0x8076C948;
 gRandMask2 = 0x8076C94C;
 
-sCourseDecorationTextureLoadState = 0x8079F938;
+gInCourseEditTestRun = 0x8076C950;
+gInCourseEditor = 0x8076C954;
 sCourseDecorationDrawFuncs = 0x8076C980;
 
 gSelectedMode = 0x8076CC50;
@@ -194,6 +195,8 @@ gSinTable = 0x8079A8A0; // size:0x4000
 sDefaultMtx = 0x8079E8A0;
 sDefaultMtxF = 0x8079E8E0;
 
+sCourseDecorationTextureLoadState = 0x8079F938;
+
 gSegments = 0x8079FA40;
 
 gCharacterLastEngine = 0x8079FAA0;
@@ -263,6 +266,7 @@ gCourseFeatures = 0x807BBE38;
 gCourseFeaturesInfo = 0x807BCB58;
 gCourseEffects = 0x807BCB68;
 gCourseEffectsInfo = 0x807BDD68;
+gEffectsDrawData = 0x807BDD70;
 gLandmines = 0x807BF570;
 gJumps = 0x807BF870;
 gEffects = 0x807BFA70;

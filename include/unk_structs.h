@@ -48,11 +48,14 @@ typedef struct unk_807C6EA8 {
 } unk_807C6EA8;
 
 typedef struct unk_80225800 {
-    Mtx unk_000;
-    Vtx unk_040[4][6];
-    s8 pad_1C0[0x180];
-    Vtx unk_1C0[48][5];
-} unk_80225800; // size = 0x10C0
+    /* 0x0000 */ Mtx unk_000;
+    /* 0x0040 */ Vtx jumpVtx[8 * 6];
+    /* 0x0340 */ Vtx landmineVtx[48 * 5];
+    /* 0x1240 */ Vtx terrainEffectVtx[0x800];
+    /* 0x1A40 */ Vtx dashVtx[0x80];
+    /* 0x2240 */ s8 pad_2240[0x400];
+    /* 0x2640 */ Mtx decorationMtx[32];
+} unk_80225800; // size = 0x2E40
 
 typedef struct Player {
     s32 id;
@@ -129,7 +132,7 @@ typedef struct CourseSegment {
     /* 0x50 */ struct Landmine* landminesEnd;
     /* 0x54 */ struct Effect* effectsStart;
     /* 0x58 */ struct Effect* effectsEnd;
-    /* 0x5C */ s8 unk_5C[0x8]; // likely a pair of unk_802D2D78 struct ptrs
+    /* 0x5C */ s8 unk_5C[0x8]; // likely a pair of EffectDrawData struct ptrs
     /* 0x64 */ f32 unk_64;
     /* 0x68 */ f32 unk_68;
     /* 0x6C */ f32 unk_6C;
@@ -161,8 +164,8 @@ typedef struct CourseInfo {
 
 typedef struct unk_36ED0 {
     s32 trackSegmentInfo;
-    s32 unk_04;
-    f32 unk_08;
+    s32 segmentIndex;
+    f32 segmentTValue;
     f32 unk_0C;
     s32 unk_10;
     Vec3f unk_14;
@@ -247,12 +250,12 @@ typedef struct CourseEffectsInfo {
     s32 count;
 } CourseEffectsInfo;
 
-typedef struct unk_802D2D78 {
+typedef struct EffectDrawData {
     s32 effectType;
     Vtx* vtxStart;
     Vtx* vtxEnd;
     s8 unk_0C[0x4];
-} unk_802D2D78; // size = 0x10
+} EffectDrawData; // size = 0x10
 
 typedef struct Racer_unk_C {
     CourseSegment* courseSegment;
@@ -703,64 +706,61 @@ typedef struct unk_8003A5D8 {
 } unk_8003A5D8; //size = 0x24
 
 typedef struct unk_80128C94 {
-    Mtx unk_0000;
-    Mtx unk_0040;
-    s8 unk_0080[0x80];
-    Mtx unk_0100;
-    s8 unk_0140[0x40];
-    Vtx unk_0180[64 * 6];
-    Vtx unk_1980[898];
-    s8 unk_51A0[0x200];
-    Vtx unk_53A0[0x30];
-    Vtx unk_56A0[0x30];
-    s8 unk_59A0[0xC00];
-    Vtx unk_65A0[0x800];
-    Vtx unk_E5A0[0x80];
-    s8 unk_EDA0[0x400];
-    Mtx unk_F1A0[0x1];
-    s8 pad_F1E0[0x7C0];
-    Gfx unk_F9A0[1];
-    s8 pad_F9A8[0x1720];
-    Gfx unk_110C8[0x13C8];
+    /* 0x00000 */ Mtx unk_0000;
+    /* 0x00040 */ Mtx unk_0040;
+    /* 0x00080 */ s8 unk_0080[0x80];
+    /* 0x00100 */ Mtx unk_0100;
+    /* 0x00140 */ s8 unk_0140[0x40];
+    /* 0x00180 */ Vtx unk_0180[64 * 6];
+    /* 0x01980 */ Vtx unk_1980[898];
+    /* 0x051A0 */ s8 unk_51A0[0x200];
+    /* 0x053A0 */ Vtx jumpVtx[8 * 6];
+    /* 0x056A0 */ Vtx landmineVtx[5 * 48];
+    /* 0x065A0 */ Vtx terrainEffectVtx[0x800];
+    /* 0x0E5A0 */ Vtx dashVtx[0x80];
+    /* 0x0EDA0 */ s8 unk_EDA0[0x400];
+    /* 0x0F1A0 */ Mtx decorationMtx[0x20];
+    /* 0x0F9A0 */ Gfx unk_F9A0[741];
+    /* 0x110C8 */ Gfx unk_110C8[5064];
 } unk_80128C94; // size = 0x1AF08
 
 typedef struct MenuDropItem {
-    void* backgroundTex;
-    void* backgroundSelectedTex;
-    void* contentsTex;
-    void* subContentsRGBATex;
-    struct MenuWidget* widget;
-    void (*action)(void);
-    u16 contentsWidth;
-    u16 contentsHeight;
-    void* unk_1C;
-    void* subContentsI4Tex;
+    /* 0x00 */ void* backgroundTex;
+    /* 0x04 */ void* backgroundSelectedTex;
+    /* 0x08 */ void* contentsTex;
+    /* 0x0C */ void* subContentsRGBATex;
+    /* 0x10 */ struct MenuWidget* widget;
+    /* 0x14 */ void (*action)(void);
+    /* 0x18 */ u16 contentsWidth;
+    /* 0x1A */ u16 contentsHeight;
+    /* 0x1C */ void* unk_1C;
+    /* 0x20 */ void* subContentsI4Tex;
 } MenuDropItem; // size = 0x24
 
 typedef struct MenuWidget {
-    s32 numItems;
-    s32 openIndex;
-    s32 highlightedIndex;
-    s32 left;
-    s32 top;
-    s32 itemXOffset;
-    s32 itemYOffset;
-    MenuDropItem* menuItems;
-    s32 cursorMinPosX;
-    s32 cursorMinPosY;
-    s32 cursorMaxPosX;
-    s32 cursorMaxPosY;
-    s32* option;
+    /* 0x00 */ s32 numItems;
+    /* 0x04 */ s32 openIndex;
+    /* 0x08 */ s32 highlightedIndex;
+    /* 0x0C */ s32 left;
+    /* 0x10 */ s32 top;
+    /* 0x14 */ s32 itemXOffset;
+    /* 0x18 */ s32 itemYOffset;
+    /* 0x1C */ MenuDropItem* menuItems;
+    /* 0x20 */ s32 cursorMinPosX;
+    /* 0x24 */ s32 cursorMinPosY;
+    /* 0x28 */ s32 cursorMaxPosX;
+    /* 0x2C */ s32 cursorMaxPosY;
+    /* 0x30 */ s32* option;
 } MenuWidget; // size = 0x34
 
 typedef struct unk_80140E60 {
-    s32 unk_00; // type
-    s32 unk_04; // value
+    /* 0x00 */ s32 unk_00; // type
+    /* 0x04 */ s32 unk_04; // value
 } unk_80140E60; // size = 0x8
 
 typedef struct unk_801413F0 {
-    Mtx unk_00;
-    LookAt unk_40;
+    /* 0x00 */ Mtx unk_00;
+    /* 0x40 */ LookAt unk_40;
 } unk_801413F0; // size = 0x60
 
 typedef struct unk_807B3C20 {

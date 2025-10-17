@@ -70,7 +70,7 @@ void func_xk2_800F13C4(void) {
 
 extern Mtx D_2000000[];
 extern Player gPlayers[];
-extern s32 D_8076C950;
+extern bool gInCourseEditTestRun;
 extern unk_80128C94 D_6000000;
 extern unk_80128C94* D_80128C94;
 
@@ -85,10 +85,10 @@ Gfx* func_xk2_800F1428(Gfx* gfx) {
     Mtx spC8;
     MtxF sp88;
 
-    if (D_8076C950 != 0) {
+    if (gInCourseEditTestRun) {
         return func_80719890(gfx);
     }
-    if (D_8076C950 != 0) {
+    if (gInCourseEditTestRun) {
         Matrix_SetFrustrum(&D_80128C94->unk_0000, NULL, (gPlayers[0].unk_94.x * 320.0f) / 240.0f, 32.0f, 4096.0f,
                            320.0f, 0.0f, 240.0f, 0.0f, &sp13E);
     } else {

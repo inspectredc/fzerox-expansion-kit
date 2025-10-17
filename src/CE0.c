@@ -114,11 +114,11 @@ void Gfx_LoadSegments(void) {
     gMasterDisp = Segment_SetTableAddresses(gMasterDisp);
 }
 
-extern s32 D_8076C954;
+extern bool gInCourseEditor;
 
 void Gfx_FullSync(void) {
 
-    if (D_8076C954 != 0) {
+    if (gInCourseEditor) {
         gMasterDisp = func_xk1_8002ED64(gMasterDisp);
     }
 

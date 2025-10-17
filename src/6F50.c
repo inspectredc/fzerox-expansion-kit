@@ -29,8 +29,8 @@ bool Course_FeatureIsDecorational(s32 courseFeature) {
 extern unk_80225800 D_80225800;
 extern CourseFeaturesInfo gCourseFeaturesInfo;
 
-s32 D_8076C950 = 0;
-s32 D_8076C954 = 0;
+bool gInCourseEditTestRun = false;
+bool gInCourseEditor = false;
 s32 D_8076C958 = 90;
 s32 D_8076C95C = 0;
 s32 D_8076C960 = 0;
@@ -56,10 +56,10 @@ void Course_LandminesViewInteractDataInit(void) {
     Mtx3F segmentBasis;
     f32 temp_fs0;
 
-    if (D_8076C954 != 0 && D_8076C950 == 0) {
-        vtx = D_80128C94->unk_56A0;
+    if (gInCourseEditor && !gInCourseEditTestRun) {
+        vtx = D_80128C94->landmineVtx;
     } else {
-        vtx = D_80225800.unk_1C0;
+        vtx = D_80225800.landmineVtx;
     }
 
     var->landmineCount = 0;
@@ -190,79 +190,51 @@ extern Mtx D_2000000[];
 extern unk_800D6CA0 D_800D6CA0;
 extern s32 D_xk2_800F7034;
 extern s32 gCreateOption;
-extern Vtx D_8022EA40[];
 extern unk_36ED0 D_802BE5C0[];
 extern CourseDecoration gCourseDecorations[];
 extern CourseFeature gCourseFeatures[];
-extern Mtx D_8022F640[];
-extern unk_802D2D78 D_807BDD70[2][0xC0];
+extern EffectDrawData gEffectsDrawData[2][0xC0];
 extern CourseEffect gCourseEffects[];
 extern CourseEffectsInfo gCourseEffectsInfo;
 extern s32 D_8079A35C;
 #define VERTEX_MODIFIED_ST(s, t) ((((s) << 15) & 0xFFFF0000) | ((t) &0xFFFF))
 
 #ifdef NON_EQUIVALENT
-Gfx* Course_FeaturesDraw(Gfx* gfx, s32 arg1) {
-    u32 i;
+Gfx* Course_GadgetsDraw(Gfx* gfx, s32 arg1) {
+    CourseFeaturesInfo* featuresInfo;
+    s32 i;
     s32 j;
     s32 k;
-    s32* sp44;
-    Mtx* var_s3;
-    Vtx* sp1BC;
-    unk_802D2D78* var_s4;
-    s32 temp_a0;
-    s32 temp_a0_3;
+    Mtx* decorationMtx;
+    Vtx* dashVtx;
+    EffectDrawData* effectDrawData;
     s32 totalVtxGroups;
-    s32 temp_a1_3;
-    s32 temp_a1_5;
-    s32 temp_a2;
-    s32 temp_a2_2;
-    s32 temp_a2_3;
-    s32 temp_s3;
-    s32 temp_s3_2;
     s32 numVtxs;
-    s32 temp_v0_2;
-    s32 temp_v0_3;
-    s32 temp_v0_4;
-    s32 temp_v0_5;
-    s32 temp_v0_6;
-    s32 temp_v0_7;
-    s32 totalWholeVtxGroups;
-    s32 var_a3;
-    s32 var_a3_2;
-    u32 remainderVtxGroupNum;
+    s32 remainderVtxGroupNum;
     Vtx* vtx;
-    s32* var_t0;
-    s32* var_t0_2;
-    u32 temp_s4;
-    CourseFeature* var_s1;
-    u32 var_s1_2;
-    CourseDecoration* var_s2_2;
-    void* temp_a0_2;
-    Vtx* temp_a1_2;
-    void* temp_a1_4;
-    void* var_t3;
-    void* var_t3_2;
+    s16* var_t0;
+    CourseFeature* feature;
+    CourseDecoration* decoration;
     s32 sp1D4;
     s32 var_v1;
-    CourseFeaturesInfo* var;
-    unk_80225800* var2;
-    CourseEffectsInfo* sp1A8;
-
-    var = &gCourseFeaturesInfo;
-    var2 = &D_80225800;
+    s32 temp_v1;
+    unk_80225800* var_s7;
+    CourseEffectsInfo* effectsInfo;
+    Vtx* tempVtx;
 
     gSPDisplayList(gfx++, aSetupLandmineTextureDL);
     gDPSetTextureFilter(gfx++, G_TF_BILERP);
     gSPMatrix(gfx++, D_2000000, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    
+    featuresInfo = &gCourseFeaturesInfo;
 
-    if ((gCourseFeaturesInfo.landmineCount != 0)) {
-        if ((D_8076C954 != 0) && (D_8076C950 == 0)) {
+    if ((featuresInfo->landmineCount != 0)) {
+        if (gInCourseEditor && !gInCourseEditTestRun) {
             sp1D4 = -1;
-            i = gCourseFeaturesInfo.landmineCount - 1;
-            while (i >= 0) {
+
+            for (i = featuresInfo->landmineCount - 1; i >= 0; i--) {
                 var_v1 = 0;
-                for (j = 0; j < gCourseFeaturesInfo.featureCount; j++) {
+                for (j = 0; j < featuresInfo->featureCount; j++) {
                     if (gCourseFeatures[j].featureType == COURSE_FEATURE_LANDMINE) {
                         break;
                     }
@@ -281,31 +253,30 @@ Gfx* Course_FeaturesDraw(Gfx* gfx, s32 arg1) {
                     sp1D4 = 0;
                     gSPDisplayList(gfx++, D_9014C40);
                 }
-                gSPVertex(gfx++, &D_80128C94->unk_56A0[i], 5, 0);
+                gSPVertex(gfx++, &D_80128C94->landmineVtx[i * 5], 5, 0);
                 gSP2Triangles(gfx++, 0, 1, 2, 0, 0, 2, 3, 0);
                 gSP2Triangles(gfx++, 0, 3, 4, 0, 0, 4, 1, 0);
-                i--;
             }
         } else {
-            i = gCourseFeaturesInfo.landmineCount;
+            i = featuresInfo->landmineCount - 1;
             do {
-                gSPVertex(gfx++, D_80225800.unk_1C0[i - 1], 5, 0);
+                vtx = &D_80225800.landmineVtx[i * 5];
+                gSPVertex(gfx++, vtx, 5, 0);
                 gSP2Triangles(gfx++, 0, 1, 2, 0, 0, 2, 3, 0);
                 gSP2Triangles(gfx++, 0, 3, 4, 0, 0, 4, 1, 0);
                 i--;
-            } while (i > 0);
+            } while (i >= 0);
         }
     }
-    if (gCourseFeaturesInfo.jumpCount != 0) {
+    if (featuresInfo->jumpCount != 0) {
         gDPLoadTextureBlock(gfx++, aJumpFeatureTex, G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32, 0, G_TX_NOMIRROR | G_TX_WRAP,
                             G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
-        if ((D_8076C954 != 0) && (D_8076C950 == 0)) {
+        if (gInCourseEditor && !gInCourseEditTestRun) {
             sp1D4 = -1;
-            i = gCourseFeaturesInfo.jumpCount - 1;
-            while (i >= 0) {
+            for (i = featuresInfo->landmineCount - 1; i >= 0; i--) {
                 var_v1 = 0;
-                for (j = 0; j < gCourseFeaturesInfo.featureCount; j++) {
+                for (j = 0; j < featuresInfo->featureCount; j++) {
                     if (gCourseFeatures[j].featureType == COURSE_FEATURE_JUMP) {
                         break;
                     }
@@ -324,43 +295,45 @@ Gfx* Course_FeaturesDraw(Gfx* gfx, s32 arg1) {
                     sp1D4 = 0;
                     gSPDisplayList(gfx++, D_9014C40);
                 }
-                gSPVertex(gfx++, &D_80128C94->unk_53A0[i], 6, 0);
+                gSPVertex(gfx++, &D_80128C94->jumpVtx[i * 6], 6, 0);
                 gSP2Triangles(gfx++, 0, 1, 2, 0, 3, 5, 4, 0);
                 gSP2Triangles(gfx++, 0, 3, 1, 0, 1, 3, 4, 0);
                 gSP2Triangles(gfx++, 0, 5, 3, 0, 0, 2, 5, 0);
-                i--;
             }
         } else {
-            i = gCourseFeaturesInfo.jumpCount;
+            Vtx* vtx2;
+            i = featuresInfo->landmineCount - 1;
             do {
-                gSPVertex(gfx++, &D_80225800.unk_040[i - 1], 6, 0);
+                vtx = &D_80225800.jumpVtx[i * 6];
+                gSPVertex(gfx++, vtx, 6, 0);
                 gSP2Triangles(gfx++, 0, 1, 2, 0, 3, 5, 4, 0);
                 gSP2Triangles(gfx++, 0, 3, 1, 0, 1, 3, 4, 0);
                 gSP2Triangles(gfx++, 0, 5, 3, 0, 0, 2, 5, 0);
                 i--;
-            } while (i > 0);
+            } while (i >= 0);
         }
     }
 
-    sp1A8 = &gCourseEffectsInfo;
+    effectsInfo = &gCourseEffectsInfo;
 
-    if (sp1A8->count != 0) {
+    if (effectsInfo->count != 0) {
 
         gSPDisplayList(gfx++, aSetupCourseEffectTextureDL);
 
-        if ((D_8076C954 != 0) && (D_8076C950 == 0)) {
+        if (gInCourseEditor && !gInCourseEditTestRun) {
             gDPSetRenderMode(gfx++,
                              Z_CMP | CVG_DST_FULL | ZMODE_OPA | ALPHA_CVG_SEL |
                                  GBL_c1(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_A_MEM),
                              Z_CMP | CVG_DST_FULL | ZMODE_OPA | ALPHA_CVG_SEL |
                                  GBL_c2(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_A_MEM));
             gDPSetCombineMode(gfx++, G_CC_DECALRGBA, G_CC_DECALRGBA);
-            sp1BC = D_80128C94->unk_E5A0;
+            dashVtx = D_80128C94->dashVtx;
             sp1D4 = -1;
-            for (i = 0; i < sp1A8->count; i++) {
-                var_s4 = &D_807BDD70[D_8079A35C][i];
+            for (i = 0; i < effectsInfo->count; i++) {
+                effectDrawData = &gEffectsDrawData[D_8079A35C][i];
                 if (D_800D6CA0.unk_0C == gCourseEffects[i].segmentIndex && gCreateOption == CREATE_OPTION_PARTS) {
                     if (sp1D4 != 1) {
+                        sp1D4 = 1;
                         gSPDisplayList(gfx++, D_9014C20);
                         gDPSetPrimColor(gfx++, 0, 0, D_xk2_800F7034, D_xk2_800F7034, D_xk2_800F7034, 255);
                     }
@@ -373,79 +346,81 @@ Gfx* Course_FeaturesDraw(Gfx* gfx, s32 arg1) {
                                      Z_CMP | CVG_DST_FULL | ZMODE_OPA | ALPHA_CVG_SEL |
                                          GBL_c2(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_A_MEM));
                 }
-                gSPTexture(gfx++, 0xFFFF, 0xFFFF, 0, var_s4->effectType, G_ON);
-                if (var_s4->effectType == COURSE_EFFECT_DASH) {
-                    gSPVertex(gfx++, sp1BC, 6, 0);
+                gSPTexture(gfx++, 0xFFFF, 0xFFFF, 0, effectDrawData->effectType, G_ON);
+                if (effectDrawData->effectType == COURSE_EFFECT_DASH) {
+                    gSPVertex(gfx++, dashVtx, 6, 0);
                     gSP2Triangles(gfx++, 0, 4, 1, 0, 0, 3, 4, 0);
                     gSP2Triangles(gfx++, 0, 2, 3, 0, 2, 5, 3, 0);
-                    sp1BC += 6;
+                    dashVtx += 6;
                 } else {
-                    numVtxs = var_s4->vtxEnd - var_s4->vtxStart;
+                    numVtxs = effectDrawData->vtxEnd - effectDrawData->vtxStart;
                     totalVtxGroups = (numVtxs >> 5) + 1;
-                    remainderVtxGroupNum = numVtxs % 32;
+                    remainderVtxGroupNum = numVtxs % 32U;
+
                     if (remainderVtxGroupNum == 0) {
                         remainderVtxGroupNum = 32;
-                        totalWholeVtxGroups = totalVtxGroups - 1;
+                        totalVtxGroups--;
                     }
 
-                    vtx = var_s4->vtxStart;
-                    for (j = 0; j < totalWholeVtxGroups - 1; j++, vtx += 32) {
+                    vtx = effectDrawData->vtxStart;
+                    for (j = 0; j < totalVtxGroups - 1; j++, vtx += 32) {
                         gSPVertex(gfx++, vtx, 32, 0);
 
                         for (k = 0; k < 15; k++) {
-                            if ((vtx[k * 2 + 2].v.tc[1] < vtx[k * 2 + 0].v.tc[1]) ||
-                                (vtx[k * 2 + 3].v.tc[1] < vtx[k * 2 + 1].v.tc[1])) {
+                            tempVtx = &vtx[k * 2];
+                            if ((tempVtx[2].v.tc[1] < tempVtx[0].v.tc[1]) ||
+                                (tempVtx[3].v.tc[1] < tempVtx[1].v.tc[1])) {
                                 gSPModifyVertex(gfx++, k, G_MWO_POINT_ST,
-                                                VERTEX_MODIFIED_ST(vtx[k * 2 + 0].v.tc[0], 0x8000));
+                                                VERTEX_MODIFIED_ST(tempVtx[0].v.tc[0], 0x8000));
                                 gSPModifyVertex(gfx++, k + 1, G_MWO_POINT_ST,
-                                                VERTEX_MODIFIED_ST(vtx[k * 2 + 1].v.tc[0], 0x8000));
+                                                VERTEX_MODIFIED_ST(tempVtx[1].v.tc[0], 0x8000));
                             }
                             gSP2Triangles(gfx++, k, k + 2, k + 1, 0, k + 1, k + 2, k + 3, 0);
                         }
                     }
 
-                    gSPVertex(gfx++, var_s4->vtxStart + (j * 32), remainderVtxGroupNum, 0);
+                    gSPVertex(gfx++, effectDrawData->vtxStart + (j * 32), remainderVtxGroupNum, 0);
 
-                    for (k = 0; k < (remainderVtxGroupNum / 2) - 1; k++) {
-                        if ((vtx[k * 2 + 2].v.tc[1] < vtx[k * 2 + 0].v.tc[1]) ||
-                            (vtx[k * 2 + 3].v.tc[1] < vtx[k * 2 + 1].v.tc[1])) {
+                    for (k = 0; k < (remainderVtxGroupNum >> 1) - 1; k++) {
+                        tempVtx = &vtx[k * 2];
+                        if ((tempVtx[2].v.tc[1] < tempVtx[0].v.tc[1]) ||
+                            (tempVtx[3].v.tc[1] < tempVtx[1].v.tc[1])) {
                             gSPModifyVertex(gfx++, k, G_MWO_POINT_ST,
-                                            VERTEX_MODIFIED_ST(vtx[k * 2 + 0].v.tc[0], 0x8000));
+                                            VERTEX_MODIFIED_ST(tempVtx[0].v.tc[0], 0x8000));
                             gSPModifyVertex(gfx++, k + 1, G_MWO_POINT_ST,
-                                            VERTEX_MODIFIED_ST(vtx[k * 2 + 1].v.tc[0], 0x8000));
+                                            VERTEX_MODIFIED_ST(tempVtx[1].v.tc[0], 0x8000));
                         }
                         gSP2Triangles(gfx++, k, k + 2, k + 1, 0, k + 1, k + 2, k + 3, 0);
                     }
                 }
             }
         } else {
-            var_s4 = D_807BDD70;
-            sp1BC = D_8022EA40;
-            for (i = 0; i < gCourseEffectsInfo.count; i++, var_s4++) {
-                gSPTexture(gfx++, 0x8000, 0x8000, 0, var_s4->effectType, G_ON);
-                if (var_s4->effectType == COURSE_EFFECT_DASH) {
-                    gSPVertex(gfx++, sp1BC, 6, 0);
+            dashVtx = D_80225800.dashVtx;
+            for (i = 0; i < effectsInfo->count; i++) {
+                effectDrawData = &gEffectsDrawData[0][i];
+                gSPTexture(gfx++, 0x8000, 0x8000, 0, effectDrawData->effectType, G_ON);
+                if (effectDrawData->effectType == COURSE_EFFECT_DASH) {
+                    gSPVertex(gfx++, dashVtx, 6, 0);
                     gSP2Triangles(gfx++, 0, 4, 1, 0, 0, 3, 4, 0);
                     gSP2Triangles(gfx++, 0, 2, 3, 0, 2, 5, 3, 0);
-                    sp1BC += 6;
+                    dashVtx += 6;
                 } else {
-                    numVtxs = var_s4->vtxEnd - var_s4->vtxStart;
+                    numVtxs = effectDrawData->vtxEnd - effectDrawData->vtxStart;
                     totalVtxGroups = (numVtxs >> 5) + 1;
-                    remainderVtxGroupNum = numVtxs % 32;
-                    totalWholeVtxGroups = totalVtxGroups;
+                    remainderVtxGroupNum = numVtxs % 32U;
                     if (remainderVtxGroupNum == 0) {
                         remainderVtxGroupNum = 32;
-                        totalWholeVtxGroups = totalVtxGroups - 1;
+                        totalVtxGroups--;
                     }
 
-                    vtx = var_s4->vtxStart;
-                    for (j = 0; j < totalWholeVtxGroups - 1; j++) {
+                    vtx = effectDrawData->vtxStart;
+                    for (j = 0; j < totalVtxGroups - 1; j++) {
+
+                        temp_v1 = (effectDrawData->vtxStart - D_80225800.terrainEffectVtx + (j << 5)) >> 1;
                         gSPVertex(gfx++, vtx, 32, 0);
 
-                        var_t0 = &D_8079E938[var_s4->vtxStart - D_80225800.unk_1C0[j]];
-
                         for (k = 0; k < 15; k++) {
-                            if (D_802BE5C0[var_t0[k]].unk_10 == 0) {
+                            if (D_802BE5C0[D_8079E938[k + temp_v1]].unk_10 == 0) {
                                 continue;
                             }
                             if ((vtx[k * 2 + 2].v.tc[1] < vtx[k * 2 + 0].v.tc[1]) ||
@@ -460,11 +435,13 @@ Gfx* Course_FeaturesDraw(Gfx* gfx, s32 arg1) {
                         vtx += 32;
                     }
 
-                    gSPVertex(gfx++, var_s4->vtxStart + (j * 32), remainderVtxGroupNum, 0);
+                    temp_v1 = (effectDrawData->vtxStart - D_80225800.terrainEffectVtx + (j << 5)) >> 1;
+                    gSPVertex(gfx++, effectDrawData->vtxStart + (j * 32), remainderVtxGroupNum, 0);
+                    
 
-                    var_t0 = &D_8079E938[var_s4->vtxStart - D_80225800.unk_1C0[j]];
-                    for (k = 0; k < (remainderVtxGroupNum / 2) - 1; k++) {
-                        if (D_802BE5C0[var_t0[k]].unk_10 == 0) {
+
+                    for (k = 0; k < (remainderVtxGroupNum >> 1) - 1; k++) {
+                        if (D_802BE5C0[D_8079E938[k + temp_v1]].unk_10 == 0) {
                             continue;
                         }
                         if ((vtx[k * 2 + 2].v.tc[1] < vtx[k * 2 + 0].v.tc[1]) ||
@@ -495,29 +472,31 @@ Gfx* Course_FeaturesDraw(Gfx* gfx, s32 arg1) {
                              GBL_c2(G_BL_CLR_FOG, G_BL_A_SHADE, G_BL_CLR_IN, G_BL_1MA));
     }
 
-    var_s2_2 = gCourseDecorations;
+    decoration = gCourseDecorations;
     sCourseDecorationTextureLoadState = -1;
-    if ((D_8076C954 != 0) && (D_8076C950 == 0)) {
+    if (gInCourseEditor && !gInCourseEditTestRun) {
         sp1D4 = -1;
-        var_s3 = D_80128C94->unk_F1A0;
-        for (i = 0; i < gCourseFeaturesInfo.featureCount; i++) {
-            var_s1 = &gCourseFeaturesInfo.features[i];
-            if (Course_FeatureIsDecorational(var_s1->featureType) != 0) {
-                if (D_800D6CA0.unk_0C == gCourseFeatures[i].segmentIndex && gCreateOption == CREATE_OPTION_PARTS) {
-                    if (sp1D4 != 1) {
-                        sp1D4 = 1;
-                        gSPDisplayList(gfx++, D_9014C20);
-                        gDPSetPrimColor(gfx++, 0, 0, D_xk2_800F7034, D_xk2_800F7034, D_xk2_800F7034, 255);
-                    }
-                } else if (sp1D4 != 0) {
-                    sp1D4 = 0;
-                    gSPDisplayList(gfx++, D_9014C40);
-                }
-                if (var_s1->featureType <= COURSE_FEATURE_SIGN_OVERHEAD) {
-                    gSPMatrix(gfx++, K0_TO_PHYS(var_s3), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                }
-                var_s3;
+        decorationMtx = D_80128C94->decorationMtx;
+        for (j = 0; j < featuresInfo->featureCount; j++) {
+            feature = &featuresInfo->features[j];
+            if (Course_FeatureIsDecorational(feature->featureType)) {
+                continue;
             }
+            if (D_800D6CA0.unk_0C == gCourseFeatures[j].segmentIndex && gCreateOption == CREATE_OPTION_PARTS) {
+                if (sp1D4 != 1) {
+                    sp1D4 = 1;
+                    gSPDisplayList(gfx++, D_9014C20);
+                    gDPSetPrimColor(gfx++, 0, 0, D_xk2_800F7034, D_xk2_800F7034, D_xk2_800F7034, 255);
+                }
+            } else if (sp1D4 != 0) {
+                sp1D4 = 0;
+                gSPDisplayList(gfx++, D_9014C40);
+            }
+            if (feature->featureType <= COURSE_FEATURE_SIGN_OVERHEAD) {
+                gSPMatrix(gfx++, K0_TO_PHYS(decorationMtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                gfx = sCourseDecorationDrawFuncs[feature->featureType](gfx);
+            }
+            decorationMtx++;
         }
         if (COURSE_CONTEXT()->courseData.skybox == SKYBOX_NIGHT) {
             gDPPipeSync(gfx++);
@@ -527,39 +506,42 @@ Gfx* Course_FeaturesDraw(Gfx* gfx, s32 arg1) {
                              Z_CMP | Z_UPD | CVG_DST_FULL | ZMODE_OPA | ALPHA_CVG_SEL | FORCE_BL |
                                  GBL_c2(G_BL_CLR_FOG, G_BL_A_SHADE, G_BL_CLR_IN, G_BL_1MA));
         }
-        for (i = 0; i < gCourseFeaturesInfo.featureCount; i++) {
-            var_s1 = &gCourseFeaturesInfo.features[i];
-            if (Course_FeatureIsDecorational(var_s1->featureType) != 0) {
-                if (D_800D6CA0.unk_0C == gCourseFeatures[i].segmentIndex && gCreateOption == CREATE_OPTION_PARTS) {
-                    if (sp1D4 != 1) {
-                        sp1D4 = 1;
-                        gSPDisplayList(gfx++, D_9014C20);
-                        gDPSetPrimColor(gfx++, 0, 0, D_xk2_800F7034, D_xk2_800F7034, D_xk2_800F7034, 255);
-                    }
-                } else if (sp1D4 != 0) {
-                    sp1D4 = 0;
-                    gSPDisplayList(gfx++, D_9014C40);
-                }
-                if (COURSE_FEATURE_IS_BUILDING(var_s1->featureType)) {
-                    gSPMatrix(gfx++, K0_TO_PHYS(var_s3), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                }
-                var_s3;
+        for (j = 0; j < featuresInfo->featureCount; j++) {
+            feature = &featuresInfo->features[j];
+            if (Course_FeatureIsDecorational(feature->featureType)) {
+                continue;
             }
+            if (D_800D6CA0.unk_0C == gCourseFeatures[j].segmentIndex && gCreateOption == CREATE_OPTION_PARTS) {
+                if (sp1D4 != 1) {
+                    sp1D4 = 1;
+                    gSPDisplayList(gfx++, D_9014C20);
+                    gDPSetPrimColor(gfx++, 0, 0, D_xk2_800F7034, D_xk2_800F7034, D_xk2_800F7034, 255);
+                }
+            } else if (sp1D4 != 0) {
+                sp1D4 = 0;
+                gSPDisplayList(gfx++, D_9014C40);
+            }
+            if (COURSE_FEATURE_IS_BUILDING(feature->featureType)) {
+                gSPMatrix(gfx++, K0_TO_PHYS(decorationMtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                gfx = sCourseDecorationDrawFuncs[feature->featureType](gfx);
+            }
+            decorationMtx++;
         }
     } else {
-        var_s3 = D_8022F640;
-        for (i = 0; i < gCourseFeaturesInfo.featureCount; i++) {
-            var_s1 = &gCourseFeaturesInfo.features[i];
-            if (Course_FeatureIsDecorational(var_s1->featureType) != 0) {
-                if ((var_s2_2->unk_34->unk_10 != 0) && (var_s1->featureType <= COURSE_FEATURE_SIGN_OVERHEAD)) {
-                    gSPMatrix(gfx++, K0_TO_PHYS(var_s3), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                    gfx = sCourseDecorationDrawFuncs[var_s1->featureType](gfx);
-                }
-                var_s3++;
-                var_s2_2++;
+        decorationMtx = D_80225800.decorationMtx;
+        for (j = 0; j < featuresInfo->featureCount; j++) {
+            feature = &featuresInfo->features[j];
+            if (!Course_FeatureIsDecorational(feature->featureType)) {
+                continue;
             }
+            if ((decoration->unk_34->unk_10 != 0) && (feature->featureType <= COURSE_FEATURE_SIGN_OVERHEAD)) {
+                gSPMatrix(gfx++, K0_TO_PHYS(decorationMtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                gfx = sCourseDecorationDrawFuncs[feature->featureType](gfx);
+            }
+            decorationMtx++;
+            decoration++;
         }
-        var_s3 = D_8022F640;
+        decorationMtx = D_80225800.decorationMtx;
         if (COURSE_CONTEXT()->courseData.skybox == SKYBOX_NIGHT) {
             gDPPipeSync(gfx++);
             gDPSetCombineMode(gfx++, G_CC_BLENDRGBA, G_CC_BLENDRGBA);
@@ -569,23 +551,24 @@ Gfx* Course_FeaturesDraw(Gfx* gfx, s32 arg1) {
                                  GBL_c2(G_BL_CLR_FOG, G_BL_A_SHADE, G_BL_CLR_IN, G_BL_1MA));
         }
 
-        for (i = 0; i < gCourseFeaturesInfo.featureCount; i++) {
-            var_s1 = &gCourseFeaturesInfo.features[i];
-            if (Course_FeatureIsDecorational(var_s1->featureType) == 0) {
+        for (j = 0; j < featuresInfo->featureCount; j++) {
+            feature = &featuresInfo->features[j];
+            if (Course_FeatureIsDecorational(feature->featureType)) {
                 continue;
             }
 
-            if (COURSE_FEATURE_IS_BUILDING(var_s1->featureType)) {
-                gSPMatrix(gfx++, K0_TO_PHYS(var_s3), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                gfx = sCourseDecorationDrawFuncs[var_s1->featureType](gfx);
+            if ((decoration->unk_34->unk_10 != 0) && COURSE_FEATURE_IS_BUILDING(feature->featureType)) {
+                gSPMatrix(gfx++, K0_TO_PHYS(decorationMtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                gfx = sCourseDecorationDrawFuncs[feature->featureType](gfx);
             }
-            var_s3++;
+            decorationMtx++;
+            decoration++;
         }
     }
     return gfx;
 }
 #else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/6F50/Course_FeaturesDraw.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/6F50/Course_GadgetsDraw.s")
 #endif
 
 extern Jump gJumps[];
@@ -604,10 +587,10 @@ void Course_JumpsViewInteractDataInit(void) {
     CourseFeature* feature;
     Mtx3F segmentBasis;
 
-    if ((D_8076C954 != 0) && (D_8076C950 == 0)) {
-        vtx = D_80128C94->unk_53A0;
+    if (gInCourseEditor && !gInCourseEditTestRun) {
+        vtx = D_80128C94->jumpVtx;
     } else {
-        vtx = D_80225800.unk_040;
+        vtx = D_80225800.jumpVtx;
     }
     featuresInfo->jumpCount = 0;
 
@@ -741,10 +724,10 @@ void Course_DecorationsViewInteractDataInit(void) {
     Mtx3F segmentBasis;
 
     featuresInfo = &gCourseFeaturesInfo;
-    if ((D_8076C954 != 0) && (D_8076C950 == 0)) {
-        mtx = D_80128C94->unk_F1A0;
+    if (gInCourseEditor && !gInCourseEditTestRun) {
+        mtx = D_80128C94->decorationMtx;
     } else {
-        mtx = D_8022F640;
+        mtx = D_80225800.decorationMtx;
     }
 
     decoration = gCourseDecorations;
@@ -1103,8 +1086,6 @@ void Course_SegmentGetCenterPosition(CourseSegment* segment, f32 t, Vec3f* pos) 
     pos->z += sp58 * segmentBasis.z.z;
 }
 
-extern s32 D_800D65C8;
-
 void func_806FCCE4(s32 arg0, s32 segmentIndex, f32 t) {
     s32 i = 0;
     s32 temp_v0;
@@ -1112,17 +1093,17 @@ void func_806FCCE4(s32 arg0, s32 segmentIndex, f32 t) {
     s32 sp0;
 
     //! @bug sp0 may not be initialised
-    if (D_8076C954 == 0 || D_8076C950 != 0) {
+    if (!gInCourseEditor || gInCourseEditTestRun) {
         sp0 = D_800D65C8;
     }
 
     while (true) {
-        temp_v0 = (i + sp0 - 1) % sp0;
+        temp_v0 = (i - 1 + sp0) % sp0;
 
-        if ((D_802BE5C0[temp_v0].unk_04 < segmentIndex ||
-             (segmentIndex == D_802BE5C0[temp_v0].unk_04 && D_802BE5C0[temp_v0].unk_08 <= t)) &&
-            (segmentIndex < D_802BE5C0[i].unk_04 ||
-             (segmentIndex == D_802BE5C0[i].unk_04 && t < D_802BE5C0[i].unk_08))) {
+        if ((D_802BE5C0[temp_v0].segmentIndex < segmentIndex ||
+             (segmentIndex == D_802BE5C0[temp_v0].segmentIndex && D_802BE5C0[temp_v0].segmentTValue <= t)) &&
+            (segmentIndex < D_802BE5C0[i].segmentIndex ||
+             (segmentIndex == D_802BE5C0[i].segmentIndex && t < D_802BE5C0[i].segmentTValue))) {
             break;
         }
         i++;
@@ -1138,7 +1119,7 @@ f32 func_806FCE04(s32 segmentIndex, f32 t) {
     sp0 = D_800D65C8;
 
     do {
-        if (segmentIndex == D_802BE5C0[i].unk_04) {
+        if (segmentIndex == D_802BE5C0[i].segmentIndex) {
             goto next;
         }
         i++;
@@ -1153,7 +1134,7 @@ f32 func_806FCE04(s32 segmentIndex, f32 t) {
 next:
     while (true) {
 
-        if (segmentIndex == D_802BE5C0[i].unk_04 && t < D_802BE5C0[i].unk_08) {
+        if (segmentIndex == D_802BE5C0[i].segmentIndex && t < D_802BE5C0[i].segmentTValue) {
             break;
         }
 
@@ -1163,12 +1144,12 @@ next:
             return 1.0f;
         }
 
-        if (segmentIndex != D_802BE5C0[i].unk_04) {
+        if (segmentIndex != D_802BE5C0[i].segmentIndex) {
             return 1.0f;
         }
     }
 
-    return D_802BE5C0[i].unk_08;
+    return D_802BE5C0[i].segmentTValue;
 }
 
 f32 sDashScaleForward = 150.0f;
@@ -1400,7 +1381,7 @@ Vtx* Course_TerrainEffectVerticesInit(CourseSegment* segment, f32 t, CourseEffec
     textureUnit = 0;
 
     while (true) {
-        if ((D_8076C954 == 0) || (D_8076C950 != 0)) {
+        if (!gInCourseEditor || gInCourseEditTestRun) {
             func_806FCCE4((s32) (vtx - D_8079F944) / 2, segment->segmentIndex, t);
         }
         Course_SplineGetTangent(segment, t, &forward);
@@ -1634,8 +1615,6 @@ Vtx* Course_TerrainEffectVerticesInitFromStorage(CourseSegment* segment, CourseE
     return vtx;
 }
 
-extern Vtx D_80226A40[];
-
 void Course_EffectsViewInteractDataInit(bool arg0) {
     s32 i;
     s32 j;
@@ -1652,19 +1631,19 @@ void Course_EffectsViewInteractDataInit(bool arg0) {
     f32 leftTextureTCoordinate;
 
     D_8076C9E4 = 0;
-    if ((D_8076C954 != 0) && (D_8076C950 == 0)) {
+    if (gInCourseEditor && !gInCourseEditTestRun) {
         D_8079F93C = D_8079A35C;
         D_8079F940 = 0x400;
-        D_8079F944 = D_80128C94->unk_65A0;
-        vtx = D_80128C94->unk_65A0;
-        dashVtx = D_80128C94->unk_E5A0;
+        D_8079F944 = D_80128C94->terrainEffectVtx;
+        vtx = D_80128C94->terrainEffectVtx;
+        dashVtx = D_80128C94->dashVtx;
         effectsInfo = &gCourseEffectsInfo;
     } else {
         D_8079F93C = 0;
         D_8079F940 = 0x800;
-        D_8079F944 = D_80226A40;
-        vtx = D_80226A40;
-        dashVtx = D_8022EA40;
+        D_8079F944 = D_80225800.terrainEffectVtx;
+        vtx = D_80225800.terrainEffectVtx;
+        dashVtx = D_80225800.dashVtx;
         effectsInfo = &gCourseEffectsInfo;
     }
 
@@ -1673,8 +1652,8 @@ void Course_EffectsViewInteractDataInit(bool arg0) {
         effect = &effectsInfo->effects[i];
         segment = &gCurrentCourseInfo->courseSegments[effect->segmentIndex];
 
-        D_807BDD70[D_8079F93C][i].effectType = effect->effectType;
-        D_807BDD70[D_8079F93C][i].vtxStart = vtx;
+        gEffectsDrawData[D_8079F93C][i].effectType = effect->effectType;
+        gEffectsDrawData[D_8079F93C][i].vtxStart = vtx;
         gEffects[i].effectType = effect->effectType;
         gEffects[i].segmentTValueStart = effect->segmentTValueStart;
         gEffects[i].segmentTValueEnd = effect->segmentTValueEnd;
@@ -1713,8 +1692,8 @@ void Course_EffectsViewInteractDataInit(bool arg0) {
                     (effectsInfo->effects[j].segmentTValueEnd == 1.0f) &&
                     (effect->rightEdgeDistance == effectsInfo->effects[j].rightEdgeDistance) &&
                     (effect->leftEdgeDistance == effectsInfo->effects[j].leftEdgeDistance)) {
-                    rightTextureTCoordinate = (D_807BDD70[D_8079F93C][j].vtxEnd - 2)->v.tc[1] / EFFECT_TEXTURE_SCALAR;
-                    leftTextureTCoordinate = (D_807BDD70[D_8079F93C][j].vtxEnd - 1)->v.tc[1] / EFFECT_TEXTURE_SCALAR;
+                    rightTextureTCoordinate = (gEffectsDrawData[D_8079F93C][j].vtxEnd - 2)->v.tc[1] / EFFECT_TEXTURE_SCALAR;
+                    leftTextureTCoordinate = (gEffectsDrawData[D_8079F93C][j].vtxEnd - 1)->v.tc[1] / EFFECT_TEXTURE_SCALAR;
                     while (true) {
                         rightTextureTCoordinate -= 0x400;
                         leftTextureTCoordinate -= 0x400;
@@ -1736,7 +1715,7 @@ void Course_EffectsViewInteractDataInit(bool arg0) {
             }
         }
 
-        D_807BDD70[D_8079F93C][i].vtxEnd = vtx;
+        gEffectsDrawData[D_8079F93C][i].vtxEnd = vtx;
     }
 
     for (i = 0; i < gCurrentCourseInfo->segmentCount; i++) {
@@ -1786,7 +1765,7 @@ void Course_SegmentPitInit(s32 courseIndex, s32 segmentIndex) {
     segmentCenterVariance = (segment->next->radiusLeft - segment->next->radiusRight) / 2;
     segmentCenterVariance -= segmentCenterDistance;
 
-    if (courseIndex >= COURSE_EDIT_1 || D_8076C950 != 0) {
+    if (courseIndex >= COURSE_EDIT_1 || gInCourseEditTestRun) {
         if (segmentWidth < nextSegmentWidth) {
             minimumSegmentWidth = segmentWidth;
         } else {
@@ -3322,7 +3301,7 @@ void Course_SignsInit(s32 courseIndex) {
 extern unk_807B3C20 D_807B3C20;
 
 void Course_FeaturesInit(s32 courseIndex) {
-    if ((D_8076C954 != 0) && (D_8076C950 == 0)) {
+    if (gInCourseEditor && !gInCourseEditTestRun) {
         if (D_807B3C20.controlPointCount < 4) {
             return;
         }
@@ -3343,7 +3322,7 @@ void Course_FeaturesInit(s32 courseIndex) {
 void Course_EffectsInit(s32 courseIndex) {
     s32 i;
 
-    if ((D_8076C954 != 0) && (D_8076C950 == 0)) {
+    if (gInCourseEditor && !gInCourseEditTestRun) {
         if (D_807B3C20.controlPointCount < 4) {
             return;
         }
@@ -3647,14 +3626,14 @@ void Course_Load(s32 courseIndex) {
         func_80701D7C(romAddr, osVirtualToPhysical(&COURSE_CONTEXT()->courseData), sizeof(CourseData));
         PRINTF("UNPACK OK\n");
         COURSE_CONTEXT()->courseData.bgm = D_i2_800BF044[courseIndex];
-        if ((D_8076C954 != 0) && (courseIndex == COURSE_RED_CANYON_2)) {
+        if (gInCourseEditor && (courseIndex == COURSE_RED_CANYON_2)) {
             COURSE_CONTEXT()->courseData.dirt[21] = DIRT_NONE;
             COURSE_CONTEXT()->courseData.checksum = Course_CalculateChecksum();
         }
     }
 
     func_80702BC4(courseIndex);
-    if (D_8076C954 != 0) {
+    if (gInCourseEditor) {
         D_800F7404 = 1;
     }
 }
@@ -3763,7 +3742,7 @@ void func_80702448(s32 courseIndex) {
         romAddr = D_807C70C8 + courseIndex * sizeof(CourseData);
 
         func_80701D7C(romAddr, osVirtualToPhysical(&COURSE_CONTEXT()->courseData), sizeof(CourseData));
-        if (D_8076C954 != 0 && courseIndex == COURSE_RED_CANYON_2) {
+        if (gInCourseEditor && courseIndex == COURSE_RED_CANYON_2) {
             COURSE_CONTEXT()->courseData.dirt[21] = DIRT_NONE;
             COURSE_CONTEXT()->courseData.checksum = Course_CalculateChecksum();
         }
