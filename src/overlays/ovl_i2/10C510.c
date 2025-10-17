@@ -127,40 +127,40 @@ Gfx* Race_Draw(Gfx* gfx) {
         case 1:
             gfx = func_i3_8006339C(gfx, 0, 0);
             gfx = func_i2_800BDE60(gfx, 0);
-            gfx = Course_FeaturesDraw(gfx, 0);
+            gfx = Course_GadgetsDraw(gfx, 0);
             break;
         case 2:
             gfx = func_i3_8006339C(gfx, 0, 1);
             gfx = func_i2_800BDE60(gfx, 0);
-            gfx = Course_FeaturesDraw(gfx, 0);
+            gfx = Course_GadgetsDraw(gfx, 0);
             gfx = func_i3_8006339C(gfx, 1, 2);
             gfx = func_i2_800BDE60(gfx, 1);
-            gfx = Course_FeaturesDraw(gfx, 1);
+            gfx = Course_GadgetsDraw(gfx, 1);
             break;
         case 3:
             gfx = func_i3_8006339C(gfx, 0, 5);
             gfx = func_i2_800BDE60(gfx, 0);
-            gfx = Course_FeaturesDraw(gfx, 0);
+            gfx = Course_GadgetsDraw(gfx, 0);
             gfx = func_i3_8006339C(gfx, 1, 7);
             gfx = func_i2_800BDE60(gfx, 1);
-            gfx = Course_FeaturesDraw(gfx, 1);
+            gfx = Course_GadgetsDraw(gfx, 1);
             gfx = func_i3_8006339C(gfx, 2, 6);
             gfx = func_i2_800BDE60(gfx, 2);
-            gfx = Course_FeaturesDraw(gfx, 2);
+            gfx = Course_GadgetsDraw(gfx, 2);
             break;
         case 4:
             gfx = func_i3_8006339C(gfx, 0, 5);
             gfx = func_i2_800BDE60(gfx, 0);
-            gfx = Course_FeaturesDraw(gfx, 0);
+            gfx = Course_GadgetsDraw(gfx, 0);
             gfx = func_i3_8006339C(gfx, 1, 7);
             gfx = func_i2_800BDE60(gfx, 1);
-            gfx = Course_FeaturesDraw(gfx, 1);
+            gfx = Course_GadgetsDraw(gfx, 1);
             gfx = func_i3_8006339C(gfx, 2, 6);
             gfx = func_i2_800BDE60(gfx, 2);
-            gfx = Course_FeaturesDraw(gfx, 2);
+            gfx = Course_GadgetsDraw(gfx, 2);
             gfx = func_i3_8006339C(gfx, 3, 8);
             gfx = func_i2_800BDE60(gfx, 3);
-            gfx = Course_FeaturesDraw(gfx, 3);
+            gfx = Course_GadgetsDraw(gfx, 3);
             break;
     }
 

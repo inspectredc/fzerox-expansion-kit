@@ -880,7 +880,7 @@ void func_xk2_800D8DAC(void) {
     }
 }
 
-extern s32 D_8076C950;
+extern bool gInCourseEditTestRun;
 extern s32 D_8076C964;
 extern volatile u8 D_80794E14;
 extern bool gMenuWidgetOpen;
@@ -932,7 +932,7 @@ void func_xk2_800D8F04(void) {
     }
     func_xk2_800DF54C();
     func_xk2_800F5F2C();
-    if (D_8076C950 == 0) {
+    if (!gInCourseEditTestRun) {
         func_xk2_800D7058();
         func_xk2_800D71E8();
         func_xk2_800D78A0();
@@ -1855,7 +1855,7 @@ void func_xk2_800DBCF8(void) {
 
 void func_xk2_800DBEE4(void) {
 
-    if ((D_8076C950 != 0) || (D_800D6CA0.unk_08 != 0)) {
+    if (gInCourseEditTestRun || (D_800D6CA0.unk_08 != 0)) {
         return;
     }
 
@@ -3094,7 +3094,7 @@ extern s32 D_xk2_80103FF4;
 extern s32 D_xk2_80103FF8;
 
 void func_xk2_800DEE20(void) {
-    if ((D_8076C950 != 0) || (gControllers[gPlayerControlPorts[0]].buttonPressed & BTN_A)) {
+    if (gInCourseEditTestRun || (gControllers[gPlayerControlPorts[0]].buttonPressed & BTN_A)) {
         if ((D_800D6CA0.unk_00 == 1) || (gCourseEditHighlightedIconIndex != 0)) {
             return;
         }
@@ -3103,7 +3103,7 @@ void func_xk2_800DEE20(void) {
             return;
         }
         Audio_TriggerSystemSE(NA_SE_36);
-        D_8076C950 = 1;
+        gInCourseEditTestRun = true;
         func_xk2_800F1360();
         D_xk2_80103FF0 = 0;
         D_xk2_80103FF4 = 0;
@@ -3268,7 +3268,7 @@ void func_xk2_800DF42C(void) {
 
 void func_xk2_800DF54C(void) {
 
-    if (!(D_80119720->buttonPressed & BTN_A) && (D_80119720->buttonPressed & BTN_B) && (D_8076C950 == 0)) {
+    if (!(D_80119720->buttonPressed & BTN_A) && (D_80119720->buttonPressed & BTN_B) && !gInCourseEditTestRun) {
         if ((D_800D6CA0.unk_08 != 1) && (D_800D6CA0.unk_08 != 0x11)) {
             func_xk2_800EF8B0();
         }

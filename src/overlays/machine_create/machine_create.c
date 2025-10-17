@@ -11,7 +11,7 @@ extern s16 D_8076C7A8;
 extern s32 D_xk3_80140E50;
 extern s32 D_xk3_80140E54;
 extern Vp gMachinePartViewports[][7];
-extern s32 D_8076C954;
+extern bool gInCourseEditor;
 
 void MachineCreate_Init(void) {
     Vp* vp;
@@ -68,7 +68,7 @@ void MachineCreate_Init(void) {
     BorderedBox_CleanWidget(&gMachineCreateColorBox);
     BorderedBox_ClearAll();
     gWorksMachineMode = MACHINE_MODE_0;
-    D_8076C954 = 1;
+    gInCourseEditor = true;
 }
 
 extern s16 gGameModeChangeState;
@@ -90,7 +90,7 @@ s32 MachineCreate_Update(void) {
         func_80705E18();
         Audio_EditorExit();
         D_80794E10 = 0;
-        D_8076C954 = 0;
+        gInCourseEditor = false;
         PRINTF("WORKS MACHINE MODE : 0\n");
         gWorksMachineMode = MACHINE_MODE_0;
         func_xk1_8002FBB0();

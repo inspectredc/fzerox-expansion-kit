@@ -90,7 +90,7 @@ void func_xk2_800DF5C0(void) {
     }
 }
 
-extern s32 D_8076C950;
+extern bool gInCourseEditTestRun;
 extern Mtx D_xk2_80119838;
 
 Gfx* func_xk2_800DF5FC(Gfx* gfx) {
@@ -104,7 +104,7 @@ Gfx* func_xk2_800DF5FC(Gfx* gfx) {
         case 1:
             func_xk2_800DF5C0();
             func_xk1_800260E4();
-            if (D_8076C950 == 0) {
+            if (!gInCourseEditTestRun) {
                 gSPMatrix(gfx++, K0_TO_PHYS(&D_xk2_80119838), G_MTX_NOPUSH | G_MTX_MUL | G_MTX_PROJECTION);
             }
             gfx = func_xk2_800DF6FC(gfx);
@@ -140,14 +140,14 @@ Gfx* func_xk2_800DF6FC(Gfx* gfx) {
     gSPDisplayList(gfx++, D_30004A8);
     gSPDisplayList(gfx++, D_9014AA0);
 
-    if (D_8076C950 != 0) {
+    if (gInCourseEditTestRun) {
         gSPMatrix(gfx++, D_2000000, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gDPPipeSync(gfx++);
         gDPPipelineMode(gfx++, G_PM_1PRIMITIVE);
         gDPSetTextureFilter(gfx++, G_TF_BILERP);
         gfx = func_i3_8006339C(gfx, 0, 0);
         gfx = func_i2_800BDE60(gfx, 0);
-        gfx = Course_FeaturesDraw(gfx, 0);
+        gfx = Course_GadgetsDraw(gfx, 0);
         gSPLoadUcodeL(gfx++, gspF3DFLX2_Rej_fifo);
         func_xk2_800E1FC0(&gfx);
         gfx = func_80727F54(gfx, 0);
@@ -179,7 +179,7 @@ Gfx* func_xk2_800DF6FC(Gfx* gfx) {
 
     if ((D_807B3C20.controlPointCount >= 4) && (D_800D6CA0.unk_20 == -1) && (D_xk2_800F7404 == 0) &&
         (D_xk2_80104CA0[10] == 0)) {
-        gfx = Course_FeaturesDraw(gfx, 0);
+        gfx = Course_GadgetsDraw(gfx, 0);
     }
     if (D_xk2_800F7404 != 0) {
         D_xk2_800F7404 = 0;
@@ -372,7 +372,7 @@ Gfx* func_xk2_800E04E0(Gfx* gfx) {
     Vec3f spA8;
     s32 var_a0;
 
-    if (D_8076C950 != 0) {
+    if (gInCourseEditTestRun) {
         return gfx;
     }
     spC0 = func_xk2_800EFDE4(150.0f);
@@ -728,7 +728,7 @@ void func_xk2_800E1FC0(Gfx** gfxP) {
     gDPSetDepthImage(gfx++, K0_TO_PHYS(0x803DBC00));
     gDPSetScissor(gfx++, G_SC_NON_INTERLACE, 12, 8, 308, 232);
     gfx = func_xk2_800F1428(gfx);
-    if (D_8076C950 == 0) {
+    if (!gInCourseEditTestRun) {
         gSPMatrix(gfx++, K0_TO_PHYS(&D_xk2_80119838), G_MTX_NOPUSH | G_MTX_MUL | G_MTX_PROJECTION);
     }
     *gfxP = gfx;
@@ -736,7 +736,7 @@ void func_xk2_800E1FC0(Gfx** gfxP) {
 
 Gfx* func_xk2_800E2104(Gfx* gfx) {
 
-    if (D_8076C950 != 0) {
+    if (gInCourseEditTestRun) {
         return gfx;
     }
 
@@ -1173,7 +1173,7 @@ void func_xk2_800E47B4(Gfx** gfxP) {
     Gfx* gfx2;
     s32 i;
 
-    if ((D_800D11C8[1] == 0) || (D_8076C950 != 0) || (gCreateOption != CREATE_OPTION_POINT)) {
+    if ((D_800D11C8[1] == 0) || gInCourseEditTestRun || (gCreateOption != CREATE_OPTION_POINT)) {
         return;
     }
     gfx = *gfxP;
@@ -1538,7 +1538,7 @@ extern Gfx D_xk2_80136EF8[];
 
 Gfx* func_xk2_800E5870(Gfx* gfx) {
 
-    if (D_8076C950 != 0) {
+    if (gInCourseEditTestRun) {
         return gfx;
     }
     func_xk2_800E5570();
@@ -1613,7 +1613,7 @@ s32 D_xk2_800F71F0 = 0;
 void func_xk2_800E5B6C(void) {
     s32 temp_v0;
 
-    if (D_8076C950 == 0) {
+    if (!gInCourseEditTestRun) {
         gCurrentCourseInfo->courseSegments = D_807B3C20.unk_0000;
         gCurrentCourseInfo->segmentCount = D_807B3C20.controlPointCount;
     }
@@ -1778,10 +1778,10 @@ void func_xk2_800E6270(CourseInfo* courseInfo) {
             break;
         }
 
-        if (D_802BE5C0[var_s3].unk_08 == 0.0f) {
+        if (D_802BE5C0[var_s3].segmentTValue == 0.0f) {
             var_s3++;
         }
-        if (var_s2->segmentIndex != D_802BE5C0[var_s3].unk_04) {
+        if (var_s2->segmentIndex != D_802BE5C0[var_s3].segmentIndex) {
             var_s3 = (var_s3 + 1) % D_800D65C8;
         }
         if ((var_s2->trackSegmentInfo & TRACK_SHAPE_MASK) == TRACK_SHAPE_AIR) {
@@ -1811,16 +1811,16 @@ void func_xk2_800E6270(CourseInfo* courseInfo) {
             }
         } else {
             while (true) {
-                if (var_s2->segmentIndex != D_802BE5C0[var_s3].unk_04) {
+                if (var_s2->segmentIndex != D_802BE5C0[var_s3].segmentIndex) {
                     break;
                 }
 
-                if (D_802BE5C0[var_s3].unk_08 == 1.0f) {
+                if (D_802BE5C0[var_s3].segmentTValue == 1.0f) {
                     break;
                 }
 
                 if ((D_xk2_800F7058 == (D_80128690[var_s2->segmentIndex].unk_00 + 1)) &&
-                    (D_802BE5C0[var_s3].unk_08 > 0.5f)) {
+                    (D_802BE5C0[var_s3].segmentTValue > 0.5f)) {
                     var_s1->unk_00 = var_s2->trackSegmentInfo;
                     var_s1->unk_04 = 0.5f;
                     Course_SplineGetPosition(var_s2, 0.5f, &var_s1->pos);
@@ -1828,7 +1828,7 @@ void func_xk2_800E6270(CourseInfo* courseInfo) {
                     var_s1->basis = sp78;
                 } else {
                     var_s1->unk_00 = var_s2->trackSegmentInfo;
-                    var_s1->unk_04 = D_802BE5C0[var_s3].unk_08;
+                    var_s1->unk_04 = D_802BE5C0[var_s3].segmentTValue;
                     var_s1->pos.x = D_802BE5C0[var_s3].unk_14.x;
                     var_s1->pos.y = D_802BE5C0[var_s3].unk_14.y;
                     var_s1->pos.z = D_802BE5C0[var_s3].unk_14.z;
@@ -2905,7 +2905,7 @@ Gfx* func_xk2_800EA248(Gfx* gfx) {
     if (D_807B3C20.controlPointCount < 4) {
         return gfx;
     }
-    if (D_8076C950 != 0) {
+    if (gInCourseEditTestRun) {
         return gfx;
     }
     sp64 = D_807B3C20.unk_0000[1].pos;
@@ -2968,7 +2968,7 @@ Gfx* func_xk2_800EA4E4(Gfx* gfx) {
     if (D_800D6CA0.unk_20 != -1) {
         return gfx;
     }
-    if (D_8076C950 != 0) {
+    if (gInCourseEditTestRun) {
         return gfx;
     }
 

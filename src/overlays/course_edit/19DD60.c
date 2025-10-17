@@ -51,7 +51,7 @@ void func_xk2_800EC2A0(void) {
 }
 
 extern s32 D_8076C77C;
-extern s32 D_8076C954;
+extern bool gInCourseEditor;
 extern s32 D_8076C958;
 
 extern CourseData D_800D0910;
@@ -98,7 +98,7 @@ void func_xk2_800EC3AC(void) {
     D_802D0620[D_807B3C20.controlPointCount - 1].next = &D_802D0620[0];
     func_80702D6C();
     D_800D0910 = COURSE_CONTEXT()->courseData;
-    D_8076C954 = 0;
+    gInCourseEditor = false;
 }
 
 void func_xk2_800EC508(void) {
@@ -174,7 +174,7 @@ void CourseEdit_Init(void) {
     func_xk1_8002FB80();
     func_xk1_8002E9D0(3);
     func_i2_800B91AC(0);
-    D_8076C954 = 1;
+    gInCourseEditor = true;
     gPointOption = 0;
     D_80030608 = 0x1F4;
     D_xk2_800F704C = -1;
@@ -223,7 +223,7 @@ void CourseEdit_Init(void) {
 extern s8 gGamePaused;
 
 void func_xk2_800EC8AC(void) {
-    gGamePaused = 0;
+    gGamePaused = false;
     Audio_TriggerSystemSE(NA_SE_12);
     Audio_PauseSet(AUDIO_PAUSE_UNPAUSED);
     if ((gRacers[0].stateFlags & RACER_STATE_FLAGS_80000) && (D_xk2_80103FF8 == 0)) {
@@ -233,11 +233,11 @@ void func_xk2_800EC8AC(void) {
     }
 }
 
-extern s32 D_8076C950;
+extern bool gInCourseEditTestRun;
 
 void func_xk2_800EC91C(void) {
-    gGamePaused = 0;
-    D_8076C950 = 0;
+    gGamePaused = false;
+    gInCourseEditTestRun = false;
     func_i2_800B91AC(0);
     D_xk2_80103FF0 = 0;
     D_xk2_80103FF4 = 0;
@@ -306,7 +306,7 @@ void func_xk2_800EC9BC(void) {
 }
 
 s32 func_xk2_800ECBC0(void) {
-    if (gGamePaused != 0) {
+    if (gGamePaused) {
         func_i2_800AB82C();
         func_80726554();
         func_80717294();
@@ -319,7 +319,7 @@ s32 func_xk2_800ECBC0(void) {
         D_xk2_80103FF0 -= 1;
     }
     if (gControllers[gPlayerControlPorts[0]].buttonPressed & BTN_START) {
-        gGamePaused = 1;
+        gGamePaused = true;
         func_xk2_800F632C();
         Audio_TriggerSystemSE(NA_SE_12);
         Audio_PauseSet(AUDIO_PAUSE_PAUSED);
@@ -395,26 +395,26 @@ s32 CourseEdit_Update(void) {
     if (D_xk2_800F7040 != 0) {
         D_xk2_800F7040 -= 1;
     }
-    if (D_8076C950 == 0) {
+    if (!gInCourseEditTestRun) {
         func_xk2_800EC2A0();
     }
     func_xk2_800D8DAC();
     func_xk1_8002D810(&gControllers[gPlayerControlPorts[0]]);
     func_xk1_8002D974();
 
-    if (D_8076C950 != 0) {
+    if (gInCourseEditTestRun) {
         return func_xk2_800ECBC0();
     }
     if ((D_xk2_80119918 == 0) && (D_800D6CA0.unk_08 != 0xFF)) {
         func_xk2_800DEE20();
     }
-    if (D_8076C950 != 0) {
+    if (gInCourseEditTestRun) {
         return GAMEMODE_COURSE_EDIT;
     }
     if (D_807B3C20.controlPointCount < 4) {
         gCurrentCourseInfo->length = 0.0f;
     }
-    if (D_8076C950 == 0) {
+    if (!gInCourseEditTestRun) {
         func_80702F1C();
     }
     switch (D_800D6CA0.unk_08) {
@@ -618,7 +618,7 @@ void func_xk2_800ED6A4(Gfx** gfxP) {
     Gfx* gfx;
     s32 alpha;
 
-    if ((D_xk2_80103FF0 == 0) || (D_8076C950 == 0)) {
+    if ((D_xk2_80103FF0 == 0) || !gInCourseEditTestRun) {
         return;
     }
     gfx = *gfxP;
@@ -646,7 +646,7 @@ Gfx* D_xk2_80104004[] = { D_9014D78, D_9014DB8, D_9014DF8 };
 
 Gfx* CourseEdit_Draw(Gfx* gfx) {
 
-    if (D_8076C954 == 0) {
+    if (!gInCourseEditor) {
         return gfx;
     }
     D_80128C94 = &D_80128C90[D_8079A35C];
@@ -660,7 +660,7 @@ Gfx* CourseEdit_Draw(Gfx* gfx) {
     gSPDisplayList(gfx++, D_9014A38);
     gfx = func_xk2_800DF5FC(gfx);
     func_xk2_800ED6A4(&gfx);
-    if ((D_8076C950 != 0) && (gGamePaused != 0)) {
+    if ((gInCourseEditTestRun) && (gGamePaused)) {
         gfx = func_xk2_800F634C(gfx);
     }
     return gfx;

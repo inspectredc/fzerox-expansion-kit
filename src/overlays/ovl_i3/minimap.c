@@ -17,7 +17,7 @@ s32 sPlayerMinimapPositions[][4][2] = {
 
 s32 gPlayerMinimapLapCounterToggle[] = { 0, 0, 0, 0 };
 
-extern s32 D_8076C954;
+extern bool gInCourseEditor;
 extern s32 gNumPlayers;
 
 void func_i3_InitCourseMinimap(void) {
@@ -35,7 +35,7 @@ void func_i3_InitCourseMinimap(void) {
     Vec3f sp78;
     CourseInfo* sp74;
 
-    if (D_8076C954 == 0) {
+    if (!gInCourseEditor) {
         sCourseMinimapTex = Arena_Allocate(ALLOC_FRONT, 0x1000);
     }
 

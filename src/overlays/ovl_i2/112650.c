@@ -1111,7 +1111,7 @@ s32 func_i2_800B3360(CourseInfo* courseInfo) {
     return 0;
 }
 
-extern s32 D_8076C954;
+extern bool gInCourseEditor;
 
 s32 Course_SegmentJoinsInit(CourseInfo* courseInfo) {
     s32 var_v1 = 0;
@@ -1137,7 +1137,7 @@ s32 Course_SegmentJoinsInit(CourseInfo* courseInfo) {
                 if (var_v0->length <=
                     (D_i2_800C18F8[TRACK_SHAPE_INDEX((u32) var_v0->trackSegmentInfo & TRACK_SHAPE_MASK)] + 100.0f)) {
                     var_v1 = -1;
-                    if (D_8076C954 != 0) {
+                    if (gInCourseEditor) {
                         func_xk2_800F1330(var_v0 - courseInfo->courseSegments, 2);
                     }
                 }
@@ -1147,7 +1147,7 @@ s32 Course_SegmentJoinsInit(CourseInfo* courseInfo) {
                     ((2.0f * D_i2_800C18F8[TRACK_SHAPE_INDEX((u32) var_v0->trackSegmentInfo & TRACK_SHAPE_MASK)]) +
                      100.0f)) {
                     var_v1 = -1;
-                    if (D_8076C954 != 0) {
+                    if (gInCourseEditor) {
                         func_xk2_800F1330(var_v0 - courseInfo->courseSegments, 2);
                     }
                 }
@@ -1965,7 +1965,7 @@ s32 func_i2_800B5CD8(CourseInfo* courseInfo) {
     }
     spB8 = func_i2_800B58B8(var_s1);
     sp280 = Course_SplineGetBasis(var_s1, 0.0f, &spEC, 0.0f);
-    if (D_8076C954 != 0) {
+    if (gInCourseEditor) {
         D_80033840[0] = spEC;
         spB0 = &D_80033840[1];
     }
@@ -2257,7 +2257,7 @@ s32 func_i2_800B5CD8(CourseInfo* courseInfo) {
             if (D_800D65C8 < 0x300) {
                 var_s3 = var_s0;
                 var_s0++;
-                if (D_8076C954 != 0) {
+                if (gInCourseEditor) {
                     *spB0++ = spEC;
                 }
                 D_800D65C8++;
@@ -3138,7 +3138,7 @@ void Course_Init(void) {
     } else {
         func_i2_800B91AC(1);
     }
-    if (D_8076C954 == 0) {
+    if (!gInCourseEditor) {
         func_i2_800B9290();
     }
     Course_SegmentsInit();

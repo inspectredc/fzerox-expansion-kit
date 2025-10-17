@@ -75,7 +75,7 @@ Gfx* Course_FeatureDrawBuildingSpire(Gfx* gfx);
 Gfx* Course_FeatureDrawBuildingMountain(Gfx* gfx);
 Gfx* Course_FeatureDrawBuildingTallGold(Gfx* gfx);
 void Course_LandminesViewInteractDataInit(void);
-Gfx* Course_FeaturesDraw(Gfx*, s32);
+Gfx* Course_GadgetsDraw(Gfx*, s32);
 void Course_JumpsViewInteractDataInit(void);
 void Course_DecorationsViewInteractDataInit(void);
 void Course_EffectsViewInteractDataInit(bool);

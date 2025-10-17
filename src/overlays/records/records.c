@@ -750,7 +750,7 @@ Gfx* Records_Draw(Gfx* gfx) {
     D_807A15E0 = &gGfxPool->unk_2A308[0x7FF];
     gfx = func_i3_8006339C(gfx, 0, 0);
     gfx = func_i2_800BDE60(gfx, 0);
-    gfx = Course_FeaturesDraw(gfx, 0);
+    gfx = Course_GadgetsDraw(gfx, 0);
     gfx = func_i3_80065560(gfx, sRecordsCourseIndex);
     if (sGhostMarkerState != GHOST_MARKER_NONE) {
         gfx = Records_DrawGhostMarker(gfx);
