@@ -370,30 +370,30 @@ void func_i2_800B0D10(s32 venue) {
     }
 }
 
-void func_i2_800B0FAC(CourseSegment* arg0, Mtx3F* arg1) {
-    f32 temp_fv1;
+void func_i2_800B0FAC(CourseSegment* segment, Mtx3F* arg1) {
+    f32 normalizingFactor;
     f32 sp38;
     f32 sp34;
     f32 sp30;
-    Vec3f sp24;
+    Vec3f forward;
     f32 temp_ft4;
 
-    temp_fv1 = 1.0f / Course_SplineGetTangent(arg0, 0.0f, &sp24);
-    sp24.x *= temp_fv1;
-    sp24.y *= temp_fv1;
-    sp24.z *= temp_fv1;
+    normalizingFactor = 1.0f / Course_SplineGetTangent(segment, 0.0f, &forward);
+    forward.x *= normalizingFactor;
+    forward.y *= normalizingFactor;
+    forward.z *= normalizingFactor;
 
-    sp38 = arg1->x.x - sp24.x;
-    sp34 = arg1->x.y - sp24.y;
-    sp30 = arg1->x.z - sp24.z;
+    sp38 = arg1->x.x - forward.x;
+    sp34 = arg1->x.y - forward.y;
+    sp30 = arg1->x.z - forward.z;
 
     //! @bug This should probably use z instead of y twice
-    temp_ft4 = ((sp38 * arg0->up.x) + (sp34 * arg0->up.y) + (sp38 * arg0->up.y));
+    temp_ft4 = ((sp38 * segment->up.x) + (sp34 * segment->up.y) + (sp38 * segment->up.y));
     temp_ft4 *= 2.0f;
 
-    arg1->y.x = (arg0->up.x + sp38) - (temp_ft4 * arg0->up.x);
-    arg1->y.y = (arg0->up.y + sp34) - (temp_ft4 * arg0->up.y);
-    arg1->y.z = (arg0->up.z + sp30) - (temp_ft4 * arg0->up.z);
+    arg1->y.x = (segment->up.x + sp38) - (temp_ft4 * segment->up.x);
+    arg1->y.y = (segment->up.y + sp34) - (temp_ft4 * segment->up.y);
+    arg1->y.z = (segment->up.z + sp30) - (temp_ft4 * segment->up.z);
     func_806F6D8C(arg1);
 }
 

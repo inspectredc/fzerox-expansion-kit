@@ -123,12 +123,12 @@ typedef struct CourseSegment {
     /* 0x38 */ struct CourseSegment* prev;
     /* 0x3C */ struct unk_36ED0* unk_3C;
     /* 0x40 */ struct unk_36ED0* unk_40;
-    /* 0x44 */ struct Jump* unk_44;
-    /* 0x48 */ struct Jump* unk_48;
-    /* 0x4C */ struct Landmine* unk_4C;
-    /* 0x50 */ struct Landmine* unk_50;
-    /* 0x54 */ struct unk_802D3E38* unk_54;
-    /* 0x58 */ struct unk_802D3E38* unk_58;
+    /* 0x44 */ struct Jump* jumpsStart;
+    /* 0x48 */ struct Jump* jumpsEnd;
+    /* 0x4C */ struct Landmine* landminesStart;
+    /* 0x50 */ struct Landmine* landminesEnd;
+    /* 0x54 */ struct Effect* effectsStart;
+    /* 0x58 */ struct Effect* effectsEnd;
     /* 0x5C */ s8 unk_5C[0x8]; // likely a pair of unk_802D2D78 struct ptrs
     /* 0x64 */ f32 unk_64;
     /* 0x68 */ f32 unk_68;
@@ -197,14 +197,14 @@ typedef struct Landmine {
     s8 unk_10[0x4];
 } Landmine; // size = 0x10
 
-typedef struct unk_802D3E38 {
+typedef struct Effect {
     s32 effectType;
     f32 segmentTValueStart;
     f32 segmentTValueEnd;
     Vec3f unk_0C;
     Vec3f unk_18;
     s8 unk_24[0x4];
-} unk_802D3E38; // size = 0x28
+} Effect; // size = 0x28
 
 #define DASH_LATERAL_OFFSET(effect) ((effect)->rightEdgeDistance)
 #define DASH_LATERAL_OFFSET2(effect) ((effect)->leftEdgeDistance)
