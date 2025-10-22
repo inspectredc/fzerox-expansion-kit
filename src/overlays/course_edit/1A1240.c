@@ -99,7 +99,7 @@ void func_xk2_800EFA94(CourseSegment* arg0, CourseSegment* arg1) {
     }
 
     for (j = 0; j < i - 1; j++) {
-        if (func_807032B0(sp64[j], sp64[j + 1]) < 498.0f) {
+        if (Math_VectorGetDistance(sp64[j], sp64[j + 1]) < 498.0f) {
             Audio_TriggerSystemSE(NA_SE_32);
             return;
         }
@@ -129,7 +129,7 @@ void func_xk2_800EFCD0(void) {
 
     var_v1 = 0;
     var_a2 = 0;
-    for (i = 0; i < D_807B3C20.unk_2900; i++) {
+    for (i = 0; i < D_807B3C20.controlPointCount; i++) {
         if (D_80128690[i].unk_08 != 0) {
             var_v1++;
             continue;
@@ -137,7 +137,7 @@ void func_xk2_800EFCD0(void) {
         sp30 = i;
         break;
     }
-    if (var_v1 == D_807B3C20.unk_2900) {
+    if (var_v1 == D_807B3C20.controlPointCount) {
         return;
     }
     var_v1 = 0;
@@ -184,7 +184,7 @@ s32 func_xk2_800EFDE4(f32 arg0) {
     Vec3f sp58;
 
     var_fp = -1;
-    for (i = 0; i < D_807B3C20.unk_2900; i++) {
+    for (i = 0; i < D_807B3C20.controlPointCount; i++) {
 
         sp58 = D_807B3C20.unk_0000[i].pos;
         if (func_xk2_800EF090(sp58, &sp70, &sp6C) != 0) {
@@ -204,7 +204,7 @@ void func_xk2_800EFF40(void) {
     s32 i;
     s32 temp_a0;
 
-    for (i = 0; i < D_807B3C20.unk_2900; i++) {
+    for (i = 0; i < D_807B3C20.controlPointCount; i++) {
 
         if (!(D_807B3C20.unk_0000[i].trackSegmentInfo & TRACK_FLAG_8000000)) {
             temp_fv0 = (D_807B3C20.unk_0000[i].radiusLeft + D_807B3C20.unk_0000[i].radiusRight) / 2.0f;
@@ -342,21 +342,21 @@ f32 func_xk2_800F05C0(CourseSegment* arg0, Vec3f arg1) {
     Vec3f sp44;
     Mtx3F sp20;
 
-    sp58 = func_i2_800B20D0(arg0, 0.0f, &sp54);
-    func_i2_800B2824(arg0, 0.0f, &sp20, sp58);
+    sp58 = Course_SplineGetLengthInfo(arg0, 0.0f, &sp54);
+    Course_SplineGetBasis(arg0, 0.0f, &sp20, sp58);
     sp44.x = (arg1.y * sp20.x.z) - (arg1.z * sp20.x.y);
     sp44.y = (arg1.z * sp20.x.x) - (arg1.x * sp20.x.z);
     sp44.z = (arg1.x * sp20.x.y) - (arg1.y * sp20.x.x);
-    func_80703444(&sp44, 1.0f);
+    Math_VectorSetScale(&sp44, 1.0f);
     arg1.x = (sp44.z * sp20.x.y) - (sp44.y * sp20.x.z);
     arg1.y = (sp44.x * sp20.x.z) - (sp44.z * sp20.x.x);
     arg1.z = (sp44.y * sp20.x.x) - (sp44.x * sp20.x.y);
-    func_80703444(&arg1, 1.0f);
-    var_fv1 = func_xk2_800EF52C((arg0->unk_0C.x * arg1.x) + (arg0->unk_0C.y * arg1.y) + (arg0->unk_0C.z * arg1.z));
-    sp44.x = (arg0->unk_0C.z * sp20.x.y) - (arg0->unk_0C.y * sp20.x.z);
-    sp44.y = (arg0->unk_0C.x * sp20.x.z) - (arg0->unk_0C.z * sp20.x.x);
-    sp44.z = (arg0->unk_0C.y * sp20.x.x) - (arg0->unk_0C.x * sp20.x.y);
-    func_80703444(&sp44, 1.0f);
+    Math_VectorSetScale(&arg1, 1.0f);
+    var_fv1 = func_xk2_800EF52C((arg0->up.x * arg1.x) + (arg0->up.y * arg1.y) + (arg0->up.z * arg1.z));
+    sp44.x = (arg0->up.z * sp20.x.y) - (arg0->up.y * sp20.x.z);
+    sp44.y = (arg0->up.x * sp20.x.z) - (arg0->up.z * sp20.x.x);
+    sp44.z = (arg0->up.y * sp20.x.x) - (arg0->up.x * sp20.x.y);
+    Math_VectorSetScale(&sp44, 1.0f);
 
     if (((sp44.x * arg1.x) + (sp44.y * arg1.y) + (sp44.z * arg1.z)) < 0.0f) {
         var_fv1 = 360.0f - var_fv1;
@@ -384,10 +384,10 @@ void func_xk2_800F07A4(void) {
         !(gControllers[gPlayerControlPorts[0]].buttonPressed & BTN_A) || (D_800D6CA0.unk_0C == 0)) {
         return;
     }
-    if (D_807B3C20.unk_2900 < 4) {
+    if (D_807B3C20.controlPointCount < 4) {
         return;
     }
-    if (D_807B3C20.unk_2900 >= 60) {
+    if (D_807B3C20.controlPointCount >= 60) {
         Audio_TriggerSystemSE(NA_SE_32);
         return;
     }
@@ -401,21 +401,21 @@ void func_xk2_800F07A4(void) {
     temp_s2 = &D_807B3C20.unk_0000[D_800D6CA0.unk_0C];
 
     D_xk2_80128CB4 = (temp_s2->radiusLeft + temp_s2->radiusRight) * 0.5f;
-    func_i2_800B2824(temp_s2, 0.0f, &spCC, func_i2_800B20D0(temp_s2, 0.0f, &sp1BC));
+    Course_SplineGetBasis(temp_s2, 0.0f, &spCC, Course_SplineGetLengthInfo(temp_s2, 0.0f, &sp1BC));
     spFC.x = temp_s2->next->pos.x - temp_s2->pos.x;
     spFC.y = temp_s2->next->pos.y - temp_s2->pos.y;
     spFC.z = temp_s2->next->pos.z - temp_s2->pos.z;
 
     sqrtf(SQ(spFC.x) + SQ(spFC.y) + SQ(spFC.z));
-    func_80703444(&spFC, 1.0f);
+    Math_VectorSetScale(&spFC, 1.0f);
     if (((spFC.x * spCC.z.x) + (spFC.y * spCC.z.y) + (spFC.z * spCC.z.z)) > 0.0f) {
         D_xk2_80128CB0 = 1.0f;
     } else {
         D_xk2_80128CB0 = -1.0f;
     }
     if (1) {}
-    func_i2_800B26B8(temp_s2, 0.5f, &spF0);
-    func_i2_800B2824(temp_s2, 0.5f, &spCC, func_i2_800B20D0(temp_s2, 0.5f, &sp1BC));
+    Course_SplineGetPosition(temp_s2, 0.5f, &spF0);
+    Course_SplineGetBasis(temp_s2, 0.5f, &spCC, Course_SplineGetLengthInfo(temp_s2, 0.5f, &sp1BC));
 
     if (func_xk2_800F01C4(spF0, spCC) != 0) {
         Audio_TriggerSystemSE(NA_SE_32);
@@ -424,9 +424,9 @@ void func_xk2_800F07A4(void) {
     sp108.radiusLeft = temp_s2->radiusLeft;
     sp108.radiusRight = temp_s2->radiusRight;
     // clang-format off
-    sp108.unk_0C.x = 0;    \
-    sp108.unk_0C.y = 1.0f; \
-    sp108.unk_0C.z = 0;
+    sp108.up.x = 0;    \
+    sp108.up.y = 1.0f; \
+    sp108.up.z = 0;
     // clang-format on
     sp108.trackSegmentInfo = temp_s2->trackSegmentInfo;
 
@@ -513,12 +513,12 @@ void func_xk2_800F0FF4(void) {
     s32 temp_a2;
     CourseSegment* var_v1;
 
-    if (D_807B3C20.unk_2900 < 4) {
+    if (D_807B3C20.controlPointCount < 4) {
         return;
     }
 
     var_v1 = &D_807B3C20.unk_0000[1];
-    for (i = 0; i < D_807B3C20.unk_2900; i++) {
+    for (i = 0; i < D_807B3C20.controlPointCount; i++) {
         temp_a0 = var_v1->segmentIndex;
         D_800CF950.bankAngle[i] = 360 - gCourseCtx.courseData.bankAngle[temp_a0];
 
@@ -537,7 +537,7 @@ void func_xk2_800F0FF4(void) {
         D_xk2_80119920[i].trackSegmentInfo = var_v1->prev->trackSegmentInfo;
         var_v1 = var_v1->prev;
     }
-    for (i = 0; i < D_807B3C20.unk_2900; i++) {
+    for (i = 0; i < D_807B3C20.controlPointCount; i++) {
         D_807B3C20.unk_0000[i] = D_xk2_80119920[i];
 
         gCourseCtx.courseData.bankAngle[i] = D_800CF950.bankAngle[i];
@@ -552,13 +552,13 @@ void func_xk2_800F0FF4(void) {
         gCourseCtx.courseData.sign[i] = D_800CF950.sign[i];
     }
 
-    for (i = 0; i < D_807B3C20.unk_2900; i++) {
+    for (i = 0; i < D_807B3C20.controlPointCount; i++) {
         D_807B3C20.unk_0000[i].segmentIndex = i;
         D_807B3C20.unk_0000[i].next = &D_807B3C20.unk_0000[i + 1];
         D_807B3C20.unk_0000[i].prev = &D_807B3C20.unk_0000[i - 1];
     }
-    D_807B3C20.unk_0000[0].prev = &D_807B3C20.unk_0000[D_807B3C20.unk_2900 - 1];
-    D_807B3C20.unk_0000[D_807B3C20.unk_2900 - 1].next = &D_807B3C20.unk_0000[0];
+    D_807B3C20.unk_0000[0].prev = &D_807B3C20.unk_0000[D_807B3C20.controlPointCount - 1];
+    D_807B3C20.unk_0000[D_807B3C20.controlPointCount - 1].next = &D_807B3C20.unk_0000[0];
 
     PRINTF("BACKUP\n");
     PRINTF("EFFECT c\n");

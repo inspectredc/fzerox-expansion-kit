@@ -793,7 +793,7 @@ void Matrix_SetTransRot(Mtx* mtx, MtxF* mtxF, f32 scale, s32 xRot, s32 yRot, s32
     Matrix_ToMtx(mtxF, mtx);
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/3A10/func_806F8868.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/3A10/Matrix_SetAxisRotation.s")
 
 void Matrix_SetShadowProjection(Mtx* mtx, MtxF* mtxF, f32 lightProjectionX, f32 lightProjectionY, f32 lightProjectionZ,
                                 f32 planePointX, f32 planePointY, f32 planePointZ, f32 planeNormalX, f32 planeNormalY,

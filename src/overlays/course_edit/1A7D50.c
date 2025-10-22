@@ -72,7 +72,7 @@ Gfx* func_xk2_800F634C(Gfx* gfx) {
         }
         if ((gControllers[gPlayerControlPorts[0]].buttonPressed & BTN_START) &&
             !(gControllers[gPlayerControlPorts[0]].buttonPressed & BTN_A)) {
-            gGamePaused = 0;
+            gGamePaused = false;
             Audio_TriggerSystemSE(NA_SE_12);
             Audio_PauseSet(AUDIO_PAUSE_UNPAUSED);
         }

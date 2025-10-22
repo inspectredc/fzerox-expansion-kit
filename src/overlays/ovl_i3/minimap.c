@@ -17,7 +17,7 @@ s32 sPlayerMinimapPositions[][4][2] = {
 
 s32 gPlayerMinimapLapCounterToggle[] = { 0, 0, 0, 0 };
 
-extern s32 D_8076C954;
+extern bool gInCourseEditor;
 extern s32 gNumPlayers;
 
 void func_i3_InitCourseMinimap(void) {
@@ -35,7 +35,7 @@ void func_i3_InitCourseMinimap(void) {
     Vec3f sp78;
     CourseInfo* sp74;
 
-    if (D_8076C954 == 0) {
+    if (!gInCourseEditor) {
         sCourseMinimapTex = Arena_Allocate(ALLOC_FRONT, 0x1000);
     }
 
@@ -57,8 +57,8 @@ void func_i3_InitCourseMinimap(void) {
     temp_s5 = var_s1;
 
     while (true) {
-        temp_fs1 = func_i2_800B2500(var_s1, var_fs0, &sp84);
-        func_i2_800B26B8(var_s1, var_fs0, &sp78);
+        temp_fs1 = Course_SplineGetTangent(var_s1, var_fs0, &sp84);
+        Course_SplineGetPosition(var_s1, var_fs0, &sp78);
         temp_s0 = Math_Round(((sp78.x * 64.0f * sp90) / 16000.0f) + temp_fs3) / 2;
         temp_v0 = Math_Round(((sp78.z * 64.0f * sp90) / 16000.0f) + temp_fs3);
         if ((temp_s0 >= 0) && (temp_s0 < 64)) {
@@ -85,7 +85,7 @@ void func_i3_InitCourseMinimap(void) {
                 break;
             }
             var_fs0 -= 1.0f;
-            var_fs0 *= (temp_fs1 / func_i2_800B2500(var_s1, 0.0f, &sp84));
+            var_fs0 *= (temp_fs1 / Course_SplineGetTangent(var_s1, 0.0f, &sp84));
         }
     }
 
@@ -94,8 +94,8 @@ void func_i3_InitCourseMinimap(void) {
     temp_s5 = var_s1;
 
     while (true) {
-        temp_fs1 = func_i2_800B2500(var_s1, var_fs0, &sp84);
-        func_i2_800B26B8(var_s1, var_fs0, &sp78);
+        temp_fs1 = Course_SplineGetTangent(var_s1, var_fs0, &sp84);
+        Course_SplineGetPosition(var_s1, var_fs0, &sp78);
         temp_s0 = Math_Round(((sp78.x * 64.0f * sp90) / 16000.0f) + temp_fs3) / 2;
         temp_v0 = Math_Round(((sp78.z * 64.0f * sp90) / 16000.0f) + temp_fs3);
         if ((temp_s0 > 0) && (temp_s0 < 64)) {
@@ -115,13 +115,13 @@ void func_i3_InitCourseMinimap(void) {
                 break;
             }
             var_fs0 -= 1.0f;
-            var_fs0 *= (temp_fs1 / func_i2_800B2500(var_s1, 0.0f, &sp84));
+            var_fs0 *= (temp_fs1 / Course_SplineGetTangent(var_s1, 0.0f, &sp84));
         }
     }
 
     var_s1 = sp74->courseSegments;
-    func_i2_800B2500(var_s1, 0.0f, &sp84);
-    func_i2_800B26B8(var_s1, 0.0f, &sp78);
+    Course_SplineGetTangent(var_s1, 0.0f, &sp84);
+    Course_SplineGetPosition(var_s1, 0.0f, &sp78);
     temp_s0 = Math_Round(((sp78.x * 64.0f * sp90) / 16000.0f) + temp_fs3) / 2;
     temp_v0 = Math_Round(((sp78.z * 64.0f * sp90) / 16000.0f) + temp_fs3);
     if ((temp_s0 > 0) && (temp_s0 < 63)) {
