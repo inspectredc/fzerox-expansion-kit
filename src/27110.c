@@ -3485,8 +3485,7 @@ void func_80721D78(Racer* racer, Controller* controller) {
                 var_fs1 = racer->unk_0C.unk_34.x - jump->pos.x;
                 var_fs0 = racer->unk_0C.unk_34.y - jump->pos.y;
                 var_ft4 = racer->unk_0C.unk_34.z - jump->pos.z;
-                var_fa1 =
-                    (jump->basis.x.x * var_fs1) + (jump->basis.x.y * var_fs0) + (jump->basis.x.z * var_ft4);
+                var_fa1 = (jump->basis.x.x * var_fs1) + (jump->basis.x.y * var_fs0) + (jump->basis.x.z * var_ft4);
 
                 if (var_fa1 < 0.0f) {
                     continue;
@@ -3496,8 +3495,7 @@ void func_80721D78(Racer* racer, Controller* controller) {
                     continue;
                 }
 
-                var_fa1 =
-                    (jump->basis.z.x * var_fs1) + (jump->basis.z.y * var_fs0) + (jump->basis.z.z * var_ft4);
+                var_fa1 = (jump->basis.z.x * var_fs1) + (jump->basis.z.y * var_fs0) + (jump->basis.z.z * var_ft4);
 
                 if (var_fa1 < 0.0f) {
                     continue;
@@ -3507,8 +3505,7 @@ void func_80721D78(Racer* racer, Controller* controller) {
                     continue;
                 }
 
-                var_fa1 =
-                    (jump->basis.y.x * var_fs1) + (jump->basis.y.y * var_fs0) + (jump->basis.y.z * var_ft4);
+                var_fa1 = (jump->basis.y.x * var_fs1) + (jump->basis.y.y * var_fs0) + (jump->basis.y.z * var_ft4);
 
                 if (var_fa1 < 0.0f) {
                     continue;
