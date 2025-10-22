@@ -557,7 +557,7 @@ void func_806F5310(void) {
                         } else if (gCurrentCourseInfo->courseIndex == COURSE_DEATH_RACE) {
                             Audio_DDBgmReady(BGM_DEATHRACE);
                         } else {
-                            Audio_DDBgmReady(func_80703228());
+                            Audio_DDBgmReady(Course_GetBgm());
                         }
                     }
                     break;

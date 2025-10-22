@@ -873,7 +873,7 @@ Gfx* func_i3_8006339C(Gfx* gfx, s32 playerIndex, s32 arg2) {
 }
 
 extern GfxPool D_8024E260[];
-extern s32 D_8076C950;
+extern bool gInCourseEditTestRun;
 extern s16 gPlayer1OverallPosition;
 extern s32 gCupType;
 
@@ -897,7 +897,7 @@ void func_i3_800639E0(void) {
         return;
     }
 
-    if (D_8076C950 != 0) {
+    if (gInCourseEditTestRun) {
         return;
     }
 

@@ -1303,6 +1303,9 @@ D_A00BB40 = 0xA00BB40;
 D_A00BD80 = 0xA00BD80;
 
 aSetupFillBlackDL = 0x8014780;
+aSetupLandmineTextureDL = 0x8022380;
+aSetupCourseEffectTextureDL = 0x80223F8;
+aJumpFeatureTex = 0x8015A20;
 
 // temp segment addrs
 

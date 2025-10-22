@@ -42,7 +42,7 @@ void func_i5_800770B4(void) {
         D_i5_8007B07C = 0;
         func_80702BC4(gCourseModelCupType * 6 + gCourseModelCupCourseNo);
         func_80702E0C(&gCourseInfos[gCourseModelCupType * 6 + gCourseModelCupCourseNo]);
-        func_i2_800B3640(&gCourseInfos[gCourseModelCupType * 6 + gCourseModelCupCourseNo]);
+        Course_SegmentLengthsInit(&gCourseInfos[gCourseModelCupType * 6 + gCourseModelCupCourseNo]);
         D_8007C270[gCourseModelCupCourseNo] =
             func_i2_800B71B0(&gCourseInfos[gCourseModelCupType * 6 + gCourseModelCupCourseNo],
                              &D_i5_8007C290[gCourseModelCupCourseNo * 0x900]);
@@ -71,7 +71,7 @@ void func_i5_800770B4(void) {
             D_i5_8007B07C = 0;
             func_80702BC4(gCourseModelCupType * 6 + gCourseModelCupCourseNo);
             func_80702E0C(&gCourseInfos[gCourseModelCupType * 6 + gCourseModelCupCourseNo]);
-            func_i2_800B3640(&gCourseInfos[gCourseModelCupType * 6 + gCourseModelCupCourseNo]);
+            Course_SegmentLengthsInit(&gCourseInfos[gCourseModelCupType * 6 + gCourseModelCupCourseNo]);
             D_8007C270[gCourseModelCupCourseNo] =
                 func_i2_800B71B0(&gCourseInfos[gCourseModelCupType * 6 + gCourseModelCupCourseNo],
                                  &D_i5_8007C290[gCourseModelCupCourseNo * 0x900]);

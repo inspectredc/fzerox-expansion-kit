@@ -41,8 +41,8 @@ void func_xk2_800F5D1C(void) {
     D_xk2_80119688 = (D_xk2_80119688 + 8) % 360;
     spB4 = (D_xk2_80119688 * 0x1000) / 360;
 
-    func_806F8868(NULL, &sp70, 1.0f, spB4, gPlayers->unk_5C.x.x, gPlayers->unk_5C.x.y, gPlayers->unk_5C.x.z, 0.0f, 0.0f,
-                  0.0f);
+    Matrix_SetAxisRotation(NULL, &sp70, 1.0f, spB4, gPlayers->unk_5C.x.x, gPlayers->unk_5C.x.y, gPlayers->unk_5C.x.z,
+                           0.0f, 0.0f, 0.0f);
 
     vtx = gGfxPool->unk_365E8;
     temp_fv1 = COS(spB4) * 24.0f;
