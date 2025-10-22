@@ -227,7 +227,7 @@ Gfx* Course_GadgetsDraw(Gfx* gfx, s32 arg1) {
     gSPDisplayList(gfx++, aSetupLandmineTextureDL);
     gDPSetTextureFilter(gfx++, G_TF_BILERP);
     gSPMatrix(gfx++, D_2000000, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    
+
     featuresInfo = &gCourseFeaturesInfo;
 
     if ((featuresInfo->landmineCount != 0)) {
@@ -360,7 +360,8 @@ Gfx* Course_GadgetsDraw(Gfx* gfx, s32 arg1) {
                     totalVtxGroups--;
                 }
                 // FAKE!!
-                if (((!featuresInfo->landmineCount) && (!featuresInfo->landmineCount)) && (!featuresInfo->landmineCount)){}
+                if (((!featuresInfo->landmineCount) && (!featuresInfo->landmineCount)) &&
+                    (!featuresInfo->landmineCount)) {}
 
                 vtx = effectDrawData->vtxStart;
                 temp_s3 = totalVtxGroups - 1;
@@ -370,14 +371,14 @@ Gfx* Course_GadgetsDraw(Gfx* gfx, s32 arg1) {
                     for (k = 0; k < 15; k++) {
                         temp_t0 = k << 1;
                         tempVtx = &vtx[temp_t0];
-                        if ((tempVtx[2].v.tc[1] < tempVtx[0].v.tc[1]) ||
-                            (tempVtx[3].v.tc[1] < tempVtx[1].v.tc[1])) {
+                        if ((tempVtx[2].v.tc[1] < tempVtx[0].v.tc[1]) || (tempVtx[3].v.tc[1] < tempVtx[1].v.tc[1])) {
                             gSPModifyVertex(gfx++, (temp_t0), G_MWO_POINT_ST,
                                             VERTEX_MODIFIED_ST(tempVtx[0].v.tc[0], 0x8000));
                             gSPModifyVertex(gfx++, (temp_t0) + 1, G_MWO_POINT_ST,
                                             VERTEX_MODIFIED_ST(tempVtx[1].v.tc[0], 0x8000));
                         }
-                        gSP2Triangles(gfx++, (temp_t0), (temp_t0) + 2, (temp_t0) + 1, 0, (temp_t0) + 1, (temp_t0) + 2, (temp_t0) + 3, 0);
+                        gSP2Triangles(gfx++, (temp_t0), (temp_t0) + 2, (temp_t0) + 1, 0, (temp_t0) + 1, (temp_t0) + 2,
+                                      (temp_t0) + 3, 0);
                     }
                     vtx += 32;
                 }
@@ -388,8 +389,7 @@ Gfx* Course_GadgetsDraw(Gfx* gfx, s32 arg1) {
                 for (k = 0; k < temp_s3; k++) {
                     temp_t0 = k << 1;
                     tempVtx = &vtx[temp_t0];
-                    if ((tempVtx[2].v.tc[1] < tempVtx[0].v.tc[1]) ||
-                        (tempVtx[3].v.tc[1] < tempVtx[1].v.tc[1])) {
+                    if ((tempVtx[2].v.tc[1] < tempVtx[0].v.tc[1]) || (tempVtx[3].v.tc[1] < tempVtx[1].v.tc[1])) {
                         tempVtx = &vtx[k * 2];
                         gSPModifyVertex(gfx++, (temp_t0), G_MWO_POINT_ST,
                                         VERTEX_MODIFIED_ST2((tempVtx[0].v.tc[0]), 0x8000));
@@ -397,7 +397,8 @@ Gfx* Course_GadgetsDraw(Gfx* gfx, s32 arg1) {
                         gSPModifyVertex(gfx++, (temp_t0) + 1, G_MWO_POINT_ST,
                                         VERTEX_MODIFIED_ST2((tempVtx[1].v.tc[0]), 0x8000));
                     }
-                    gSP2Triangles(gfx++, (temp_t0), (temp_t0) + 2, (temp_t0) + 1, 0, (temp_t0) + 1, (temp_t0) + 2, (temp_t0) + 3, 0);
+                    gSP2Triangles(gfx++, (temp_t0), (temp_t0) + 2, (temp_t0) + 1, 0, (temp_t0) + 1, (temp_t0) + 2,
+                                  (temp_t0) + 3, 0);
                 }
             }
         } else {
@@ -433,14 +434,14 @@ Gfx* Course_GadgetsDraw(Gfx* gfx, s32 arg1) {
                         if (D_802BE5C0[D_8079E938[k + var_v1]].unk_10 == 0) {
                             continue;
                         }
-                        if ((tempVtx[2].v.tc[1] < tempVtx[0].v.tc[1]) ||
-                            (tempVtx[3].v.tc[1] < tempVtx[1].v.tc[1])) {
+                        if ((tempVtx[2].v.tc[1] < tempVtx[0].v.tc[1]) || (tempVtx[3].v.tc[1] < tempVtx[1].v.tc[1])) {
                             gSPModifyVertex(gfx++, (temp_t0), G_MWO_POINT_ST,
                                             VERTEX_MODIFIED_ST(tempVtx[0].v.tc[0], 0x8000));
                             gSPModifyVertex(gfx++, (temp_t0) + 1, G_MWO_POINT_ST,
                                             VERTEX_MODIFIED_ST(tempVtx[1].v.tc[0], 0x8000));
                         }
-                        gSP2Triangles(gfx++, (temp_t0), (temp_t0) + 2, (temp_t0) + 1, 0, (temp_t0) + 1, (temp_t0) + 2, (temp_t0) + 3, 0);
+                        gSP2Triangles(gfx++, (temp_t0), (temp_t0) + 2, (temp_t0) + 1, 0, (temp_t0) + 1, (temp_t0) + 2,
+                                      (temp_t0) + 3, 0);
                     }
                     vtx += 32;
                 }
@@ -455,8 +456,7 @@ Gfx* Course_GadgetsDraw(Gfx* gfx, s32 arg1) {
                     if (D_802BE5C0[D_8079E938[k + var_v1]].unk_10 == 0) {
                         continue;
                     }
-                    if ((tempVtx[2].v.tc[1] < tempVtx[0].v.tc[1]) ||
-                        (tempVtx[3].v.tc[1] < tempVtx[1].v.tc[1])) {
+                    if ((tempVtx[2].v.tc[1] < tempVtx[0].v.tc[1]) || (tempVtx[3].v.tc[1] < tempVtx[1].v.tc[1])) {
                         tempVtx = &vtx[k * 2];
                         gSPModifyVertex(gfx++, (temp_t0), G_MWO_POINT_ST,
                                         VERTEX_MODIFIED_ST2((tempVtx[0].v.tc[0]), 0x8000));
@@ -464,7 +464,8 @@ Gfx* Course_GadgetsDraw(Gfx* gfx, s32 arg1) {
                         gSPModifyVertex(gfx++, (temp_t0) + 1, G_MWO_POINT_ST,
                                         VERTEX_MODIFIED_ST2((tempVtx[1].v.tc[0]), 0x8000));
                     }
-                    gSP2Triangles(gfx++, (temp_t0), (temp_t0) + 2, (temp_t0) + 1, 0, (temp_t0) + 1, (temp_t0) + 2, (temp_t0) + 3, 0);
+                    gSP2Triangles(gfx++, (temp_t0), (temp_t0) + 2, (temp_t0) + 1, 0, (temp_t0) + 1, (temp_t0) + 2,
+                                  (temp_t0) + 3, 0);
                 }
             }
         }
@@ -1706,8 +1707,10 @@ void Course_EffectsViewInteractDataInit(bool arg0) {
                     (effectsInfo->effects[j].segmentTValueEnd == 1.0f) &&
                     (effect->rightEdgeDistance == effectsInfo->effects[j].rightEdgeDistance) &&
                     (effect->leftEdgeDistance == effectsInfo->effects[j].leftEdgeDistance)) {
-                    rightTextureTCoordinate = (gEffectsDrawData[D_8079F93C][j].vtxEnd - 2)->v.tc[1] / EFFECT_TEXTURE_SCALAR;
-                    leftTextureTCoordinate = (gEffectsDrawData[D_8079F93C][j].vtxEnd - 1)->v.tc[1] / EFFECT_TEXTURE_SCALAR;
+                    rightTextureTCoordinate =
+                        (gEffectsDrawData[D_8079F93C][j].vtxEnd - 2)->v.tc[1] / EFFECT_TEXTURE_SCALAR;
+                    leftTextureTCoordinate =
+                        (gEffectsDrawData[D_8079F93C][j].vtxEnd - 1)->v.tc[1] / EFFECT_TEXTURE_SCALAR;
                     while (true) {
                         rightTextureTCoordinate -= 0x400;
                         leftTextureTCoordinate -= 0x400;
