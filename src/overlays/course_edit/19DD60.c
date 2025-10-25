@@ -249,7 +249,7 @@ void func_xk2_800EC91C(void) {
     func_xk2_800F13C4();
     func_xk2_800EF8B0();
     D_xk2_800F7040 = 4;
-    D_800D6CA0.unk_0C = gRacers[0].unk_0C.courseSegment->next->segmentIndex;
+    D_800D6CA0.unk_0C = gRacers[0].segmentPositionInfo.courseSegment->next->segmentIndex;
 }
 
 extern s32 D_xk1_8003A550;

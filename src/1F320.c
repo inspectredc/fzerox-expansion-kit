@@ -764,9 +764,9 @@ void func_8071370C(Player* arg0) {
     f32 sp18;
 
     racer = &gRacers[D_807A16C8];
-    sp20 = racer->unk_0C.unk_34.x - arg0->unk_50.x;
-    sp1C = racer->unk_0C.unk_34.y - arg0->unk_50.y;
-    sp18 = racer->unk_0C.unk_34.z - arg0->unk_50.z;
+    sp20 = racer->segmentPositionInfo.pos.x - arg0->unk_50.x;
+    sp1C = racer->segmentPositionInfo.pos.y - arg0->unk_50.y;
+    sp18 = racer->segmentPositionInfo.pos.z - arg0->unk_50.z;
 
     var_fv1 = sqrtf((sp20 * sp20) + (sp1C * sp1C) + (sp18 * sp18));
 
@@ -1389,7 +1389,7 @@ void func_807153A0(unk_800E5D70* arg0, unk_struct_14* arg1) {
     *((Mtx3F*) &temp_v0->unk_00.unk_00.unk_00) = *arg0->unk_14;
     *((Vec3f*) &temp_v0->unk_00.unk_60) = temp_v1->unk_B4;
     temp_v0->unk_90 = temp_v1->speed;
-    temp_v0->unk_98 = temp_v1->unk_0C.courseSegment->trackSegmentInfo;
+    temp_v0->unk_98 = temp_v1->segmentPositionInfo.courseSegment->trackSegmentInfo;
     sp2C.x = sp38[0].x + arg0->unk_10->x;
     sp2C.y = sp38[0].y + arg0->unk_10->y;
     sp2C.z = sp38[0].z + arg0->unk_10->z;
@@ -1410,7 +1410,7 @@ void func_80715490(unk_800E5D70* arg0, unk_struct_14* arg1) {
     *((Mtx3F*) &temp_v0->unk_00.unk_00.unk_00) = *arg0->unk_14;
     *((Vec3f*) &temp_v0->unk_00.unk_60) = temp_v1->unk_B4;
     temp_v0->unk_90 = temp_v1->speed;
-    temp_v0->unk_98 = temp_v1->unk_0C.courseSegment->trackSegmentInfo;
+    temp_v0->unk_98 = temp_v1->segmentPositionInfo.courseSegment->trackSegmentInfo;
     sp28.x = sp34[0].x + arg0->unk_10->x;
     sp28.y = sp34[0].y + arg0->unk_10->y;
     sp28.z = sp34[0].z + arg0->unk_10->z;
@@ -1431,7 +1431,7 @@ void func_80715580(unk_800E5D70* arg0, unk_80085434_arg_2* arg1) {
     *((Mtx3F*) &temp_v0->unk_00.unk_00.unk_00) = *arg0->unk_14;
     *((Vec3f*) &temp_v0->unk_00.unk_60) = temp_v1->unk_B4;
     temp_v0->unk_90 = temp_v1->speed;
-    temp_v0->unk_98 = temp_v1->unk_0C.courseSegment->trackSegmentInfo;
+    temp_v0->unk_98 = temp_v1->segmentPositionInfo.courseSegment->trackSegmentInfo;
     sp28.x = sp34.unk_00[0].x + arg0->unk_10->x;
     sp28.y = sp34.unk_00[0].y + arg0->unk_10->y;
     sp28.z = sp34.unk_00[0].z + arg0->unk_10->z;
@@ -1452,7 +1452,7 @@ void func_80715674(unk_800E5D70* arg0, unk_80085494_arg_2* arg1) {
     *((Mtx3F*) &temp_v0->unk_00.unk_00.unk_00) = *arg0->unk_14;
     *((Vec3f*) &temp_v0->unk_00.unk_60) = temp_v1->unk_B4;
     temp_v0->unk_90 = temp_v1->speed;
-    temp_v0->unk_98 = temp_v1->unk_0C.courseSegment->trackSegmentInfo;
+    temp_v0->unk_98 = temp_v1->segmentPositionInfo.courseSegment->trackSegmentInfo;
     sp2C.x = sp38.unk_00[0].x + arg0->unk_10->x;
     sp2C.y = sp38.unk_00[0].y + arg0->unk_10->y;
     sp2C.z = sp38.unk_00[0].z + arg0->unk_10->z;
@@ -1691,7 +1691,7 @@ void func_807160A0(void) {
                     gPlayers[i].unk_04 = 4;
                 }
 
-                gPlayers[i].unk_20 = gRacers[i].unk_0C.unk_34;
+                gPlayers[i].unk_20 = gRacers[i].segmentPositionInfo.pos;
 
                 gPlayers[i].unk_2C = gRacers[i].unk_C0;
 
@@ -1710,7 +1710,7 @@ void func_807160A0(void) {
                 D_807A1590 = 2;
                 gPlayers[0].unk_04 = 4;
             }
-            gPlayers[0].unk_20 = gRacers[0].unk_0C.unk_34;
+            gPlayers[0].unk_20 = gRacers[0].segmentPositionInfo.pos;
             gPlayers[0].unk_2C = gRacers[0].unk_C0;
 
             gPlayers[1].unk_04 = 12;
@@ -1724,7 +1724,7 @@ void func_807160A0(void) {
             D_807A1590 = ++v0;
             gPlayers[0].unk_04 = 6;
 
-            gPlayers[0].unk_20 = gRacers[0].unk_0C.unk_34;
+            gPlayers[0].unk_20 = gRacers[0].segmentPositionInfo.pos;
             gPlayers[0].unk_2C = gRacers[0].unk_C0;
 
             for (i = 0; i < D_807A1590; i++) {
@@ -1735,7 +1735,7 @@ void func_807160A0(void) {
 
             D_807A1590 = 2;
             gPlayers[0].unk_04 = 0xB;
-            gPlayers[0].unk_20 = gRacers[0].unk_0C.unk_34;
+            gPlayers[0].unk_20 = gRacers[0].segmentPositionInfo.pos;
             gPlayers[0].unk_2C = gRacers[0].unk_C0;
             gPlayers[1].unk_04 = 0xC;
             for (i = 0; i < D_807A1590; i++) {
@@ -1869,8 +1869,8 @@ void func_807166B8(Player* player, unk_struct_F8* arg1, unk_800E5D70* arg2) {
             }
 
             racer = &gRacers[player->id];
-            func_80718F58(&D_807A15A0[player->id], racer->unk_0C.courseSegment, racer->unk_0C.segmentTValue,
-                          &D_8076D788[0]);
+            func_80718F58(&D_807A15A0[player->id], racer->segmentPositionInfo.courseSegment,
+                          racer->segmentPositionInfo.segmentTValue, &D_8076D788[0]);
             break;
         case 9:
             racer = &gRacers[player->id];
@@ -2752,7 +2752,8 @@ void func_80718AFC(Player* player, unk_struct_F8* arg1, unk_800E5D70* arg2) {
                 temp_t0->unk_00.unk_18[3] = 0.0f;
                 temp_t0->unk_00.unk_18[4] = 1.0f;
                 temp_t0->unk_00.unk_18[5] = 0.0f;
-                func_80718F58(temp_s1, temp_t2->unk_0C.courseSegment, temp_t2->unk_0C.segmentTValue, temp_a3);
+                func_80718F58(temp_s1, temp_t2->segmentPositionInfo.courseSegment,
+                              temp_t2->segmentPositionInfo.segmentTValue, temp_a3);
                 temp_v1->unk_00.unk_00.unk_00.unk_00 = temp_t2->unk_180;
                 temp_v1->unk_00.unk_00.unk_00.unk_0C.x = temp_s1->x;
                 temp_v1->unk_00.unk_00.unk_00.unk_0C.y = temp_s1->y;
@@ -2829,7 +2830,7 @@ void func_80718F58(Vec3f* arg0, CourseSegment* arg1, f32 arg2, unk_800CD970* arg
 void func_80719140(Player* player, unk_struct_F8* arg1, unk_800E5D70* arg2) {
 
     if (player->unk_1C <= 60) {
-        arg1->unk_04.unk_58.unk_00.unk_00.unk_00.unk_00 = gRacers[player->id].unk_0C.unk_34;
+        arg1->unk_04.unk_58.unk_00.unk_00.unk_00.unk_00 = gRacers[player->id].segmentPositionInfo.pos;
         player->unk_1C++;
     }
 }

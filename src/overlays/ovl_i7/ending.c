@@ -1131,7 +1131,7 @@ void func_i7_8009580C(void) {
                     var_s2->unk_0C = D_i7_80098F38[i];
                     var_s2->unk_04 = 0;
                 }
-                temp_fv0 = (var_s2->unk_0C + 120.0f) - var_s4->unk_168.y;
+                temp_fv0 = (var_s2->unk_0C + 120.0f) - var_s4->shadowPos.y;
                 if (temp_fv0 > 0.0f) {
                     var_s4->unk_A4 += temp_fv0;
                 }

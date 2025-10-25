@@ -12,8 +12,8 @@ Racer* sRivalRacer;
 Vtx* D_807A15DC;
 Vtx* D_807A15E0;
 s16 gPlayerLives[4];
-s16 D_807A15F0[4];
-s16 D_807A15F8[4];
+s16 gPlayerCharacters[4];
+s16 gPlayerMachineSkins[4];
 f32 gPlayerEngine[4];
 s32 D_807A1610[4];
 s32 D_807A1620[4];
@@ -41,8 +41,8 @@ s16 gStartNewBestLap;
 s16 D_807A16F2;
 s16 D_807A16F4;
 s16 D_807A16F6;
-Vec3s* D_807A16F8;
-Vec3s* D_807A16FC;
+Vec3s* sPipeFogColors;
+Vec3s* sTunnelFogColors;
 s32 D_807A1700;
 Ghost gGhosts[3];
 Ghost* gFastestGhost;
@@ -335,7 +335,7 @@ f32 D_8076E2F8 = 2000.0f;
 
 s8 gTotalLives[] = { 5, 4, 3, 2 };
 
-Vec3s D_8076E300[] = {
+Vec3s sVenuePipeFogColors[] = {
     { 140, 220, 255 }, { 205, 0, 0 }, { 200, 255, 0 },   { 55, 55, 0 }, { 140, 220, 255 }, { 205, 0, 0 },
     { 200, 255, 0 },   { 55, 55, 0 }, { 140, 220, 255 }, { 205, 0, 0 }, { 200, 255, 0 },   { 55, 55, 0 },
     { 140, 220, 255 }, { 205, 0, 0 }, { 200, 255, 0 },   { 55, 55, 0 }, { 140, 220, 255 }, { 205, 0, 0 },
@@ -345,7 +345,7 @@ Vec3s D_8076E300[] = {
     { 140, 220, 255 }, { 205, 0, 0 }, { 200, 255, 0 },   { 55, 55, 0 },
 };
 
-Vec3s D_8076E3F0[] = {
+Vec3s sVenueTunnelFogColors[] = {
     { 150, 130, 70 }, { 155, 55, 255 },  { 55, 255, 105 }, { 255, 160, 100 }, { 150, 130, 70 }, { 155, 55, 255 },
     { 55, 255, 105 }, { 255, 160, 100 }, { 150, 130, 70 }, { 155, 55, 255 },  { 55, 255, 105 }, { 255, 160, 100 },
     { 150, 130, 70 }, { 155, 55, 255 },  { 55, 255, 105 }, { 255, 160, 100 }, { 150, 130, 70 }, { 155, 55, 255 },
@@ -526,62 +526,67 @@ extern s8 D_8076C7D8;
 
 // Set up racer positions before the start line
 void func_80719958(void) {
-    f32 var_fs0;
-    f32 var_fs4;
+    f32 t;
+    f32 height;
     f32 var_fs1;
     f32 var_fv0;
     s32 i;
     s32 j;
-    CourseSegment* temp_v0;
-    CourseSegment* temp_v1;
-    CourseSegment* var_s2;
-    Racer* temp_s1;
+    CourseSegment* currentSegment;
+    CourseSegment* nextSegment;
+    CourseSegment* racerStartSegment;
+    Racer* racer;
     Vec3f sp84;
     s32 index;
 
     func_i3_8003F364();
 
-    var_s2 = gCurrentCourseInfo->courseSegments->prev;
-    var_fs0 = 1.0f;
+    racerStartSegment = gCurrentCourseInfo->courseSegments[0].prev;
+    t = 1.0f;
     for (i = 20; i > 0; i--) {
-        var_fs0 -= 7.3f / Course_SplineGetTangent(var_s2, var_fs0, &gRacers[0].unk_0C.unk_0C);
+        t -= 7.3f / Course_SplineGetTangent(racerStartSegment, t, &gRacers[0].segmentPositionInfo.segmentForward);
     }
 
     if ((gGameMode != GAMEMODE_RECORDS) && (gGameMode != GAMEMODE_GP_END_CS) && (D_8076C7D8 == 0) &&
         (gGameMode != GAMEMODE_COURSE_EDIT)) {
         if ((gGameMode == GAMEMODE_GP_RACE) || (gGameMode == GAMEMODE_PRACTICE) || (gGameMode == GAMEMODE_DEATH_RACE)) {
-            var_fs4 = 1.99f;
+            height = 1.99f;
         } else {
-            var_fs4 = 0;
+            height = 0;
         }
     } else {
-        var_fs4 = 7.99f;
+        height = 7.99f;
     }
 
     for (j = 1; j <= gTotalRacers; j++) {
         index = func_80719910(j);
-        temp_s1 = &gRacers[index];
-        temp_s1->unk_0C.courseSegment = var_s2;
-        temp_s1->unk_0C.segmentTValue = var_fs0;
-        Course_SplineGetPosition(var_s2, var_fs0, &temp_s1->unk_0C.unk_1C);
-        sp84 = temp_s1->unk_0C.unk_1C;
-        temp_s1->unk_0C.unk_44 = sp84;
-        temp_s1->unk_0C.unk_34 = sp84;
-        temp_s1->unk_0C.unk_28.x = 0.0f;
-        temp_s1->unk_0C.unk_28.y = 0.0f;
-        temp_s1->unk_0C.unk_28.z = 0.0f;
-        temp_s1->unk_0C.unk_40 = 0.0f;
-        temp_s1->unk_0C.unk_18 = Course_SplineGetTangent(temp_s1->unk_0C.courseSegment, temp_s1->unk_0C.segmentTValue,
-                                                         &temp_s1->unk_0C.unk_0C);
-        temp_s1->unk_0C.unk_08 = Course_SplineGetLengthInfo(temp_s1->unk_0C.courseSegment,
-                                                            temp_s1->unk_0C.segmentTValue, &temp_s1->lapDistance);
-        Course_SplineGetBasis(temp_s1->unk_0C.courseSegment, temp_s1->unk_0C.segmentTValue, &temp_s1->unk_24C,
-                              temp_s1->unk_0C.unk_08);
+        racer = &gRacers[index];
+        racer->segmentPositionInfo.courseSegment = racerStartSegment;
+        racer->segmentPositionInfo.segmentTValue = t;
+        Course_SplineGetPosition(racerStartSegment, t, &racer->segmentPositionInfo.segmentPos);
+        sp84 = racer->segmentPositionInfo.segmentPos;
+        racer->segmentPositionInfo.lastGroundedPos = sp84;
+        racer->segmentPositionInfo.pos = sp84;
+        racer->segmentPositionInfo.segmentDisplacement.x = 0.0f;
+        racer->segmentPositionInfo.segmentDisplacement.y = 0.0f;
+        racer->segmentPositionInfo.segmentDisplacement.z = 0.0f;
+        racer->segmentPositionInfo.distanceFromSegment = 0.0f;
+        racer->segmentPositionInfo.segmentForwardMagnitude =
+            Course_SplineGetTangent(racer->segmentPositionInfo.courseSegment, racer->segmentPositionInfo.segmentTValue,
+                                    &racer->segmentPositionInfo.segmentForward);
+        racer->segmentPositionInfo.segmentLengthProportion = Course_SplineGetLengthInfo(
+            racer->segmentPositionInfo.courseSegment, racer->segmentPositionInfo.segmentTValue, &racer->lapDistance);
+        Course_SplineGetBasis(racer->segmentPositionInfo.courseSegment, racer->segmentPositionInfo.segmentTValue,
+                              &racer->unk_24C, racer->segmentPositionInfo.segmentLengthProportion);
 
-        temp_v0 = temp_s1->unk_0C.courseSegment;
-        temp_v1 = temp_v0->next;
-        var_fs1 = ((temp_s1->unk_0C.unk_08 * (temp_v1->radiusLeft - temp_v0->radiusLeft)) + temp_v0->radiusLeft +
-                   (temp_s1->unk_0C.unk_08 * (temp_v1->radiusRight - temp_v0->radiusRight)) + temp_v0->radiusRight) *
+        currentSegment = racer->segmentPositionInfo.courseSegment;
+        nextSegment = currentSegment->next;
+        var_fs1 = ((racer->segmentPositionInfo.segmentLengthProportion *
+                    (nextSegment->radiusLeft - currentSegment->radiusLeft)) +
+                   currentSegment->radiusLeft +
+                   (racer->segmentPositionInfo.segmentLengthProportion *
+                    (nextSegment->radiusRight - currentSegment->radiusRight)) +
+                   currentSegment->radiusRight) *
                   0.125f;
         if (var_fs1 > 50.0f) {
             var_fs1 = 50.0f;
@@ -593,11 +598,12 @@ void func_80719958(void) {
             var_fv0 = gTotalRacers - 1;
         }
         var_fv0 = (((j - 1) & 3) * 2 - var_fv0) * var_fs1;
-        func_i2_800B2C00(&temp_s1->unk_0C,
-                         temp_s1->unk_0C.unk_34.x + (var_fs4 * temp_s1->unk_24C.y.x) + (var_fv0 * temp_s1->unk_24C.z.x),
-                         temp_s1->unk_0C.unk_34.y + (var_fs4 * temp_s1->unk_24C.y.y) + (var_fv0 * temp_s1->unk_24C.z.y),
-                         temp_s1->unk_0C.unk_34.z + (var_fs4 * temp_s1->unk_24C.y.z) + (var_fv0 * temp_s1->unk_24C.z.z),
-                         100, 1.0f);
+        func_i2_800B2C00(
+            &racer->segmentPositionInfo,
+            racer->segmentPositionInfo.pos.x + (height * racer->unk_24C.y.x) + (var_fv0 * racer->unk_24C.z.x),
+            racer->segmentPositionInfo.pos.y + (height * racer->unk_24C.y.y) + (var_fv0 * racer->unk_24C.z.y),
+            racer->segmentPositionInfo.pos.z + (height * racer->unk_24C.y.z) + (var_fv0 * racer->unk_24C.z.z), 100,
+            1.0f);
         if (gNumPlayers == 1) {
             var_fv0 = 100.0f;
         } else if (var_fs1 <= 23.0f) {
@@ -607,16 +613,18 @@ void func_80719958(void) {
         }
 
         for (i = 20; i > 0; i--) {
-            var_fs0 -= (var_fv0 / 20.0f) / temp_s1->unk_0C.unk_18;
-            if (var_fs0 < 0.0f) {
-                var_s2 = var_s2->prev;
-                var_fs0 *= (temp_s1->unk_0C.unk_18 / Course_SplineGetTangent(var_s2, 1.0f, &temp_s1->unk_0C.unk_0C));
-                var_fs0 += 1.0f;
+            t -= (var_fv0 / 20.0f) / racer->segmentPositionInfo.segmentForwardMagnitude;
+            if (t < 0.0f) {
+                racerStartSegment = racerStartSegment->prev;
+                t *= (racer->segmentPositionInfo.segmentForwardMagnitude /
+                      Course_SplineGetTangent(racerStartSegment, 1.0f, &racer->segmentPositionInfo.segmentForward));
+                t += 1.0f;
             }
         }
     }
 }
 
+// Set new rival racer
 void func_80719D70(void) {
     s16 temp_a0;
     s16 temp_a1;
@@ -655,19 +663,19 @@ void func_80719D70(void) {
 
     var_a0 = sLastRacer;
     do {
-        if (!(var_a0->stateFlags & RACER_STATE_RETIRED)) {
-            if (var_a2 < var_a0->points) {
-                var_v1 = var_v0;
-                var_a3 = var_a2;
-                var_v0 = var_a0;
-                var_a2 = var_a0->points;
-            } else if ((var_a3 < var_a0->points) && (var_a0 != var_v0)) {
-                var_v1 = var_a0;
-                var_a3 = var_a0->points;
-            }
+        if (var_a0->stateFlags & RACER_STATE_RETIRED) {
+            continue;
         }
-        var_a0--;
-    } while (var_a0 >= gRacers);
+        if (var_a2 < var_a0->points) {
+            var_v1 = var_v0;
+            var_a3 = var_a2;
+            var_v0 = var_a0;
+            var_a2 = var_a0->points;
+        } else if ((var_a3 < var_a0->points) && (var_a0 != var_v0)) {
+            var_v1 = var_a0;
+            var_a3 = var_a0->points;
+        }
+    } while (--var_a0 >= gRacers);
 
     if (var_a2 == 0) {
         sRivalRacer = NULL;
@@ -680,6 +688,7 @@ void func_80719D70(void) {
     sRivalRacer = var_v0;
 }
 
+// Increase life
 void func_80719EDC(s32 playerIndex) {
 
     gPlayerLives[playerIndex]++;
@@ -692,6 +701,7 @@ void func_80719EDC(s32 playerIndex) {
     D_807B37D4 = 0;
 }
 
+// Decrease life
 void func_80719F38(s32 playerIndex) {
 
     if (--gPlayerLives[playerIndex] >= 0) {
@@ -703,6 +713,7 @@ void func_80719F38(s32 playerIndex) {
     D_807B37D4 = 0;
 }
 
+// Retire racer
 void func_80719F9C(Racer* racer) {
 
     if (!(racer->stateFlags & (RACER_STATE_FLAGS_2000000 | RACER_STATE_RETIRED))) {
@@ -716,9 +727,8 @@ void func_80719F9C(Racer* racer) {
             if ((gGameMode == GAMEMODE_DEATH_RACE) && (gTotalRacers == (gCpuRacersRetired + 1))) {
                 gRacers[0].stateFlags |= (RACER_STATE_FLAGS_2000000 | RACER_STATE_CPU_CONTROLLED);
                 gRacers[0].raceTime += Math_Rand2() % 16;
-                D_807A16CC = 1;
                 gRacers[0].energy = gRacers[0].maxEnergy;
-                D_807B14F8 = D_807A16CC;
+                D_807B14F8 = D_807A16CC = 1;
                 Audio_PlayerFinished(gRacers[0].id);
                 Audio_PlayerEngineStop(gRacers[0].id);
                 func_8070DAFC();
@@ -736,44 +746,46 @@ void func_80719F9C(Racer* racer) {
     }
 }
 
-void func_8071A17C(Racer* arg0) {
+void func_8071A17C(Racer* racer) {
 
     if (D_807A16E0 != 0) {
-        if (arg0->unk_08 & 0x800) {
-            arg0->unk_08 &= ~0x800;
-            Audio_PlayerLevelSEStop(arg0->id, NA_LEVEL_SE_4);
+        if (racer->soundEffectFlags & RACER_SE_FLAGS_PIT) {
+            racer->soundEffectFlags &= ~RACER_SE_FLAGS_PIT;
+            Audio_PlayerLevelSEStop(racer->id, NA_LEVEL_SE_4);
         }
-        if (arg0->unk_08 & 0x400) {
-            arg0->unk_08 &= ~0x400;
-            Audio_PlayerLevelSEStop(arg0->id, NA_LEVEL_SE_5);
+        if (racer->soundEffectFlags & RACER_SE_FLAGS_DIRT) {
+            racer->soundEffectFlags &= ~RACER_SE_FLAGS_DIRT;
+            Audio_PlayerLevelSEStop(racer->id, NA_LEVEL_SE_5);
         }
-        if (arg0->unk_08 & 0x20) {
-            arg0->unk_08 &= ~0x20;
-            Audio_PlayerLevelSEStop(arg0->id, NA_LEVEL_SE_11);
+        if (racer->soundEffectFlags & RACER_SE_FLAGS_ICE) {
+            racer->soundEffectFlags &= ~RACER_SE_FLAGS_ICE;
+            Audio_PlayerLevelSEStop(racer->id, NA_LEVEL_SE_11);
         }
-        if (arg0->unk_08 & 0x200) {
-            arg0->unk_08 &= ~0x200;
-            Audio_PlayerLevelSEStop(arg0->id, NA_LEVEL_SE_6);
+        if (racer->soundEffectFlags & RACER_SE_FLAGS_200) {
+            racer->soundEffectFlags &= ~RACER_SE_FLAGS_200;
+            Audio_PlayerLevelSEStop(racer->id, NA_LEVEL_SE_6);
         }
-        if (arg0->unk_08 & 0x40) {
-            arg0->unk_08 &= ~0x40;
-            Audio_PlayerLevelSEStop(arg0->id, NA_LEVEL_SE_10);
+        if (racer->soundEffectFlags & RACER_SE_FLAGS_DRIFT_SLIDE) {
+            racer->soundEffectFlags &= ~RACER_SE_FLAGS_DRIFT_SLIDE;
+            Audio_PlayerLevelSEStop(racer->id, NA_LEVEL_SE_10);
         }
-        if (arg0->unk_08 & 0x2000) {
-            arg0->unk_08 &= ~0x2000;
-            Audio_PlayerLevelSEStop(arg0->id, NA_LEVEL_SE_8);
+        if (racer->soundEffectFlags & RACER_SE_FLAGS_AIRBORNE) {
+            racer->soundEffectFlags &= ~RACER_SE_FLAGS_AIRBORNE;
+            Audio_PlayerLevelSEStop(racer->id, NA_LEVEL_SE_8);
         }
-        if (arg0->unk_08 & 0x100) {
-            arg0->unk_08 &= ~0x100;
-            Audio_PlayerEngineEchoStop(arg0->id);
+        if (racer->soundEffectFlags & RACER_SE_FLAGS_ENGINE_ECHO) {
+            racer->soundEffectFlags &= ~RACER_SE_FLAGS_ENGINE_ECHO;
+            Audio_PlayerEngineEchoStop(racer->id);
         }
-        if (arg0->unk_08 & 0x80) {
-            arg0->unk_08 &= ~0x80;
-            Audio_PlayerLevelSEStop(arg0->id, NA_LEVEL_SE_9);
+        if (racer->soundEffectFlags & RACER_SE_FLAGS_BRAKE) {
+            racer->soundEffectFlags &= ~RACER_SE_FLAGS_BRAKE;
+            Audio_PlayerLevelSEStop(racer->id, NA_LEVEL_SE_9);
         }
-        Audio_PlayerEngineStop(arg0->id);
+        Audio_PlayerEngineStop(racer->id);
     } else {
-        arg0->unk_08 &= ~(0x800 | 0x400 | 0x20 | 0x200 | 0x40 | 0x2000 | 0x100 | 0x80);
+        racer->soundEffectFlags &=
+            ~(RACER_SE_FLAGS_PIT | RACER_SE_FLAGS_DIRT | RACER_SE_FLAGS_ICE | RACER_SE_FLAGS_200 |
+              RACER_SE_FLAGS_DRIFT_SLIDE | RACER_SE_FLAGS_AIRBORNE | RACER_SE_FLAGS_ENGINE_ECHO | RACER_SE_FLAGS_BRAKE);
     }
 }
 
@@ -795,8 +807,8 @@ void func_8071A358(void) {
     s32 i;
 
     for (i = gNumPlayers - 1; i >= 0; i--) {
-        gRacers[i].character = D_807A15F0[i];
-        gRacers[i].machineSkinIndex = D_807A15F8[i];
+        gRacers[i].character = gPlayerCharacters[i];
+        gRacers[i].machineSkinIndex = gPlayerMachineSkins[i];
     }
 }
 
@@ -804,8 +816,8 @@ void func_8071A3E0(void) {
     s32 i;
 
     for (i = gNumPlayers - 1; i >= 0; i--) {
-        D_807A15F0[i] = gRacers[i].character;
-        D_807A15F8[i] = gRacers[i].machineSkinIndex;
+        gPlayerCharacters[i] = gRacers[i].character;
+        gPlayerMachineSkins[i] = gRacers[i].machineSkinIndex;
         gRacers[i].unk_1A8 = func_8071A2C8(gPlayerEngine[i]);
     }
 }
@@ -819,7 +831,7 @@ void func_8071A4BC(void) {
     j = 0;
 
     for (i = 1; i < 30; i++) {
-        if (j == D_807A15F0[0]) {
+        if (j == gPlayerCharacters[0]) {
             j++;
         }
         gRacers[i].character = j++;
@@ -912,7 +924,7 @@ void func_8071A88C(void) {
                     gCurrentCourseInfo->timeRecord[j + 1] = gCurrentCourseInfo->timeRecord[j];
                     gCurrentCourseInfo->recordMachineInfos[j + 1] = gCurrentCourseInfo->recordMachineInfos[j];
                     gCurrentCourseInfo->recordEngines[j + 1] = gCurrentCourseInfo->recordEngines[j];
-                    *(s32*) &gCurrentCourseInfo->recordNames[j + 1] = *(s32*) &gCurrentCourseInfo->recordNames[j];
+                    *(s32*) gCurrentCourseInfo->recordNames[j + 1] = *(s32*) gCurrentCourseInfo->recordNames[j];
 
                     D_807B3C14[j + 1] = D_807B3C14[j];
                 }
@@ -1065,23 +1077,21 @@ void func_8071B634(void) {
         activeRacer = NULL;
         finishedRacer = NULL;
         racer = sLastRacer;
-        // FAKE
-        if (gRacersByPosition[0]) {}
 
         do {
-            if (racer->position == 0) {
-                if (racer->stateFlags & RACER_STATE_FLAGS_2000000) {
-                    if ((finishedRacer == NULL) || (racer->raceTime < bestRaceTime)) {
-                        bestRaceTime = racer->raceTime;
-                        finishedRacer = racer;
-                    }
-                } else if ((activeRacer == NULL) || (racer->raceDistancePosition < var_fv0)) {
-                    var_fv0 = racer->raceDistancePosition;
-                    activeRacer = racer;
-                }
+            if (racer->position != 0) {
+                continue;
             }
-            racer--;
-        } while (racer >= gRacers);
+            if (racer->stateFlags & RACER_STATE_FLAGS_2000000) {
+                if ((finishedRacer == NULL) || (racer->raceTime < bestRaceTime)) {
+                    bestRaceTime = racer->raceTime;
+                    finishedRacer = racer;
+                }
+            } else if ((activeRacer == NULL) || (racer->raceDistancePosition < var_fv0)) {
+                var_fv0 = racer->raceDistancePosition;
+                activeRacer = racer;
+            }
+        } while (--racer >= gRacers);
 
         if (finishedRacer != NULL) {
             gRacersByPosition[position - 1] = finishedRacer;
@@ -1362,7 +1372,7 @@ s32 func_8071BEF8(MachineInfo* arg0, MachineInfo* arg1) {
     return 0;
 }
 
-f32 func_8071BF94(Racer* arg0, f32 arg1) {
+f32 func_8071BF94(Racer* racer, f32 arg1) {
     Machine* temp_a1;
     f32 temp_fs0;
     f32 temp_fv0;
@@ -1371,7 +1381,7 @@ f32 func_8071BF94(Racer* arg0, f32 arg1) {
     f32 temp_ret;
     f32 temp_fa1;
 
-    temp_fs0 = (arg0->unk_1F0 - 780.0f) / 1560.0f;
+    temp_fs0 = (racer->unk_1F0 - 780.0f) / 1560.0f;
 
     while (IO_READ(PI_STATUS_REG) & (PI_STATUS_IO_BUSY | PI_STATUS_DMA_BUSY)) {}
 
@@ -1384,9 +1394,9 @@ f32 func_8071BF94(Racer* arg0, f32 arg1) {
          temp_fs0) +
         ((f32) ((ROM_READ(0x390) >> 9) & 0xFF) * 0.001f);
 
-    arg0->unk_1B4 =
+    racer->unk_1B4 =
         ((temp_fv1 - temp_fv0) * arg1) + temp_fv0 + (0.2f * (temp_fv0 - temp_fv1) * (1.0f - SQ((2.0f * arg1) - 1.0f)));
-    temp_fs1 = arg0->unk_1B4;
+    temp_fs1 = racer->unk_1B4;
 
     while (IO_READ(PI_STATUS_REG) & (PI_STATUS_IO_BUSY | PI_STATUS_DMA_BUSY)) {}
 
@@ -1398,9 +1408,9 @@ f32 func_8071BF94(Racer* arg0, f32 arg1) {
         ((((f32) ((ROM_READ(0x95C) >> 0x13) & 0xFF) * 0.001f) - ((f32) ((ROM_READ(0x50C) >> 6) & 0xFF) * 0.001f)) *
          temp_fs0) +
         ((f32) ((ROM_READ(0x50C) >> 6) & 0xFF) * 0.001f);
-    arg0->unk_1B0 =
+    racer->unk_1B0 =
         ((temp_fv1 - temp_fv0) * arg1) + temp_fv0 + (0.2f * (temp_fv0 - temp_fv1) * (1.0f - SQ((2.0f * arg1) - 1.0f)));
-    temp_fs1 += arg0->unk_1B0;
+    temp_fs1 += racer->unk_1B0;
 
     while (IO_READ(PI_STATUS_REG) & (PI_STATUS_IO_BUSY | PI_STATUS_DMA_BUSY)) {}
 
@@ -1412,8 +1422,8 @@ f32 func_8071BF94(Racer* arg0, f32 arg1) {
         (((((f32) ((ROM_READ(0x978) >> 0x15) & 0xFF) * 0.001f) - ((f32) ((ROM_READ(0x550) >> 0x13) & 0xFF) * 0.001f)) *
           temp_fs0)) +
         ((f32) ((ROM_READ(0x550) >> 0x13) & 0xFF) * 0.001f);
-    arg0->unk_1B8 = ((temp_fv1 - temp_fv0) * arg1) + temp_fv0;
-    temp_fs1 += arg0->unk_1B8;
+    racer->unk_1B8 = ((temp_fv1 - temp_fv0) * arg1) + temp_fv0;
+    temp_fs1 += racer->unk_1B8;
 
     while (IO_READ(PI_STATUS_REG) & (PI_STATUS_IO_BUSY | PI_STATUS_DMA_BUSY)) {}
 
@@ -1421,8 +1431,8 @@ f32 func_8071BF94(Racer* arg0, f32 arg1) {
                (f32) ((ROM_READ(0x5D8) >> 4) & 0xFF);
     temp_fv1 = (((f32) ((ROM_READ(0x988) >> 0x18) & 0xFF) - (f32) ((ROM_READ(0x57C) >> 0xA) & 0xFF)) * temp_fs0) +
                (f32) ((ROM_READ(0x57C) >> 0xA) & 0xFF);
-    arg0->unk_1BC = ((temp_fv1 - temp_fv0) * arg1) + temp_fv0;
-    temp_fs1 += arg0->unk_1BC;
+    racer->unk_1BC = ((temp_fv1 - temp_fv0) * arg1) + temp_fv0;
+    temp_fs1 += racer->unk_1BC;
 
     while (IO_READ(PI_STATUS_REG) & (PI_STATUS_IO_BUSY | PI_STATUS_DMA_BUSY)) {}
 
@@ -1434,9 +1444,9 @@ f32 func_8071BF94(Racer* arg0, f32 arg1) {
         (((((f32) ((ROM_READ(0xA20) >> 0xC) & 0xFF) * 0.01f) - ((f32) ((ROM_READ(0x5E4) >> 0x14) & 0xFF) * 0.01f)) *
           temp_fs0) +
          ((f32) ((ROM_READ(0x5E4) >> 0x14) & 0xFF) * 0.01f));
-    arg0->unk_1C8 =
+    racer->unk_1C8 =
         ((temp_fv1 - temp_fv0) * arg1) + temp_fv0 + (0.2f * (temp_fv1 - temp_fv0) * (1.0f - SQ((2.0f * arg1) - 1.0f)));
-    temp_fs1 += arg0->unk_1C8;
+    temp_fs1 += racer->unk_1C8;
 
     while (IO_READ(PI_STATUS_REG) & (PI_STATUS_IO_BUSY | PI_STATUS_DMA_BUSY)) {}
 
@@ -1444,9 +1454,9 @@ f32 func_8071BF94(Racer* arg0, f32 arg1) {
                (f32) ((ROM_READ(0x6A0) >> 0xC) & 0xFF);
     temp_fv1 = ((((f32) ((ROM_READ(0x1BC) >> 0xA) & 0xFF) - (f32) ((ROM_READ(0x60C) >> 0x16) & 0xFF)) * temp_fs0) +
                 (f32) ((ROM_READ(0x60C) >> 0x16) & 0xFF));
-    arg0->unk_1CC = arg0->unk_1C8 / (((temp_fv1 - temp_fv0) * arg1) + temp_fv0 +
-                                     (0.2f * (temp_fv1 - temp_fv0) * (1.0f - SQ((2.0f * arg1) - 1.0f))));
-    temp_fs1 += arg0->unk_1CC;
+    racer->unk_1CC = racer->unk_1C8 / (((temp_fv1 - temp_fv0) * arg1) + temp_fv0 +
+                                       (0.2f * (temp_fv1 - temp_fv0) * (1.0f - SQ((2.0f * arg1) - 1.0f))));
+    temp_fs1 += racer->unk_1CC;
 
     while (IO_READ(PI_STATUS_REG) & (PI_STATUS_IO_BUSY | PI_STATUS_DMA_BUSY)) {}
 
@@ -1455,9 +1465,9 @@ f32 func_8071BF94(Racer* arg0, f32 arg1) {
     temp_fv1 =
         (((((ROM_READ(0x1C8) >> 4) & 0xFF) * 0.01f) - ((f32) ((ROM_READ(0x664) >> 2) & 0xFF) * 0.01f)) * temp_fs0) +
         (((ROM_READ(0x664) >> 2) & 0xFF) * 0.01f);
-    temp_a1 = &gMachines[arg0->character];
-    arg0->unk_1F8 = D_8076EFAC[temp_a1->machineStats[GRIP_STAT]] + ((temp_fv1 - temp_fv0) * arg1) + temp_fv0;
-    temp_fs1 += arg0->unk_1F8;
+    temp_a1 = &gMachines[racer->character];
+    racer->unk_1F8 = D_8076EFAC[temp_a1->machineStats[GRIP_STAT]] + ((temp_fv1 - temp_fv0) * arg1) + temp_fv0;
+    temp_fs1 += racer->unk_1F8;
 
     while (IO_READ(PI_STATUS_REG) & (PI_STATUS_IO_BUSY | PI_STATUS_DMA_BUSY)) {}
 
@@ -1468,8 +1478,8 @@ f32 func_8071BF94(Racer* arg0, f32 arg1) {
         ((((f32) ((ROM_READ(0x248) >> 0xB) & 0xFF) * 0.001f) - ((f32) ((ROM_READ(0x6A0) >> 0xE) & 0xFF) * 0.01f)) *
          temp_fs0) +
         (((ROM_READ(0x6A0) >> 0xE) & 0xFF) * 0.01f);
-    arg0->unk_1FC = D_8076EFC0[temp_a1->machineStats[GRIP_STAT]] + ((temp_fv1 - temp_fv0) * arg1) + temp_fv0;
-    temp_fs1 += arg0->unk_1FC;
+    racer->unk_1FC = D_8076EFC0[temp_a1->machineStats[GRIP_STAT]] + ((temp_fv1 - temp_fv0) * arg1) + temp_fv0;
+    temp_fs1 += racer->unk_1FC;
 
     while (IO_READ(PI_STATUS_REG) & (PI_STATUS_IO_BUSY | PI_STATUS_DMA_BUSY)) {}
 
@@ -1479,117 +1489,114 @@ f32 func_8071BF94(Racer* arg0, f32 arg1) {
         (((((ROM_READ(0x250) >> 3) & 0xFF) * 0.001f) - (((ROM_READ(0x718) >> 0x17) & 0xFF) * 0.001f)) * temp_fs0) +
         (((ROM_READ(0x718) >> 0x17) & 0xFF) * 0.001f);
 
-    temp_fa1 = ((temp_fv1 - temp_fv0) * arg0->unk_1A8) + temp_fv0;
+    temp_fa1 = ((temp_fv1 - temp_fv0) * racer->unk_1A8) + temp_fv0;
 
-    arg0->unk_1C0 = (D_8076EF98[temp_a1->machineStats[BOOST_STAT]] + temp_fa1) / arg0->unk_1B8;
-    temp_fs1 += arg0->unk_1C0;
-    arg0->unk_1C4 = (D_8076EF98[2] + temp_fa1) / arg0->unk_1B8;
-    temp_fs1 += arg0->unk_1C4;
+    racer->unk_1C0 = (D_8076EF98[temp_a1->machineStats[BOOST_STAT]] + temp_fa1) / racer->unk_1B8;
+    temp_fs1 += racer->unk_1C0;
+    racer->unk_1C4 = (D_8076EF98[BOOST_C] + temp_fa1) / racer->unk_1B8;
+    temp_fs1 += racer->unk_1C4;
     temp_ret = func_8071A310(arg1);
     temp_ret = func_8071A310(temp_ret);
     temp_ret = func_8071A310(temp_ret);
-    arg0->unk_1D0 = ((D_8076EF80 - 1.0f) * temp_ret) + 1.0f;
+    racer->unk_1D0 = ((D_8076EF80 - 1.0f) * temp_ret) + 1.0f;
 
     return temp_ret;
 }
 
-void func_8071CE08(Racer* arg0) {
-    s32 pad[7];
+void func_8071CE08(Racer* racer) {
+    s32 pad[4];
     f32 temp;
     f32 temp_fv0_4;
     f32 var_fs0;
     s32 i;
-    Mtx3F spE8;
-    Machine* temp_s2;
+    Machine* machine;
 
-    temp_s2 = &gMachines[arg0->character];
-    arg0->customType = temp_s2->customType;
+    machine = &gMachines[racer->character];
+    racer->customType = machine->customType;
     if (gGameMode == GAMEMODE_TIME_ATTACK) {
-        arg0->machineIndex = 0;
+        racer->machineIndex = 0;
     } else {
-        arg0->machineIndex = arg0->character;
+        racer->machineIndex = racer->character;
     }
 
-    arg0->shadowType = temp_s2->shadowType;
-    arg0->boostersType = temp_s2->boostersType;
-    arg0->bodyRF = arg0->bodyR = temp_s2->red[arg0->machineSkinIndex];
-    arg0->bodyGF = arg0->bodyG = temp_s2->green[arg0->machineSkinIndex];
-    arg0->bodyBF = arg0->bodyB = temp_s2->blue[arg0->machineSkinIndex];
-    arg0->unk_2DA = arg0->unk_2DC = arg0->unk_2DE = arg0->shadowR = arg0->shadowG = arg0->shadowB = 0;
-    arg0->unk_2EC = 255.0f;
-    arg0->unk_2F0 = 0.0f;
-    arg0->unk_2F4 = 0.0f;
-    arg0->unk_2F8 = arg0->bodyRF - arg0->unk_2EC;
-    arg0->unk_2FC = arg0->bodyGF - arg0->unk_2F0;
-    arg0->unk_300 = arg0->bodyBF - arg0->unk_2F4;
+    racer->shadowType = machine->shadowType;
+    racer->boostersType = machine->boostersType;
+    racer->bodyRF = racer->bodyR = machine->red[racer->machineSkinIndex];
+    racer->bodyGF = racer->bodyG = machine->green[racer->machineSkinIndex];
+    racer->bodyBF = racer->bodyB = machine->blue[racer->machineSkinIndex];
+    racer->attackHighlightR = racer->attackHighlightG = racer->attackHighlightB = racer->shadowR = racer->shadowG =
+        racer->shadowB = 0;
+    racer->unk_2EC = 255.0f;
+    racer->unk_2F0 = 0.0f;
+    racer->unk_2F4 = 0.0f;
+    racer->unk_2F8 = racer->bodyRF - racer->unk_2EC;
+    racer->unk_2FC = racer->bodyGF - racer->unk_2F0;
+    racer->unk_300 = racer->bodyBF - racer->unk_2F4;
     if ((D_8076C7D8 != 0) || (gGameMode == GAMEMODE_PRACTICE) || (gGameMode == GAMEMODE_DEATH_RACE) ||
         (gGameMode == GAMEMODE_COURSE_EDIT)) {
-        arg0->stateFlags =
+        racer->stateFlags =
             RACER_STATE_FLAGS_40000000 | RACER_STATE_FLAGS_20000000 | RACER_STATE_FLAGS_100000 | RACER_STATE_FLAGS_8000;
     } else {
-        arg0->stateFlags = RACER_STATE_FLAGS_40000000 | RACER_STATE_FLAGS_20000000 | RACER_STATE_FLAGS_8000;
+        racer->stateFlags = RACER_STATE_FLAGS_40000000 | RACER_STATE_FLAGS_20000000 | RACER_STATE_FLAGS_8000;
     }
-    if ((arg0->id >= gNumPlayers) || (D_8076E59C != 0) || (gGameMode == GAMEMODE_RECORDS) ||
+    if ((racer->id >= gNumPlayers) || (D_8076E59C != 0) || (gGameMode == GAMEMODE_RECORDS) ||
         (gGameMode == GAMEMODE_GP_END_CS) || (D_8076C7D8 != 0)) {
-        arg0->stateFlags |= RACER_STATE_CPU_CONTROLLED;
+        racer->stateFlags |= RACER_STATE_CPU_CONTROLLED;
     }
-    arg0->unk_0C.unk_08 =
-        Course_SplineGetLengthInfo(arg0->unk_0C.courseSegment, arg0->unk_0C.segmentTValue, &arg0->lapDistance);
+    racer->segmentPositionInfo.segmentLengthProportion = Course_SplineGetLengthInfo(
+        racer->segmentPositionInfo.courseSegment, racer->segmentPositionInfo.segmentTValue, &racer->lapDistance);
 
-    Course_SplineGetBasis(arg0->unk_0C.courseSegment, arg0->unk_0C.segmentTValue, &arg0->unk_24C, arg0->unk_0C.unk_08);
-    // FAKE spE8 is compiler stack from a chain struct copy
-    spE8 = arg0->unk_24C;
-    arg0->unk_C0 = spE8;
-    arg0->unk_E8 = spE8;
+    Course_SplineGetBasis(racer->segmentPositionInfo.courseSegment, racer->segmentPositionInfo.segmentTValue,
+                          &racer->unk_24C, racer->segmentPositionInfo.segmentLengthProportion);
 
-    spE8.x = arg0->unk_0C.unk_34;
+    racer->unk_E8 = racer->unk_C0 = racer->unk_24C;
+    racer->unk_10C = racer->unk_180 = racer->segmentPositionInfo.pos;
 
-    arg0->unk_180 = spE8.x;
-    arg0->unk_10C = spE8.x;
-
-    arg0->unk_A8.x = arg0->unk_B4.x = arg0->unk_19C.x = arg0->unk_C0.y.x;
-    arg0->unk_A8.y = arg0->unk_B4.y = arg0->unk_19C.y = arg0->unk_C0.y.y;
-    arg0->unk_A8.z = arg0->unk_B4.z = arg0->unk_19C.z = arg0->unk_C0.y.z;
+    racer->unk_A8.x = racer->unk_B4.x = racer->upFromGround.x = racer->unk_C0.y.x;
+    racer->unk_A8.y = racer->unk_B4.y = racer->upFromGround.y = racer->unk_C0.y.y;
+    racer->unk_A8.z = racer->unk_B4.z = racer->upFromGround.z = racer->unk_C0.y.z;
 
     for (i = 0; i < 3; i++) {
-        arg0->lapTimes[i] = NULL;
+        racer->lapTimes[i] = NULL;
     }
 
-    arg0->machineLod = arg0->unk_2B2 = arg0->unk_2B3 = 1;
-    arg0->unk_168.y = -54321.0f;
-    arg0->lapsCompletedDistance = -gCurrentCourseInfo->length;
-    arg0->unk_284 = 0;
-    arg0->unk_286 = 0;
-    arg0->raceDistance = arg0->raceDistancePosition = arg0->lapsCompletedDistance + arg0->lapDistance;
-    arg0->unk_2A4 = ((Math_Rand2() & 0x1FFFF) % 150) + 1;
-    arg0->lapsCompleted = 1;
-    arg0->unk_28C = NULL;
-    arg0->unk_08 = 0x8000;
-    arg0->startNewPracticeLap = arg0->unk_288 = arg0->unk_278 = arg0->unk_27A = arg0->unk_27C = arg0->unk_220 =
-        arg0->spinOutTimer = arg0->completedLapsTime = arg0->raceTime = arg0->lap = arg0->unk_204 = arg0->unk_208 =
-            arg0->unk_20C = arg0->boostTimer = arg0->unk_214 = arg0->unk_210 = 0;
-    arg0->unk_118.x = arg0->unk_118.y = arg0->unk_118.z = arg0->pitForceFieldSize = arg0->unk_1DC = arg0->unk_E4 =
-        arg0->unk_238 = arg0->unk_200 = arg0->unk_A0 = arg0->unk_1D4 = arg0->unk_1D8 = arg0->speed = arg0->maxSpeed =
-            arg0->unk_198 = arg0->unk_18C.x = arg0->unk_18C.y = arg0->unk_18C.z = arg0->unk_68.x = arg0->unk_68.y =
-                arg0->unk_68.z = arg0->unk_5C.x = arg0->unk_5C.y = arg0->unk_5C.z = arg0->unk_80.x = arg0->unk_80.y =
-                    arg0->unk_80.z = arg0->velocity.x = arg0->velocity.y = arg0->velocity.z = var_fs0 = 0.0f;
-    arg0->unk_A4 = arg0->unk_230 = arg0->unk_178 = arg0->unk_1E8 = 0.0f;
-    arg0->shadowColorStrength = 1.0f;
-    arg0->unk_1EC = 2500.0f / 27.0f;
-    arg0->unk_17C = D_807B37B4;
+    racer->machineLod = racer->unk_2B2 = racer->unk_2B3 = 1;
+    racer->shadowPos.y = -54321.0f;
+    racer->lapsCompletedDistance = -gCurrentCourseInfo->length;
+    racer->attackState = ATTACK_STATE_NONE;
+    racer->driftAttackDirection = DRIFT_ATTACK_LEFT;
+    racer->raceDistance = racer->raceDistancePosition = racer->lapsCompletedDistance + racer->lapDistance;
+    racer->unk_2A4 = ((Math_Rand2() & 0x1FFFF) % 150) + 1;
+    racer->lapsCompleted = 1;
+    racer->unk_28C = NULL;
+    racer->soundEffectFlags = RACER_SE_FLAGS_8000;
+    racer->startNewPracticeLap = racer->unk_288 = racer->zButtonTimer = racer->rButtonTimer = racer->unk_27C =
+        racer->unk_220 = racer->spinOutTimer = racer->completedLapsTime = racer->raceTime = racer->lap =
+            racer->unk_204 = racer->unk_208 = racer->unk_20C = racer->boostTimer = racer->unk_214 = racer->unk_210 = 0;
+    var_fs0 = racer->unk_178 = racer->unk_1E8 = racer->unk_118.x = racer->unk_118.y = racer->unk_118.z =
+        racer->pitForceFieldSize = racer->jumpBoost = racer->unk_E4 = racer->unk_238 = racer->unk_200 =
+            racer->heightAboveGround = racer->accelerationForce = racer->driftAttackForce = racer->speed =
+                racer->maxSpeed = racer->unk_198 = racer->unk_18C.x = racer->unk_18C.y = racer->unk_18C.z =
+                    racer->unk_68.x = racer->unk_68.y = racer->unk_68.z = racer->unk_5C.x = racer->unk_5C.y =
+                        racer->unk_5C.z = racer->unk_80.x = racer->unk_80.y = racer->unk_80.z = racer->velocity.x =
+                            racer->velocity.y = racer->velocity.z = var_fs0 = 0.0f;
+    racer->unk_A4 = racer->unk_230 = 0.0f;
+    racer->shadowColorStrength = 1.0f;
+    racer->unk_1EC = 2500.0f / 27.0f;
+    racer->unk_17C = D_807B37B4;
 
-    arg0->unk_1E0 = (((temp_s2->weight - 780.0f) * -0.0050000027f) / 1560.0f) + 0.054f;
-    arg0->unk_1E4 = (((temp_s2->weight - 780.0f) * -0.004999999f) / 1560.0f) + 0.03f;
-    arg0->unk_1F0 = temp_s2->weight;
-    arg0->unk_1F4 =
-        ((4 - temp_s2->machineStats[BODY_STAT]) * 312.0f) + 780.0f + ((312.0f * (temp_s2->weight - 780.0f)) / 1560.0f);
+    racer->unk_1E0 = (((machine->weight - 780.0f) * -0.0050000027f) / 1560.0f) + 0.054f;
+    racer->unk_1E4 = (((machine->weight - 780.0f) * -0.004999999f) / 1560.0f) + 0.03f;
+    racer->unk_1F0 = machine->weight;
+    racer->unk_1F4 =
+        ((4 - machine->machineStats[BODY_STAT]) * 312.0f) + 780.0f + ((312.0f * (machine->weight - 780.0f)) / 1560.0f);
 
-    // arg0->unk_1F4 = SQ(arg0->unk_1F4);
+    // racer->unk_1F4 = SQ(racer->unk_1F4);
     // FAKE
-    arg0->unk_1F4 = arg0->unk_1F4 * (temp = arg0->unk_1F4);
+    racer->unk_1F4 = racer->unk_1F4 * (temp = racer->unk_1F4);
 
     for (i = 0; i < 2;) {
-        temp_fv0_4 = func_8071BF94(arg0, arg0->unk_1A8);
+        temp_fv0_4 = func_8071BF94(racer, racer->unk_1A8);
         if (temp_fv0_4 == var_fs0) {
             i++;
         } else {
@@ -1598,22 +1605,24 @@ void func_8071CE08(Racer* arg0) {
         var_fs0 = temp_fv0_4;
     }
 
-    arg0->unk_234 = 1.7f;
+    racer->unk_234 = 1.7f;
 
-    arg0->energy = arg0->maxEnergy = gBodyHealthValues[temp_s2->machineStats[BODY_STAT]];
-    arg0->boostEnergyUsage = arg0->maxEnergy * 0.0015f;
-    arg0->unk_31C = arg0->unk_1C4 - 1.0f;
-    arg0->unk_320 = (0.5f - arg0->unk_1A8) * 0.5f;
-    arg0->unk_324 = 1.0f / (2.0f * arg0->unk_1BC);
-    arg0->unk_328 = 1.0f - arg0->unk_1D0;
-    arg0->energyIncrease = arg0->maxEnergy * sEnergyRefillScale;
+    racer->energy = racer->maxEnergy = gBodyHealthValues[machine->machineStats[BODY_STAT]];
+    racer->boostEnergyUsage = racer->maxEnergy * 0.0015f;
+    racer->unk_31C = racer->unk_1C4 - 1.0f;
+    racer->unk_320 = (0.5f - racer->unk_1A8) * 0.5f;
+    racer->unk_324 = 1.0f / (2.0f * racer->unk_1BC);
+    racer->unk_328 = 1.0f - racer->unk_1D0;
+    racer->energyIncrease = racer->maxEnergy * sEnergyRefillScale;
 
-    arg0->unk_270 = (arg0->unk_0C.unk_08 *
-                     (arg0->unk_0C.courseSegment->next->radiusLeft - arg0->unk_0C.courseSegment->radiusLeft)) +
-                    arg0->unk_0C.courseSegment->radiusLeft;
-    arg0->unk_274 = (arg0->unk_0C.unk_08 *
-                     (arg0->unk_0C.courseSegment->next->radiusRight - arg0->unk_0C.courseSegment->radiusRight)) +
-                    arg0->unk_0C.courseSegment->radiusRight;
+    racer->currentRadiusLeft = (racer->segmentPositionInfo.segmentLengthProportion *
+                                (racer->segmentPositionInfo.courseSegment->next->radiusLeft -
+                                 racer->segmentPositionInfo.courseSegment->radiusLeft)) +
+                               racer->segmentPositionInfo.courseSegment->radiusLeft;
+    racer->currentRadiusRight = (racer->segmentPositionInfo.segmentLengthProportion *
+                                 (racer->segmentPositionInfo.courseSegment->next->radiusRight -
+                                  racer->segmentPositionInfo.courseSegment->radiusRight)) +
+                                racer->segmentPositionInfo.courseSegment->radiusRight;
 }
 
 extern OSMesgQueue D_8079A0F0;
@@ -1631,8 +1640,8 @@ void func_8071D48C(void) {
     MachineInfo sp6C;
     OSMesg sp68;
 
-    D_807A16F8 = &D_8076E300[COURSE_CONTEXT()->courseData.venue * 4];
-    D_807A16FC = &D_8076E3F0[COURSE_CONTEXT()->courseData.venue * 4];
+    sPipeFogColors = &sVenuePipeFogColors[COURSE_CONTEXT()->courseData.venue * PIPE_MAX];
+    sTunnelFogColors = &sVenueTunnelFogColors[COURSE_CONTEXT()->courseData.venue * TUNNEL_MAX];
     gPracticeBestLap = 600000 - 1;
     D_807B37AC = D_807B37B0 = 0.0f;
     sRaceFrameCount = gStartNewBestLap = gRacersKOd = D_807B37D4 = D_807B37C8 = D_807A16CC = D_807A16CE = D_807A16D0 =
@@ -1799,9 +1808,9 @@ void func_8071D48C(void) {
     gFastestGhostRacer = NULL;
     gFastestGhost = NULL;
     if (gGameMode == GAMEMODE_TIME_ATTACK) {
-        sReplayRecordPosX = Math_Round(gRacers[0].unk_0C.unk_34.x);
-        sReplayRecordPosY = Math_Round(gRacers[0].unk_0C.unk_34.y);
-        sReplayRecordPosZ = Math_Round(gRacers[0].unk_0C.unk_34.z);
+        sReplayRecordPosX = Math_Round(gRacers[0].segmentPositionInfo.pos.x);
+        sReplayRecordPosY = Math_Round(gRacers[0].segmentPositionInfo.pos.y);
+        sReplayRecordPosZ = Math_Round(gRacers[0].segmentPositionInfo.pos.z);
         if (gCurrentGhostType != GHOST_NONE) {
             func_8071A730(&sp6C);
             var_a3 = var_t0 = 0x40000000;
@@ -1980,29 +1989,32 @@ void func_8071E564(s32 character, s32 arg1) {
     }
 }
 
-void func_8071E794(MachineInfo* arg0, s32 arg1) {
+void func_8071E794(MachineInfo* machineInfo, s32 arg1) {
     s32 pad[2];
     s32 var_v1;
     Gfx* gfx;
     s32 i;
 
-    if (arg0->customType == CUSTOM_MACHINE_EDITED) {
-        gfx = Machine_DrawLoadCustomTextures(D_8076DB58[arg1], arg0->logo, arg0->number, arg0->decal);
+    if (machineInfo->customType == CUSTOM_MACHINE_EDITED) {
+        gfx = Machine_DrawLoadCustomTextures(D_8076DB58[arg1], machineInfo->logo, machineInfo->number,
+                                             machineInfo->decal);
         gSPEndDisplayList(gfx);
 
         for (i = 4; i >= 0; i--) {
-            gfx = Machine_DrawCustom(D_8076DBD0[arg1 * 6 + i], i, arg0->frontType, arg0->rearType, arg0->wingType,
-                                     arg0->decalR, arg0->decalG, arg0->decalB, arg0->numberR, arg0->numberG,
-                                     arg0->numberB, 255, 255, 255, arg0->cockpitR, arg0->cockpitG, arg0->cockpitB);
+            gfx =
+                Machine_DrawCustom(D_8076DBD0[arg1 * 6 + i], i, machineInfo->frontType, machineInfo->rearType,
+                                   machineInfo->wingType, machineInfo->decalR, machineInfo->decalG, machineInfo->decalB,
+                                   machineInfo->numberR, machineInfo->numberG, machineInfo->numberB, 255, 255, 255,
+                                   machineInfo->cockpitR, machineInfo->cockpitG, machineInfo->cockpitB);
             gSPEndDisplayList(gfx);
         }
 
         return;
     }
-    if (arg0->customType != CUSTOM_MACHINE_DEFAULT) {
-        var_v1 = arg0->customType - CUSTOM_MACHINE_SUPER_FALCON + 30;
+    if (machineInfo->customType != CUSTOM_MACHINE_DEFAULT) {
+        var_v1 = machineInfo->customType - CUSTOM_MACHINE_SUPER_FALCON + 30;
     } else {
-        var_v1 = arg0->character;
+        var_v1 = machineInfo->character;
     }
 
     gfx = sMachineLoadTexturesFuncs[var_v1](D_8076DB58[arg1]);
@@ -2047,7 +2059,7 @@ void func_8071E9C4(void) {
 void func_8071EA88(void) {
     s32 i;
 
-    func_8071E564(D_807A15F0[0], 0);
+    func_8071E564(gPlayerCharacters[0], 0);
     func_8071E9C4();
 
     for (i = 0; i < 3; i++) {
@@ -2085,8 +2097,8 @@ void func_8071EC04(void) {
         gRacers[i].machineSkinIndex = 0;
         gRacers[i].unk_1A8 = func_8071A2C8(0.5f);
         if (i < 4) {
-            D_807A15F0[i] = (s16) gRacers[i].character;
-            D_807A15F8[i] = gRacers[i].machineSkinIndex;
+            gPlayerCharacters[i] = gRacers[i].character;
+            gPlayerMachineSkins[i] = gRacers[i].machineSkinIndex;
             gPlayerEngine[i] = 0.5f;
         }
     }
@@ -2128,9 +2140,12 @@ void func_8071ED54(Racer* arg0, s32 arg1) {
     }
 }
 
-void func_8071EE74(Racer* arg0, f32 arg1) {
+// Racer hit
+void func_8071EE74(Racer* racer, f32 arg1) {
     s32 pad[7];
-    Vec3f sp90;
+    f32 x;
+    f32 y;
+    f32 z;
     f32 temp_fs0;
     f32 temp_fs1;
     f32 temp_fs2;
@@ -2139,37 +2154,35 @@ void func_8071EE74(Racer* arg0, f32 arg1) {
     s32 temp_s7;
     s32 i;
 
-    if (arg0->stateFlags & (RACER_STATE_CRASHED | RACER_STATE_FLAGS_2000000)) {
-        if (((arg0->stateFlags & (RACER_STATE_FLAGS_40000000 | RACER_STATE_CRASHED)) ==
+    if (racer->stateFlags & (RACER_STATE_CRASHED | RACER_STATE_FLAGS_2000000)) {
+        if (((racer->stateFlags & (RACER_STATE_FLAGS_40000000 | RACER_STATE_CRASHED)) ==
              (RACER_STATE_FLAGS_40000000 | RACER_STATE_CRASHED)) &&
             (D_8076E590 < arg1)) {
-            arg0->stateFlags &= ~RACER_STATE_FLAGS_40000000;
-            arg0->unk_C0 = arg0->unk_24C;
+            racer->stateFlags &= ~RACER_STATE_FLAGS_40000000;
+            racer->unk_C0 = racer->unk_24C;
             D_807A16D0++;
-            if (arg0->id < gNumPlayers) {
-                func_8071A17C(arg0);
+            if (racer->id < gNumPlayers) {
+                func_8071A17C(racer);
             }
             if (D_807A16E0 != 0) {
-                Audio_PlayerTriggerSEStart(arg0->id, NA_SE_8);
+                Audio_PlayerTriggerSEStart(racer->id, NA_SE_8);
             }
-            if (arg0->machineLod != 0) {
-                if (arg0->unk_28C == NULL) {
-                    sp90.x = 0.0f;
-                    sp90.y = 0.0f;
-                    sp90.z = 0.0f;
+            if (racer->machineLod != 0) {
+                if (racer->unk_28C == NULL) {
+                    x = y = z = 0.0f;
                 } else {
-                    sp90.z = arg0->unk_28C->velocity.x;
-                    sp90.y = arg0->unk_28C->velocity.y;
-                    sp90.x = arg0->unk_28C->velocity.z;
+                    x = racer->unk_28C->velocity.x;
+                    y = racer->unk_28C->velocity.y;
+                    z = racer->unk_28C->velocity.z;
                 }
-                func_i2_800AC808(arg0->unk_0C.unk_34.x, arg0->unk_0C.unk_34.y, arg0->unk_0C.unk_34.z, sp90.z, sp90.y,
-                                 sp90.x, 40.0f, arg0);
+                func_i2_800AC808(racer->segmentPositionInfo.pos.x, racer->segmentPositionInfo.pos.y,
+                                 racer->segmentPositionInfo.pos.z, x, y, z, 40.0f, racer);
 
-                temp_s5 = arg0->bodyRF;
-                temp_s6 = arg0->bodyGF;
-                temp_s7 = arg0->bodyBF;
+                temp_s5 = racer->bodyRF;
+                temp_s6 = racer->bodyGF;
+                temp_s7 = racer->bodyBF;
 
-                i = (arg0->id < gNumPlayers) ? 60 : 30;
+                i = (racer->id < gNumPlayers) ? 60 : 30;
                 do {
 
                     temp_fs2 = ((Math_Rand1() & 0x1FFFF) * (15.0f / 131071.0f)) - 7.5f;
@@ -2178,1003 +2191,1051 @@ void func_8071EE74(Racer* arg0, f32 arg1) {
 
                     temp_fs1 = ((Math_Rand1() & 0x1FFFF) * (15.0f / 131071.0f)) - 7.5f;
 
-                    func_i2_800ACBE8(((s32) (Math_Rand2() % 32) - 0x10) + arg0->unk_0C.unk_34.x,
-                                     ((s32) (Math_Rand1() % 32) - 0x10) + arg0->unk_0C.unk_34.y,
-                                     ((s32) (Math_Rand1() % 32) - 0x10) + arg0->unk_0C.unk_34.z,
-                                     sp90.z + (arg0->unk_C0.z.x * temp_fs2) + (temp_fs0 * arg0->unk_C0.y.x) +
-                                         (temp_fs1 * arg0->unk_C0.x.x),
-                                     sp90.y + (arg0->unk_C0.z.y * temp_fs2) + (temp_fs0 * arg0->unk_C0.y.y) +
-                                         (temp_fs1 * arg0->unk_C0.x.y),
-                                     sp90.x + (arg0->unk_C0.z.z * temp_fs2) + (temp_fs0 * arg0->unk_C0.y.z) +
-                                         (temp_fs1 * arg0->unk_C0.x.z),
-                                     &arg0->unk_C0, temp_s5, temp_s6, temp_s7, arg0);
+                    func_i2_800ACBE8(((s32) (Math_Rand2() % 32) - 0x10) + racer->segmentPositionInfo.pos.x,
+                                     ((s32) (Math_Rand1() % 32) - 0x10) + racer->segmentPositionInfo.pos.y,
+                                     ((s32) (Math_Rand1() % 32) - 0x10) + racer->segmentPositionInfo.pos.z,
+                                     x + (racer->unk_C0.z.x * temp_fs2) + (temp_fs0 * racer->unk_C0.y.x) +
+                                         (temp_fs1 * racer->unk_C0.x.x),
+                                     y + (racer->unk_C0.z.y * temp_fs2) + (temp_fs0 * racer->unk_C0.y.y) +
+                                         (temp_fs1 * racer->unk_C0.x.y),
+                                     z + (racer->unk_C0.z.z * temp_fs2) + (temp_fs0 * racer->unk_C0.y.z) +
+                                         (temp_fs1 * racer->unk_C0.x.z),
+                                     &racer->unk_C0, temp_s5, temp_s6, temp_s7, racer);
                     i--;
                 } while (i != 0);
             }
         }
     } else {
         if (D_8076E5A0 != 0) {
-            arg0->energy -= arg1;
+            racer->energy -= arg1;
         }
-        arg0->stateFlags |= RACER_STATE_FLAGS_20000;
-        if (arg0->energy < 0.0f) {
-            if (arg0->machineLod == 0) {
-                arg0->energy = 0.1f;
+        racer->stateFlags |= RACER_STATE_FLAGS_20000;
+        if (racer->energy < 0.0f) {
+            if (racer->machineLod == 0) {
+                racer->energy = 0.1f;
                 return;
             }
-            arg0->energy = 0.0f;
-            arg0->unk_238 = 0.2f * arg1;
-            if (arg0->unk_238 > 1.0f) {
-                arg0->unk_238 = 1.0f;
+            racer->energy = 0.0f;
+            racer->unk_238 = 0.2f * arg1;
+            if (racer->unk_238 > 1.0f) {
+                racer->unk_238 = 1.0f;
             }
             if (Math_Rand1() % 2) {
-                arg0->unk_238 *= -1.0f;
+                racer->unk_238 *= -1.0f;
             }
 
-            if (!(arg0->stateFlags & (RACER_STATE_CRASHED | RACER_STATE_SPINNING_OUT))) {
-                arg0->stateFlags |= RACER_STATE_SPINNING_OUT;
-                arg0->stateFlags &= ~RACER_STATE_FLAGS_400000;
-                arg0->spinOutTimer = 1;
-                arg0->unk_234 = 2.0f;
-                func_8071ED54(arg0, 60);
+            if (!(racer->stateFlags & (RACER_STATE_CRASHED | RACER_STATE_SPINNING_OUT))) {
+                racer->stateFlags |= RACER_STATE_SPINNING_OUT;
+                racer->stateFlags &= ~RACER_STATE_FLAGS_400000;
+                racer->spinOutTimer = 1;
+                racer->unk_234 = 2.0f;
+                func_8071ED54(racer, 60);
             }
         }
     }
 }
 
-void func_8071F334(Racer* arg0, f32 arg1, f32 arg2, f32 arg3) {
+// Hit wall
+void func_8071F334(Racer* racer, f32 lateralVelocity, f32 wallDirection, f32 edgeDisplacement) {
     s32 pad;
     Racer* var;
     f32 var_fv0;
 
-    var_fv0 = arg0->unk_24C.z.x * arg3;
-    arg0->unk_0C.unk_28.x -= var_fv0;
-    arg0->unk_0C.unk_34.x -= var_fv0;
-    arg0->unk_0C.unk_44.x -= var_fv0;
+    var_fv0 = racer->unk_24C.z.x * edgeDisplacement;
+    racer->segmentPositionInfo.segmentDisplacement.x -= var_fv0;
+    racer->segmentPositionInfo.pos.x -= var_fv0;
+    racer->segmentPositionInfo.lastGroundedPos.x -= var_fv0;
 
-    var_fv0 = arg0->unk_24C.z.y * arg3;
-    arg0->unk_0C.unk_28.y -= var_fv0;
-    arg0->unk_0C.unk_34.y -= var_fv0;
-    arg0->unk_0C.unk_44.y -= var_fv0;
+    var_fv0 = racer->unk_24C.z.y * edgeDisplacement;
+    racer->segmentPositionInfo.segmentDisplacement.y -= var_fv0;
+    racer->segmentPositionInfo.pos.y -= var_fv0;
+    racer->segmentPositionInfo.lastGroundedPos.y -= var_fv0;
 
-    var_fv0 = arg0->unk_24C.z.z * arg3;
-    arg0->unk_0C.unk_28.z -= var_fv0;
-    arg0->unk_0C.unk_34.z -= var_fv0;
-    arg0->unk_0C.unk_44.z -= var_fv0;
+    var_fv0 = racer->unk_24C.z.z * edgeDisplacement;
+    racer->segmentPositionInfo.segmentDisplacement.z -= var_fv0;
+    racer->segmentPositionInfo.pos.z -= var_fv0;
+    racer->segmentPositionInfo.lastGroundedPos.z -= var_fv0;
 
-    arg0->unk_0C.unk_40 = sqrtf(SQ(arg0->unk_0C.unk_28.x) + SQ(arg0->unk_0C.unk_28.y) + SQ(arg0->unk_0C.unk_28.z));
+    racer->segmentPositionInfo.distanceFromSegment = sqrtf(SQ(racer->segmentPositionInfo.segmentDisplacement.x) +
+                                                           SQ(racer->segmentPositionInfo.segmentDisplacement.y) +
+                                                           SQ(racer->segmentPositionInfo.segmentDisplacement.z));
 
-    if (arg1 * arg2 <= 0.0f) {
+    if (lateralVelocity * wallDirection <= 0.0f) {
         return;
     }
 
-    if (arg1 * arg2 > 0.01f) {
-        if (arg0->machineLod != 0) {
-            func_i2_800AC680(arg0->unk_0C.unk_34.x + ((arg2 * 15.0f) * arg0->unk_24C.z.x),
-                             arg0->unk_0C.unk_34.y + ((arg2 * 15.0f) * arg0->unk_24C.z.y),
-                             arg0->unk_0C.unk_34.z + ((arg2 * 15.0f) * arg0->unk_24C.z.z), arg0->velocity.x,
-                             arg0->velocity.y, arg0->velocity.z, (arg1 * arg2 * 1.5f) + 18.0f, arg0);
+    if (lateralVelocity * wallDirection > 0.01f) {
+        if (racer->machineLod != 0) {
+            func_i2_800AC680(racer->segmentPositionInfo.pos.x + ((wallDirection * 15.0f) * racer->unk_24C.z.x),
+                             racer->segmentPositionInfo.pos.y + ((wallDirection * 15.0f) * racer->unk_24C.z.y),
+                             racer->segmentPositionInfo.pos.z + ((wallDirection * 15.0f) * racer->unk_24C.z.z),
+                             racer->velocity.x, racer->velocity.y, racer->velocity.z,
+                             (lateralVelocity * wallDirection * 1.5f) + 18.0f, racer);
         }
         if (D_807A16E0 != 0) {
-            Audio_PlayerTriggerSEStart(arg0->id, NA_SE_3);
+            Audio_PlayerTriggerSEStart(racer->id, NA_SE_3);
         }
-        func_8071EE74(arg0, arg1 * arg2 * 0.7f);
+        func_8071EE74(racer, lateralVelocity * wallDirection * 0.7f);
     }
 
-    arg0->velocity.x = (arg0->velocity.x - arg0->unk_234 * arg1 * arg0->unk_24C.z.x) * 0.998f;
-    arg0->velocity.y = (arg0->velocity.y - arg0->unk_234 * arg1 * arg0->unk_24C.z.y) * 0.998f;
-    arg0->velocity.z = (arg0->velocity.z - arg0->unk_234 * arg1 * arg0->unk_24C.z.z) * 0.998f;
+    racer->velocity.x = (racer->velocity.x - racer->unk_234 * lateralVelocity * racer->unk_24C.z.x) * 0.998f;
+    racer->velocity.y = (racer->velocity.y - racer->unk_234 * lateralVelocity * racer->unk_24C.z.y) * 0.998f;
+    racer->velocity.z = (racer->velocity.z - racer->unk_234 * lateralVelocity * racer->unk_24C.z.z) * 0.998f;
 
     // FAKE
-    var = arg0;
-    var->unk_118.x = var->unk_24C.z.x * (-0.15f * arg1);
-    var->unk_118.y = var->unk_24C.z.y * (-0.15f * arg1);
-    var->unk_118.z = var->unk_24C.z.z * (-0.15f * arg1);
+    var = racer;
+    var->unk_118.x = var->unk_24C.z.x * (-0.15f * lateralVelocity);
+    var->unk_118.y = var->unk_24C.z.y * (-0.15f * lateralVelocity);
+    var->unk_118.z = var->unk_24C.z.z * (-0.15f * lateralVelocity);
 
-    arg0->stateFlags |= RACER_STATE_FLAGS_2000;
+    racer->stateFlags |= RACER_STATE_FLAGS_2000;
 }
 
-void func_8071F5C4(Racer* arg0) {
+void func_8071F5C4(Racer* racer) {
     f32 temp_fv0;
     f32 temp_fv1;
 
-    temp_fv0 =
-        ((arg0->unk_A8.x * arg0->unk_B4.x) + (arg0->unk_A8.y * arg0->unk_B4.y) + (arg0->unk_A8.z * arg0->unk_B4.z)) *
-        0.15f * arg0->unk_E4;
+    temp_fv0 = ((racer->unk_A8.x * racer->unk_B4.x) + (racer->unk_A8.y * racer->unk_B4.y) +
+                (racer->unk_A8.z * racer->unk_B4.z)) *
+               0.15f * racer->unk_E4;
 
-    arg0->unk_B4.x = arg0->unk_C0.y.x + (temp_fv0 * arg0->unk_C0.x.x);
-    arg0->unk_B4.y = arg0->unk_C0.y.y + (temp_fv0 * arg0->unk_C0.x.y);
-    arg0->unk_B4.z = arg0->unk_C0.y.z + (temp_fv0 * arg0->unk_C0.x.z);
+    racer->unk_B4.x = racer->unk_C0.y.x + (temp_fv0 * racer->unk_C0.x.x);
+    racer->unk_B4.y = racer->unk_C0.y.y + (temp_fv0 * racer->unk_C0.x.y);
+    racer->unk_B4.z = racer->unk_C0.y.z + (temp_fv0 * racer->unk_C0.x.z);
 
-    temp_fv1 = 1.0f / sqrtf(SQ(arg0->unk_B4.x) + SQ(arg0->unk_B4.y) + SQ(arg0->unk_B4.z));
-    arg0->unk_B4.x *= temp_fv1;
-    arg0->unk_B4.y *= temp_fv1;
-    arg0->unk_B4.z *= temp_fv1;
+    temp_fv1 = 1.0f / sqrtf(SQ(racer->unk_B4.x) + SQ(racer->unk_B4.y) + SQ(racer->unk_B4.z));
+    racer->unk_B4.x *= temp_fv1;
+    racer->unk_B4.y *= temp_fv1;
+    racer->unk_B4.z *= temp_fv1;
 }
 
-void func_8071F6B0(Racer* arg0) {
+void func_8071F6B0(Racer* racer) {
 
-    arg0->unk_A8.x -= 0.5f * arg0->unk_A8.x;
-    arg0->unk_A8.y += 0.5f * (1.0f - arg0->unk_A8.y);
-    arg0->unk_A8.z -= 0.5f * arg0->unk_A8.z;
+    racer->unk_A8.x -= 0.5f * racer->unk_A8.x;
+    racer->unk_A8.y += 0.5f * (1.0f - racer->unk_A8.y);
+    racer->unk_A8.z -= 0.5f * racer->unk_A8.z;
 }
 
-void func_8071F6F8(Racer* arg0, f32 arg1) {
+void func_8071F6F8(Racer* racer, f32 airborneRange) {
     f32 temp_ft4;
-    f32 sp50;
+    f32 lateralOffset;
     f32 temp_fv0;
 
-    if (arg0->stateFlags & RACER_STATE_FLAGS_80000000) {
-        arg0->unk_270 += 57.5f;
-        arg0->unk_274 += 57.5f;
-        func_80721714(arg0);
+    if (racer->stateFlags & RACER_STATE_FLAGS_80000000) {
+        racer->currentRadiusLeft += 57.5f;
+        racer->currentRadiusRight += 57.5f;
+        func_80721714(racer);
 
-        arg0->unk_270 -= 57.5f;
-        arg0->unk_274 -= 57.5f;
-        if (arg0->stateFlags & RACER_STATE_FLAGS_80000000) {
+        racer->currentRadiusLeft -= 57.5f;
+        racer->currentRadiusRight -= 57.5f;
+        if (racer->stateFlags & RACER_STATE_FLAGS_80000000) {
             return;
         }
-        sp50 = (arg0->unk_24C.z.x * arg0->unk_0C.unk_28.x) + (arg0->unk_24C.z.y * arg0->unk_0C.unk_28.y) +
-               (arg0->unk_24C.z.z * arg0->unk_0C.unk_28.z);
-        if ((sp50 < -arg0->unk_274) || (arg0->unk_270 < sp50)) {
-            arg0->stateFlags |= RACER_STATE_FLAGS_80000000;
-            func_8071EE74(arg0, 2.0f);
-            func_i2_800AC680(arg0->unk_0C.unk_34.x, arg0->unk_0C.unk_34.y, arg0->unk_0C.unk_34.z, arg0->velocity.x,
-                             arg0->velocity.y, arg0->velocity.z, 40.0f, arg0);
+        lateralOffset = (racer->unk_24C.z.x * racer->segmentPositionInfo.segmentDisplacement.x) +
+                        (racer->unk_24C.z.y * racer->segmentPositionInfo.segmentDisplacement.y) +
+                        (racer->unk_24C.z.z * racer->segmentPositionInfo.segmentDisplacement.z);
+        if ((lateralOffset < -racer->currentRadiusRight) || (racer->currentRadiusLeft < lateralOffset)) {
+            racer->stateFlags |= RACER_STATE_FLAGS_80000000;
+            func_8071EE74(racer, 2.0f);
+            func_i2_800AC680(racer->segmentPositionInfo.pos.x, racer->segmentPositionInfo.pos.y,
+                             racer->segmentPositionInfo.pos.z, racer->velocity.x, racer->velocity.y, racer->velocity.z,
+                             40.0f, racer);
             if (D_807A16E0 != 0) {
-                Audio_PlayerTriggerSEStart(arg0->id, NA_SE_3);
+                Audio_PlayerTriggerSEStart(racer->id, NA_SE_3);
             }
         }
     } else {
-        sp50 = (arg0->unk_24C.z.x * arg0->unk_0C.unk_28.x) + (arg0->unk_24C.z.y * arg0->unk_0C.unk_28.y) +
-               (arg0->unk_24C.z.z * arg0->unk_0C.unk_28.z);
-        arg0->unk_A0 = (arg0->unk_24C.y.x * arg0->unk_0C.unk_28.x) + (arg0->unk_24C.y.y * arg0->unk_0C.unk_28.y) +
-                       (arg0->unk_24C.y.z * arg0->unk_0C.unk_28.z);
-        arg0->unk_19C.x = arg0->unk_24C.y.x;
-        arg0->unk_19C.y = arg0->unk_24C.y.y;
-        arg0->unk_19C.z = arg0->unk_24C.y.z;
+        lateralOffset = (racer->unk_24C.z.x * racer->segmentPositionInfo.segmentDisplacement.x) +
+                        (racer->unk_24C.z.y * racer->segmentPositionInfo.segmentDisplacement.y) +
+                        (racer->unk_24C.z.z * racer->segmentPositionInfo.segmentDisplacement.z);
+        racer->heightAboveGround = (racer->unk_24C.y.x * racer->segmentPositionInfo.segmentDisplacement.x) +
+                                   (racer->unk_24C.y.y * racer->segmentPositionInfo.segmentDisplacement.y) +
+                                   (racer->unk_24C.y.z * racer->segmentPositionInfo.segmentDisplacement.z);
+        racer->upFromGround.x = racer->unk_24C.y.x;
+        racer->upFromGround.y = racer->unk_24C.y.y;
+        racer->upFromGround.z = racer->unk_24C.y.z;
 
-        if (arg1 < arg0->unk_A0) {
-            arg0->stateFlags |= RACER_STATE_FLAGS_80000000 | RACER_STATE_AIRBORNE;
-            if (arg0->id < gNumPlayers) {
-                if (!(arg0->unk_08 & 0x2000)) {
-                    arg0->unk_08 |= 0x2000;
+        if (airborneRange < racer->heightAboveGround) {
+            racer->stateFlags |= RACER_STATE_FLAGS_80000000 | RACER_STATE_AIRBORNE;
+            if (racer->id < gNumPlayers) {
+                if (!(racer->soundEffectFlags & RACER_SE_FLAGS_AIRBORNE)) {
+                    racer->soundEffectFlags |= RACER_SE_FLAGS_AIRBORNE;
                     if (D_807A16E0 != 0) {
-                        Audio_PlayerLevelSEStart(arg0->id, NA_LEVEL_SE_8);
+                        Audio_PlayerLevelSEStart(racer->id, NA_LEVEL_SE_8);
                     }
                 }
             }
-            func_8071F5C4(arg0);
-            func_8071F6B0(arg0);
-            arg0->unk_168.y = -54321.0f;
+            func_8071F5C4(racer);
+            func_8071F6B0(racer);
+            racer->shadowPos.y = -54321.0f;
             return;
         }
 
-        if (arg0->unk_A0 < 0.0f) {
-            temp_fv0 = arg0->unk_A0 * arg0->unk_24C.y.x;
-            arg0->unk_0C.unk_28.x -= temp_fv0;
-            arg0->unk_0C.unk_34.x -= temp_fv0;
-            arg0->unk_0C.unk_44.x -= temp_fv0;
+        if (racer->heightAboveGround < 0.0f) {
+            temp_fv0 = racer->heightAboveGround * racer->unk_24C.y.x;
+            racer->segmentPositionInfo.segmentDisplacement.x -= temp_fv0;
+            racer->segmentPositionInfo.pos.x -= temp_fv0;
+            racer->segmentPositionInfo.lastGroundedPos.x -= temp_fv0;
 
-            temp_fv0 = arg0->unk_A0 * arg0->unk_24C.y.y;
-            arg0->unk_0C.unk_28.y -= temp_fv0;
-            arg0->unk_0C.unk_34.y -= temp_fv0;
-            arg0->unk_0C.unk_44.y -= temp_fv0;
+            temp_fv0 = racer->heightAboveGround * racer->unk_24C.y.y;
+            racer->segmentPositionInfo.segmentDisplacement.y -= temp_fv0;
+            racer->segmentPositionInfo.pos.y -= temp_fv0;
+            racer->segmentPositionInfo.lastGroundedPos.y -= temp_fv0;
 
-            temp_fv0 = arg0->unk_A0 * arg0->unk_24C.y.z;
-            arg0->unk_0C.unk_28.z -= temp_fv0;
-            arg0->unk_0C.unk_34.z -= temp_fv0;
-            arg0->unk_0C.unk_44.z -= temp_fv0;
+            temp_fv0 = racer->heightAboveGround * racer->unk_24C.y.z;
+            racer->segmentPositionInfo.segmentDisplacement.z -= temp_fv0;
+            racer->segmentPositionInfo.pos.z -= temp_fv0;
+            racer->segmentPositionInfo.lastGroundedPos.z -= temp_fv0;
 
-            arg0->unk_A0 = 0.0f;
+            racer->heightAboveGround = 0.0f;
 
-            temp_ft4 = (arg0->unk_24C.y.x * arg0->velocity.x) + (arg0->unk_24C.y.y * arg0->velocity.y) +
-                       (arg0->unk_24C.y.z * arg0->velocity.z);
+            temp_ft4 = (racer->unk_24C.y.x * racer->velocity.x) + (racer->unk_24C.y.y * racer->velocity.y) +
+                       (racer->unk_24C.y.z * racer->velocity.z);
             if (temp_ft4 < 0.0f) {
-                arg0->velocity.x -= temp_ft4 * arg0->unk_24C.y.x;
-                arg0->velocity.y -= temp_ft4 * arg0->unk_24C.y.y;
-                arg0->velocity.z -= temp_ft4 * arg0->unk_24C.y.z;
-                if ((arg0->id < gNumPlayers) && (D_807A16E0 != 0)) {
-                    Audio_Chakuchi(arg0->id, temp_ft4);
+                racer->velocity.x -= temp_ft4 * racer->unk_24C.y.x;
+                racer->velocity.y -= temp_ft4 * racer->unk_24C.y.y;
+                racer->velocity.z -= temp_ft4 * racer->unk_24C.y.z;
+                if ((racer->id < gNumPlayers) && (D_807A16E0 != 0)) {
+                    Audio_Chakuchi(racer->id, temp_ft4);
                 }
             }
         }
 
-        if (arg0->unk_A0 <= 15.0f) {
-            arg0->stateFlags &= ~RACER_STATE_AIRBORNE;
-            if (arg0->id < gNumPlayers) {
+        if (racer->heightAboveGround <= 15.0f) {
+            racer->stateFlags &= ~RACER_STATE_AIRBORNE;
+            if (racer->id < gNumPlayers) {
 
-                if (arg0->unk_08 & 0x2000) {
-                    arg0->unk_08 &= ~0x2000;
+                if (racer->soundEffectFlags & RACER_SE_FLAGS_AIRBORNE) {
+                    racer->soundEffectFlags &= ~RACER_SE_FLAGS_AIRBORNE;
                     if (D_807A16E0 != 0) {
-                        Audio_PlayerLevelSEStop(arg0->id, NA_LEVEL_SE_8);
+                        Audio_PlayerLevelSEStop(racer->id, NA_LEVEL_SE_8);
                     }
                 }
             }
 
-            arg0->unk_A8.x = arg0->unk_B4.x = arg0->unk_24C.y.x;
-            arg0->unk_A8.y = arg0->unk_B4.y = arg0->unk_24C.y.y;
-            arg0->unk_A8.z = arg0->unk_B4.z = arg0->unk_24C.y.z;
+            racer->unk_A8.x = racer->unk_B4.x = racer->unk_24C.y.x;
+            racer->unk_A8.y = racer->unk_B4.y = racer->unk_24C.y.y;
+            racer->unk_A8.z = racer->unk_B4.z = racer->unk_24C.y.z;
 
         } else {
-            arg0->stateFlags |= RACER_STATE_AIRBORNE;
-            if (arg0->id < gNumPlayers) {
-                if (!(arg0->unk_08 & 0x2000)) {
-                    arg0->unk_08 |= 0x2000;
+            racer->stateFlags |= RACER_STATE_AIRBORNE;
+            if (racer->id < gNumPlayers) {
+                if (!(racer->soundEffectFlags & RACER_SE_FLAGS_AIRBORNE)) {
+                    racer->soundEffectFlags |= RACER_SE_FLAGS_AIRBORNE;
                     if (D_807A16E0 != 0) {
-                        Audio_PlayerLevelSEStart(arg0->id, NA_LEVEL_SE_8);
+                        Audio_PlayerLevelSEStart(racer->id, NA_LEVEL_SE_8);
                     }
                 }
             }
-            func_8071F5C4(arg0);
-            func_8071F6B0(arg0);
+            func_8071F5C4(racer);
+            func_8071F6B0(racer);
 
-            if (arg0->unk_A0 < 30.0f) {
+            if (racer->heightAboveGround < 30.0f) {
 
-                temp_ft4 = (arg0->unk_A0 - 15.0f) / 15.0f;
-                arg0->unk_A8.x = (arg0->unk_A8.x - arg0->unk_24C.y.x) * temp_ft4 + arg0->unk_24C.y.x;
-                arg0->unk_A8.y = (arg0->unk_A8.y - arg0->unk_24C.y.y) * temp_ft4 + arg0->unk_24C.y.y;
-                arg0->unk_A8.z = (arg0->unk_A8.z - arg0->unk_24C.y.z) * temp_ft4 + arg0->unk_24C.y.z;
+                temp_ft4 = (racer->heightAboveGround - 15.0f) / 15.0f;
+                racer->unk_A8.x = (racer->unk_A8.x - racer->unk_24C.y.x) * temp_ft4 + racer->unk_24C.y.x;
+                racer->unk_A8.y = (racer->unk_A8.y - racer->unk_24C.y.y) * temp_ft4 + racer->unk_24C.y.y;
+                racer->unk_A8.z = (racer->unk_A8.z - racer->unk_24C.y.z) * temp_ft4 + racer->unk_24C.y.z;
 
-                arg0->unk_B4.x = (arg0->unk_B4.x - arg0->unk_24C.y.x) * temp_ft4 + arg0->unk_B4.x;
-                arg0->unk_B4.y = (arg0->unk_B4.y - arg0->unk_24C.y.y) * temp_ft4 + arg0->unk_B4.y;
-                arg0->unk_B4.z = (arg0->unk_B4.z - arg0->unk_24C.y.z) * temp_ft4 + arg0->unk_B4.z;
+                racer->unk_B4.x = (racer->unk_B4.x - racer->unk_24C.y.x) * temp_ft4 + racer->unk_B4.x;
+                racer->unk_B4.y = (racer->unk_B4.y - racer->unk_24C.y.y) * temp_ft4 + racer->unk_B4.y;
+                racer->unk_B4.z = (racer->unk_B4.z - racer->unk_24C.y.z) * temp_ft4 + racer->unk_B4.z;
 
-                temp_fv0 = 1.0f / sqrtf(SQ(arg0->unk_B4.x) + SQ(arg0->unk_B4.y) + SQ(arg0->unk_B4.z));
-                arg0->unk_B4.x *= temp_fv0;
-                arg0->unk_B4.y *= temp_fv0;
-                arg0->unk_B4.z *= temp_fv0;
+                temp_fv0 = 1.0f / sqrtf(SQ(racer->unk_B4.x) + SQ(racer->unk_B4.y) + SQ(racer->unk_B4.z));
+                racer->unk_B4.x *= temp_fv0;
+                racer->unk_B4.y *= temp_fv0;
+                racer->unk_B4.z *= temp_fv0;
             }
         }
 
-        if (sp50 < -arg0->unk_274) {
-            func_8071F334(arg0,
-                          (arg0->unk_24C.z.x * arg0->velocity.x) + (arg0->unk_24C.z.y * arg0->velocity.y) +
-                              (arg0->unk_24C.z.z * arg0->velocity.z),
-                          -1.0f, arg0->unk_274 + sp50);
-        } else if (arg0->unk_270 < sp50) {
-            func_8071F334(arg0,
-                          (arg0->unk_24C.z.x * arg0->velocity.x) + (arg0->unk_24C.z.y * arg0->velocity.y) +
-                              (arg0->unk_24C.z.z * arg0->velocity.z),
-                          1.0f, sp50 - arg0->unk_270);
+        if (lateralOffset < -racer->currentRadiusRight) {
+            func_8071F334(racer,
+                          (racer->unk_24C.z.x * racer->velocity.x) + (racer->unk_24C.z.y * racer->velocity.y) +
+                              (racer->unk_24C.z.z * racer->velocity.z),
+                          -1.0f, racer->currentRadiusRight + lateralOffset);
+        } else if (racer->currentRadiusLeft < lateralOffset) {
+            func_8071F334(racer,
+                          (racer->unk_24C.z.x * racer->velocity.x) + (racer->unk_24C.z.y * racer->velocity.y) +
+                              (racer->unk_24C.z.z * racer->velocity.z),
+                          1.0f, lateralOffset - racer->currentRadiusLeft);
         } else {
-            arg0->unk_0C.unk_40 =
-                sqrtf(SQ(arg0->unk_0C.unk_28.x) + SQ(arg0->unk_0C.unk_28.y) + SQ(arg0->unk_0C.unk_28.z));
+            racer->segmentPositionInfo.distanceFromSegment =
+                sqrtf(SQ(racer->segmentPositionInfo.segmentDisplacement.x) +
+                      SQ(racer->segmentPositionInfo.segmentDisplacement.y) +
+                      SQ(racer->segmentPositionInfo.segmentDisplacement.z));
         }
 
-        arg0->unk_168.x = arg0->unk_0C.unk_34.x - (arg0->unk_A0 * arg0->unk_24C.y.x);
-        arg0->unk_168.y = arg0->unk_0C.unk_34.y - (arg0->unk_A0 * arg0->unk_24C.y.y);
-        arg0->unk_168.z = arg0->unk_0C.unk_34.z - (arg0->unk_A0 * arg0->unk_24C.y.z);
+        racer->shadowPos.x = racer->segmentPositionInfo.pos.x - (racer->heightAboveGround * racer->unk_24C.y.x);
+        racer->shadowPos.y = racer->segmentPositionInfo.pos.y - (racer->heightAboveGround * racer->unk_24C.y.y);
+        racer->shadowPos.z = racer->segmentPositionInfo.pos.z - (racer->heightAboveGround * racer->unk_24C.y.z);
     }
 }
 
-void func_8071FDE4(Racer* arg0) {
-    func_8071F6F8(arg0, 40.0f);
+void func_8071FDE4(Racer* racer) {
+    func_8071F6F8(racer, 40.0f);
 }
 
-void func_8071FE04(Racer* arg0) {
-    func_8071F6F8(arg0, 145.0f);
+void func_8071FE04(Racer* racer) {
+    func_8071F6F8(racer, 145.0f);
 }
 
-void func_8071FE24(Racer* arg0) {
-    func_8071F6F8(arg0, 210.0f);
+void func_8071FE24(Racer* racer) {
+    func_8071F6F8(racer, 210.0f);
 }
 
-extern f32 D_800C18F8[];
+extern f32 D_i2_800C18F8[];
 
-void func_8071FE44(Racer* arg0) {
-    f32 var_fv0;
+void func_8071FE44(Racer* racer) {
+    f32 pipeRadius;
     f32 temp_fv0;
     f32 var_fv1;
-    f32 sp60;
+    f32 joinProportion;
+    f32 x;
+    f32 y;
+    f32 z;
     f32 var_fs0;
-    f32 sp58;
-    f32 sp54;
 
-    if (arg0->unk_0C.segmentTValue < arg0->unk_0C.courseSegment->unk_68) {
-        var_fv0 = sp60 = arg0->unk_0C.unk_08 / arg0->unk_0C.courseSegment->unk_70;
-        var_fv0 *= arg0->unk_270;
-        var_fs0 = arg0->unk_270;
-    } else if (arg0->unk_0C.courseSegment->unk_6C < arg0->unk_0C.segmentTValue) {
-        var_fv0 = sp60 = (1.0f - arg0->unk_0C.unk_08) / arg0->unk_0C.courseSegment->unk_70;
-        var_fv0 *= arg0->unk_270;
-        var_fs0 = -arg0->unk_270;
+    if (racer->segmentPositionInfo.segmentTValue < racer->segmentPositionInfo.courseSegment->previousJoinEndTValue) {
+        pipeRadius = joinProportion =
+            racer->segmentPositionInfo.segmentLengthProportion / racer->segmentPositionInfo.courseSegment->joinScale;
+        pipeRadius *= racer->currentRadiusLeft;
+        var_fs0 = racer->currentRadiusLeft;
+    } else if (racer->segmentPositionInfo.courseSegment->nextJoinStartTValue <
+               racer->segmentPositionInfo.segmentTValue) {
+        pipeRadius = joinProportion = (1.0f - racer->segmentPositionInfo.segmentLengthProportion) /
+                                      racer->segmentPositionInfo.courseSegment->joinScale;
+        pipeRadius *= racer->currentRadiusLeft;
+        var_fs0 = -racer->currentRadiusLeft;
     } else {
-        var_fv0 = arg0->unk_270;
+        pipeRadius = racer->currentRadiusLeft;
         var_fs0 = 0.0f;
     }
 
-    arg0->unk_A0 = arg0->unk_270 - arg0->unk_0C.unk_40;
-    if (arg0->unk_0C.unk_40 > 0.01f) {
-        var_fv1 = -1.0f / arg0->unk_0C.unk_40;
-        arg0->unk_19C.x = arg0->unk_0C.unk_28.x * var_fv1;
-        arg0->unk_19C.y = arg0->unk_0C.unk_28.y * var_fv1;
-        arg0->unk_19C.z = arg0->unk_0C.unk_28.z * var_fv1;
+    racer->heightAboveGround = racer->currentRadiusLeft - racer->segmentPositionInfo.distanceFromSegment;
+    if (racer->segmentPositionInfo.distanceFromSegment > 0.01f) {
+        var_fv1 = -1.0f / racer->segmentPositionInfo.distanceFromSegment;
+        racer->upFromGround.x = racer->segmentPositionInfo.segmentDisplacement.x * var_fv1;
+        racer->upFromGround.y = racer->segmentPositionInfo.segmentDisplacement.y * var_fv1;
+        racer->upFromGround.z = racer->segmentPositionInfo.segmentDisplacement.z * var_fv1;
     }
 
     if (var_fs0 != 0.0f) {
-        var_fv1 = ((arg0->unk_24C.y.x * arg0->unk_0C.unk_28.x) + (arg0->unk_24C.y.y * arg0->unk_0C.unk_28.y) +
-                   (arg0->unk_24C.y.z * arg0->unk_0C.unk_28.z)) -
+        var_fv1 = ((racer->unk_24C.y.x * racer->segmentPositionInfo.segmentDisplacement.x) +
+                   (racer->unk_24C.y.y * racer->segmentPositionInfo.segmentDisplacement.y) +
+                   (racer->unk_24C.y.z * racer->segmentPositionInfo.segmentDisplacement.z)) -
                   23.0f;
-        if (arg0->stateFlags & RACER_STATE_FLAGS_80000000) {
-            if ((var_fv1 >= 0.0f) || (arg0->unk_270 < arg0->unk_0C.unk_40)) {
-                func_8071F5C4(arg0);
-                func_8071F6B0(arg0);
-                arg0->unk_168.y = -54321.0f;
+        if (racer->stateFlags & RACER_STATE_FLAGS_80000000) {
+            if ((var_fv1 >= 0.0f) || (racer->currentRadiusLeft < racer->segmentPositionInfo.distanceFromSegment)) {
+                func_8071F5C4(racer);
+                func_8071F6B0(racer);
+                racer->shadowPos.y = -54321.0f;
                 return;
             }
-            arg0->stateFlags &= ~RACER_STATE_FLAGS_80000000;
+            racer->stateFlags &= ~RACER_STATE_FLAGS_80000000;
         } else if (var_fv1 >= 0.0f) {
-            arg0->stateFlags |= RACER_STATE_FLAGS_80000000 | RACER_STATE_AIRBORNE;
-            if (arg0->id < gNumPlayers) {
-                if (!(arg0->unk_08 & 0x2000)) {
-                    arg0->unk_08 |= 0x2000;
+            racer->stateFlags |= RACER_STATE_FLAGS_80000000 | RACER_STATE_AIRBORNE;
+            if (racer->id < gNumPlayers) {
+                if (!(racer->soundEffectFlags & RACER_SE_FLAGS_AIRBORNE)) {
+                    racer->soundEffectFlags |= RACER_SE_FLAGS_AIRBORNE;
                     if (D_807A16E0 != 0) {
-                        Audio_PlayerLevelSEStart(arg0->id, NA_LEVEL_SE_8);
+                        Audio_PlayerLevelSEStart(racer->id, NA_LEVEL_SE_8);
                     }
                 }
             }
-            func_8071F5C4(arg0);
-            func_8071F6B0(arg0);
-            arg0->unk_168.y = -54321.0f;
+            func_8071F5C4(racer);
+            func_8071F6B0(racer);
+            racer->shadowPos.y = -54321.0f;
             return;
         }
-    } else if (arg0->stateFlags & RACER_STATE_FLAGS_80000000) {
-        if (arg0->unk_270 < arg0->unk_0C.unk_40) {
-            func_8071F5C4(arg0);
-            func_8071F6B0(arg0);
-            arg0->unk_168.y = -54321.0f;
+    } else if (racer->stateFlags & RACER_STATE_FLAGS_80000000) {
+        if (racer->currentRadiusLeft < racer->segmentPositionInfo.distanceFromSegment) {
+            func_8071F5C4(racer);
+            func_8071F6B0(racer);
+            racer->shadowPos.y = -54321.0f;
             return;
         }
-        arg0->stateFlags &= ~RACER_STATE_FLAGS_80000000;
+        racer->stateFlags &= ~RACER_STATE_FLAGS_80000000;
     }
 
     if (var_fs0 != 0.0f) {
-        var_fv1 = var_fv0 + (arg0->unk_24C.y.x * arg0->unk_0C.unk_28.x) + (arg0->unk_24C.y.y * arg0->unk_0C.unk_28.y) +
-                  (arg0->unk_24C.y.z * arg0->unk_0C.unk_28.z);
-        if (var_fv1 < arg0->unk_A0) {
-            arg0->unk_A0 = var_fv1;
-            arg0->unk_19C.x = arg0->unk_24C.y.x;
-            arg0->unk_19C.y = arg0->unk_24C.y.y;
-            arg0->unk_19C.z = arg0->unk_24C.y.z;
+        var_fv1 = pipeRadius + (racer->unk_24C.y.x * racer->segmentPositionInfo.segmentDisplacement.x) +
+                  (racer->unk_24C.y.y * racer->segmentPositionInfo.segmentDisplacement.y) +
+                  (racer->unk_24C.y.z * racer->segmentPositionInfo.segmentDisplacement.z);
+        if (var_fv1 < racer->heightAboveGround) {
+            racer->heightAboveGround = var_fv1;
+            racer->upFromGround.x = racer->unk_24C.y.x;
+            racer->upFromGround.y = racer->unk_24C.y.y;
+            racer->upFromGround.z = racer->unk_24C.y.z;
 
-            arg0->unk_B4.x = (D_800C18F8[TRACK_SHAPE_INDEX(TRACK_SHAPE_HALF_PIPE)] * arg0->unk_24C.y.x) +
-                             (var_fs0 * arg0->unk_24C.x.x);
-            arg0->unk_B4.y = (D_800C18F8[TRACK_SHAPE_INDEX(TRACK_SHAPE_HALF_PIPE)] * arg0->unk_24C.y.y) +
-                             (var_fs0 * arg0->unk_24C.x.y);
-            arg0->unk_B4.z = (D_800C18F8[TRACK_SHAPE_INDEX(TRACK_SHAPE_HALF_PIPE)] * arg0->unk_24C.y.z) +
-                             (var_fs0 * arg0->unk_24C.x.z);
+            racer->unk_B4.x = (D_i2_800C18F8[TRACK_SHAPE_INDEX(TRACK_SHAPE_HALF_PIPE)] * racer->unk_24C.y.x) +
+                              (var_fs0 * racer->unk_24C.x.x);
+            racer->unk_B4.y = (D_i2_800C18F8[TRACK_SHAPE_INDEX(TRACK_SHAPE_HALF_PIPE)] * racer->unk_24C.y.y) +
+                              (var_fs0 * racer->unk_24C.x.y);
+            racer->unk_B4.z = (D_i2_800C18F8[TRACK_SHAPE_INDEX(TRACK_SHAPE_HALF_PIPE)] * racer->unk_24C.y.z) +
+                              (var_fs0 * racer->unk_24C.x.z);
 
-            if (false) {
-                // FAKE: ARTIFICIALLY INCREASE COMPILER STACK
-                arg0->unk_B4.x = arg0->unk_B4.y = arg0->unk_B4.z;
-            }
+            var_fv1 = 1.0f / sqrtf(SQ(racer->unk_B4.x) + SQ(racer->unk_B4.y) + SQ(racer->unk_B4.z));
 
-            var_fv1 = 1.0f / sqrtf(SQ(arg0->unk_B4.x) + SQ(arg0->unk_B4.y) + SQ(arg0->unk_B4.z));
+            racer->unk_B4.x *= var_fv1;
+            racer->unk_B4.y *= var_fv1;
+            racer->unk_B4.z *= var_fv1;
 
-            arg0->unk_B4.x *= var_fv1;
-            arg0->unk_B4.y *= var_fv1;
-            arg0->unk_B4.z *= var_fv1;
+            if (racer->heightAboveGround < 0.0f) {
+                temp_fv0 = racer->heightAboveGround * racer->unk_24C.y.x;
+                racer->segmentPositionInfo.segmentDisplacement.x -= temp_fv0;
+                racer->segmentPositionInfo.pos.x -= temp_fv0;
+                racer->segmentPositionInfo.lastGroundedPos.x -= temp_fv0;
 
-            if (arg0->unk_A0 < 0.0f) {
-                temp_fv0 = arg0->unk_A0 * arg0->unk_24C.y.x;
-                arg0->unk_0C.unk_28.x -= temp_fv0;
-                arg0->unk_0C.unk_34.x -= temp_fv0;
-                arg0->unk_0C.unk_44.x -= temp_fv0;
+                temp_fv0 = racer->heightAboveGround * racer->unk_24C.y.y;
+                racer->segmentPositionInfo.segmentDisplacement.y -= temp_fv0;
+                racer->segmentPositionInfo.pos.y -= temp_fv0;
+                racer->segmentPositionInfo.lastGroundedPos.y -= temp_fv0;
 
-                temp_fv0 = arg0->unk_A0 * arg0->unk_24C.y.y;
-                arg0->unk_0C.unk_28.y -= temp_fv0;
-                arg0->unk_0C.unk_34.y -= temp_fv0;
-                arg0->unk_0C.unk_44.y -= temp_fv0;
+                temp_fv0 = racer->heightAboveGround * racer->unk_24C.y.z;
+                racer->segmentPositionInfo.segmentDisplacement.z -= temp_fv0;
+                racer->segmentPositionInfo.pos.z -= temp_fv0;
+                racer->segmentPositionInfo.lastGroundedPos.z -= temp_fv0;
 
-                temp_fv0 = arg0->unk_A0 * arg0->unk_24C.y.z;
-                arg0->unk_0C.unk_28.z -= temp_fv0;
-                arg0->unk_0C.unk_34.z -= temp_fv0;
-                arg0->unk_0C.unk_44.z -= temp_fv0;
+                racer->segmentPositionInfo.distanceFromSegment =
+                    sqrtf(SQ(racer->segmentPositionInfo.segmentDisplacement.x) +
+                          SQ(racer->segmentPositionInfo.segmentDisplacement.y) +
+                          SQ(racer->segmentPositionInfo.segmentDisplacement.z));
+                racer->heightAboveGround = 0.0f;
 
-                arg0->unk_0C.unk_40 =
-                    sqrtf(SQ(arg0->unk_0C.unk_28.x) + SQ(arg0->unk_0C.unk_28.y) + SQ(arg0->unk_0C.unk_28.z));
-                arg0->unk_A0 = 0.0f;
-
-                var_fs0 = (arg0->unk_24C.y.x * arg0->velocity.x) + (arg0->unk_24C.y.y * arg0->velocity.y) +
-                          (arg0->unk_24C.y.z * arg0->velocity.z);
+                var_fs0 = (racer->unk_24C.y.x * racer->velocity.x) + (racer->unk_24C.y.y * racer->velocity.y) +
+                          (racer->unk_24C.y.z * racer->velocity.z);
                 if (var_fs0 < 0.0f) {
-                    arg0->velocity.x -= var_fs0 * arg0->unk_24C.y.x;
-                    arg0->velocity.y -= var_fs0 * arg0->unk_24C.y.y;
-                    arg0->velocity.z -= var_fs0 * arg0->unk_24C.y.z;
-                    if ((arg0->id < gNumPlayers) && (D_807A16E0 != 0)) {
-                        Audio_Chakuchi(arg0->id, var_fs0);
+                    racer->velocity.x -= var_fs0 * racer->unk_24C.y.x;
+                    racer->velocity.y -= var_fs0 * racer->unk_24C.y.y;
+                    racer->velocity.z -= var_fs0 * racer->unk_24C.y.z;
+                    if ((racer->id < gNumPlayers) && (D_807A16E0 != 0)) {
+                        Audio_Chakuchi(racer->id, var_fs0);
                     }
                 }
             }
         } else {
-            arg0->unk_B4 = arg0->unk_19C;
+            racer->unk_B4 = racer->upFromGround;
         }
-        var_fs0 = ((arg0->unk_B4.x - arg0->unk_24C.y.x) * sp60) + arg0->unk_24C.y.x;
-        sp58 = ((arg0->unk_B4.y - arg0->unk_24C.y.y) * sp60) + arg0->unk_24C.y.y;
-        sp54 = ((arg0->unk_B4.z - arg0->unk_24C.y.z) * sp60) + arg0->unk_24C.y.z;
+        x = ((racer->unk_B4.x - racer->unk_24C.y.x) * joinProportion) + racer->unk_24C.y.x;
+        y = ((racer->unk_B4.y - racer->unk_24C.y.y) * joinProportion) + racer->unk_24C.y.y;
+        z = ((racer->unk_B4.z - racer->unk_24C.y.z) * joinProportion) + racer->unk_24C.y.z;
 
-        var_fv1 = sqrtf(SQ(var_fs0) + SQ(sp58) + SQ(sp54));
+        var_fv1 = sqrtf(SQ(x) + SQ(y) + SQ(z));
         if (var_fv1 > 0.01f) {
             var_fv1 = 1.0f / var_fv1;
-            arg0->unk_B4.x = var_fv1 * var_fs0;
-            arg0->unk_B4.y = var_fv1 * sp58;
-            arg0->unk_B4.z = var_fv1 * sp54;
+            racer->unk_B4.x = var_fv1 * x;
+            racer->unk_B4.y = var_fv1 * y;
+            racer->unk_B4.z = var_fv1 * z;
         }
 
-        arg0->unk_A8.x = ((arg0->unk_19C.x - arg0->unk_24C.y.x) * sp60) + arg0->unk_24C.y.x;
-        arg0->unk_A8.y = ((arg0->unk_19C.y - arg0->unk_24C.y.y) * sp60) + arg0->unk_24C.y.y;
-        arg0->unk_A8.z = ((arg0->unk_19C.z - arg0->unk_24C.y.z) * sp60) + arg0->unk_24C.y.z;
+        racer->unk_A8.x = ((racer->upFromGround.x - racer->unk_24C.y.x) * joinProportion) + racer->unk_24C.y.x;
+        racer->unk_A8.y = ((racer->upFromGround.y - racer->unk_24C.y.y) * joinProportion) + racer->unk_24C.y.y;
+        racer->unk_A8.z = ((racer->upFromGround.z - racer->unk_24C.y.z) * joinProportion) + racer->unk_24C.y.z;
     } else {
-        arg0->unk_A8 = arg0->unk_B4 = arg0->unk_19C;
+        racer->unk_A8 = racer->unk_B4 = racer->upFromGround;
     }
 
-    if (arg0->unk_270 < arg0->unk_0C.unk_40) {
-        var_fv1 = arg0->unk_270 / arg0->unk_0C.unk_40;
-        arg0->unk_0C.unk_40 = arg0->unk_270;
+    if (racer->currentRadiusLeft < racer->segmentPositionInfo.distanceFromSegment) {
+        var_fv1 = racer->currentRadiusLeft / racer->segmentPositionInfo.distanceFromSegment;
+        racer->segmentPositionInfo.distanceFromSegment = racer->currentRadiusLeft;
 
-        arg0->unk_0C.unk_28.x *= var_fv1;
-        arg0->unk_0C.unk_34.x = arg0->unk_0C.unk_44.x = arg0->unk_0C.unk_28.x + arg0->unk_0C.unk_1C.x;
+        racer->segmentPositionInfo.segmentDisplacement.x *= var_fv1;
+        temp_fv0 = racer->segmentPositionInfo.segmentDisplacement.x + racer->segmentPositionInfo.segmentPos.x;
+        racer->segmentPositionInfo.lastGroundedPos.x = temp_fv0;
+        racer->segmentPositionInfo.pos.x = temp_fv0;
 
-        arg0->unk_0C.unk_28.y *= var_fv1;
-        arg0->unk_0C.unk_34.y = arg0->unk_0C.unk_44.y = arg0->unk_0C.unk_28.y + arg0->unk_0C.unk_1C.y;
+        racer->segmentPositionInfo.segmentDisplacement.y *= var_fv1;
+        temp_fv0 = racer->segmentPositionInfo.segmentDisplacement.y + racer->segmentPositionInfo.segmentPos.y;
+        racer->segmentPositionInfo.lastGroundedPos.y = temp_fv0;
+        racer->segmentPositionInfo.pos.y = temp_fv0;
 
-        arg0->unk_0C.unk_28.z *= var_fv1;
-        arg0->unk_0C.unk_34.z = arg0->unk_0C.unk_44.z = arg0->unk_0C.unk_28.z + arg0->unk_0C.unk_1C.z;
+        racer->segmentPositionInfo.segmentDisplacement.z *= var_fv1;
+        temp_fv0 = racer->segmentPositionInfo.segmentDisplacement.z + racer->segmentPositionInfo.segmentPos.z;
+        racer->segmentPositionInfo.lastGroundedPos.z = temp_fv0;
+        racer->segmentPositionInfo.pos.z = temp_fv0;
 
-        arg0->unk_A0 = 0.0f;
+        racer->heightAboveGround = 0.0f;
 
-        var_fs0 = (arg0->unk_19C.x * arg0->velocity.x) + (arg0->unk_19C.y * arg0->velocity.y) +
-                  (arg0->unk_19C.z * arg0->velocity.z);
+        var_fs0 = (racer->upFromGround.x * racer->velocity.x) + (racer->upFromGround.y * racer->velocity.y) +
+                  (racer->upFromGround.z * racer->velocity.z);
         if (var_fs0 < 0.0f) {
-            arg0->velocity.x -= var_fs0 * arg0->unk_19C.x;
-            arg0->velocity.y -= var_fs0 * arg0->unk_19C.y;
-            arg0->velocity.z -= var_fs0 * arg0->unk_19C.z;
-            if ((arg0->id < gNumPlayers) && (D_807A16E0 != 0)) {
-                Audio_Chakuchi(arg0->id, var_fs0);
+            racer->velocity.x -= var_fs0 * racer->upFromGround.x;
+            racer->velocity.y -= var_fs0 * racer->upFromGround.y;
+            racer->velocity.z -= var_fs0 * racer->upFromGround.z;
+            if ((racer->id < gNumPlayers) && (D_807A16E0 != 0)) {
+                Audio_Chakuchi(racer->id, var_fs0);
             }
         }
     }
 
-    arg0->unk_168.x = arg0->unk_0C.unk_34.x - (arg0->unk_A0 * arg0->unk_19C.x);
-    arg0->unk_168.y = arg0->unk_0C.unk_34.y - (arg0->unk_A0 * arg0->unk_19C.y);
-    arg0->unk_168.z = arg0->unk_0C.unk_34.z - (arg0->unk_A0 * arg0->unk_19C.z);
+    racer->shadowPos.x = racer->segmentPositionInfo.pos.x - (racer->heightAboveGround * racer->upFromGround.x);
+    racer->shadowPos.y = racer->segmentPositionInfo.pos.y - (racer->heightAboveGround * racer->upFromGround.y);
+    racer->shadowPos.z = racer->segmentPositionInfo.pos.z - (racer->heightAboveGround * racer->upFromGround.z);
 
-    if (arg0->unk_A0 <= 15.0f) {
-        arg0->stateFlags &= ~RACER_STATE_AIRBORNE;
-        if (arg0->id < gNumPlayers) {
-            if (arg0->unk_08 & 0x2000) {
-                arg0->unk_08 &= ~0x2000;
+    if (racer->heightAboveGround <= 15.0f) {
+        racer->stateFlags &= ~RACER_STATE_AIRBORNE;
+        if (racer->id < gNumPlayers) {
+            if (racer->soundEffectFlags & RACER_SE_FLAGS_AIRBORNE) {
+                racer->soundEffectFlags &= ~RACER_SE_FLAGS_AIRBORNE;
                 if (D_807A16E0 != 0) {
-                    Audio_PlayerLevelSEStop(arg0->id, NA_LEVEL_SE_8);
+                    Audio_PlayerLevelSEStop(racer->id, NA_LEVEL_SE_8);
                 }
             }
         }
     } else {
-        arg0->stateFlags |= RACER_STATE_AIRBORNE;
-        if (arg0->id < gNumPlayers) {
-            if (!(arg0->unk_08 & 0x2000)) {
-                arg0->unk_08 |= 0x2000;
+        racer->stateFlags |= RACER_STATE_AIRBORNE;
+        if (racer->id < gNumPlayers) {
+            if (!(racer->soundEffectFlags & RACER_SE_FLAGS_AIRBORNE)) {
+                racer->soundEffectFlags |= RACER_SE_FLAGS_AIRBORNE;
                 if (D_807A16E0 != 0) {
-                    Audio_PlayerLevelSEStart(arg0->id, NA_LEVEL_SE_8);
+                    Audio_PlayerLevelSEStart(racer->id, NA_LEVEL_SE_8);
                 }
             }
         }
     }
 }
 
-void func_807206FC(Racer* arg0) {
+void func_807206FC(Racer* racer) {
     f32 var_fa1;
     f32 temp_fv1;
-    f32 sp5C;
-    f32 sp58;
-    f32 sp54;
-    f32 sp50;
-    f32 sp4C;
+    f32 cylinderRadius;
+    f32 joinProportion;
+    f32 x;
+    f32 y;
+    f32 z;
     f32 temp_fv0;
 
-    if (arg0->unk_0C.segmentTValue < arg0->unk_0C.courseSegment->unk_68) {
-        sp5C = sp58 = arg0->unk_0C.unk_08 / arg0->unk_0C.courseSegment->unk_70;
-        sp5C *= arg0->unk_270;
-        var_fa1 = arg0->unk_270;
-    } else if (arg0->unk_0C.courseSegment->unk_6C < arg0->unk_0C.segmentTValue) {
-        var_fa1 = -arg0->unk_270;
-        sp5C = sp58 = (1.0f - arg0->unk_0C.unk_08) / arg0->unk_0C.courseSegment->unk_70;
-        sp5C *= arg0->unk_270;
+    if (racer->segmentPositionInfo.segmentTValue < racer->segmentPositionInfo.courseSegment->previousJoinEndTValue) {
+        cylinderRadius = joinProportion =
+            racer->segmentPositionInfo.segmentLengthProportion / racer->segmentPositionInfo.courseSegment->joinScale;
+        cylinderRadius *= racer->currentRadiusLeft;
+        var_fa1 = racer->currentRadiusLeft;
+    } else if (racer->segmentPositionInfo.courseSegment->nextJoinStartTValue <
+               racer->segmentPositionInfo.segmentTValue) {
+        var_fa1 = -racer->currentRadiusLeft;
+        cylinderRadius = joinProportion = (1.0f - racer->segmentPositionInfo.segmentLengthProportion) /
+                                          racer->segmentPositionInfo.courseSegment->joinScale;
+        cylinderRadius *= racer->currentRadiusLeft;
     } else {
         var_fa1 = 0.0f;
-        sp5C = arg0->unk_270;
+        cylinderRadius = racer->currentRadiusLeft;
     }
 
-    arg0->unk_A0 = arg0->unk_0C.unk_40 - sp5C;
-    if (arg0->unk_0C.unk_40 > 0.01f) {
-        temp_fv1 = 1.0f / arg0->unk_0C.unk_40;
-        arg0->unk_19C.x = arg0->unk_0C.unk_28.x * temp_fv1;
-        arg0->unk_19C.y = arg0->unk_0C.unk_28.y * temp_fv1;
-        arg0->unk_19C.z = arg0->unk_0C.unk_28.z * temp_fv1;
+    racer->heightAboveGround = racer->segmentPositionInfo.distanceFromSegment - cylinderRadius;
+    if (racer->segmentPositionInfo.distanceFromSegment > 0.01f) {
+        temp_fv1 = 1.0f / racer->segmentPositionInfo.distanceFromSegment;
+        racer->upFromGround.x = racer->segmentPositionInfo.segmentDisplacement.x * temp_fv1;
+        racer->upFromGround.y = racer->segmentPositionInfo.segmentDisplacement.y * temp_fv1;
+        racer->upFromGround.z = racer->segmentPositionInfo.segmentDisplacement.z * temp_fv1;
     }
 
-    arg0->unk_168.x = arg0->unk_0C.unk_34.x - (arg0->unk_A0 * arg0->unk_19C.x);
-    arg0->unk_168.y = arg0->unk_0C.unk_34.y - (arg0->unk_A0 * arg0->unk_19C.y);
-    arg0->unk_168.z = arg0->unk_0C.unk_34.z - (arg0->unk_A0 * arg0->unk_19C.z);
-    if (arg0->stateFlags & RACER_STATE_FLAGS_80000000) {
-        if ((arg0->unk_270 + 200.0f) < arg0->unk_0C.unk_40) {
-            func_8071F5C4(arg0);
-            func_8071F6B0(arg0);
-            arg0->unk_168.y = -54321.0f;
+    racer->shadowPos.x = racer->segmentPositionInfo.pos.x - (racer->heightAboveGround * racer->upFromGround.x);
+    racer->shadowPos.y = racer->segmentPositionInfo.pos.y - (racer->heightAboveGround * racer->upFromGround.y);
+    racer->shadowPos.z = racer->segmentPositionInfo.pos.z - (racer->heightAboveGround * racer->upFromGround.z);
+    if (racer->stateFlags & RACER_STATE_FLAGS_80000000) {
+        if ((racer->currentRadiusLeft + 200.0f) < racer->segmentPositionInfo.distanceFromSegment) {
+            func_8071F5C4(racer);
+            func_8071F6B0(racer);
+            racer->shadowPos.y = -54321.0f;
             return;
         }
-        arg0->stateFlags &= ~RACER_STATE_FLAGS_80000000;
-    } else if ((arg0->unk_270 + 200.0f) < arg0->unk_0C.unk_40) {
-        arg0->stateFlags |= RACER_STATE_FLAGS_80000000 | RACER_STATE_AIRBORNE;
-        if (arg0->id < gNumPlayers) {
-            if (!(arg0->unk_08 & 0x2000)) {
-                arg0->unk_08 |= 0x2000;
-                if (D_807A16E0 != 0) {
-                    Audio_PlayerLevelSEStart(arg0->id, NA_LEVEL_SE_8);
+        racer->stateFlags &= ~RACER_STATE_FLAGS_80000000;
+    } else {
+        if ((racer->currentRadiusLeft + 200.0f) < racer->segmentPositionInfo.distanceFromSegment) {
+            racer->stateFlags |= RACER_STATE_FLAGS_80000000 | RACER_STATE_AIRBORNE;
+            if (racer->id < gNumPlayers) {
+                if (!(racer->soundEffectFlags & RACER_SE_FLAGS_AIRBORNE)) {
+                    racer->soundEffectFlags |= RACER_SE_FLAGS_AIRBORNE;
+                    if (D_807A16E0 != 0) {
+                        Audio_PlayerLevelSEStart(racer->id, NA_LEVEL_SE_8);
+                    }
                 }
             }
+            func_8071F5C4(racer);
+            func_8071F6B0(racer);
+            racer->shadowPos.y = -54321.0f;
+            return;
         }
-        func_8071F5C4(arg0);
-        func_8071F6B0(arg0);
-        arg0->unk_168.y = -54321.0f;
-        return;
     }
 
     if (var_fa1 != 0.0f) {
 
-        sp54 = ((arg0->unk_19C.x - arg0->unk_24C.y.x) * sp58) + arg0->unk_24C.y.x;
-        sp50 = ((arg0->unk_19C.y - arg0->unk_24C.y.y) * sp58) + arg0->unk_24C.y.y;
-        sp4C = ((arg0->unk_19C.z - arg0->unk_24C.y.z) * sp58) + arg0->unk_24C.y.z;
+        x = ((racer->upFromGround.x - racer->unk_24C.y.x) * joinProportion) + racer->unk_24C.y.x;
+        y = ((racer->upFromGround.y - racer->unk_24C.y.y) * joinProportion) + racer->unk_24C.y.y;
+        z = ((racer->upFromGround.z - racer->unk_24C.y.z) * joinProportion) + racer->unk_24C.y.z;
 
-        temp_fv1 = sqrtf(SQ(sp54) + SQ(sp50) + SQ(sp4C));
+        temp_fv1 = sqrtf(SQ(x) + SQ(y) + SQ(z));
         if (temp_fv1 > 0.01f) {
             temp_fv1 = 1.0f / temp_fv1;
-            arg0->unk_B4.x = temp_fv1 * sp54;
-            arg0->unk_B4.y = temp_fv1 * sp50;
-            arg0->unk_B4.z = temp_fv1 * sp4C;
+            racer->unk_B4.x = temp_fv1 * x;
+            racer->unk_B4.y = temp_fv1 * y;
+            racer->unk_B4.z = temp_fv1 * z;
         }
 
-        temp_fv1 = 1.0f - sp58;
-        sp54 = arg0->unk_24C.y.x * SQ(temp_fv1);
-        sp50 = arg0->unk_24C.y.y * SQ(temp_fv1);
-        sp4C = arg0->unk_24C.y.z * SQ(temp_fv1);
+        temp_fv1 = 1.0f - joinProportion;
+        x = racer->unk_24C.y.x * SQ(temp_fv1);
+        y = racer->unk_24C.y.y * SQ(temp_fv1);
+        z = racer->unk_24C.y.z * SQ(temp_fv1);
 
-        arg0->unk_A8.x = ((arg0->unk_19C.x - sp54) * sp58) + sp54;
-        arg0->unk_A8.y = ((arg0->unk_19C.y - sp50) * sp58) + sp50;
-        arg0->unk_A8.z = ((arg0->unk_19C.z - sp4C) * sp58) + sp4C;
-        temp_fv1 = (sp58 * 200.0f) + sp5C + (arg0->unk_24C.y.x * arg0->unk_0C.unk_28.x) +
-                   (arg0->unk_24C.y.y * arg0->unk_0C.unk_28.y) + (arg0->unk_24C.y.z * arg0->unk_0C.unk_28.z);
-        if (temp_fv1 < arg0->unk_A0) {
-            arg0->unk_A0 = temp_fv1;
-            arg0->unk_19C.x = arg0->unk_24C.y.x;
-            arg0->unk_19C.y = arg0->unk_24C.y.y;
-            arg0->unk_19C.z = arg0->unk_24C.y.z;
-            if (arg0->unk_A0 < 0.0f) {
+        racer->unk_A8.x = ((racer->upFromGround.x - x) * joinProportion) + x;
+        racer->unk_A8.y = ((racer->upFromGround.y - y) * joinProportion) + y;
+        racer->unk_A8.z = ((racer->upFromGround.z - z) * joinProportion) + z;
+        temp_fv1 = (joinProportion * 200.0f) + cylinderRadius +
+                   (racer->unk_24C.y.x * racer->segmentPositionInfo.segmentDisplacement.x) +
+                   (racer->unk_24C.y.y * racer->segmentPositionInfo.segmentDisplacement.y) +
+                   (racer->unk_24C.y.z * racer->segmentPositionInfo.segmentDisplacement.z);
+        if (temp_fv1 < racer->heightAboveGround) {
+            racer->heightAboveGround = temp_fv1;
+            racer->upFromGround.x = racer->unk_24C.y.x;
+            racer->upFromGround.y = racer->unk_24C.y.y;
+            racer->upFromGround.z = racer->unk_24C.y.z;
+            if (racer->heightAboveGround < 0.0f) {
 
-                temp_fv0 = arg0->unk_A0 * arg0->unk_24C.y.x;
-                arg0->unk_0C.unk_28.x -= temp_fv0;
-                arg0->unk_0C.unk_34.x -= temp_fv0;
-                arg0->unk_0C.unk_44.x -= temp_fv0;
+                temp_fv0 = racer->heightAboveGround * racer->unk_24C.y.x;
+                racer->segmentPositionInfo.segmentDisplacement.x -= temp_fv0;
+                racer->segmentPositionInfo.pos.x -= temp_fv0;
+                racer->segmentPositionInfo.lastGroundedPos.x -= temp_fv0;
 
-                temp_fv0 = arg0->unk_A0 * arg0->unk_24C.y.y;
-                arg0->unk_0C.unk_28.y -= temp_fv0;
-                arg0->unk_0C.unk_34.y -= temp_fv0;
-                arg0->unk_0C.unk_44.y -= temp_fv0;
+                temp_fv0 = racer->heightAboveGround * racer->unk_24C.y.y;
+                racer->segmentPositionInfo.segmentDisplacement.y -= temp_fv0;
+                racer->segmentPositionInfo.pos.y -= temp_fv0;
+                racer->segmentPositionInfo.lastGroundedPos.y -= temp_fv0;
 
-                temp_fv0 = arg0->unk_A0 * arg0->unk_24C.y.z;
-                arg0->unk_0C.unk_28.z -= temp_fv0;
-                arg0->unk_0C.unk_34.z -= temp_fv0;
-                arg0->unk_0C.unk_44.z -= temp_fv0;
+                temp_fv0 = racer->heightAboveGround * racer->unk_24C.y.z;
+                racer->segmentPositionInfo.segmentDisplacement.z -= temp_fv0;
+                racer->segmentPositionInfo.pos.z -= temp_fv0;
+                racer->segmentPositionInfo.lastGroundedPos.z -= temp_fv0;
 
-                arg0->unk_0C.unk_40 =
-                    sqrtf(SQ(arg0->unk_0C.unk_28.x) + SQ(arg0->unk_0C.unk_28.y) + SQ(arg0->unk_0C.unk_28.z));
-                arg0->unk_A0 = 0.0f;
+                racer->segmentPositionInfo.distanceFromSegment =
+                    sqrtf(SQ(racer->segmentPositionInfo.segmentDisplacement.x) +
+                          SQ(racer->segmentPositionInfo.segmentDisplacement.y) +
+                          SQ(racer->segmentPositionInfo.segmentDisplacement.z));
+                racer->heightAboveGround = 0.0f;
             }
         }
     } else {
-        arg0->unk_A8 = arg0->unk_B4 = arg0->unk_19C;
+        racer->unk_A8 = racer->unk_B4 = racer->upFromGround;
     }
 
-    if (arg0->unk_0C.unk_40 < sp5C) {
-        temp_fv1 = sp5C / arg0->unk_0C.unk_40;
-        arg0->unk_0C.unk_40 = sp5C;
+    if (racer->segmentPositionInfo.distanceFromSegment < cylinderRadius) {
+        temp_fv1 = cylinderRadius / racer->segmentPositionInfo.distanceFromSegment;
+        racer->segmentPositionInfo.distanceFromSegment = cylinderRadius;
 
-        arg0->unk_0C.unk_28.x *= temp_fv1;
-        temp_fv0 = arg0->unk_0C.unk_28.x + arg0->unk_0C.unk_1C.x;
-        arg0->unk_0C.unk_44.x = temp_fv0;
-        arg0->unk_0C.unk_34.x = temp_fv0;
+        racer->segmentPositionInfo.segmentDisplacement.x *= temp_fv1;
+        temp_fv0 = racer->segmentPositionInfo.segmentDisplacement.x + racer->segmentPositionInfo.segmentPos.x;
+        racer->segmentPositionInfo.lastGroundedPos.x = temp_fv0;
+        racer->segmentPositionInfo.pos.x = temp_fv0;
 
-        arg0->unk_0C.unk_28.y *= temp_fv1;
-        temp_fv0 = arg0->unk_0C.unk_28.y + arg0->unk_0C.unk_1C.y;
-        arg0->unk_0C.unk_44.y = temp_fv0;
-        arg0->unk_0C.unk_34.y = temp_fv0;
+        racer->segmentPositionInfo.segmentDisplacement.y *= temp_fv1;
+        temp_fv0 = racer->segmentPositionInfo.segmentDisplacement.y + racer->segmentPositionInfo.segmentPos.y;
+        racer->segmentPositionInfo.lastGroundedPos.y = temp_fv0;
+        racer->segmentPositionInfo.pos.y = temp_fv0;
 
-        arg0->unk_0C.unk_28.z *= temp_fv1;
-        temp_fv0 = arg0->unk_0C.unk_28.z + arg0->unk_0C.unk_1C.z;
-        arg0->unk_0C.unk_44.z = temp_fv0;
-        arg0->unk_0C.unk_34.z = temp_fv0;
+        racer->segmentPositionInfo.segmentDisplacement.z *= temp_fv1;
+        temp_fv0 = racer->segmentPositionInfo.segmentDisplacement.z + racer->segmentPositionInfo.segmentPos.z;
+        racer->segmentPositionInfo.lastGroundedPos.z = temp_fv0;
+        racer->segmentPositionInfo.pos.z = temp_fv0;
 
-        arg0->unk_A0 = 0.0f;
+        racer->heightAboveGround = 0.0f;
 
-        var_fa1 = (arg0->unk_19C.x * arg0->velocity.x) + (arg0->unk_19C.y * arg0->velocity.y) +
-                  (arg0->unk_19C.z * arg0->velocity.z);
+        var_fa1 = (racer->upFromGround.x * racer->velocity.x) + (racer->upFromGround.y * racer->velocity.y) +
+                  (racer->upFromGround.z * racer->velocity.z);
         if (var_fa1 < 0.0f) {
-            arg0->velocity.x -= (var_fa1 * arg0->unk_19C.x);
-            arg0->velocity.y -= (var_fa1 * arg0->unk_19C.y);
-            arg0->velocity.z -= (var_fa1 * arg0->unk_19C.z);
+            racer->velocity.x -= (var_fa1 * racer->upFromGround.x);
+            racer->velocity.y -= (var_fa1 * racer->upFromGround.y);
+            racer->velocity.z -= (var_fa1 * racer->upFromGround.z);
 
-            if ((arg0->id < gNumPlayers) && (D_807A16E0 != 0)) {
-                Audio_Chakuchi(arg0->id, var_fa1);
+            if ((racer->id < gNumPlayers) && (D_807A16E0 != 0)) {
+                Audio_Chakuchi(racer->id, var_fa1);
             }
         }
     }
 
-    if (arg0->unk_A0 <= 15.0f) {
-        arg0->stateFlags &= ~RACER_STATE_AIRBORNE;
-        if (arg0->id < gNumPlayers) {
-            if (arg0->unk_08 & 0x2000) {
-                arg0->unk_08 &= ~0x2000;
+    if (racer->heightAboveGround <= 15.0f) {
+        racer->stateFlags &= ~RACER_STATE_AIRBORNE;
+        if (racer->id < gNumPlayers) {
+            if (racer->soundEffectFlags & RACER_SE_FLAGS_AIRBORNE) {
+                racer->soundEffectFlags &= ~RACER_SE_FLAGS_AIRBORNE;
                 if (D_807A16E0 != 0) {
-                    Audio_PlayerLevelSEStop(arg0->id, NA_LEVEL_SE_8);
+                    Audio_PlayerLevelSEStop(racer->id, NA_LEVEL_SE_8);
                 }
             }
         }
     } else {
-        arg0->stateFlags |= RACER_STATE_AIRBORNE;
-        if (arg0->id < gNumPlayers) {
-            if (!(arg0->unk_08 & 0x2000)) {
-                arg0->unk_08 |= 0x2000;
+        racer->stateFlags |= RACER_STATE_AIRBORNE;
+        if (racer->id < gNumPlayers) {
+            if (!(racer->soundEffectFlags & RACER_SE_FLAGS_AIRBORNE)) {
+                racer->soundEffectFlags |= RACER_SE_FLAGS_AIRBORNE;
                 if (D_807A16E0 != 0) {
-                    Audio_PlayerLevelSEStart(arg0->id, NA_LEVEL_SE_8);
+                    Audio_PlayerLevelSEStart(racer->id, NA_LEVEL_SE_8);
                 }
             }
         }
     }
 }
 
-void func_80720E2C(Racer* arg0) {
-    f32 var_fv0;
+void func_80720E2C(Racer* racer) {
+    f32 halfPipeRadius;
     f32 var_fs0;
     f32 temp_fv1;
-    f32 sp58;
+    f32 joinProportion;
+    f32 x;
+    f32 y;
+    f32 z;
     f32 temp_fv0;
-    f32 sp50;
-    f32 sp4C;
 
-    if (arg0->unk_0C.segmentTValue < arg0->unk_0C.courseSegment->unk_68) {
-        var_fv0 = sp58 = arg0->unk_0C.unk_08 / arg0->unk_0C.courseSegment->unk_70;
-        var_fv0 *= arg0->unk_270;
-        var_fs0 = arg0->unk_270;
-    } else if (arg0->unk_0C.courseSegment->unk_6C < arg0->unk_0C.segmentTValue) {
-        var_fv0 = sp58 = (1.0f - arg0->unk_0C.unk_08) / arg0->unk_0C.courseSegment->unk_70;
-        var_fv0 *= arg0->unk_270;
-        var_fs0 = -arg0->unk_270;
+    if (racer->segmentPositionInfo.segmentTValue < racer->segmentPositionInfo.courseSegment->previousJoinEndTValue) {
+        halfPipeRadius = joinProportion =
+            racer->segmentPositionInfo.segmentLengthProportion / racer->segmentPositionInfo.courseSegment->joinScale;
+        halfPipeRadius *= racer->currentRadiusLeft;
+        var_fs0 = racer->currentRadiusLeft;
+    } else if (racer->segmentPositionInfo.courseSegment->nextJoinStartTValue <
+               racer->segmentPositionInfo.segmentTValue) {
+        halfPipeRadius = joinProportion = (1.0f - racer->segmentPositionInfo.segmentLengthProportion) /
+                                          racer->segmentPositionInfo.courseSegment->joinScale;
+        halfPipeRadius *= racer->currentRadiusLeft;
+        var_fs0 = -racer->currentRadiusLeft;
     } else {
-        var_fv0 = arg0->unk_270;
+        halfPipeRadius = racer->currentRadiusLeft;
         var_fs0 = 0.0f;
     }
 
-    arg0->unk_A0 = arg0->unk_270 - arg0->unk_0C.unk_40;
-    if (arg0->unk_0C.unk_40 > 0.01f) {
-        temp_fv1 = -1.0f / arg0->unk_0C.unk_40;
-        arg0->unk_19C.x = arg0->unk_0C.unk_28.x * temp_fv1;
-        arg0->unk_19C.y = arg0->unk_0C.unk_28.y * temp_fv1;
-        arg0->unk_19C.z = arg0->unk_0C.unk_28.z * temp_fv1;
+    racer->heightAboveGround = racer->currentRadiusLeft - racer->segmentPositionInfo.distanceFromSegment;
+    if (racer->segmentPositionInfo.distanceFromSegment > 0.01f) {
+        temp_fv1 = -1.0f / racer->segmentPositionInfo.distanceFromSegment;
+        racer->upFromGround.x = racer->segmentPositionInfo.segmentDisplacement.x * temp_fv1;
+        racer->upFromGround.y = racer->segmentPositionInfo.segmentDisplacement.y * temp_fv1;
+        racer->upFromGround.z = racer->segmentPositionInfo.segmentDisplacement.z * temp_fv1;
     }
 
-    temp_fv1 = (((arg0->unk_24C.y.x * arg0->unk_0C.unk_28.x) + (arg0->unk_24C.y.y * arg0->unk_0C.unk_28.y) +
-                 (arg0->unk_24C.y.z * arg0->unk_0C.unk_28.z)) -
+    temp_fv1 = (((racer->unk_24C.y.x * racer->segmentPositionInfo.segmentDisplacement.x) +
+                 (racer->unk_24C.y.y * racer->segmentPositionInfo.segmentDisplacement.y) +
+                 (racer->unk_24C.y.z * racer->segmentPositionInfo.segmentDisplacement.z)) -
                 23.0f) +
-               (var_fv0 * 0.3826834f);
-    if (arg0->stateFlags & RACER_STATE_FLAGS_80000000) {
-        if ((temp_fv1 >= 0.0f) || (arg0->unk_270 < arg0->unk_0C.unk_40)) {
-            func_8071F5C4(arg0);
-            func_8071F6B0(arg0);
-            arg0->unk_168.y = -54321.0f;
+               (halfPipeRadius * 0.3826834f);
+    if (racer->stateFlags & RACER_STATE_FLAGS_80000000) {
+        if ((temp_fv1 >= 0.0f) || (racer->currentRadiusLeft < racer->segmentPositionInfo.distanceFromSegment)) {
+            func_8071F5C4(racer);
+            func_8071F6B0(racer);
+            racer->shadowPos.y = -54321.0f;
             return;
         }
-        arg0->stateFlags &= ~RACER_STATE_FLAGS_80000000;
+        racer->stateFlags &= ~RACER_STATE_FLAGS_80000000;
 
     } else if (temp_fv1 >= 0.0f) {
-        arg0->stateFlags |= RACER_STATE_FLAGS_80000000 | RACER_STATE_AIRBORNE;
-        if (arg0->id < gNumPlayers) {
-            if (!(arg0->unk_08 & 0x2000)) {
-                arg0->unk_08 |= 0x2000;
+        racer->stateFlags |= RACER_STATE_FLAGS_80000000 | RACER_STATE_AIRBORNE;
+        if (racer->id < gNumPlayers) {
+            if (!(racer->soundEffectFlags & RACER_SE_FLAGS_AIRBORNE)) {
+                racer->soundEffectFlags |= RACER_SE_FLAGS_AIRBORNE;
                 if (D_807A16E0 != 0) {
-                    Audio_PlayerLevelSEStart(arg0->id, NA_LEVEL_SE_8);
+                    Audio_PlayerLevelSEStart(racer->id, NA_LEVEL_SE_8);
                 }
             }
         }
-        func_8071F5C4(arg0);
-        func_8071F6B0(arg0);
-        arg0->unk_168.y = -54321.0f;
+        func_8071F5C4(racer);
+        func_8071F6B0(racer);
+        racer->shadowPos.y = -54321.0f;
         return;
     }
 
     if (var_fs0 != 0.0f) {
-        temp_fv1 = var_fv0 + (arg0->unk_24C.y.x * arg0->unk_0C.unk_28.x) + (arg0->unk_24C.y.y * arg0->unk_0C.unk_28.y) +
-                   (arg0->unk_24C.y.z * arg0->unk_0C.unk_28.z);
-        if (temp_fv1 < arg0->unk_A0) {
-            arg0->unk_A0 = temp_fv1;
-            arg0->unk_19C.x = arg0->unk_24C.y.x;
-            arg0->unk_19C.y = arg0->unk_24C.y.y;
-            arg0->unk_19C.z = arg0->unk_24C.y.z;
-            arg0->unk_B4.x = (D_800C18F8[TRACK_SHAPE_INDEX(TRACK_SHAPE_HALF_PIPE)] * arg0->unk_19C.x) +
-                             (var_fs0 * arg0->unk_24C.x.x);
-            arg0->unk_B4.y = (D_800C18F8[TRACK_SHAPE_INDEX(TRACK_SHAPE_HALF_PIPE)] * arg0->unk_19C.y) +
-                             (var_fs0 * arg0->unk_24C.x.y);
-            arg0->unk_B4.z = (D_800C18F8[TRACK_SHAPE_INDEX(TRACK_SHAPE_HALF_PIPE)] * arg0->unk_19C.z) +
-                             (var_fs0 * arg0->unk_24C.x.z);
+        temp_fv1 = halfPipeRadius + (racer->unk_24C.y.x * racer->segmentPositionInfo.segmentDisplacement.x) +
+                   (racer->unk_24C.y.y * racer->segmentPositionInfo.segmentDisplacement.y) +
+                   (racer->unk_24C.y.z * racer->segmentPositionInfo.segmentDisplacement.z);
+        if (temp_fv1 < racer->heightAboveGround) {
+            racer->heightAboveGround = temp_fv1;
+            racer->upFromGround.x = racer->unk_24C.y.x;
+            racer->upFromGround.y = racer->unk_24C.y.y;
+            racer->upFromGround.z = racer->unk_24C.y.z;
+            racer->unk_B4.x = (D_i2_800C18F8[TRACK_SHAPE_INDEX(TRACK_SHAPE_HALF_PIPE)] * racer->upFromGround.x) +
+                              (var_fs0 * racer->unk_24C.x.x);
+            racer->unk_B4.y = (D_i2_800C18F8[TRACK_SHAPE_INDEX(TRACK_SHAPE_HALF_PIPE)] * racer->upFromGround.y) +
+                              (var_fs0 * racer->unk_24C.x.y);
+            racer->unk_B4.z = (D_i2_800C18F8[TRACK_SHAPE_INDEX(TRACK_SHAPE_HALF_PIPE)] * racer->upFromGround.z) +
+                              (var_fs0 * racer->unk_24C.x.z);
 
-            temp_fv1 = 1.0f / sqrtf(SQ(arg0->unk_B4.x) + SQ(arg0->unk_B4.y) + SQ(arg0->unk_B4.z));
+            temp_fv1 = 1.0f / sqrtf(SQ(racer->unk_B4.x) + SQ(racer->unk_B4.y) + SQ(racer->unk_B4.z));
 
-            arg0->unk_B4.x *= temp_fv1;
-            arg0->unk_B4.y *= temp_fv1;
-            arg0->unk_B4.z *= temp_fv1;
+            racer->unk_B4.x *= temp_fv1;
+            racer->unk_B4.y *= temp_fv1;
+            racer->unk_B4.z *= temp_fv1;
 
-            if (arg0->unk_A0 < 0.0f) {
-                temp_fv0 = arg0->unk_A0 * arg0->unk_24C.y.x;
-                arg0->unk_0C.unk_28.x -= temp_fv0;
-                arg0->unk_0C.unk_34.x -= temp_fv0;
-                arg0->unk_0C.unk_44.x -= temp_fv0;
+            if (racer->heightAboveGround < 0.0f) {
+                temp_fv0 = racer->heightAboveGround * racer->unk_24C.y.x;
+                racer->segmentPositionInfo.segmentDisplacement.x -= temp_fv0;
+                racer->segmentPositionInfo.pos.x -= temp_fv0;
+                racer->segmentPositionInfo.lastGroundedPos.x -= temp_fv0;
 
-                temp_fv0 = arg0->unk_A0 * arg0->unk_24C.y.y;
-                arg0->unk_0C.unk_28.y -= temp_fv0;
-                arg0->unk_0C.unk_34.y -= temp_fv0;
-                arg0->unk_0C.unk_44.y -= temp_fv0;
+                temp_fv0 = racer->heightAboveGround * racer->unk_24C.y.y;
+                racer->segmentPositionInfo.segmentDisplacement.y -= temp_fv0;
+                racer->segmentPositionInfo.pos.y -= temp_fv0;
+                racer->segmentPositionInfo.lastGroundedPos.y -= temp_fv0;
 
-                temp_fv0 = arg0->unk_A0 * arg0->unk_24C.y.z;
-                arg0->unk_0C.unk_28.z -= temp_fv0;
-                arg0->unk_0C.unk_34.z -= temp_fv0;
-                arg0->unk_0C.unk_44.z -= temp_fv0;
+                temp_fv0 = racer->heightAboveGround * racer->unk_24C.y.z;
+                racer->segmentPositionInfo.segmentDisplacement.z -= temp_fv0;
+                racer->segmentPositionInfo.pos.z -= temp_fv0;
+                racer->segmentPositionInfo.lastGroundedPos.z -= temp_fv0;
 
-                arg0->unk_0C.unk_40 =
-                    sqrtf(SQ(arg0->unk_0C.unk_28.x) + SQ(arg0->unk_0C.unk_28.y) + SQ(arg0->unk_0C.unk_28.z));
-                arg0->unk_A0 = 0.0f;
+                racer->segmentPositionInfo.distanceFromSegment =
+                    sqrtf(SQ(racer->segmentPositionInfo.segmentDisplacement.x) +
+                          SQ(racer->segmentPositionInfo.segmentDisplacement.y) +
+                          SQ(racer->segmentPositionInfo.segmentDisplacement.z));
+                racer->heightAboveGround = 0.0f;
 
-                var_fs0 = (arg0->unk_24C.y.x * arg0->velocity.x) + (arg0->unk_24C.y.y * arg0->velocity.y) +
-                          (arg0->unk_24C.y.z * arg0->velocity.z);
+                var_fs0 = (racer->unk_24C.y.x * racer->velocity.x) + (racer->unk_24C.y.y * racer->velocity.y) +
+                          (racer->unk_24C.y.z * racer->velocity.z);
                 if (var_fs0 < 0.0f) {
-                    arg0->velocity.x -= var_fs0 * arg0->unk_24C.y.x;
-                    arg0->velocity.y -= var_fs0 * arg0->unk_24C.y.y;
-                    arg0->velocity.z -= var_fs0 * arg0->unk_24C.y.z;
-                    if ((arg0->id < gNumPlayers) && (D_807A16E0 != 0)) {
-                        Audio_Chakuchi(arg0->id, var_fs0);
+                    racer->velocity.x -= var_fs0 * racer->unk_24C.y.x;
+                    racer->velocity.y -= var_fs0 * racer->unk_24C.y.y;
+                    racer->velocity.z -= var_fs0 * racer->unk_24C.y.z;
+                    if ((racer->id < gNumPlayers) && (D_807A16E0 != 0)) {
+                        Audio_Chakuchi(racer->id, var_fs0);
                     }
                 }
             }
         } else {
-            arg0->unk_B4 = arg0->unk_19C;
+            racer->unk_B4 = racer->upFromGround;
         }
 
-        var_fs0 = ((arg0->unk_B4.x - arg0->unk_24C.y.x) * sp58) + arg0->unk_24C.y.x;
-        sp50 = ((arg0->unk_B4.y - arg0->unk_24C.y.y) * sp58) + arg0->unk_24C.y.y;
-        sp4C = ((arg0->unk_B4.z - arg0->unk_24C.y.z) * sp58) + arg0->unk_24C.y.z;
+        x = ((racer->unk_B4.x - racer->unk_24C.y.x) * joinProportion) + racer->unk_24C.y.x;
+        y = ((racer->unk_B4.y - racer->unk_24C.y.y) * joinProportion) + racer->unk_24C.y.y;
+        z = ((racer->unk_B4.z - racer->unk_24C.y.z) * joinProportion) + racer->unk_24C.y.z;
 
-        temp_fv1 = sqrtf(SQ(var_fs0) + SQ(sp50) + SQ(sp4C));
+        temp_fv1 = sqrtf(SQ(x) + SQ(y) + SQ(z));
         if (temp_fv1 > 0.01f) {
             temp_fv1 = 1.0f / temp_fv1;
-            arg0->unk_B4.x = temp_fv1 * var_fs0;
-            arg0->unk_B4.y = temp_fv1 * sp50;
-            arg0->unk_B4.z = temp_fv1 * sp4C;
+            racer->unk_B4.x = temp_fv1 * x;
+            racer->unk_B4.y = temp_fv1 * y;
+            racer->unk_B4.z = temp_fv1 * z;
         }
     } else {
-        arg0->unk_B4 = arg0->unk_19C;
+        racer->unk_B4 = racer->upFromGround;
     }
 
-    if (arg0->unk_270 < arg0->unk_0C.unk_40) {
-        temp_fv1 = arg0->unk_270 / arg0->unk_0C.unk_40;
-        arg0->unk_0C.unk_40 = arg0->unk_270;
+    if (racer->currentRadiusLeft < racer->segmentPositionInfo.distanceFromSegment) {
+        temp_fv1 = racer->currentRadiusLeft / racer->segmentPositionInfo.distanceFromSegment;
+        racer->segmentPositionInfo.distanceFromSegment = racer->currentRadiusLeft;
 
-        arg0->unk_0C.unk_28.x *= temp_fv1;
-        arg0->unk_0C.unk_34.x = arg0->unk_0C.unk_44.x = arg0->unk_0C.unk_28.x + arg0->unk_0C.unk_1C.x;
-        arg0->unk_0C.unk_28.y *= temp_fv1;
-        arg0->unk_0C.unk_34.y = arg0->unk_0C.unk_44.y = arg0->unk_0C.unk_28.y + arg0->unk_0C.unk_1C.y;
-        arg0->unk_0C.unk_28.z *= temp_fv1;
-        arg0->unk_0C.unk_34.z = arg0->unk_0C.unk_44.z = arg0->unk_0C.unk_28.z + arg0->unk_0C.unk_1C.z;
+        racer->segmentPositionInfo.segmentDisplacement.x *= temp_fv1;
+        temp_fv0 = racer->segmentPositionInfo.segmentDisplacement.x + racer->segmentPositionInfo.segmentPos.x;
+        racer->segmentPositionInfo.lastGroundedPos.x = temp_fv0;
+        racer->segmentPositionInfo.pos.x = temp_fv0;
+        racer->segmentPositionInfo.segmentDisplacement.y *= temp_fv1;
+        temp_fv0 = racer->segmentPositionInfo.segmentDisplacement.y + racer->segmentPositionInfo.segmentPos.y;
+        racer->segmentPositionInfo.lastGroundedPos.y = temp_fv0;
+        racer->segmentPositionInfo.pos.y = temp_fv0;
+        racer->segmentPositionInfo.segmentDisplacement.z *= temp_fv1;
+        temp_fv0 = racer->segmentPositionInfo.segmentDisplacement.z + racer->segmentPositionInfo.segmentPos.z;
+        racer->segmentPositionInfo.lastGroundedPos.z = temp_fv0;
+        racer->segmentPositionInfo.pos.z = temp_fv0;
 
-        arg0->unk_A0 = 0.0f;
+        racer->heightAboveGround = 0.0f;
 
-        var_fs0 = (arg0->unk_19C.x * arg0->velocity.x) + (arg0->unk_19C.y * arg0->velocity.y) +
-                  (arg0->unk_19C.z * arg0->velocity.z);
+        var_fs0 = (racer->upFromGround.x * racer->velocity.x) + (racer->upFromGround.y * racer->velocity.y) +
+                  (racer->upFromGround.z * racer->velocity.z);
         if (var_fs0 < 0.0f) {
-            arg0->velocity.x -= var_fs0 * arg0->unk_19C.x;
-            arg0->velocity.y -= var_fs0 * arg0->unk_19C.y;
-            arg0->velocity.z -= var_fs0 * arg0->unk_19C.z;
-            if ((arg0->id < gNumPlayers) && (D_807A16E0 != 0)) {
-                Audio_Chakuchi(arg0->id, var_fs0);
+            racer->velocity.x -= var_fs0 * racer->upFromGround.x;
+            racer->velocity.y -= var_fs0 * racer->upFromGround.y;
+            racer->velocity.z -= var_fs0 * racer->upFromGround.z;
+            if ((racer->id < gNumPlayers) && (D_807A16E0 != 0)) {
+                Audio_Chakuchi(racer->id, var_fs0);
             }
         }
     }
 
-    arg0->unk_A8.x = arg0->unk_24C.y.x;
-    arg0->unk_A8.y = arg0->unk_24C.y.y;
-    arg0->unk_A8.z = arg0->unk_24C.y.z;
-    arg0->unk_168.x = arg0->unk_0C.unk_34.x - (arg0->unk_A0 * arg0->unk_19C.x);
-    arg0->unk_168.y = arg0->unk_0C.unk_34.y - (arg0->unk_A0 * arg0->unk_19C.y);
-    arg0->unk_168.z = arg0->unk_0C.unk_34.z - (arg0->unk_A0 * arg0->unk_19C.z);
+    racer->unk_A8.x = racer->unk_24C.y.x;
+    racer->unk_A8.y = racer->unk_24C.y.y;
+    racer->unk_A8.z = racer->unk_24C.y.z;
+    racer->shadowPos.x = racer->segmentPositionInfo.pos.x - (racer->heightAboveGround * racer->upFromGround.x);
+    racer->shadowPos.y = racer->segmentPositionInfo.pos.y - (racer->heightAboveGround * racer->upFromGround.y);
+    racer->shadowPos.z = racer->segmentPositionInfo.pos.z - (racer->heightAboveGround * racer->upFromGround.z);
 
-    if (arg0->unk_A0 <= 15.0f) {
-        arg0->stateFlags &= ~RACER_STATE_AIRBORNE;
-        if (arg0->id < gNumPlayers) {
-            if (arg0->unk_08 & 0x2000) {
-                arg0->unk_08 &= ~0x2000;
+    if (racer->heightAboveGround <= 15.0f) {
+        racer->stateFlags &= ~RACER_STATE_AIRBORNE;
+        if (racer->id < gNumPlayers) {
+            if (racer->soundEffectFlags & RACER_SE_FLAGS_AIRBORNE) {
+                racer->soundEffectFlags &= ~RACER_SE_FLAGS_AIRBORNE;
                 if (D_807A16E0 != 0) {
-                    Audio_PlayerLevelSEStop(arg0->id, NA_LEVEL_SE_8);
+                    Audio_PlayerLevelSEStop(racer->id, NA_LEVEL_SE_8);
                 }
             }
         }
     } else {
-        arg0->stateFlags |= RACER_STATE_AIRBORNE;
-        if (arg0->id < gNumPlayers) {
-            if (!(arg0->unk_08 & 0x2000)) {
-                arg0->unk_08 |= 0x2000;
+        racer->stateFlags |= RACER_STATE_AIRBORNE;
+        if (racer->id < gNumPlayers) {
+            if (!(racer->soundEffectFlags & RACER_SE_FLAGS_AIRBORNE)) {
+                racer->soundEffectFlags |= RACER_SE_FLAGS_AIRBORNE;
                 if (D_807A16E0 != 0) {
-                    Audio_PlayerLevelSEStart(arg0->id, NA_LEVEL_SE_8);
+                    Audio_PlayerLevelSEStart(racer->id, NA_LEVEL_SE_8);
                 }
             }
         }
     }
 }
 
-void func_8072163C(Racer* arg0) {
+void func_8072163C(Racer* racer) {
 
-    arg0->stateFlags |= RACER_STATE_FLAGS_80000000 | RACER_STATE_AIRBORNE;
-    if (arg0->id < gNumPlayers) {
-        if (!(arg0->unk_08 & 0x2000)) {
-            arg0->unk_08 |= 0x2000;
+    racer->stateFlags |= RACER_STATE_FLAGS_80000000 | RACER_STATE_AIRBORNE;
+    if (racer->id < gNumPlayers) {
+        if (!(racer->soundEffectFlags & RACER_SE_FLAGS_AIRBORNE)) {
+            racer->soundEffectFlags |= RACER_SE_FLAGS_AIRBORNE;
             if (D_807A16E0 != 0) {
-                Audio_PlayerLevelSEStart(arg0->id, NA_LEVEL_SE_8);
+                Audio_PlayerLevelSEStart(racer->id, NA_LEVEL_SE_8);
             }
         }
     }
 
-    arg0->unk_168.y = -54321.0f;
+    racer->shadowPos.y = -54321.0f;
 
-    arg0->unk_A0 = (arg0->unk_0C.unk_28.x * arg0->unk_24C.y.x) + (arg0->unk_0C.unk_28.y * arg0->unk_24C.y.y) +
-                   (arg0->unk_0C.unk_28.z * arg0->unk_24C.y.z);
+    racer->heightAboveGround = (racer->segmentPositionInfo.segmentDisplacement.x * racer->unk_24C.y.x) +
+                               (racer->segmentPositionInfo.segmentDisplacement.y * racer->unk_24C.y.y) +
+                               (racer->segmentPositionInfo.segmentDisplacement.z * racer->unk_24C.y.z);
 
-    arg0->unk_19C.x = arg0->unk_24C.y.x;
-    arg0->unk_19C.y = arg0->unk_24C.y.y;
-    arg0->unk_19C.z = arg0->unk_24C.y.z;
-    func_8071F5C4(arg0);
-    func_8071F6B0(arg0);
+    racer->upFromGround.x = racer->unk_24C.y.x;
+    racer->upFromGround.y = racer->unk_24C.y.y;
+    racer->upFromGround.z = racer->unk_24C.y.z;
+    func_8071F5C4(racer);
+    func_8071F6B0(racer);
 }
 
-void func_80721714(Racer* arg0) {
+void func_80721714(Racer* racer) {
     f32 temp_fv1;
     f32 sp48;
     f32 temp_fv0;
 
-    sp48 = (arg0->unk_24C.z.x * arg0->unk_0C.unk_28.x) + (arg0->unk_24C.z.y * arg0->unk_0C.unk_28.y) +
-           (arg0->unk_24C.z.z * arg0->unk_0C.unk_28.z);
+    sp48 = (racer->unk_24C.z.x * racer->segmentPositionInfo.segmentDisplacement.x) +
+           (racer->unk_24C.z.y * racer->segmentPositionInfo.segmentDisplacement.y) +
+           (racer->unk_24C.z.z * racer->segmentPositionInfo.segmentDisplacement.z);
 
-    arg0->unk_A0 = (arg0->unk_24C.y.x * arg0->unk_0C.unk_28.x) + (arg0->unk_24C.y.y * arg0->unk_0C.unk_28.y) +
-                   (arg0->unk_24C.y.z * arg0->unk_0C.unk_28.z);
+    racer->heightAboveGround = (racer->unk_24C.y.x * racer->segmentPositionInfo.segmentDisplacement.x) +
+                               (racer->unk_24C.y.y * racer->segmentPositionInfo.segmentDisplacement.y) +
+                               (racer->unk_24C.y.z * racer->segmentPositionInfo.segmentDisplacement.z);
 
-    arg0->unk_19C.x = arg0->unk_24C.y.x;
-    arg0->unk_19C.y = arg0->unk_24C.y.y;
-    arg0->unk_19C.z = arg0->unk_24C.y.z;
+    racer->upFromGround.x = racer->unk_24C.y.x;
+    racer->upFromGround.y = racer->unk_24C.y.y;
+    racer->upFromGround.z = racer->unk_24C.y.z;
 
-    // FAKE
-    if ((arg0->stateFlags ^ 0) & RACER_STATE_FLAGS_80000000) {
-        if ((arg0->unk_A0 < -100.0f) || (arg0->unk_A0 > 30.0f) || (sp48 < -arg0->unk_274) || (arg0->unk_270 < sp48)) {
-            func_8071F5C4(arg0);
-            func_8071F6B0(arg0);
-            arg0->unk_168.y = -54321.0f;
+    if (racer->stateFlags & RACER_STATE_FLAGS_80000000) {
+        if ((racer->heightAboveGround < -100.0f) || (racer->heightAboveGround > 30.0f) ||
+            (sp48 < -racer->currentRadiusRight) || (racer->currentRadiusLeft < sp48)) {
+            func_8071F5C4(racer);
+            func_8071F6B0(racer);
+            racer->shadowPos.y = -54321.0f;
             return;
         }
-        arg0->stateFlags &= ~RACER_STATE_FLAGS_80000000;
-    } else if ((arg0->unk_A0 > 30.0f) || (sp48 < -arg0->unk_274) || (arg0->unk_270 < sp48)) {
-        arg0->stateFlags |= RACER_STATE_FLAGS_80000000 | RACER_STATE_AIRBORNE;
-        if (arg0->id < gNumPlayers) {
-            if (!(arg0->unk_08 & 0x2000)) {
-                arg0->unk_08 |= 0x2000;
-                if (D_807A16E0 != 0) {
-                    Audio_PlayerLevelSEStart(arg0->id, NA_LEVEL_SE_8);
+        racer->stateFlags &= ~RACER_STATE_FLAGS_80000000;
+    } else {
+        if ((racer->heightAboveGround > 30.0f) || (sp48 < -racer->currentRadiusRight) ||
+            (racer->currentRadiusLeft < sp48)) {
+            racer->stateFlags |= RACER_STATE_FLAGS_80000000 | RACER_STATE_AIRBORNE;
+            if (racer->id < gNumPlayers) {
+                if (!(racer->soundEffectFlags & RACER_SE_FLAGS_AIRBORNE)) {
+                    racer->soundEffectFlags |= RACER_SE_FLAGS_AIRBORNE;
+                    if (D_807A16E0 != 0) {
+                        Audio_PlayerLevelSEStart(racer->id, NA_LEVEL_SE_8);
+                    }
                 }
             }
+            func_8071F5C4(racer);
+            func_8071F6B0(racer);
+            racer->shadowPos.y = -54321.0f;
+            return;
         }
-        func_8071F5C4(arg0);
-        func_8071F6B0(arg0);
-        arg0->unk_168.y = -54321.0f;
-        return;
     }
 
-    if (arg0->unk_A0 < 0.0f) {
+    if (racer->heightAboveGround < 0.0f) {
 
-        temp_fv0 = arg0->unk_A0 * arg0->unk_24C.y.x;
-        arg0->unk_0C.unk_28.x -= temp_fv0;
-        arg0->unk_0C.unk_34.x -= temp_fv0;
-        arg0->unk_0C.unk_44.x -= temp_fv0;
+        temp_fv0 = racer->heightAboveGround * racer->unk_24C.y.x;
+        racer->segmentPositionInfo.segmentDisplacement.x -= temp_fv0;
+        racer->segmentPositionInfo.pos.x -= temp_fv0;
+        racer->segmentPositionInfo.lastGroundedPos.x -= temp_fv0;
 
-        temp_fv0 = arg0->unk_A0 * arg0->unk_24C.y.y;
-        arg0->unk_0C.unk_28.y -= temp_fv0;
-        arg0->unk_0C.unk_34.y -= temp_fv0;
-        arg0->unk_0C.unk_44.y -= temp_fv0;
+        temp_fv0 = racer->heightAboveGround * racer->unk_24C.y.y;
+        racer->segmentPositionInfo.segmentDisplacement.y -= temp_fv0;
+        racer->segmentPositionInfo.pos.y -= temp_fv0;
+        racer->segmentPositionInfo.lastGroundedPos.y -= temp_fv0;
 
-        temp_fv0 = arg0->unk_A0 * arg0->unk_24C.y.z;
-        arg0->unk_0C.unk_28.z -= temp_fv0;
-        arg0->unk_0C.unk_34.z -= temp_fv0;
-        arg0->unk_0C.unk_44.z -= temp_fv0;
+        temp_fv0 = racer->heightAboveGround * racer->unk_24C.y.z;
+        racer->segmentPositionInfo.segmentDisplacement.z -= temp_fv0;
+        racer->segmentPositionInfo.pos.z -= temp_fv0;
+        racer->segmentPositionInfo.lastGroundedPos.z -= temp_fv0;
 
-        arg0->unk_A0 = 0.0f;
-        sp48 = (arg0->unk_24C.y.x * arg0->velocity.x) + (arg0->unk_24C.y.y * arg0->velocity.y) +
-               (arg0->unk_24C.y.z * arg0->velocity.z);
+        racer->heightAboveGround = 0.0f;
+        sp48 = (racer->unk_24C.y.x * racer->velocity.x) + (racer->unk_24C.y.y * racer->velocity.y) +
+               (racer->unk_24C.y.z * racer->velocity.z);
 
         if (sp48 < 0.0f) {
-            arg0->velocity.x -= sp48 * arg0->unk_24C.y.x;
-            arg0->velocity.y -= sp48 * arg0->unk_24C.y.y;
-            arg0->velocity.z -= sp48 * arg0->unk_24C.y.z;
-            if ((arg0->id < gNumPlayers) && (D_807A16E0 != 0)) {
-                Audio_Chakuchi(arg0->id, sp48);
+            racer->velocity.x -= sp48 * racer->unk_24C.y.x;
+            racer->velocity.y -= sp48 * racer->unk_24C.y.y;
+            racer->velocity.z -= sp48 * racer->unk_24C.y.z;
+            if ((racer->id < gNumPlayers) && (D_807A16E0 != 0)) {
+                Audio_Chakuchi(racer->id, sp48);
             }
         }
     }
 
-    if (arg0->unk_A0 <= 15.0f) {
-        arg0->stateFlags &= ~RACER_STATE_AIRBORNE;
-        if (arg0->id < gNumPlayers) {
-            if (arg0->unk_08 & 0x2000) {
-                arg0->unk_08 &= ~0x2000;
+    if (racer->heightAboveGround <= 15.0f) {
+        racer->stateFlags &= ~RACER_STATE_AIRBORNE;
+        if (racer->id < gNumPlayers) {
+            if (racer->soundEffectFlags & RACER_SE_FLAGS_AIRBORNE) {
+                racer->soundEffectFlags &= ~RACER_SE_FLAGS_AIRBORNE;
                 if (D_807A16E0 != 0) {
-                    Audio_PlayerLevelSEStop(arg0->id, NA_LEVEL_SE_8);
+                    Audio_PlayerLevelSEStop(racer->id, NA_LEVEL_SE_8);
                 }
             }
         }
-        arg0->unk_A8.x = arg0->unk_B4.x = arg0->unk_24C.y.x;
-        arg0->unk_A8.y = arg0->unk_B4.y = arg0->unk_24C.y.y;
-        arg0->unk_A8.z = arg0->unk_B4.z = arg0->unk_24C.y.z;
+        racer->unk_A8.x = racer->unk_B4.x = racer->unk_24C.y.x;
+        racer->unk_A8.y = racer->unk_B4.y = racer->unk_24C.y.y;
+        racer->unk_A8.z = racer->unk_B4.z = racer->unk_24C.y.z;
     } else {
-        arg0->stateFlags |= RACER_STATE_AIRBORNE;
-        if (arg0->id < gNumPlayers) {
-            if (!(arg0->unk_08 & 0x2000)) {
-                arg0->unk_08 |= 0x2000;
+        racer->stateFlags |= RACER_STATE_AIRBORNE;
+        if (racer->id < gNumPlayers) {
+            if (!(racer->soundEffectFlags & RACER_SE_FLAGS_AIRBORNE)) {
+                racer->soundEffectFlags |= RACER_SE_FLAGS_AIRBORNE;
                 if (D_807A16E0 != 0) {
-                    Audio_PlayerLevelSEStart(arg0->id, NA_LEVEL_SE_8);
+                    Audio_PlayerLevelSEStart(racer->id, NA_LEVEL_SE_8);
                 }
             }
         }
-        func_8071F5C4(arg0);
-        func_8071F6B0(arg0);
+        func_8071F5C4(racer);
+        func_8071F6B0(racer);
 
-        if (arg0->unk_A0 < 30.0f) {
-            temp_fv1 = (arg0->unk_A0 - 15.0f) / 15.0f;
+        if (racer->heightAboveGround < 30.0f) {
+            temp_fv1 = (racer->heightAboveGround - 15.0f) / 15.0f;
 
-            arg0->unk_A8.x = ((arg0->unk_A8.x - arg0->unk_24C.y.x) * temp_fv1) + arg0->unk_24C.y.x;
-            arg0->unk_A8.y = ((arg0->unk_A8.y - arg0->unk_24C.y.y) * temp_fv1) + arg0->unk_24C.y.y;
-            arg0->unk_A8.z = ((arg0->unk_A8.z - arg0->unk_24C.y.z) * temp_fv1) + arg0->unk_24C.y.z;
+            racer->unk_A8.x = ((racer->unk_A8.x - racer->unk_24C.y.x) * temp_fv1) + racer->unk_24C.y.x;
+            racer->unk_A8.y = ((racer->unk_A8.y - racer->unk_24C.y.y) * temp_fv1) + racer->unk_24C.y.y;
+            racer->unk_A8.z = ((racer->unk_A8.z - racer->unk_24C.y.z) * temp_fv1) + racer->unk_24C.y.z;
 
-            arg0->unk_B4.x = ((arg0->unk_B4.x - arg0->unk_24C.y.x) * temp_fv1) + arg0->unk_B4.x;
-            arg0->unk_B4.y = ((arg0->unk_B4.y - arg0->unk_24C.y.y) * temp_fv1) + arg0->unk_B4.y;
-            arg0->unk_B4.z = ((arg0->unk_B4.z - arg0->unk_24C.y.z) * temp_fv1) + arg0->unk_B4.z;
+            racer->unk_B4.x = ((racer->unk_B4.x - racer->unk_24C.y.x) * temp_fv1) + racer->unk_B4.x;
+            racer->unk_B4.y = ((racer->unk_B4.y - racer->unk_24C.y.y) * temp_fv1) + racer->unk_B4.y;
+            racer->unk_B4.z = ((racer->unk_B4.z - racer->unk_24C.y.z) * temp_fv1) + racer->unk_B4.z;
 
-            temp_fv1 = 1.0f / sqrtf(SQ(arg0->unk_B4.x) + SQ(arg0->unk_B4.y) + SQ(arg0->unk_B4.z));
-            arg0->unk_B4.x *= temp_fv1;
-            arg0->unk_B4.y *= temp_fv1;
-            arg0->unk_B4.z *= temp_fv1;
+            temp_fv1 = 1.0f / sqrtf(SQ(racer->unk_B4.x) + SQ(racer->unk_B4.y) + SQ(racer->unk_B4.z));
+            racer->unk_B4.x *= temp_fv1;
+            racer->unk_B4.y *= temp_fv1;
+            racer->unk_B4.z *= temp_fv1;
         }
     }
-    arg0->unk_168.x = arg0->unk_0C.unk_34.x - (arg0->unk_A0 * arg0->unk_24C.y.x);
-    arg0->unk_168.y = arg0->unk_0C.unk_34.y - (arg0->unk_A0 * arg0->unk_24C.y.y);
-    arg0->unk_168.z = arg0->unk_0C.unk_34.z - (arg0->unk_A0 * arg0->unk_24C.y.z);
+    racer->shadowPos.x = racer->segmentPositionInfo.pos.x - (racer->heightAboveGround * racer->unk_24C.y.x);
+    racer->shadowPos.y = racer->segmentPositionInfo.pos.y - (racer->heightAboveGround * racer->unk_24C.y.y);
+    racer->shadowPos.z = racer->segmentPositionInfo.pos.z - (racer->heightAboveGround * racer->unk_24C.y.z);
 }
 
-void func_80721CA8(Racer* arg0) {
+void func_80721CA8(Racer* racer) {
 
-    if (!(arg0->stateFlags & (RACER_STATE_CRASHED | RACER_STATE_SPINNING_OUT))) {
-        func_8071ED54(arg0, 120);
+    if (!(racer->stateFlags & (RACER_STATE_CRASHED | RACER_STATE_SPINNING_OUT))) {
+        func_8071ED54(racer, 120);
     }
-    arg0->stateFlags = (arg0->stateFlags & ~RACER_STATE_FLAGS_400000) | RACER_STATE_FLAGS_80000;
+    racer->stateFlags = (racer->stateFlags & ~RACER_STATE_FLAGS_400000) | RACER_STATE_FLAGS_80000;
 
-    if ((arg0->id < gNumPlayers) && (D_807A16E0 != 0)) {
-        if (sCharacterVoices[arg0->character] != VOICE_FEMALE) {
-            Audio_PlayerTriggerSEStart(arg0->id, NA_SE_52);
+    if ((racer->id < gNumPlayers) && (D_807A16E0 != 0)) {
+        if (sCharacterVoices[racer->character] != VOICE_FEMALE) {
+            Audio_PlayerTriggerSEStart(racer->id, NA_SE_52);
         } else {
-            Audio_PlayerTriggerSEStart(arg0->id, NA_SE_53);
+            Audio_PlayerTriggerSEStart(racer->id, NA_SE_53);
         }
-        func_8071A17C(arg0);
+        func_8071A17C(racer);
     }
 }
 
@@ -3182,7 +3243,7 @@ extern u32 gGameFrameCount;
 
 #ifdef NON_MATCHING
 void func_80721D78(Racer* racer, Controller* controller) {
-    bool var_v1;
+    bool isDrifting;
     s32 i;
     s32 sp13C;
     s32 sp138;
@@ -3196,7 +3257,7 @@ void func_80721D78(Racer* racer, Controller* controller) {
     f32 var_ft4; // sp118
     Vec3f sp10C;
     Mtx3F spE8;
-    f32 spE4;
+    f32 directionChange;
     CourseSegment* segment;
     Effect* effectsEnd;
     Effect* effect;
@@ -3208,7 +3269,7 @@ void func_80721D78(Racer* racer, Controller* controller) {
     u16 buttonCurrent;
     u16 buttonPressed;
     f32 temp_fa0;
-    s32 pad;
+    s32 spinOutTimer;
 
     if (!(racer->stateFlags & RACER_STATE_FLAGS_400000)) {
         buttonReleased = 0;
@@ -3239,18 +3300,20 @@ void func_80721D78(Racer* racer, Controller* controller) {
 
     spE8 = racer->unk_C0;
 
-    sp10C.x = racer->unk_0C.unk_34.x + racer->velocity.x;
-    sp10C.y = racer->unk_0C.unk_34.y + racer->velocity.y;
-    sp10C.z = racer->unk_0C.unk_34.z + racer->velocity.z;
-    segment = racer->unk_0C.courseSegment;
+    sp10C.x = racer->segmentPositionInfo.pos.x + racer->velocity.x;
+    sp10C.y = racer->segmentPositionInfo.pos.y + racer->velocity.y;
+    sp10C.z = racer->segmentPositionInfo.pos.z + racer->velocity.z;
+    segment = racer->segmentPositionInfo.courseSegment;
 
     racer->stateFlags &= ~COURSE_EFFECT_MASK;
     effect = segment->effectsStart;
     if ((effect != NULL) && !(racer->stateFlags & RACER_STATE_AIRBORNE)) {
         effectsEnd = segment->effectsEnd;
         if (segment->trackSegmentInfo & TRACK_FLAG_8000000) {
-            var_fa1 = (racer->unk_0C.unk_28.x * racer->unk_24C.z.x) + (racer->unk_0C.unk_28.y * racer->unk_24C.z.y) +
-                      (racer->unk_0C.unk_28.z * racer->unk_24C.z.z) + (0.5f * (racer->unk_274 - racer->unk_270));
+            var_fa1 = (racer->segmentPositionInfo.segmentDisplacement.x * racer->unk_24C.z.x) +
+                      (racer->segmentPositionInfo.segmentDisplacement.y * racer->unk_24C.z.y) +
+                      (racer->segmentPositionInfo.segmentDisplacement.z * racer->unk_24C.z.z) +
+                      (0.5f * (racer->currentRadiusRight - racer->currentRadiusLeft));
 
             do {
                 if (var_fa1 < effect->unk_0C.x) {
@@ -3259,10 +3322,10 @@ void func_80721D78(Racer* racer, Controller* controller) {
                 if (effect->unk_18.x < var_fa1) {
                     continue;
                 }
-                if (racer->unk_0C.segmentTValue < effect->segmentTValueStart) {
+                if (racer->segmentPositionInfo.segmentTValue < effect->segmentTValueStart) {
                     continue;
                 }
-                if (effect->segmentTValueEnd < racer->unk_0C.segmentTValue) {
+                if (effect->segmentTValueEnd < racer->segmentPositionInfo.segmentTValue) {
                     continue;
                 }
                 racer->stateFlags |= effect->effectType;
@@ -3272,29 +3335,35 @@ void func_80721D78(Racer* racer, Controller* controller) {
         } else {
 
             do {
-                if (racer->unk_0C.segmentTValue < effect->segmentTValueStart) {
+                if (racer->segmentPositionInfo.segmentTValue < effect->segmentTValueStart) {
                     continue;
                 }
 
-                if (effect->segmentTValueEnd < racer->unk_0C.segmentTValue) {
+                if (effect->segmentTValueEnd < racer->segmentPositionInfo.segmentTValue) {
                     continue;
                 }
 
-                if ((((racer->unk_0C.unk_28.y * effect->unk_0C.z) - (racer->unk_0C.unk_28.z * effect->unk_0C.y)) *
+                if ((((racer->segmentPositionInfo.segmentDisplacement.y * effect->unk_0C.z) -
+                      (racer->segmentPositionInfo.segmentDisplacement.z * effect->unk_0C.y)) *
                      racer->unk_24C.x.x) +
-                        (((racer->unk_0C.unk_28.z * effect->unk_0C.x) - (racer->unk_0C.unk_28.x * effect->unk_0C.z)) *
+                        (((racer->segmentPositionInfo.segmentDisplacement.z * effect->unk_0C.x) -
+                          (racer->segmentPositionInfo.segmentDisplacement.x * effect->unk_0C.z)) *
                          racer->unk_24C.x.y) +
-                        (((racer->unk_0C.unk_28.x * effect->unk_0C.y) - (racer->unk_0C.unk_28.y * effect->unk_0C.x)) *
+                        (((racer->segmentPositionInfo.segmentDisplacement.x * effect->unk_0C.y) -
+                          (racer->segmentPositionInfo.segmentDisplacement.y * effect->unk_0C.x)) *
                          racer->unk_24C.x.z) <
                     0.0f) {
                     continue;
                 }
 
-                if ((((effect->unk_18.y * racer->unk_0C.unk_28.z) - (effect->unk_18.z * racer->unk_0C.unk_28.y)) *
+                if ((((effect->unk_18.y * racer->segmentPositionInfo.segmentDisplacement.z) -
+                      (effect->unk_18.z * racer->segmentPositionInfo.segmentDisplacement.y)) *
                      racer->unk_24C.x.x) +
-                        (((effect->unk_18.z * racer->unk_0C.unk_28.x) - (effect->unk_18.x * racer->unk_0C.unk_28.z)) *
+                        (((effect->unk_18.z * racer->segmentPositionInfo.segmentDisplacement.x) -
+                          (effect->unk_18.x * racer->segmentPositionInfo.segmentDisplacement.z)) *
                          racer->unk_24C.x.y) +
-                        (((effect->unk_18.x * racer->unk_0C.unk_28.y) - (effect->unk_18.y * racer->unk_0C.unk_28.x)) *
+                        (((effect->unk_18.x * racer->segmentPositionInfo.segmentDisplacement.y) -
+                          (effect->unk_18.y * racer->segmentPositionInfo.segmentDisplacement.x)) *
                          racer->unk_24C.x.z) <
                     0.0f) {
                     continue;
@@ -3315,7 +3384,7 @@ void func_80721D78(Racer* racer, Controller* controller) {
             var_fa1 = 0.2f;
         } else {
             if (buttonCurrent & (BTN_Z | BTN_R)) {
-                if (racer->unk_1D8 != 0.f) {
+                if (racer->driftAttackForce != 0.f) {
                     var_fa1 = ((racer->unk_1E0 - racer->unk_1E4) * 0.4f) + racer->unk_1E4;
                 } else {
                     var_fa1 = racer->unk_1E0;
@@ -3337,9 +3406,7 @@ void func_80721D78(Racer* racer, Controller* controller) {
         racer->unk_C0.x.z -= (var_fa1 * racer->unk_C0.z.z);
 
         racer->unk_C0.z.x = (racer->unk_C0.y.y * racer->unk_C0.x.z) - (racer->unk_C0.y.z * racer->unk_C0.x.y);
-
         racer->unk_C0.z.y = (racer->unk_C0.y.z * racer->unk_C0.x.x) - (racer->unk_C0.y.x * racer->unk_C0.x.z);
-
         racer->unk_C0.z.z = (racer->unk_C0.y.x * racer->unk_C0.x.y) - (racer->unk_C0.y.y * racer->unk_C0.x.x);
 
         temp_fa0 = 1.0f / sqrtf(SQ(racer->unk_C0.z.x) + SQ(racer->unk_C0.z.y) + SQ(racer->unk_C0.z.z));
@@ -3353,9 +3420,9 @@ void func_80721D78(Racer* racer, Controller* controller) {
             (racer->unk_C0.z.z * racer->unk_C0.y.x) - (racer->unk_C0.z.x * racer->unk_C0.y.z);
         var_ft4 -= racer->unk_C0.x.z =
             (racer->unk_C0.z.x * racer->unk_C0.y.y) - (racer->unk_C0.z.y * racer->unk_C0.y.x);
-        spE4 = sqrtf(SQ(var_fs1) + SQ(var_fs0) + SQ(var_ft4));
+        directionChange = sqrtf(SQ(var_fs1) + SQ(var_fs0) + SQ(var_ft4));
     } else {
-        spE4 = 0.0f;
+        directionChange = 0.0f;
     }
     if (racer->spinOutTimer != 0) {
         var_fs1 = var_ft4 = 0.997f;
@@ -3370,18 +3437,20 @@ void func_80721D78(Racer* racer, Controller* controller) {
         var_fs1 *= 0.987f;
         var_ft4 *= 0.987f;
         if (racer->id < gNumPlayers) {
-            if (!(racer->unk_08 & 0x400)) {
-                racer->unk_08 |= 0x400;
+            if (!(racer->soundEffectFlags & RACER_SE_FLAGS_DIRT)) {
+                racer->soundEffectFlags |= RACER_SE_FLAGS_DIRT;
                 if (D_807A16E0 != 0) {
                     Audio_PlayerLevelSEStart(racer->id, NA_LEVEL_SE_5);
                 }
             }
         }
-    } else if (racer->id < gNumPlayers) {
-        if (racer->unk_08 & 0x400) {
-            racer->unk_08 &= ~0x400;
-            if (D_807A16E0 != 0) {
-                Audio_PlayerLevelSEStop(racer->id, NA_LEVEL_SE_5);
+    } else {
+        if (racer->id < gNumPlayers) {
+            if (racer->soundEffectFlags & RACER_SE_FLAGS_DIRT) {
+                racer->soundEffectFlags &= ~RACER_SE_FLAGS_DIRT;
+                if (D_807A16E0 != 0) {
+                    Audio_PlayerLevelSEStop(racer->id, NA_LEVEL_SE_5);
+                }
             }
         }
     }
@@ -3394,18 +3463,20 @@ void func_80721D78(Racer* racer, Controller* controller) {
             var_ft4 *= 0.9f;
         }
         if (racer->id < gNumPlayers) {
-            if (!(racer->unk_08 & 0x80)) {
-                racer->unk_08 |= 0x80;
+            if (!(racer->soundEffectFlags & RACER_SE_FLAGS_BRAKE)) {
+                racer->soundEffectFlags |= RACER_SE_FLAGS_BRAKE;
                 if (D_807A16E0 != 0) {
                     Audio_PlayerLevelSEStart(racer->id, NA_LEVEL_SE_9);
                 }
             }
         }
-    } else if (racer->id < gNumPlayers) {
-        if (racer->unk_08 & 0x80) {
-            racer->unk_08 &= ~0x80;
-            if (D_807A16E0 != 0) {
-                Audio_PlayerLevelSEStop(racer->id, NA_LEVEL_SE_9);
+    } else {
+        if (racer->id < gNumPlayers) {
+            if (racer->soundEffectFlags & RACER_SE_FLAGS_BRAKE) {
+                racer->soundEffectFlags &= ~RACER_SE_FLAGS_BRAKE;
+                if (D_807A16E0 != 0) {
+                    Audio_PlayerLevelSEStop(racer->id, NA_LEVEL_SE_9);
+                }
             }
         }
     }
@@ -3427,7 +3498,7 @@ void func_80721D78(Racer* racer, Controller* controller) {
         racer->shadowBaseR = racer->shadowBaseB = 91.0f;
         racer->shadowBaseG = 255.0f;
         racer->boostTimer = sInitialBoostTimer;
-        racer->unk_08 |= 0x1000;
+        racer->soundEffectFlags |= RACER_SE_FLAGS_BOOST;
         if (D_807A16E0 != 0) {
             Audio_PlayerTriggerSEStart(racer->id, NA_SE_7);
         }
@@ -3441,26 +3512,26 @@ void func_80721D78(Racer* racer, Controller* controller) {
             racer->shadowBaseB = 0.0f;
             racer->stateFlags |= RACER_STATE_DASH_PAD_BOOST;
             racer->boostTimer = sInitialBoostTimer;
-            if (!(racer->unk_08 & 0x1000)) {
-                racer->unk_08 |= 0x1000;
+            if (!(racer->soundEffectFlags & RACER_SE_FLAGS_BOOST)) {
+                racer->soundEffectFlags |= RACER_SE_FLAGS_BOOST;
                 if (D_807A16E0 != 0) {
                     Audio_PlayerTriggerSEStart(racer->id, NA_SE_7);
                 }
             }
         } else {
-            racer->unk_08 &= ~0x1000;
+            racer->soundEffectFlags &= ~RACER_SE_FLAGS_BOOST;
         }
     }
 
     if (!(racer->stateFlags & RACER_STATE_TOUCHING_LANDMINE)) {
-        segment = racer->unk_0C.courseSegment;
+        segment = racer->segmentPositionInfo.courseSegment;
         landmine = segment->landminesStart;
         if (landmine != NULL) {
             landminesEnd = segment->landminesEnd;
             do {
-                var_fs1 = landmine->pos.x - racer->unk_0C.unk_34.x;
-                var_fs0 = landmine->pos.y - racer->unk_0C.unk_34.y;
-                var_ft4 = landmine->pos.z - racer->unk_0C.unk_34.z;
+                var_fs1 = landmine->pos.x - racer->segmentPositionInfo.pos.x;
+                var_fs0 = landmine->pos.y - racer->segmentPositionInfo.pos.y;
+                var_ft4 = landmine->pos.z - racer->segmentPositionInfo.pos.z;
                 if ((SQ(var_fs1) + SQ(var_fs0) + SQ(var_ft4)) < 900.0f) {
                     racer->acceleration.x += (15.0f * racer->unk_B4.x);
                     racer->acceleration.y += (15.0f * racer->unk_B4.y);
@@ -3477,14 +3548,14 @@ void func_80721D78(Racer* racer, Controller* controller) {
     }
 
     if (!(racer->stateFlags & RACER_STATE_JUMP_BOOST)) {
-        segment = racer->unk_0C.courseSegment;
+        segment = racer->segmentPositionInfo.courseSegment;
         jump = segment->jumpsStart;
         if (jump != NULL) {
             jumpsEnd = segment->jumpsEnd;
             do {
-                var_fs1 = racer->unk_0C.unk_34.x - jump->pos.x;
-                var_fs0 = racer->unk_0C.unk_34.y - jump->pos.y;
-                var_ft4 = racer->unk_0C.unk_34.z - jump->pos.z;
+                var_fs1 = racer->segmentPositionInfo.pos.x - jump->pos.x;
+                var_fs0 = racer->segmentPositionInfo.pos.y - jump->pos.y;
+                var_ft4 = racer->segmentPositionInfo.pos.z - jump->pos.z;
                 var_fa1 = (jump->basis.x.x * var_fs1) + (jump->basis.x.y * var_fs0) + (jump->basis.x.z * var_ft4);
 
                 if (var_fa1 < 0.0f) {
@@ -3516,7 +3587,7 @@ void func_80721D78(Racer* racer, Controller* controller) {
                 }
 
                 racer->stateFlags |= RACER_STATE_JUMP_BOOST;
-                racer->unk_1DC = (racer->speed * 0.3f) + 0.5f;
+                racer->jumpBoost = (racer->speed * 0.3f) + 0.5f;
                 if ((racer->id < gNumPlayers) && (D_807A16E0 != 0)) {
                     Audio_PlayerTriggerSEStart(racer->id, NA_SE_55);
                 }
@@ -3529,23 +3600,23 @@ void func_80721D78(Racer* racer, Controller* controller) {
     racer->acceleration.y += (-1.0f * racer->unk_A8.y);
     racer->acceleration.z += (-1.0f * racer->unk_A8.z);
     if (racer->stateFlags & RACER_STATE_JUMP_BOOST) {
-        racer->acceleration.x += (racer->unk_1DC * racer->unk_B4.x);
-        racer->acceleration.y += (racer->unk_1DC * racer->unk_B4.y);
-        racer->acceleration.z += (racer->unk_1DC * racer->unk_B4.z);
-        racer->unk_1DC *= 0.8f;
+        racer->acceleration.x += (racer->jumpBoost * racer->unk_B4.x);
+        racer->acceleration.y += (racer->jumpBoost * racer->unk_B4.y);
+        racer->acceleration.z += (racer->jumpBoost * racer->unk_B4.z);
+        racer->jumpBoost *= 0.8f;
     }
     if (!(racer->stateFlags & RACER_STATE_FLAGS_80000000)) {
-        var_fa1 = racer->unk_17C - racer->unk_A0;
+        var_fa1 = racer->unk_17C - racer->heightAboveGround;
         if (var_fa1 > 0.0f) {
-            var_fa1 -= ((racer->velocity.x * racer->unk_19C.x) + (racer->velocity.y * racer->unk_19C.y) +
-                        (racer->velocity.z * racer->unk_19C.z));
+            var_fa1 -= ((racer->velocity.x * racer->upFromGround.x) + (racer->velocity.y * racer->upFromGround.y) +
+                        (racer->velocity.z * racer->upFromGround.z));
 
             racer->unk_198 = var_fa1 * 0.2f;
 
-            racer->acceleration.x += (racer->unk_198 * racer->unk_19C.x);
-            racer->acceleration.y += (racer->unk_198 * racer->unk_19C.y);
-            racer->acceleration.z += (racer->unk_198 * racer->unk_19C.z);
-            if (racer->unk_1DC < 0.5f) {
+            racer->acceleration.x += (racer->unk_198 * racer->upFromGround.x);
+            racer->acceleration.y += (racer->unk_198 * racer->upFromGround.y);
+            racer->acceleration.z += (racer->unk_198 * racer->upFromGround.z);
+            if (racer->jumpBoost < 0.5f) {
                 racer->stateFlags &= ~(RACER_STATE_JUMP_BOOST | RACER_STATE_TOUCHING_LANDMINE);
             }
         } else {
@@ -3554,81 +3625,81 @@ void func_80721D78(Racer* racer, Controller* controller) {
     } else {
         racer->unk_198 = 0.0f;
     }
-    racer->unk_278++;
-    racer->unk_27A++;
+    racer->zButtonTimer++;
+    racer->rButtonTimer++;
     if (buttonPressed & BTN_R_Z_COMBO) {
         buttonPressed |= BTN_Z;
         buttonCurrent |= BTN_R;
-        racer->unk_278 = 10;
+        racer->zButtonTimer = 10;
     } else if (buttonPressed & BTN_Z_R_COMBO) {
         buttonPressed |= BTN_R;
         buttonCurrent |= BTN_Z;
-        racer->unk_27A = 10;
+        racer->rButtonTimer = 10;
     }
 
     switch (buttonPressed & (BTN_Z | BTN_R)) {
         case BTN_Z:
-            if ((racer->unk_278 < 0xF) && (racer->unk_27C == 0)) {
+            if ((racer->zButtonTimer < 15) && (racer->unk_27C == 0)) {
                 racer->unk_27C = 0x80;
                 racer->unk_280 = 0x100;
                 if (buttonCurrent & BTN_R) {
-                    racer->unk_284 = 2;
+                    racer->attackState = ATTACK_STATE_SPIN;
                     if (D_807A16E0 != 0) {
                         Audio_PlayerTriggerSEStart(racer->id, NA_SE_2);
                     }
                 } else {
-                    racer->unk_284 = 1;
+                    racer->attackState = ATTACK_STATE_SIDE;
                     if (D_807A16E0 != 0) {
                         Audio_PlayerTriggerSEStart(racer->id, NA_SE_6);
                     }
                 }
             }
-            racer->unk_278 = 0;
+            racer->zButtonTimer = 0;
             break;
         case BTN_R:
-            if ((racer->unk_27A < 0xF) && (racer->unk_27C == 0)) {
+            if ((racer->rButtonTimer < 15) && (racer->unk_27C == 0)) {
                 racer->unk_27C = 0xF80;
                 racer->unk_280 = -0x100;
                 if (buttonCurrent & BTN_Z) {
-                    racer->unk_284 = 2;
+                    racer->attackState = ATTACK_STATE_SPIN;
                     if (D_807A16E0 != 0) {
                         Audio_PlayerTriggerSEStart(racer->id, NA_SE_2);
                     }
                 } else {
-                    racer->unk_284 = 1;
+                    racer->attackState = ATTACK_STATE_SIDE;
                     if (D_807A16E0 != 0) {
                         Audio_PlayerTriggerSEStart(racer->id, NA_SE_6);
                     }
                 }
             }
-            racer->unk_27A = 0;
+            racer->rButtonTimer = 0;
             break;
         default:
             break;
     }
 
-    var_v1 = false;
-    if (racer->unk_284 == 1) {
+    isDrifting = false;
+    if (racer->attackState == ATTACK_STATE_SIDE) {
         if (racer->unk_280 < 0) {
-            racer->unk_286 = 1;
+            racer->driftAttackDirection = DRIFT_ATTACK_RIGHT;
             var_fa1 = -racer->unk_5C.x;
         } else {
             var_fa1 = racer->unk_5C.x;
-            racer->unk_286 = 0;
+            racer->driftAttackDirection = DRIFT_ATTACK_LEFT;
         }
         if (var_fa1 < 0.0f) {
-            racer->unk_1D8 = 5.0f;
+            racer->driftAttackForce = 5.0f;
         } else if (var_fa1 < 6.0f) {
-            racer->unk_1D8 = 5.0f - (0.8333333f * var_fa1);
+            racer->driftAttackForce = 5.0f - (0.8333333f * var_fa1);
         } else {
-            racer->unk_1D8 = 0.0f;
+            racer->driftAttackForce = 0.0f;
         }
 
-        var_fs1 = racer->unk_1D8 * racer->unk_C0.z.x;
-        var_fs0 = racer->unk_1D8 * racer->unk_C0.z.y;
-        var_ft4 = racer->unk_1D8 * racer->unk_C0.z.z;
+        var_fs1 = racer->driftAttackForce * racer->unk_C0.z.x;
+        var_fs0 = racer->driftAttackForce * racer->unk_C0.z.y;
+        var_ft4 = racer->driftAttackForce * racer->unk_C0.z.z;
         var_fa1 = (racer->unk_A8.x * var_fs1) + (var_fs0 * racer->unk_A8.y) + (var_ft4 * racer->unk_A8.z);
-        if (racer->unk_286 == 1) {
+        if (racer->driftAttackDirection == DRIFT_ATTACK_RIGHT) {
             racer->acceleration.x -= (var_fs1 - (var_fa1 * racer->unk_A8.x));
             racer->acceleration.y -= (var_fs0 - (var_fa1 * racer->unk_A8.y));
             racer->acceleration.z -= (var_ft4 - (var_fa1 * racer->unk_A8.z));
@@ -3637,26 +3708,26 @@ void func_80721D78(Racer* racer, Controller* controller) {
             racer->acceleration.y += (var_fs0 - (var_fa1 * racer->unk_A8.y));
             racer->acceleration.z += (var_ft4 - (var_fa1 * racer->unk_A8.z));
         }
-    } else if (racer->unk_284 == 2) {
+    } else if (racer->attackState == ATTACK_STATE_SPIN) {
         if (racer->unk_280 < 0) {
-            racer->unk_286 = 1;
+            racer->driftAttackDirection = DRIFT_ATTACK_RIGHT;
             var_fa1 = -racer->unk_5C.x;
         } else {
             var_fa1 = racer->unk_5C.x;
-            racer->unk_286 = 0;
+            racer->driftAttackDirection = DRIFT_ATTACK_LEFT;
         }
         if (var_fa1 < 0.0f) {
-            racer->unk_1D8 = 0.5f;
+            racer->driftAttackForce = 0.5f;
         } else if (var_fa1 < 2.0f) {
-            racer->unk_1D8 = 0.5f - (0.25f * var_fa1);
+            racer->driftAttackForce = 0.5f - (0.25f * var_fa1);
         } else {
-            racer->unk_1D8 = 0.0f;
+            racer->driftAttackForce = 0.0f;
         }
 
-        var_fs1 = racer->unk_1D8 * racer->unk_C0.z.x;
-        var_fs0 = racer->unk_1D8 * racer->unk_C0.z.y;
-        var_ft4 = racer->unk_1D8 * racer->unk_C0.z.z;
-        if (racer->unk_286 == 1) {
+        var_fs1 = racer->driftAttackForce * racer->unk_C0.z.x;
+        var_fs0 = racer->driftAttackForce * racer->unk_C0.z.y;
+        var_ft4 = racer->driftAttackForce * racer->unk_C0.z.z;
+        if (racer->driftAttackDirection == DRIFT_ATTACK_RIGHT) {
             racer->acceleration.x -= var_fs1;
             racer->acceleration.y -= var_fs0;
             racer->acceleration.z -= var_ft4;
@@ -3669,32 +3740,32 @@ void func_80721D78(Racer* racer, Controller* controller) {
         switch (buttonCurrent & (BTN_Z | BTN_R)) {
             case 0:
             case (BTN_Z | BTN_R):
-                racer->unk_1D8 = 0.0f;
+                racer->driftAttackForce = 0.0f;
                 break;
             default:
                 if ((buttonCurrent & (BTN_Z | BTN_R)) == BTN_Z) {
                     var_fa1 = racer->unk_5C.x;
-                    racer->unk_286 = 0;
+                    racer->driftAttackDirection = DRIFT_ATTACK_LEFT;
                 } else {
-                    racer->unk_286 = 1;
+                    racer->driftAttackDirection = DRIFT_ATTACK_RIGHT;
                     var_fa1 = -racer->unk_5C.x;
                 }
                 if (var_fa1 < 0.0f) {
-                    racer->unk_1D8 = 1.0f;
+                    racer->driftAttackForce = 1.0f;
                 } else if (var_fa1 < 8.0f) {
-                    racer->unk_1D8 = 1.0f - (0.125f * var_fa1);
+                    racer->driftAttackForce = 1.0f - (0.125f * var_fa1);
                 } else {
-                    racer->unk_1D8 = 0.0f;
+                    racer->driftAttackForce = 0.0f;
                 }
                 if ((racer->stateFlags & COURSE_EFFECT_MASK) == COURSE_EFFECT_ICE) {
-                    racer->unk_1D8 *= 0.2f;
+                    racer->driftAttackForce *= 0.2f;
                 }
 
-                var_fs1 = racer->unk_1D8 * racer->unk_C0.z.x;
-                var_fs0 = racer->unk_1D8 * racer->unk_C0.z.y;
-                var_ft4 = racer->unk_1D8 * racer->unk_C0.z.z;
+                var_fs1 = racer->driftAttackForce * racer->unk_C0.z.x;
+                var_fs0 = racer->driftAttackForce * racer->unk_C0.z.y;
+                var_ft4 = racer->driftAttackForce * racer->unk_C0.z.z;
                 var_fa1 = (racer->unk_A8.x * var_fs1) + (var_fs0 * racer->unk_A8.y) + (var_ft4 * racer->unk_A8.z);
-                if (racer->unk_286 == 1) {
+                if (racer->driftAttackDirection == DRIFT_ATTACK_RIGHT) {
                     racer->acceleration.x -= (var_fs1 - (var_fa1 * racer->unk_A8.x));
                     racer->acceleration.y -= (var_fs0 - (var_fa1 * racer->unk_A8.y));
                     racer->acceleration.z -= (var_ft4 - (var_fa1 * racer->unk_A8.z));
@@ -3704,21 +3775,21 @@ void func_80721D78(Racer* racer, Controller* controller) {
                     racer->acceleration.z += (var_ft4 - (var_fa1 * racer->unk_A8.z));
                 }
 
-                var_v1 = true;
+                isDrifting = true;
                 break;
         }
     }
     if (racer->id < gNumPlayers) {
-        if (var_v1) {
-            if (!(racer->unk_08 & 0x40)) {
-                racer->unk_08 |= 0x40;
+        if (isDrifting) {
+            if (!(racer->soundEffectFlags & RACER_SE_FLAGS_DRIFT_SLIDE)) {
+                racer->soundEffectFlags |= RACER_SE_FLAGS_DRIFT_SLIDE;
                 if (D_807A16E0 != 0) {
                     Audio_PlayerLevelSEStart(racer->id, NA_LEVEL_SE_10);
                 }
             }
         } else {
-            if (racer->unk_08 & 0x40) {
-                racer->unk_08 &= ~0x40;
+            if (racer->soundEffectFlags & RACER_SE_FLAGS_DRIFT_SLIDE) {
+                racer->soundEffectFlags &= ~RACER_SE_FLAGS_DRIFT_SLIDE;
                 if (D_807A16E0 != 0) {
                     Audio_PlayerLevelSEStop(racer->id, NA_LEVEL_SE_10);
                 }
@@ -3738,8 +3809,8 @@ void func_80721D78(Racer* racer, Controller* controller) {
             var_fa1 = 1.0f;
         }
         if (buttonPressed & BTN_A) {
-            racer->unk_204 = 0x1E;
-            racer->unk_214 = 0x1B;
+            racer->unk_204 = 30;
+            racer->unk_214 = 27;
             if ((racer->id < gNumPlayers) && (D_807A16E0 != 0)) {
                 Audio_PlayerTriggerSEStart(racer->id, NA_SE_41);
             }
@@ -3801,8 +3872,8 @@ void func_80721D78(Racer* racer, Controller* controller) {
                 racer->unk_200 = racer->unk_1C8 * var_fa1;
             }
             if (racer->id < gNumPlayers) {
-                if (!(racer->unk_08 & 0x200)) {
-                    racer->unk_08 |= 0x200;
+                if (!(racer->soundEffectFlags & RACER_SE_FLAGS_200)) {
+                    racer->soundEffectFlags |= RACER_SE_FLAGS_200;
                     if (D_807A16E0 != 0) {
                         Audio_PlayerLevelSEStart(racer->id, NA_LEVEL_SE_6);
                     }
@@ -3811,8 +3882,8 @@ void func_80721D78(Racer* racer, Controller* controller) {
         } else {
             racer->unk_20C = 0;
             if (racer->id < gNumPlayers) {
-                if (racer->unk_08 & 0x200) {
-                    racer->unk_08 &= ~0x200;
+                if (racer->soundEffectFlags & RACER_SE_FLAGS_200) {
+                    racer->soundEffectFlags &= ~RACER_SE_FLAGS_200;
                     if (D_807A16E0 != 0) {
                         Audio_PlayerLevelSEStop(racer->id, NA_LEVEL_SE_6);
                     }
@@ -3822,8 +3893,8 @@ void func_80721D78(Racer* racer, Controller* controller) {
     } else {
         racer->unk_20C = 0;
         if (racer->id < gNumPlayers) {
-            if (racer->unk_08 & 0x200) {
-                racer->unk_08 &= ~0x200;
+            if (racer->soundEffectFlags & RACER_SE_FLAGS_200) {
+                racer->soundEffectFlags &= ~RACER_SE_FLAGS_200;
                 if (D_807A16E0 != 0) {
                     Audio_PlayerLevelSEStop(racer->id, NA_LEVEL_SE_6);
                 }
@@ -3886,7 +3957,7 @@ void func_80721D78(Racer* racer, Controller* controller) {
         racer->boostTimer--;
         if (racer->boostTimer == 0) {
             racer->stateFlags &= ~RACER_STATE_DASH_PAD_BOOST;
-            racer->unk_08 &= ~0x1000;
+            racer->soundEffectFlags &= ~RACER_SE_FLAGS_BOOST;
         }
     }
     var_fs1 *= var_ft4;
@@ -3894,8 +3965,8 @@ void func_80721D78(Racer* racer, Controller* controller) {
 
     if ((racer->stateFlags & COURSE_EFFECT_MASK) == COURSE_EFFECT_ICE) {
         if (racer->id < gNumPlayers) {
-            if (!(racer->unk_08 & 0x20)) {
-                racer->unk_08 |= 0x20;
+            if (!(racer->soundEffectFlags & RACER_SE_FLAGS_ICE)) {
+                racer->soundEffectFlags |= RACER_SE_FLAGS_ICE;
                 if (D_807A16E0 != 0) {
                     Audio_PlayerLevelSEStart(racer->id, NA_LEVEL_SE_11);
                 }
@@ -3904,8 +3975,8 @@ void func_80721D78(Racer* racer, Controller* controller) {
         var_ft4 = racer->speed;
     } else {
         if (racer->id < gNumPlayers) {
-            if (racer->unk_08 & 0x20) {
-                racer->unk_08 &= ~0x20;
+            if (racer->soundEffectFlags & RACER_SE_FLAGS_ICE) {
+                racer->soundEffectFlags &= ~RACER_SE_FLAGS_ICE;
                 if (D_807A16E0 != 0) {
                     Audio_PlayerLevelSEStop(racer->id, NA_LEVEL_SE_11);
                 }
@@ -3933,16 +4004,16 @@ void func_80721D78(Racer* racer, Controller* controller) {
                 if (racer->unk_1E8 == 0.0f) {
                     var_fv1 = var_fs0;
                 } else {
-                    var_fv1 = ((D_8076EF98[4] - var_fs0) * racer->unk_1E8) + var_fs0;
+                    var_fv1 = ((D_8076EF98[BOOST_E] - var_fs0) * racer->unk_1E8) + var_fs0;
                 }
             }
         }
-        var_fv1 -= ((spE4 * 0.5f) + (racer->unk_1D8 * 0.16f));
+        var_fv1 -= ((directionChange * 0.5f) + (racer->driftAttackForce * 0.16f));
         if (var_fv1 < 0.0f) {
-            racer->unk_1D4 = 0.0f;
+            racer->accelerationForce = 0.0f;
         } else {
-            if (var_fv1 <= racer->unk_1D4) {
-                racer->unk_1D4 = var_fv1;
+            if (var_fv1 <= racer->accelerationForce) {
+                racer->accelerationForce = var_fv1;
             } else {
                 var_ft4 *= racer->unk_324;
                 if (var_ft4 < 1.0f) {
@@ -3950,19 +4021,19 @@ void func_80721D78(Racer* racer, Controller* controller) {
                 } else {
                     var_ft4 = 1.0f;
                 }
-                racer->unk_1D4 += ((var_fv1 - racer->unk_1D4) * var_ft4);
+                racer->accelerationForce += ((var_fv1 - racer->accelerationForce) * var_ft4);
             }
 
-            var_fs1 = racer->unk_1D4 * racer->unk_C0.x.x;
-            var_fs0 = racer->unk_1D4 * racer->unk_C0.x.y;
-            var_ft4 = racer->unk_1D4 * racer->unk_C0.x.z;
+            var_fs1 = racer->accelerationForce * racer->unk_C0.x.x;
+            var_fs0 = racer->accelerationForce * racer->unk_C0.x.y;
+            var_ft4 = racer->accelerationForce * racer->unk_C0.x.z;
             var_fa1 = (racer->unk_A8.x * var_fs1) + (var_fs0 * racer->unk_A8.y) + (var_ft4 * racer->unk_A8.z);
             racer->acceleration.x += (var_fs1 - (var_fa1 * racer->unk_A8.x));
             racer->acceleration.y += (var_fs0 - (var_fa1 * racer->unk_A8.y));
             racer->acceleration.z += (var_ft4 - (var_fa1 * racer->unk_A8.z));
         }
     } else {
-        racer->unk_1D4 = 0.0f;
+        racer->accelerationForce = 0.0f;
     }
     racer->velocity.x += racer->acceleration.x;
     racer->velocity.y += racer->acceleration.y;
@@ -3971,16 +4042,17 @@ void func_80721D78(Racer* racer, Controller* controller) {
     if (racer->stateFlags & RACER_STATE_FLAGS_80000) {
         racer->velocity.x *= 0.94f;
         racer->velocity.z *= 0.94f;
-        racer->unk_0C.unk_34.x += racer->velocity.x;
-        racer->unk_0C.unk_34.y += racer->velocity.y;
-        racer->unk_0C.unk_34.z += racer->velocity.z;
-        racer->unk_0C.unk_28.x += racer->velocity.x;
-        racer->unk_0C.unk_28.y += racer->velocity.y;
-        racer->unk_0C.unk_28.z += racer->velocity.z;
-        racer->unk_0C.unk_40 =
-            sqrtf(SQ(racer->unk_0C.unk_28.x) + SQ(racer->unk_0C.unk_28.y) + SQ(racer->unk_0C.unk_28.z));
+        racer->segmentPositionInfo.pos.x += racer->velocity.x;
+        racer->segmentPositionInfo.pos.y += racer->velocity.y;
+        racer->segmentPositionInfo.pos.z += racer->velocity.z;
+        racer->segmentPositionInfo.segmentDisplacement.x += racer->velocity.x;
+        racer->segmentPositionInfo.segmentDisplacement.y += racer->velocity.y;
+        racer->segmentPositionInfo.segmentDisplacement.z += racer->velocity.z;
+        racer->segmentPositionInfo.distanceFromSegment = sqrtf(SQ(racer->segmentPositionInfo.segmentDisplacement.x) +
+                                                               SQ(racer->segmentPositionInfo.segmentDisplacement.y) +
+                                                               SQ(racer->segmentPositionInfo.segmentDisplacement.z));
         D_8076F2DC[TRACK_SHAPE_INDEX(TRACK_SHAPE_AIR)](racer);
-        if (racer->unk_0C.unk_34.y < -2750.0f) {
+        if (racer->segmentPositionInfo.pos.y < -2750.0f) {
             racer->stateFlags &= ~RACER_STATE_FLAGS_40000000;
             if (gGameMode != GAMEMODE_COURSE_EDIT) {
                 racer->stateFlags |= RACER_STATE_CRASHED;
@@ -3992,8 +4064,8 @@ void func_80721D78(Racer* racer, Controller* controller) {
                 func_8071A17C(racer);
             }
             if ((racer->id < gNumPlayers) || (gRacers[0].stateFlags & RACER_STATE_FLAGS_80000)) {
-                func_i2_800AC750(racer->unk_0C.unk_34.x, racer->unk_0C.unk_34.y, racer->unk_0C.unk_34.z, 0.0f, 0.0f,
-                                 0.0f, 600.0f, racer);
+                func_i2_800AC750(racer->segmentPositionInfo.pos.x, racer->segmentPositionInfo.pos.y,
+                                 racer->segmentPositionInfo.pos.z, 0.0f, 0.0f, 0.0f, 600.0f, racer);
                 if (D_807A16E0 != 0) {
                     Audio_PlayerTriggerSEStart(racer->id, NA_SE_8);
                     if ((racer->id == 0) && (gNumPlayers == 1)) {
@@ -4033,26 +4105,34 @@ void func_80721D78(Racer* racer, Controller* controller) {
             i = 3;
         }
 
-        if (func_i2_800B2C00(&racer->unk_0C, racer->unk_0C.unk_34.x + racer->velocity.x,
-                             racer->unk_0C.unk_34.y + racer->velocity.y, racer->unk_0C.unk_34.z + racer->velocity.z, i,
-                             var_fa1) == 0) {
+        if (func_i2_800B2C00(&racer->segmentPositionInfo, racer->segmentPositionInfo.pos.x + racer->velocity.x,
+                             racer->segmentPositionInfo.pos.y + racer->velocity.y,
+                             racer->segmentPositionInfo.pos.z + racer->velocity.z, i, var_fa1) == 0) {
             sp128 = racer->lapDistance;
-            racer->lapDistance = func_i2_800B1F68(&racer->unk_0C);
-            segment = racer->unk_0C.courseSegment;
+            racer->lapDistance = func_i2_800B1F68(&racer->segmentPositionInfo);
+            segment = racer->segmentPositionInfo.courseSegment;
 
-            racer->unk_270 =
-                (racer->unk_0C.unk_08 * (segment->next->radiusLeft - segment->radiusLeft)) + segment->radiusLeft;
-            racer->unk_274 =
-                (racer->unk_0C.unk_08 * (segment->next->radiusRight - segment->radiusRight)) + segment->radiusRight;
+            racer->currentRadiusLeft = (racer->segmentPositionInfo.segmentLengthProportion *
+                                        (segment->next->radiusLeft - segment->radiusLeft)) +
+                                       segment->radiusLeft;
+            racer->currentRadiusRight = (racer->segmentPositionInfo.segmentLengthProportion *
+                                         (segment->next->radiusRight - segment->radiusRight)) +
+                                        segment->radiusRight;
 
-            var_fa1 = 1.0f / racer->unk_0C.unk_18;
-            racer->unk_24C.x.x = racer->unk_0C.unk_0C.x * var_fa1;
-            racer->unk_24C.x.y = racer->unk_0C.unk_0C.y * var_fa1;
-            racer->unk_24C.x.z = racer->unk_0C.unk_0C.z * var_fa1;
+            var_fa1 = 1.0f / racer->segmentPositionInfo.segmentForwardMagnitude;
+            racer->unk_24C.x.x = racer->segmentPositionInfo.segmentForward.x * var_fa1;
+            racer->unk_24C.x.y = racer->segmentPositionInfo.segmentForward.y * var_fa1;
+            racer->unk_24C.x.z = racer->segmentPositionInfo.segmentForward.z * var_fa1;
 
-            racer->unk_24C.y.x = (racer->unk_0C.unk_08 * (segment->next->up.x - segment->up.x)) + segment->up.x;
-            racer->unk_24C.y.y = (racer->unk_0C.unk_08 * (segment->next->up.y - segment->up.y)) + segment->up.y;
-            racer->unk_24C.y.z = (racer->unk_0C.unk_08 * (segment->next->up.z - segment->up.z)) + segment->up.z;
+            racer->unk_24C.y.x =
+                (racer->segmentPositionInfo.segmentLengthProportion * (segment->next->up.x - segment->up.x)) +
+                segment->up.x;
+            racer->unk_24C.y.y =
+                (racer->segmentPositionInfo.segmentLengthProportion * (segment->next->up.y - segment->up.y)) +
+                segment->up.y;
+            racer->unk_24C.y.z =
+                (racer->segmentPositionInfo.segmentLengthProportion * (segment->next->up.z - segment->up.z)) +
+                segment->up.z;
 
             if ((racer->unk_24C.y.x == 0.0f) && (racer->unk_24C.y.y == 0.0f) && (racer->unk_24C.y.z == 0.0f)) {
                 func_i2_800B0FAC(segment, &racer->unk_24C);
@@ -4064,7 +4144,7 @@ void func_80721D78(Racer* racer, Controller* controller) {
                 racer->unk_24C.z.z =
                     (racer->unk_24C.y.x * racer->unk_24C.x.y) - (racer->unk_24C.y.y * racer->unk_24C.x.x);
                 if ((racer->unk_24C.z.x == 0.0f) && (racer->unk_24C.z.y == 0.0f) && (racer->unk_24C.z.z == 0.0f)) {
-                    func_i2_800B0FAC(racer->unk_0C.courseSegment, &racer->unk_24C);
+                    func_i2_800B0FAC(racer->segmentPositionInfo.courseSegment, &racer->unk_24C);
                 } else {
                     temp_fa0 = 1.0f / sqrtf(SQ(racer->unk_24C.z.x) + SQ(racer->unk_24C.z.y) + SQ(racer->unk_24C.z.z));
 
@@ -4090,7 +4170,7 @@ void func_80721D78(Racer* racer, Controller* controller) {
                 if (D_807B37CC < sp128) {
                     racer->lapsCompletedDistance += gCurrentCourseInfo->length;
                     racer->lap++;
-                    if ((racer->lap == racer->lapsCompleted + 1) && ((gTotalLapCount + 1) >= racer->lap)) {
+                    if ((racer->lap == racer->lapsCompleted + 1) && (racer->lap <= (gTotalLapCount + 1))) {
                         racer->lapsCompleted = racer->lap;
                         racer->stateFlags |= RACER_STATE_FLAGS_100000;
                         i = racer->raceTime -
@@ -4106,11 +4186,11 @@ void func_80721D78(Racer* racer, Controller* controller) {
                                     gStartNewBestLap = true;
                                 }
                             }
-                            if ((gTotalLapCount + 1) == racer->lap) {
+                            if (racer->lap == (gTotalLapCount + 1)) {
                                 racer->lap = racer->lapsCompleted = 1;
                                 racer->lapsCompletedDistance = 0;
                             }
-                        } else if ((gTotalLapCount + 1) == racer->lap) {
+                        } else if (racer->lap == (gTotalLapCount + 1)) {
                             racer->raceTime = i;
                             racer->stateFlags |= RACER_STATE_FLAGS_2000000 | RACER_STATE_CPU_CONTROLLED;
                             racer->energy = racer->maxEnergy;
@@ -4143,19 +4223,21 @@ void func_80721D78(Racer* racer, Controller* controller) {
                 racer->raceDistance = racer->raceDistancePosition = racer->lapsCompletedDistance + racer->lapDistance;
             }
 
-            D_8076F2DC[TRACK_SHAPE_INDEX((u32) racer->unk_0C.courseSegment->trackSegmentInfo & TRACK_SHAPE_MASK)](
-                racer);
+            D_8076F2DC[TRACK_SHAPE_INDEX((u32) racer->segmentPositionInfo.courseSegment->trackSegmentInfo &
+                                         TRACK_SHAPE_MASK)](racer);
             if (racer->stateFlags & RACER_STATE_FLAGS_80000000) {
-                if ((racer->unk_0C.unk_34.x < -20000.0f) || (racer->unk_0C.unk_34.x > 20000.0f) ||
-                    (racer->unk_0C.unk_34.z < -20000.0f) || (racer->unk_0C.unk_34.z > 20000.0f) ||
-                    ((racer->velocity.y < 0.0f) && (racer->unk_0C.unk_28.y < -racer->unk_270) &&
-                     (((racer->unk_0C.unk_28.x * racer->velocity.x) + (racer->unk_0C.unk_28.y * racer->velocity.y) +
-                       (racer->unk_0C.unk_28.z * racer->velocity.z)) >= 0.0f))) {
+                if ((racer->segmentPositionInfo.pos.x < -20000.0f) || (racer->segmentPositionInfo.pos.x > 20000.0f) ||
+                    (racer->segmentPositionInfo.pos.z < -20000.0f) || (racer->segmentPositionInfo.pos.z > 20000.0f) ||
+                    ((racer->velocity.y < 0.0f) &&
+                     (racer->segmentPositionInfo.segmentDisplacement.y < -racer->currentRadiusLeft) &&
+                     (((racer->segmentPositionInfo.segmentDisplacement.x * racer->velocity.x) +
+                       (racer->segmentPositionInfo.segmentDisplacement.y * racer->velocity.y) +
+                       (racer->segmentPositionInfo.segmentDisplacement.z * racer->velocity.z)) >= 0.0f))) {
                     func_80721CA8(racer);
                 }
             }
         } else {
-            racer->unk_0C.unk_34 = sp10C;
+            racer->segmentPositionInfo.pos = sp10C;
             func_80721CA8(racer);
         }
     }
@@ -4166,29 +4248,29 @@ void func_80721D78(Racer* racer, Controller* controller) {
         racer->unk_C0 = spE8;
     }
     if (racer->unk_198 != 0.0f) {
-        sp128 = racer->unk_A0;
+        sp128 = racer->heightAboveGround;
     } else {
         sp128 = racer->unk_17C;
     }
 
     var_fa1 = racer->unk_180.x;
-    var_fv1 = racer->unk_0C.unk_34.x - (sp128 * racer->unk_C0.y.x);
+    var_fv1 = racer->segmentPositionInfo.pos.x - (sp128 * racer->unk_C0.y.x);
     racer->unk_180.x = var_fv1;
     racer->unk_18C.x = var_fv1 - var_fa1;
 
     var_fa1 = racer->unk_180.y;
-    var_fv1 = racer->unk_0C.unk_34.y - (sp128 * racer->unk_C0.y.y);
+    var_fv1 = racer->segmentPositionInfo.pos.y - (sp128 * racer->unk_C0.y.y);
     racer->unk_180.y = var_fv1;
     racer->unk_18C.y = var_fv1 - var_fa1;
 
     var_fa1 = racer->unk_180.z;
-    var_fv1 = racer->unk_0C.unk_34.z - (sp128 * racer->unk_C0.y.z);
+    var_fv1 = racer->segmentPositionInfo.pos.z - (sp128 * racer->unk_C0.y.z);
     racer->unk_180.z = var_fv1;
     racer->unk_18C.z = var_fv1 - var_fa1;
 
-    racer->unk_80.x = racer->unk_0C.unk_34.x - sp10C.x;
-    racer->unk_80.y = racer->unk_0C.unk_34.y - sp10C.y;
-    racer->unk_80.z = racer->unk_0C.unk_34.z - sp10C.z;
+    racer->unk_80.x = racer->segmentPositionInfo.pos.x - sp10C.x;
+    racer->unk_80.y = racer->segmentPositionInfo.pos.y - sp10C.y;
+    racer->unk_80.z = racer->segmentPositionInfo.pos.z - sp10C.z;
 
     racer->unk_68.x = (spE8.z.x * racer->unk_80.x) + (spE8.z.y * racer->unk_80.y) + (spE8.z.z * racer->unk_80.z);
     racer->unk_68.y = (spE8.y.x * racer->unk_80.x) + (spE8.y.y * racer->unk_80.y) + (spE8.y.z * racer->unk_80.z);
@@ -4264,7 +4346,7 @@ void func_80721D78(Racer* racer, Controller* controller) {
             if (racer->pitForceFieldSize >= 1.0f) {
                 racer->pitForceFieldSize = 1.0f;
             } else if ((racer->id < gNumPlayers) && (racer->pitForceFieldSize == 0.1f)) {
-                racer->unk_08 |= 0x800;
+                racer->soundEffectFlags |= RACER_SE_FLAGS_PIT;
                 if (D_807A16E0 != 0) {
                     Audio_PlayerLevelSEStart(racer->id, NA_LEVEL_SE_4);
                 }
@@ -4276,7 +4358,7 @@ void func_80721D78(Racer* racer, Controller* controller) {
             if (racer->pitForceFieldSize <= 0.0f) {
                 racer->pitForceFieldSize = 0.0f;
                 if (racer->id < gNumPlayers) {
-                    racer->unk_08 &= ~0x800;
+                    racer->soundEffectFlags &= ~RACER_SE_FLAGS_PIT;
                     if (D_807A16E0 != 0) {
                         Audio_PlayerLevelSEStop(racer->id, NA_LEVEL_SE_4);
                     }
@@ -4284,15 +4366,15 @@ void func_80721D78(Racer* racer, Controller* controller) {
             }
         }
     }
-    racer->unk_210 = (racer->unk_210 + (s32) (racer->unk_1D4 * 4000.0f)) & 0xFFF;
+    racer->unk_210 = (racer->unk_210 + (s32) (racer->accelerationForce * 4000.0f)) & 0xFFF;
 
     var_fa1 = SIN(racer->unk_210) * (racer->speed * 0.007f);
-    if (racer->unk_08 & 0x400) {
+    if (racer->soundEffectFlags & RACER_SE_FLAGS_DIRT) {
         var_fa1 *= 5.0f;
     }
-    racer->unk_10C.x = racer->unk_0C.unk_34.x + (var_fa1 * racer->unk_E8.y.x);
-    racer->unk_10C.y = racer->unk_0C.unk_34.y + (var_fa1 * racer->unk_E8.y.y);
-    racer->unk_10C.z = racer->unk_0C.unk_34.z + (var_fa1 * racer->unk_E8.y.z);
+    racer->unk_10C.x = racer->segmentPositionInfo.pos.x + (var_fa1 * racer->unk_E8.y.x);
+    racer->unk_10C.y = racer->segmentPositionInfo.pos.y + (var_fa1 * racer->unk_E8.y.y);
+    racer->unk_10C.z = racer->segmentPositionInfo.pos.z + (var_fa1 * racer->unk_E8.y.z);
     if (racer->spinOutTimer != 0) {
         racer->unk_10C.x += ((f32) (Math_Rand1() & 0xFFFF) * 0.000027466238f) - 0.9f;
         racer->unk_10C.y += ((f32) (Math_Rand1() & 0xFFFF) * 0.000027466238f) - 0.9f;
@@ -4300,7 +4382,7 @@ void func_80721D78(Racer* racer, Controller* controller) {
     }
 
     if (racer->unk_27C != 0) {
-        if (racer->unk_284 == 1) {
+        if (racer->attackState == ATTACK_STATE_SIDE) {
             racer->unk_E8.x.x = racer->unk_C0.x.x;
             racer->unk_E8.x.y = racer->unk_C0.x.y;
             racer->unk_E8.x.z = racer->unk_C0.x.z;
@@ -4312,12 +4394,12 @@ void func_80721D78(Racer* racer, Controller* controller) {
             racer->unk_E8.x.z = (racer->unk_C0.x.z * var_fs1) + (var_fs0 * racer->unk_C0.z.z);
         }
 
-        if (racer->unk_284 == 1) {
+        if (racer->attackState == ATTACK_STATE_SIDE) {
             racer->unk_27C += racer->unk_280;
             if ((racer->unk_27C == -0x80) || (racer->unk_27C == 0x1080)) {
-                racer->unk_204 = 0x1E;
+                racer->unk_204 = 30;
                 racer->unk_27C = 0;
-                racer->unk_284 = 0;
+                racer->attackState = ATTACK_STATE_NONE;
             }
         } else {
             racer->unk_27C += racer->unk_280;
@@ -4325,9 +4407,9 @@ void func_80721D78(Racer* racer, Controller* controller) {
                 racer->unk_280 += 2;
                 if (racer->unk_27C <= 0) {
                     racer->unk_27C += 0x1000;
-                    if (racer->unk_280 >= -0x31) {
+                    if (racer->unk_280 > -50) {
                         racer->unk_27C = 0;
-                        racer->unk_284 = 0;
+                        racer->attackState = ATTACK_STATE_NONE;
                     } else if (D_807A16E0 != 0) {
                         Audio_PlayerTriggerSEStart(racer->id, NA_SE_2);
                     }
@@ -4336,9 +4418,9 @@ void func_80721D78(Racer* racer, Controller* controller) {
                 racer->unk_280 -= 2;
                 if (racer->unk_27C >= 0x1000) {
                     racer->unk_27C -= 0x1000;
-                    if (racer->unk_280 < 0x32) {
+                    if (racer->unk_280 < 50) {
                         racer->unk_27C = 0;
-                        racer->unk_284 = 0;
+                        racer->attackState = ATTACK_STATE_NONE;
                     } else if (D_807A16E0 != 0) {
                         Audio_PlayerTriggerSEStart(racer->id, NA_SE_2);
                     }
@@ -4353,9 +4435,9 @@ void func_80721D78(Racer* racer, Controller* controller) {
             racer->unk_10C.x += (var_fs1 = racer->unk_A4 * racer->unk_C0.y.x);
             racer->unk_10C.y += (var_fs0 = racer->unk_A4 * racer->unk_C0.y.y);
             racer->unk_10C.z += (var_ft4 = racer->unk_A4 * racer->unk_C0.y.z);
-            racer->unk_168.x += var_fs1;
-            racer->unk_168.y += var_fs0;
-            racer->unk_168.z += var_ft4;
+            racer->shadowPos.x += var_fs1;
+            racer->shadowPos.y += var_fs0;
+            racer->shadowPos.z += var_ft4;
         }
     }
     var_fa1 = racer->unk_68.x * 0.6f;
@@ -4410,10 +4492,10 @@ void func_80721D78(Racer* racer, Controller* controller) {
         racer->unk_220--;
     }
     if (racer->spinOutTimer != 0) {
-        if (!((racer->id + gGameFrameCount) & 3) && (racer->machineLod != 0)) {
-            sp10C.x = (s32) ((Math_Rand1() & 0x1F) - 0x10) + racer->unk_0C.unk_34.x;
-            sp10C.y = (s32) ((Math_Rand1() & 0x1F) - 0x10) + racer->unk_0C.unk_34.y;
-            sp10C.z = (s32) ((Math_Rand1() & 0x1F) - 0x10) + racer->unk_0C.unk_34.z;
+        if (!((racer->id + *(vu32*) &gGameFrameCount) & 3) && (racer->machineLod != 0)) {
+            sp10C.x = (s32) ((Math_Rand1() & 0x1F) - 0x10) + racer->segmentPositionInfo.pos.x;
+            sp10C.y = (s32) ((Math_Rand1() & 0x1F) - 0x10) + racer->segmentPositionInfo.pos.y;
+            sp10C.z = (s32) ((Math_Rand1() & 0x1F) - 0x10) + racer->segmentPositionInfo.pos.z;
             func_i2_800AC750(sp10C.x, sp10C.y, sp10C.z, racer->velocity.x, racer->velocity.y, racer->velocity.z,
                              (f32) ((Math_Rand2() & 0xF) + ((s32) (racer->spinOutTimer * 5) / 150) + 5), racer);
             if (!((racer->id + gGameFrameCount) & 4) && (D_807A16E0 != 0)) {
@@ -4450,8 +4532,9 @@ void func_80721D78(Racer* racer, Controller* controller) {
             D_807A16CE++;
             func_80719F9C(racer);
             if (racer->machineLod != 0) {
-                func_i2_800AC808(racer->unk_0C.unk_34.x, racer->unk_0C.unk_34.y, racer->unk_0C.unk_34.z,
-                                 racer->velocity.x, racer->velocity.y, racer->velocity.z, 80.0f, racer);
+                func_i2_800AC808(racer->segmentPositionInfo.pos.x, racer->segmentPositionInfo.pos.y,
+                                 racer->segmentPositionInfo.pos.z, racer->velocity.x, racer->velocity.y,
+                                 racer->velocity.z, 80.0f, racer);
                 if (racer->id < gNumPlayers) {
                     i = 60;
                 } else {
@@ -4464,9 +4547,9 @@ void func_80721D78(Racer* racer, Controller* controller) {
                     var_fs1 = ((f32) (Math_Rand1() & 0x1FFFF) * 0.00011444179f) - 7.5f;
                     var_fs0 = ((f32) (Math_Rand1() & 0x1FFFF) * 0.00005340617f) + 3.5f;
                     var_ft4 = ((f32) (Math_Rand1() & 0x1FFFF) * 0.00011444179f) - 7.5f;
-                    func_i2_800ACBE8((s32) ((Math_Rand2() & 0x1F) - 0x10) + racer->unk_0C.unk_34.x,
-                                     (s32) ((Math_Rand2() & 0x1F) - 0x10) + racer->unk_0C.unk_34.y,
-                                     (s32) ((Math_Rand2() & 0x1F) - 0x10) + racer->unk_0C.unk_34.z,
+                    func_i2_800ACBE8((s32) ((Math_Rand2() & 0x1F) - 0x10) + racer->segmentPositionInfo.pos.x,
+                                     (s32) ((Math_Rand2() & 0x1F) - 0x10) + racer->segmentPositionInfo.pos.y,
+                                     (s32) ((Math_Rand2() & 0x1F) - 0x10) + racer->segmentPositionInfo.pos.z,
                                      racer->velocity.x + (var_fs1 * racer->unk_C0.z.x) + (var_fs0 * racer->unk_C0.y.x) +
                                          (var_ft4 * racer->unk_C0.x.x),
                                      racer->velocity.y + (var_fs1 * racer->unk_C0.z.y) + (var_fs0 * racer->unk_C0.y.y) +
@@ -4489,19 +4572,24 @@ void func_80721D78(Racer* racer, Controller* controller) {
     }
     if (!(racer->stateFlags & RACER_STATE_CRASHED)) {
         var_fa1 = racer->energy / racer->maxEnergy;
-        if ((racer->id < gNumPlayers) && (var_fa1 < 0.3f) && (racer->spinOutTimer == 0) && (D_807A16E0 != 0)) {
-            if (var_fa1 >= 0.2f) {
-                if (!(gGameFrameCount & 0x1F)) {
-                    Audio_PlayerTriggerSEStart(racer->id, NA_SE_19);
+        if ((racer->id < gNumPlayers) && (var_fa1 < 0.3f)) {
+            spinOutTimer = racer->spinOutTimer;
+            if ((spinOutTimer == 0) && (D_807A16E0 != 0)) {
+                if (var_fa1 >= 0.2f) {
+                    if (!(*(vu32*) &gGameFrameCount & 0x1F)) {
+                        Audio_PlayerTriggerSEStart(racer->id, NA_SE_19);
+                    }
+                } else if (var_fa1 >= 0.1f) {
+                    if (!(*(vu32*) &gGameFrameCount & 0xF)) {
+                        Audio_PlayerTriggerSEStart(racer->id, NA_SE_20);
+                    }
+                } else if (!(*(vu32*) &gGameFrameCount & 7)) {
+                    Audio_PlayerTriggerSEStart(racer->id, NA_SE_21);
                 }
-            } else if (var_fa1 >= 0.1f) {
-                if (!(gGameFrameCount & 0xF)) {
-                    Audio_PlayerTriggerSEStart(racer->id, NA_SE_20);
-                }
-            } else if (!(gGameFrameCount & 7)) {
-                Audio_PlayerTriggerSEStart(racer->id, NA_SE_21);
             }
         }
+        if (!(*(vu32*) &gGameFrameCount & 0x8)) {}
+        if (!(*(vu32*) &gGameFrameCount & 0x10)) {}
         if (!(gGameFrameCount & 8) && ((var_fa1 < 0.2f) || ((var_fa1 < 0.5f) && !(gGameFrameCount & 0x10)))) {
             var_fa1 *= 2;
             var_fs1 = (racer->unk_2F8 * var_fa1) + racer->unk_2EC;
@@ -4521,17 +4609,17 @@ void func_80721D78(Racer* racer, Controller* controller) {
         racer->bodyR = ((255.0f - var_fs1) * var_fa1) + var_fs1;
         racer->bodyG = ((255.0f - var_fs0) * var_fa1) + var_fs0;
         racer->bodyB = ((255.0f - var_ft4) * var_fa1) + var_ft4;
-        if (racer->unk_284 == 2) {
+        if (racer->attackState == ATTACK_STATE_SPIN) {
             var_fa1 = SIN(racer->unk_27C & 0x7FF);
             racer->unk_178 = (0.1f * var_fa1) + 1.05f;
-            racer->unk_2DA = 0xFF;
-            racer->unk_2DC = 0xFF - (s32) (255.0f * var_fa1);
-            racer->unk_2DE = 0;
-        } else if (racer->unk_284 == 1) {
+            racer->attackHighlightR = 255;
+            racer->attackHighlightG = 255 - (s32) (255.0f * var_fa1);
+            racer->attackHighlightB = 0;
+        } else if (racer->attackState == ATTACK_STATE_SIDE) {
             racer->unk_178 = 1.075f;
-            racer->unk_2DA = 0xFF;
-            racer->unk_2DC = 0;
-            racer->unk_2DE = 0;
+            racer->attackHighlightR = 255;
+            racer->attackHighlightG = 0;
+            racer->attackHighlightB = 0;
         } else {
             racer->unk_178 = 0.0f;
         }
@@ -4543,9 +4631,9 @@ void func_80721D78(Racer* racer, Controller* controller) {
             var_fs1 = (((f32) (Math_Rand1() & 0x1FFFF) / 131071.0f) * 3.0f) - 1.5f;
             var_fs0 = (((f32) (Math_Rand2() & 0x1FFFF) / 131071.0f) * 1.5f) + 0.5f;
             var_ft4 = (((f32) (Math_Rand2() & 0x1FFFF) / 131071.0f) * 3.0f) - 1.5f;
-            sp10C.x = (s32) ((Math_Rand2() & 0x1F) - 0x10) + racer->unk_0C.unk_34.x;
-            sp10C.y = (s32) ((Math_Rand1() & 0x1F) - 0x10) + racer->unk_0C.unk_34.y;
-            sp10C.z = (s32) ((Math_Rand1() & 0x1F) - 0x10) + racer->unk_0C.unk_34.z;
+            sp10C.x = (s32) ((Math_Rand2() & 0x1F) - 0x10) + racer->segmentPositionInfo.pos.x;
+            sp10C.y = (s32) ((Math_Rand1() & 0x1F) - 0x10) + racer->segmentPositionInfo.pos.y;
+            sp10C.z = (s32) ((Math_Rand1() & 0x1F) - 0x10) + racer->segmentPositionInfo.pos.z;
 
             func_i2_800AC680(sp10C.x, sp10C.y, sp10C.z,
                              racer->velocity.x + (var_fs1 * racer->unk_C0.z.x) + (var_fs0 * racer->unk_C0.y.x) +
@@ -4562,8 +4650,8 @@ void func_80721D78(Racer* racer, Controller* controller) {
                 Audio_PlayerTriggerSEStart(racer->id, NA_SE_50);
             }
             racer->unk_178 = 1.03f;
-            racer->unk_2DA = racer->unk_2DC = 0xFF;
-            racer->unk_2DE = 0;
+            racer->attackHighlightR = racer->attackHighlightG = 0xFF;
+            racer->attackHighlightB = 0;
         } else {
             racer->unk_178 = 0.0f;
         }
@@ -4601,18 +4689,18 @@ void func_80721D78(Racer* racer, Controller* controller) {
         racer->shadowR = racer->shadowG = racer->shadowB = 0;
     }
     if (racer->id < gNumPlayers) {
-        if ((racer->unk_0C.courseSegment->trackSegmentInfo & TRACK_FLAG_20000000) &&
+        if ((racer->segmentPositionInfo.courseSegment->trackSegmentInfo & TRACK_FLAG_20000000) &&
             !(racer->stateFlags & RACER_STATE_FLAGS_80000000)) {
-            if (!(racer->unk_08 & 0x100)) {
-                racer->unk_08 |= 0x100;
+            if (!(racer->soundEffectFlags & RACER_SE_FLAGS_ENGINE_ECHO)) {
+                racer->soundEffectFlags |= RACER_SE_FLAGS_ENGINE_ECHO;
                 if (D_807A16E0 != 0) {
                     Audio_PlayerEngineEchoStart(racer->id);
                 }
             }
         } else {
 
-            if (racer->unk_08 & 0x100) {
-                racer->unk_08 &= ~0x100;
+            if (racer->soundEffectFlags & RACER_SE_FLAGS_ENGINE_ECHO) {
+                racer->soundEffectFlags &= ~RACER_SE_FLAGS_ENGINE_ECHO;
                 if (D_807A16E0 != 0) {
                     Audio_PlayerEngineEchoStop(racer->id);
                 }
@@ -4697,8 +4785,9 @@ void func_8072643C(Racer* racer) {
         func_80721D78(racer, &dummyController);
     } else {
         func_80721D78(racer, &gControllers[gPlayerControlPorts[racer->id]]);
-        racer->unk_33C = -racer->unk_0C.unk_28.x * racer->unk_24C.z.x - racer->unk_0C.unk_28.y * racer->unk_24C.z.y -
-                         racer->unk_0C.unk_28.z * racer->unk_24C.z.z;
+        racer->unk_33C = -racer->segmentPositionInfo.segmentDisplacement.x * racer->unk_24C.z.x -
+                         racer->segmentPositionInfo.segmentDisplacement.y * racer->unk_24C.z.y -
+                         racer->segmentPositionInfo.segmentDisplacement.z * racer->unk_24C.z.z;
     }
 }
 
@@ -4756,9 +4845,9 @@ void func_80726554(void) {
             } else if ((gRaceIntroTimer == 255) && (gGameMode == GAMEMODE_TIME_ATTACK)) {
                 D_807B14F4 = 1;
                 sReplayRecordFrameCount = 0;
-                sReplayRecordPosX = Math_Round(gRacers[0].unk_0C.unk_34.x);
-                sReplayRecordPosY = Math_Round(gRacers[0].unk_0C.unk_34.y);
-                sReplayRecordPosZ = Math_Round(gRacers[0].unk_0C.unk_34.z);
+                sReplayRecordPosX = Math_Round(gRacers[0].segmentPositionInfo.pos.x);
+                sReplayRecordPosY = Math_Round(gRacers[0].segmentPositionInfo.pos.y);
+                sReplayRecordPosZ = Math_Round(gRacers[0].segmentPositionInfo.pos.z);
 
                 for (var_s0 = &gGhostRacers[2]; var_s0 >= gGhostRacers; var_s0--) {
                     if (var_s0->exists) {
@@ -4766,13 +4855,13 @@ void func_80726554(void) {
                         var_s0->frameCount = 0;
                         posDiff = func_80726348(var_s0);
                         var_s0->replayPosX = posDiff + sReplayRecordPosX;
-                        var_s0->pos.x = gRacers[0].unk_0C.unk_34.x + (posDiff * 0.5f);
+                        var_s0->pos.x = gRacers[0].segmentPositionInfo.pos.x + (posDiff * 0.5f);
                         posDiff = func_80726348(var_s0);
                         var_s0->replayPosY = posDiff + sReplayRecordPosY;
-                        var_s0->pos.y = gRacers[0].unk_0C.unk_34.y + (posDiff * 0.5f);
+                        var_s0->pos.y = gRacers[0].segmentPositionInfo.pos.y + (posDiff * 0.5f);
                         posDiff = func_80726348(var_s0);
                         var_s0->replayPosZ = posDiff + sReplayRecordPosZ;
-                        var_s0->pos.z = gRacers[0].unk_0C.unk_34.z + (posDiff * 0.5f);
+                        var_s0->pos.z = gRacers[0].segmentPositionInfo.pos.z + (posDiff * 0.5f);
                     }
                 }
             }
@@ -4796,15 +4885,15 @@ void func_80726554(void) {
                 var_fs0 = (30 - gRaceIntroTimer) / 30.0f;
             }
             var_fs0 = (1500.0f * var_fs0 * var_fs0) + 33.0f;
-            var_fs2 = var_fs0 - racer2->unk_A0;
+            var_fs2 = var_fs0 - racer2->heightAboveGround;
             Matrix_SetLockedLookAt(
                 &gGfxPool->unk_33988[i], NULL, 0.2f, 0.2f, 0.2f, spCC.x.x, spCC.x.y, spCC.x.z, spCC.y.x, spCC.y.y,
                 spCC.y.z,
-                (racer2->unk_0C.unk_34.x + (var_fs2 * racer2->unk_C0.y.x) + (50.0f * racer2->unk_C0.x.x)) -
+                (racer2->segmentPositionInfo.pos.x + (var_fs2 * racer2->unk_C0.y.x) + (50.0f * racer2->unk_C0.x.x)) -
                     (var_fs0 * var_s1_2->unk_5C.x.x),
-                (racer2->unk_0C.unk_34.y + (var_fs2 * racer2->unk_C0.y.y) + (50.0f * racer2->unk_C0.x.y)) -
+                (racer2->segmentPositionInfo.pos.y + (var_fs2 * racer2->unk_C0.y.y) + (50.0f * racer2->unk_C0.x.y)) -
                     (var_fs0 * var_s1_2->unk_5C.x.y),
-                (racer2->unk_0C.unk_34.z + (var_fs2 * racer2->unk_C0.y.z) + (50.0f * racer2->unk_C0.x.z)) -
+                (racer2->segmentPositionInfo.pos.z + (var_fs2 * racer2->unk_C0.y.z) + (50.0f * racer2->unk_C0.x.z)) -
                     (var_fs0 * var_s1_2->unk_5C.x.z));
         }
     }
@@ -4854,8 +4943,8 @@ void func_80726554(void) {
                         continue;
                     }
 
-                    var_fa0 = racer2->unk_0C.unk_34.x - racer->unk_0C.unk_34.x;
-                    var_fa1 = racer2->unk_0C.unk_34.z - racer->unk_0C.unk_34.z;
+                    var_fa0 = racer2->segmentPositionInfo.pos.x - racer->segmentPositionInfo.pos.x;
+                    var_fa1 = racer2->segmentPositionInfo.pos.z - racer->segmentPositionInfo.pos.z;
                     sp110 = var_fa0;
                     sp108 = var_fa1;
                     if (SQ(var_fa0) + SQ(var_fa1) > 2116.0f) {
@@ -4863,7 +4952,7 @@ void func_80726554(void) {
                         continue;
                     }
 
-                    sp10C = racer2->unk_0C.unk_34.y - racer->unk_0C.unk_34.y;
+                    sp10C = racer2->segmentPositionInfo.pos.y - racer->segmentPositionInfo.pos.y;
                     if ((SQ(var_fa0) + SQ(var_fa1) + SQ(sp10C)) > 2116.0f) {
                         temp_s2->unk_10 = 0;
                         continue;
@@ -4912,21 +5001,21 @@ void func_80726554(void) {
                             var_fs0 = -var_fs0;
                         }
                         if ((racer2->machineLod != 0) &&
-                            (func_i2_800AC680(((racer->unk_0C.unk_34.x + racer2->unk_0C.unk_34.x) * 0.5f) +
-                                                  (6.0f * racer->unk_C0.y.x),
-                                              ((racer->unk_0C.unk_34.y + racer2->unk_0C.unk_34.y) * 0.5f) +
-                                                  (6.0f * racer->unk_C0.y.y),
-                                              ((racer->unk_0C.unk_34.z + racer2->unk_0C.unk_34.z) * 0.5f) +
-                                                  (6.0f * racer->unk_C0.y.z),
-                                              (racer->velocity.x + racer2->velocity.x) * 0.5f,
-                                              (racer->velocity.y + racer2->velocity.y) * 0.5f,
-                                              (racer->velocity.z + racer2->velocity.z) * 0.5f, var_fs0 + 12.0f,
-                                              racer2) == 0)) {
+                            (func_i2_800AC680(
+                                 ((racer->segmentPositionInfo.pos.x + racer2->segmentPositionInfo.pos.x) * 0.5f) +
+                                     (6.0f * racer->unk_C0.y.x),
+                                 ((racer->segmentPositionInfo.pos.y + racer2->segmentPositionInfo.pos.y) * 0.5f) +
+                                     (6.0f * racer->unk_C0.y.y),
+                                 ((racer->segmentPositionInfo.pos.z + racer2->segmentPositionInfo.pos.z) * 0.5f) +
+                                     (6.0f * racer->unk_C0.y.z),
+                                 (racer->velocity.x + racer2->velocity.x) * 0.5f,
+                                 (racer->velocity.y + racer2->velocity.y) * 0.5f,
+                                 (racer->velocity.z + racer2->velocity.z) * 0.5f, var_fs0 + 12.0f, racer2) == 0)) {
                             racer->unk_220 = racer2->unk_220;
                         }
                         var_fs0 *= 1.1f;
-                        if (racer->unk_284 == 0) {
-                            if (racer2->unk_284 == 0) {
+                        if (racer->attackState == ATTACK_STATE_NONE) {
+                            if (racer2->attackState == ATTACK_STATE_NONE) {
                                 func_8071EE74(racer, var_fs1 * var_fs0);
                                 func_8071EE74(racer2, var_fs2 * var_fs0);
                             } else if ((racer2 == gRacers) && (gNumPlayers == 1)) {
@@ -4934,7 +5023,7 @@ void func_80726554(void) {
                             } else {
                                 func_8071EE74(racer, var_fs0);
                             }
-                        } else if (racer2->unk_284 == 0) {
+                        } else if (racer2->attackState == ATTACK_STATE_NONE) {
                             func_8071EE74(racer2, var_fs0);
                         } else {
                             func_8071EE74(racer, var_fs1 * var_fs0);
@@ -4952,7 +5041,7 @@ void func_80726554(void) {
                             var_fa1 = temp_fv1_3 * temp_fs4;
                             var_ft4 = temp_fv1_3 * temp_fs5;
                         } else {
-                            if ((racer->unk_284 | racer2->unk_284) != 0) {
+                            if ((racer->attackState | racer2->attackState) != ATTACK_STATE_NONE) {
                                 var_fs0 = 46.0f - sp128;
                                 if (var_fs0 < 3) {
                                     var_fs0 = 3;
@@ -4966,16 +5055,16 @@ void func_80726554(void) {
                             var_fa1 = var_fs0 * sp10C;
                             var_ft4 = var_fs0 * sp108;
                         }
-                        if (racer->unk_284 != 0) {
-                            if (racer2->unk_284 == 0) {
+                        if (racer->attackState != ATTACK_STATE_NONE) {
+                            if (racer2->attackState == ATTACK_STATE_NONE) {
                                 var_fs2 = 3.0f;
                                 var_fs1 = 0.0f;
-                                racer2->unk_208 = 0x3C;
+                                racer2->unk_208 = 60;
                             }
-                        } else if (racer2->unk_284 != 0) {
+                        } else if (racer2->attackState != ATTACK_STATE_NONE) {
                             var_fs2 = 0.0f;
                             var_fs1 = 3.0f;
-                            racer->unk_208 = 0x3C;
+                            racer->unk_208 = 60;
                         }
                         racer->acceleration.x -= var_fs1 * var_fa0;
                         racer->acceleration.y -= var_fs1 * var_fa1;
@@ -5015,15 +5104,15 @@ void func_80726554(void) {
     if (gGameMode == GAMEMODE_TIME_ATTACK && !spC0) {
         sReplayRecordFrameCount++;
         if ((D_807B14F4 != 0) && !(sReplayRecordFrameCount & 1)) {
-            var_fs0 = gRacers[0].unk_0C.unk_34.x;
+            var_fs0 = gRacers[0].segmentPositionInfo.pos.x;
             i = Math_Round(var_fs0);
             func_80726254(i - sReplayRecordPosX);
             sReplayRecordPosX = i;
-            var_fs0 = gRacers[0].unk_0C.unk_34.y;
+            var_fs0 = gRacers[0].segmentPositionInfo.pos.y;
             i = Math_Round(var_fs0);
             func_80726254(i - sReplayRecordPosY);
             sReplayRecordPosY = i;
-            var_fs0 = gRacers[0].unk_0C.unk_34.z;
+            var_fs0 = gRacers[0].segmentPositionInfo.pos.z;
             i = Math_Round(var_fs0);
             func_80726254(i - sReplayRecordPosZ);
             sReplayRecordPosZ = i;
@@ -5043,22 +5132,26 @@ void func_80726554(void) {
                 racer->velocity.z = var_s0->pos.z - racer->unk_10C.z;
                 racer->unk_10C = var_s0->pos;
 
-                if (func_i2_800B2C00(&racer->unk_0C, racer->unk_10C.x, racer->unk_10C.y, racer->unk_10C.z, 100, 1.0f) !=
-                    0) {
+                if (func_i2_800B2C00(&racer->segmentPositionInfo, racer->unk_10C.x, racer->unk_10C.y, racer->unk_10C.z,
+                                     100, 1.0f) != 0) {
                     var_s0->exists = var_s0->initialized = false;
                 } else {
-                    racer->unk_0C.unk_08 = Course_SplineGetLengthInfo(racer->unk_0C.courseSegment,
-                                                                      racer->unk_0C.segmentTValue, &racer->lapDistance);
+                    racer->segmentPositionInfo.segmentLengthProportion =
+                        Course_SplineGetLengthInfo(racer->segmentPositionInfo.courseSegment,
+                                                   racer->segmentPositionInfo.segmentTValue, &racer->lapDistance);
 
-                    Course_SplineGetBasis(racer->unk_0C.courseSegment, racer->unk_0C.segmentTValue, &racer->unk_24C,
-                                          racer->unk_0C.unk_08);
-                    racer->unk_270 = (racer->unk_0C.unk_08 * (racer->unk_0C.courseSegment->next->radiusLeft -
-                                                              racer->unk_0C.courseSegment->radiusLeft)) +
-                                     racer->unk_0C.courseSegment->radiusLeft;
-                    racer->unk_274 = (racer->unk_0C.unk_08 * (racer->unk_0C.courseSegment->next->radiusRight -
-                                                              racer->unk_0C.courseSegment->radiusRight)) +
-                                     racer->unk_0C.courseSegment->radiusRight;
-                    D_8076F2DC[TRACK_SHAPE_INDEX((u32) racer->unk_0C.courseSegment->trackSegmentInfo &
+                    Course_SplineGetBasis(racer->segmentPositionInfo.courseSegment,
+                                          racer->segmentPositionInfo.segmentTValue, &racer->unk_24C,
+                                          racer->segmentPositionInfo.segmentLengthProportion);
+                    racer->currentRadiusLeft = (racer->segmentPositionInfo.segmentLengthProportion *
+                                                (racer->segmentPositionInfo.courseSegment->next->radiusLeft -
+                                                 racer->segmentPositionInfo.courseSegment->radiusLeft)) +
+                                               racer->segmentPositionInfo.courseSegment->radiusLeft;
+                    racer->currentRadiusRight = (racer->segmentPositionInfo.segmentLengthProportion *
+                                                 (racer->segmentPositionInfo.courseSegment->next->radiusRight -
+                                                  racer->segmentPositionInfo.courseSegment->radiusRight)) +
+                                                racer->segmentPositionInfo.courseSegment->radiusRight;
+                    D_8076F2DC[TRACK_SHAPE_INDEX((u32) racer->segmentPositionInfo.courseSegment->trackSegmentInfo &
                                                  TRACK_SHAPE_MASK)](racer);
 
                     var_s0->frameCount++;
@@ -5166,14 +5259,14 @@ void func_80726554(void) {
             (gGameMode != GAMEMODE_PRACTICE) && (gGameMode != GAMEMODE_COURSE_EDIT)) {
             var_fs0 = gRacersByPosition[0]->raceDistance - gRacersByPosition[1]->raceDistance;
             if (var_fs0 > 4000.0f) {
-                if (!(gRacersByPosition[0]->unk_08 & 0x4000)) {
-                    gRacersByPosition[0]->unk_08 |= 0x4000;
+                if (!(gRacersByPosition[0]->soundEffectFlags & RACER_SE_FLAGS_4000)) {
+                    gRacersByPosition[0]->soundEffectFlags |= RACER_SE_FLAGS_4000;
                     if (D_807A16E0 != 0) {
                         Audio_TriggerSystemSE(NA_SE_59);
                     }
                 }
             } else if (var_fs0 < 2000.0f) {
-                gRacersByPosition[0]->unk_08 &= ~0x4000;
+                gRacersByPosition[0]->soundEffectFlags &= ~RACER_SE_FLAGS_4000;
             }
         }
     }
@@ -5419,9 +5512,9 @@ Gfx* func_80727F54(Gfx* gfx, s32 playerIndex) {
         for (racer = sLastRacer; racer >= gRacers; racer--) {
             racer->machineLod = racer->unk_2B2 = racer->unk_2B3 = 0;
             if (racer->stateFlags & RACER_STATE_FLAGS_40000000) {
-                temp_fv0_2 = racer->unk_0C.unk_34.x;
-                temp_fv1_2 = racer->unk_0C.unk_34.y;
-                temp_fa1_2 = racer->unk_0C.unk_34.z;
+                temp_fv0_2 = racer->segmentPositionInfo.pos.x;
+                temp_fv1_2 = racer->segmentPositionInfo.pos.y;
+                temp_fa1_2 = racer->segmentPositionInfo.pos.z;
                 temp_fa0_2 = sp580.zw + ((sp580.zx * temp_fv0_2) + (sp580.zy * temp_fv1_2) + (sp580.zz * temp_fa1_2));
                 if ((temp_fa0_2 < 0.0f) || (temp_fa0_2 > 2500.0f)) {
                     continue;
@@ -5481,9 +5574,9 @@ Gfx* func_80727F54(Gfx* gfx, s32 playerIndex) {
                 racer = var_v1->racer;
                 racer->machineLod = racer->unk_2B2 = racer->unk_2B3 = 0;
                 if (var_v1->exists) {
-                    temp_fv0_3 = racer->unk_0C.unk_34.x;
-                    temp_fv1_3 = racer->unk_0C.unk_34.y;
-                    temp_fa1_3 = racer->unk_0C.unk_34.z;
+                    temp_fv0_3 = racer->segmentPositionInfo.pos.x;
+                    temp_fv1_3 = racer->segmentPositionInfo.pos.y;
+                    temp_fa1_3 = racer->segmentPositionInfo.pos.z;
                     temp_fa0_2 =
                         sp580.zw + ((sp580.zx * temp_fv0_3) + (sp580.zy * temp_fv1_3) + (sp580.zz * temp_fa1_3));
                     if ((temp_fa0_2 < 0.0f) || (temp_fa0_2 > 2500.0f)) {
@@ -5540,17 +5633,18 @@ Gfx* func_80727F54(Gfx* gfx, s32 playerIndex) {
 
         for (racer = sLastRacer; racer >= gRacers; racer--) {
 
-            if ((racer->unk_2B2 != 0) && (racer->unk_168.y != -54321.0f)) {
+            if ((racer->unk_2B2 != 0) && (racer->shadowPos.y != -54321.0f)) {
                 if (racer->unk_165 == 0) {
-                    if (racer->unk_284 == 1) {
+                    if (racer->attackState == ATTACK_STATE_SIDE) {
                         var_fs0 = ((COS(racer->unk_27C) * 0.15f) + 0.85f) * D_8076E570;
                     } else {
                         var_fs0 = D_8076E570;
                     }
 
-                    Matrix_SetLockedLookAtFromVectors(
-                        &gGfxPool->unk_32A88[racer->id], NULL, racer->shadowColorStrength * D_8076E568, 0.1f,
-                        racer->shadowColorStrength * var_fs0, &racer->unk_E8.x, &racer->unk_19C, &racer->unk_168);
+                    Matrix_SetLockedLookAtFromVectors(&gGfxPool->unk_32A88[racer->id], NULL,
+                                                      racer->shadowColorStrength * D_8076E568, 0.1f,
+                                                      racer->shadowColorStrength * var_fs0, &racer->unk_E8.x,
+                                                      &racer->upFromGround, &racer->shadowPos);
                     racer->unk_165 = 1;
                 }
                 gSPMatrix(gfx++, &D_1000000.unk_32A88[racer->id], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -5577,10 +5671,10 @@ Gfx* func_80727F54(Gfx* gfx, s32 playerIndex) {
             for (sp4F8 = &gGhostRacers[2]; sp4F8 >= gGhostRacers; sp4F8--) {
                 if (sp4F8->exists) {
                     racer = sp4F8->racer;
-                    if ((racer->unk_2B2 != 0) && (racer->unk_168.y != -54321.0f)) {
+                    if ((racer->unk_2B2 != 0) && (racer->shadowPos.y != -54321.0f)) {
                         Matrix_SetLockedLookAtFromVectors(&gGfxPool->unk_32A88[racer->id], NULL,
                                                           sp4F8->scale * D_8076E568, 0.1f, sp4F8->scale * D_8076E570,
-                                                          &racer->unk_E8.x, &racer->unk_19C, &racer->unk_168);
+                                                          &racer->unk_E8.x, &racer->upFromGround, &racer->shadowPos);
                         gSPMatrix(gfx++, &D_1000000.unk_32A88[racer->id], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                         gDPLoadTextureBlock_4b(gfx++, D_8076DA74[racer->shadowType], G_IM_FMT_I, 32, 64, 0,
                                                G_TX_MIRROR | G_TX_CLAMP, G_TX_MIRROR | G_TX_CLAMP, 5, 6, G_TX_NOLOD,
@@ -5608,7 +5702,7 @@ Gfx* func_80727F54(Gfx* gfx, s32 playerIndex) {
                 }
                 gSPMatrix(gfx++, &D_1000000.unk_33208[racer->id], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                 gDPPipeSync(gfx++);
-                gDPSetBlendColor(gfx++, racer->unk_2DA, racer->unk_2DC, racer->unk_2DE, 255);
+                gDPSetBlendColor(gfx++, racer->attackHighlightR, racer->attackHighlightG, racer->attackHighlightB, 255);
 
                 if (!(racer->stateFlags & RACER_STATE_CRASHED)) {
                     gSPDisplayList(gfx++, D_8076DBD0[racer->machineIndex * 6 + racer->machineLod - 1]);
@@ -5620,12 +5714,12 @@ Gfx* func_80727F54(Gfx* gfx, s32 playerIndex) {
     }
     playerRacer = &gRacers[playerIndex];
 
-    temp_v0_6 = playerRacer->unk_0C.courseSegment;
+    temp_v0_6 = playerRacer->segmentPositionInfo.courseSegment;
     if (temp_v0_6->trackSegmentInfo & TRACK_FLAG_20000000) {
-        if (temp_v0_6->unk_6C < playerRacer->unk_0C.segmentTValue) {
-            var_fs0_2 = (1.0f - playerRacer->unk_0C.unk_08) / temp_v0_6->unk_70;
-        } else if (playerRacer->unk_0C.segmentTValue < temp_v0_6->unk_68) {
-            var_fs0_2 = playerRacer->unk_0C.unk_08 / temp_v0_6->unk_70;
+        if (temp_v0_6->nextJoinStartTValue < playerRacer->segmentPositionInfo.segmentTValue) {
+            var_fs0_2 = (1.0f - playerRacer->segmentPositionInfo.segmentLengthProportion) / temp_v0_6->joinScale;
+        } else if (playerRacer->segmentPositionInfo.segmentTValue < temp_v0_6->previousJoinEndTValue) {
+            var_fs0_2 = playerRacer->segmentPositionInfo.segmentLengthProportion / temp_v0_6->joinScale;
         } else {
             var_s3 = 50;
             var_s4 = 50;
@@ -5657,7 +5751,7 @@ block_115:
     gSPLight(gfx++, &D_1000000.unk_33A88[playerIndex].l[0], 1);
     gSPLight(gfx++, &D_1000000.unk_33A88[playerIndex].a, 2);
 
-    if ((playerRacer->unk_0C.courseSegment->trackSegmentInfo & TRACK_FLAG_20000000) &&
+    if ((playerRacer->segmentPositionInfo.courseSegment->trackSegmentInfo & TRACK_FLAG_20000000) &&
         !(playerRacer->stateFlags & RACER_STATE_FLAGS_80000000)) {
         sp560 = playerRacer->unk_24C.y.x;
         gGfxPool->unk_33A88[playerIndex].l[0].l.dir[0] = Math_Round(sp560 * 120.0f);
@@ -5665,10 +5759,12 @@ block_115:
         gGfxPool->unk_33A88[playerIndex].l[0].l.dir[1] = Math_Round(sp55C * 120.0f);
         sp558 = playerRacer->unk_24C.y.z;
         gGfxPool->unk_33A88[playerIndex].l[0].l.dir[2] = Math_Round(sp558 * 120.0f);
-        if ((playerRacer->unk_0C.courseSegment->trackSegmentInfo & TRACK_SHAPE_MASK) == TRACK_SHAPE_PIPE) {
-            var_v0 = &D_807A16F8[playerRacer->unk_0C.courseSegment->trackSegmentInfo & TRACK_TYPE_MASK];
+        if ((playerRacer->segmentPositionInfo.courseSegment->trackSegmentInfo & TRACK_SHAPE_MASK) == TRACK_SHAPE_PIPE) {
+            var_v0 =
+                &sPipeFogColors[playerRacer->segmentPositionInfo.courseSegment->trackSegmentInfo & TRACK_TYPE_MASK];
         } else {
-            var_v0 = &D_807A16FC[playerRacer->unk_0C.courseSegment->trackSegmentInfo & TRACK_TYPE_MASK];
+            var_v0 =
+                &sTunnelFogColors[playerRacer->segmentPositionInfo.courseSegment->trackSegmentInfo & TRACK_TYPE_MASK];
         }
         var_s3 = var_v0->x;
         sp5C4 = var_v0->y;
@@ -6283,10 +6379,10 @@ block_115:
     while ((racer >= gRacers) && ((D_807A15E0 - 3) >= D_807A15DC)) {
         if ((racer->pitForceFieldSize != 0.0f) && (racer->unk_2B3 != 0)) {
             temp_fs0_14 = 3.0f - ((1.0f - racer->pitForceFieldSize) * 19.0f);
-            temp_fs4 = racer->unk_0C.unk_34.x + (temp_fs0_14 * racer->unk_C0.y.x);
-            temp_fs5 = racer->unk_0C.unk_34.y + (temp_fs0_14 * racer->unk_C0.y.y);
+            temp_fs4 = racer->segmentPositionInfo.pos.x + (temp_fs0_14 * racer->unk_C0.y.x);
+            temp_fs5 = racer->segmentPositionInfo.pos.y + (temp_fs0_14 * racer->unk_C0.y.y);
             temp_fs0_15 = racer->pitForceFieldSize * 38.0f;
-            sp54C = racer->unk_0C.unk_34.z + (temp_fs0_14 * racer->unk_C0.y.z);
+            sp54C = racer->segmentPositionInfo.pos.z + (temp_fs0_14 * racer->unk_C0.y.z);
             temp_fs1 = temp_fs0_15 * sp56C;
             temp_fs3 = temp_fs0_15 * sp568;
             temp_fs2 = temp_fs0_15 * sp564;
@@ -6344,23 +6440,23 @@ block_115:
 
             temp_fs0_15 = temp * temp_s1_6->unk_00;
             temp_fs1 = temp_fs0_15 * sp56C;
-            D_807A15DC[0].v.ob[0] = Math_Round(racer->unk_0C.unk_34.x + temp_fs1);
+            D_807A15DC[0].v.ob[0] = Math_Round(racer->segmentPositionInfo.pos.x + temp_fs1);
             temp_fs2 = temp_fs0_15 * sp568;
-            D_807A15DC[0].v.ob[1] = Math_Round(racer->unk_0C.unk_34.y + temp_fs2);
+            D_807A15DC[0].v.ob[1] = Math_Round(racer->segmentPositionInfo.pos.y + temp_fs2);
             temp_fs3 = temp_fs0_15 * sp564;
-            D_807A15DC[0].v.ob[2] = Math_Round(racer->unk_0C.unk_34.z + temp_fs3);
-            D_807A15DC[2].v.ob[0] = Math_Round(racer->unk_0C.unk_34.x - temp_fs1);
-            D_807A15DC[2].v.ob[1] = Math_Round(racer->unk_0C.unk_34.y - temp_fs2);
-            D_807A15DC[2].v.ob[2] = Math_Round(racer->unk_0C.unk_34.z - temp_fs3);
+            D_807A15DC[0].v.ob[2] = Math_Round(racer->segmentPositionInfo.pos.z + temp_fs3);
+            D_807A15DC[2].v.ob[0] = Math_Round(racer->segmentPositionInfo.pos.x - temp_fs1);
+            D_807A15DC[2].v.ob[1] = Math_Round(racer->segmentPositionInfo.pos.y - temp_fs2);
+            D_807A15DC[2].v.ob[2] = Math_Round(racer->segmentPositionInfo.pos.z - temp_fs3);
             temp_fs1 = temp_fs0_15 * sp560;
-            D_807A15DC[1].v.ob[0] = Math_Round(racer->unk_0C.unk_34.x + temp_fs1);
+            D_807A15DC[1].v.ob[0] = Math_Round(racer->segmentPositionInfo.pos.x + temp_fs1);
             temp_fs2 = temp_fs0_15 * sp55C;
-            D_807A15DC[1].v.ob[1] = Math_Round(racer->unk_0C.unk_34.y + temp_fs2);
+            D_807A15DC[1].v.ob[1] = Math_Round(racer->segmentPositionInfo.pos.y + temp_fs2);
             temp_fs3 = temp_fs0_15 * sp558;
-            D_807A15DC[1].v.ob[2] = Math_Round(racer->unk_0C.unk_34.z + temp_fs3);
-            D_807A15DC[3].v.ob[0] = Math_Round(racer->unk_0C.unk_34.x - temp_fs1);
-            D_807A15DC[3].v.ob[1] = Math_Round(racer->unk_0C.unk_34.y - temp_fs2);
-            D_807A15DC[3].v.ob[2] = Math_Round(racer->unk_0C.unk_34.z - temp_fs3);
+            D_807A15DC[1].v.ob[2] = Math_Round(racer->segmentPositionInfo.pos.z + temp_fs3);
+            D_807A15DC[3].v.ob[0] = Math_Round(racer->segmentPositionInfo.pos.x - temp_fs1);
+            D_807A15DC[3].v.ob[1] = Math_Round(racer->segmentPositionInfo.pos.y - temp_fs2);
+            D_807A15DC[3].v.ob[2] = Math_Round(racer->segmentPositionInfo.pos.z - temp_fs3);
             D_807A15DC[0].v.tc[0] = D_807A15DC[1].v.tc[0] = D_807A15DC[1].v.tc[1] = D_807A15DC[2].v.tc[1] = 0x40;
             D_807A15DC[0].v.tc[1] = D_807A15DC[2].v.tc[0] = D_807A15DC[3].v.tc[0] = D_807A15DC[3].v.tc[1] = 0x1FBF;
             gSPTexture(gfx++, 0x8000, 0x8000, 0, 0, G_ON);
@@ -6383,18 +6479,18 @@ block_115:
             sp53C = racer->unk_C0.z.x * temp_fs0_18;
             sp538 = racer->unk_C0.z.y * temp_fs0_18;
             sp534 = racer->unk_C0.z.z * temp_fs0_18;
-            D_807A15DC[0].v.ob[0] = Math_Round(racer->unk_0C.unk_34.x + temp_fs1);
-            D_807A15DC[0].v.ob[1] = Math_Round(racer->unk_0C.unk_34.y + temp_fs3);
-            D_807A15DC[0].v.ob[2] = Math_Round(racer->unk_0C.unk_34.z + temp_fs2);
-            D_807A15DC[2].v.ob[0] = Math_Round(racer->unk_0C.unk_34.x - temp_fs1);
-            D_807A15DC[2].v.ob[1] = Math_Round(racer->unk_0C.unk_34.y - temp_fs3);
-            D_807A15DC[2].v.ob[2] = Math_Round(racer->unk_0C.unk_34.z - temp_fs2);
-            D_807A15DC[1].v.ob[0] = Math_Round(racer->unk_0C.unk_34.x + sp53C);
-            D_807A15DC[1].v.ob[1] = Math_Round(racer->unk_0C.unk_34.y + sp538);
-            D_807A15DC[1].v.ob[2] = Math_Round(racer->unk_0C.unk_34.z + sp534);
-            D_807A15DC[3].v.ob[0] = Math_Round(racer->unk_0C.unk_34.x - sp53C);
-            D_807A15DC[3].v.ob[1] = Math_Round(racer->unk_0C.unk_34.y - sp538);
-            D_807A15DC[3].v.ob[2] = Math_Round(racer->unk_0C.unk_34.z - sp534);
+            D_807A15DC[0].v.ob[0] = Math_Round(racer->segmentPositionInfo.pos.x + temp_fs1);
+            D_807A15DC[0].v.ob[1] = Math_Round(racer->segmentPositionInfo.pos.y + temp_fs3);
+            D_807A15DC[0].v.ob[2] = Math_Round(racer->segmentPositionInfo.pos.z + temp_fs2);
+            D_807A15DC[2].v.ob[0] = Math_Round(racer->segmentPositionInfo.pos.x - temp_fs1);
+            D_807A15DC[2].v.ob[1] = Math_Round(racer->segmentPositionInfo.pos.y - temp_fs3);
+            D_807A15DC[2].v.ob[2] = Math_Round(racer->segmentPositionInfo.pos.z - temp_fs2);
+            D_807A15DC[1].v.ob[0] = Math_Round(racer->segmentPositionInfo.pos.x + sp53C);
+            D_807A15DC[1].v.ob[1] = Math_Round(racer->segmentPositionInfo.pos.y + sp538);
+            D_807A15DC[1].v.ob[2] = Math_Round(racer->segmentPositionInfo.pos.z + sp534);
+            D_807A15DC[3].v.ob[0] = Math_Round(racer->segmentPositionInfo.pos.x - sp53C);
+            D_807A15DC[3].v.ob[1] = Math_Round(racer->segmentPositionInfo.pos.y - sp538);
+            D_807A15DC[3].v.ob[2] = Math_Round(racer->segmentPositionInfo.pos.z - sp534);
             D_807A15DC[2].v.tc[1] = 0x40;
 
             D_807A15DC[0].v.tc[0] = D_807A15DC[1].v.tc[0] = D_807A15DC[1].v.tc[1] = D_807A15DC[2].v.tc[1];
@@ -6505,9 +6601,9 @@ block_115:
                             continue;
                         }
 
-                        temp_fs4 = racer->unk_0C.unk_34.x + (20.0f * racer->unk_C0.y.x);
-                        temp_fs5 = racer->unk_0C.unk_34.y + (20.0f * racer->unk_C0.y.y);
-                        temp_fv0_19 = racer->unk_0C.unk_34.z + (20.0f * racer->unk_C0.y.z);
+                        temp_fs4 = racer->segmentPositionInfo.pos.x + (20.0f * racer->unk_C0.y.x);
+                        temp_fs5 = racer->segmentPositionInfo.pos.y + (20.0f * racer->unk_C0.y.y);
+                        temp_fv0_19 = racer->segmentPositionInfo.pos.z + (20.0f * racer->unk_C0.y.z);
                         temp_fv1_7 = 1.0f / (player->unk_19C.ww +
                                              ((player->unk_19C.wx * temp_fs4) + (player->unk_19C.wy * temp_fs5) +
                                               (player->unk_19C.wz * temp_fv0_19)));
@@ -6551,9 +6647,9 @@ block_115:
             if ((gGameMode == GAMEMODE_GP_RACE) && (sRivalRacer != NULL) && (sRivalRacer->machineLod != 0) &&
                 !(sRivalRacer->stateFlags & (RACER_STATE_CRASHED | RACER_STATE_FLAGS_2000000)) &&
                 (gRacers[0].position >= sRivalRacer->position)) {
-                temp_fs4 = sRivalRacer->unk_0C.unk_34.x + (20.0f * sRivalRacer->unk_C0.y.x);
-                temp_fs5 = sRivalRacer->unk_0C.unk_34.y + (20.0f * sRivalRacer->unk_C0.y.y);
-                temp_fv0_19 = sRivalRacer->unk_0C.unk_34.z + (20.0f * sRivalRacer->unk_C0.y.z);
+                temp_fs4 = sRivalRacer->segmentPositionInfo.pos.x + (20.0f * sRivalRacer->unk_C0.y.x);
+                temp_fs5 = sRivalRacer->segmentPositionInfo.pos.y + (20.0f * sRivalRacer->unk_C0.y.y);
+                temp_fv0_19 = sRivalRacer->segmentPositionInfo.pos.z + (20.0f * sRivalRacer->unk_C0.y.z);
                 temp_fv1_7 =
                     1.0f / (player->unk_19C.ww + ((player->unk_19C.wx * temp_fs4) + (player->unk_19C.wy * temp_fs5) +
                                                   (player->unk_19C.wz * temp_fv0_19)));
@@ -6586,9 +6682,9 @@ block_115:
             temp_v0_27 = playerRacer->racerBehind;
             if ((temp_v0_27->position == (playerRacer->position + 1)) &&
                 !(temp_v0_27->stateFlags & RACER_STATE_RETIRED)) {
-                temp_fa0_6 = playerRacer->unk_0C.unk_34.x - temp_v0_27->unk_0C.unk_34.x;
-                temp_fv1_9 = playerRacer->unk_0C.unk_34.y - temp_v0_27->unk_0C.unk_34.y;
-                sp564 = playerRacer->unk_0C.unk_34.z - temp_v0_27->unk_0C.unk_34.z;
+                temp_fa0_6 = playerRacer->segmentPositionInfo.pos.x - temp_v0_27->segmentPositionInfo.pos.x;
+                temp_fv1_9 = playerRacer->segmentPositionInfo.pos.y - temp_v0_27->segmentPositionInfo.pos.y;
+                sp564 = playerRacer->segmentPositionInfo.pos.z - temp_v0_27->segmentPositionInfo.pos.z;
                 if ((((player->unk_5C.x.x * temp_fa0_6) + (temp_fv1_9 * player->unk_5C.x.y) +
                       (sp564 * player->unk_5C.x.z)) < 0.0f)) {
                     goto end;
@@ -6647,14 +6743,14 @@ block_115:
 
                 if ((gNumPlayers == 1) && (gGameMode != GAMEMODE_DEATH_RACE)) {
                     if (playerRacer->distanceFromRacerBehind < 1000.0f) {
-                        if (!(playerRacer->unk_08 & 0x8000)) {
-                            playerRacer->unk_08 |= 0x8000;
+                        if (!(playerRacer->soundEffectFlags & RACER_SE_FLAGS_8000)) {
+                            playerRacer->soundEffectFlags |= RACER_SE_FLAGS_8000;
                             if (D_807A16E0 != 0) {
                                 Audio_TriggerSystemSE(NA_SE_58);
                             }
                         }
                     } else if (playerRacer->distanceFromRacerBehind > 2500.0f) {
-                        playerRacer->unk_08 &= ~0x8000;
+                        playerRacer->soundEffectFlags &= ~RACER_SE_FLAGS_8000;
                     }
                 }
             }

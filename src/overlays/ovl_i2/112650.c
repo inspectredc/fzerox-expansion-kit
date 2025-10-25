@@ -397,7 +397,7 @@ void func_i2_800B0FAC(CourseSegment* segment, Mtx3F* arg1) {
     func_806F6D8C(arg1);
 }
 
-s32 func_i2_800B10A8(Racer_unk_C* arg0, f32 arg1, f32 arg2, f32 arg3, Mtx3F* arg4) {
+s32 func_i2_800B10A8(RacerSegmentPositionInfo* arg0, f32 arg1, f32 arg2, f32 arg3, Mtx3F* arg4) {
     s32 i;
     Vec3f sp130;
     CourseSegment* var_s1_2;
@@ -413,7 +413,7 @@ s32 func_i2_800B10A8(Racer_unk_C* arg0, f32 arg1, f32 arg2, f32 arg3, Mtx3F* arg
     f32 sp78;
     f32 sp74;
     s32 pad;
-    f32 var_fs4;
+    f32 tension;
     f32 temp_fa0;
     f32 temp_fa1;
     f32 temp_ft4;
@@ -422,33 +422,33 @@ s32 func_i2_800B10A8(Racer_unk_C* arg0, f32 arg1, f32 arg2, f32 arg3, Mtx3F* arg
     CourseSegment* var_s1;
     CourseSegment* var_s2;
     CourseSegment* var_s3;
-    Racer_unk_C sp88;
+    RacerSegmentPositionInfo sp88;
 
     i = 3;
 
-    sp130.x = arg1 - arg0->unk_44.x;
-    sp130.y = arg2 - arg0->unk_44.y;
-    sp130.z = arg3 - arg0->unk_44.z;
+    sp130.x = arg1 - arg0->lastGroundedPos.x;
+    sp130.y = arg2 - arg0->lastGroundedPos.y;
+    sp130.z = arg3 - arg0->lastGroundedPos.z;
 
     var_s0 = arg0->courseSegment;
     var_s1 = var_s0->next;
     var_s2 = var_s0->prev;
     var_s3 = var_s1->next;
-    var_fs4 = var_s0->unk_24;
+    tension = var_s0->tension;
 
-    sp114 = var_fs4 - 2.0f;
+    sp114 = tension - 2.0f;
     sp110 = sp114 - 1.0f;
-    sp10C = sp110 + var_fs4;
-    sp78 = (sp10C - 3.0f) + var_fs4;
-    sp74 = sp78 + var_fs4;
+    sp10C = sp110 + tension;
+    sp78 = (sp10C - 3.0f) + tension;
+    sp74 = sp78 + tension;
 
     sp88.segmentTValue = arg0->segmentTValue;
     sp88.courseSegment = arg0->courseSegment;
-    sp88.unk_0C = arg0->unk_0C;
-    sp88.unk_18 = arg0->unk_18;
+    sp88.segmentForward = arg0->segmentForward;
+    sp88.segmentForwardMagnitude = arg0->segmentForwardMagnitude;
 
     while ((SQ_SUM(&sp130) > 5.0f) && (--i != 0)) {
-        sp88.segmentTValue += (DOT_XYZ(&sp130, &sp88.unk_0C) / SQ(sp88.unk_18));
+        sp88.segmentTValue += (DOT_XYZ(&sp130, &sp88.segmentForward) / SQ(sp88.segmentForwardMagnitude));
         if (sp88.segmentTValue >= 1.0f) {
             if (sp88.segmentTValue > 1.9f) {
                 return -1;
@@ -458,12 +458,13 @@ s32 func_i2_800B10A8(Racer_unk_C* arg0, f32 arg1, f32 arg2, f32 arg3, Mtx3F* arg
             var_s0 = var_s1;
             var_s1 = var_s3;
             var_s3 = sp88.courseSegment->next->next;
-            var_fs4 = sp88.courseSegment->unk_24;
-            sp114 = var_fs4 - 2.0f;
+            tension = sp88.courseSegment->tension;
+            sp114 = tension - 2.0f;
             sp110 = sp114 - 1.0f;
-            sp10C = sp110 + var_fs4;
+            sp10C = sp110 + tension;
             sp88.segmentTValue -= 1.0f;
-            sp88.segmentTValue *= (sp88.unk_18 / Course_SplineGetTangent(sp88.courseSegment, 0.0f, &sp130));
+            sp88.segmentTValue *=
+                (sp88.segmentForwardMagnitude / Course_SplineGetTangent(sp88.courseSegment, 0.0f, &sp130));
         } else if (sp88.segmentTValue < 0.0f) {
             if (sp88.segmentTValue < -0.9f) {
                 return -1;
@@ -473,66 +474,67 @@ s32 func_i2_800B10A8(Racer_unk_C* arg0, f32 arg1, f32 arg2, f32 arg3, Mtx3F* arg
             var_s1 = var_s0;
             var_s0 = var_s2;
             var_s2 = sp88.courseSegment->prev;
-            var_fs4 = sp88.courseSegment->unk_24;
-            sp114 = var_fs4 - 2.0f;
+            tension = sp88.courseSegment->tension;
+            sp114 = tension - 2.0f;
             sp110 = sp114 - 1.0f;
-            sp10C = sp110 + var_fs4;
+            sp10C = sp110 + tension;
 
-            sp88.segmentTValue *= (sp88.unk_18 / Course_SplineGetTangent(sp88.courseSegment, 1.0f, &sp130));
+            sp88.segmentTValue *=
+                (sp88.segmentForwardMagnitude / Course_SplineGetTangent(sp88.courseSegment, 1.0f, &sp130));
             sp88.segmentTValue += 1.0f;
         }
         tSquare = SQ(sp88.segmentTValue);
         tCube = tSquare * sp88.segmentTValue;
-        temp_fa0 = (((2.0f * tSquare) - sp88.segmentTValue) - tCube) * var_fs4;
+        temp_fa0 = (((2.0f * tSquare) - sp88.segmentTValue) - tCube) * tension;
         temp_fa1 = ((sp110 * tSquare) - sp114 * tCube) + 1.0f;
-        temp_ft4 = (sp114 * tCube - (sp10C * tSquare)) + (var_fs4 * sp88.segmentTValue);
-        spE8 = (tCube - tSquare) * var_fs4;
+        temp_ft4 = (sp114 * tCube - (sp10C * tSquare)) + (tension * sp88.segmentTValue);
+        spE8 = (tCube - tSquare) * tension;
 
-        sp88.unk_1C.x = (temp_fa0 * var_s2->pos.x) + (temp_fa1 * var_s0->pos.x) + (temp_ft4 * var_s1->pos.x) +
-                        (spE8 * var_s3->pos.x);
-        sp88.unk_1C.y = (temp_fa0 * var_s2->pos.y) + (temp_fa1 * var_s0->pos.y) + (temp_ft4 * var_s1->pos.y) +
-                        (spE8 * var_s3->pos.y);
-        sp88.unk_1C.z = (temp_fa0 * var_s2->pos.z) + (temp_fa1 * var_s0->pos.z) + (temp_ft4 * var_s1->pos.z) +
-                        (spE8 * var_s3->pos.z);
+        sp88.segmentPos.x = (temp_fa0 * var_s2->pos.x) + (temp_fa1 * var_s0->pos.x) + (temp_ft4 * var_s1->pos.x) +
+                            (spE8 * var_s3->pos.x);
+        sp88.segmentPos.y = (temp_fa0 * var_s2->pos.y) + (temp_fa1 * var_s0->pos.y) + (temp_ft4 * var_s1->pos.y) +
+                            (spE8 * var_s3->pos.y);
+        sp88.segmentPos.z = (temp_fa0 * var_s2->pos.z) + (temp_fa1 * var_s0->pos.z) + (temp_ft4 * var_s1->pos.z) +
+                            (spE8 * var_s3->pos.z);
 
-        sp78 = (sp10C - 3.0f) + var_fs4;
-        sp74 = sp78 + var_fs4;
+        sp78 = (sp10C - 3.0f) + tension;
+        sp74 = sp78 + tension;
 
-        temp_fa0 = (((4.0f * sp88.segmentTValue) - 1.0f) - (3.0f * tSquare)) * var_fs4;
+        temp_fa0 = (((4.0f * sp88.segmentTValue) - 1.0f) - (3.0f * tSquare)) * tension;
         temp_fa1 = ((sp10C - 3.0f) * sp88.segmentTValue) - sp78 * tSquare;
-        temp_ft4 = (sp78 * tSquare - (sp74 * sp88.segmentTValue)) + var_fs4;
-        spE8 = ((3.0f * tSquare) - (2.0f * sp88.segmentTValue)) * var_fs4;
+        temp_ft4 = (sp78 * tSquare - (sp74 * sp88.segmentTValue)) + tension;
+        spE8 = ((3.0f * tSquare) - (2.0f * sp88.segmentTValue)) * tension;
 
-        sp88.unk_0C.x = (temp_fa0 * var_s2->pos.x) + (temp_fa1 * var_s0->pos.x) + (temp_ft4 * var_s1->pos.x) +
-                        (spE8 * var_s3->pos.x);
-        sp88.unk_0C.y = (temp_fa0 * var_s2->pos.y) + (temp_fa1 * var_s0->pos.y) + (temp_ft4 * var_s1->pos.y) +
-                        (spE8 * var_s3->pos.y);
-        sp88.unk_0C.z = (temp_fa0 * var_s2->pos.z) + (temp_fa1 * var_s0->pos.z) + (temp_ft4 * var_s1->pos.z) +
-                        (spE8 * var_s3->pos.z);
+        sp88.segmentForward.x = (temp_fa0 * var_s2->pos.x) + (temp_fa1 * var_s0->pos.x) + (temp_ft4 * var_s1->pos.x) +
+                                (spE8 * var_s3->pos.x);
+        sp88.segmentForward.y = (temp_fa0 * var_s2->pos.y) + (temp_fa1 * var_s0->pos.y) + (temp_ft4 * var_s1->pos.y) +
+                                (spE8 * var_s3->pos.y);
+        sp88.segmentForward.z = (temp_fa0 * var_s2->pos.z) + (temp_fa1 * var_s0->pos.z) + (temp_ft4 * var_s1->pos.z) +
+                                (spE8 * var_s3->pos.z);
 
-        sp88.unk_18 = sqrtf(SQ_SUM(&sp88.unk_0C));
+        sp88.segmentForwardMagnitude = sqrtf(SQ_SUM(&sp88.segmentForward));
 
-        sp88.unk_28.x = arg1 - sp88.unk_1C.x;
-        sp88.unk_28.y = arg2 - sp88.unk_1C.y;
-        sp88.unk_28.z = arg3 - sp88.unk_1C.z;
+        sp88.segmentDisplacement.x = arg1 - sp88.segmentPos.x;
+        sp88.segmentDisplacement.y = arg2 - sp88.segmentPos.y;
+        sp88.segmentDisplacement.z = arg3 - sp88.segmentPos.z;
 
-        sp88.unk_40 = sqrtf(SQ_SUM(&sp88.unk_28));
+        sp88.distanceFromSegment = sqrtf(SQ_SUM(&sp88.segmentDisplacement));
 
-        if (sp88.unk_40 < 0.001f) {
+        if (sp88.distanceFromSegment < 0.001f) {
             break;
         }
-        sp88.unk_34.x = CROSS_X(&sp88.unk_28, &sp88.unk_0C);
-        sp88.unk_34.y = CROSS_Y(&sp88.unk_28, &sp88.unk_0C);
-        sp88.unk_34.z = CROSS_Z(&sp88.unk_28, &sp88.unk_0C);
+        sp88.pos.x = CROSS_X(&sp88.segmentDisplacement, &sp88.segmentForward);
+        sp88.pos.y = CROSS_Y(&sp88.segmentDisplacement, &sp88.segmentForward);
+        sp88.pos.z = CROSS_Z(&sp88.segmentDisplacement, &sp88.segmentForward);
 
-        sp88.unk_28.x = CROSS_X(&sp88.unk_0C, &sp88.unk_34);
-        sp88.unk_28.y = CROSS_Y(&sp88.unk_0C, &sp88.unk_34);
-        sp88.unk_28.z = CROSS_Z(&sp88.unk_0C, &sp88.unk_34);
+        sp88.segmentDisplacement.x = CROSS_X(&sp88.segmentForward, &sp88.pos);
+        sp88.segmentDisplacement.y = CROSS_Y(&sp88.segmentForward, &sp88.pos);
+        sp88.segmentDisplacement.z = CROSS_Z(&sp88.segmentForward, &sp88.pos);
 
-        temp_fv1 = sp88.unk_40 / sqrtf(SQ_SUM(&sp88.unk_28));
-        sp130.x = arg1 - ((sp88.unk_28.x * temp_fv1) + sp88.unk_1C.x);
-        sp130.y = arg2 - ((sp88.unk_28.y * temp_fv1) + sp88.unk_1C.y);
-        sp130.z = arg3 - ((sp88.unk_28.z * temp_fv1) + sp88.unk_1C.z);
+        temp_fv1 = sp88.distanceFromSegment / sqrtf(SQ_SUM(&sp88.segmentDisplacement));
+        sp130.x = arg1 - ((sp88.segmentDisplacement.x * temp_fv1) + sp88.segmentPos.x);
+        sp130.y = arg2 - ((sp88.segmentDisplacement.y * temp_fv1) + sp88.segmentPos.y);
+        sp130.z = arg3 - ((sp88.segmentDisplacement.z * temp_fv1) + sp88.segmentPos.z);
     }
 
     var_s1_2 = sp88.courseSegment;
@@ -542,11 +544,11 @@ s32 func_i2_800B10A8(Racer_unk_C* arg0, f32 arg1, f32 arg2, f32 arg3, Mtx3F* arg
 
     tSquare = SQ(sp88.segmentTValue);
 
-    var_fs4 = var_s1_2->unk_24;
-    temp_fa0 = (((4.0f * sp88.segmentTValue) - 1.0f) - 3.0f * tSquare) * var_fs4;
-    temp_fa1 = ((6.0f - 3.0f * var_fs4) * tSquare) + (((2.0f * var_fs4) - 6.0f) * sp88.segmentTValue);
-    temp_ft4 = ((3.0f * var_fs4 - 6.0f) * tSquare) + ((6.0f - (4.0f * var_fs4)) * sp88.segmentTValue) + var_fs4;
-    spE8 = (3.0f * tSquare - (2.0f * sp88.segmentTValue)) * var_fs4;
+    tension = var_s1_2->tension;
+    temp_fa0 = (((4.0f * sp88.segmentTValue) - 1.0f) - 3.0f * tSquare) * tension;
+    temp_fa1 = ((6.0f - 3.0f * tension) * tSquare) + (((2.0f * tension) - 6.0f) * sp88.segmentTValue);
+    temp_ft4 = ((3.0f * tension - 6.0f) * tSquare) + ((6.0f - (4.0f * tension)) * sp88.segmentTValue) + tension;
+    spE8 = (3.0f * tSquare - (2.0f * sp88.segmentTValue)) * tension;
 
     arg4->x.x =
         (temp_fa0 * var_v1->pos.x) + (temp_fa1 * var_s1_2->pos.x) + (temp_ft4 * var_v0->pos.x) + (spE8 * var_a0->pos.x);
@@ -586,7 +588,7 @@ s32 func_i2_800B10A8(Racer_unk_C* arg0, f32 arg1, f32 arg2, f32 arg3, Mtx3F* arg
 }
 
 #ifdef NON_EQUIVALENT
-void func_8009DB28(CourseSegment* arg0, f32* arg1, f32* arg2) {
+void func_i2_800B1AF0(CourseSegment* arg0, f32* arg1, f32* arg2) {
     f64 temp_ft5;
     f64 temp_fs0;
     f64 temp_fs1;
@@ -664,72 +666,71 @@ void func_i2_800B1AF0(CourseSegment*, f32*, f32*);
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/112650/func_i2_800B1AF0.s")
 #endif
 
-// Generate course segment sharpnesses?
-s32 func_i2_800B1E74(CourseInfo* arg0) {
+s32 Course_SplineCalculateTensions(CourseInfo* courseInfo) {
     f32 sp4C;
     f32 sp48;
-    CourseSegment* var_s0 = arg0->courseSegments;
+    CourseSegment* segment = courseInfo->courseSegments;
 
     do {
-        func_i2_800B1AF0(var_s0, &sp4C, &sp48);
+        func_i2_800B1AF0(segment, &sp4C, &sp48);
         if ((sp4C < 0.0f) || (sp4C > 2.0f) || (sp48 < 0.0f) || (sp48 > 2.0f)) {
             return -1;
         }
-        var_s0->unk_24 = (sp4C + sp48) * 0.5f;
-        var_s0 = var_s0->next;
-    } while (var_s0 != arg0->courseSegments);
+        segment->tension = (sp4C + sp48) * 0.5f;
+        segment = segment->next;
+    } while (segment != courseInfo->courseSegments);
 
     return 0;
 }
 
 // Get Rough Racer Lap Distance
-f32 func_i2_800B1F68(Racer_unk_C* arg0) {
+f32 func_i2_800B1F68(RacerSegmentPositionInfo* arg0) {
     f32 length;
     Vec3f posDiff;
 
     if (arg0->segmentTValue < 0.5f) {
         if (arg0->segmentTValue < 0.25f) {
             length = 0.0f;
-            posDiff.x = arg0->unk_1C.x - arg0->courseSegment->pos.x;
-            posDiff.y = arg0->unk_1C.y - arg0->courseSegment->pos.y;
-            posDiff.z = arg0->unk_1C.z - arg0->courseSegment->pos.z;
+            posDiff.x = arg0->segmentPos.x - arg0->courseSegment->pos.x;
+            posDiff.y = arg0->segmentPos.y - arg0->courseSegment->pos.y;
+            posDiff.z = arg0->segmentPos.z - arg0->courseSegment->pos.z;
         } else {
             length = arg0->courseSegment->quarterMarkLength;
-            posDiff.x = arg0->unk_1C.x - arg0->courseSegment->quarterMarkPos.x;
-            posDiff.y = arg0->unk_1C.y - arg0->courseSegment->quarterMarkPos.y;
-            posDiff.z = arg0->unk_1C.z - arg0->courseSegment->quarterMarkPos.z;
+            posDiff.x = arg0->segmentPos.x - arg0->courseSegment->quarterMarkPos.x;
+            posDiff.y = arg0->segmentPos.y - arg0->courseSegment->quarterMarkPos.y;
+            posDiff.z = arg0->segmentPos.z - arg0->courseSegment->quarterMarkPos.z;
         }
     } else if (arg0->segmentTValue < 0.75f) {
         length = arg0->courseSegment->halfMarkLength;
-        posDiff.x = arg0->unk_1C.x - arg0->courseSegment->halfMarkPos.x;
-        posDiff.y = arg0->unk_1C.y - arg0->courseSegment->halfMarkPos.y;
-        posDiff.z = arg0->unk_1C.z - arg0->courseSegment->halfMarkPos.z;
+        posDiff.x = arg0->segmentPos.x - arg0->courseSegment->halfMarkPos.x;
+        posDiff.y = arg0->segmentPos.y - arg0->courseSegment->halfMarkPos.y;
+        posDiff.z = arg0->segmentPos.z - arg0->courseSegment->halfMarkPos.z;
     } else {
         length = arg0->courseSegment->threeQuarterMarkLength;
-        posDiff.x = arg0->unk_1C.x - arg0->courseSegment->threeQuarterMarkPos.x;
-        posDiff.y = arg0->unk_1C.y - arg0->courseSegment->threeQuarterMarkPos.y;
-        posDiff.z = arg0->unk_1C.z - arg0->courseSegment->threeQuarterMarkPos.z;
+        posDiff.x = arg0->segmentPos.x - arg0->courseSegment->threeQuarterMarkPos.x;
+        posDiff.y = arg0->segmentPos.y - arg0->courseSegment->threeQuarterMarkPos.y;
+        posDiff.z = arg0->segmentPos.z - arg0->courseSegment->threeQuarterMarkPos.z;
     }
 
     length += sqrtf(SQ(posDiff.x) + SQ(posDiff.y) + SQ(posDiff.z));
-    arg0->unk_08 = length / arg0->courseSegment->length;
+    arg0->segmentLengthProportion = length / arg0->courseSegment->length;
     return arg0->courseSegment->lengthFromStart + length;
 }
 
 // Get Length Into Course Segment
 // Returns Length proportion along the track
-f32 Course_SplineGetLengthInfo(CourseSegment* segment, f32 t, f32* lengthFromStart) {
-    f32 spDC;
+f32 Course_SplineGetLengthInfo(CourseSegment* segment, f32 targetT, f32* lengthFromStart) {
+    f32 tension;
     f32 spD8;
     f32 spD4;
     f32 spD0;
-    f32 var_fs0;
+    f32 t;
     f32 temp_fs2;
     f32 temp_fv0;
     f32 temp_fv1;
-    f32 square;
-    f32 cube;
-    f32 spB4;
+    f32 tSquare;
+    f32 tCube;
+    f32 tEnd;
     f32 temp_fa0;
     f32 temp_fa1;
     f32 temp_ft4;
@@ -740,25 +741,25 @@ f32 Course_SplineGetLengthInfo(CourseSegment* segment, f32 t, f32* lengthFromSta
     CourseSegment* prevSegment = segment->prev;
     CourseSegment* nextNextSegment = nextSegment->next;
 
-    spDC = segment->unk_24;
-    spD8 = spDC - 2.0f;
-    spD4 = spDC - 3.0f;
-    spD0 = 3.0f - (2.0f * spDC);
+    tension = segment->tension;
+    spD8 = tension - 2.0f;
+    spD4 = tension - 3.0f;
+    spD0 = 3.0f - (2.0f * tension);
     *lengthFromStart = 0.0f;
-    if (t < 0.5f) {
-        var_fs0 = 0.0f;
-        spB4 = t;
+    if (targetT < 0.5f) {
+        t = 0.0f;
+        tEnd = targetT;
     } else {
-        var_fs0 = t;
-        spB4 = 1.0f;
+        t = targetT;
+        tEnd = 1.0f;
     }
 
-    square = SQ(var_fs0);
-    cube = square * var_fs0;
-    temp_fa0 = (2.0f * square - var_fs0 - cube) * spDC;      // spDC . -x(1-x)^2
-    temp_fa1 = spD4 * square - spD8 * cube + 1.0f;           // spDC . x^2(1-x) + (2x+1)(1-x)^2
-    temp_ft4 = spD8 * cube + spD0 * square + spDC * var_fs0; // spDC . x(1-x)^2 + x^2(3-2x)
-    spA4 = (cube - square) * spDC;                           // spDC . -x^2(1-x)
+    tSquare = SQ(t);
+    tCube = tSquare * t;
+    temp_fa0 = (2.0f * tSquare - t - tCube) * tension;
+    temp_fa1 = spD4 * tSquare - spD8 * tCube + 1.0f;
+    temp_ft4 = spD8 * tCube + spD0 * tSquare + tension * t;
+    spA4 = (tCube - tSquare) * tension;
 
     sp98.x = temp_fa0 * prevSegment->pos.x + temp_fa1 * segment->pos.x + temp_ft4 * nextSegment->pos.x +
              spA4 * nextNextSegment->pos.x;
@@ -767,18 +768,18 @@ f32 Course_SplineGetLengthInfo(CourseSegment* segment, f32 t, f32* lengthFromSta
     sp98.z = temp_fa0 * prevSegment->pos.z + temp_fa1 * segment->pos.z + temp_ft4 * nextSegment->pos.z +
              spA4 * nextNextSegment->pos.z;
 
-    while (var_fs0 < spB4) {
-        var_fs0 += 0.05f;
-        if (spB4 < var_fs0) {
-            var_fs0 = spB4;
+    while (t < tEnd) {
+        t += 0.05f;
+        if (tEnd < t) {
+            t = tEnd;
         }
 
-        square = SQ(var_fs0);
-        cube = square * var_fs0;
-        temp_fa0 = (2.0f * square - var_fs0 - cube) * spDC;
-        temp_fa1 = spD4 * square - spD8 * cube + 1.0f;
-        temp_ft4 = spD8 * cube + spD0 * square + spDC * var_fs0;
-        spA4 = (cube - square) * spDC;
+        tSquare = SQ(t);
+        tCube = tSquare * t;
+        temp_fa0 = (2.0f * tSquare - t - tCube) * tension;
+        temp_fa1 = spD4 * tSquare - spD8 * tCube + 1.0f;
+        temp_ft4 = spD8 * tCube + spD0 * tSquare + tension * t;
+        spA4 = (tCube - tSquare) * tension;
 
         sp8C.x = (prevSegment->pos.x * temp_fa0) + (temp_fa1 * segment->pos.x) + (temp_ft4 * nextSegment->pos.x) +
                  (spA4 * nextNextSegment->pos.x);
@@ -795,50 +796,53 @@ f32 Course_SplineGetLengthInfo(CourseSegment* segment, f32 t, f32* lengthFromSta
         sp98 = sp8C;
     }
 
-    if (t >= 0.5f) {
+    if (targetT >= 0.5f) {
         *lengthFromStart = segment->length - *lengthFromStart;
     }
 
-    var_fs0 = *lengthFromStart / segment->length;
-    if (var_fs0 < 0.0f) {
-        var_fs0 = 0.0f;
-    } else if (var_fs0 > 1.0f) {
-        var_fs0 = 1.0f;
+    t = *lengthFromStart / segment->length;
+    if (t < 0.0f) {
+        t = 0.0f;
+    } else if (t > 1.0f) {
+        t = 1.0f;
     }
     *lengthFromStart += segment->lengthFromStart;
-    return var_fs0;
+    return t;
 }
 
 // Get un-normalised tangent vector along course segment (and magnitude)
 f32 Course_SplineGetTangent(CourseSegment* segment, f32 t, Vec3f* tangentVec) {
-    f32 square;
-    f32 temp_fv0;
+    f32 tSquare;
+    f32 tension;
     f32 sp44;
     f32 sp40;
     f32 sp3C;
     f32 sp38;
-    CourseSegment* temp_v0 = segment->next;
-    CourseSegment* temp_v1 = segment->prev;
-    CourseSegment* temp_a1 = temp_v0->next;
+    CourseSegment* nextSegment = segment->next;
+    CourseSegment* prevSegment = segment->prev;
+    CourseSegment* nextNextSegment = nextSegment->next;
 
-    square = SQ(t);
-    temp_fv0 = segment->unk_24;
+    tSquare = SQ(t);
+    tension = segment->tension;
 
-    sp44 = (4.0f * t - 1.0f - (3.0f * square)) * temp_fv0;
-    sp40 = (6.0f - 3.0f * temp_fv0) * square + (2.0f * temp_fv0 - 6.0f) * t;
-    sp3C = (3.0f * temp_fv0 - 6.0f) * square + (6.0f - 4.0f * temp_fv0) * t + temp_fv0;
-    sp38 = ((3.0f * square) - 2.0f * t) * temp_fv0;
+    sp44 = (4.0f * t - 1.0f - (3.0f * tSquare)) * tension;
+    sp40 = (6.0f - 3.0f * tension) * tSquare + (2.0f * tension - 6.0f) * t;
+    sp3C = (3.0f * tension - 6.0f) * tSquare + (6.0f - 4.0f * tension) * t + tension;
+    sp38 = ((3.0f * tSquare) - 2.0f * t) * tension;
 
-    tangentVec->x = sp44 * temp_v1->pos.x + sp40 * segment->pos.x + sp3C * temp_v0->pos.x + sp38 * temp_a1->pos.x;
-    tangentVec->y = sp44 * temp_v1->pos.y + sp40 * segment->pos.y + sp3C * temp_v0->pos.y + sp38 * temp_a1->pos.y;
-    tangentVec->z = sp44 * temp_v1->pos.z + sp40 * segment->pos.z + sp3C * temp_v0->pos.z + sp38 * temp_a1->pos.z;
+    tangentVec->x =
+        sp44 * prevSegment->pos.x + sp40 * segment->pos.x + sp3C * nextSegment->pos.x + sp38 * nextNextSegment->pos.x;
+    tangentVec->y =
+        sp44 * prevSegment->pos.y + sp40 * segment->pos.y + sp3C * nextSegment->pos.y + sp38 * nextNextSegment->pos.y;
+    tangentVec->z =
+        sp44 * prevSegment->pos.z + sp40 * segment->pos.z + sp3C * nextSegment->pos.z + sp38 * nextNextSegment->pos.z;
 
     return sqrtf(SQ(tangentVec->x) + SQ(tangentVec->y) + SQ(tangentVec->z));
 }
 
 // Get position along course segment
 void Course_SplineGetPosition(CourseSegment* segment, f32 t, Vec3f* pos) {
-    f32 temp_fv0;
+    f32 tension;
     f32 tSquare;
     f32 tCube;
     f32 sp30;
@@ -849,13 +853,13 @@ void Course_SplineGetPosition(CourseSegment* segment, f32 t, Vec3f* pos) {
     CourseSegment* nextSegment = segment->next;
     CourseSegment* nextNextSegment = nextSegment->next;
 
-    temp_fv0 = segment->unk_24;
+    tension = segment->tension;
     tSquare = SQ(t);
     tCube = tSquare * t;
-    sp30 = (2.0f * tSquare - t - tCube) * temp_fv0;
-    sp2C = (2.0f - temp_fv0) * tCube + (temp_fv0 - 3.0f) * tSquare + 1.0f;
-    sp28 = (temp_fv0 - 2.0f) * tCube + (3.0f - 2.0f * temp_fv0) * tSquare + temp_fv0 * t;
-    sp24 = (tCube - tSquare) * temp_fv0;
+    sp30 = (2.0f * tSquare - t - tCube) * tension;
+    sp2C = (2.0f - tension) * tCube + (tension - 3.0f) * tSquare + 1.0f;
+    sp28 = (tension - 2.0f) * tCube + (3.0f - 2.0f * tension) * tSquare + tension * t;
+    sp24 = (tCube - tSquare) * tension;
 
     pos->x =
         sp30 * prevSegment->pos.x + sp2C * segment->pos.x + sp28 * nextSegment->pos.x + sp24 * nextNextSegment->pos.x;
@@ -869,7 +873,7 @@ void Course_SplineGetPosition(CourseSegment* segment, f32 t, Vec3f* pos) {
 // NOTE: z vector is positive in the left direction!
 // Returns magnitude of tangent
 f32 Course_SplineGetBasis(CourseSegment* segment, f32 t, Mtx3F* basis, f32 lengthProportionAlongSegment) {
-    f32 temp_fa0;
+    f32 tension;
     f32 sp50;
     f32 sp4C;
     f32 sp48;
@@ -879,12 +883,12 @@ f32 Course_SplineGetBasis(CourseSegment* segment, f32 t, Mtx3F* basis, f32 lengt
     CourseSegment* prevSegment = segment->prev;
     CourseSegment* nextNextSegment = nextSegment->next;
 
-    temp_fa0 = segment->unk_24;
+    tension = segment->tension;
     sp50 = SQ(t);
-    sp4C = (4.0f * t - 1.0f - 3.0f * sp50) * temp_fa0;
-    sp48 = (6.0f - 3.0f * temp_fa0) * sp50 + (2.0f * temp_fa0 - 6.0f) * t;
-    sp44 = (3.0f * temp_fa0 - 6.0f) * sp50 + (6.0f - 4.0f * temp_fa0) * t + temp_fa0;
-    sp40 = (3.0f * sp50 - 2.0f * t) * temp_fa0;
+    sp4C = (4.0f * t - 1.0f - 3.0f * sp50) * tension;
+    sp48 = (6.0f - 3.0f * tension) * sp50 + (2.0f * tension - 6.0f) * t;
+    sp44 = (3.0f * tension - 6.0f) * sp50 + (6.0f - 4.0f * tension) * t + tension;
+    sp40 = (3.0f * sp50 - 2.0f * t) * tension;
 
     basis->x.x =
         sp4C * prevSegment->pos.x + sp48 * segment->pos.x + sp44 * nextSegment->pos.x + sp40 * nextNextSegment->pos.x;
@@ -894,11 +898,11 @@ f32 Course_SplineGetBasis(CourseSegment* segment, f32 t, Mtx3F* basis, f32 lengt
         sp4C * prevSegment->pos.z + sp48 * segment->pos.z + sp44 * nextSegment->pos.z + sp40 * nextNextSegment->pos.z;
 
     sp50 = sqrtf(SQ(basis->x.x) + SQ(basis->x.y) + SQ(basis->x.z));
-    temp_fa0 = 1.0f / sp50;
+    tension = 1.0f / sp50;
 
-    basis->x.x *= temp_fa0;
-    basis->x.y *= temp_fa0;
-    basis->x.z *= temp_fa0;
+    basis->x.x *= tension;
+    basis->x.y *= tension;
+    basis->x.z *= tension;
 
     basis->y.x = (segment->next->up.x - segment->up.x) * lengthProportionAlongSegment + segment->up.x;
     basis->y.y = (segment->next->up.y - segment->up.y) * lengthProportionAlongSegment + segment->up.y;
@@ -918,11 +922,11 @@ f32 Course_SplineGetBasis(CourseSegment* segment, f32 t, Mtx3F* basis, f32 lengt
         return sp50;
     }
 
-    temp_fa0 = 1.0f / sqrtf(SQ(basis->z.x) + SQ(basis->z.y) + SQ(basis->z.z));
+    tension = 1.0f / sqrtf(SQ(basis->z.x) + SQ(basis->z.y) + SQ(basis->z.z));
 
-    basis->z.x *= temp_fa0;
-    basis->z.y *= temp_fa0;
-    basis->z.z *= temp_fa0;
+    basis->z.x *= tension;
+    basis->z.y *= tension;
+    basis->z.z *= tension;
 
     basis->y.x = basis->x.y * basis->z.z - basis->x.z * basis->z.y;
     basis->y.y = basis->x.z * basis->z.x - basis->x.x * basis->z.z;
@@ -931,7 +935,7 @@ f32 Course_SplineGetBasis(CourseSegment* segment, f32 t, Mtx3F* basis, f32 lengt
     return sp50;
 }
 
-s32 func_i2_800B2C00(Racer_unk_C* arg0, f32 arg1, f32 arg2, f32 arg3, s32 i, f32 arg5) {
+s32 func_i2_800B2C00(RacerSegmentPositionInfo* arg0, f32 xPos, f32 yPos, f32 zPos, s32 i, f32 arg5) {
     s32 pad2;
     Vec3f spD0;
     f32 temp_ft4;
@@ -939,38 +943,38 @@ s32 func_i2_800B2C00(Racer_unk_C* arg0, f32 arg1, f32 arg2, f32 arg3, s32 i, f32
     f32 temp_fs1;
     f32 temp_fs2;
     f32 spBC;
-    f32 temp_fa0;
+    f32 spB8;
     f32 spB4;
-    s32 pad;
-    f32 sp78;
-    f32 var_fs3;
+    f32 pad;
+    f32 temp_fa0;
+    f32 tension;
     f32 var_fs5;
-    f32 square;
-    f32 temp_fv1;
+    f32 tSquare;
+    f32 tCube;
     CourseSegment* prevSegment;
     CourseSegment* nextNextSegment;
     CourseSegment* segment;
     CourseSegment* nextSegment;
 
-    spD0.x = arg1 - arg0->unk_44.x;
-    spD0.y = arg2 - arg0->unk_44.y;
-    spD0.z = arg3 - arg0->unk_44.z;
+    spD0.x = xPos - arg0->lastGroundedPos.x;
+    spD0.y = yPos - arg0->lastGroundedPos.y;
+    spD0.z = zPos - arg0->lastGroundedPos.z;
 
     segment = arg0->courseSegment;
     nextSegment = segment->next;
     prevSegment = segment->prev;
     nextNextSegment = nextSegment->next;
 
-    var_fs3 = segment->unk_24;
-    var_fs5 = var_fs3 - 2.0f;
+    tension = segment->tension;
+    var_fs5 = tension - 2.0f;
 
-    spBC = ((var_fs5 - 1.0f) + var_fs3) - 3.0f;
-    sp78 = spBC + var_fs3;
+    spBC = ((var_fs5 - 1.0f) + tension) - 3.0f;
+    spB8 = spBC + tension;
+    spB4 = spB8 + tension;
 
-    spB4 = sp78 + var_fs3;
     while ((arg5 < (SQ_SUM(&spD0))) && (--i != 0)) {
 
-        arg0->segmentTValue += DOT_XYZ(&spD0, &arg0->unk_0C) / SQ(arg0->unk_18);
+        arg0->segmentTValue += DOT_XYZ(&spD0, &arg0->segmentForward) / SQ(arg0->segmentForwardMagnitude);
 
         if (arg0->segmentTValue >= 1.0f) {
             if (arg0->segmentTValue > 1.9f) {
@@ -981,17 +985,18 @@ s32 func_i2_800B2C00(Racer_unk_C* arg0, f32 arg1, f32 arg2, f32 arg3, s32 i, f32
             segment = nextSegment;
             nextSegment = nextNextSegment;
             nextNextSegment = arg0->courseSegment->next->next;
-            var_fs3 = arg0->courseSegment->unk_24;
+            tension = arg0->courseSegment->tension;
 
-            var_fs5 = var_fs3 - 2.0f;
+            var_fs5 = tension - 2.0f;
 
-            spBC = ((var_fs5 - 1.0f) + var_fs3) - 3.0f;
-            sp78 = spBC + var_fs3;
+            spBC = ((var_fs5 - 1.0f) + tension) - 3.0f;
+            spB8 = spBC + tension;
+            spB4 = spB8 + tension;
 
-            spB4 = sp78 + var_fs3;
             arg0->segmentTValue -= 1.0f;
 
-            arg0->segmentTValue *= arg0->unk_18 / Course_SplineGetTangent(arg0->courseSegment, 0.0f, &spD0);
+            arg0->segmentTValue *=
+                arg0->segmentForwardMagnitude / Course_SplineGetTangent(arg0->courseSegment, 0.0f, &spD0);
         } else if (arg0->segmentTValue < 0.0f) {
             if (arg0->segmentTValue < -0.9f) {
                 return -1;
@@ -1001,91 +1006,92 @@ s32 func_i2_800B2C00(Racer_unk_C* arg0, f32 arg1, f32 arg2, f32 arg3, s32 i, f32
             nextSegment = segment;
             segment = prevSegment;
             prevSegment = arg0->courseSegment->prev;
-            var_fs3 = arg0->courseSegment->unk_24;
+            tension = arg0->courseSegment->tension;
 
-            var_fs5 = var_fs3 - 2.0f;
+            var_fs5 = tension - 2.0f;
 
-            spBC = ((var_fs5 - 1.0f) + var_fs3) - 3.0f;
-            sp78 = spBC + var_fs3;
-            spB4 = sp78 + var_fs3;
+            spBC = ((var_fs5 - 1.0f) + tension) - 3.0f;
+            spB8 = spBC + tension;
+            spB4 = spB8 + tension;
 
-            arg0->segmentTValue *= arg0->unk_18 / Course_SplineGetTangent(arg0->courseSegment, 1.0f, &spD0);
+            arg0->segmentTValue *=
+                arg0->segmentForwardMagnitude / Course_SplineGetTangent(arg0->courseSegment, 1.0f, &spD0);
             arg0->segmentTValue += 1.0f;
         }
 
-        square = SQ(arg0->segmentTValue);
-        // FAKE
-        temp_fv1 = arg0->segmentTValue * (0, square);
-        temp_ft4 = (((2.0f * square) - arg0->segmentTValue) - temp_fv1) * var_fs3;
-        temp_ft5 = (((var_fs5 - 1.0f) * square) - var_fs5 * temp_fv1) + 1.0f;
-        temp_fs1 = (var_fs5 * temp_fv1 - (((var_fs5 - 1.0f) + var_fs3) * square)) + (var_fs3 * arg0->segmentTValue);
-        temp_fs2 = (temp_fv1 - square) * var_fs3;
+        tCube = tSquare = SQ(arg0->segmentTValue);
+        tCube *= arg0->segmentTValue;
 
-        arg0->unk_1C.x = (temp_ft4 * prevSegment->pos.x) + (temp_ft5 * segment->pos.x) +
-                         (temp_fs1 * nextSegment->pos.x) + (temp_fs2 * nextNextSegment->pos.x);
-        arg0->unk_1C.y = (temp_ft4 * prevSegment->pos.y) + (temp_ft5 * segment->pos.y) +
-                         (temp_fs1 * nextSegment->pos.y) + (temp_fs2 * nextNextSegment->pos.y);
-        arg0->unk_1C.z = (temp_ft4 * prevSegment->pos.z) + (temp_ft5 * segment->pos.z) +
-                         (temp_fs1 * nextSegment->pos.z) + (temp_fs2 * nextNextSegment->pos.z);
+        temp_ft4 = ((2.0f * tSquare) - arg0->segmentTValue - tCube) * tension;
+        temp_ft5 = (((var_fs5 - 1.0f) * tSquare) - var_fs5 * tCube) + 1.0f;
+        temp_fs1 = (var_fs5 * tCube - (((var_fs5 - 1.0f) + tension) * tSquare)) + (tension * arg0->segmentTValue);
+        temp_fs2 = (tCube - tSquare) * tension;
 
-        temp_ft4 = (((arg0->segmentTValue * 4.0f) - 1.0f) - (3.0f * square)) * var_fs3;
-        temp_ft5 = (arg0->segmentTValue * spBC) - sp78 * square;
-        temp_fs1 = (sp78 * square - (spB4 * arg0->segmentTValue)) + var_fs3;
-        temp_fs2 = ((3.0f * square) - (2.0f * arg0->segmentTValue)) * var_fs3;
+        arg0->segmentPos.x = (temp_ft4 * prevSegment->pos.x) + (temp_ft5 * segment->pos.x) +
+                             (temp_fs1 * nextSegment->pos.x) + (temp_fs2 * nextNextSegment->pos.x);
+        arg0->segmentPos.y = (temp_ft4 * prevSegment->pos.y) + (temp_ft5 * segment->pos.y) +
+                             (temp_fs1 * nextSegment->pos.y) + (temp_fs2 * nextNextSegment->pos.y);
+        arg0->segmentPos.z = (temp_ft4 * prevSegment->pos.z) + (temp_ft5 * segment->pos.z) +
+                             (temp_fs1 * nextSegment->pos.z) + (temp_fs2 * nextNextSegment->pos.z);
 
-        arg0->unk_0C.x = (temp_ft4 * prevSegment->pos.x) + (temp_ft5 * segment->pos.x) +
-                         (temp_fs1 * nextSegment->pos.x) + (temp_fs2 * nextNextSegment->pos.x);
-        arg0->unk_0C.y = (temp_ft4 * prevSegment->pos.y) + (temp_ft5 * segment->pos.y) +
-                         (temp_fs1 * nextSegment->pos.y) + (temp_fs2 * nextNextSegment->pos.y);
-        arg0->unk_0C.z = (temp_ft4 * prevSegment->pos.z) + (temp_ft5 * segment->pos.z) +
-                         (temp_fs1 * nextSegment->pos.z) + (temp_fs2 * nextNextSegment->pos.z);
+        temp_ft4 = (((arg0->segmentTValue * 4.0f) - 1.0f) - (3.0f * tSquare)) * tension;
+        temp_ft5 = (arg0->segmentTValue * spBC) - spB8 * tSquare;
+        temp_fs1 = (spB8 * tSquare - (spB4 * arg0->segmentTValue)) + tension;
+        temp_fs2 = ((3.0f * tSquare) - (2.0f * arg0->segmentTValue)) * tension;
 
-        arg0->unk_18 = sqrtf(SQ_SUM(&arg0->unk_0C));
-        arg0->unk_28.x = arg1 - arg0->unk_1C.x;
-        arg0->unk_28.y = arg2 - arg0->unk_1C.y;
-        arg0->unk_28.z = arg3 - arg0->unk_1C.z;
-        arg0->unk_40 = sqrtf(SQ_SUM(&arg0->unk_28));
+        arg0->segmentForward.x = (temp_ft4 * prevSegment->pos.x) + (temp_ft5 * segment->pos.x) +
+                                 (temp_fs1 * nextSegment->pos.x) + (temp_fs2 * nextNextSegment->pos.x);
+        arg0->segmentForward.y = (temp_ft4 * prevSegment->pos.y) + (temp_ft5 * segment->pos.y) +
+                                 (temp_fs1 * nextSegment->pos.y) + (temp_fs2 * nextNextSegment->pos.y);
+        arg0->segmentForward.z = (temp_ft4 * prevSegment->pos.z) + (temp_ft5 * segment->pos.z) +
+                                 (temp_fs1 * nextSegment->pos.z) + (temp_fs2 * nextNextSegment->pos.z);
 
-        if (arg0->unk_40 < 0.001f) {
+        arg0->segmentForwardMagnitude = sqrtf(SQ_SUM(&arg0->segmentForward));
+        arg0->segmentDisplacement.x = xPos - arg0->segmentPos.x;
+        arg0->segmentDisplacement.y = yPos - arg0->segmentPos.y;
+        arg0->segmentDisplacement.z = zPos - arg0->segmentPos.z;
+        arg0->distanceFromSegment = sqrtf(SQ_SUM(&arg0->segmentDisplacement));
+
+        if (arg0->distanceFromSegment < 0.001f) {
             break;
         }
 
-        arg0->unk_34.x = CROSS_X(&arg0->unk_28, &arg0->unk_0C);
-        arg0->unk_34.y = CROSS_Y(&arg0->unk_28, &arg0->unk_0C);
-        arg0->unk_34.z = CROSS_Z(&arg0->unk_28, &arg0->unk_0C);
+        arg0->pos.x = CROSS_X(&arg0->segmentDisplacement, &arg0->segmentForward);
+        arg0->pos.y = CROSS_Y(&arg0->segmentDisplacement, &arg0->segmentForward);
+        arg0->pos.z = CROSS_Z(&arg0->segmentDisplacement, &arg0->segmentForward);
 
-        arg0->unk_28.x = CROSS_X(&arg0->unk_0C, &arg0->unk_34);
-        arg0->unk_28.y = CROSS_Y(&arg0->unk_0C, &arg0->unk_34);
-        arg0->unk_28.z = CROSS_Z(&arg0->unk_0C, &arg0->unk_34);
+        arg0->segmentDisplacement.x = CROSS_X(&arg0->segmentForward, &arg0->pos);
+        arg0->segmentDisplacement.y = CROSS_Y(&arg0->segmentForward, &arg0->pos);
+        arg0->segmentDisplacement.z = CROSS_Z(&arg0->segmentForward, &arg0->pos);
 
-        temp_fa0 = SQ_SUM(&arg0->unk_28);
+        temp_fa0 = SQ_SUM(&arg0->segmentDisplacement);
         if (temp_fa0 == 0.0f) {
             break;
         }
 
-        temp_fa0 = arg0->unk_40 / sqrtf(temp_fa0);
+        temp_fa0 = arg0->distanceFromSegment / sqrtf(temp_fa0);
 
-        arg0->unk_28.x *= temp_fa0;
-        arg0->unk_44.x = temp_fv1 = arg0->unk_28.x + arg0->unk_1C.x;
-        spD0.x = arg1 - arg0->unk_44.x;
+        arg0->segmentDisplacement.x *= temp_fa0;
+        arg0->lastGroundedPos.x = pad = arg0->segmentDisplacement.x + arg0->segmentPos.x;
+        spD0.x = xPos - arg0->lastGroundedPos.x;
 
-        arg0->unk_28.y *= temp_fa0;
-        arg0->unk_44.y = temp_fv1 = arg0->unk_28.y + arg0->unk_1C.y;
-        spD0.y = arg2 - arg0->unk_44.y;
+        arg0->segmentDisplacement.y *= temp_fa0;
+        arg0->lastGroundedPos.y = pad = arg0->segmentDisplacement.y + arg0->segmentPos.y;
+        spD0.y = yPos - arg0->lastGroundedPos.y;
 
-        arg0->unk_28.z *= temp_fa0;
-        arg0->unk_44.z = temp_fv1 = arg0->unk_28.z + arg0->unk_1C.z;
-        spD0.z = arg3 - arg0->unk_44.z;
+        arg0->segmentDisplacement.z *= temp_fa0;
+        arg0->lastGroundedPos.z = pad = arg0->segmentDisplacement.z + arg0->segmentPos.z;
+        spD0.z = zPos - arg0->lastGroundedPos.z;
     }
 
-    arg0->unk_28.x = arg1 - arg0->unk_1C.x;
-    arg0->unk_28.y = arg2 - arg0->unk_1C.y;
-    arg0->unk_28.z = arg3 - arg0->unk_1C.z;
+    arg0->segmentDisplacement.x = xPos - arg0->segmentPos.x;
+    arg0->segmentDisplacement.y = yPos - arg0->segmentPos.y;
+    arg0->segmentDisplacement.z = zPos - arg0->segmentPos.z;
 
-    arg0->unk_34.x = arg1;
-    arg0->unk_34.y = arg2;
-    arg0->unk_34.z = arg3;
-    arg0->unk_40 = sqrtf(SQ_SUM(&arg0->unk_28));
+    arg0->pos.x = xPos;
+    arg0->pos.y = yPos;
+    arg0->pos.z = zPos;
+    arg0->distanceFromSegment = sqrtf(SQ_SUM(&arg0->segmentDisplacement));
 
     return 0;
 }
@@ -1182,14 +1188,14 @@ void Course_SegmentLengthsInit(CourseInfo* courseInfo) {
 
     courseInfo->length = 0.0f;
     do {
-        f32 temp_fs2 = segment->unk_24;
+        f32 tension = segment->tension;
         CourseSegment* nextSegment = segment->next;
         CourseSegment* prevSegment = segment->prev;
         CourseSegment* nextNextSegment = nextSegment->next;
 
-        spD8 = temp_fs2 - 2.0f;
-        spD4 = temp_fs2 - 3.0f;
-        spD0 = 3.0f - (2.0f * temp_fs2);
+        spD8 = tension - 2.0f;
+        spD4 = tension - 3.0f;
+        spD0 = 3.0f - (2.0f * tension);
 
         sp9C = segment->pos;
         segment->length = 0.0f;
@@ -1198,10 +1204,10 @@ void Course_SegmentLengthsInit(CourseInfo* courseInfo) {
             temp_fv1 = (f32) i / 50.0f;
             square = SQ(temp_fv1);
             cube = square * temp_fv1;
-            temp_fa1 = (2.0f * square - temp_fv1 - cube) * temp_fs2;
+            temp_fa1 = (2.0f * square - temp_fv1 - cube) * tension;
             spB0 = (spD4 * square - spD8 * cube) + 1.0f;
-            spAC = spD8 * cube + spD0 * square + temp_fs2 * temp_fv1;
-            spA8 = (cube - square) * temp_fs2;
+            spAC = spD8 * cube + spD0 * square + tension * temp_fv1;
+            spA8 = (cube - square) * tension;
 
             sp90.x = temp_fa1 * prevSegment->pos.x + spB0 * segment->pos.x + spAC * nextSegment->pos.x +
                      spA8 * nextNextSegment->pos.x;
@@ -1782,7 +1788,7 @@ f32 func_i2_800B58B8(CourseSegment* arg0) {
     f32 var_fs1;
     Vec3f sp58;
 
-    arg0->unk_70 = -1.0f;
+    arg0->joinScale = -1.0f;
     var_fs3 = D_i2_800C18F8[TRACK_SHAPE_INDEX((u32) arg0->trackSegmentInfo & TRACK_SHAPE_MASK)];
 
     switch (arg0->trackSegmentInfo & TRACK_JOIN_MASK) {
@@ -1800,49 +1806,49 @@ f32 func_i2_800B58B8(CourseSegment* arg0) {
     }
 
     if (arg0->trackSegmentInfo & TRACK_JOIN_PREVIOUS) {
-        arg0->unk_68 = 0.0f;
+        arg0->previousJoinEndTValue = 0.0f;
         var_fs1 = 0.0f;
         do {
-            temp_fv1 = 50.0f / Course_SplineGetTangent(arg0, arg0->unk_68, &sp58);
-            arg0->unk_68 += temp_fv1;
+            temp_fv1 = 50.0f / Course_SplineGetTangent(arg0, arg0->previousJoinEndTValue, &sp58);
+            arg0->previousJoinEndTValue += temp_fv1;
 
-            if (arg0->unk_68 >= 1.0f) {
+            if (arg0->previousJoinEndTValue >= 1.0f) {
                 var_fs3 = var_fs1;
-                arg0->unk_68 -= temp_fv1;
+                arg0->previousJoinEndTValue -= temp_fv1;
                 break;
             }
             var_fs1 += 50.0f;
         } while (var_fs1 < var_fs3);
-        arg0->unk_70 = var_fs1 / arg0->length;
+        arg0->joinScale = var_fs1 / arg0->length;
     } else {
-        arg0->unk_68 = -99.0f;
+        arg0->previousJoinEndTValue = -99.0f;
     }
 
     if (arg0->trackSegmentInfo & TRACK_JOIN_NEXT) {
-        arg0->unk_6C = 1.0f;
+        arg0->nextJoinStartTValue = 1.0f;
 
         var_fs1 = 0.0f;
         do {
-            temp_fv1 = 50.0f / Course_SplineGetTangent(arg0, arg0->unk_6C, &sp58);
-            arg0->unk_6C -= temp_fv1;
-            if (arg0->unk_6C <= 0.0f) {
+            temp_fv1 = 50.0f / Course_SplineGetTangent(arg0, arg0->nextJoinStartTValue, &sp58);
+            arg0->nextJoinStartTValue -= temp_fv1;
+            if (arg0->nextJoinStartTValue <= 0.0f) {
                 var_fs3 = var_fs1;
-                arg0->unk_6C += temp_fv1;
+                arg0->nextJoinStartTValue += temp_fv1;
                 break;
             }
             var_fs1 += 50.0f;
         } while (var_fs1 < var_fs3);
-        arg0->unk_70 = var_fs1 / arg0->length;
+        arg0->joinScale = var_fs1 / arg0->length;
     } else if (!(arg0->trackSegmentInfo & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK)) &&
                (arg0->next->trackSegmentInfo & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK))) {
-        arg0->unk_6C = 1.0f - (100.0f / Course_SplineGetTangent(arg0, 1.0f, &sp58));
+        arg0->nextJoinStartTValue = 1.0f - (100.0f / Course_SplineGetTangent(arg0, 1.0f, &sp58));
     } else {
-        arg0->unk_6C = 99.0f;
+        arg0->nextJoinStartTValue = 99.0f;
     }
-    if (arg0->unk_6C <= arg0->unk_68) {
-        arg0->unk_68 = 0.49f;
-        arg0->unk_6C = 0.51f;
-        arg0->unk_70 = 0.49f;
+    if (arg0->nextJoinStartTValue <= arg0->previousJoinEndTValue) {
+        arg0->previousJoinEndTValue = 0.49f;
+        arg0->nextJoinStartTValue = 0.51f;
+        arg0->joinScale = 0.49f;
         var_fs3 = arg0->length * 0.49f;
     }
     return var_fs3;
@@ -2009,7 +2015,8 @@ s32 func_i2_800B5CD8(CourseInfo* courseInfo) {
         }
 
         if (((var_s1->trackSegmentInfo & TRACK_SHAPE_MASK) == TRACK_SHAPE_AIR) ||
-            (((var_fs1 == var_s1->unk_6C)) && !(var_s1->trackSegmentInfo & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK)))) {
+            (((var_fs1 == var_s1->nextJoinStartTValue)) &&
+             !(var_s1->trackSegmentInfo & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK)))) {
             var_s1->unk_40 = var_s0;
             var_s1 = var_s4;
             var_fs1 = 0.0f;
@@ -2020,15 +2027,15 @@ s32 func_i2_800B5CD8(CourseInfo* courseInfo) {
             } else {
                 break;
             }
-        } else if (var_fs1 < var_s1->unk_68) {
+        } else if (var_fs1 < var_s1->previousJoinEndTValue) {
             var_fs1 += sp274;
-            if (var_s1->unk_68 <= var_fs1) {
-                var_fs1 = var_s1->unk_68;
+            if (var_s1->previousJoinEndTValue <= var_fs1) {
+                var_fs1 = var_s1->previousJoinEndTValue;
             }
-        } else if ((var_fs1 < var_s1->unk_6C) && (var_s1->unk_6C < 1.0f)) {
+        } else if ((var_fs1 < var_s1->nextJoinStartTValue) && (var_s1->nextJoinStartTValue < 1.0f)) {
             var_fs1 += sp274;
-            if (var_s1->unk_6C <= var_fs1) {
-                var_fs1 = var_s1->unk_6C;
+            if (var_s1->nextJoinStartTValue <= var_fs1) {
+                var_fs1 = var_s1->nextJoinStartTValue;
             }
         } else {
             var_fs1 += sp274;
@@ -2078,8 +2085,8 @@ s32 func_i2_800B5CD8(CourseInfo* courseInfo) {
         sp1B8 = sp1F4;
         if ((D_i2_800D65D4 == 0) || (D_i2_800D6C94 <= var_fs3) || (func_i2_800B5B9C(&sp254, &sp17C, &sp218) != 0) ||
             (func_i2_800B5B9C(&sp248, &sp17C, &sp20C) != 0) || (func_i2_800B5B9C(&sp23C, &sp17C, &sp200) != 0) ||
-            (func_i2_800B5B9C(&sp230, &sp17C, &sp1F4) != 0) || (var_fs1 == 0.0f) || (var_fs1 == var_s1->unk_68) ||
-            (var_fs1 == var_s1->unk_6C)) {
+            (func_i2_800B5B9C(&sp230, &sp17C, &sp1F4) != 0) || (var_fs1 == 0.0f) ||
+            (var_fs1 == var_s1->previousJoinEndTValue) || (var_fs1 == var_s1->nextJoinStartTValue)) {
             sp17C.x = sp1E8.x - sp224.x;
             sp17C.y = sp1E8.y - sp224.y;
             sp17C.z = sp1E8.z - sp224.z;
@@ -2189,8 +2196,8 @@ s32 func_i2_800B5CD8(CourseInfo* courseInfo) {
             var_s0->unk_08 = var_fs1;
             var_s0->unk_04 = (s32) (var_s1 - courseInfo->courseSegments);
 
-            if ((var_s1->unk_68 <= var_fs1) && (var_fs1 <= var_s1->unk_6C)) {
-                if (var_fs1 == var_s1->unk_68) {
+            if ((var_s1->previousJoinEndTValue <= var_fs1) && (var_fs1 <= var_s1->nextJoinStartTValue)) {
+                if (var_fs1 == var_s1->previousJoinEndTValue) {
 
                     if (var_s0[-1].trackSegmentInfo & 0x20000000) {
                         var_s0[-1].trackSegmentInfo =
@@ -2198,14 +2205,14 @@ s32 func_i2_800B5CD8(CourseInfo* courseInfo) {
                     } else {
                         var_s0[-1].trackSegmentInfo |= TRACK_UNK2_2000;
                     }
-                } else if (var_fs1 == var_s1->unk_6C) {
+                } else if (var_fs1 == var_s1->nextJoinStartTValue) {
                     var_s0->trackSegmentInfo |= TRACK_UNK2_4000;
                     if (!(var_s0->trackSegmentInfo & 0x1FF)) {
                         var_s0->trackSegmentInfo = (var_s0->trackSegmentInfo & ~0x3F) | 1;
                     }
                 }
             } else {
-                if (var_fs1 < var_s1->unk_68) {
+                if (var_fs1 < var_s1->previousJoinEndTValue) {
                     var_s0->trackSegmentInfo |= 0x200;
                     if (spB8 != 0.0f) {
                         sp274 = (var_s1->length * sp284) / spB8;
@@ -2222,8 +2229,8 @@ s32 func_i2_800B5CD8(CourseInfo* courseInfo) {
                 D_i2_800C1938[(u32) (var_s1->trackSegmentInfo & 0x1C0) >> 6](&sp110, var_s0, sp274);
             }
 
-            if ((var_fs1 != 0.0f) && (var_fs1 != var_s1->unk_68) && (var_fs1 != var_s1->unk_6C) &&
-                (var_fs3 < D_i2_800D6C94)) {
+            if ((var_fs1 != 0.0f) && (var_fs1 != var_s1->previousJoinEndTValue) &&
+                (var_fs1 != var_s1->nextJoinStartTValue) && (var_fs3 < D_i2_800D6C94)) {
                 var_s0->trackSegmentInfo |= TRACK_FLAG_CONTINUOUS;
                 var_fs3 = 0.0f;
             } else {
@@ -2539,7 +2546,7 @@ void Course_GenerateRandomCourse(void) {
                         var_s0--;
                         var_fs1 += 1.0f;
                     } while (var_s0 >= gCurrentCourseInfo->courseSegments);
-                } while (func_i2_800B1E74(gCurrentCourseInfo) != 0);
+                } while (Course_SplineCalculateTensions(gCurrentCourseInfo) != 0);
 
                 var_s1_2 = COURSE_CONTEXT()->courseData.controlPoint;
                 var_s0 = gCurrentCourseInfo->courseSegments;
@@ -2625,7 +2632,7 @@ void Course_GenerateRandomCourse(void) {
                 var_s0->pos.x = spCC.x - temp_fs2;
                 var_s0->pos.y = spCC.y - temp_ft5;
                 var_s0->pos.z = spCC.z - temp_fs3;
-            } while (func_i2_800B1E74(gCurrentCourseInfo) != 0);
+            } while (Course_SplineCalculateTensions(gCurrentCourseInfo) != 0);
 
             var_s0 = &gCurrentCourseInfo->courseSegments[gCurrentCourseInfo->segmentCount - 1];
 
@@ -3116,7 +3123,7 @@ void func_i2_800B9290(void) {
     func_80702FF4(COURSE_CONTEXT()->courseData.venue);
     func_i2_800B0D10(COURSE_CONTEXT()->courseData.venue);
     func_80702E0C(gCurrentCourseInfo);
-    func_i2_800B1E74(gCurrentCourseInfo);
+    Course_SplineCalculateTensions(gCurrentCourseInfo);
     if (gCurrentCourseInfo->courseIndex >= COURSE_EDIT_1) {
         gCurrentCourseInfo->encodedCourseIndex = COURSE_EDIT_1;
     } else {
@@ -4228,11 +4235,13 @@ Gfx* func_i2_800BDE60(Gfx* gfx, s32 playerIndex) {
     racer = &gRacers[player->id];
 
     D_i2_800D6C74 = gfx;
-    segment = racer->unk_0C.courseSegment;
+    segment = racer->segmentPositionInfo.courseSegment;
 
     if (segment->trackSegmentInfo & TRACK_FLAG_20000000) {
-        if (((segment->trackSegmentInfo & TRACK_JOIN_PREVIOUS) && (racer->unk_0C.segmentTValue < segment->unk_68)) ||
-            ((segment->trackSegmentInfo & TRACK_JOIN_NEXT) && (segment->unk_6C < racer->unk_0C.segmentTValue))) {
+        if (((segment->trackSegmentInfo & TRACK_JOIN_PREVIOUS) &&
+             (racer->segmentPositionInfo.segmentTValue < segment->previousJoinEndTValue)) ||
+            ((segment->trackSegmentInfo & TRACK_JOIN_NEXT) &&
+             (segment->nextJoinStartTValue < racer->segmentPositionInfo.segmentTValue))) {
             D_i2_800D6C88 = true;
         } else {
             D_i2_800D6C88 = false;
@@ -4399,13 +4408,13 @@ Gfx* func_i2_800BDE60(Gfx* gfx, s32 playerIndex) {
     gDPSetPrimColor(D_i2_800D6C74++, 0, 0, 255 - ((gGameFrameCount * 8) % 256), 0, 0, 255);
 
     if (1) {}
-    segment = racer->unk_0C.courseSegment;
+    segment = racer->segmentPositionInfo.courseSegment;
 
     if (segment->trackSegmentInfo & TRACK_FLAG_20000000) {
-        if (segment->unk_6C < racer->unk_0C.segmentTValue) {
-            var_fv1 = (1.0f - racer->unk_0C.unk_08) / segment->unk_70;
-        } else if (racer->unk_0C.segmentTValue < segment->unk_68) {
-            var_fv1 = racer->unk_0C.unk_08 / segment->unk_70;
+        if (segment->nextJoinStartTValue < racer->segmentPositionInfo.segmentTValue) {
+            var_fv1 = (1.0f - racer->segmentPositionInfo.segmentLengthProportion) / segment->joinScale;
+        } else if (racer->segmentPositionInfo.segmentTValue < segment->previousJoinEndTValue) {
+            var_fv1 = racer->segmentPositionInfo.segmentLengthProportion / segment->joinScale;
         } else {
             var_a0 = gCurrentCourseInfo->unk_14[0] >> 2;
             var_t0 = gCurrentCourseInfo->unk_14[1] >> 2;
@@ -4465,22 +4474,22 @@ block_68:
 
 extern unk_800D6CA0 D_800D6CA0;
 
-s32 func_i2_800BE8BC(CourseInfo* arg0) {
+s32 func_i2_800BE8BC(CourseInfo* courseInfo) {
     s32 var_s3 = -1;
     f32 sp58;
     f32 sp54;
-    CourseSegment* var_s0 = arg0->courseSegments;
+    CourseSegment* segment = courseInfo->courseSegments;
 
     if (1) {}
     do {
-        func_i2_800B1AF0(var_s0, &sp58, &sp54);
-        var_s0->unk_24 = (sp58 + sp54) * 0.5f;
+        func_i2_800B1AF0(segment, &sp58, &sp54);
+        segment->tension = (sp58 + sp54) * 0.5f;
         if ((sp58 < 0.0f) || (sp58 > 2.0f) || (sp54 < 0.0f) || (sp54 > 2.0f)) {
-            var_s3 = var_s0->segmentIndex;
-            var_s0->unk_24 = 0.1f;
+            var_s3 = segment->segmentIndex;
+            segment->tension = 0.1f;
         }
-        var_s0 = var_s0->next;
-    } while (var_s0 != arg0->courseSegments);
+        segment = segment->next;
+    } while (segment != courseInfo->courseSegments);
 
     D_800D6CA0.unk_20 = var_s3;
     return var_s3;

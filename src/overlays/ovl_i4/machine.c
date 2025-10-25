@@ -1306,7 +1306,8 @@ void MachineSelect_MachineInit(Object* machineObj) {
     }
 
     for (j = 3; j >= 0; j--) {
-        gRacers[j].unk_0C.unk_34.x = gRacers[j].unk_0C.unk_34.y = gRacers[j].unk_0C.unk_34.z = 0.0f;
+        gRacers[j].segmentPositionInfo.pos.x = gRacers[j].segmentPositionInfo.pos.y =
+            gRacers[j].segmentPositionInfo.pos.z = 0.0f;
         gRacers[j].unk_C0.x.z = 1.0f;
         gRacers[j].unk_C0.y.y = 1.0f;
         gRacers[j].unk_C0.z.x = 1.0f;
@@ -1356,7 +1357,8 @@ void MachineSettings_MachineInit(Object* machineObj) {
     }
 
     for (k = 3; k >= 0; k--) {
-        gRacers[k].unk_0C.unk_34.x = gRacers[k].unk_0C.unk_34.y = gRacers[k].unk_0C.unk_34.z = 0.0f;
+        gRacers[k].segmentPositionInfo.pos.x = gRacers[k].segmentPositionInfo.pos.y =
+            gRacers[k].segmentPositionInfo.pos.z = 0.0f;
         gRacers[k].unk_C0.x.z = 1.0f;
         gRacers[k].unk_C0.y.y = 1.0f;
         gRacers[k].unk_C0.z.x = 1.0f;
@@ -2132,8 +2134,8 @@ void MachineSelect_MachineUpdate(Object* machineObj) {
         func_806F6D8C(&var_s0->unk_C0);
         Matrix_SetLockedLookAt(&gGfxPool->unk_32308[i], NULL, D_8076E568, D_8076E56C, D_8076E570, var_s0->unk_C0.x.x,
                                var_s0->unk_C0.x.y, var_s0->unk_C0.x.z, var_s0->unk_C0.y.x, var_s0->unk_C0.y.y,
-                               var_s0->unk_C0.y.z, var_s0->unk_0C.unk_34.x, var_s0->unk_0C.unk_34.y,
-                               var_s0->unk_0C.unk_34.z);
+                               var_s0->unk_C0.y.z, var_s0->segmentPositionInfo.pos.x, var_s0->segmentPositionInfo.pos.y,
+                               var_s0->segmentPositionInfo.pos.z);
         var_s0--;
         i--;
     }
@@ -2221,17 +2223,19 @@ void MachineSettings_MachineUpdate(Object* machineObj) {
         func_806F6D8C(&var_s0->unk_C0);
         Matrix_SetLockedLookAt(&gGfxPool->unk_32308[i], NULL, var_fs2 * D_8076E568, var_fs2 * D_8076E56C,
                                var_fs2 * D_8076E570, var_s0->unk_C0.x.x, var_s0->unk_C0.x.y, var_s0->unk_C0.x.z,
-                               var_s0->unk_C0.y.x, var_s0->unk_C0.y.y, var_s0->unk_C0.y.z, var_s0->unk_0C.unk_34.x,
-                               var_s0->unk_0C.unk_34.y, var_s0->unk_0C.unk_34.z);
+                               var_s0->unk_C0.y.x, var_s0->unk_C0.y.y, var_s0->unk_C0.y.z,
+                               var_s0->segmentPositionInfo.pos.x, var_s0->segmentPositionInfo.pos.y,
+                               var_s0->segmentPositionInfo.pos.z);
         Matrix_SetLockedLookAt(&gGfxPool->unk_33208[i], NULL, (var_fs2 * 1.05f) * D_8076E568,
                                (var_fs2 * 1.05f) * D_8076E56C, (var_fs2 * 1.05f) * D_8076E570, var_s0->unk_C0.x.x,
                                var_s0->unk_C0.x.y, var_s0->unk_C0.x.z, var_s0->unk_C0.y.x, var_s0->unk_C0.y.y,
-                               var_s0->unk_C0.y.z, var_s0->unk_0C.unk_34.x, var_s0->unk_0C.unk_34.y,
-                               var_s0->unk_0C.unk_34.z);
+                               var_s0->unk_C0.y.z, var_s0->segmentPositionInfo.pos.x, var_s0->segmentPositionInfo.pos.y,
+                               var_s0->segmentPositionInfo.pos.z);
         Matrix_SetLockedLookAt(&gGfxPool->unk_32A88[i], NULL, var_fs2 * D_8076E568, var_fs2 * D_8076E56C,
                                var_fs2 * D_8076E570, var_s0->unk_C0.x.x, var_s0->unk_C0.x.y, var_s0->unk_C0.x.z,
-                               var_s0->unk_C0.y.x, var_s0->unk_C0.y.y, var_s0->unk_C0.y.z, var_s0->unk_0C.unk_34.x,
-                               var_s0->unk_0C.unk_34.y, var_s0->unk_0C.unk_34.z);
+                               var_s0->unk_C0.y.x, var_s0->unk_C0.y.y, var_s0->unk_C0.y.z,
+                               var_s0->segmentPositionInfo.pos.x, var_s0->segmentPositionInfo.pos.y,
+                               var_s0->segmentPositionInfo.pos.z);
         var_s0--;
         i--;
     }
