@@ -193,9 +193,9 @@ void func_i2_800AB82C(void) {
             temp_fs2 = (((Math_Rand1() & 0x1FFFF) / 131071.0f) * 1.8f) - 0.9f;
             temp_fs0 = (((Math_Rand1() & 0x1FFFF) / 131071.0f) * 0.4f) + 0.4f;
             temp_fs1 = (((Math_Rand1() & 0x1FFFF) / 131071.0f) * 1.8f) - 0.9f;
-            func_i2_800ACABC(((s32) (Math_Rand1() % 16) - 8) + racer->unk_0C.unk_34.x,
-                             ((s32) (Math_Rand1() % 16) - 8) + racer->unk_0C.unk_34.y,
-                             ((s32) (Math_Rand1() % 16) - 8) + racer->unk_0C.unk_34.z,
+            func_i2_800ACABC(((s32) (Math_Rand1() % 16) - 8) + racer->segmentPositionInfo.pos.x,
+                             ((s32) (Math_Rand1() % 16) - 8) + racer->segmentPositionInfo.pos.y,
+                             ((s32) (Math_Rand1() % 16) - 8) + racer->segmentPositionInfo.pos.z,
                              racer->velocity.x + (temp_fs2 * racer->unk_C0.z.x) + (temp_fs0 * racer->unk_C0.y.x) +
                                  (temp_fs1 * racer->unk_C0.x.x),
                              racer->velocity.y + (temp_fs2 * racer->unk_C0.z.y) + (temp_fs0 * racer->unk_C0.y.y) +

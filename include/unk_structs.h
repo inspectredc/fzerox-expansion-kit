@@ -118,7 +118,7 @@ typedef struct CourseSegment {
     /* 0x18 */ f32 radiusLeft;
     /* 0x1C */ f32 radiusRight;
     /* 0x20 */ s32 trackSegmentInfo;
-    /* 0x24 */ f32 unk_24;
+    /* 0x24 */ f32 tension;
     /* 0x28 */ f32 length;
     /* 0x2C */ f32 lengthFromStart;
     /* 0x30 */ s32 segmentIndex;
@@ -134,9 +134,9 @@ typedef struct CourseSegment {
     /* 0x58 */ struct Effect* effectsEnd;
     /* 0x5C */ s8 unk_5C[0x8]; // likely a pair of EffectDrawData struct ptrs
     /* 0x64 */ f32 unk_64;
-    /* 0x68 */ f32 unk_68;
-    /* 0x6C */ f32 unk_6C;
-    /* 0x70 */ f32 unk_70;
+    /* 0x68 */ f32 previousJoinEndTValue;
+    /* 0x6C */ f32 nextJoinStartTValue;
+    /* 0x70 */ f32 joinScale;
     /* 0x74 */ Vec3f quarterMarkPos;
     /* 0x80 */ Vec3f halfMarkPos;
     /* 0x8C */ Vec3f threeQuarterMarkPos;
@@ -257,25 +257,25 @@ typedef struct EffectDrawData {
     s8 unk_0C[0x4];
 } EffectDrawData; // size = 0x10
 
-typedef struct Racer_unk_C {
-    CourseSegment* courseSegment;
-    f32 segmentTValue;
-    f32 unk_08;
-    Vec3f unk_0C;
-    f32 unk_18;
-    Vec3f unk_1C;
-    Vec3f unk_28;
-    Vec3f unk_34;
-    f32 unk_40;
-    Vec3f unk_44;
-} Racer_unk_C; // size >= 0x50
+typedef struct RacerSegmentPositionInfo {
+    /* 0x00 */ CourseSegment* courseSegment;
+    /* 0x04 */ f32 segmentTValue;
+    /* 0x08 */ f32 segmentLengthProportion;
+    /* 0x0C */ Vec3f segmentForward;
+    /* 0x18 */ f32 segmentForwardMagnitude;
+    /* 0x1C */ Vec3f segmentPos;
+    /* 0x28 */ Vec3f segmentDisplacement;
+    /* 0x34 */ Vec3f pos;
+    /* 0x40 */ f32 distanceFromSegment;
+    /* 0x44 */ Vec3f lastGroundedPos;
+} RacerSegmentPositionInfo; // size = 0x50
 
 typedef struct Racer {
     s32 id;
     s32 stateFlags;
-    u16 unk_08;
+    u16 soundEffectFlags;
     s16 points;
-    Racer_unk_C unk_0C;
+    RacerSegmentPositionInfo segmentPositionInfo;
     Vec3f unk_5C;
     Vec3f unk_68;
     Vec3f velocity;
@@ -283,7 +283,7 @@ typedef struct Racer {
     Vec3f acceleration;
     f32 speed;
     f32 maxSpeed;
-    f32 unk_A0;
+    f32 heightAboveGround;
     f32 unk_A4;
     Vec3f unk_A8;
     Vec3f unk_B4;
@@ -297,14 +297,14 @@ typedef struct Racer {
     s8 unk_165;
     s8 unk_166;
     s8 customType;
-    Vec3f unk_168;
+    Vec3f shadowPos;
     f32 shadowColorStrength;
     f32 unk_178;
     f32 unk_17C;
     Vec3f unk_180;
     Vec3f unk_18C;
     f32 unk_198;
-    Vec3f unk_19C;
+    Vec3f upFromGround;
     f32 unk_1A8;
     f32 boostEnergyUsage;
     f32 unk_1B0;
@@ -316,9 +316,9 @@ typedef struct Racer {
     f32 unk_1C8;
     f32 unk_1CC;
     f32 unk_1D0;
-    f32 unk_1D4;
-    f32 unk_1D8;
-    f32 unk_1DC;
+    f32 accelerationForce;
+    f32 driftAttackForce;
+    f32 jumpBoost;
     f32 unk_1E0;
     f32 unk_1E4;
     f32 unk_1E8;
@@ -346,15 +346,15 @@ typedef struct Racer {
     f32 lapsCompletedDistance;
     f32 lapDistance;
     f32 raceDistancePosition;
-    Mtx3F unk_24C;
-    f32 unk_270;
-    f32 unk_274;
-    s16 unk_278;
-    s16 unk_27A;
+    Mtx3F unk_24C; // basis
+    f32 currentRadiusLeft;
+    f32 currentRadiusRight;
+    s16 zButtonTimer;
+    s16 rButtonTimer;
     s32 unk_27C;
     s32 unk_280;
-    s16 unk_284;
-    s16 unk_286;
+    s16 attackState;
+    s16 driftAttackDirection;
     s32 unk_288;
     struct Racer* unk_28C;
     s32 lapTimes[3];
@@ -383,9 +383,9 @@ typedef struct Racer {
     s16 shadowR;
     s16 shadowG;
     s16 shadowB;
-    s16 unk_2DA;
-    s16 unk_2DC;
-    s16 unk_2DE;
+    s16 attackHighlightR;
+    s16 attackHighlightG;
+    s16 attackHighlightB;
     f32 bodyRF;
     f32 bodyGF;
     f32 bodyBF;

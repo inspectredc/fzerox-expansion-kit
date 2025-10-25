@@ -1811,9 +1811,9 @@ void Audio_PlayerSEStart(u8 racerId, u8 sfxId) {
                 if (racerId == sAudioClosestRacerId) {
                     distance = sAudioClosestRacerDistance;
                 } else {
-                    vec.x = gRacers[racerId].unk_0C.unk_34.x - gPlayers[0].unk_50.x;
-                    vec.y = gRacers[racerId].unk_0C.unk_34.y - gPlayers[0].unk_50.y;
-                    vec.z = gRacers[racerId].unk_0C.unk_34.z - gPlayers[0].unk_50.z;
+                    vec.x = gRacers[racerId].segmentPositionInfo.pos.x - gPlayers[0].unk_50.x;
+                    vec.y = gRacers[racerId].segmentPositionInfo.pos.y - gPlayers[0].unk_50.y;
+                    vec.z = gRacers[racerId].segmentPositionInfo.pos.z - gPlayers[0].unk_50.z;
 
                     distance = sqrtf(SQ_SUM(&vec));
                 }
@@ -1988,9 +1988,9 @@ void Audio_UpdateEnemyEngine(void) {
     if (((gGameMode == GAMEMODE_GP_RACE) || (gGameMode == GAMEMODE_PRACTICE) || (gGameMode == GAMEMODE_DEATH_RACE)) &&
         !sAudioLevelFadeoutActive && (gAudioPlayerFinishedState[0] == 0)) {
         if (gRacers[sAudioClosestRacerId].unk_17C > 9.0f) {
-            vec.x = gRacers[sAudioClosestRacerId].unk_0C.unk_34.x - gPlayers[0].unk_50.x;
-            vec.y = gRacers[sAudioClosestRacerId].unk_0C.unk_34.y - gPlayers[0].unk_50.y;
-            vec.z = gRacers[sAudioClosestRacerId].unk_0C.unk_34.z - gPlayers[0].unk_50.z;
+            vec.x = gRacers[sAudioClosestRacerId].segmentPositionInfo.pos.x - gPlayers[0].unk_50.x;
+            vec.y = gRacers[sAudioClosestRacerId].segmentPositionInfo.pos.y - gPlayers[0].unk_50.y;
+            vec.z = gRacers[sAudioClosestRacerId].segmentPositionInfo.pos.z - gPlayers[0].unk_50.z;
             sAudioClosestRacerDistance = sqrtf(SQ_SUM(&vec));
         }
         if (gRacers[sAudioClosestRacerId].unk_17C > 9.0f) {
@@ -2063,7 +2063,7 @@ void func_807447CC(u8 playerId) {
     }
     D_80771B5C[playerId] = gRacers[playerId].speed;
     if (D_80771B74[playerId] == 0) {
-        if ((gRacers[playerId].unk_1D4 != 0.0f) && (gRacers[playerId].speed > 27.0f)) {
+        if ((gRacers[playerId].accelerationForce != 0.0f) && (gRacers[playerId].speed > 27.0f)) {
             if (D_80771B58[playerId] == 1) {
                 if (D_80771B44[playerId] > -0.5f) {
                     D_80771B44[playerId] -= 0.004f;
@@ -2084,14 +2084,14 @@ void func_807447CC(u8 playerId) {
     freqScale = (((0.01f + gRacers[playerId].speed) * (1.0f / 21.0f)) + 0.25f) + D_80771B44[playerId];
     AUDIOCMD_CHANNEL_SET_FREQ_SCALE(0, playerId + 2, freqScale);
 
-    if ((gRacers[playerId].unk_1D4 == 0.0f) && (gRacers[playerId].unk_1D8 == 0.0f)) {
+    if ((gRacers[playerId].accelerationForce == 0.0f) && (gRacers[playerId].driftAttackForce == 0.0f)) {
         if (D_80771B74[playerId] == 1) {
             Vec3f vec;
             f32 temp;
 
-            vec.x = gRacers[playerId].unk_0C.unk_34.x - gPlayers[playerId].unk_50.x;
-            vec.y = gRacers[playerId].unk_0C.unk_34.y - gPlayers[playerId].unk_50.y;
-            vec.z = gRacers[playerId].unk_0C.unk_34.z - gPlayers[playerId].unk_50.z;
+            vec.x = gRacers[playerId].segmentPositionInfo.pos.x - gPlayers[playerId].unk_50.x;
+            vec.y = gRacers[playerId].segmentPositionInfo.pos.y - gPlayers[playerId].unk_50.y;
+            vec.z = gRacers[playerId].segmentPositionInfo.pos.z - gPlayers[playerId].unk_50.z;
             temp = sqrtf(SQ_SUM(&vec));
             volumeScale = (-0.002f * temp + 1.2f) * 0.65f;
 
@@ -2108,9 +2108,9 @@ void func_807447CC(u8 playerId) {
         Vec3f vec;
         f32 temp;
 
-        vec.x = gRacers[playerId].unk_0C.unk_34.x - gPlayers[playerId].unk_50.x;
-        vec.y = gRacers[playerId].unk_0C.unk_34.y - gPlayers[playerId].unk_50.y;
-        vec.z = gRacers[playerId].unk_0C.unk_34.z - gPlayers[playerId].unk_50.z;
+        vec.x = gRacers[playerId].segmentPositionInfo.pos.x - gPlayers[playerId].unk_50.x;
+        vec.y = gRacers[playerId].segmentPositionInfo.pos.y - gPlayers[playerId].unk_50.y;
+        vec.z = gRacers[playerId].segmentPositionInfo.pos.z - gPlayers[playerId].unk_50.z;
         temp = sqrtf(SQ_SUM(&vec));
         volumeScale = -0.002f * temp + 1.2f;
 

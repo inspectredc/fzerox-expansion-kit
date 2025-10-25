@@ -512,7 +512,8 @@ void func_xk3_80133BD4(Object* machineObj) {
     }
 
     for (j = 1; j >= 0; j--) {
-        gRacers[j].unk_0C.unk_34.x = gRacers[j].unk_0C.unk_34.y = gRacers[j].unk_0C.unk_34.z = 0.0f;
+        gRacers[j].segmentPositionInfo.pos.x = gRacers[j].segmentPositionInfo.pos.y =
+            gRacers[j].segmentPositionInfo.pos.z = 0.0f;
         gRacers[j].unk_C0.x.z = 1.0f;
         gRacers[j].unk_C0.y.y = 1.0f;
         gRacers[j].unk_C0.z.x = 1.0f;
@@ -777,7 +778,7 @@ void func_xk3_80134B04(Object* machineObj) {
         func_806F6D8C(&racer->unk_C0);
         Matrix_SetLockedLookAt(&gGfxPool->unk_32308[i], NULL, D_8076E568, D_8076E56C, D_8076E570, racer->unk_C0.x.x,
                                racer->unk_C0.x.y, racer->unk_C0.x.z, racer->unk_C0.y.x, racer->unk_C0.y.y,
-                               racer->unk_C0.y.z, racer->unk_0C.unk_34.x, racer->unk_0C.unk_34.y,
-                               racer->unk_0C.unk_34.z);
+                               racer->unk_C0.y.z, racer->segmentPositionInfo.pos.x, racer->segmentPositionInfo.pos.y,
+                               racer->segmentPositionInfo.pos.z);
     }
 }
