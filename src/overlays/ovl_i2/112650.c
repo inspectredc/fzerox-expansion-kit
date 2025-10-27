@@ -4257,7 +4257,7 @@ Gfx* func_i2_800BDE60(Gfx* gfx, s32 playerIndex) {
     sp60.m[3][2] = player->unk_11C.m[3][2] -
                    (player->unk_11C.m[2][2] *
                     (sp60.m[3][3] = ((-temp_fv1 * player->unk_15C.m[0][2]) - (temp_fa0 * player->unk_15C.m[1][2])) -
-                                    (player->unk_15C.m[2][2] * temp_fa1)));
+                                    (temp_fa1 * player->unk_15C.m[2][2])));
     sp60.m[3][0] =
         (player->unk_11C.m[0][0] * ((temp_fv1 * player->unk_15C.m[0][0]) + (temp_fa0 * player->unk_15C.m[1][0]) +
                                     (temp_fa1 * player->unk_15C.m[2][0]))) -

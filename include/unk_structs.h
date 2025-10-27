@@ -292,10 +292,10 @@ typedef struct Racer {
     /* 0x0E8 */ Mtx3F modelBasis;
     /* 0x10C */ Vec3f modelPos;
     /* 0x118 */ Vec3f recoilStrength;
-    /* 0x124 */ MtxF unk_124;
-    /* 0x164 */ s8 unk_164;
-    /* 0x165 */ s8 unk_165;
-    /* 0x166 */ s8 unk_166;
+    /* 0x124 */ MtxF modelMatrix;
+    /* 0x164 */ s8 modelMatrixInit;
+    /* 0x165 */ s8 shadowMatrixInit;
+    /* 0x166 */ s8 attackHighlightMatrixInit;
     /* 0x167 */ s8 customType;
     /* 0x168 */ Vec3f shadowPos;
     /* 0x174 */ f32 shadowColorStrength;

@@ -8,7 +8,7 @@ typedef struct MachineEffect {
     Vec3f pos;
     Vec3f velocity;
     f32 scale;
-    u32 timer;
+    s32 timer;
     Racer* racer;
 } MachineEffect; // size = 0x24
 
@@ -22,7 +22,7 @@ typedef struct FlyingSparkEffect {
     Vec3f pos;
     Vec3f velocity;
     Mtx3F basis;
-    u32 timer;
+    s32 timer;
     Racer* racer;
 } FlyingSparkEffect; // size = 0x44
 
@@ -39,7 +39,7 @@ typedef struct MachineDebrisEffect {
     s16 green;
     s16 blue;
     s16 alpha;
-    u32 timer;
+    s32 timer;
     Racer* racer;
 } MachineDebrisEffect; // size = 0x58
 

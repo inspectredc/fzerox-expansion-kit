@@ -654,14 +654,14 @@ void func_i7_80096DAC(void) {
                 if (var_fa0 <= 0) {
                     temp_s4->unk_0C = temp_s4->unk_10 = 0x200;
                 } else {
-                    var_fs2 = var->unk_19C.xw + ((var->unk_19C.xx * temp_fv0_12) + (var->unk_19C.xy * temp_fv1_5) +
-                                                 (var->unk_19C.xz * temp_fa1));
-                    var_fs1 = var->unk_19C.yw + ((var->unk_19C.yx * temp_fv0_12) + (var->unk_19C.yy * temp_fv1_5) +
-                                                 (var->unk_19C.yz * temp_fa1));
-                    temp1 = var->unk_19C.zw + ((var->unk_19C.zx * temp_fv0_12) + (var->unk_19C.zy * temp_fv1_5) +
-                                               (var->unk_19C.zz * temp_fa1));
-                    var_fs0 = var->unk_19C.ww + ((var->unk_19C.wx * temp_fv0_12) + (var->unk_19C.wy * temp_fv1_5) +
-                                                 (var->unk_19C.wz * temp_fa1));
+                    var_fs2 = ((var->unk_19C.m[0][0] * temp_fv0_12) + (var->unk_19C.m[1][0] * temp_fv1_5) +
+                                                     (var->unk_19C.m[2][0] * temp_fa1)) + var->unk_19C.m[3][0];
+                    var_fs1 = ((var->unk_19C.m[0][1] * temp_fv0_12) + (var->unk_19C.m[1][1] * temp_fv1_5) +
+                                                    (var->unk_19C.m[2][1] * temp_fa1)) + var->unk_19C.m[3][1];
+                    temp1 = ((var->unk_19C.m[0][2] * temp_fv0_12) + (var->unk_19C.m[1][2] * temp_fv1_5) +
+                                                (var->unk_19C.m[2][2] * temp_fa1)) + var->unk_19C.m[3][2];
+                    var_fs0 = ((var->unk_19C.m[0][3] * temp_fv0_12) + (var->unk_19C.m[1][3] * temp_fv1_5) +
+                                                    (var->unk_19C.m[2][3] * temp_fa1)) + var->unk_19C.m[3][3];
                     if (func_i3_fabsf(var_fs0) < 0.001f) {
                         temp_s0->unk_0C = temp_s0->unk_10 = 0x200;
                     } else {
@@ -689,14 +689,14 @@ void func_i7_80096DAC(void) {
                     if (var_fa0 <= 0) {
                         temp_s0->unk_0C = temp_s0->unk_10 = 0x200;
                     } else {
-                        var_fs2 = var->unk_19C.xw + ((var->unk_19C.xx * temp_fv0_12) + (var->unk_19C.xy * temp_fv1_5) +
-                                                     (var->unk_19C.xz * temp_fa1));
-                        var_fs1 = var->unk_19C.yw + ((var->unk_19C.yx * temp_fv0_12) + (var->unk_19C.yy * temp_fv1_5) +
-                                                     (var->unk_19C.yz * temp_fa1));
-                        temp1 = var->unk_19C.zw + ((var->unk_19C.zx * temp_fv0_12) + (var->unk_19C.zy * temp_fv1_5) +
-                                                   (var->unk_19C.zz * temp_fa1));
-                        var_fs0 = var->unk_19C.ww + ((var->unk_19C.wx * temp_fv0_12) + (var->unk_19C.wy * temp_fv1_5) +
-                                                     (var->unk_19C.wz * temp_fa1));
+                        var_fs2 = ((var->unk_19C.m[0][0] * temp_fv0_12) + (var->unk_19C.m[1][0] * temp_fv1_5) +
+                                                     (var->unk_19C.m[2][0] * temp_fa1)) + var->unk_19C.m[3][0];
+                        var_fs1 = ((var->unk_19C.m[0][1] * temp_fv0_12) + (var->unk_19C.m[1][1] * temp_fv1_5) +
+                                                     (var->unk_19C.m[2][1] * temp_fa1)) + var->unk_19C.m[3][1];
+                        temp1 = ((var->unk_19C.m[0][2] * temp_fv0_12) + (var->unk_19C.m[1][2] * temp_fv1_5) +
+                                                   (var->unk_19C.m[2][2] * temp_fa1)) + var->unk_19C.m[3][2];
+                        var_fs0 = ((var->unk_19C.m[0][3] * temp_fv0_12) + (var->unk_19C.m[1][3] * temp_fv1_5) +
+                                                     (var->unk_19C.m[2][3] * temp_fa1)) + var->unk_19C.m[3][3];
                         if (func_i3_fabsf(var_fs0) < 0.001f) {
                             temp_s0->unk_0C = temp_s0->unk_10 = 0x200;
                         } else {
