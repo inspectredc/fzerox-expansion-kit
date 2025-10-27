@@ -18,7 +18,7 @@ void func_i2_800AABD0(void) {
     func_806F5A50();
     func_8071D48C();
     func_807160A0();
-    func_i2_800AB6B0();
+    Effects_Init();
     gGamePaused = false;
     func_i3_80044DD0();
     func_i3_ResetLivesChangeCounter();
@@ -46,7 +46,7 @@ void Race_Init(void) {
     func_807160A0();
     func_8070F0B0(COURSE_CONTEXT()->courseData.venue, COURSE_CONTEXT()->courseData.skybox);
     func_i3_800617A0();
-    func_i2_800AB6B0();
+    Effects_Init();
     Course_LandminesViewInteractDataInit();
     Course_JumpsViewInteractDataInit();
     Course_DecorationsViewInteractDataInit();
@@ -59,7 +59,7 @@ void Race_Init(void) {
 
 s32 Race_Update(void) {
     func_i3_80044750();
-    func_i2_800AB82C();
+    Effects_Update();
     func_80726554();
     func_80717294();
     func_i3_80061C2C();

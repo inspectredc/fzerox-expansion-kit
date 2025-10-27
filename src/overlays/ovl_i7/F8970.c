@@ -268,12 +268,14 @@ void func_i7_800967D8(void) {
     if (D_i7_8009AF64 == 1) {
         for (i = 0; i < gTotalRacers; i++) {
             racer = &gRacers[i];
-            Matrix_SetLockedLookAt(
-                &D_i7_8009AD10->unk_3F0[i], NULL, 0.04f, 0.04f, 0.04f, -gPlayers[0].unk_5C.x.x, -gPlayers[0].unk_5C.x.y,
-                -gPlayers[0].unk_5C.x.z, racer->unk_C0.y.x, racer->unk_C0.y.y, racer->unk_C0.y.z,
-                racer->shadowPos.x + ((racer->unk_C0.x.x * 23.0f * 3.0f) / 2) + (racer->unk_C0.z.x * 23.0f * 0.8f),
-                (D_i7_8009ADE8[i].unk_0C + 120.0f) - 1.0f,
-                racer->shadowPos.z + ((racer->unk_C0.x.z * 23.0f * 3.0f) / 2) + (racer->unk_C0.z.z * 23.0f * 0.8f));
+            Matrix_SetLockedLookAt(&D_i7_8009AD10->unk_3F0[i], NULL, 0.04f, 0.04f, 0.04f, -gPlayers[0].unk_5C.x.x,
+                                   -gPlayers[0].unk_5C.x.y, -gPlayers[0].unk_5C.x.z, racer->trueBasis.y.x,
+                                   racer->trueBasis.y.y, racer->trueBasis.y.z,
+                                   racer->shadowPos.x + ((racer->trueBasis.x.x * 23.0f * 3.0f) / 2) +
+                                       (racer->trueBasis.z.x * 23.0f * 0.8f),
+                                   (D_i7_8009ADE8[i].unk_0C + 120.0f) - 1.0f,
+                                   racer->shadowPos.z + ((racer->trueBasis.x.z * 23.0f * 3.0f) / 2) +
+                                       (racer->trueBasis.z.z * 23.0f * 0.8f));
         }
     }
 }
