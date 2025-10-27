@@ -89,7 +89,7 @@ void Effects_Update(void) {
     for (count = gCollisionSparkCount, index = (gCollisionSparkIndex - 1), index %= ARRAY_COUNT(gCollisionSparks);
          count != 0; index = (index - 1) % ARRAY_COUNT(gCollisionSparks), count--) {
         machineEffect = &gCollisionSparks[index];
-        machineEffect->timer = (machineEffect->timer + 1) % 16;
+        machineEffect->timer = (machineEffect->timer + 1) % 16U;
         if (machineEffect->timer != 0) {
             machineEffect->scale *= 1.05f;
             machineEffect->pos.x += machineEffect->velocity.x;
@@ -103,7 +103,7 @@ void Effects_Update(void) {
     for (count = gExplosions1Count, index = (gExplosions1Index - 1), index %= ARRAY_COUNT(gExplosions1); count != 0;
          index = (index - 1) % ARRAY_COUNT(gExplosions1), count--) {
         machineEffect = &gExplosions1[index];
-        machineEffect->timer = (machineEffect->timer + 1) % 16;
+        machineEffect->timer = (machineEffect->timer + 1) % 16U;
         if (machineEffect->timer != 0) {
             machineEffect->scale *= 1.02f;
             machineEffect->pos.x += machineEffect->velocity.x;
@@ -117,7 +117,7 @@ void Effects_Update(void) {
     for (count = gExplosions2Count, index = (gExplosions2Index - 1), index %= ARRAY_COUNT(gExplosions2); count != 0;
          index = (index - 1) % ARRAY_COUNT(gExplosions2), count--) {
         machineEffect = &gExplosions2[index];
-        machineEffect->timer = (machineEffect->timer + 1) % 32;
+        machineEffect->timer = (machineEffect->timer + 1) % 32U;
         if (machineEffect->timer != 0) {
             machineEffect->scale *= 1.02f;
             machineEffect->pos.x += machineEffect->velocity.x;
@@ -131,7 +131,7 @@ void Effects_Update(void) {
     for (count = gFlyingSparksCount, index = (gFlyingSparksIndex - 1), index %= ARRAY_COUNT(gFlyingSparks); count != 0;
          index = (index - 1) % ARRAY_COUNT(gFlyingSparks), count--) {
         flyingSpark = &gFlyingSparks[index];
-        flyingSpark->timer = (flyingSpark->timer + 1) % 64;
+        flyingSpark->timer = (flyingSpark->timer + 1) % 64U;
 
         if (flyingSpark->timer != 0) {
             Racer* racer = flyingSpark->racer;
@@ -176,7 +176,7 @@ void Effects_Update(void) {
     for (count = gSmokesCount, index = (gSmokesIndex - 1), index %= ARRAY_COUNT(gSmokes); count != 0;
          index = (index - 1) % ARRAY_COUNT(gSmokes), count--) {
         machineEffect = &gSmokes[index];
-        machineEffect->timer = (machineEffect->timer + 1) % 32;
+        machineEffect->timer = (machineEffect->timer + 1) % 32U;
         if (machineEffect->timer != 0) {
             machineEffect->scale *= 1.02f;
             machineEffect->pos.x += machineEffect->velocity.x;
@@ -216,7 +216,7 @@ void Effects_Update(void) {
     for (count = gMachineDebrisCount, index = (gMachineDebrisIndex - 1), index %= ARRAY_COUNT(gMachineDebris);
          count != 0; index = (index - 1) % ARRAY_COUNT(gMachineDebris), count--) {
         machineDebris = &gMachineDebris[index];
-        machineDebris->timer = (machineDebris->timer + 1) % 64;
+        machineDebris->timer = (machineDebris->timer + 1) % 64U;
         if (machineDebris->timer != 0) {
             machineDebris->cornerVibration1 += 0xCC;
 
