@@ -312,11 +312,11 @@ void func_807121D4(unk_struct_F8* arg0, Player* player) {
     player->unk_20.y = racer->unk_180.y;
     player->unk_20.z = racer->unk_180.z;
 
-    var_fv1 = (racer->unk_18C.x * racer->unk_A8.x) + (racer->unk_18C.y * racer->unk_A8.y) +
-              (racer->unk_18C.z * racer->unk_A8.z);
-    sp98.x = (temp_s2->unk_00.unk_54.x - player->unk_20.x) + (var_fv1 * racer->unk_A8.x);
-    sp98.y = (temp_s2->unk_00.unk_54.y - player->unk_20.y) + (var_fv1 * racer->unk_A8.y);
-    sp98.z = (temp_s2->unk_00.unk_54.z - player->unk_20.z) + (var_fv1 * racer->unk_A8.z);
+    var_fv1 = (racer->unk_18C.x * racer->gravityUp.x) + (racer->unk_18C.y * racer->gravityUp.y) +
+              (racer->unk_18C.z * racer->gravityUp.z);
+    sp98.x = (temp_s2->unk_00.unk_54.x - player->unk_20.x) + (var_fv1 * racer->gravityUp.x);
+    sp98.y = (temp_s2->unk_00.unk_54.y - player->unk_20.y) + (var_fv1 * racer->gravityUp.y);
+    sp98.z = (temp_s2->unk_00.unk_54.z - player->unk_20.z) + (var_fv1 * racer->gravityUp.z);
     var_fv1 = sqrtf(SQ(sp98.x) + SQ(sp98.y) + SQ(sp98.z));
 
     if (var_fv1 < 0.01f) {
@@ -345,9 +345,9 @@ void func_807121D4(unk_struct_F8* arg0, Player* player) {
     temp_s1->unk_00.unk_00.x = player->unk_20.x + (var_fv1 * (racer->unk_18C.x - (temp_fv0 * player->unk_5C.y.x)));
     temp_s1->unk_00.unk_00.y = player->unk_20.y + (var_fv1 * (racer->unk_18C.y - (temp_fv0 * player->unk_5C.y.y)));
     temp_s1->unk_00.unk_00.z = player->unk_20.z + (var_fv1 * (racer->unk_18C.z - (temp_fv0 * player->unk_5C.y.z)));
-    sp8C.x = racer->unk_A8.x - player->unk_2C.y.x;
-    sp8C.y = racer->unk_A8.y - player->unk_2C.y.y;
-    sp8C.z = racer->unk_A8.z - player->unk_2C.y.z;
+    sp8C.x = racer->gravityUp.x - player->unk_2C.y.x;
+    sp8C.y = racer->gravityUp.y - player->unk_2C.y.y;
+    sp8C.z = racer->gravityUp.z - player->unk_2C.y.z;
 
     var_fv1 = sqrtf(SQ(sp8C.x) + SQ(sp8C.y) + SQ(sp8C.z)) * 0.2f;
     player->unk_2C.y.x += var_fv1 * sp8C.x;
@@ -382,7 +382,7 @@ void func_807121D4(unk_struct_F8* arg0, Player* player) {
     angle = Math_Round(DEG_TO_FZXANG2(temp_s2->unk_68[4]));
 
     var_fv1 = temp_s2->unk_68[1] * SIN(angle) *
-              ((sp70.x * racer->unk_C0.y.x) + (sp70.y * racer->unk_C0.y.y) + (sp70.z * racer->unk_C0.y.z));
+              ((sp70.x * racer->trueBasis.y.x) + (sp70.y * racer->trueBasis.y.y) + (sp70.z * racer->trueBasis.y.z));
     spA4 = temp_s2->unk_68[1] * COS(angle);
 
     angle = Math_Round(DEG_TO_FZXANG2(temp_s2->unk_68[8]));
@@ -1387,7 +1387,7 @@ void func_807153A0(unk_800E5D70* arg0, unk_struct_14* arg1) {
     temp_v1 = arg0->unk_18;
     temp_v0 = &arg0->unk_00->unk_04.unk_58;
     *((Mtx3F*) &temp_v0->unk_00.unk_00.unk_00) = *arg0->unk_14;
-    *((Vec3f*) &temp_v0->unk_00.unk_60) = temp_v1->unk_B4;
+    *((Vec3f*) &temp_v0->unk_00.unk_60) = temp_v1->tiltUp;
     temp_v0->unk_90 = temp_v1->speed;
     temp_v0->unk_98 = temp_v1->segmentPositionInfo.courseSegment->trackSegmentInfo;
     sp2C.x = sp38[0].x + arg0->unk_10->x;
@@ -1408,7 +1408,7 @@ void func_80715490(unk_800E5D70* arg0, unk_struct_14* arg1) {
     temp_v1 = arg0->unk_18;
     temp_v0 = &arg0->unk_00->unk_04.unk_58;
     *((Mtx3F*) &temp_v0->unk_00.unk_00.unk_00) = *arg0->unk_14;
-    *((Vec3f*) &temp_v0->unk_00.unk_60) = temp_v1->unk_B4;
+    *((Vec3f*) &temp_v0->unk_00.unk_60) = temp_v1->tiltUp;
     temp_v0->unk_90 = temp_v1->speed;
     temp_v0->unk_98 = temp_v1->segmentPositionInfo.courseSegment->trackSegmentInfo;
     sp28.x = sp34[0].x + arg0->unk_10->x;
@@ -1429,7 +1429,7 @@ void func_80715580(unk_800E5D70* arg0, unk_80085434_arg_2* arg1) {
     temp_v1 = arg0->unk_18;
     temp_v0 = &arg0->unk_00->unk_04.unk_58;
     *((Mtx3F*) &temp_v0->unk_00.unk_00.unk_00) = *arg0->unk_14;
-    *((Vec3f*) &temp_v0->unk_00.unk_60) = temp_v1->unk_B4;
+    *((Vec3f*) &temp_v0->unk_00.unk_60) = temp_v1->tiltUp;
     temp_v0->unk_90 = temp_v1->speed;
     temp_v0->unk_98 = temp_v1->segmentPositionInfo.courseSegment->trackSegmentInfo;
     sp28.x = sp34.unk_00[0].x + arg0->unk_10->x;
@@ -1450,7 +1450,7 @@ void func_80715674(unk_800E5D70* arg0, unk_80085494_arg_2* arg1) {
     temp_v1 = arg0->unk_18;
     temp_v0 = &arg0->unk_00->unk_04.unk_58;
     *((Mtx3F*) &temp_v0->unk_00.unk_00.unk_00) = *arg0->unk_14;
-    *((Vec3f*) &temp_v0->unk_00.unk_60) = temp_v1->unk_B4;
+    *((Vec3f*) &temp_v0->unk_00.unk_60) = temp_v1->tiltUp;
     temp_v0->unk_90 = temp_v1->speed;
     temp_v0->unk_98 = temp_v1->segmentPositionInfo.courseSegment->trackSegmentInfo;
     sp2C.x = sp38.unk_00[0].x + arg0->unk_10->x;
@@ -1618,7 +1618,7 @@ void func_80715F9C(void) {
         func_80713FD4(var_s1, var_s3);
         func_80713FDC(var_s1, var_s4);
         temp_a3 = &gRacers[var_s0->id];
-        func_80713FE4(var_s1, &temp_a3->unk_180, &temp_a3->unk_C0, temp_a3);
+        func_80713FE4(var_s1, &temp_a3->unk_180, &temp_a3->trueBasis, temp_a3);
 
         var_s1++;
         var_s3++;
@@ -1641,7 +1641,7 @@ void func_807160A0(void) {
 
     for (i = 0, var_s0 = gPlayers; i < 4; i++, var_s0++) {
         temp_a3 = &gRacers[var_s0->id];
-        func_80713FE4(&D_807A1480[i], &temp_a3->unk_180, &temp_a3->unk_C0, temp_a3);
+        func_80713FE4(&D_807A1480[i], &temp_a3->unk_180, &temp_a3->trueBasis, temp_a3);
     }
     switch (gGameMode) {
         case GAMEMODE_FLX_TITLE:
@@ -1693,7 +1693,7 @@ void func_807160A0(void) {
 
                 gPlayers[i].unk_20 = gRacers[i].segmentPositionInfo.pos;
 
-                gPlayers[i].unk_2C = gRacers[i].unk_C0;
+                gPlayers[i].unk_2C = gRacers[i].trueBasis;
 
                 func_807166B8(&gPlayers[i], &D_807A10A0[i], &D_807A1480[i]);
             }
@@ -1711,7 +1711,7 @@ void func_807160A0(void) {
                 gPlayers[0].unk_04 = 4;
             }
             gPlayers[0].unk_20 = gRacers[0].segmentPositionInfo.pos;
-            gPlayers[0].unk_2C = gRacers[0].unk_C0;
+            gPlayers[0].unk_2C = gRacers[0].trueBasis;
 
             gPlayers[1].unk_04 = 12;
             for (i = 0; i < D_807A1590; i++) {
@@ -1725,7 +1725,7 @@ void func_807160A0(void) {
             gPlayers[0].unk_04 = 6;
 
             gPlayers[0].unk_20 = gRacers[0].segmentPositionInfo.pos;
-            gPlayers[0].unk_2C = gRacers[0].unk_C0;
+            gPlayers[0].unk_2C = gRacers[0].trueBasis;
 
             for (i = 0; i < D_807A1590; i++) {
                 func_807166B8(&gPlayers[i], &D_807A10A0[i], &D_807A1480[i]);
@@ -1736,7 +1736,7 @@ void func_807160A0(void) {
             D_807A1590 = 2;
             gPlayers[0].unk_04 = 0xB;
             gPlayers[0].unk_20 = gRacers[0].segmentPositionInfo.pos;
-            gPlayers[0].unk_2C = gRacers[0].unk_C0;
+            gPlayers[0].unk_2C = gRacers[0].trueBasis;
             gPlayers[1].unk_04 = 0xC;
             for (i = 0; i < D_807A1590; i++) {
                 func_807166B8(&gPlayers[i], &D_807A10A0[i], &D_807A1480[i]);
@@ -1842,9 +1842,9 @@ void func_807166B8(Player* player, unk_struct_F8* arg1, unk_800E5D70* arg2) {
 
             Math_Round(DEG_TO_FZXANG2(arg1->unk_04.unk_58.unk_68[4]));
             racer = &gRacers[player->id];
-            arg1->unk_04.unk_58.unk_00.unk_54.x = racer->unk_180.x - (sp38->y * racer->unk_C0.x.x);
-            arg1->unk_04.unk_58.unk_00.unk_54.y = racer->unk_180.y - (sp38->y * racer->unk_C0.x.y);
-            arg1->unk_04.unk_58.unk_00.unk_54.z = racer->unk_180.z - (sp38->y * racer->unk_C0.x.z);
+            arg1->unk_04.unk_58.unk_00.unk_54.x = racer->unk_180.x - (sp38->y * racer->trueBasis.x.x);
+            arg1->unk_04.unk_58.unk_00.unk_54.y = racer->unk_180.y - (sp38->y * racer->trueBasis.x.y);
+            arg1->unk_04.unk_58.unk_00.unk_54.z = racer->unk_180.z - (sp38->y * racer->trueBasis.x.z);
             player->unk_14 = arg1->unk_04.unk_00.unk_18[8];
             player->unk_10 = 0;
             if ((sp48 == 1) || (sp48 == 2)) {
@@ -1884,11 +1884,11 @@ void func_807166B8(Player* player, unk_struct_F8* arg1, unk_800E5D70* arg2) {
             arg1->unk_04.unk_58.unk_00.unk_00.unk_3C.x = arg1->unk_04.unk_58.unk_00.unk_00.unk_3C.y = 35.0f;
             arg1->unk_04.unk_58.unk_00.unk_00.unk_48.x = arg1->unk_04.unk_58.unk_00.unk_00.unk_48.y = -50.0f;
 
-            *(Mtx3F*) &arg1->unk_04.unk_58.unk_00.unk_00.unk_00.unk_0C = racer->unk_C0;
+            *(Mtx3F*) &arg1->unk_04.unk_58.unk_00.unk_00.unk_00.unk_0C = racer->trueBasis;
 
-            arg1->unk_04.unk_58.unk_00.unk_00.unk_00.unk_18 = racer->unk_B4.x;
-            arg1->unk_04.unk_58.unk_00.unk_00.unk_00.unk_1C = racer->unk_B4.y;
-            arg1->unk_04.unk_58.unk_00.unk_00.unk_20 = racer->unk_B4.z;
+            arg1->unk_04.unk_58.unk_00.unk_00.unk_00.unk_18 = racer->tiltUp.x;
+            arg1->unk_04.unk_58.unk_00.unk_00.unk_00.unk_1C = racer->tiltUp.y;
+            arg1->unk_04.unk_58.unk_00.unk_00.unk_20 = racer->tiltUp.z;
             break;
         case 10:
             sp2C = arg1->unk_04.unk_00.unk_0C;
@@ -1909,9 +1909,9 @@ void func_807166B8(Player* player, unk_struct_F8* arg1, unk_800E5D70* arg2) {
             sp38 = &D_80776A48[1];
             Math_Round(DEG_TO_FZXANG2(angle));
             racer = &gRacers[0];
-            arg1->unk_04.unk_58.unk_00.unk_54.x = racer->unk_180.x - (sp38->y * racer->unk_C0.x.x);
-            arg1->unk_04.unk_58.unk_00.unk_54.y = racer->unk_180.y - (sp38->y * racer->unk_C0.x.y);
-            arg1->unk_04.unk_58.unk_00.unk_54.z = racer->unk_180.z - (sp38->y * racer->unk_C0.x.z);
+            arg1->unk_04.unk_58.unk_00.unk_54.x = racer->unk_180.x - (sp38->y * racer->trueBasis.x.x);
+            arg1->unk_04.unk_58.unk_00.unk_54.y = racer->unk_180.y - (sp38->y * racer->trueBasis.x.y);
+            arg1->unk_04.unk_58.unk_00.unk_54.z = racer->unk_180.z - (sp38->y * racer->trueBasis.x.z);
             player->unk_14 = arg1->unk_04.unk_00.unk_18[8];
             player->unk_10 = 0;
             sp44 = true;
@@ -2174,17 +2174,17 @@ void func_807176B4(Player* player, unk_struct_F8* arg1) {
 
         temp_s0 = &gRacers[player->id];
 
-        sp48.x.x = 0.0f - (var_s1->y * temp_s0->unk_C0.x.x);
-        sp48.x.y = 0.0f - (var_s1->y * temp_s0->unk_C0.x.y);
-        sp48.x.z = 0.0f - (var_s1->y * temp_s0->unk_C0.x.z);
+        sp48.x.x = 0.0f - (var_s1->y * temp_s0->trueBasis.x.x);
+        sp48.x.y = 0.0f - (var_s1->y * temp_s0->trueBasis.x.y);
+        sp48.x.z = 0.0f - (var_s1->y * temp_s0->trueBasis.x.z);
         temp_fv1 = 1.0f / sqrtf(SQ(sp48.x.x) + SQ(sp48.x.y) + SQ(sp48.x.z));
         sp48.x.x *= temp_fv1;
         sp48.x.y *= temp_fv1;
         sp48.x.z *= temp_fv1;
 
-        sp48.z.x = (temp_s0->unk_C0.y.y * sp48.x.z) - (temp_s0->unk_C0.y.z * sp48.x.y);
-        sp48.z.y = (temp_s0->unk_C0.y.z * sp48.x.x) - (temp_s0->unk_C0.y.x * sp48.x.z);
-        sp48.z.z = (temp_s0->unk_C0.y.x * sp48.x.y) - (temp_s0->unk_C0.y.y * sp48.x.x);
+        sp48.z.x = (temp_s0->trueBasis.y.y * sp48.x.z) - (temp_s0->trueBasis.y.z * sp48.x.y);
+        sp48.z.y = (temp_s0->trueBasis.y.z * sp48.x.x) - (temp_s0->trueBasis.y.x * sp48.x.z);
+        sp48.z.z = (temp_s0->trueBasis.y.x * sp48.x.y) - (temp_s0->trueBasis.y.y * sp48.x.x);
         temp_fv1 = 1.0f / sqrtf(SQ(sp48.z.x) + SQ(sp48.z.y) + SQ(sp48.z.z));
         sp48.z.x *= temp_fv1;
         sp48.z.y *= temp_fv1;
@@ -2200,8 +2200,9 @@ void func_807176B4(Player* player, unk_struct_F8* arg1) {
 
         angle = Math_Round(DEG_TO_FZXANG2(var_s1->z));
 
-        temp_fv0 = (SIN(angle) * var_s1->y) * ((sp48.y.x * temp_s0->unk_C0.y.x) + (sp48.y.y * temp_s0->unk_C0.y.y) +
-                                               (sp48.y.z * temp_s0->unk_C0.y.z));
+        temp_fv0 =
+            (SIN(angle) * var_s1->y) * ((sp48.y.x * temp_s0->trueBasis.y.x) + (sp48.y.y * temp_s0->trueBasis.y.y) +
+                                        (sp48.y.z * temp_s0->trueBasis.y.z));
         temp_fv1 = COS(angle) * var_s1->y;
 
         temp1 = (temp_s0->unk_180.x + (temp_fv1 * sp48.x.x) + (temp_fv0 * sp48.y.x));
@@ -2219,9 +2220,9 @@ void func_807176B4(Player* player, unk_struct_F8* arg1) {
         sp48.x.x = temp_v1->unk_00.unk_00.x - temp_v1->unk_00.unk_0C.x;
         sp48.x.y = temp_v1->unk_00.unk_00.y - temp_v1->unk_00.unk_0C.y;
         sp48.x.z = temp_v1->unk_00.unk_00.z - temp_v1->unk_00.unk_0C.z;
-        sp48.y.x = temp_s0->unk_C0.y.x;
-        sp48.y.y = temp_s0->unk_C0.y.y;
-        sp48.y.z = temp_s0->unk_C0.y.z;
+        sp48.y.x = temp_s0->trueBasis.y.x;
+        sp48.y.y = temp_s0->trueBasis.y.y;
+        sp48.y.z = temp_s0->trueBasis.y.z;
         func_806F6D8C(&sp48);
         temp_v1->unk_00.unk_18[3] = sp48.y.x;
         temp_v1->unk_00.unk_18[0] = temp_v1->unk_00.unk_18[3];
@@ -2471,7 +2472,7 @@ void func_807181F8(Player* player, unk_struct_F8* arg1) {
 
     temp_a3->unk_00.unk_00.unk_00.unk_00 = temp_t3->unk_180;
 
-    *((Mtx3F*) &arg1->unk_04.unk_58.unk_00.unk_00.unk_00.unk_0C) = temp_t3->unk_C0;
+    *((Mtx3F*) &arg1->unk_04.unk_58.unk_00.unk_00.unk_00.unk_0C) = temp_t3->trueBasis;
 
     temp_fv0 = (f32) player->unk_1C / 300.0f;
     temp_fv0 = (-2.0f * temp_fv0 * temp_fv0 * temp_fv0) + (3.0f * temp_fv0 * temp_fv0);
@@ -2505,12 +2506,12 @@ void func_807181F8(Player* player, unk_struct_F8* arg1) {
         temp_a0->unk_00.unk_18[8] = var_v1->x;
 
         temp_t4 = &gRacers[player->id];
-        temp_a3->unk_00.unk_54.x = temp_t4->unk_180.x - (var_v1->y * temp_t4->unk_C0.x.x);
-        temp_a3->unk_00.unk_54.y = temp_t4->unk_180.y - (var_v1->y * temp_t4->unk_C0.x.y);
-        temp_a3->unk_00.unk_54.z = temp_t4->unk_180.z - (var_v1->y * temp_t4->unk_C0.x.z);
+        temp_a3->unk_00.unk_54.x = temp_t4->unk_180.x - (var_v1->y * temp_t4->trueBasis.x.x);
+        temp_a3->unk_00.unk_54.y = temp_t4->unk_180.y - (var_v1->y * temp_t4->trueBasis.x.y);
+        temp_a3->unk_00.unk_54.z = temp_t4->unk_180.z - (var_v1->y * temp_t4->trueBasis.x.z);
 
         player->unk_20 = temp_t4->unk_180;
-        player->unk_2C = temp_t4->unk_C0;
+        player->unk_2C = temp_t4->trueBasis;
 
         player->unk_14 = arg1->unk_04.unk_00.unk_18[8];
         player->unk_10 = 0;
@@ -2550,7 +2551,7 @@ void func_80718530(Player* player, unk_struct_F8* arg1, unk_800E5D70* arg2) {
             func_807166B8(player, arg1, arg2);
             return;
         }
-        if (temp_t0->stateFlags & RACER_STATE_FLAGS_2000000) {
+        if (temp_t0->stateFlags & RACER_STATE_FINISHED) {
             if ((gNumPlayers >= 2) && (D_807A16CC != 0)) {
                 player->unk_04 = 9;
                 func_807166B8(player, arg1, arg2);
@@ -2698,7 +2699,7 @@ void func_80718AFC(Player* player, unk_struct_F8* arg1, unk_800E5D70* arg2) {
         case 1:
             temp_v0_2 = (unk_800CD8B0*) temp_a3->unk_08;
 
-            *((Mtx3F*) &temp_v1->unk_00.unk_00.unk_00.unk_0C) = temp_t2->unk_C0;
+            *((Mtx3F*) &temp_v1->unk_00.unk_00.unk_00.unk_0C) = temp_t2->trueBasis;
 
             temp_t0->unk_00.unk_18[3] = temp_v1->unk_00.unk_00.unk_00.unk_18;
             temp_t0->unk_00.unk_18[4] = temp_v1->unk_00.unk_00.unk_00.unk_1C;
@@ -2847,9 +2848,9 @@ void func_807191B0(Player* player, unk_struct_F8* arg1, unk_800E5D70* arg2) {
         func_807166B8(player, arg1, arg2);
         return;
     }
-    temp_v1->unk_00.unk_00.unk_00.unk_18 += temp_a3->unk_B4.x * 0.3f;
-    temp_v1->unk_00.unk_00.unk_00.unk_1C += temp_a3->unk_B4.y * 0.3f;
-    temp_v1->unk_00.unk_00.unk_20 += temp_a3->unk_B4.z * 0.3f;
+    temp_v1->unk_00.unk_00.unk_00.unk_18 += temp_a3->tiltUp.x * 0.3f;
+    temp_v1->unk_00.unk_00.unk_00.unk_1C += temp_a3->tiltUp.y * 0.3f;
+    temp_v1->unk_00.unk_00.unk_20 += temp_a3->tiltUp.z * 0.3f;
 
     func_806F6F64((Mtx3F*) &temp_v1->unk_00.unk_00.unk_00.unk_0C);
 
@@ -2944,7 +2945,7 @@ void func_80719480(Player* player, unk_struct_F8* arg1, unk_800E5D70* arg2) {
                         }
                         func_80714000(arg2, var_a1);
                         temp_a3 = &gRacers[D_807A1598];
-                        func_80713FE4(&D_807A1480[player->id], &temp_a3->unk_180, &temp_a3->unk_C0, temp_a3);
+                        func_80713FE4(&D_807A1480[player->id], &temp_a3->unk_180, &temp_a3->trueBasis, temp_a3);
                     }
                 }
                 break;
@@ -2967,13 +2968,13 @@ void func_80719480(Player* player, unk_struct_F8* arg1, unk_800E5D70* arg2) {
                 break;
             case 2:
                 temp_a3 = &gRacers[D_807A1598];
-                *((Mtx3F*) &arg1->unk_04.unk_58.unk_00.unk_00.unk_00.unk_0C) = temp_a3->unk_C0;
+                *((Mtx3F*) &arg1->unk_04.unk_58.unk_00.unk_00.unk_00.unk_0C) = temp_a3->trueBasis;
                 arg1->unk_04.unk_58.unk_00.unk_00.unk_00.unk_00 = temp_a3->unk_180;
                 if (func_80719868(4)) {
                     player->unk_18 = 3;
                     player->unk_1C = 0;
                     temp_a3 = &gRacers[2];
-                    func_80713FE4(&D_807A1480[player->id], &temp_a3->unk_180, &temp_a3->unk_C0, temp_a3);
+                    func_80713FE4(&D_807A1480[player->id], &temp_a3->unk_180, &temp_a3->trueBasis, temp_a3);
                     func_80714000(arg2, D_8009A210);
                 }
                 break;
@@ -2982,7 +2983,7 @@ void func_80719480(Player* player, unk_struct_F8* arg1, unk_800E5D70* arg2) {
                     player->unk_18 = 4;
                     player->unk_1C = 0;
                     temp_a3 = &gRacers[1];
-                    func_80713FE4(&D_807A1480[player->id], &temp_a3->unk_180, &temp_a3->unk_C0, temp_a3);
+                    func_80713FE4(&D_807A1480[player->id], &temp_a3->unk_180, &temp_a3->trueBasis, temp_a3);
                     func_80714000(arg2, D_8009A090);
                 }
                 break;
@@ -2991,7 +2992,7 @@ void func_80719480(Player* player, unk_struct_F8* arg1, unk_800E5D70* arg2) {
                     player->unk_18 = 5;
                     player->unk_1C = 0;
                     temp_a3 = &gRacers[0];
-                    func_80713FE4(&D_807A1480[player->id], &temp_a3->unk_180, &temp_a3->unk_C0, temp_a3);
+                    func_80713FE4(&D_807A1480[player->id], &temp_a3->unk_180, &temp_a3->trueBasis, temp_a3);
                     func_80714000(arg2, D_80099F70);
                 }
                 break;

@@ -370,7 +370,7 @@ void func_i2_800B0D10(s32 venue) {
     }
 }
 
-void func_i2_800B0FAC(CourseSegment* segment, Mtx3F* arg1) {
+void func_i2_800B0FAC(CourseSegment* segment, Mtx3F* basis) {
     f32 normalizingFactor;
     f32 sp38;
     f32 sp34;
@@ -383,18 +383,18 @@ void func_i2_800B0FAC(CourseSegment* segment, Mtx3F* arg1) {
     forward.y *= normalizingFactor;
     forward.z *= normalizingFactor;
 
-    sp38 = arg1->x.x - forward.x;
-    sp34 = arg1->x.y - forward.y;
-    sp30 = arg1->x.z - forward.z;
+    sp38 = basis->x.x - forward.x;
+    sp34 = basis->x.y - forward.y;
+    sp30 = basis->x.z - forward.z;
 
     //! @bug This should probably use z instead of y twice
     temp_ft4 = ((sp38 * segment->up.x) + (sp34 * segment->up.y) + (sp38 * segment->up.y));
     temp_ft4 *= 2.0f;
 
-    arg1->y.x = (segment->up.x + sp38) - (temp_ft4 * segment->up.x);
-    arg1->y.y = (segment->up.y + sp34) - (temp_ft4 * segment->up.y);
-    arg1->y.z = (segment->up.z + sp30) - (temp_ft4 * segment->up.z);
-    func_806F6D8C(arg1);
+    basis->y.x = (segment->up.x + sp38) - (temp_ft4 * segment->up.x);
+    basis->y.y = (segment->up.y + sp34) - (temp_ft4 * segment->up.y);
+    basis->y.z = (segment->up.z + sp30) - (temp_ft4 * segment->up.z);
+    func_806F6D8C(basis);
 }
 
 s32 func_i2_800B10A8(RacerSegmentPositionInfo* arg0, f32 arg1, f32 arg2, f32 arg3, Mtx3F* arg4) {

@@ -580,7 +580,7 @@ Gfx* func_i3_DrawEnergyBar(Gfx* gfx, s32 numPlayersIndex, s32 playerIndex) {
     s32 height;
     f32 scale;
 
-    if (gRacers[playerIndex].stateFlags & RACER_STATE_FLAGS_2000000) {
+    if (gRacers[playerIndex].stateFlags & RACER_STATE_FINISHED) {
         return gfx;
     }
 
@@ -607,7 +607,7 @@ Gfx* func_i3_DrawEnergyBar(Gfx* gfx, s32 numPlayersIndex, s32 playerIndex) {
 
     for (i = 0; i < height; i++) {
         gDPPipeSync(gfx++);
-        if (gRacers[playerIndex].stateFlags & RACER_STATE_FLAGS_100000) {
+        if (gRacers[playerIndex].stateFlags & RACER_STATE_CAN_BOOST) {
             gDPSetFillColor(gfx++, sEnergyBarFillColors[i + 5]);
         } else {
             gDPSetFillColor(gfx++, sEnergyBarFillColors[i]);
@@ -630,7 +630,7 @@ Gfx* func_i3_DrawEnergyOutlineRectangle(Gfx* gfx, s32 numPlayersIndex, s32 playe
     s32 height;
     f32 scale;
 
-    if (gRacers[playerIndex].stateFlags & RACER_STATE_FLAGS_2000000) {
+    if (gRacers[playerIndex].stateFlags & RACER_STATE_FINISHED) {
         return gfx;
     }
 
@@ -817,7 +817,7 @@ Gfx* func_i3_DrawPosition(Gfx* gfx, s32 numPlayersIndex, s32 playerIndex) {
         return gfx;
     }
 
-    if (gRacers[playerIndex].stateFlags & (RACER_STATE_FLAGS_2000000 | RACER_STATE_RETIRED)) {
+    if (gRacers[playerIndex].stateFlags & (RACER_STATE_FINISHED | RACER_STATE_RETIRED)) {
         sPositionScales[playerIndex] += 0.04f;
     }
 
@@ -942,7 +942,7 @@ Gfx* func_i3_DrawLapRectangle(Gfx* gfx, s32 numPlayersIndex, s32 playerIndex) {
     if (gGameMode == GAMEMODE_DEATH_RACE) {
         return gfx;
     }
-    if (gRacers[playerIndex].stateFlags & RACER_STATE_FLAGS_2000000) {
+    if (gRacers[playerIndex].stateFlags & RACER_STATE_FINISHED) {
         return gfx;
     }
     if ((gPlayerMinimapLapCounterToggle[playerIndex] != 0) && (numPlayersIndex >= 2)) {
@@ -968,7 +968,7 @@ Gfx* func_i3_DrawLapCounter(Gfx* gfx, s32 numPlayersIndex, s32 playerIndex) {
     if (gGameMode == GAMEMODE_DEATH_RACE) {
         return gfx;
     }
-    if (gRacers[playerIndex].stateFlags & RACER_STATE_FLAGS_2000000) {
+    if (gRacers[playerIndex].stateFlags & RACER_STATE_FINISHED) {
         return gfx;
     }
     if ((gPlayerMinimapLapCounterToggle[playerIndex] != 0) && (numPlayersIndex >= 2)) {
@@ -1234,7 +1234,7 @@ void func_i3_UpdatePortraitScales(void) {
     s32 i;
 
     for (i = 0; i < gTotalRacers; i++) {
-        if (gRacers[i].stateFlags & RACER_STATE_FLAGS_2000000) {
+        if (gRacers[i].stateFlags & RACER_STATE_FINISHED) {
             sPortraitTextureScale[i] = 1.0f;
         } else if (gRacers[i].stateFlags & RACER_STATE_FLAGS_80000) {
             sPortraitTextureScale[i] -= 0.01f;

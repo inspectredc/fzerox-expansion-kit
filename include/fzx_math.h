@@ -42,15 +42,6 @@ typedef union {
     /* 0x0 */ s16 v[3];
 } Vec3s; // size = 0x6
 
-typedef union {
-    struct {
-        /* 0x0 */ s32 x;
-        /* 0x4 */ s32 y;
-        /* 0x8 */ s32 z;
-    };
-    /* 0x0 */ s32 v[3];
-} Vec3i; // size = 0xC
-
 // Needed for stack to complement macros
 typedef struct Vec3fFlip {
     /* 0x0 */ f32 z;

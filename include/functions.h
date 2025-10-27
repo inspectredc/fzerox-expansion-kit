@@ -393,15 +393,17 @@ SaveCourseRecords* DDSave_GetCachedCourseRecord(void);
 void DDSave_LoadBaseCourses(void);
 void DDSave_EraseCourseGhostFile(s32 courseIndex);
 void func_i2_800AABD0(void);
-void func_i2_800AB6B0(void);
-void func_i2_800AB82C(void);
-s32 func_i2_800AC680(f32, f32, f32, f32, f32, f32, f32, Racer*);
-s32 func_i2_800AC750(f32, f32, f32, f32, f32, f32, f32, Racer*);
-s32 func_i2_800AC808(f32, f32, f32, f32, f32, f32, f32, Racer*);
-s32 func_i2_800AC8C0(f32, f32, f32, f32, f32, f32, Racer*);
-s32 func_i2_800ACBE8(f32, f32, f32, f32, f32, f32, Mtx3F*, s32, s32, s32, Racer*);
-s32 func_i2_800ACABC(f32, f32, f32, f32, f32, f32, f32, Racer*);
-s32 func_i2_800ACB74(f32, Racer*);
+
+void Effects_Init(void);
+void Effects_Update(void);
+s32 Effects_SpawnCollisionSparks(f32 xPos, f32 yPos, f32 zPos, f32 xVelocity, f32 yVelocity, f32 zVelocity, f32 scale, Racer* racer);
+s32 Effects_SpawnExplosion1(f32 xPos, f32 yPos, f32 zPos, f32 xVelocity, f32 yVelocity, f32 zVelocity, f32 scale, Racer* racer);
+s32 Effects_SpawnExplosion2(f32 xPos, f32 yPos, f32 zPos, f32 xVelocity, f32 yVelocity, f32 zVelocity, f32 scale, Racer* racer);
+s32 Effects_SpawnFlyingSparks(f32 xPos, f32 yPos, f32 zPos, f32 xVelocity, f32 yVelocity, f32 zVelocity, Racer* racer);
+s32 Effects_SpawnSmoke(f32 xPos, f32 yPos, f32 zPos, f32 xVelocity, f32 yVelocity, f32 zVelocity, f32 scale, Racer* racer);
+s32 Effects_SpawnFallExplosion(f32 scale, Racer* racer);
+s32 Effects_SpawnMachineDebris(f32 xPos, f32 yPos, f32 zPos, f32 xVelocity, f32 yVelocity, f32 zVelocity, Mtx3F* racerBasis, s32 red, s32 green, s32 blue, Racer* racer);
+
 void func_i2_800AE100(s32 segAddr, size_t size, u8* startAddr);
 u8* func_i2_800AE17C(unk_80077D50*, s32, bool);
 u8* func_i2_800AE578(unk_80077D50*, bool);

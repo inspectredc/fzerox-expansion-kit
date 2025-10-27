@@ -5,6 +5,7 @@
 #include "fzx_ghost.h"
 #include "fzx_assets.h"
 #include "fzx_machine.h"
+#include "fzx_effects.h"
 
 s32 gTotalRacers;
 Racer* sLastRacer;
@@ -22,7 +23,7 @@ s32 D_807A1640[4];
 Racer* gRacersByPosition[30];
 s32 D_807A16C8;
 s16 D_807A16CC;
-s16 D_807A16CE;
+s16 sSpunOutRacers;
 s16 D_807A16D0;
 s16 gRacersRetired;
 s16 gRacersFinished;
@@ -69,8 +70,8 @@ f32 D_807B37B0;
 f32 D_807B37B4;
 s32 D_807B37B8[4];
 s32 D_807B37C8;
-f32 D_807B37CC;
-f32 D_807B37D0;
+f32 sCourseHalfLength;
+f32 sCourseNegativeHalfLength;
 s16 D_807B37D4;
 Machine gMachines[30];
 CustomMachineInfo sCustomMachineInfo[30];
@@ -577,7 +578,7 @@ void func_80719958(void) {
         racer->segmentPositionInfo.segmentLengthProportion = Course_SplineGetLengthInfo(
             racer->segmentPositionInfo.courseSegment, racer->segmentPositionInfo.segmentTValue, &racer->lapDistance);
         Course_SplineGetBasis(racer->segmentPositionInfo.courseSegment, racer->segmentPositionInfo.segmentTValue,
-                              &racer->unk_24C, racer->segmentPositionInfo.segmentLengthProportion);
+                              &racer->segmentBasis, racer->segmentPositionInfo.segmentLengthProportion);
 
         currentSegment = racer->segmentPositionInfo.courseSegment;
         nextSegment = currentSegment->next;
@@ -600,10 +601,10 @@ void func_80719958(void) {
         var_fv0 = (((j - 1) & 3) * 2 - var_fv0) * var_fs1;
         func_i2_800B2C00(
             &racer->segmentPositionInfo,
-            racer->segmentPositionInfo.pos.x + (height * racer->unk_24C.y.x) + (var_fv0 * racer->unk_24C.z.x),
-            racer->segmentPositionInfo.pos.y + (height * racer->unk_24C.y.y) + (var_fv0 * racer->unk_24C.z.y),
-            racer->segmentPositionInfo.pos.z + (height * racer->unk_24C.y.z) + (var_fv0 * racer->unk_24C.z.z), 100,
-            1.0f);
+            racer->segmentPositionInfo.pos.x + (height * racer->segmentBasis.y.x) + (var_fv0 * racer->segmentBasis.z.x),
+            racer->segmentPositionInfo.pos.y + (height * racer->segmentBasis.y.y) + (var_fv0 * racer->segmentBasis.z.y),
+            racer->segmentPositionInfo.pos.z + (height * racer->segmentBasis.y.z) + (var_fv0 * racer->segmentBasis.z.z),
+            100, 1.0f);
         if (gNumPlayers == 1) {
             var_fv0 = 100.0f;
         } else if (var_fs1 <= 23.0f) {
@@ -716,7 +717,7 @@ void func_80719F38(s32 playerIndex) {
 // Retire racer
 void func_80719F9C(Racer* racer) {
 
-    if (!(racer->stateFlags & (RACER_STATE_FLAGS_2000000 | RACER_STATE_RETIRED))) {
+    if (!(racer->stateFlags & (RACER_STATE_FINISHED | RACER_STATE_RETIRED))) {
         racer->stateFlags |= RACER_STATE_RETIRED;
         racer->energy = 0.0f;
         gRacersRetired++;
@@ -725,7 +726,7 @@ void func_80719F9C(Racer* racer) {
         } else if (D_807A16CC == 0) {
             gCpuRacersRetired++;
             if ((gGameMode == GAMEMODE_DEATH_RACE) && (gTotalRacers == (gCpuRacersRetired + 1))) {
-                gRacers[0].stateFlags |= (RACER_STATE_FLAGS_2000000 | RACER_STATE_CPU_CONTROLLED);
+                gRacers[0].stateFlags |= (RACER_STATE_FINISHED | RACER_STATE_CPU_CONTROLLED);
                 gRacers[0].raceTime += Math_Rand2() % 16;
                 gRacers[0].energy = gRacers[0].maxEnergy;
                 D_807B14F8 = D_807A16CC = 1;
@@ -1082,7 +1083,7 @@ void func_8071B634(void) {
             if (racer->position != 0) {
                 continue;
             }
-            if (racer->stateFlags & RACER_STATE_FLAGS_2000000) {
+            if (racer->stateFlags & RACER_STATE_FINISHED) {
                 if ((finishedRacer == NULL) || (racer->raceTime < bestRaceTime)) {
                     bestRaceTime = racer->raceTime;
                     finishedRacer = racer;
@@ -1117,20 +1118,20 @@ void func_8071B748(void) {
     Racer* racer;
 
     for (racer = sLastRacer; racer >= gRacers; racer--) {
-        if (racer->stateFlags & RACER_STATE_FLAGS_2000000) {
+        if (racer->stateFlags & RACER_STATE_FINISHED) {
             continue;
         }
 
         if (racer->stateFlags & RACER_STATE_CRASHED) {
             racer->raceTime = 0;
         } else if (racer->stateFlags & RACER_STATE_FLAGS_80000) {
-            racer->stateFlags &= ~RACER_STATE_FLAGS_40000000;
+            racer->stateFlags &= ~RACER_STATE_ACTIVE;
             racer->stateFlags |= RACER_STATE_CRASHED;
             D_807A16D0++;
             func_80719F9C(racer);
             racer->raceTime = 0;
         } else {
-            racer->stateFlags |= RACER_STATE_FLAGS_2000000;
+            racer->stateFlags |= RACER_STATE_FINISHED;
             var_a0 = 0;
             if (racer->lapTimes[1] != 0) {
                 var_a1 = racer->lapTimes[0] - racer->lapTimes[1];
@@ -1169,7 +1170,7 @@ void func_8071B748(void) {
         }
     }
     func_8071B634();
-    if ((gGameMode == GAMEMODE_GP_RACE) && (gRacers[0].stateFlags & RACER_STATE_FLAGS_2000000)) {
+    if ((gGameMode == GAMEMODE_GP_RACE) && (gRacers[0].stateFlags & RACER_STATE_FINISHED)) {
         var_v1 = gTotalRacers - 1;
         while (var_v1 >= 0) {
             if (gRacersByPosition[var_v1]->raceTime != 0) {
@@ -1526,18 +1527,18 @@ void func_8071CE08(Racer* racer) {
     racer->bodyBF = racer->bodyB = machine->blue[racer->machineSkinIndex];
     racer->attackHighlightR = racer->attackHighlightG = racer->attackHighlightB = racer->shadowR = racer->shadowG =
         racer->shadowB = 0;
-    racer->unk_2EC = 255.0f;
-    racer->unk_2F0 = 0.0f;
-    racer->unk_2F4 = 0.0f;
-    racer->unk_2F8 = racer->bodyRF - racer->unk_2EC;
-    racer->unk_2FC = racer->bodyGF - racer->unk_2F0;
-    racer->unk_300 = racer->bodyBF - racer->unk_2F4;
+    racer->bodyLowEnergyR = 255.0f;
+    racer->bodyLowEnergyG = 0.0f;
+    racer->bodyLowEnergyB = 0.0f;
+    racer->bodyLowEnergyGradientR = racer->bodyRF - racer->bodyLowEnergyR;
+    racer->bodyLowEnergyGradientG = racer->bodyGF - racer->bodyLowEnergyG;
+    racer->bodyLowEnergyGradientB = racer->bodyBF - racer->bodyLowEnergyB;
     if ((D_8076C7D8 != 0) || (gGameMode == GAMEMODE_PRACTICE) || (gGameMode == GAMEMODE_DEATH_RACE) ||
         (gGameMode == GAMEMODE_COURSE_EDIT)) {
         racer->stateFlags =
-            RACER_STATE_FLAGS_40000000 | RACER_STATE_FLAGS_20000000 | RACER_STATE_FLAGS_100000 | RACER_STATE_FLAGS_8000;
+            RACER_STATE_ACTIVE | RACER_STATE_FLAGS_20000000 | RACER_STATE_CAN_BOOST | RACER_STATE_FLAGS_8000;
     } else {
-        racer->stateFlags = RACER_STATE_FLAGS_40000000 | RACER_STATE_FLAGS_20000000 | RACER_STATE_FLAGS_8000;
+        racer->stateFlags = RACER_STATE_ACTIVE | RACER_STATE_FLAGS_20000000 | RACER_STATE_FLAGS_8000;
     }
     if ((racer->id >= gNumPlayers) || (D_8076E59C != 0) || (gGameMode == GAMEMODE_RECORDS) ||
         (gGameMode == GAMEMODE_GP_END_CS) || (D_8076C7D8 != 0)) {
@@ -1547,14 +1548,14 @@ void func_8071CE08(Racer* racer) {
         racer->segmentPositionInfo.courseSegment, racer->segmentPositionInfo.segmentTValue, &racer->lapDistance);
 
     Course_SplineGetBasis(racer->segmentPositionInfo.courseSegment, racer->segmentPositionInfo.segmentTValue,
-                          &racer->unk_24C, racer->segmentPositionInfo.segmentLengthProportion);
+                          &racer->segmentBasis, racer->segmentPositionInfo.segmentLengthProportion);
 
-    racer->unk_E8 = racer->unk_C0 = racer->unk_24C;
-    racer->unk_10C = racer->unk_180 = racer->segmentPositionInfo.pos;
+    racer->modelBasis = racer->trueBasis = racer->segmentBasis;
+    racer->modelPos = racer->unk_180 = racer->segmentPositionInfo.pos;
 
-    racer->unk_A8.x = racer->unk_B4.x = racer->upFromGround.x = racer->unk_C0.y.x;
-    racer->unk_A8.y = racer->unk_B4.y = racer->upFromGround.y = racer->unk_C0.y.y;
-    racer->unk_A8.z = racer->unk_B4.z = racer->upFromGround.z = racer->unk_C0.y.z;
+    racer->gravityUp.x = racer->tiltUp.x = racer->upFromGround.x = racer->trueBasis.y.x;
+    racer->gravityUp.y = racer->tiltUp.y = racer->upFromGround.y = racer->trueBasis.y.y;
+    racer->gravityUp.z = racer->tiltUp.z = racer->upFromGround.z = racer->trueBasis.y.z;
 
     for (i = 0; i < 3; i++) {
         racer->lapTimes[i] = NULL;
@@ -1571,16 +1572,17 @@ void func_8071CE08(Racer* racer) {
     racer->unk_28C = NULL;
     racer->soundEffectFlags = RACER_SE_FLAGS_8000;
     racer->startNewPracticeLap = racer->unk_288 = racer->zButtonTimer = racer->rButtonTimer = racer->unk_27C =
-        racer->unk_220 = racer->spinOutTimer = racer->completedLapsTime = racer->raceTime = racer->lap =
-            racer->unk_204 = racer->unk_208 = racer->unk_20C = racer->boostTimer = racer->unk_214 = racer->unk_210 = 0;
-    var_fs0 = racer->unk_178 = racer->unk_1E8 = racer->unk_118.x = racer->unk_118.y = racer->unk_118.z =
-        racer->pitForceFieldSize = racer->jumpBoost = racer->unk_E4 = racer->unk_238 = racer->unk_200 =
-            racer->heightAboveGround = racer->accelerationForce = racer->driftAttackForce = racer->speed =
-                racer->maxSpeed = racer->unk_198 = racer->unk_18C.x = racer->unk_18C.y = racer->unk_18C.z =
-                    racer->unk_68.x = racer->unk_68.y = racer->unk_68.z = racer->unk_5C.x = racer->unk_5C.y =
-                        racer->unk_5C.z = racer->unk_80.x = racer->unk_80.y = racer->unk_80.z = racer->velocity.x =
-                            racer->velocity.y = racer->velocity.z = var_fs0 = 0.0f;
-    racer->unk_A4 = racer->unk_230 = 0.0f;
+        racer->bodyWhiteTimer = racer->spinOutTimer = racer->completedLapsTime = racer->raceTime = racer->lap =
+            racer->unk_204 = racer->unk_208 = racer->unk_20C = racer->boostTimer = racer->unk_214 =
+                racer->vibrationStrength = 0;
+    var_fs0 = racer->attackHighlightScale = racer->unk_1E8 = racer->recoilStrength.x = racer->recoilStrength.y =
+        racer->recoilStrength.z = racer->pitForceFieldSize = racer->jumpBoost = racer->tiltUpInput = racer->unk_238 =
+            racer->unk_200 = racer->heightAboveGround = racer->accelerationForce = racer->driftAttackForce =
+                racer->speed = racer->maxSpeed = racer->unk_198 = racer->unk_18C.x = racer->unk_18C.y =
+                    racer->unk_18C.z = racer->unk_68.x = racer->unk_68.y = racer->unk_68.z = racer->unk_5C.x =
+                        racer->unk_5C.y = racer->unk_5C.z = racer->unk_80.x = racer->unk_80.y = racer->unk_80.z =
+                            racer->velocity.x = racer->velocity.y = racer->velocity.z = var_fs0 = 0.0f;
+    racer->podiumHeight = racer->unk_230 = 0.0f;
     racer->shadowColorStrength = 1.0f;
     racer->unk_1EC = 2500.0f / 27.0f;
     racer->unk_17C = D_807B37B4;
@@ -1644,10 +1646,11 @@ void func_8071D48C(void) {
     sTunnelFogColors = &sVenueTunnelFogColors[COURSE_CONTEXT()->courseData.venue * TUNNEL_MAX];
     gPracticeBestLap = 600000 - 1;
     D_807B37AC = D_807B37B0 = 0.0f;
-    sRaceFrameCount = gStartNewBestLap = gRacersKOd = D_807B37D4 = D_807B37C8 = D_807A16CC = D_807A16CE = D_807A16D0 =
-        gRacersRetired = gRacersFinished = gCpuRacersRetired = gPlayerRacersRetired = gPlayerRacersFinished = 0;
-    D_807B37CC = gCurrentCourseInfo->length * 0.5;
-    D_807B37D0 = -D_807B37CC;
+    sRaceFrameCount = gStartNewBestLap = gRacersKOd = D_807B37D4 = D_807B37C8 = D_807A16CC = sSpunOutRacers =
+        D_807A16D0 = gRacersRetired = gRacersFinished = gCpuRacersRetired = gPlayerRacersRetired =
+            gPlayerRacersFinished = 0;
+    sCourseHalfLength = gCurrentCourseInfo->length * 0.5;
+    sCourseNegativeHalfLength = -sCourseHalfLength;
     if (gGameMode != GAMEMODE_GP_RACE) {
         D_807A16E6 = 0;
     }
@@ -2120,7 +2123,7 @@ void func_8071ED54(Racer* arg0, s32 arg1) {
     if (temp_v0 == NULL) {
         return;
     }
-    if (temp_v0->stateFlags & (RACER_STATE_FLAGS_2000000 | RACER_STATE_RETIRED | RACER_STATE_SPINNING_OUT)) {
+    if (temp_v0->stateFlags & (RACER_STATE_FINISHED | RACER_STATE_RETIRED | RACER_STATE_SPINNING_OUT)) {
         return;
     }
 
@@ -2154,12 +2157,12 @@ void func_8071EE74(Racer* racer, f32 arg1) {
     s32 temp_s7;
     s32 i;
 
-    if (racer->stateFlags & (RACER_STATE_CRASHED | RACER_STATE_FLAGS_2000000)) {
-        if (((racer->stateFlags & (RACER_STATE_FLAGS_40000000 | RACER_STATE_CRASHED)) ==
-             (RACER_STATE_FLAGS_40000000 | RACER_STATE_CRASHED)) &&
+    if (racer->stateFlags & (RACER_STATE_CRASHED | RACER_STATE_FINISHED)) {
+        if (((racer->stateFlags & (RACER_STATE_ACTIVE | RACER_STATE_CRASHED)) ==
+             (RACER_STATE_ACTIVE | RACER_STATE_CRASHED)) &&
             (D_8076E590 < arg1)) {
-            racer->stateFlags &= ~RACER_STATE_FLAGS_40000000;
-            racer->unk_C0 = racer->unk_24C;
+            racer->stateFlags &= ~RACER_STATE_ACTIVE;
+            racer->trueBasis = racer->segmentBasis;
             D_807A16D0++;
             if (racer->id < gNumPlayers) {
                 func_8071A17C(racer);
@@ -2175,8 +2178,8 @@ void func_8071EE74(Racer* racer, f32 arg1) {
                     y = racer->unk_28C->velocity.y;
                     z = racer->unk_28C->velocity.z;
                 }
-                func_i2_800AC808(racer->segmentPositionInfo.pos.x, racer->segmentPositionInfo.pos.y,
-                                 racer->segmentPositionInfo.pos.z, x, y, z, 40.0f, racer);
+                Effects_SpawnExplosion2(racer->segmentPositionInfo.pos.x, racer->segmentPositionInfo.pos.y,
+                                        racer->segmentPositionInfo.pos.z, x, y, z, 40.0f, racer);
 
                 temp_s5 = racer->bodyRF;
                 temp_s6 = racer->bodyGF;
@@ -2191,16 +2194,17 @@ void func_8071EE74(Racer* racer, f32 arg1) {
 
                     temp_fs1 = ((Math_Rand1() & 0x1FFFF) * (15.0f / 131071.0f)) - 7.5f;
 
-                    func_i2_800ACBE8(((s32) (Math_Rand2() % 32) - 0x10) + racer->segmentPositionInfo.pos.x,
-                                     ((s32) (Math_Rand1() % 32) - 0x10) + racer->segmentPositionInfo.pos.y,
-                                     ((s32) (Math_Rand1() % 32) - 0x10) + racer->segmentPositionInfo.pos.z,
-                                     x + (racer->unk_C0.z.x * temp_fs2) + (temp_fs0 * racer->unk_C0.y.x) +
-                                         (temp_fs1 * racer->unk_C0.x.x),
-                                     y + (racer->unk_C0.z.y * temp_fs2) + (temp_fs0 * racer->unk_C0.y.y) +
-                                         (temp_fs1 * racer->unk_C0.x.y),
-                                     z + (racer->unk_C0.z.z * temp_fs2) + (temp_fs0 * racer->unk_C0.y.z) +
-                                         (temp_fs1 * racer->unk_C0.x.z),
-                                     &racer->unk_C0, temp_s5, temp_s6, temp_s7, racer);
+                    Effects_SpawnMachineDebris(
+                        ((s32) (Math_Rand2() % 32) - 0x10) + racer->segmentPositionInfo.pos.x,
+                        ((s32) (Math_Rand1() % 32) - 0x10) + racer->segmentPositionInfo.pos.y,
+                        ((s32) (Math_Rand1() % 32) - 0x10) + racer->segmentPositionInfo.pos.z,
+                        x + (racer->trueBasis.z.x * temp_fs2) + (temp_fs0 * racer->trueBasis.y.x) +
+                            (temp_fs1 * racer->trueBasis.x.x),
+                        y + (racer->trueBasis.z.y * temp_fs2) + (temp_fs0 * racer->trueBasis.y.y) +
+                            (temp_fs1 * racer->trueBasis.x.y),
+                        z + (racer->trueBasis.z.z * temp_fs2) + (temp_fs0 * racer->trueBasis.y.z) +
+                            (temp_fs1 * racer->trueBasis.x.z),
+                        &racer->trueBasis, temp_s5, temp_s6, temp_s7, racer);
                     i--;
                 } while (i != 0);
             }
@@ -2241,17 +2245,17 @@ void func_8071F334(Racer* racer, f32 lateralVelocity, f32 wallDirection, f32 edg
     Racer* var;
     f32 var_fv0;
 
-    var_fv0 = racer->unk_24C.z.x * edgeDisplacement;
+    var_fv0 = racer->segmentBasis.z.x * edgeDisplacement;
     racer->segmentPositionInfo.segmentDisplacement.x -= var_fv0;
     racer->segmentPositionInfo.pos.x -= var_fv0;
     racer->segmentPositionInfo.lastGroundedPos.x -= var_fv0;
 
-    var_fv0 = racer->unk_24C.z.y * edgeDisplacement;
+    var_fv0 = racer->segmentBasis.z.y * edgeDisplacement;
     racer->segmentPositionInfo.segmentDisplacement.y -= var_fv0;
     racer->segmentPositionInfo.pos.y -= var_fv0;
     racer->segmentPositionInfo.lastGroundedPos.y -= var_fv0;
 
-    var_fv0 = racer->unk_24C.z.z * edgeDisplacement;
+    var_fv0 = racer->segmentBasis.z.z * edgeDisplacement;
     racer->segmentPositionInfo.segmentDisplacement.z -= var_fv0;
     racer->segmentPositionInfo.pos.z -= var_fv0;
     racer->segmentPositionInfo.lastGroundedPos.z -= var_fv0;
@@ -2266,11 +2270,12 @@ void func_8071F334(Racer* racer, f32 lateralVelocity, f32 wallDirection, f32 edg
 
     if (lateralVelocity * wallDirection > 0.01f) {
         if (racer->machineLod != 0) {
-            func_i2_800AC680(racer->segmentPositionInfo.pos.x + ((wallDirection * 15.0f) * racer->unk_24C.z.x),
-                             racer->segmentPositionInfo.pos.y + ((wallDirection * 15.0f) * racer->unk_24C.z.y),
-                             racer->segmentPositionInfo.pos.z + ((wallDirection * 15.0f) * racer->unk_24C.z.z),
-                             racer->velocity.x, racer->velocity.y, racer->velocity.z,
-                             (lateralVelocity * wallDirection * 1.5f) + 18.0f, racer);
+            Effects_SpawnCollisionSparks(
+                racer->segmentPositionInfo.pos.x + ((wallDirection * 15.0f) * racer->segmentBasis.z.x),
+                racer->segmentPositionInfo.pos.y + ((wallDirection * 15.0f) * racer->segmentBasis.z.y),
+                racer->segmentPositionInfo.pos.z + ((wallDirection * 15.0f) * racer->segmentBasis.z.z),
+                racer->velocity.x, racer->velocity.y, racer->velocity.z,
+                (lateralVelocity * wallDirection * 1.5f) + 18.0f, racer);
         }
         if (D_807A16E0 != 0) {
             Audio_PlayerTriggerSEStart(racer->id, NA_SE_3);
@@ -2278,42 +2283,42 @@ void func_8071F334(Racer* racer, f32 lateralVelocity, f32 wallDirection, f32 edg
         func_8071EE74(racer, lateralVelocity * wallDirection * 0.7f);
     }
 
-    racer->velocity.x = (racer->velocity.x - racer->unk_234 * lateralVelocity * racer->unk_24C.z.x) * 0.998f;
-    racer->velocity.y = (racer->velocity.y - racer->unk_234 * lateralVelocity * racer->unk_24C.z.y) * 0.998f;
-    racer->velocity.z = (racer->velocity.z - racer->unk_234 * lateralVelocity * racer->unk_24C.z.z) * 0.998f;
+    racer->velocity.x = (racer->velocity.x - racer->unk_234 * lateralVelocity * racer->segmentBasis.z.x) * 0.998f;
+    racer->velocity.y = (racer->velocity.y - racer->unk_234 * lateralVelocity * racer->segmentBasis.z.y) * 0.998f;
+    racer->velocity.z = (racer->velocity.z - racer->unk_234 * lateralVelocity * racer->segmentBasis.z.z) * 0.998f;
 
     // FAKE
     var = racer;
-    var->unk_118.x = var->unk_24C.z.x * (-0.15f * lateralVelocity);
-    var->unk_118.y = var->unk_24C.z.y * (-0.15f * lateralVelocity);
-    var->unk_118.z = var->unk_24C.z.z * (-0.15f * lateralVelocity);
+    var->recoilStrength.x = var->segmentBasis.z.x * (-0.15f * lateralVelocity);
+    var->recoilStrength.y = var->segmentBasis.z.y * (-0.15f * lateralVelocity);
+    var->recoilStrength.z = var->segmentBasis.z.z * (-0.15f * lateralVelocity);
 
-    racer->stateFlags |= RACER_STATE_FLAGS_2000;
+    racer->stateFlags |= RACER_STATE_COLLISION_RECOIL;
 }
 
 void func_8071F5C4(Racer* racer) {
     f32 temp_fv0;
     f32 temp_fv1;
 
-    temp_fv0 = ((racer->unk_A8.x * racer->unk_B4.x) + (racer->unk_A8.y * racer->unk_B4.y) +
-                (racer->unk_A8.z * racer->unk_B4.z)) *
-               0.15f * racer->unk_E4;
+    temp_fv0 = ((racer->gravityUp.x * racer->tiltUp.x) + (racer->gravityUp.y * racer->tiltUp.y) +
+                (racer->gravityUp.z * racer->tiltUp.z)) *
+               0.15f * racer->tiltUpInput;
 
-    racer->unk_B4.x = racer->unk_C0.y.x + (temp_fv0 * racer->unk_C0.x.x);
-    racer->unk_B4.y = racer->unk_C0.y.y + (temp_fv0 * racer->unk_C0.x.y);
-    racer->unk_B4.z = racer->unk_C0.y.z + (temp_fv0 * racer->unk_C0.x.z);
+    racer->tiltUp.x = racer->trueBasis.y.x + (temp_fv0 * racer->trueBasis.x.x);
+    racer->tiltUp.y = racer->trueBasis.y.y + (temp_fv0 * racer->trueBasis.x.y);
+    racer->tiltUp.z = racer->trueBasis.y.z + (temp_fv0 * racer->trueBasis.x.z);
 
-    temp_fv1 = 1.0f / sqrtf(SQ(racer->unk_B4.x) + SQ(racer->unk_B4.y) + SQ(racer->unk_B4.z));
-    racer->unk_B4.x *= temp_fv1;
-    racer->unk_B4.y *= temp_fv1;
-    racer->unk_B4.z *= temp_fv1;
+    temp_fv1 = 1.0f / sqrtf(SQ(racer->tiltUp.x) + SQ(racer->tiltUp.y) + SQ(racer->tiltUp.z));
+    racer->tiltUp.x *= temp_fv1;
+    racer->tiltUp.y *= temp_fv1;
+    racer->tiltUp.z *= temp_fv1;
 }
 
 void func_8071F6B0(Racer* racer) {
 
-    racer->unk_A8.x -= 0.5f * racer->unk_A8.x;
-    racer->unk_A8.y += 0.5f * (1.0f - racer->unk_A8.y);
-    racer->unk_A8.z -= 0.5f * racer->unk_A8.z;
+    racer->gravityUp.x -= 0.5f * racer->gravityUp.x;
+    racer->gravityUp.y += 0.5f * (1.0f - racer->gravityUp.y);
+    racer->gravityUp.z -= 0.5f * racer->gravityUp.z;
 }
 
 void func_8071F6F8(Racer* racer, f32 airborneRange) {
@@ -2331,29 +2336,29 @@ void func_8071F6F8(Racer* racer, f32 airborneRange) {
         if (racer->stateFlags & RACER_STATE_FLAGS_80000000) {
             return;
         }
-        lateralOffset = (racer->unk_24C.z.x * racer->segmentPositionInfo.segmentDisplacement.x) +
-                        (racer->unk_24C.z.y * racer->segmentPositionInfo.segmentDisplacement.y) +
-                        (racer->unk_24C.z.z * racer->segmentPositionInfo.segmentDisplacement.z);
+        lateralOffset = (racer->segmentBasis.z.x * racer->segmentPositionInfo.segmentDisplacement.x) +
+                        (racer->segmentBasis.z.y * racer->segmentPositionInfo.segmentDisplacement.y) +
+                        (racer->segmentBasis.z.z * racer->segmentPositionInfo.segmentDisplacement.z);
         if ((lateralOffset < -racer->currentRadiusRight) || (racer->currentRadiusLeft < lateralOffset)) {
             racer->stateFlags |= RACER_STATE_FLAGS_80000000;
             func_8071EE74(racer, 2.0f);
-            func_i2_800AC680(racer->segmentPositionInfo.pos.x, racer->segmentPositionInfo.pos.y,
-                             racer->segmentPositionInfo.pos.z, racer->velocity.x, racer->velocity.y, racer->velocity.z,
-                             40.0f, racer);
+            Effects_SpawnCollisionSparks(racer->segmentPositionInfo.pos.x, racer->segmentPositionInfo.pos.y,
+                                         racer->segmentPositionInfo.pos.z, racer->velocity.x, racer->velocity.y,
+                                         racer->velocity.z, 40.0f, racer);
             if (D_807A16E0 != 0) {
                 Audio_PlayerTriggerSEStart(racer->id, NA_SE_3);
             }
         }
     } else {
-        lateralOffset = (racer->unk_24C.z.x * racer->segmentPositionInfo.segmentDisplacement.x) +
-                        (racer->unk_24C.z.y * racer->segmentPositionInfo.segmentDisplacement.y) +
-                        (racer->unk_24C.z.z * racer->segmentPositionInfo.segmentDisplacement.z);
-        racer->heightAboveGround = (racer->unk_24C.y.x * racer->segmentPositionInfo.segmentDisplacement.x) +
-                                   (racer->unk_24C.y.y * racer->segmentPositionInfo.segmentDisplacement.y) +
-                                   (racer->unk_24C.y.z * racer->segmentPositionInfo.segmentDisplacement.z);
-        racer->upFromGround.x = racer->unk_24C.y.x;
-        racer->upFromGround.y = racer->unk_24C.y.y;
-        racer->upFromGround.z = racer->unk_24C.y.z;
+        lateralOffset = (racer->segmentBasis.z.x * racer->segmentPositionInfo.segmentDisplacement.x) +
+                        (racer->segmentBasis.z.y * racer->segmentPositionInfo.segmentDisplacement.y) +
+                        (racer->segmentBasis.z.z * racer->segmentPositionInfo.segmentDisplacement.z);
+        racer->heightAboveGround = (racer->segmentBasis.y.x * racer->segmentPositionInfo.segmentDisplacement.x) +
+                                   (racer->segmentBasis.y.y * racer->segmentPositionInfo.segmentDisplacement.y) +
+                                   (racer->segmentBasis.y.z * racer->segmentPositionInfo.segmentDisplacement.z);
+        racer->upFromGround.x = racer->segmentBasis.y.x;
+        racer->upFromGround.y = racer->segmentBasis.y.y;
+        racer->upFromGround.z = racer->segmentBasis.y.z;
 
         if (airborneRange < racer->heightAboveGround) {
             racer->stateFlags |= RACER_STATE_FLAGS_80000000 | RACER_STATE_AIRBORNE;
@@ -2372,29 +2377,29 @@ void func_8071F6F8(Racer* racer, f32 airborneRange) {
         }
 
         if (racer->heightAboveGround < 0.0f) {
-            temp_fv0 = racer->heightAboveGround * racer->unk_24C.y.x;
+            temp_fv0 = racer->heightAboveGround * racer->segmentBasis.y.x;
             racer->segmentPositionInfo.segmentDisplacement.x -= temp_fv0;
             racer->segmentPositionInfo.pos.x -= temp_fv0;
             racer->segmentPositionInfo.lastGroundedPos.x -= temp_fv0;
 
-            temp_fv0 = racer->heightAboveGround * racer->unk_24C.y.y;
+            temp_fv0 = racer->heightAboveGround * racer->segmentBasis.y.y;
             racer->segmentPositionInfo.segmentDisplacement.y -= temp_fv0;
             racer->segmentPositionInfo.pos.y -= temp_fv0;
             racer->segmentPositionInfo.lastGroundedPos.y -= temp_fv0;
 
-            temp_fv0 = racer->heightAboveGround * racer->unk_24C.y.z;
+            temp_fv0 = racer->heightAboveGround * racer->segmentBasis.y.z;
             racer->segmentPositionInfo.segmentDisplacement.z -= temp_fv0;
             racer->segmentPositionInfo.pos.z -= temp_fv0;
             racer->segmentPositionInfo.lastGroundedPos.z -= temp_fv0;
 
             racer->heightAboveGround = 0.0f;
 
-            temp_ft4 = (racer->unk_24C.y.x * racer->velocity.x) + (racer->unk_24C.y.y * racer->velocity.y) +
-                       (racer->unk_24C.y.z * racer->velocity.z);
+            temp_ft4 = (racer->segmentBasis.y.x * racer->velocity.x) + (racer->segmentBasis.y.y * racer->velocity.y) +
+                       (racer->segmentBasis.y.z * racer->velocity.z);
             if (temp_ft4 < 0.0f) {
-                racer->velocity.x -= temp_ft4 * racer->unk_24C.y.x;
-                racer->velocity.y -= temp_ft4 * racer->unk_24C.y.y;
-                racer->velocity.z -= temp_ft4 * racer->unk_24C.y.z;
+                racer->velocity.x -= temp_ft4 * racer->segmentBasis.y.x;
+                racer->velocity.y -= temp_ft4 * racer->segmentBasis.y.y;
+                racer->velocity.z -= temp_ft4 * racer->segmentBasis.y.z;
                 if ((racer->id < gNumPlayers) && (D_807A16E0 != 0)) {
                     Audio_Chakuchi(racer->id, temp_ft4);
                 }
@@ -2413,9 +2418,9 @@ void func_8071F6F8(Racer* racer, f32 airborneRange) {
                 }
             }
 
-            racer->unk_A8.x = racer->unk_B4.x = racer->unk_24C.y.x;
-            racer->unk_A8.y = racer->unk_B4.y = racer->unk_24C.y.y;
-            racer->unk_A8.z = racer->unk_B4.z = racer->unk_24C.y.z;
+            racer->gravityUp.x = racer->tiltUp.x = racer->segmentBasis.y.x;
+            racer->gravityUp.y = racer->tiltUp.y = racer->segmentBasis.y.y;
+            racer->gravityUp.z = racer->tiltUp.z = racer->segmentBasis.y.z;
 
         } else {
             racer->stateFlags |= RACER_STATE_AIRBORNE;
@@ -2433,30 +2438,35 @@ void func_8071F6F8(Racer* racer, f32 airborneRange) {
             if (racer->heightAboveGround < 30.0f) {
 
                 temp_ft4 = (racer->heightAboveGround - 15.0f) / 15.0f;
-                racer->unk_A8.x = (racer->unk_A8.x - racer->unk_24C.y.x) * temp_ft4 + racer->unk_24C.y.x;
-                racer->unk_A8.y = (racer->unk_A8.y - racer->unk_24C.y.y) * temp_ft4 + racer->unk_24C.y.y;
-                racer->unk_A8.z = (racer->unk_A8.z - racer->unk_24C.y.z) * temp_ft4 + racer->unk_24C.y.z;
+                racer->gravityUp.x =
+                    (racer->gravityUp.x - racer->segmentBasis.y.x) * temp_ft4 + racer->segmentBasis.y.x;
+                racer->gravityUp.y =
+                    (racer->gravityUp.y - racer->segmentBasis.y.y) * temp_ft4 + racer->segmentBasis.y.y;
+                racer->gravityUp.z =
+                    (racer->gravityUp.z - racer->segmentBasis.y.z) * temp_ft4 + racer->segmentBasis.y.z;
 
-                racer->unk_B4.x = (racer->unk_B4.x - racer->unk_24C.y.x) * temp_ft4 + racer->unk_B4.x;
-                racer->unk_B4.y = (racer->unk_B4.y - racer->unk_24C.y.y) * temp_ft4 + racer->unk_B4.y;
-                racer->unk_B4.z = (racer->unk_B4.z - racer->unk_24C.y.z) * temp_ft4 + racer->unk_B4.z;
+                racer->tiltUp.x = (racer->tiltUp.x - racer->segmentBasis.y.x) * temp_ft4 + racer->tiltUp.x;
+                racer->tiltUp.y = (racer->tiltUp.y - racer->segmentBasis.y.y) * temp_ft4 + racer->tiltUp.y;
+                racer->tiltUp.z = (racer->tiltUp.z - racer->segmentBasis.y.z) * temp_ft4 + racer->tiltUp.z;
 
-                temp_fv0 = 1.0f / sqrtf(SQ(racer->unk_B4.x) + SQ(racer->unk_B4.y) + SQ(racer->unk_B4.z));
-                racer->unk_B4.x *= temp_fv0;
-                racer->unk_B4.y *= temp_fv0;
-                racer->unk_B4.z *= temp_fv0;
+                temp_fv0 = 1.0f / sqrtf(SQ(racer->tiltUp.x) + SQ(racer->tiltUp.y) + SQ(racer->tiltUp.z));
+                racer->tiltUp.x *= temp_fv0;
+                racer->tiltUp.y *= temp_fv0;
+                racer->tiltUp.z *= temp_fv0;
             }
         }
 
         if (lateralOffset < -racer->currentRadiusRight) {
             func_8071F334(racer,
-                          (racer->unk_24C.z.x * racer->velocity.x) + (racer->unk_24C.z.y * racer->velocity.y) +
-                              (racer->unk_24C.z.z * racer->velocity.z),
+                          (racer->segmentBasis.z.x * racer->velocity.x) +
+                              (racer->segmentBasis.z.y * racer->velocity.y) +
+                              (racer->segmentBasis.z.z * racer->velocity.z),
                           -1.0f, racer->currentRadiusRight + lateralOffset);
         } else if (racer->currentRadiusLeft < lateralOffset) {
             func_8071F334(racer,
-                          (racer->unk_24C.z.x * racer->velocity.x) + (racer->unk_24C.z.y * racer->velocity.y) +
-                              (racer->unk_24C.z.z * racer->velocity.z),
+                          (racer->segmentBasis.z.x * racer->velocity.x) +
+                              (racer->segmentBasis.z.y * racer->velocity.y) +
+                              (racer->segmentBasis.z.z * racer->velocity.z),
                           1.0f, lateralOffset - racer->currentRadiusLeft);
         } else {
             racer->segmentPositionInfo.distanceFromSegment =
@@ -2465,9 +2475,9 @@ void func_8071F6F8(Racer* racer, f32 airborneRange) {
                       SQ(racer->segmentPositionInfo.segmentDisplacement.z));
         }
 
-        racer->shadowPos.x = racer->segmentPositionInfo.pos.x - (racer->heightAboveGround * racer->unk_24C.y.x);
-        racer->shadowPos.y = racer->segmentPositionInfo.pos.y - (racer->heightAboveGround * racer->unk_24C.y.y);
-        racer->shadowPos.z = racer->segmentPositionInfo.pos.z - (racer->heightAboveGround * racer->unk_24C.y.z);
+        racer->shadowPos.x = racer->segmentPositionInfo.pos.x - (racer->heightAboveGround * racer->segmentBasis.y.x);
+        racer->shadowPos.y = racer->segmentPositionInfo.pos.y - (racer->heightAboveGround * racer->segmentBasis.y.y);
+        racer->shadowPos.z = racer->segmentPositionInfo.pos.z - (racer->heightAboveGround * racer->segmentBasis.y.z);
     }
 }
 
@@ -2520,9 +2530,9 @@ void func_8071FE44(Racer* racer) {
     }
 
     if (var_fs0 != 0.0f) {
-        var_fv1 = ((racer->unk_24C.y.x * racer->segmentPositionInfo.segmentDisplacement.x) +
-                   (racer->unk_24C.y.y * racer->segmentPositionInfo.segmentDisplacement.y) +
-                   (racer->unk_24C.y.z * racer->segmentPositionInfo.segmentDisplacement.z)) -
+        var_fv1 = ((racer->segmentBasis.y.x * racer->segmentPositionInfo.segmentDisplacement.x) +
+                   (racer->segmentBasis.y.y * racer->segmentPositionInfo.segmentDisplacement.y) +
+                   (racer->segmentBasis.y.z * racer->segmentPositionInfo.segmentDisplacement.z)) -
                   23.0f;
         if (racer->stateFlags & RACER_STATE_FLAGS_80000000) {
             if ((var_fv1 >= 0.0f) || (racer->currentRadiusLeft < racer->segmentPositionInfo.distanceFromSegment)) {
@@ -2558,40 +2568,40 @@ void func_8071FE44(Racer* racer) {
     }
 
     if (var_fs0 != 0.0f) {
-        var_fv1 = pipeRadius + (racer->unk_24C.y.x * racer->segmentPositionInfo.segmentDisplacement.x) +
-                  (racer->unk_24C.y.y * racer->segmentPositionInfo.segmentDisplacement.y) +
-                  (racer->unk_24C.y.z * racer->segmentPositionInfo.segmentDisplacement.z);
+        var_fv1 = pipeRadius + (racer->segmentBasis.y.x * racer->segmentPositionInfo.segmentDisplacement.x) +
+                  (racer->segmentBasis.y.y * racer->segmentPositionInfo.segmentDisplacement.y) +
+                  (racer->segmentBasis.y.z * racer->segmentPositionInfo.segmentDisplacement.z);
         if (var_fv1 < racer->heightAboveGround) {
             racer->heightAboveGround = var_fv1;
-            racer->upFromGround.x = racer->unk_24C.y.x;
-            racer->upFromGround.y = racer->unk_24C.y.y;
-            racer->upFromGround.z = racer->unk_24C.y.z;
+            racer->upFromGround.x = racer->segmentBasis.y.x;
+            racer->upFromGround.y = racer->segmentBasis.y.y;
+            racer->upFromGround.z = racer->segmentBasis.y.z;
 
-            racer->unk_B4.x = (D_i2_800C18F8[TRACK_SHAPE_INDEX(TRACK_SHAPE_HALF_PIPE)] * racer->unk_24C.y.x) +
-                              (var_fs0 * racer->unk_24C.x.x);
-            racer->unk_B4.y = (D_i2_800C18F8[TRACK_SHAPE_INDEX(TRACK_SHAPE_HALF_PIPE)] * racer->unk_24C.y.y) +
-                              (var_fs0 * racer->unk_24C.x.y);
-            racer->unk_B4.z = (D_i2_800C18F8[TRACK_SHAPE_INDEX(TRACK_SHAPE_HALF_PIPE)] * racer->unk_24C.y.z) +
-                              (var_fs0 * racer->unk_24C.x.z);
+            racer->tiltUp.x = (D_i2_800C18F8[TRACK_SHAPE_INDEX(TRACK_SHAPE_HALF_PIPE)] * racer->segmentBasis.y.x) +
+                              (var_fs0 * racer->segmentBasis.x.x);
+            racer->tiltUp.y = (D_i2_800C18F8[TRACK_SHAPE_INDEX(TRACK_SHAPE_HALF_PIPE)] * racer->segmentBasis.y.y) +
+                              (var_fs0 * racer->segmentBasis.x.y);
+            racer->tiltUp.z = (D_i2_800C18F8[TRACK_SHAPE_INDEX(TRACK_SHAPE_HALF_PIPE)] * racer->segmentBasis.y.z) +
+                              (var_fs0 * racer->segmentBasis.x.z);
 
-            var_fv1 = 1.0f / sqrtf(SQ(racer->unk_B4.x) + SQ(racer->unk_B4.y) + SQ(racer->unk_B4.z));
+            var_fv1 = 1.0f / sqrtf(SQ(racer->tiltUp.x) + SQ(racer->tiltUp.y) + SQ(racer->tiltUp.z));
 
-            racer->unk_B4.x *= var_fv1;
-            racer->unk_B4.y *= var_fv1;
-            racer->unk_B4.z *= var_fv1;
+            racer->tiltUp.x *= var_fv1;
+            racer->tiltUp.y *= var_fv1;
+            racer->tiltUp.z *= var_fv1;
 
             if (racer->heightAboveGround < 0.0f) {
-                temp_fv0 = racer->heightAboveGround * racer->unk_24C.y.x;
+                temp_fv0 = racer->heightAboveGround * racer->segmentBasis.y.x;
                 racer->segmentPositionInfo.segmentDisplacement.x -= temp_fv0;
                 racer->segmentPositionInfo.pos.x -= temp_fv0;
                 racer->segmentPositionInfo.lastGroundedPos.x -= temp_fv0;
 
-                temp_fv0 = racer->heightAboveGround * racer->unk_24C.y.y;
+                temp_fv0 = racer->heightAboveGround * racer->segmentBasis.y.y;
                 racer->segmentPositionInfo.segmentDisplacement.y -= temp_fv0;
                 racer->segmentPositionInfo.pos.y -= temp_fv0;
                 racer->segmentPositionInfo.lastGroundedPos.y -= temp_fv0;
 
-                temp_fv0 = racer->heightAboveGround * racer->unk_24C.y.z;
+                temp_fv0 = racer->heightAboveGround * racer->segmentBasis.y.z;
                 racer->segmentPositionInfo.segmentDisplacement.z -= temp_fv0;
                 racer->segmentPositionInfo.pos.z -= temp_fv0;
                 racer->segmentPositionInfo.lastGroundedPos.z -= temp_fv0;
@@ -2602,37 +2612,40 @@ void func_8071FE44(Racer* racer) {
                           SQ(racer->segmentPositionInfo.segmentDisplacement.z));
                 racer->heightAboveGround = 0.0f;
 
-                var_fs0 = (racer->unk_24C.y.x * racer->velocity.x) + (racer->unk_24C.y.y * racer->velocity.y) +
-                          (racer->unk_24C.y.z * racer->velocity.z);
+                var_fs0 = (racer->segmentBasis.y.x * racer->velocity.x) +
+                          (racer->segmentBasis.y.y * racer->velocity.y) + (racer->segmentBasis.y.z * racer->velocity.z);
                 if (var_fs0 < 0.0f) {
-                    racer->velocity.x -= var_fs0 * racer->unk_24C.y.x;
-                    racer->velocity.y -= var_fs0 * racer->unk_24C.y.y;
-                    racer->velocity.z -= var_fs0 * racer->unk_24C.y.z;
+                    racer->velocity.x -= var_fs0 * racer->segmentBasis.y.x;
+                    racer->velocity.y -= var_fs0 * racer->segmentBasis.y.y;
+                    racer->velocity.z -= var_fs0 * racer->segmentBasis.y.z;
                     if ((racer->id < gNumPlayers) && (D_807A16E0 != 0)) {
                         Audio_Chakuchi(racer->id, var_fs0);
                     }
                 }
             }
         } else {
-            racer->unk_B4 = racer->upFromGround;
+            racer->tiltUp = racer->upFromGround;
         }
-        x = ((racer->unk_B4.x - racer->unk_24C.y.x) * joinProportion) + racer->unk_24C.y.x;
-        y = ((racer->unk_B4.y - racer->unk_24C.y.y) * joinProportion) + racer->unk_24C.y.y;
-        z = ((racer->unk_B4.z - racer->unk_24C.y.z) * joinProportion) + racer->unk_24C.y.z;
+        x = ((racer->tiltUp.x - racer->segmentBasis.y.x) * joinProportion) + racer->segmentBasis.y.x;
+        y = ((racer->tiltUp.y - racer->segmentBasis.y.y) * joinProportion) + racer->segmentBasis.y.y;
+        z = ((racer->tiltUp.z - racer->segmentBasis.y.z) * joinProportion) + racer->segmentBasis.y.z;
 
         var_fv1 = sqrtf(SQ(x) + SQ(y) + SQ(z));
         if (var_fv1 > 0.01f) {
             var_fv1 = 1.0f / var_fv1;
-            racer->unk_B4.x = var_fv1 * x;
-            racer->unk_B4.y = var_fv1 * y;
-            racer->unk_B4.z = var_fv1 * z;
+            racer->tiltUp.x = var_fv1 * x;
+            racer->tiltUp.y = var_fv1 * y;
+            racer->tiltUp.z = var_fv1 * z;
         }
 
-        racer->unk_A8.x = ((racer->upFromGround.x - racer->unk_24C.y.x) * joinProportion) + racer->unk_24C.y.x;
-        racer->unk_A8.y = ((racer->upFromGround.y - racer->unk_24C.y.y) * joinProportion) + racer->unk_24C.y.y;
-        racer->unk_A8.z = ((racer->upFromGround.z - racer->unk_24C.y.z) * joinProportion) + racer->unk_24C.y.z;
+        racer->gravityUp.x =
+            ((racer->upFromGround.x - racer->segmentBasis.y.x) * joinProportion) + racer->segmentBasis.y.x;
+        racer->gravityUp.y =
+            ((racer->upFromGround.y - racer->segmentBasis.y.y) * joinProportion) + racer->segmentBasis.y.y;
+        racer->gravityUp.z =
+            ((racer->upFromGround.z - racer->segmentBasis.y.z) * joinProportion) + racer->segmentBasis.y.z;
     } else {
-        racer->unk_A8 = racer->unk_B4 = racer->upFromGround;
+        racer->gravityUp = racer->tiltUp = racer->upFromGround;
     }
 
     if (racer->currentRadiusLeft < racer->segmentPositionInfo.distanceFromSegment) {
@@ -2760,48 +2773,48 @@ void func_807206FC(Racer* racer) {
 
     if (var_fa1 != 0.0f) {
 
-        x = ((racer->upFromGround.x - racer->unk_24C.y.x) * joinProportion) + racer->unk_24C.y.x;
-        y = ((racer->upFromGround.y - racer->unk_24C.y.y) * joinProportion) + racer->unk_24C.y.y;
-        z = ((racer->upFromGround.z - racer->unk_24C.y.z) * joinProportion) + racer->unk_24C.y.z;
+        x = ((racer->upFromGround.x - racer->segmentBasis.y.x) * joinProportion) + racer->segmentBasis.y.x;
+        y = ((racer->upFromGround.y - racer->segmentBasis.y.y) * joinProportion) + racer->segmentBasis.y.y;
+        z = ((racer->upFromGround.z - racer->segmentBasis.y.z) * joinProportion) + racer->segmentBasis.y.z;
 
         temp_fv1 = sqrtf(SQ(x) + SQ(y) + SQ(z));
         if (temp_fv1 > 0.01f) {
             temp_fv1 = 1.0f / temp_fv1;
-            racer->unk_B4.x = temp_fv1 * x;
-            racer->unk_B4.y = temp_fv1 * y;
-            racer->unk_B4.z = temp_fv1 * z;
+            racer->tiltUp.x = temp_fv1 * x;
+            racer->tiltUp.y = temp_fv1 * y;
+            racer->tiltUp.z = temp_fv1 * z;
         }
 
         temp_fv1 = 1.0f - joinProportion;
-        x = racer->unk_24C.y.x * SQ(temp_fv1);
-        y = racer->unk_24C.y.y * SQ(temp_fv1);
-        z = racer->unk_24C.y.z * SQ(temp_fv1);
+        x = racer->segmentBasis.y.x * SQ(temp_fv1);
+        y = racer->segmentBasis.y.y * SQ(temp_fv1);
+        z = racer->segmentBasis.y.z * SQ(temp_fv1);
 
-        racer->unk_A8.x = ((racer->upFromGround.x - x) * joinProportion) + x;
-        racer->unk_A8.y = ((racer->upFromGround.y - y) * joinProportion) + y;
-        racer->unk_A8.z = ((racer->upFromGround.z - z) * joinProportion) + z;
+        racer->gravityUp.x = ((racer->upFromGround.x - x) * joinProportion) + x;
+        racer->gravityUp.y = ((racer->upFromGround.y - y) * joinProportion) + y;
+        racer->gravityUp.z = ((racer->upFromGround.z - z) * joinProportion) + z;
         temp_fv1 = (joinProportion * 200.0f) + cylinderRadius +
-                   (racer->unk_24C.y.x * racer->segmentPositionInfo.segmentDisplacement.x) +
-                   (racer->unk_24C.y.y * racer->segmentPositionInfo.segmentDisplacement.y) +
-                   (racer->unk_24C.y.z * racer->segmentPositionInfo.segmentDisplacement.z);
+                   (racer->segmentBasis.y.x * racer->segmentPositionInfo.segmentDisplacement.x) +
+                   (racer->segmentBasis.y.y * racer->segmentPositionInfo.segmentDisplacement.y) +
+                   (racer->segmentBasis.y.z * racer->segmentPositionInfo.segmentDisplacement.z);
         if (temp_fv1 < racer->heightAboveGround) {
             racer->heightAboveGround = temp_fv1;
-            racer->upFromGround.x = racer->unk_24C.y.x;
-            racer->upFromGround.y = racer->unk_24C.y.y;
-            racer->upFromGround.z = racer->unk_24C.y.z;
+            racer->upFromGround.x = racer->segmentBasis.y.x;
+            racer->upFromGround.y = racer->segmentBasis.y.y;
+            racer->upFromGround.z = racer->segmentBasis.y.z;
             if (racer->heightAboveGround < 0.0f) {
 
-                temp_fv0 = racer->heightAboveGround * racer->unk_24C.y.x;
+                temp_fv0 = racer->heightAboveGround * racer->segmentBasis.y.x;
                 racer->segmentPositionInfo.segmentDisplacement.x -= temp_fv0;
                 racer->segmentPositionInfo.pos.x -= temp_fv0;
                 racer->segmentPositionInfo.lastGroundedPos.x -= temp_fv0;
 
-                temp_fv0 = racer->heightAboveGround * racer->unk_24C.y.y;
+                temp_fv0 = racer->heightAboveGround * racer->segmentBasis.y.y;
                 racer->segmentPositionInfo.segmentDisplacement.y -= temp_fv0;
                 racer->segmentPositionInfo.pos.y -= temp_fv0;
                 racer->segmentPositionInfo.lastGroundedPos.y -= temp_fv0;
 
-                temp_fv0 = racer->heightAboveGround * racer->unk_24C.y.z;
+                temp_fv0 = racer->heightAboveGround * racer->segmentBasis.y.z;
                 racer->segmentPositionInfo.segmentDisplacement.z -= temp_fv0;
                 racer->segmentPositionInfo.pos.z -= temp_fv0;
                 racer->segmentPositionInfo.lastGroundedPos.z -= temp_fv0;
@@ -2814,7 +2827,7 @@ void func_807206FC(Racer* racer) {
             }
         }
     } else {
-        racer->unk_A8 = racer->unk_B4 = racer->upFromGround;
+        racer->gravityUp = racer->tiltUp = racer->upFromGround;
     }
 
     if (racer->segmentPositionInfo.distanceFromSegment < cylinderRadius) {
@@ -2908,9 +2921,9 @@ void func_80720E2C(Racer* racer) {
         racer->upFromGround.z = racer->segmentPositionInfo.segmentDisplacement.z * temp_fv1;
     }
 
-    temp_fv1 = (((racer->unk_24C.y.x * racer->segmentPositionInfo.segmentDisplacement.x) +
-                 (racer->unk_24C.y.y * racer->segmentPositionInfo.segmentDisplacement.y) +
-                 (racer->unk_24C.y.z * racer->segmentPositionInfo.segmentDisplacement.z)) -
+    temp_fv1 = (((racer->segmentBasis.y.x * racer->segmentPositionInfo.segmentDisplacement.x) +
+                 (racer->segmentBasis.y.y * racer->segmentPositionInfo.segmentDisplacement.y) +
+                 (racer->segmentBasis.y.z * racer->segmentPositionInfo.segmentDisplacement.z)) -
                 23.0f) +
                (halfPipeRadius * 0.3826834f);
     if (racer->stateFlags & RACER_STATE_FLAGS_80000000) {
@@ -2939,39 +2952,39 @@ void func_80720E2C(Racer* racer) {
     }
 
     if (var_fs0 != 0.0f) {
-        temp_fv1 = halfPipeRadius + (racer->unk_24C.y.x * racer->segmentPositionInfo.segmentDisplacement.x) +
-                   (racer->unk_24C.y.y * racer->segmentPositionInfo.segmentDisplacement.y) +
-                   (racer->unk_24C.y.z * racer->segmentPositionInfo.segmentDisplacement.z);
+        temp_fv1 = halfPipeRadius + (racer->segmentBasis.y.x * racer->segmentPositionInfo.segmentDisplacement.x) +
+                   (racer->segmentBasis.y.y * racer->segmentPositionInfo.segmentDisplacement.y) +
+                   (racer->segmentBasis.y.z * racer->segmentPositionInfo.segmentDisplacement.z);
         if (temp_fv1 < racer->heightAboveGround) {
             racer->heightAboveGround = temp_fv1;
-            racer->upFromGround.x = racer->unk_24C.y.x;
-            racer->upFromGround.y = racer->unk_24C.y.y;
-            racer->upFromGround.z = racer->unk_24C.y.z;
-            racer->unk_B4.x = (D_i2_800C18F8[TRACK_SHAPE_INDEX(TRACK_SHAPE_HALF_PIPE)] * racer->upFromGround.x) +
-                              (var_fs0 * racer->unk_24C.x.x);
-            racer->unk_B4.y = (D_i2_800C18F8[TRACK_SHAPE_INDEX(TRACK_SHAPE_HALF_PIPE)] * racer->upFromGround.y) +
-                              (var_fs0 * racer->unk_24C.x.y);
-            racer->unk_B4.z = (D_i2_800C18F8[TRACK_SHAPE_INDEX(TRACK_SHAPE_HALF_PIPE)] * racer->upFromGround.z) +
-                              (var_fs0 * racer->unk_24C.x.z);
+            racer->upFromGround.x = racer->segmentBasis.y.x;
+            racer->upFromGround.y = racer->segmentBasis.y.y;
+            racer->upFromGround.z = racer->segmentBasis.y.z;
+            racer->tiltUp.x = (D_i2_800C18F8[TRACK_SHAPE_INDEX(TRACK_SHAPE_HALF_PIPE)] * racer->upFromGround.x) +
+                              (var_fs0 * racer->segmentBasis.x.x);
+            racer->tiltUp.y = (D_i2_800C18F8[TRACK_SHAPE_INDEX(TRACK_SHAPE_HALF_PIPE)] * racer->upFromGround.y) +
+                              (var_fs0 * racer->segmentBasis.x.y);
+            racer->tiltUp.z = (D_i2_800C18F8[TRACK_SHAPE_INDEX(TRACK_SHAPE_HALF_PIPE)] * racer->upFromGround.z) +
+                              (var_fs0 * racer->segmentBasis.x.z);
 
-            temp_fv1 = 1.0f / sqrtf(SQ(racer->unk_B4.x) + SQ(racer->unk_B4.y) + SQ(racer->unk_B4.z));
+            temp_fv1 = 1.0f / sqrtf(SQ(racer->tiltUp.x) + SQ(racer->tiltUp.y) + SQ(racer->tiltUp.z));
 
-            racer->unk_B4.x *= temp_fv1;
-            racer->unk_B4.y *= temp_fv1;
-            racer->unk_B4.z *= temp_fv1;
+            racer->tiltUp.x *= temp_fv1;
+            racer->tiltUp.y *= temp_fv1;
+            racer->tiltUp.z *= temp_fv1;
 
             if (racer->heightAboveGround < 0.0f) {
-                temp_fv0 = racer->heightAboveGround * racer->unk_24C.y.x;
+                temp_fv0 = racer->heightAboveGround * racer->segmentBasis.y.x;
                 racer->segmentPositionInfo.segmentDisplacement.x -= temp_fv0;
                 racer->segmentPositionInfo.pos.x -= temp_fv0;
                 racer->segmentPositionInfo.lastGroundedPos.x -= temp_fv0;
 
-                temp_fv0 = racer->heightAboveGround * racer->unk_24C.y.y;
+                temp_fv0 = racer->heightAboveGround * racer->segmentBasis.y.y;
                 racer->segmentPositionInfo.segmentDisplacement.y -= temp_fv0;
                 racer->segmentPositionInfo.pos.y -= temp_fv0;
                 racer->segmentPositionInfo.lastGroundedPos.y -= temp_fv0;
 
-                temp_fv0 = racer->heightAboveGround * racer->unk_24C.y.z;
+                temp_fv0 = racer->heightAboveGround * racer->segmentBasis.y.z;
                 racer->segmentPositionInfo.segmentDisplacement.z -= temp_fv0;
                 racer->segmentPositionInfo.pos.z -= temp_fv0;
                 racer->segmentPositionInfo.lastGroundedPos.z -= temp_fv0;
@@ -2982,34 +2995,34 @@ void func_80720E2C(Racer* racer) {
                           SQ(racer->segmentPositionInfo.segmentDisplacement.z));
                 racer->heightAboveGround = 0.0f;
 
-                var_fs0 = (racer->unk_24C.y.x * racer->velocity.x) + (racer->unk_24C.y.y * racer->velocity.y) +
-                          (racer->unk_24C.y.z * racer->velocity.z);
+                var_fs0 = (racer->segmentBasis.y.x * racer->velocity.x) +
+                          (racer->segmentBasis.y.y * racer->velocity.y) + (racer->segmentBasis.y.z * racer->velocity.z);
                 if (var_fs0 < 0.0f) {
-                    racer->velocity.x -= var_fs0 * racer->unk_24C.y.x;
-                    racer->velocity.y -= var_fs0 * racer->unk_24C.y.y;
-                    racer->velocity.z -= var_fs0 * racer->unk_24C.y.z;
+                    racer->velocity.x -= var_fs0 * racer->segmentBasis.y.x;
+                    racer->velocity.y -= var_fs0 * racer->segmentBasis.y.y;
+                    racer->velocity.z -= var_fs0 * racer->segmentBasis.y.z;
                     if ((racer->id < gNumPlayers) && (D_807A16E0 != 0)) {
                         Audio_Chakuchi(racer->id, var_fs0);
                     }
                 }
             }
         } else {
-            racer->unk_B4 = racer->upFromGround;
+            racer->tiltUp = racer->upFromGround;
         }
 
-        x = ((racer->unk_B4.x - racer->unk_24C.y.x) * joinProportion) + racer->unk_24C.y.x;
-        y = ((racer->unk_B4.y - racer->unk_24C.y.y) * joinProportion) + racer->unk_24C.y.y;
-        z = ((racer->unk_B4.z - racer->unk_24C.y.z) * joinProportion) + racer->unk_24C.y.z;
+        x = ((racer->tiltUp.x - racer->segmentBasis.y.x) * joinProportion) + racer->segmentBasis.y.x;
+        y = ((racer->tiltUp.y - racer->segmentBasis.y.y) * joinProportion) + racer->segmentBasis.y.y;
+        z = ((racer->tiltUp.z - racer->segmentBasis.y.z) * joinProportion) + racer->segmentBasis.y.z;
 
         temp_fv1 = sqrtf(SQ(x) + SQ(y) + SQ(z));
         if (temp_fv1 > 0.01f) {
             temp_fv1 = 1.0f / temp_fv1;
-            racer->unk_B4.x = temp_fv1 * x;
-            racer->unk_B4.y = temp_fv1 * y;
-            racer->unk_B4.z = temp_fv1 * z;
+            racer->tiltUp.x = temp_fv1 * x;
+            racer->tiltUp.y = temp_fv1 * y;
+            racer->tiltUp.z = temp_fv1 * z;
         }
     } else {
-        racer->unk_B4 = racer->upFromGround;
+        racer->tiltUp = racer->upFromGround;
     }
 
     if (racer->currentRadiusLeft < racer->segmentPositionInfo.distanceFromSegment) {
@@ -3043,9 +3056,9 @@ void func_80720E2C(Racer* racer) {
         }
     }
 
-    racer->unk_A8.x = racer->unk_24C.y.x;
-    racer->unk_A8.y = racer->unk_24C.y.y;
-    racer->unk_A8.z = racer->unk_24C.y.z;
+    racer->gravityUp.x = racer->segmentBasis.y.x;
+    racer->gravityUp.y = racer->segmentBasis.y.y;
+    racer->gravityUp.z = racer->segmentBasis.y.z;
     racer->shadowPos.x = racer->segmentPositionInfo.pos.x - (racer->heightAboveGround * racer->upFromGround.x);
     racer->shadowPos.y = racer->segmentPositionInfo.pos.y - (racer->heightAboveGround * racer->upFromGround.y);
     racer->shadowPos.z = racer->segmentPositionInfo.pos.z - (racer->heightAboveGround * racer->upFromGround.z);
@@ -3087,13 +3100,13 @@ void func_8072163C(Racer* racer) {
 
     racer->shadowPos.y = -54321.0f;
 
-    racer->heightAboveGround = (racer->segmentPositionInfo.segmentDisplacement.x * racer->unk_24C.y.x) +
-                               (racer->segmentPositionInfo.segmentDisplacement.y * racer->unk_24C.y.y) +
-                               (racer->segmentPositionInfo.segmentDisplacement.z * racer->unk_24C.y.z);
+    racer->heightAboveGround = (racer->segmentPositionInfo.segmentDisplacement.x * racer->segmentBasis.y.x) +
+                               (racer->segmentPositionInfo.segmentDisplacement.y * racer->segmentBasis.y.y) +
+                               (racer->segmentPositionInfo.segmentDisplacement.z * racer->segmentBasis.y.z);
 
-    racer->upFromGround.x = racer->unk_24C.y.x;
-    racer->upFromGround.y = racer->unk_24C.y.y;
-    racer->upFromGround.z = racer->unk_24C.y.z;
+    racer->upFromGround.x = racer->segmentBasis.y.x;
+    racer->upFromGround.y = racer->segmentBasis.y.y;
+    racer->upFromGround.z = racer->segmentBasis.y.z;
     func_8071F5C4(racer);
     func_8071F6B0(racer);
 }
@@ -3103,17 +3116,17 @@ void func_80721714(Racer* racer) {
     f32 sp48;
     f32 temp_fv0;
 
-    sp48 = (racer->unk_24C.z.x * racer->segmentPositionInfo.segmentDisplacement.x) +
-           (racer->unk_24C.z.y * racer->segmentPositionInfo.segmentDisplacement.y) +
-           (racer->unk_24C.z.z * racer->segmentPositionInfo.segmentDisplacement.z);
+    sp48 = (racer->segmentBasis.z.x * racer->segmentPositionInfo.segmentDisplacement.x) +
+           (racer->segmentBasis.z.y * racer->segmentPositionInfo.segmentDisplacement.y) +
+           (racer->segmentBasis.z.z * racer->segmentPositionInfo.segmentDisplacement.z);
 
-    racer->heightAboveGround = (racer->unk_24C.y.x * racer->segmentPositionInfo.segmentDisplacement.x) +
-                               (racer->unk_24C.y.y * racer->segmentPositionInfo.segmentDisplacement.y) +
-                               (racer->unk_24C.y.z * racer->segmentPositionInfo.segmentDisplacement.z);
+    racer->heightAboveGround = (racer->segmentBasis.y.x * racer->segmentPositionInfo.segmentDisplacement.x) +
+                               (racer->segmentBasis.y.y * racer->segmentPositionInfo.segmentDisplacement.y) +
+                               (racer->segmentBasis.y.z * racer->segmentPositionInfo.segmentDisplacement.z);
 
-    racer->upFromGround.x = racer->unk_24C.y.x;
-    racer->upFromGround.y = racer->unk_24C.y.y;
-    racer->upFromGround.z = racer->unk_24C.y.z;
+    racer->upFromGround.x = racer->segmentBasis.y.x;
+    racer->upFromGround.y = racer->segmentBasis.y.y;
+    racer->upFromGround.z = racer->segmentBasis.y.z;
 
     if (racer->stateFlags & RACER_STATE_FLAGS_80000000) {
         if ((racer->heightAboveGround < -100.0f) || (racer->heightAboveGround > 30.0f) ||
@@ -3145,29 +3158,29 @@ void func_80721714(Racer* racer) {
 
     if (racer->heightAboveGround < 0.0f) {
 
-        temp_fv0 = racer->heightAboveGround * racer->unk_24C.y.x;
+        temp_fv0 = racer->heightAboveGround * racer->segmentBasis.y.x;
         racer->segmentPositionInfo.segmentDisplacement.x -= temp_fv0;
         racer->segmentPositionInfo.pos.x -= temp_fv0;
         racer->segmentPositionInfo.lastGroundedPos.x -= temp_fv0;
 
-        temp_fv0 = racer->heightAboveGround * racer->unk_24C.y.y;
+        temp_fv0 = racer->heightAboveGround * racer->segmentBasis.y.y;
         racer->segmentPositionInfo.segmentDisplacement.y -= temp_fv0;
         racer->segmentPositionInfo.pos.y -= temp_fv0;
         racer->segmentPositionInfo.lastGroundedPos.y -= temp_fv0;
 
-        temp_fv0 = racer->heightAboveGround * racer->unk_24C.y.z;
+        temp_fv0 = racer->heightAboveGround * racer->segmentBasis.y.z;
         racer->segmentPositionInfo.segmentDisplacement.z -= temp_fv0;
         racer->segmentPositionInfo.pos.z -= temp_fv0;
         racer->segmentPositionInfo.lastGroundedPos.z -= temp_fv0;
 
         racer->heightAboveGround = 0.0f;
-        sp48 = (racer->unk_24C.y.x * racer->velocity.x) + (racer->unk_24C.y.y * racer->velocity.y) +
-               (racer->unk_24C.y.z * racer->velocity.z);
+        sp48 = (racer->segmentBasis.y.x * racer->velocity.x) + (racer->segmentBasis.y.y * racer->velocity.y) +
+               (racer->segmentBasis.y.z * racer->velocity.z);
 
         if (sp48 < 0.0f) {
-            racer->velocity.x -= sp48 * racer->unk_24C.y.x;
-            racer->velocity.y -= sp48 * racer->unk_24C.y.y;
-            racer->velocity.z -= sp48 * racer->unk_24C.y.z;
+            racer->velocity.x -= sp48 * racer->segmentBasis.y.x;
+            racer->velocity.y -= sp48 * racer->segmentBasis.y.y;
+            racer->velocity.z -= sp48 * racer->segmentBasis.y.z;
             if ((racer->id < gNumPlayers) && (D_807A16E0 != 0)) {
                 Audio_Chakuchi(racer->id, sp48);
             }
@@ -3184,9 +3197,9 @@ void func_80721714(Racer* racer) {
                 }
             }
         }
-        racer->unk_A8.x = racer->unk_B4.x = racer->unk_24C.y.x;
-        racer->unk_A8.y = racer->unk_B4.y = racer->unk_24C.y.y;
-        racer->unk_A8.z = racer->unk_B4.z = racer->unk_24C.y.z;
+        racer->gravityUp.x = racer->tiltUp.x = racer->segmentBasis.y.x;
+        racer->gravityUp.y = racer->tiltUp.y = racer->segmentBasis.y.y;
+        racer->gravityUp.z = racer->tiltUp.z = racer->segmentBasis.y.z;
     } else {
         racer->stateFlags |= RACER_STATE_AIRBORNE;
         if (racer->id < gNumPlayers) {
@@ -3203,23 +3216,23 @@ void func_80721714(Racer* racer) {
         if (racer->heightAboveGround < 30.0f) {
             temp_fv1 = (racer->heightAboveGround - 15.0f) / 15.0f;
 
-            racer->unk_A8.x = ((racer->unk_A8.x - racer->unk_24C.y.x) * temp_fv1) + racer->unk_24C.y.x;
-            racer->unk_A8.y = ((racer->unk_A8.y - racer->unk_24C.y.y) * temp_fv1) + racer->unk_24C.y.y;
-            racer->unk_A8.z = ((racer->unk_A8.z - racer->unk_24C.y.z) * temp_fv1) + racer->unk_24C.y.z;
+            racer->gravityUp.x = ((racer->gravityUp.x - racer->segmentBasis.y.x) * temp_fv1) + racer->segmentBasis.y.x;
+            racer->gravityUp.y = ((racer->gravityUp.y - racer->segmentBasis.y.y) * temp_fv1) + racer->segmentBasis.y.y;
+            racer->gravityUp.z = ((racer->gravityUp.z - racer->segmentBasis.y.z) * temp_fv1) + racer->segmentBasis.y.z;
 
-            racer->unk_B4.x = ((racer->unk_B4.x - racer->unk_24C.y.x) * temp_fv1) + racer->unk_B4.x;
-            racer->unk_B4.y = ((racer->unk_B4.y - racer->unk_24C.y.y) * temp_fv1) + racer->unk_B4.y;
-            racer->unk_B4.z = ((racer->unk_B4.z - racer->unk_24C.y.z) * temp_fv1) + racer->unk_B4.z;
+            racer->tiltUp.x = ((racer->tiltUp.x - racer->segmentBasis.y.x) * temp_fv1) + racer->tiltUp.x;
+            racer->tiltUp.y = ((racer->tiltUp.y - racer->segmentBasis.y.y) * temp_fv1) + racer->tiltUp.y;
+            racer->tiltUp.z = ((racer->tiltUp.z - racer->segmentBasis.y.z) * temp_fv1) + racer->tiltUp.z;
 
-            temp_fv1 = 1.0f / sqrtf(SQ(racer->unk_B4.x) + SQ(racer->unk_B4.y) + SQ(racer->unk_B4.z));
-            racer->unk_B4.x *= temp_fv1;
-            racer->unk_B4.y *= temp_fv1;
-            racer->unk_B4.z *= temp_fv1;
+            temp_fv1 = 1.0f / sqrtf(SQ(racer->tiltUp.x) + SQ(racer->tiltUp.y) + SQ(racer->tiltUp.z));
+            racer->tiltUp.x *= temp_fv1;
+            racer->tiltUp.y *= temp_fv1;
+            racer->tiltUp.z *= temp_fv1;
         }
     }
-    racer->shadowPos.x = racer->segmentPositionInfo.pos.x - (racer->heightAboveGround * racer->unk_24C.y.x);
-    racer->shadowPos.y = racer->segmentPositionInfo.pos.y - (racer->heightAboveGround * racer->unk_24C.y.y);
-    racer->shadowPos.z = racer->segmentPositionInfo.pos.z - (racer->heightAboveGround * racer->unk_24C.y.z);
+    racer->shadowPos.x = racer->segmentPositionInfo.pos.x - (racer->heightAboveGround * racer->segmentBasis.y.x);
+    racer->shadowPos.y = racer->segmentPositionInfo.pos.y - (racer->heightAboveGround * racer->segmentBasis.y.y);
+    racer->shadowPos.z = racer->segmentPositionInfo.pos.z - (racer->heightAboveGround * racer->segmentBasis.y.z);
 }
 
 void func_80721CA8(Racer* racer) {
@@ -3241,53 +3254,52 @@ void func_80721CA8(Racer* racer) {
 
 extern u32 gGameFrameCount;
 
-#ifdef NON_MATCHING
 void func_80721D78(Racer* racer, Controller* controller) {
     bool isDrifting;
     s32 i;
     s32 sp13C;
     s32 sp138;
     s32 sp134;
-    f32 var_fa1; // sp130
+    f32 var_fa1;
     f32 sp12C;
     f32 sp128;
     f32 var_fv1;
     f32 var_fs1;
     f32 var_fs0;
-    f32 var_ft4; // sp118
+    f32 var_ft4;
     Vec3f sp10C;
     Mtx3F spE8;
     f32 directionChange;
-    CourseSegment* segment;
+    s32 pad;
     Effect* effectsEnd;
     Effect* effect;
     Landmine* landmine;
     Landmine* landminesEnd;
     Jump* jump;
     Jump* jumpsEnd;
-    u16 buttonReleased; // spC6
+    u16 buttonReleased;
     u16 buttonCurrent;
     u16 buttonPressed;
-    f32 temp_fa0;
+    f32 temp_fv0;
     s32 spinOutTimer;
 
     if (!(racer->stateFlags & RACER_STATE_FLAGS_400000)) {
         buttonReleased = 0;
         buttonPressed = 0;
         buttonCurrent = 0;
-        racer->unk_E4 = 0.0f;
+        racer->tiltUpInput = 0.0f;
         sp12C = racer->unk_238;
         racer->unk_238 *= 0.99f;
     } else {
         buttonCurrent = controller->buttonCurrent;
         buttonPressed = controller->buttonPressed;
         buttonReleased = controller->buttonReleased;
-        racer->unk_E4 = controller->stickY / 63.0f;
+        racer->tiltUpInput = controller->stickY / 63.0f;
 
-        if (racer->unk_E4 < -1.0f) {
-            racer->unk_E4 = -1.0f;
-        } else if (racer->unk_E4 > 1.0f) {
-            racer->unk_E4 = 1.0f;
+        if (racer->tiltUpInput < -1.0f) {
+            racer->tiltUpInput = -1.0f;
+        } else if (racer->tiltUpInput > 1.0f) {
+            racer->tiltUpInput = 1.0f;
         }
         sp12C = controller->stickX / 63.0f;
 
@@ -3298,21 +3310,20 @@ void func_80721D78(Racer* racer, Controller* controller) {
         }
     }
 
-    spE8 = racer->unk_C0;
+    spE8 = racer->trueBasis;
 
     sp10C.x = racer->segmentPositionInfo.pos.x + racer->velocity.x;
     sp10C.y = racer->segmentPositionInfo.pos.y + racer->velocity.y;
     sp10C.z = racer->segmentPositionInfo.pos.z + racer->velocity.z;
-    segment = racer->segmentPositionInfo.courseSegment;
 
     racer->stateFlags &= ~COURSE_EFFECT_MASK;
-    effect = segment->effectsStart;
+    effect = racer->segmentPositionInfo.courseSegment->effectsStart;
     if ((effect != NULL) && !(racer->stateFlags & RACER_STATE_AIRBORNE)) {
-        effectsEnd = segment->effectsEnd;
-        if (segment->trackSegmentInfo & TRACK_FLAG_8000000) {
-            var_fa1 = (racer->segmentPositionInfo.segmentDisplacement.x * racer->unk_24C.z.x) +
-                      (racer->segmentPositionInfo.segmentDisplacement.y * racer->unk_24C.z.y) +
-                      (racer->segmentPositionInfo.segmentDisplacement.z * racer->unk_24C.z.z) +
+        effectsEnd = racer->segmentPositionInfo.courseSegment->effectsEnd;
+        if (racer->segmentPositionInfo.courseSegment->trackSegmentInfo & TRACK_FLAG_8000000) {
+            var_fa1 = (racer->segmentPositionInfo.segmentDisplacement.x * racer->segmentBasis.z.x) +
+                      (racer->segmentPositionInfo.segmentDisplacement.y * racer->segmentBasis.z.y) +
+                      (racer->segmentPositionInfo.segmentDisplacement.z * racer->segmentBasis.z.z) +
                       (0.5f * (racer->currentRadiusRight - racer->currentRadiusLeft));
 
             do {
@@ -3345,26 +3356,26 @@ void func_80721D78(Racer* racer, Controller* controller) {
 
                 if ((((racer->segmentPositionInfo.segmentDisplacement.y * effect->unk_0C.z) -
                       (racer->segmentPositionInfo.segmentDisplacement.z * effect->unk_0C.y)) *
-                     racer->unk_24C.x.x) +
+                     racer->segmentBasis.x.x) +
                         (((racer->segmentPositionInfo.segmentDisplacement.z * effect->unk_0C.x) -
                           (racer->segmentPositionInfo.segmentDisplacement.x * effect->unk_0C.z)) *
-                         racer->unk_24C.x.y) +
+                         racer->segmentBasis.x.y) +
                         (((racer->segmentPositionInfo.segmentDisplacement.x * effect->unk_0C.y) -
                           (racer->segmentPositionInfo.segmentDisplacement.y * effect->unk_0C.x)) *
-                         racer->unk_24C.x.z) <
+                         racer->segmentBasis.x.z) <
                     0.0f) {
                     continue;
                 }
 
                 if ((((effect->unk_18.y * racer->segmentPositionInfo.segmentDisplacement.z) -
                       (effect->unk_18.z * racer->segmentPositionInfo.segmentDisplacement.y)) *
-                     racer->unk_24C.x.x) +
+                     racer->segmentBasis.x.x) +
                         (((effect->unk_18.z * racer->segmentPositionInfo.segmentDisplacement.x) -
                           (effect->unk_18.x * racer->segmentPositionInfo.segmentDisplacement.z)) *
-                         racer->unk_24C.x.y) +
+                         racer->segmentBasis.x.y) +
                         (((effect->unk_18.x * racer->segmentPositionInfo.segmentDisplacement.y) -
                           (effect->unk_18.y * racer->segmentPositionInfo.segmentDisplacement.x)) *
-                         racer->unk_24C.x.z) <
+                         racer->segmentBasis.x.z) <
                     0.0f) {
                     continue;
                 }
@@ -3376,9 +3387,9 @@ void func_80721D78(Racer* racer, Controller* controller) {
         }
     }
     if ((sp12C > 0.1f) || (sp12C < -0.1f)) {
-        var_fs1 = racer->unk_C0.x.x;
-        var_fs0 = racer->unk_C0.x.y;
-        var_ft4 = racer->unk_C0.x.z;
+        var_fs1 = racer->trueBasis.x.x;
+        var_fs0 = racer->trueBasis.x.y;
+        var_ft4 = racer->trueBasis.x.z;
 
         if (racer->spinOutTimer != 0) {
             var_fa1 = 0.2f;
@@ -3401,25 +3412,28 @@ void func_80721D78(Racer* racer, Controller* controller) {
         }
         var_fa1 *= sp12C;
 
-        racer->unk_C0.x.x -= (var_fa1 * racer->unk_C0.z.x);
-        racer->unk_C0.x.y -= (var_fa1 * racer->unk_C0.z.y);
-        racer->unk_C0.x.z -= (var_fa1 * racer->unk_C0.z.z);
+        racer->trueBasis.x.x -= (var_fa1 * racer->trueBasis.z.x);
+        racer->trueBasis.x.y -= (var_fa1 * racer->trueBasis.z.y);
+        racer->trueBasis.x.z -= (var_fa1 * racer->trueBasis.z.z);
 
-        racer->unk_C0.z.x = (racer->unk_C0.y.y * racer->unk_C0.x.z) - (racer->unk_C0.y.z * racer->unk_C0.x.y);
-        racer->unk_C0.z.y = (racer->unk_C0.y.z * racer->unk_C0.x.x) - (racer->unk_C0.y.x * racer->unk_C0.x.z);
-        racer->unk_C0.z.z = (racer->unk_C0.y.x * racer->unk_C0.x.y) - (racer->unk_C0.y.y * racer->unk_C0.x.x);
+        racer->trueBasis.z.x =
+            (racer->trueBasis.y.y * racer->trueBasis.x.z) - (racer->trueBasis.y.z * racer->trueBasis.x.y);
+        racer->trueBasis.z.y =
+            (racer->trueBasis.y.z * racer->trueBasis.x.x) - (racer->trueBasis.y.x * racer->trueBasis.x.z);
+        racer->trueBasis.z.z =
+            (racer->trueBasis.y.x * racer->trueBasis.x.y) - (racer->trueBasis.y.y * racer->trueBasis.x.x);
 
-        temp_fa0 = 1.0f / sqrtf(SQ(racer->unk_C0.z.x) + SQ(racer->unk_C0.z.y) + SQ(racer->unk_C0.z.z));
-        racer->unk_C0.z.x *= temp_fa0;
-        racer->unk_C0.z.y *= temp_fa0;
-        racer->unk_C0.z.z *= temp_fa0;
+        var_fa1 = 1.0f / sqrtf(SQ(racer->trueBasis.z.x) + SQ(racer->trueBasis.z.y) + SQ(racer->trueBasis.z.z));
+        racer->trueBasis.z.x *= var_fa1;
+        racer->trueBasis.z.y *= var_fa1;
+        racer->trueBasis.z.z *= var_fa1;
 
-        var_fs1 -= racer->unk_C0.x.x =
-            (racer->unk_C0.z.y * racer->unk_C0.y.z) - (racer->unk_C0.z.z * racer->unk_C0.y.y);
-        var_fs0 -= racer->unk_C0.x.y =
-            (racer->unk_C0.z.z * racer->unk_C0.y.x) - (racer->unk_C0.z.x * racer->unk_C0.y.z);
-        var_ft4 -= racer->unk_C0.x.z =
-            (racer->unk_C0.z.x * racer->unk_C0.y.y) - (racer->unk_C0.z.y * racer->unk_C0.y.x);
+        var_fs1 -= racer->trueBasis.x.x =
+            (racer->trueBasis.z.y * racer->trueBasis.y.z) - (racer->trueBasis.z.z * racer->trueBasis.y.y);
+        var_fs0 -= racer->trueBasis.x.y =
+            (racer->trueBasis.z.z * racer->trueBasis.y.x) - (racer->trueBasis.z.x * racer->trueBasis.y.z);
+        var_ft4 -= racer->trueBasis.x.z =
+            (racer->trueBasis.z.x * racer->trueBasis.y.y) - (racer->trueBasis.z.y * racer->trueBasis.y.x);
         directionChange = sqrtf(SQ(var_fs1) + SQ(var_fs0) + SQ(var_ft4));
     } else {
         directionChange = 0.0f;
@@ -3481,19 +3495,22 @@ void func_80721D78(Racer* racer, Controller* controller) {
         }
     }
 
-    var_fs1 *= ((racer->unk_C0.z.x * racer->velocity.x) + (racer->unk_C0.z.y * racer->velocity.y) +
-                (racer->unk_C0.z.z * racer->velocity.z));
-    var_fs0 = ((racer->unk_C0.y.x * racer->velocity.x) + (racer->unk_C0.y.y * racer->velocity.y) +
-               (racer->unk_C0.y.z * racer->velocity.z)) *
+    var_fs1 *= ((racer->trueBasis.z.x * racer->velocity.x) + (racer->trueBasis.z.y * racer->velocity.y) +
+                (racer->trueBasis.z.z * racer->velocity.z));
+    var_fs0 = ((racer->trueBasis.y.x * racer->velocity.x) + (racer->trueBasis.y.y * racer->velocity.y) +
+               (racer->trueBasis.y.z * racer->velocity.z)) *
               0.94f;
-    var_ft4 *= ((racer->unk_C0.x.x * racer->velocity.x) + (racer->unk_C0.x.y * racer->velocity.y) +
-                (racer->unk_C0.x.z * racer->velocity.z));
-    racer->velocity.x = (racer->unk_C0.z.x * var_fs1) + (racer->unk_C0.y.x * var_fs0) + (racer->unk_C0.x.x * var_ft4);
-    racer->velocity.y = (racer->unk_C0.z.y * var_fs1) + (racer->unk_C0.y.y * var_fs0) + (racer->unk_C0.x.y * var_ft4);
-    racer->velocity.z = (racer->unk_C0.z.z * var_fs1) + (racer->unk_C0.y.z * var_fs0) + (racer->unk_C0.x.z * var_ft4);
+    var_ft4 *= ((racer->trueBasis.x.x * racer->velocity.x) + (racer->trueBasis.x.y * racer->velocity.y) +
+                (racer->trueBasis.x.z * racer->velocity.z));
+    racer->velocity.x =
+        (racer->trueBasis.z.x * var_fs1) + (racer->trueBasis.y.x * var_fs0) + (racer->trueBasis.x.x * var_ft4);
+    racer->velocity.y =
+        (racer->trueBasis.z.y * var_fs1) + (racer->trueBasis.y.y * var_fs0) + (racer->trueBasis.x.y * var_ft4);
+    racer->velocity.z =
+        (racer->trueBasis.z.z * var_fs1) + (racer->trueBasis.y.z * var_fs0) + (racer->trueBasis.x.z * var_ft4);
 
     if ((buttonPressed & BTN_B) && (racer->boostTimer == 0) && (racer->energy != 0.0) &&
-        (racer->stateFlags & RACER_STATE_FLAGS_100000)) {
+        (racer->stateFlags & RACER_STATE_CAN_BOOST)) {
         racer->shadowColorStrength = 1.3f;
         racer->shadowBaseR = racer->shadowBaseB = 91.0f;
         racer->shadowBaseG = 255.0f;
@@ -3524,18 +3541,17 @@ void func_80721D78(Racer* racer, Controller* controller) {
     }
 
     if (!(racer->stateFlags & RACER_STATE_TOUCHING_LANDMINE)) {
-        segment = racer->segmentPositionInfo.courseSegment;
-        landmine = segment->landminesStart;
+        landmine = racer->segmentPositionInfo.courseSegment->landminesStart;
         if (landmine != NULL) {
-            landminesEnd = segment->landminesEnd;
+            landminesEnd = racer->segmentPositionInfo.courseSegment->landminesEnd;
             do {
                 var_fs1 = landmine->pos.x - racer->segmentPositionInfo.pos.x;
                 var_fs0 = landmine->pos.y - racer->segmentPositionInfo.pos.y;
                 var_ft4 = landmine->pos.z - racer->segmentPositionInfo.pos.z;
                 if ((SQ(var_fs1) + SQ(var_fs0) + SQ(var_ft4)) < 900.0f) {
-                    racer->acceleration.x += (15.0f * racer->unk_B4.x);
-                    racer->acceleration.y += (15.0f * racer->unk_B4.y);
-                    racer->acceleration.z += (15.0f * racer->unk_B4.z);
+                    racer->acceleration.x += (15.0f * racer->tiltUp.x);
+                    racer->acceleration.y += (15.0f * racer->tiltUp.y);
+                    racer->acceleration.z += (15.0f * racer->tiltUp.z);
                     racer->stateFlags |= RACER_STATE_TOUCHING_LANDMINE;
                     func_8071EE74(racer, 12.5f);
                     if (D_807A16E0 != 0) {
@@ -3548,10 +3564,9 @@ void func_80721D78(Racer* racer, Controller* controller) {
     }
 
     if (!(racer->stateFlags & RACER_STATE_JUMP_BOOST)) {
-        segment = racer->segmentPositionInfo.courseSegment;
-        jump = segment->jumpsStart;
+        jump = racer->segmentPositionInfo.courseSegment->jumpsStart;
         if (jump != NULL) {
-            jumpsEnd = segment->jumpsEnd;
+            jumpsEnd = racer->segmentPositionInfo.courseSegment->jumpsEnd;
             do {
                 var_fs1 = racer->segmentPositionInfo.pos.x - jump->pos.x;
                 var_fs0 = racer->segmentPositionInfo.pos.y - jump->pos.y;
@@ -3596,13 +3611,13 @@ void func_80721D78(Racer* racer, Controller* controller) {
             } while (++jump != jumpsEnd);
         }
     }
-    racer->acceleration.x += (-1.0f * racer->unk_A8.x);
-    racer->acceleration.y += (-1.0f * racer->unk_A8.y);
-    racer->acceleration.z += (-1.0f * racer->unk_A8.z);
+    racer->acceleration.x += (-1.0f * racer->gravityUp.x);
+    racer->acceleration.y += (-1.0f * racer->gravityUp.y);
+    racer->acceleration.z += (-1.0f * racer->gravityUp.z);
     if (racer->stateFlags & RACER_STATE_JUMP_BOOST) {
-        racer->acceleration.x += (racer->jumpBoost * racer->unk_B4.x);
-        racer->acceleration.y += (racer->jumpBoost * racer->unk_B4.y);
-        racer->acceleration.z += (racer->jumpBoost * racer->unk_B4.z);
+        racer->acceleration.x += (racer->jumpBoost * racer->tiltUp.x);
+        racer->acceleration.y += (racer->jumpBoost * racer->tiltUp.y);
+        racer->acceleration.z += (racer->jumpBoost * racer->tiltUp.z);
         racer->jumpBoost *= 0.8f;
     }
     if (!(racer->stateFlags & RACER_STATE_FLAGS_80000000)) {
@@ -3695,18 +3710,18 @@ void func_80721D78(Racer* racer, Controller* controller) {
             racer->driftAttackForce = 0.0f;
         }
 
-        var_fs1 = racer->driftAttackForce * racer->unk_C0.z.x;
-        var_fs0 = racer->driftAttackForce * racer->unk_C0.z.y;
-        var_ft4 = racer->driftAttackForce * racer->unk_C0.z.z;
-        var_fa1 = (racer->unk_A8.x * var_fs1) + (var_fs0 * racer->unk_A8.y) + (var_ft4 * racer->unk_A8.z);
+        var_fs1 = racer->driftAttackForce * racer->trueBasis.z.x;
+        var_fs0 = racer->driftAttackForce * racer->trueBasis.z.y;
+        var_ft4 = racer->driftAttackForce * racer->trueBasis.z.z;
+        var_fa1 = (racer->gravityUp.x * var_fs1) + (var_fs0 * racer->gravityUp.y) + (var_ft4 * racer->gravityUp.z);
         if (racer->driftAttackDirection == DRIFT_ATTACK_RIGHT) {
-            racer->acceleration.x -= (var_fs1 - (var_fa1 * racer->unk_A8.x));
-            racer->acceleration.y -= (var_fs0 - (var_fa1 * racer->unk_A8.y));
-            racer->acceleration.z -= (var_ft4 - (var_fa1 * racer->unk_A8.z));
+            racer->acceleration.x -= (var_fs1 - (var_fa1 * racer->gravityUp.x));
+            racer->acceleration.y -= (var_fs0 - (var_fa1 * racer->gravityUp.y));
+            racer->acceleration.z -= (var_ft4 - (var_fa1 * racer->gravityUp.z));
         } else {
-            racer->acceleration.x += (var_fs1 - (var_fa1 * racer->unk_A8.x));
-            racer->acceleration.y += (var_fs0 - (var_fa1 * racer->unk_A8.y));
-            racer->acceleration.z += (var_ft4 - (var_fa1 * racer->unk_A8.z));
+            racer->acceleration.x += (var_fs1 - (var_fa1 * racer->gravityUp.x));
+            racer->acceleration.y += (var_fs0 - (var_fa1 * racer->gravityUp.y));
+            racer->acceleration.z += (var_ft4 - (var_fa1 * racer->gravityUp.z));
         }
     } else if (racer->attackState == ATTACK_STATE_SPIN) {
         if (racer->unk_280 < 0) {
@@ -3724,9 +3739,9 @@ void func_80721D78(Racer* racer, Controller* controller) {
             racer->driftAttackForce = 0.0f;
         }
 
-        var_fs1 = racer->driftAttackForce * racer->unk_C0.z.x;
-        var_fs0 = racer->driftAttackForce * racer->unk_C0.z.y;
-        var_ft4 = racer->driftAttackForce * racer->unk_C0.z.z;
+        var_fs1 = racer->driftAttackForce * racer->trueBasis.z.x;
+        var_fs0 = racer->driftAttackForce * racer->trueBasis.z.y;
+        var_ft4 = racer->driftAttackForce * racer->trueBasis.z.z;
         if (racer->driftAttackDirection == DRIFT_ATTACK_RIGHT) {
             racer->acceleration.x -= var_fs1;
             racer->acceleration.y -= var_fs0;
@@ -3761,18 +3776,19 @@ void func_80721D78(Racer* racer, Controller* controller) {
                     racer->driftAttackForce *= 0.2f;
                 }
 
-                var_fs1 = racer->driftAttackForce * racer->unk_C0.z.x;
-                var_fs0 = racer->driftAttackForce * racer->unk_C0.z.y;
-                var_ft4 = racer->driftAttackForce * racer->unk_C0.z.z;
-                var_fa1 = (racer->unk_A8.x * var_fs1) + (var_fs0 * racer->unk_A8.y) + (var_ft4 * racer->unk_A8.z);
+                var_fs1 = racer->driftAttackForce * racer->trueBasis.z.x;
+                var_fs0 = racer->driftAttackForce * racer->trueBasis.z.y;
+                var_ft4 = racer->driftAttackForce * racer->trueBasis.z.z;
+                var_fa1 =
+                    (racer->gravityUp.x * var_fs1) + (var_fs0 * racer->gravityUp.y) + (var_ft4 * racer->gravityUp.z);
                 if (racer->driftAttackDirection == DRIFT_ATTACK_RIGHT) {
-                    racer->acceleration.x -= (var_fs1 - (var_fa1 * racer->unk_A8.x));
-                    racer->acceleration.y -= (var_fs0 - (var_fa1 * racer->unk_A8.y));
-                    racer->acceleration.z -= (var_ft4 - (var_fa1 * racer->unk_A8.z));
+                    racer->acceleration.x -= (var_fs1 - (var_fa1 * racer->gravityUp.x));
+                    racer->acceleration.y -= (var_fs0 - (var_fa1 * racer->gravityUp.y));
+                    racer->acceleration.z -= (var_ft4 - (var_fa1 * racer->gravityUp.z));
                 } else {
-                    racer->acceleration.x += (var_fs1 - (var_fa1 * racer->unk_A8.x));
-                    racer->acceleration.y += (var_fs0 - (var_fa1 * racer->unk_A8.y));
-                    racer->acceleration.z += (var_ft4 - (var_fa1 * racer->unk_A8.z));
+                    racer->acceleration.x += (var_fs1 - (var_fa1 * racer->gravityUp.x));
+                    racer->acceleration.y += (var_fs0 - (var_fa1 * racer->gravityUp.y));
+                    racer->acceleration.z += (var_ft4 - (var_fa1 * racer->gravityUp.z));
                 }
 
                 isDrifting = true;
@@ -3799,8 +3815,8 @@ void func_80721D78(Racer* racer, Controller* controller) {
 
     if (!(racer->stateFlags & (RACER_STATE_CRASHED | RACER_STATE_SPINNING_OUT)) &&
         ((racer->stateFlags & COURSE_EFFECT_MASK) != COURSE_EFFECT_ICE)) {
-        sp128 = (racer->unk_C0.z.x * racer->velocity.x) + (racer->unk_C0.z.y * racer->velocity.y) +
-                (racer->unk_C0.z.z * racer->velocity.z);
+        sp128 = (racer->trueBasis.z.x * racer->velocity.x) + (racer->trueBasis.z.y * racer->velocity.y) +
+                (racer->trueBasis.z.z * racer->velocity.z);
 
         if (sp128 < 0.0f) {
             var_fa1 = -1.0f;
@@ -3859,9 +3875,9 @@ void func_80721D78(Racer* racer, Controller* controller) {
         }
 
         sp128 *= var_fa1;
-        racer->velocity.x -= sp128 * racer->unk_C0.z.x;
-        racer->velocity.y -= sp128 * racer->unk_C0.z.y;
-        racer->velocity.z -= sp128 * racer->unk_C0.z.z;
+        racer->velocity.x -= sp128 * racer->trueBasis.z.x;
+        racer->velocity.y -= sp128 * racer->trueBasis.z.y;
+        racer->velocity.z -= sp128 * racer->trueBasis.z.z;
         if (((racer->unk_5C.x < -8.0f) || (racer->unk_5C.x > 8.0f)) && !(racer->stateFlags & RACER_STATE_AIRBORNE)) {
 
             racer->unk_20C++;
@@ -3993,6 +4009,8 @@ void func_80721D78(Racer* racer, Controller* controller) {
             if (var_ft4 < var_fv1) {
                 var_fa1 = var_ft4 / var_fv1;
 
+                // FAKE
+                if (1) {}
                 sp128 = 1.0f - SQ((2.0f * var_fa1) - 1.0f);
                 if (var_fs1 < var_fs0) {
                     sp128 *= (var_fs0 - var_fs1) * racer->unk_320;
@@ -4016,6 +4034,11 @@ void func_80721D78(Racer* racer, Controller* controller) {
                 racer->accelerationForce = var_fv1;
             } else {
                 var_ft4 *= racer->unk_324;
+                // FAKE
+                if (1) {}
+                if (1) {}
+                if (1) {}
+                if (1) {}
                 if (var_ft4 < 1.0f) {
                     var_ft4 = (racer->unk_328 * var_ft4) + racer->unk_1D0;
                 } else {
@@ -4024,13 +4047,13 @@ void func_80721D78(Racer* racer, Controller* controller) {
                 racer->accelerationForce += ((var_fv1 - racer->accelerationForce) * var_ft4);
             }
 
-            var_fs1 = racer->accelerationForce * racer->unk_C0.x.x;
-            var_fs0 = racer->accelerationForce * racer->unk_C0.x.y;
-            var_ft4 = racer->accelerationForce * racer->unk_C0.x.z;
-            var_fa1 = (racer->unk_A8.x * var_fs1) + (var_fs0 * racer->unk_A8.y) + (var_ft4 * racer->unk_A8.z);
-            racer->acceleration.x += (var_fs1 - (var_fa1 * racer->unk_A8.x));
-            racer->acceleration.y += (var_fs0 - (var_fa1 * racer->unk_A8.y));
-            racer->acceleration.z += (var_ft4 - (var_fa1 * racer->unk_A8.z));
+            var_fs1 = racer->accelerationForce * racer->trueBasis.x.x;
+            var_fs0 = racer->accelerationForce * racer->trueBasis.x.y;
+            var_ft4 = racer->accelerationForce * racer->trueBasis.x.z;
+            var_fa1 = (racer->gravityUp.x * var_fs1) + (var_fs0 * racer->gravityUp.y) + (var_ft4 * racer->gravityUp.z);
+            racer->acceleration.x += (var_fs1 - (var_fa1 * racer->gravityUp.x));
+            racer->acceleration.y += (var_fs0 - (var_fa1 * racer->gravityUp.y));
+            racer->acceleration.z += (var_ft4 - (var_fa1 * racer->gravityUp.z));
         }
     } else {
         racer->accelerationForce = 0.0f;
@@ -4053,7 +4076,7 @@ void func_80721D78(Racer* racer, Controller* controller) {
                                                                SQ(racer->segmentPositionInfo.segmentDisplacement.z));
         D_8076F2DC[TRACK_SHAPE_INDEX(TRACK_SHAPE_AIR)](racer);
         if (racer->segmentPositionInfo.pos.y < -2750.0f) {
-            racer->stateFlags &= ~RACER_STATE_FLAGS_40000000;
+            racer->stateFlags &= ~RACER_STATE_ACTIVE;
             if (gGameMode != GAMEMODE_COURSE_EDIT) {
                 racer->stateFlags |= RACER_STATE_CRASHED;
             }
@@ -4064,28 +4087,28 @@ void func_80721D78(Racer* racer, Controller* controller) {
                 func_8071A17C(racer);
             }
             if ((racer->id < gNumPlayers) || (gRacers[0].stateFlags & RACER_STATE_FLAGS_80000)) {
-                func_i2_800AC750(racer->segmentPositionInfo.pos.x, racer->segmentPositionInfo.pos.y,
-                                 racer->segmentPositionInfo.pos.z, 0.0f, 0.0f, 0.0f, 600.0f, racer);
+                Effects_SpawnExplosion1(racer->segmentPositionInfo.pos.x, racer->segmentPositionInfo.pos.y,
+                                        racer->segmentPositionInfo.pos.z, 0.0f, 0.0f, 0.0f, 600.0f, racer);
                 if (D_807A16E0 != 0) {
                     Audio_PlayerTriggerSEStart(racer->id, NA_SE_8);
                     if ((racer->id == 0) && (gNumPlayers == 1)) {
                         Audio_LevelSEFadeout();
                     }
                 }
-                racer->unk_C0.x.y = 0.0f;
-                racer->unk_C0.y.x = 0.0f;
-                racer->unk_C0.z.z = 0.0f;
-                racer->unk_C0.x.x = 0.0f;
-                racer->unk_C0.y.z = 0.0f;
-                racer->unk_C0.z.y = 0.0f;
-                racer->unk_C0.x.z = 1.0f;
-                racer->unk_C0.y.y = 1.0f;
-                racer->unk_C0.z.x = 1.0f;
-                func_i2_800ACB74(14.0f, racer);
+                racer->trueBasis.x.y = 0.0f;
+                racer->trueBasis.y.x = 0.0f;
+                racer->trueBasis.z.z = 0.0f;
+                racer->trueBasis.x.x = 0.0f;
+                racer->trueBasis.y.z = 0.0f;
+                racer->trueBasis.z.y = 0.0f;
+                racer->trueBasis.x.z = 1.0f;
+                racer->trueBasis.y.y = 1.0f;
+                racer->trueBasis.z.x = 1.0f;
+                Effects_SpawnFallExplosion(14.0f, racer);
             }
             if (racer->id < gNumPlayers) {
-                controller->unk_88 = 0x2710;
-                controller->unk_8C = 0x1F4;
+                controller->unk_88 = 10000;
+                controller->unk_8C = 500;
                 controller->unk_90 = 5;
             }
         }
@@ -4098,10 +4121,10 @@ void func_80721D78(Racer* racer, Controller* controller) {
             racer->velocity.z *= var_fa1;
         }
         if (racer->id < gNumPlayers) {
-            var_fa1 = 1.0f;
+            var_fa1 = 1;
             i = 100;
         } else {
-            var_fa1 = 5.0f;
+            var_fa1 = 5;
             i = 3;
         }
 
@@ -4110,69 +4133,76 @@ void func_80721D78(Racer* racer, Controller* controller) {
                              racer->segmentPositionInfo.pos.z + racer->velocity.z, i, var_fa1) == 0) {
             sp128 = racer->lapDistance;
             racer->lapDistance = func_i2_800B1F68(&racer->segmentPositionInfo);
-            segment = racer->segmentPositionInfo.courseSegment;
 
             racer->currentRadiusLeft = (racer->segmentPositionInfo.segmentLengthProportion *
-                                        (segment->next->radiusLeft - segment->radiusLeft)) +
-                                       segment->radiusLeft;
+                                        (racer->segmentPositionInfo.courseSegment->next->radiusLeft -
+                                         racer->segmentPositionInfo.courseSegment->radiusLeft)) +
+                                       racer->segmentPositionInfo.courseSegment->radiusLeft;
             racer->currentRadiusRight = (racer->segmentPositionInfo.segmentLengthProportion *
-                                         (segment->next->radiusRight - segment->radiusRight)) +
-                                        segment->radiusRight;
+                                         (racer->segmentPositionInfo.courseSegment->next->radiusRight -
+                                          racer->segmentPositionInfo.courseSegment->radiusRight)) +
+                                        racer->segmentPositionInfo.courseSegment->radiusRight;
 
             var_fa1 = 1.0f / racer->segmentPositionInfo.segmentForwardMagnitude;
-            racer->unk_24C.x.x = racer->segmentPositionInfo.segmentForward.x * var_fa1;
-            racer->unk_24C.x.y = racer->segmentPositionInfo.segmentForward.y * var_fa1;
-            racer->unk_24C.x.z = racer->segmentPositionInfo.segmentForward.z * var_fa1;
+            racer->segmentBasis.x.x = racer->segmentPositionInfo.segmentForward.x * var_fa1;
+            racer->segmentBasis.x.y = racer->segmentPositionInfo.segmentForward.y * var_fa1;
+            racer->segmentBasis.x.z = racer->segmentPositionInfo.segmentForward.z * var_fa1;
 
-            racer->unk_24C.y.x =
-                (racer->segmentPositionInfo.segmentLengthProportion * (segment->next->up.x - segment->up.x)) +
-                segment->up.x;
-            racer->unk_24C.y.y =
-                (racer->segmentPositionInfo.segmentLengthProportion * (segment->next->up.y - segment->up.y)) +
-                segment->up.y;
-            racer->unk_24C.y.z =
-                (racer->segmentPositionInfo.segmentLengthProportion * (segment->next->up.z - segment->up.z)) +
-                segment->up.z;
+            racer->segmentBasis.y.x = (racer->segmentPositionInfo.segmentLengthProportion *
+                                       (racer->segmentPositionInfo.courseSegment->next->up.x -
+                                        racer->segmentPositionInfo.courseSegment->up.x)) +
+                                      racer->segmentPositionInfo.courseSegment->up.x;
+            racer->segmentBasis.y.y = (racer->segmentPositionInfo.segmentLengthProportion *
+                                       (racer->segmentPositionInfo.courseSegment->next->up.y -
+                                        racer->segmentPositionInfo.courseSegment->up.y)) +
+                                      racer->segmentPositionInfo.courseSegment->up.y;
+            racer->segmentBasis.y.z = (racer->segmentPositionInfo.segmentLengthProportion *
+                                       (racer->segmentPositionInfo.courseSegment->next->up.z -
+                                        racer->segmentPositionInfo.courseSegment->up.z)) +
+                                      racer->segmentPositionInfo.courseSegment->up.z;
 
-            if ((racer->unk_24C.y.x == 0.0f) && (racer->unk_24C.y.y == 0.0f) && (racer->unk_24C.y.z == 0.0f)) {
-                func_i2_800B0FAC(segment, &racer->unk_24C);
+            if ((racer->segmentBasis.y.x == 0.0f) && (racer->segmentBasis.y.y == 0.0f) &&
+                (racer->segmentBasis.y.z == 0.0f)) {
+                func_i2_800B0FAC(racer->segmentPositionInfo.courseSegment, &racer->segmentBasis);
             } else {
-                racer->unk_24C.z.x =
-                    (racer->unk_24C.y.y * racer->unk_24C.x.z) - (racer->unk_24C.y.z * racer->unk_24C.x.y);
-                racer->unk_24C.z.y =
-                    (racer->unk_24C.y.z * racer->unk_24C.x.x) - (racer->unk_24C.y.x * racer->unk_24C.x.z);
-                racer->unk_24C.z.z =
-                    (racer->unk_24C.y.x * racer->unk_24C.x.y) - (racer->unk_24C.y.y * racer->unk_24C.x.x);
-                if ((racer->unk_24C.z.x == 0.0f) && (racer->unk_24C.z.y == 0.0f) && (racer->unk_24C.z.z == 0.0f)) {
-                    func_i2_800B0FAC(racer->segmentPositionInfo.courseSegment, &racer->unk_24C);
+                racer->segmentBasis.z.x = (racer->segmentBasis.y.y * racer->segmentBasis.x.z) -
+                                          (racer->segmentBasis.y.z * racer->segmentBasis.x.y);
+                racer->segmentBasis.z.y = (racer->segmentBasis.y.z * racer->segmentBasis.x.x) -
+                                          (racer->segmentBasis.y.x * racer->segmentBasis.x.z);
+                racer->segmentBasis.z.z = (racer->segmentBasis.y.x * racer->segmentBasis.x.y) -
+                                          (racer->segmentBasis.y.y * racer->segmentBasis.x.x);
+                if ((racer->segmentBasis.z.x == 0.0f) && (racer->segmentBasis.z.y == 0.0f) &&
+                    (racer->segmentBasis.z.z == 0.0f)) {
+                    func_i2_800B0FAC(racer->segmentPositionInfo.courseSegment, &racer->segmentBasis);
                 } else {
-                    temp_fa0 = 1.0f / sqrtf(SQ(racer->unk_24C.z.x) + SQ(racer->unk_24C.z.y) + SQ(racer->unk_24C.z.z));
+                    var_fa1 = 1.0f / sqrtf(SQ(racer->segmentBasis.z.x) + SQ(racer->segmentBasis.z.y) +
+                                           SQ(racer->segmentBasis.z.z));
 
-                    racer->unk_24C.z.x *= temp_fa0;
-                    racer->unk_24C.z.y *= temp_fa0;
-                    racer->unk_24C.z.z *= temp_fa0;
+                    racer->segmentBasis.z.x *= var_fa1;
+                    racer->segmentBasis.z.y *= var_fa1;
+                    racer->segmentBasis.z.z *= var_fa1;
 
-                    racer->unk_24C.y.x =
-                        (racer->unk_24C.x.y * racer->unk_24C.z.z) - (racer->unk_24C.x.z * racer->unk_24C.z.y);
-                    racer->unk_24C.y.y =
-                        (racer->unk_24C.x.z * racer->unk_24C.z.x) - (racer->unk_24C.x.x * racer->unk_24C.z.z);
-                    racer->unk_24C.y.z =
-                        (racer->unk_24C.x.x * racer->unk_24C.z.y) - (racer->unk_24C.x.y * racer->unk_24C.z.x);
+                    racer->segmentBasis.y.x = (racer->segmentBasis.x.y * racer->segmentBasis.z.z) -
+                                              (racer->segmentBasis.x.z * racer->segmentBasis.z.y);
+                    racer->segmentBasis.y.y = (racer->segmentBasis.x.z * racer->segmentBasis.z.x) -
+                                              (racer->segmentBasis.x.x * racer->segmentBasis.z.z);
+                    racer->segmentBasis.y.z = (racer->segmentBasis.x.x * racer->segmentBasis.z.y) -
+                                              (racer->segmentBasis.x.y * racer->segmentBasis.z.x);
                 }
             }
-            if (!(racer->stateFlags & (RACER_STATE_CRASHED | RACER_STATE_FLAGS_2000000 | RACER_STATE_FLAGS_80000)) &&
+            if (!(racer->stateFlags & (RACER_STATE_CRASHED | RACER_STATE_FINISHED | RACER_STATE_FLAGS_80000)) &&
                 (gRaceIntroTimer < 40) && (gGameMode != GAMEMODE_RECORDS)) {
 
                 sp128 -= racer->lapDistance;
                 racer->unk_288++;
                 racer->unk_2A4++;
                 racer->raceTime = (s32) (racer->unk_2A4 * 50) / 3;
-                if (D_807B37CC < sp128) {
+                if (sCourseHalfLength < sp128) {
                     racer->lapsCompletedDistance += gCurrentCourseInfo->length;
                     racer->lap++;
                     if ((racer->lap == racer->lapsCompleted + 1) && (racer->lap <= (gTotalLapCount + 1))) {
                         racer->lapsCompleted = racer->lap;
-                        racer->stateFlags |= RACER_STATE_FLAGS_100000;
+                        racer->stateFlags |= RACER_STATE_CAN_BOOST;
                         i = racer->raceTime -
                             (s32) ((50.0f * racer->lapDistance) / (3.0f * (gCurrentCourseInfo->length - sp128)));
                         racer->lapTimes[racer->lap - 2] = (s32) (i - racer->completedLapsTime);
@@ -4192,7 +4222,7 @@ void func_80721D78(Racer* racer, Controller* controller) {
                             }
                         } else if (racer->lap == (gTotalLapCount + 1)) {
                             racer->raceTime = i;
-                            racer->stateFlags |= RACER_STATE_FLAGS_2000000 | RACER_STATE_CPU_CONTROLLED;
+                            racer->stateFlags |= RACER_STATE_FINISHED | RACER_STATE_CPU_CONTROLLED;
                             racer->energy = racer->maxEnergy;
 
                             if (racer->id < gNumPlayers) {
@@ -4216,7 +4246,7 @@ void func_80721D78(Racer* racer, Controller* controller) {
                             }
                         }
                     }
-                } else if (sp128 < D_807B37D0) {
+                } else if (sp128 < sCourseNegativeHalfLength) {
                     racer->lap--;
                     racer->lapsCompletedDistance -= gCurrentCourseInfo->length;
                 }
@@ -4241,11 +4271,11 @@ void func_80721D78(Racer* racer, Controller* controller) {
             func_80721CA8(racer);
         }
     }
-    racer->unk_C0.y.x += 0.19f * racer->unk_B4.x;
-    racer->unk_C0.y.y += 0.19f * racer->unk_B4.y;
-    racer->unk_C0.y.z += 0.19f * racer->unk_B4.z;
-    if (func_806F6F64(&racer->unk_C0) != 0) {
-        racer->unk_C0 = spE8;
+    racer->trueBasis.y.x += 0.19f * racer->tiltUp.x;
+    racer->trueBasis.y.y += 0.19f * racer->tiltUp.y;
+    racer->trueBasis.y.z += 0.19f * racer->tiltUp.z;
+    if (func_806F6F64(&racer->trueBasis) != 0) {
+        racer->trueBasis = spE8;
     }
     if (racer->unk_198 != 0.0f) {
         sp128 = racer->heightAboveGround;
@@ -4254,18 +4284,15 @@ void func_80721D78(Racer* racer, Controller* controller) {
     }
 
     var_fa1 = racer->unk_180.x;
-    var_fv1 = racer->segmentPositionInfo.pos.x - (sp128 * racer->unk_C0.y.x);
-    racer->unk_180.x = var_fv1;
+    var_fv1 = racer->unk_180.x = racer->segmentPositionInfo.pos.x - (sp128 * racer->trueBasis.y.x);
     racer->unk_18C.x = var_fv1 - var_fa1;
 
     var_fa1 = racer->unk_180.y;
-    var_fv1 = racer->segmentPositionInfo.pos.y - (sp128 * racer->unk_C0.y.y);
-    racer->unk_180.y = var_fv1;
+    var_fv1 = racer->unk_180.y = racer->segmentPositionInfo.pos.y - (sp128 * racer->trueBasis.y.y);
     racer->unk_18C.y = var_fv1 - var_fa1;
 
     var_fa1 = racer->unk_180.z;
-    var_fv1 = racer->segmentPositionInfo.pos.z - (sp128 * racer->unk_C0.y.z);
-    racer->unk_180.z = var_fv1;
+    var_fv1 = racer->unk_180.z = racer->segmentPositionInfo.pos.z - (sp128 * racer->trueBasis.y.z);
     racer->unk_18C.z = var_fv1 - var_fa1;
 
     racer->unk_80.x = racer->segmentPositionInfo.pos.x - sp10C.x;
@@ -4275,12 +4302,12 @@ void func_80721D78(Racer* racer, Controller* controller) {
     racer->unk_68.x = (spE8.z.x * racer->unk_80.x) + (spE8.z.y * racer->unk_80.y) + (spE8.z.z * racer->unk_80.z);
     racer->unk_68.y = (spE8.y.x * racer->unk_80.x) + (spE8.y.y * racer->unk_80.y) + (spE8.y.z * racer->unk_80.z);
     racer->unk_68.z = (spE8.x.x * racer->unk_80.x) + (spE8.x.y * racer->unk_80.y) + (spE8.x.z * racer->unk_80.z);
-    racer->unk_5C.x = (racer->unk_C0.z.x * racer->velocity.x) + (racer->unk_C0.z.y * racer->velocity.y) +
-                      (racer->unk_C0.z.z * racer->velocity.z);
-    racer->unk_5C.y = (racer->unk_C0.y.x * racer->velocity.x) + (racer->unk_C0.y.y * racer->velocity.y) +
-                      (racer->unk_C0.y.z * racer->velocity.z);
-    racer->unk_5C.z = (racer->unk_C0.x.x * racer->velocity.x) + (racer->unk_C0.x.y * racer->velocity.y) +
-                      (racer->unk_C0.x.z * racer->velocity.z);
+    racer->unk_5C.x = (racer->trueBasis.z.x * racer->velocity.x) + (racer->trueBasis.z.y * racer->velocity.y) +
+                      (racer->trueBasis.z.z * racer->velocity.z);
+    racer->unk_5C.y = (racer->trueBasis.y.x * racer->velocity.x) + (racer->trueBasis.y.y * racer->velocity.y) +
+                      (racer->trueBasis.y.z * racer->velocity.z);
+    racer->unk_5C.z = (racer->trueBasis.x.x * racer->velocity.x) + (racer->trueBasis.x.y * racer->velocity.y) +
+                      (racer->trueBasis.x.z * racer->velocity.z);
     if ((racer->id < gNumPlayers) && (controller->unk_74 != 0)) {
 
         if (!(racer->stateFlags & (RACER_STATE_RETIRED | RACER_STATE_SPINNING_OUT))) {
@@ -4366,32 +4393,32 @@ void func_80721D78(Racer* racer, Controller* controller) {
             }
         }
     }
-    racer->unk_210 = (racer->unk_210 + (s32) (racer->accelerationForce * 4000.0f)) & 0xFFF;
+    racer->vibrationStrength = (racer->vibrationStrength + (s32) (racer->accelerationForce * 4000.0f)) & 0xFFF;
 
-    var_fa1 = SIN(racer->unk_210) * (racer->speed * 0.007f);
+    var_fa1 = SIN(racer->vibrationStrength) * (racer->speed * 0.007f);
     if (racer->soundEffectFlags & RACER_SE_FLAGS_DIRT) {
         var_fa1 *= 5.0f;
     }
-    racer->unk_10C.x = racer->segmentPositionInfo.pos.x + (var_fa1 * racer->unk_E8.y.x);
-    racer->unk_10C.y = racer->segmentPositionInfo.pos.y + (var_fa1 * racer->unk_E8.y.y);
-    racer->unk_10C.z = racer->segmentPositionInfo.pos.z + (var_fa1 * racer->unk_E8.y.z);
+    racer->modelPos.x = racer->segmentPositionInfo.pos.x + (var_fa1 * racer->modelBasis.y.x);
+    racer->modelPos.y = racer->segmentPositionInfo.pos.y + (var_fa1 * racer->modelBasis.y.y);
+    racer->modelPos.z = racer->segmentPositionInfo.pos.z + (var_fa1 * racer->modelBasis.y.z);
     if (racer->spinOutTimer != 0) {
-        racer->unk_10C.x += ((f32) (Math_Rand1() & 0xFFFF) * 0.000027466238f) - 0.9f;
-        racer->unk_10C.y += ((f32) (Math_Rand1() & 0xFFFF) * 0.000027466238f) - 0.9f;
-        racer->unk_10C.z += ((f32) (Math_Rand2() & 0xFFFF) * 0.000027466238f) - 0.9f;
+        racer->modelPos.x += ((f32) (Math_Rand1() % 65536) * (1.8f / 65535.0f)) - 0.9f;
+        racer->modelPos.y += ((f32) (Math_Rand1() % 65536) * (1.8f / 65535.0f)) - 0.9f;
+        racer->modelPos.z += ((f32) (Math_Rand2() % 65536) * (1.8f / 65535.0f)) - 0.9f;
     }
 
     if (racer->unk_27C != 0) {
         if (racer->attackState == ATTACK_STATE_SIDE) {
-            racer->unk_E8.x.x = racer->unk_C0.x.x;
-            racer->unk_E8.x.y = racer->unk_C0.x.y;
-            racer->unk_E8.x.z = racer->unk_C0.x.z;
-        } else {
+            racer->modelBasis.x.x = racer->trueBasis.x.x;
+            racer->modelBasis.x.y = racer->trueBasis.x.y;
+            racer->modelBasis.x.z = racer->trueBasis.x.z;
+        } else { // ATTACK_STATE_SPIN
             var_fs1 = COS(racer->unk_27C);
             var_fs0 = SIN(racer->unk_27C);
-            racer->unk_E8.x.x = (racer->unk_C0.x.x * var_fs1) + (var_fs0 * racer->unk_C0.z.x);
-            racer->unk_E8.x.y = (racer->unk_C0.x.y * var_fs1) + (var_fs0 * racer->unk_C0.z.y);
-            racer->unk_E8.x.z = (racer->unk_C0.x.z * var_fs1) + (var_fs0 * racer->unk_C0.z.z);
+            racer->modelBasis.x.x = (racer->trueBasis.x.x * var_fs1) + (var_fs0 * racer->trueBasis.z.x);
+            racer->modelBasis.x.y = (racer->trueBasis.x.y * var_fs1) + (var_fs0 * racer->trueBasis.z.y);
+            racer->modelBasis.x.z = (racer->trueBasis.x.z * var_fs1) + (var_fs0 * racer->trueBasis.z.z);
         }
 
         if (racer->attackState == ATTACK_STATE_SIDE) {
@@ -4401,7 +4428,7 @@ void func_80721D78(Racer* racer, Controller* controller) {
                 racer->unk_27C = 0;
                 racer->attackState = ATTACK_STATE_NONE;
             }
-        } else {
+        } else { // ATTACK_STATE_SPIN
             racer->unk_27C += racer->unk_280;
             if (racer->unk_280 < 0) {
                 racer->unk_280 += 2;
@@ -4428,13 +4455,13 @@ void func_80721D78(Racer* racer, Controller* controller) {
             }
         }
     } else {
-        racer->unk_E8.x.x = racer->unk_C0.x.x;
-        racer->unk_E8.x.y = racer->unk_C0.x.y;
-        racer->unk_E8.x.z = racer->unk_C0.x.z;
+        racer->modelBasis.x.x = racer->trueBasis.x.x;
+        racer->modelBasis.x.y = racer->trueBasis.x.y;
+        racer->modelBasis.x.z = racer->trueBasis.x.z;
         if (gGameMode == GAMEMODE_GP_END_CS) {
-            racer->unk_10C.x += (var_fs1 = racer->unk_A4 * racer->unk_C0.y.x);
-            racer->unk_10C.y += (var_fs0 = racer->unk_A4 * racer->unk_C0.y.y);
-            racer->unk_10C.z += (var_ft4 = racer->unk_A4 * racer->unk_C0.y.z);
+            racer->modelPos.x += (var_fs1 = racer->podiumHeight * racer->trueBasis.y.x);
+            racer->modelPos.y += (var_fs0 = racer->podiumHeight * racer->trueBasis.y.y);
+            racer->modelPos.z += (var_ft4 = racer->podiumHeight * racer->trueBasis.y.z);
             racer->shadowPos.x += var_fs1;
             racer->shadowPos.y += var_fs0;
             racer->shadowPos.z += var_ft4;
@@ -4442,99 +4469,110 @@ void func_80721D78(Racer* racer, Controller* controller) {
     }
     var_fa1 = racer->unk_68.x * 0.6f;
 
-    racer->unk_E8.y.x += 0.19f * (racer->unk_C0.y.x + (var_fa1 * racer->unk_C0.z.x));
-    racer->unk_E8.y.y += 0.19f * (racer->unk_C0.y.y + (var_fa1 * racer->unk_C0.z.y));
-    racer->unk_E8.y.z += 0.19f * (racer->unk_C0.y.z + (var_fa1 * racer->unk_C0.z.z));
+    racer->modelBasis.y.x += 0.19f * (racer->trueBasis.y.x + (var_fa1 * racer->trueBasis.z.x));
+    racer->modelBasis.y.y += 0.19f * (racer->trueBasis.y.y + (var_fa1 * racer->trueBasis.z.y));
+    racer->modelBasis.y.z += 0.19f * (racer->trueBasis.y.z + (var_fa1 * racer->trueBasis.z.z));
 
-    racer->unk_E8.z.x = (racer->unk_E8.y.y * racer->unk_E8.x.z) - (racer->unk_E8.y.z * racer->unk_E8.x.y);
-    racer->unk_E8.z.y = (racer->unk_E8.y.z * racer->unk_E8.x.x) - (racer->unk_E8.y.x * racer->unk_E8.x.z);
-    racer->unk_E8.z.z = (racer->unk_E8.y.x * racer->unk_E8.x.y) - (racer->unk_E8.y.y * racer->unk_E8.x.x);
+    racer->modelBasis.z.x =
+        (racer->modelBasis.y.y * racer->modelBasis.x.z) - (racer->modelBasis.y.z * racer->modelBasis.x.y);
+    racer->modelBasis.z.y =
+        (racer->modelBasis.y.z * racer->modelBasis.x.x) - (racer->modelBasis.y.x * racer->modelBasis.x.z);
+    racer->modelBasis.z.z =
+        (racer->modelBasis.y.x * racer->modelBasis.x.y) - (racer->modelBasis.y.y * racer->modelBasis.x.x);
 
-    temp_fa0 = 1.0f / sqrtf(SQ(racer->unk_E8.z.x) + SQ(racer->unk_E8.z.y) + SQ(racer->unk_E8.z.z));
+    var_fa1 = 1.0f / sqrtf(SQ(racer->modelBasis.z.x) + SQ(racer->modelBasis.z.y) + SQ(racer->modelBasis.z.z));
 
-    racer->unk_E8.z.x *= temp_fa0;
-    racer->unk_E8.z.y *= temp_fa0;
-    racer->unk_E8.z.z *= temp_fa0;
+    racer->modelBasis.z.x *= var_fa1;
+    racer->modelBasis.z.y *= var_fa1;
+    racer->modelBasis.z.z *= var_fa1;
 
-    racer->unk_E8.y.x = (racer->unk_E8.x.y * racer->unk_E8.z.z) - (racer->unk_E8.x.z * racer->unk_E8.z.y);
-    racer->unk_E8.y.y = (racer->unk_E8.x.z * racer->unk_E8.z.x) - (racer->unk_E8.x.x * racer->unk_E8.z.z);
-    racer->unk_E8.y.z = (racer->unk_E8.x.x * racer->unk_E8.z.y) - (racer->unk_E8.x.y * racer->unk_E8.z.x);
-    if (racer->stateFlags & RACER_STATE_FLAGS_2000) {
-        racer->unk_E8.y.x += racer->unk_118.x *= 0.8f;
-        racer->unk_E8.y.y += racer->unk_118.y *= 0.8f;
-        racer->unk_E8.y.z += racer->unk_118.z *= 0.8f;
+    racer->modelBasis.y.x =
+        (racer->modelBasis.x.y * racer->modelBasis.z.z) - (racer->modelBasis.x.z * racer->modelBasis.z.y);
+    racer->modelBasis.y.y =
+        (racer->modelBasis.x.z * racer->modelBasis.z.x) - (racer->modelBasis.x.x * racer->modelBasis.z.z);
+    racer->modelBasis.y.z =
+        (racer->modelBasis.x.x * racer->modelBasis.z.y) - (racer->modelBasis.x.y * racer->modelBasis.z.x);
+    if (racer->stateFlags & RACER_STATE_COLLISION_RECOIL) {
+        racer->modelBasis.y.x += racer->recoilStrength.x *= 0.8f;
+        racer->modelBasis.y.y += racer->recoilStrength.y *= 0.8f;
+        racer->modelBasis.y.z += racer->recoilStrength.z *= 0.8f;
 
-        var_fa1 = 1.0f / sqrtf(SQ(racer->unk_E8.y.x) + SQ(racer->unk_E8.y.y) + SQ(racer->unk_E8.y.z));
+        var_fa1 = 1.0f / sqrtf(SQ(racer->modelBasis.y.x) + SQ(racer->modelBasis.y.y) + SQ(racer->modelBasis.y.z));
         if (var_fa1 > 0.99f) {
-            racer->stateFlags &= ~RACER_STATE_FLAGS_2000;
+            racer->stateFlags &= ~RACER_STATE_COLLISION_RECOIL;
         }
 
-        racer->unk_E8.y.x *= var_fa1;
-        racer->unk_E8.y.y *= var_fa1;
-        racer->unk_E8.y.z *= var_fa1;
+        racer->modelBasis.y.x *= var_fa1;
+        racer->modelBasis.y.y *= var_fa1;
+        racer->modelBasis.y.z *= var_fa1;
 
-        racer->unk_E8.z.x = (racer->unk_E8.y.y * racer->unk_E8.x.z) - (racer->unk_E8.y.z * racer->unk_E8.x.y);
-        racer->unk_E8.z.y = (racer->unk_E8.y.z * racer->unk_E8.x.x) - (racer->unk_E8.y.x * racer->unk_E8.x.z);
-        racer->unk_E8.z.z = (racer->unk_E8.y.x * racer->unk_E8.x.y) - (racer->unk_E8.y.y * racer->unk_E8.x.x);
+        racer->modelBasis.z.x =
+            (racer->modelBasis.y.y * racer->modelBasis.x.z) - (racer->modelBasis.y.z * racer->modelBasis.x.y);
+        racer->modelBasis.z.y =
+            (racer->modelBasis.y.z * racer->modelBasis.x.x) - (racer->modelBasis.y.x * racer->modelBasis.x.z);
+        racer->modelBasis.z.z =
+            (racer->modelBasis.y.x * racer->modelBasis.x.y) - (racer->modelBasis.y.y * racer->modelBasis.x.x);
 
-        temp_fa0 = 1.0f / sqrtf(SQ(racer->unk_E8.z.x) + SQ(racer->unk_E8.z.y) + SQ(racer->unk_E8.z.z));
+        var_fa1 = 1.0f / sqrtf(SQ(racer->modelBasis.z.x) + SQ(racer->modelBasis.z.y) + SQ(racer->modelBasis.z.z));
 
-        racer->unk_E8.z.x *= temp_fa0;
-        racer->unk_E8.z.y *= temp_fa0;
-        racer->unk_E8.z.z *= temp_fa0;
+        racer->modelBasis.z.x *= var_fa1;
+        racer->modelBasis.z.y *= var_fa1;
+        racer->modelBasis.z.z *= var_fa1;
 
-        racer->unk_E8.x.x = (racer->unk_E8.z.y * racer->unk_E8.y.z) - (racer->unk_E8.z.z * racer->unk_E8.y.y);
-        racer->unk_E8.x.y = (racer->unk_E8.z.z * racer->unk_E8.y.x) - (racer->unk_E8.z.x * racer->unk_E8.y.z);
-        racer->unk_E8.x.z = (racer->unk_E8.z.x * racer->unk_E8.y.y) - (racer->unk_E8.z.y * racer->unk_E8.y.x);
+        racer->modelBasis.x.x =
+            (racer->modelBasis.z.y * racer->modelBasis.y.z) - (racer->modelBasis.z.z * racer->modelBasis.y.y);
+        racer->modelBasis.x.y =
+            (racer->modelBasis.z.z * racer->modelBasis.y.x) - (racer->modelBasis.z.x * racer->modelBasis.y.z);
+        racer->modelBasis.x.z =
+            (racer->modelBasis.z.x * racer->modelBasis.y.y) - (racer->modelBasis.z.y * racer->modelBasis.y.x);
     }
 
-    if (racer->unk_220 != 0) {
-        racer->unk_220--;
+    if (racer->bodyWhiteTimer != 0) {
+        racer->bodyWhiteTimer--;
     }
     if (racer->spinOutTimer != 0) {
-        if (!((racer->id + *(vu32*) &gGameFrameCount) & 3) && (racer->machineLod != 0)) {
-            sp10C.x = (s32) ((Math_Rand1() & 0x1F) - 0x10) + racer->segmentPositionInfo.pos.x;
-            sp10C.y = (s32) ((Math_Rand1() & 0x1F) - 0x10) + racer->segmentPositionInfo.pos.y;
-            sp10C.z = (s32) ((Math_Rand1() & 0x1F) - 0x10) + racer->segmentPositionInfo.pos.z;
-            func_i2_800AC750(sp10C.x, sp10C.y, sp10C.z, racer->velocity.x, racer->velocity.y, racer->velocity.z,
-                             (f32) ((Math_Rand2() & 0xF) + ((s32) (racer->spinOutTimer * 5) / 150) + 5), racer);
+        if (!((*(vu32*) &gGameFrameCount + (0, racer->id)) & 3) && (racer->machineLod != 0)) {
+            sp10C.x = (s32) ((Math_Rand1() % 32) - 16) + racer->segmentPositionInfo.pos.x;
+            sp10C.y = (s32) ((Math_Rand1() % 32) - 16) + racer->segmentPositionInfo.pos.y;
+            sp10C.z = (s32) ((Math_Rand1() % 32) - 16) + racer->segmentPositionInfo.pos.z;
+            Effects_SpawnExplosion1(sp10C.x, sp10C.y, sp10C.z, racer->velocity.x, racer->velocity.y, racer->velocity.z,
+                                    (f32) ((Math_Rand2() % 16) + ((racer->spinOutTimer * 5) / 150) + 5), racer);
             if (!((racer->id + gGameFrameCount) & 4) && (D_807A16E0 != 0)) {
                 Audio_PlayerTriggerSEStart(racer->id, NA_SE_5);
             }
             if (racer->id < gNumPlayers) {
-                controller->unk_88 = 0xBB8;
+                controller->unk_88 = 3000;
                 controller->unk_8C = 0;
                 controller->unk_90 = 0;
             }
 
             for (i = 2; i > 0; i--) {
-                var_fs1 = ((f32) (Math_Rand2() & 0x1FFFF) * 0.000068665075f) - 4.5f;
-                var_fs0 = ((f32) (Math_Rand1() & 0x1FFFF) * 0.000038147264f) + 2.0f;
-                var_ft4 = ((f32) (Math_Rand2() & 0x1FFFF) * 0.000068665075f) - 4.5f;
-                func_i2_800AC8C0(sp10C.x, sp10C.y, sp10C.z,
-                                 racer->velocity.x + (var_fs1 * racer->unk_C0.z.x) + (var_fs0 * racer->unk_C0.y.x) +
-                                     (var_ft4 * racer->unk_C0.x.x),
-                                 racer->velocity.y + (var_fs1 * racer->unk_C0.z.y) + (var_fs0 * racer->unk_C0.y.y) +
-                                     (var_ft4 * racer->unk_C0.x.y),
-                                 racer->velocity.z + (var_fs1 * racer->unk_C0.z.z) + (var_fs0 * racer->unk_C0.y.z) +
-                                     (var_ft4 * racer->unk_C0.x.z),
-                                 racer);
+                var_fs1 = ((f32) (Math_Rand2() & 0x1FFFF) * (9.0f / 131071.0f)) - 4.5f;
+                var_fs0 = ((f32) (Math_Rand1() & 0x1FFFF) * (5.0f / 131071.0f)) + 2.0f;
+                var_ft4 = ((f32) (Math_Rand2() & 0x1FFFF) * (9.0f / 131071.0f)) - 4.5f;
+                Effects_SpawnFlyingSparks(sp10C.x, sp10C.y, sp10C.z,
+                                          racer->velocity.x + (var_fs1 * racer->trueBasis.z.x) +
+                                              (var_fs0 * racer->trueBasis.y.x) + (var_ft4 * racer->trueBasis.x.x),
+                                          racer->velocity.y + (var_fs1 * racer->trueBasis.z.y) +
+                                              (var_fs0 * racer->trueBasis.y.y) + (var_ft4 * racer->trueBasis.x.y),
+                                          racer->velocity.z + (var_fs1 * racer->trueBasis.z.z) +
+                                              (var_fs0 * racer->trueBasis.y.z) + (var_ft4 * racer->trueBasis.x.z),
+                                          racer);
             }
         }
 
         racer->spinOutTimer++;
         if (racer->spinOutTimer > 150) {
-
-            racer->stateFlags &= ~RACER_STATE_SPINNING_OUT;
             racer->spinOutTimer = 0;
+            racer->stateFlags &= ~RACER_STATE_SPINNING_OUT;
             racer->stateFlags |= RACER_STATE_CRASHED;
             racer->unk_17C = 10.0f;
-            D_807A16CE++;
+            sSpunOutRacers++;
             func_80719F9C(racer);
             if (racer->machineLod != 0) {
-                func_i2_800AC808(racer->segmentPositionInfo.pos.x, racer->segmentPositionInfo.pos.y,
-                                 racer->segmentPositionInfo.pos.z, racer->velocity.x, racer->velocity.y,
-                                 racer->velocity.z, 80.0f, racer);
+                Effects_SpawnExplosion2(racer->segmentPositionInfo.pos.x, racer->segmentPositionInfo.pos.y,
+                                        racer->segmentPositionInfo.pos.z, racer->velocity.x, racer->velocity.y,
+                                        racer->velocity.z, 80.0f, racer);
                 if (racer->id < gNumPlayers) {
                     i = 60;
                 } else {
@@ -4544,19 +4582,19 @@ void func_80721D78(Racer* racer, Controller* controller) {
                 sp138 = racer->bodyGF;
                 sp134 = racer->bodyBF;
                 do {
-                    var_fs1 = ((f32) (Math_Rand1() & 0x1FFFF) * 0.00011444179f) - 7.5f;
-                    var_fs0 = ((f32) (Math_Rand1() & 0x1FFFF) * 0.00005340617f) + 3.5f;
-                    var_ft4 = ((f32) (Math_Rand1() & 0x1FFFF) * 0.00011444179f) - 7.5f;
-                    func_i2_800ACBE8((s32) ((Math_Rand2() & 0x1F) - 0x10) + racer->segmentPositionInfo.pos.x,
-                                     (s32) ((Math_Rand2() & 0x1F) - 0x10) + racer->segmentPositionInfo.pos.y,
-                                     (s32) ((Math_Rand2() & 0x1F) - 0x10) + racer->segmentPositionInfo.pos.z,
-                                     racer->velocity.x + (var_fs1 * racer->unk_C0.z.x) + (var_fs0 * racer->unk_C0.y.x) +
-                                         (var_ft4 * racer->unk_C0.x.x),
-                                     racer->velocity.y + (var_fs1 * racer->unk_C0.z.y) + (var_fs0 * racer->unk_C0.y.y) +
-                                         (var_ft4 * racer->unk_C0.x.y),
-                                     racer->velocity.z + (var_fs1 * racer->unk_C0.z.z) + (var_fs0 * racer->unk_C0.y.z) +
-                                         (var_ft4 * racer->unk_C0.x.z),
-                                     &racer->unk_C0, sp13C, sp138, sp134, racer);
+                    var_fs1 = ((f32) (Math_Rand1() & 0x1FFFF) * (15.0f / 131071.0f)) - 7.5f;
+                    var_fs0 = ((f32) (Math_Rand1() & 0x1FFFF) * (7.0f / 131071.0f)) + 3.5f;
+                    var_ft4 = ((f32) (Math_Rand1() & 0x1FFFF) * (15.0f / 131071.0f)) - 7.5f;
+                    Effects_SpawnMachineDebris((s32) ((Math_Rand2() % 32) - 16) + racer->segmentPositionInfo.pos.x,
+                                               (s32) ((Math_Rand2() % 32) - 16) + racer->segmentPositionInfo.pos.y,
+                                               (s32) ((Math_Rand2() % 32) - 16) + racer->segmentPositionInfo.pos.z,
+                                               racer->velocity.x + (var_fs1 * racer->trueBasis.z.x) +
+                                                   (var_fs0 * racer->trueBasis.y.x) + (var_ft4 * racer->trueBasis.x.x),
+                                               racer->velocity.y + (var_fs1 * racer->trueBasis.z.y) +
+                                                   (var_fs0 * racer->trueBasis.y.y) + (var_ft4 * racer->trueBasis.x.y),
+                                               racer->velocity.z + (var_fs1 * racer->trueBasis.z.z) +
+                                                   (var_fs0 * racer->trueBasis.y.z) + (var_ft4 * racer->trueBasis.x.z),
+                                               &racer->trueBasis, sp13C, sp138, sp134, racer);
                     i--;
                 } while (i != 0);
                 if (D_807A16E0 != 0) {
@@ -4577,14 +4615,14 @@ void func_80721D78(Racer* racer, Controller* controller) {
             if ((spinOutTimer == 0) && (D_807A16E0 != 0)) {
                 if (var_fa1 >= 0.2f) {
                     if (!(*(vu32*) &gGameFrameCount & 0x1F)) {
-                        Audio_PlayerTriggerSEStart(racer->id, NA_SE_19);
+                        Audio_PlayerTriggerSEStart(racer->id, NA_SE_LOW_ENERGY_SLOW);
                     }
                 } else if (var_fa1 >= 0.1f) {
                     if (!(*(vu32*) &gGameFrameCount & 0xF)) {
-                        Audio_PlayerTriggerSEStart(racer->id, NA_SE_20);
+                        Audio_PlayerTriggerSEStart(racer->id, NA_SE_LOW_ENERGY_MEDIUM);
                     }
                 } else if (!(*(vu32*) &gGameFrameCount & 7)) {
-                    Audio_PlayerTriggerSEStart(racer->id, NA_SE_21);
+                    Audio_PlayerTriggerSEStart(racer->id, NA_SE_LOW_ENERGY_FAST);
                 }
             }
         }
@@ -4592,36 +4630,36 @@ void func_80721D78(Racer* racer, Controller* controller) {
         if (!(*(vu32*) &gGameFrameCount & 0x10)) {}
         if (!(gGameFrameCount & 8) && ((var_fa1 < 0.2f) || ((var_fa1 < 0.5f) && !(gGameFrameCount & 0x10)))) {
             var_fa1 *= 2;
-            var_fs1 = (racer->unk_2F8 * var_fa1) + racer->unk_2EC;
-            var_fs0 = (racer->unk_2FC * var_fa1) + racer->unk_2F0;
-            var_ft4 = (racer->unk_300 * var_fa1) + racer->unk_2F4;
+            var_fs1 = (racer->bodyLowEnergyGradientR * var_fa1) + racer->bodyLowEnergyR;
+            var_fs0 = (racer->bodyLowEnergyGradientG * var_fa1) + racer->bodyLowEnergyG;
+            var_ft4 = (racer->bodyLowEnergyGradientB * var_fa1) + racer->bodyLowEnergyB;
             var_fa1 = (f32) (gGameFrameCount & 7) / 7.0f;
-            var_fs1 += ((racer->bodyRF - var_fs1) * var_fa1);
-            var_fs0 += ((racer->bodyGF - var_fs0) * var_fa1);
-            var_ft4 += ((racer->bodyBF - var_ft4) * var_fa1);
+            var_fs1 = ((racer->bodyRF - var_fs1) * var_fa1) + var_fs1;
+            var_fs0 = ((racer->bodyGF - var_fs0) * var_fa1) + var_fs0;
+            var_ft4 = ((racer->bodyBF - var_ft4) * var_fa1) + var_ft4;
         } else {
             var_fs1 = racer->bodyRF;
             var_fs0 = racer->bodyGF;
             var_ft4 = racer->bodyBF;
         }
 
-        var_fa1 = racer->unk_220 / 5.0f;
+        var_fa1 = racer->bodyWhiteTimer / 5.0f;
         racer->bodyR = ((255.0f - var_fs1) * var_fa1) + var_fs1;
         racer->bodyG = ((255.0f - var_fs0) * var_fa1) + var_fs0;
         racer->bodyB = ((255.0f - var_ft4) * var_fa1) + var_ft4;
         if (racer->attackState == ATTACK_STATE_SPIN) {
             var_fa1 = SIN(racer->unk_27C & 0x7FF);
-            racer->unk_178 = (0.1f * var_fa1) + 1.05f;
+            racer->attackHighlightScale = (0.1f * var_fa1) + 1.05f;
             racer->attackHighlightR = 255;
             racer->attackHighlightG = 255 - (s32) (255.0f * var_fa1);
             racer->attackHighlightB = 0;
         } else if (racer->attackState == ATTACK_STATE_SIDE) {
-            racer->unk_178 = 1.075f;
+            racer->attackHighlightScale = 1.075f;
             racer->attackHighlightR = 255;
             racer->attackHighlightG = 0;
             racer->attackHighlightB = 0;
         } else {
-            racer->unk_178 = 0.0f;
+            racer->attackHighlightScale = 0.0f;
         }
     } else {
         racer->bodyR = racer->bodyRF;
@@ -4631,29 +4669,29 @@ void func_80721D78(Racer* racer, Controller* controller) {
             var_fs1 = (((f32) (Math_Rand1() & 0x1FFFF) / 131071.0f) * 3.0f) - 1.5f;
             var_fs0 = (((f32) (Math_Rand2() & 0x1FFFF) / 131071.0f) * 1.5f) + 0.5f;
             var_ft4 = (((f32) (Math_Rand2() & 0x1FFFF) / 131071.0f) * 3.0f) - 1.5f;
-            sp10C.x = (s32) ((Math_Rand2() & 0x1F) - 0x10) + racer->segmentPositionInfo.pos.x;
-            sp10C.y = (s32) ((Math_Rand1() & 0x1F) - 0x10) + racer->segmentPositionInfo.pos.y;
-            sp10C.z = (s32) ((Math_Rand1() & 0x1F) - 0x10) + racer->segmentPositionInfo.pos.z;
+            sp10C.x = (s32) ((Math_Rand2() % 32) - 16) + racer->segmentPositionInfo.pos.x;
+            sp10C.y = (s32) ((Math_Rand1() % 32) - 16) + racer->segmentPositionInfo.pos.y;
+            sp10C.z = (s32) ((Math_Rand1() % 32) - 16) + racer->segmentPositionInfo.pos.z;
 
-            func_i2_800AC680(sp10C.x, sp10C.y, sp10C.z,
-                             racer->velocity.x + (var_fs1 * racer->unk_C0.z.x) + (var_fs0 * racer->unk_C0.y.x) +
-                                 (var_ft4 * racer->unk_C0.x.x),
-                             racer->velocity.y + (var_fs1 * racer->unk_C0.z.y) + (var_fs0 * racer->unk_C0.y.y) +
-                                 (var_ft4 * racer->unk_C0.x.y),
-                             racer->velocity.z + (var_fs1 * racer->unk_C0.z.z) + (var_fs0 * racer->unk_C0.y.z) +
-                                 (var_ft4 * racer->unk_C0.x.z),
-                             10.0f, racer);
-            func_i2_800ACABC(sp10C.x, sp10C.y, sp10C.z, racer->velocity.x + racer->unk_B4.x,
-                             racer->velocity.y + racer->unk_B4.y, racer->velocity.z + racer->unk_B4.z, 20.0f, racer);
+            Effects_SpawnCollisionSparks(sp10C.x, sp10C.y, sp10C.z,
+                                         racer->velocity.x + (var_fs1 * racer->trueBasis.z.x) +
+                                             (var_fs0 * racer->trueBasis.y.x) + (var_ft4 * racer->trueBasis.x.x),
+                                         racer->velocity.y + (var_fs1 * racer->trueBasis.z.y) +
+                                             (var_fs0 * racer->trueBasis.y.y) + (var_ft4 * racer->trueBasis.x.y),
+                                         racer->velocity.z + (var_fs1 * racer->trueBasis.z.z) +
+                                             (var_fs0 * racer->trueBasis.y.z) + (var_ft4 * racer->trueBasis.x.z),
+                                         10.0f, racer);
+            Effects_SpawnSmoke(sp10C.x, sp10C.y, sp10C.z, racer->velocity.x + racer->tiltUp.x,
+                               racer->velocity.y + racer->tiltUp.y, racer->velocity.z + racer->tiltUp.z, 20.0f, racer);
 
             if (racer->id < gNumPlayers) {
                 Audio_PlayerTriggerSEStart(racer->id, NA_SE_50);
             }
-            racer->unk_178 = 1.03f;
-            racer->attackHighlightR = racer->attackHighlightG = 0xFF;
+            racer->attackHighlightScale = 1.03f;
+            racer->attackHighlightR = racer->attackHighlightG = 255;
             racer->attackHighlightB = 0;
         } else {
-            racer->unk_178 = 0.0f;
+            racer->attackHighlightScale = 0.0f;
         }
     }
 
@@ -4682,7 +4720,7 @@ void func_80721D78(Racer* racer, Controller* controller) {
         racer->shadowG = racer->shadowBaseG * var_fa1;
         racer->shadowB = racer->shadowBaseB * var_fa1;
         racer->shadowColorStrength -= 0.003f;
-        if (racer->shadowColorStrength < 1.f) {
+        if (racer->shadowColorStrength < 1) {
             racer->shadowColorStrength = 1.0f;
         }
     } else {
@@ -4708,10 +4746,6 @@ void func_80721D78(Racer* racer, Controller* controller) {
         }
     }
 }
-#else
-void func_80721D78(Racer* racer, Controller* controller);
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/27110/func_80721D78.s")
-#endif
 
 void func_80726254(s32 position) {
     if (!(position > -0x80 && position < 0x80)) {
@@ -4737,16 +4771,16 @@ void func_80726254(s32 position) {
     }
 }
 
-s32 func_80726348(GhostRacer* arg0) {
-    s32 temp1 = *arg0->replayPtr++;
+s32 func_80726348(GhostRacer* ghostRacer) {
+    s32 temp1 = *ghostRacer->replayPtr++;
 
     if (temp1 == -0x80) {
-        temp1 = *arg0->replayPtr++;
+        temp1 = *ghostRacer->replayPtr++;
         temp1 <<= 8;
-        temp1 |= (u8) *arg0->replayPtr++;
-        arg0->replayIndex += 3;
+        temp1 |= (u8) *ghostRacer->replayPtr++;
+        ghostRacer->replayIndex += 3;
     } else {
-        arg0->replayIndex++;
+        ghostRacer->replayIndex++;
     }
 
     return temp1;
@@ -4785,9 +4819,9 @@ void func_8072643C(Racer* racer) {
         func_80721D78(racer, &dummyController);
     } else {
         func_80721D78(racer, &gControllers[gPlayerControlPorts[racer->id]]);
-        racer->unk_33C = -racer->segmentPositionInfo.segmentDisplacement.x * racer->unk_24C.z.x -
-                         racer->segmentPositionInfo.segmentDisplacement.y * racer->unk_24C.z.y -
-                         racer->segmentPositionInfo.segmentDisplacement.z * racer->unk_24C.z.z;
+        racer->unk_33C = -racer->segmentPositionInfo.segmentDisplacement.x * racer->segmentBasis.z.x -
+                         racer->segmentPositionInfo.segmentDisplacement.y * racer->segmentBasis.z.y -
+                         racer->segmentPositionInfo.segmentDisplacement.z * racer->segmentBasis.z.z;
     }
 }
 
@@ -4812,8 +4846,8 @@ void func_80726554(void) {
     f32 var_fs2;
     f32 var_ft4;
     s32 posDiff;
-    GhostRacer* var_s0;
-    RacerPairInfo* temp_s2;
+    GhostRacer* ghostRacer;
+    RacerPairInfo* racerPair;
     s32 i;
     Mtx3F spCC;
     Racer* racer;
@@ -4849,19 +4883,19 @@ void func_80726554(void) {
                 sReplayRecordPosY = Math_Round(gRacers[0].segmentPositionInfo.pos.y);
                 sReplayRecordPosZ = Math_Round(gRacers[0].segmentPositionInfo.pos.z);
 
-                for (var_s0 = &gGhostRacers[2]; var_s0 >= gGhostRacers; var_s0--) {
-                    if (var_s0->exists) {
-                        var_s0->initialized = true;
-                        var_s0->frameCount = 0;
-                        posDiff = func_80726348(var_s0);
-                        var_s0->replayPosX = posDiff + sReplayRecordPosX;
-                        var_s0->pos.x = gRacers[0].segmentPositionInfo.pos.x + (posDiff * 0.5f);
-                        posDiff = func_80726348(var_s0);
-                        var_s0->replayPosY = posDiff + sReplayRecordPosY;
-                        var_s0->pos.y = gRacers[0].segmentPositionInfo.pos.y + (posDiff * 0.5f);
-                        posDiff = func_80726348(var_s0);
-                        var_s0->replayPosZ = posDiff + sReplayRecordPosZ;
-                        var_s0->pos.z = gRacers[0].segmentPositionInfo.pos.z + (posDiff * 0.5f);
+                for (ghostRacer = &gGhostRacers[2]; ghostRacer >= gGhostRacers; ghostRacer--) {
+                    if (ghostRacer->exists) {
+                        ghostRacer->initialized = true;
+                        ghostRacer->frameCount = 0;
+                        posDiff = func_80726348(ghostRacer);
+                        ghostRacer->replayPosX = posDiff + sReplayRecordPosX;
+                        ghostRacer->pos.x = gRacers[0].segmentPositionInfo.pos.x + (posDiff * 0.5f);
+                        posDiff = func_80726348(ghostRacer);
+                        ghostRacer->replayPosY = posDiff + sReplayRecordPosY;
+                        ghostRacer->pos.y = gRacers[0].segmentPositionInfo.pos.y + (posDiff * 0.5f);
+                        posDiff = func_80726348(ghostRacer);
+                        ghostRacer->replayPosZ = posDiff + sReplayRecordPosZ;
+                        ghostRacer->pos.z = gRacers[0].segmentPositionInfo.pos.z + (posDiff * 0.5f);
                     }
                 }
             }
@@ -4873,9 +4907,9 @@ void func_80726554(void) {
             spCC.x.x = -var_s1_2->unk_5C.x.x;
             spCC.x.y = -var_s1_2->unk_5C.x.y;
             spCC.x.z = -var_s1_2->unk_5C.x.z;
-            spCC.y.x = racer2->unk_C0.y.x;
-            spCC.y.y = racer2->unk_C0.y.y;
-            spCC.y.z = racer2->unk_C0.y.z;
+            spCC.y.x = racer2->trueBasis.y.x;
+            spCC.y.y = racer2->trueBasis.y.y;
+            spCC.y.z = racer2->trueBasis.y.z;
             func_806F6F64(&spCC);
             if (gRaceIntroTimer > 220) {
                 var_fs0 = (gRaceIntroTimer - 220) / 240.0f;
@@ -4886,15 +4920,17 @@ void func_80726554(void) {
             }
             var_fs0 = (1500.0f * var_fs0 * var_fs0) + 33.0f;
             var_fs2 = var_fs0 - racer2->heightAboveGround;
-            Matrix_SetLockedLookAt(
-                &gGfxPool->unk_33988[i], NULL, 0.2f, 0.2f, 0.2f, spCC.x.x, spCC.x.y, spCC.x.z, spCC.y.x, spCC.y.y,
-                spCC.y.z,
-                (racer2->segmentPositionInfo.pos.x + (var_fs2 * racer2->unk_C0.y.x) + (50.0f * racer2->unk_C0.x.x)) -
-                    (var_fs0 * var_s1_2->unk_5C.x.x),
-                (racer2->segmentPositionInfo.pos.y + (var_fs2 * racer2->unk_C0.y.y) + (50.0f * racer2->unk_C0.x.y)) -
-                    (var_fs0 * var_s1_2->unk_5C.x.y),
-                (racer2->segmentPositionInfo.pos.z + (var_fs2 * racer2->unk_C0.y.z) + (50.0f * racer2->unk_C0.x.z)) -
-                    (var_fs0 * var_s1_2->unk_5C.x.z));
+            Matrix_SetLockedLookAt(&gGfxPool->unk_33988[i], NULL, 0.2f, 0.2f, 0.2f, spCC.x.x, spCC.x.y, spCC.x.z,
+                                   spCC.y.x, spCC.y.y, spCC.y.z,
+                                   (racer2->segmentPositionInfo.pos.x + (var_fs2 * racer2->trueBasis.y.x) +
+                                    (50.0f * racer2->trueBasis.x.x)) -
+                                       (var_fs0 * var_s1_2->unk_5C.x.x),
+                                   (racer2->segmentPositionInfo.pos.y + (var_fs2 * racer2->trueBasis.y.y) +
+                                    (50.0f * racer2->trueBasis.x.y)) -
+                                       (var_fs0 * var_s1_2->unk_5C.x.y),
+                                   (racer2->segmentPositionInfo.pos.z + (var_fs2 * racer2->trueBasis.y.z) +
+                                    (50.0f * racer2->trueBasis.x.z)) -
+                                       (var_fs0 * var_s1_2->unk_5C.x.z));
         }
     }
 
@@ -4929,17 +4965,17 @@ void func_80726554(void) {
     if (gTotalRacers >= 2) {
         racer = sLastRacer;
         do {
-            if (!(racer->stateFlags & RACER_STATE_FLAGS_40000000)) {
+            if (!(racer->stateFlags & RACER_STATE_ACTIVE)) {
                 continue;
             }
 
             i = (s32) (racer->id * (racer->id - 1)) >> 1;
             racer2 = racer - 1;
             do {
-                if (racer2->stateFlags & RACER_STATE_FLAGS_40000000) {
-                    temp_s2 = &sRacerPairInfo[i + racer2->id];
-                    if (temp_s2->trailToLeadDistance > 92.0f) {
-                        temp_s2->unk_10 = 0;
+                if (racer2->stateFlags & RACER_STATE_ACTIVE) {
+                    racerPair = &sRacerPairInfo[i + racer2->id];
+                    if (racerPair->trailToLeadDistance > 92.0f) {
+                        racerPair->unk_10 = 0;
                         continue;
                     }
 
@@ -4948,13 +4984,13 @@ void func_80726554(void) {
                     sp110 = var_fa0;
                     sp108 = var_fa1;
                     if (SQ(var_fa0) + SQ(var_fa1) > 2116.0f) {
-                        temp_s2->unk_10 = 0;
+                        racerPair->unk_10 = 0;
                         continue;
                     }
 
                     sp10C = racer2->segmentPositionInfo.pos.y - racer->segmentPositionInfo.pos.y;
                     if ((SQ(var_fa0) + SQ(var_fa1) + SQ(sp10C)) > 2116.0f) {
-                        temp_s2->unk_10 = 0;
+                        racerPair->unk_10 = 0;
                         continue;
                     }
 
@@ -4975,7 +5011,7 @@ void func_80726554(void) {
                     temp_fs3 = racer2->velocity.x - racer->velocity.x;
                     temp_fs4 = racer2->velocity.y - racer->velocity.y;
                     temp_fs5 = racer2->velocity.z - racer->velocity.z;
-                    if (temp_s2->unk_10 == 0) {
+                    if (racerPair->unk_10 == 0) {
                         if (racer->id < gNumPlayers) {
                             racer2->unk_288 = 0;
                             racer2->unk_28C = racer;
@@ -5001,17 +5037,17 @@ void func_80726554(void) {
                             var_fs0 = -var_fs0;
                         }
                         if ((racer2->machineLod != 0) &&
-                            (func_i2_800AC680(
+                            (Effects_SpawnCollisionSparks(
                                  ((racer->segmentPositionInfo.pos.x + racer2->segmentPositionInfo.pos.x) * 0.5f) +
-                                     (6.0f * racer->unk_C0.y.x),
+                                     (6.0f * racer->trueBasis.y.x),
                                  ((racer->segmentPositionInfo.pos.y + racer2->segmentPositionInfo.pos.y) * 0.5f) +
-                                     (6.0f * racer->unk_C0.y.y),
+                                     (6.0f * racer->trueBasis.y.y),
                                  ((racer->segmentPositionInfo.pos.z + racer2->segmentPositionInfo.pos.z) * 0.5f) +
-                                     (6.0f * racer->unk_C0.y.z),
+                                     (6.0f * racer->trueBasis.y.z),
                                  (racer->velocity.x + racer2->velocity.x) * 0.5f,
                                  (racer->velocity.y + racer2->velocity.y) * 0.5f,
                                  (racer->velocity.z + racer2->velocity.z) * 0.5f, var_fs0 + 12.0f, racer2) == 0)) {
-                            racer->unk_220 = racer2->unk_220;
+                            racer->bodyWhiteTimer = racer2->bodyWhiteTimer;
                         }
                         var_fs0 *= 1.1f;
                         if (racer->attackState == ATTACK_STATE_NONE) {
@@ -5033,7 +5069,7 @@ void func_80726554(void) {
                             Audio_PlayerTriggerSEStart(racer2->id, NA_SE_4);
                         }
                     }
-                    temp_s2->unk_10 = 1;
+                    racerPair->unk_10 = 1;
                     if (((sp110 * temp_fs3) + (sp10C * temp_fs4) + (sp108 * temp_fs5)) <= 0.0f) {
                         if (sp128 < 0.01f) {
                             temp_fv1_3 = -46.0f / sqrtf(SQ(temp_fs3) + SQ(temp_fs4) + SQ(temp_fs5));
@@ -5069,24 +5105,24 @@ void func_80726554(void) {
                         racer->acceleration.x -= var_fs1 * var_fa0;
                         racer->acceleration.y -= var_fs1 * var_fa1;
                         racer->acceleration.z -= var_fs1 * var_ft4;
-                        racer->unk_118.x = (-0.15f * var_fs1) * var_fa0;
-                        racer->unk_118.y = (-0.15f * var_fs1) * var_fa1;
-                        racer->unk_118.z = (-0.15f * var_fs1) * var_ft4;
-                        racer->stateFlags |= RACER_STATE_FLAGS_2000;
+                        racer->recoilStrength.x = (-0.15f * var_fs1) * var_fa0;
+                        racer->recoilStrength.y = (-0.15f * var_fs1) * var_fa1;
+                        racer->recoilStrength.z = (-0.15f * var_fs1) * var_ft4;
+                        racer->stateFlags |= RACER_STATE_COLLISION_RECOIL;
                         racer2->acceleration.x += var_fs2 * var_fa0;
                         racer2->acceleration.y += var_fs2 * var_fa1;
                         racer2->acceleration.z += var_fs2 * var_ft4;
-                        racer2->unk_118.x = (0.15f * var_fs2) * var_fa0;
-                        racer2->unk_118.y = (0.15f * var_fs2) * var_fa1;
-                        racer2->unk_118.z = (0.15f * var_fs2) * var_ft4;
-                        racer2->stateFlags |= RACER_STATE_FLAGS_2000;
+                        racer2->recoilStrength.x = (0.15f * var_fs2) * var_fa0;
+                        racer2->recoilStrength.y = (0.15f * var_fs2) * var_fa1;
+                        racer2->recoilStrength.z = (0.15f * var_fs2) * var_ft4;
+                        racer2->stateFlags |= RACER_STATE_COLLISION_RECOIL;
                     }
                 }
             } while (--racer2 >= gRacers);
         } while (--racer > gRacers);
     }
     for (racer = sLastRacer; racer >= gRacers; racer--) {
-        if (racer->stateFlags & RACER_STATE_FLAGS_40000000) {
+        if (racer->stateFlags & RACER_STATE_ACTIVE) {
             func_8072643C(racer);
         }
     }
@@ -5095,7 +5131,7 @@ void func_80726554(void) {
         racer2 = &gRacers[i];
         if ((racer2->maxSpeed < racer2->speed) &&
             !(racer2->stateFlags &
-              (RACER_STATE_CRASHED | RACER_STATE_AIRBORNE | RACER_STATE_FLAGS_2000000 | RACER_STATE_FLAGS_80000)) &&
+              (RACER_STATE_CRASHED | RACER_STATE_AIRBORNE | RACER_STATE_FINISHED | RACER_STATE_FLAGS_80000)) &&
             (D_807B37B8[i] == 0)) {
             racer2->maxSpeed = racer2->speed;
         }
@@ -5121,27 +5157,27 @@ void func_80726554(void) {
                 sGhostReplayRecordingEnd = sGhostReplayRecordingSize;
             }
         }
-        for (var_s0 = &gGhostRacers[2]; var_s0 >= gGhostRacers; var_s0--) {
-            if ((var_s0->exists) && (var_s0->initialized)) {
-                racer = var_s0->racer;
-                sp110 = racer->unk_10C.x + racer->velocity.x;
-                sp10C = racer->unk_10C.y + racer->velocity.y;
-                sp108 = racer->unk_10C.z + racer->velocity.z;
-                racer->velocity.x = var_s0->pos.x - racer->unk_10C.x;
-                racer->velocity.y = var_s0->pos.y - racer->unk_10C.y;
-                racer->velocity.z = var_s0->pos.z - racer->unk_10C.z;
-                racer->unk_10C = var_s0->pos;
+        for (ghostRacer = &gGhostRacers[2]; ghostRacer >= gGhostRacers; ghostRacer--) {
+            if ((ghostRacer->exists) && (ghostRacer->initialized)) {
+                racer = ghostRacer->racer;
+                sp110 = racer->modelPos.x + racer->velocity.x;
+                sp10C = racer->modelPos.y + racer->velocity.y;
+                sp108 = racer->modelPos.z + racer->velocity.z;
+                racer->velocity.x = ghostRacer->pos.x - racer->modelPos.x;
+                racer->velocity.y = ghostRacer->pos.y - racer->modelPos.y;
+                racer->velocity.z = ghostRacer->pos.z - racer->modelPos.z;
+                racer->modelPos = ghostRacer->pos;
 
-                if (func_i2_800B2C00(&racer->segmentPositionInfo, racer->unk_10C.x, racer->unk_10C.y, racer->unk_10C.z,
-                                     100, 1.0f) != 0) {
-                    var_s0->exists = var_s0->initialized = false;
+                if (func_i2_800B2C00(&racer->segmentPositionInfo, racer->modelPos.x, racer->modelPos.y,
+                                     racer->modelPos.z, 100, 1.0f) != 0) {
+                    ghostRacer->exists = ghostRacer->initialized = false;
                 } else {
                     racer->segmentPositionInfo.segmentLengthProportion =
                         Course_SplineGetLengthInfo(racer->segmentPositionInfo.courseSegment,
                                                    racer->segmentPositionInfo.segmentTValue, &racer->lapDistance);
 
                     Course_SplineGetBasis(racer->segmentPositionInfo.courseSegment,
-                                          racer->segmentPositionInfo.segmentTValue, &racer->unk_24C,
+                                          racer->segmentPositionInfo.segmentTValue, &racer->segmentBasis,
                                           racer->segmentPositionInfo.segmentLengthProportion);
                     racer->currentRadiusLeft = (racer->segmentPositionInfo.segmentLengthProportion *
                                                 (racer->segmentPositionInfo.courseSegment->next->radiusLeft -
@@ -5154,44 +5190,44 @@ void func_80726554(void) {
                     D_8076F2DC[TRACK_SHAPE_INDEX((u32) racer->segmentPositionInfo.courseSegment->trackSegmentInfo &
                                                  TRACK_SHAPE_MASK)](racer);
 
-                    var_s0->frameCount++;
-                    if (var_s0->frameCount & 1) {
-                        var_s0->pos.x = var_s0->replayPosX;
-                        var_s0->pos.y = var_s0->replayPosY;
-                        var_s0->pos.z = var_s0->replayPosZ;
-                        if (var_s0->replayIndex >= var_s0->ghost->replaySize) {
-                            var_s0->exists = var_s0->initialized = false;
+                    ghostRacer->frameCount++;
+                    if (ghostRacer->frameCount & 1) {
+                        ghostRacer->pos.x = ghostRacer->replayPosX;
+                        ghostRacer->pos.y = ghostRacer->replayPosY;
+                        ghostRacer->pos.z = ghostRacer->replayPosZ;
+                        if (ghostRacer->replayIndex >= ghostRacer->ghost->replaySize) {
+                            ghostRacer->exists = ghostRacer->initialized = false;
                         }
                     } else {
-                        posDiff = func_80726348(var_s0);
-                        var_s0->replayPosX += posDiff;
-                        var_s0->pos.x += (posDiff * 0.5f);
-                        posDiff = func_80726348(var_s0);
-                        var_s0->replayPosY += posDiff;
-                        var_s0->pos.y += (posDiff * 0.5f);
-                        posDiff = func_80726348(var_s0);
-                        var_s0->replayPosZ += posDiff;
-                        var_s0->pos.z += (posDiff * 0.5f);
+                        posDiff = func_80726348(ghostRacer);
+                        ghostRacer->replayPosX += posDiff;
+                        ghostRacer->pos.x += (posDiff * 0.5f);
+                        posDiff = func_80726348(ghostRacer);
+                        ghostRacer->replayPosY += posDiff;
+                        ghostRacer->pos.y += (posDiff * 0.5f);
+                        posDiff = func_80726348(ghostRacer);
+                        ghostRacer->replayPosZ += posDiff;
+                        ghostRacer->pos.z += (posDiff * 0.5f);
                     }
 
                     racer->speed = sqrtf(SQ(racer->velocity.x) + SQ(racer->velocity.y) + SQ(racer->velocity.z));
 
-                    spCC = racer->unk_C0;
+                    spCC = racer->trueBasis;
                     if (racer->speed > 1.0f) {
-                        racer->unk_C0.x.x = var_s0->pos.x - racer->unk_10C.x;
-                        racer->unk_C0.x.y = var_s0->pos.y - racer->unk_10C.y;
-                        racer->unk_C0.x.z = var_s0->pos.z - racer->unk_10C.z;
+                        racer->trueBasis.x.x = ghostRacer->pos.x - racer->modelPos.x;
+                        racer->trueBasis.x.y = ghostRacer->pos.y - racer->modelPos.y;
+                        racer->trueBasis.x.z = ghostRacer->pos.z - racer->modelPos.z;
                     }
-                    racer->unk_C0.y.x += 0.19f * racer->unk_B4.x;
-                    racer->unk_C0.y.y += 0.19f * racer->unk_B4.y;
-                    racer->unk_C0.y.z += 0.19f * racer->unk_B4.z;
-                    if (func_806F6F64(&racer->unk_C0) != 0) {
-                        racer->unk_C0 = spCC;
+                    racer->trueBasis.y.x += 0.19f * racer->tiltUp.x;
+                    racer->trueBasis.y.y += 0.19f * racer->tiltUp.y;
+                    racer->trueBasis.y.z += 0.19f * racer->tiltUp.z;
+                    if (func_806F6F64(&racer->trueBasis) != 0) {
+                        racer->trueBasis = spCC;
                     }
 
-                    racer->unk_80.x = racer->unk_10C.x - sp110;
-                    racer->unk_80.y = racer->unk_10C.y - sp10C;
-                    racer->unk_80.z = racer->unk_10C.z - sp108;
+                    racer->unk_80.x = racer->modelPos.x - sp110;
+                    racer->unk_80.y = racer->modelPos.y - sp10C;
+                    racer->unk_80.z = racer->modelPos.z - sp108;
                     var_fs0 = racer->unk_68.x;
                     racer->unk_68.x = ((spCC.z.x * (racer->unk_80.x)) + (spCC.z.y * racer->unk_80.y) +
                                        (spCC.z.z * racer->unk_80.z) + var_fs0) *
@@ -5200,26 +5236,29 @@ void func_80726554(void) {
                         (spCC.y.x * (racer->unk_80.x)) + (spCC.y.y * racer->unk_80.y) + (spCC.y.z * racer->unk_80.z);
                     racer->unk_68.z =
                         (spCC.x.x * (racer->unk_80.x)) + (spCC.x.y * racer->unk_80.y) + (spCC.x.z * racer->unk_80.z);
-                    racer->unk_5C.x = (racer->unk_C0.z.x * racer->velocity.x) +
-                                      (racer->unk_C0.z.y * racer->velocity.y) + (racer->unk_C0.z.z * racer->velocity.z);
-                    racer->unk_5C.y = (racer->unk_C0.y.x * racer->velocity.x) +
-                                      (racer->unk_C0.y.y * racer->velocity.y) + (racer->unk_C0.y.z * racer->velocity.z);
-                    racer->unk_5C.z = (racer->unk_C0.x.x * racer->velocity.x) +
-                                      (racer->unk_C0.x.y * racer->velocity.y) + (racer->unk_C0.x.z * racer->velocity.z);
-                    racer->unk_E8.x.x = racer->unk_C0.x.x;
-                    racer->unk_E8.x.y = racer->unk_C0.x.y;
-                    racer->unk_E8.x.z = racer->unk_C0.x.z;
+                    racer->unk_5C.x = (racer->trueBasis.z.x * racer->velocity.x) +
+                                      (racer->trueBasis.z.y * racer->velocity.y) +
+                                      (racer->trueBasis.z.z * racer->velocity.z);
+                    racer->unk_5C.y = (racer->trueBasis.y.x * racer->velocity.x) +
+                                      (racer->trueBasis.y.y * racer->velocity.y) +
+                                      (racer->trueBasis.y.z * racer->velocity.z);
+                    racer->unk_5C.z = (racer->trueBasis.x.x * racer->velocity.x) +
+                                      (racer->trueBasis.x.y * racer->velocity.y) +
+                                      (racer->trueBasis.x.z * racer->velocity.z);
+                    racer->modelBasis.x.x = racer->trueBasis.x.x;
+                    racer->modelBasis.x.y = racer->trueBasis.x.y;
+                    racer->modelBasis.x.z = racer->trueBasis.x.z;
 
                     var_fs0 = racer->unk_68.x * 0.6f;
-                    racer->unk_E8.y.x += 0.19f * (racer->unk_C0.y.x + (var_fs0 * racer->unk_C0.z.x));
-                    racer->unk_E8.y.y += 0.19f * (racer->unk_C0.y.y + (var_fs0 * racer->unk_C0.z.y));
-                    racer->unk_E8.y.z += 0.19f * (racer->unk_C0.y.z + (var_fs0 * racer->unk_C0.z.z));
-                    func_806F6D8C(&racer->unk_E8);
-                    if (var_s0->ghost->replayEnd < var_s0->replayIndex) {
-                        if (var_s0->scale != 0.f) {
-                            var_s0->scale -= 0.02f;
-                            if (var_s0->scale <= 0.0f) {
-                                var_s0->exists = var_s0->initialized = false;
+                    racer->modelBasis.y.x += 0.19f * (racer->trueBasis.y.x + (var_fs0 * racer->trueBasis.z.x));
+                    racer->modelBasis.y.y += 0.19f * (racer->trueBasis.y.y + (var_fs0 * racer->trueBasis.z.y));
+                    racer->modelBasis.y.z += 0.19f * (racer->trueBasis.y.z + (var_fs0 * racer->trueBasis.z.z));
+                    func_806F6D8C(&racer->modelBasis);
+                    if (ghostRacer->ghost->replayEnd < ghostRacer->replayIndex) {
+                        if (ghostRacer->scale != 0.f) {
+                            ghostRacer->scale -= 0.02f;
+                            if (ghostRacer->scale <= 0.0f) {
+                                ghostRacer->exists = ghostRacer->initialized = false;
                             }
                         }
                     }
@@ -5236,8 +5275,8 @@ void func_80726554(void) {
 
         for (i = 0; i < gNumPlayers; i++) {
             racer2 = &gRacers[i];
-            if ((((racer2->unk_24C.x.x * racer2->velocity.x) + (racer2->unk_24C.x.y * racer2->velocity.y) +
-                  (racer2->unk_24C.x.z * racer2->velocity.z)) < -0.3f) &&
+            if ((((racer2->segmentBasis.x.x * racer2->velocity.x) + (racer2->segmentBasis.x.y * racer2->velocity.y) +
+                  (racer2->segmentBasis.x.z * racer2->velocity.z)) < -0.3f) &&
                 !(racer2->stateFlags & (RACER_STATE_CRASHED | RACER_STATE_FLAGS_80000))) {
                 D_807B37B8[i]++;
                 if (D_807B37B8[i] == 100) {
@@ -5272,7 +5311,7 @@ void func_80726554(void) {
     }
     if (D_807A16CC == 0) {
         if (gNumPlayers == 1) {
-            if (gRacers[0].stateFlags & (RACER_STATE_CRASHED | RACER_STATE_FLAGS_2000000)) {
+            if (gRacers[0].stateFlags & (RACER_STATE_CRASHED | RACER_STATE_FINISHED)) {
                 D_807A16CC = 1;
             }
         } else {
@@ -5284,8 +5323,8 @@ void func_80726554(void) {
                     func_8071B634();
                 }
                 for (racer = &gRacers[gTotalRacers - 1]; racer >= gRacers; racer--) {
-                    if (!(racer->stateFlags & (RACER_STATE_CRASHED | RACER_STATE_FLAGS_2000000))) {
-                        racer->stateFlags |= RACER_STATE_FLAGS_2000000 | RACER_STATE_CPU_CONTROLLED;
+                    if (!(racer->stateFlags & (RACER_STATE_CRASHED | RACER_STATE_FINISHED))) {
+                        racer->stateFlags |= RACER_STATE_FINISHED | RACER_STATE_CPU_CONTROLLED;
                         racer->energy = racer->maxEnergy;
                         if (D_807A16E0 != 0) {
                             if (racer->position == 1) {
@@ -5314,7 +5353,7 @@ void func_80726554(void) {
                 func_807263A4();
                 break;
             case 30:
-                if (gRacers[0].stateFlags & RACER_STATE_FLAGS_2000000) {
+                if (gRacers[0].stateFlags & RACER_STATE_FINISHED) {
                     if ((gGameMode == GAMEMODE_GP_RACE) || (gGameMode == GAMEMODE_DEATH_RACE)) {
                         Audio_TriggerSystemSE(NA_SE_61);
                         break;
@@ -5328,7 +5367,7 @@ void func_80726554(void) {
                 }
                 break;
             case 120:
-                if ((gGameMode == GAMEMODE_GP_RACE) && (gRacers[0].stateFlags & RACER_STATE_FLAGS_2000000) &&
+                if ((gGameMode == GAMEMODE_GP_RACE) && (gRacers[0].stateFlags & RACER_STATE_FINISHED) &&
                     (gRacers[0].position == (u32) 1)) {
                     Audio_TriggerSystemSE(NA_SE_51);
                 }
@@ -5336,28 +5375,6 @@ void func_80726554(void) {
         }
     }
 }
-
-extern unk_80111870 D_800D1330[32];
-extern s32 D_800D17B0;
-extern s32 D_800D17B4;
-extern unk_80111870 D_800D17B8[32];
-extern s32 D_800D1C38;
-extern s32 D_800D1C3C;
-extern unk_80111870 D_800D1C40[8];
-extern s32 D_800D1D60;
-extern s32 D_800D1D64;
-extern unk_801122A8 D_800D1D68[32];
-extern s32 D_800D25E8;
-extern s32 D_800D25EC;
-extern unk_80111870 D_800D25F0[32];
-extern s32 D_800D2A70;
-extern s32 D_800D2A74;
-extern unk_80112FB8 D_800D2A78[32];
-extern s32 D_800D2BF8;
-extern s32 D_800D2BFC;
-extern unk_80113140 D_800D2C00[128];
-extern s32 D_800D5800;
-extern s32 D_800D5804;
 
 extern GfxPool D_1000000;
 
@@ -5468,13 +5485,13 @@ Gfx* func_80727F54(Gfx* gfx, s32 playerIndex) {
     GhostRacer* temp_v0_10;
     GhostRacer* temp_v0_4;
     GhostRacer* var_v1;
-    unk_80111870* temp_s1;
-    unk_80111870* temp_s1_4;
-    unk_80111870* temp_s1_5;
-    unk_801122A8* temp_s1_3;
-    unk_80112FB8* temp_s1_6;
+    MachineEffect* temp_s1;
+    MachineEffect* temp_s1_4;
+    MachineEffect* temp_s1_5;
+    FlyingSparkEffect* temp_s1_3;
+    FallExplosionEffect* temp_s1_6;
     Mtx* mtx;
-    unk_80113140* temp_v0_13;
+    MachineDebrisEffect* temp_v0_13;
     s32 temp;
 
     player = &gPlayers[playerIndex];
@@ -5511,7 +5528,7 @@ Gfx* func_80727F54(Gfx* gfx, s32 playerIndex) {
     } else {
         for (racer = sLastRacer; racer >= gRacers; racer--) {
             racer->machineLod = racer->unk_2B2 = racer->unk_2B3 = 0;
-            if (racer->stateFlags & RACER_STATE_FLAGS_40000000) {
+            if (racer->stateFlags & RACER_STATE_ACTIVE) {
                 temp_fv0_2 = racer->segmentPositionInfo.pos.x;
                 temp_fv1_2 = racer->segmentPositionInfo.pos.y;
                 temp_fa1_2 = racer->segmentPositionInfo.pos.z;
@@ -5643,7 +5660,7 @@ Gfx* func_80727F54(Gfx* gfx, s32 playerIndex) {
 
                     Matrix_SetLockedLookAtFromVectors(&gGfxPool->unk_32A88[racer->id], NULL,
                                                       racer->shadowColorStrength * D_8076E568, 0.1f,
-                                                      racer->shadowColorStrength * var_fs0, &racer->unk_E8.x,
+                                                      racer->shadowColorStrength * var_fs0, &racer->modelBasis.x,
                                                       &racer->upFromGround, &racer->shadowPos);
                     racer->unk_165 = 1;
                 }
@@ -5672,9 +5689,9 @@ Gfx* func_80727F54(Gfx* gfx, s32 playerIndex) {
                 if (sp4F8->exists) {
                     racer = sp4F8->racer;
                     if ((racer->unk_2B2 != 0) && (racer->shadowPos.y != -54321.0f)) {
-                        Matrix_SetLockedLookAtFromVectors(&gGfxPool->unk_32A88[racer->id], NULL,
-                                                          sp4F8->scale * D_8076E568, 0.1f, sp4F8->scale * D_8076E570,
-                                                          &racer->unk_E8.x, &racer->upFromGround, &racer->shadowPos);
+                        Matrix_SetLockedLookAtFromVectors(
+                            &gGfxPool->unk_32A88[racer->id], NULL, sp4F8->scale * D_8076E568, 0.1f,
+                            sp4F8->scale * D_8076E570, &racer->modelBasis.x, &racer->upFromGround, &racer->shadowPos);
                         gSPMatrix(gfx++, &D_1000000.unk_32A88[racer->id], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                         gDPLoadTextureBlock_4b(gfx++, D_8076DA74[racer->shadowType], G_IM_FMT_I, 32, 64, 0,
                                                G_TX_MIRROR | G_TX_CLAMP, G_TX_MIRROR | G_TX_CLAMP, 5, 6, G_TX_NOLOD,
@@ -5692,12 +5709,13 @@ Gfx* func_80727F54(Gfx* gfx, s32 playerIndex) {
     gSPDisplayList(gfx++, D_303A7D8);
 
     for (racer = sLastRacer; racer >= gRacers; racer--) {
-        if (racer->unk_178 != 0.0f) {
+        if (racer->attackHighlightScale != 0.0f) {
             if ((racer->machineLod != 0) && (racer->machineLod < 6)) {
                 if (racer->unk_166 == 0) {
-                    Matrix_ScaleFrom3DMatrix(&gGfxPool->unk_33208[racer->id], NULL, racer->unk_178 * D_8076E568,
-                                             racer->unk_178 * D_8076E56C, racer->unk_178 * D_8076E570, &racer->unk_E8,
-                                             &racer->unk_10C);
+                    Matrix_ScaleFrom3DMatrix(
+                        &gGfxPool->unk_33208[racer->id], NULL, racer->attackHighlightScale * D_8076E568,
+                        racer->attackHighlightScale * D_8076E56C, racer->attackHighlightScale * D_8076E570,
+                        &racer->modelBasis, &racer->modelPos);
                     racer->unk_166 = 1;
                 }
                 gSPMatrix(gfx++, &D_1000000.unk_33208[racer->id], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -5753,11 +5771,11 @@ block_115:
 
     if ((playerRacer->segmentPositionInfo.courseSegment->trackSegmentInfo & TRACK_FLAG_20000000) &&
         !(playerRacer->stateFlags & RACER_STATE_FLAGS_80000000)) {
-        sp560 = playerRacer->unk_24C.y.x;
+        sp560 = playerRacer->segmentBasis.y.x;
         gGfxPool->unk_33A88[playerIndex].l[0].l.dir[0] = Math_Round(sp560 * 120.0f);
-        sp55C = playerRacer->unk_24C.y.y;
+        sp55C = playerRacer->segmentBasis.y.y;
         gGfxPool->unk_33A88[playerIndex].l[0].l.dir[1] = Math_Round(sp55C * 120.0f);
-        sp558 = playerRacer->unk_24C.y.z;
+        sp558 = playerRacer->segmentBasis.y.z;
         gGfxPool->unk_33A88[playerIndex].l[0].l.dir[2] = Math_Round(sp558 * 120.0f);
         if ((playerRacer->segmentPositionInfo.courseSegment->trackSegmentInfo & TRACK_SHAPE_MASK) == TRACK_SHAPE_PIPE) {
             var_v0 =
@@ -5792,7 +5810,7 @@ block_115:
         if (racer->machineLod != 0) {
             if (racer->unk_164 == 0) {
                 Matrix_ScaleFrom3DMatrix(&gGfxPool->unk_32308[racer->id], &racer->unk_124, D_8076E568, D_8076E56C,
-                                         D_8076E570, &racer->unk_E8, &racer->unk_10C);
+                                         D_8076E570, &racer->modelBasis, &racer->modelPos);
                 racer->unk_164 = 1;
             }
             if (!(racer->stateFlags & RACER_STATE_CRASHED)) {
@@ -5871,7 +5889,7 @@ block_115:
                 if (racer->machineLod != 0) {
                     Matrix_ScaleFrom3DMatrix(&gGfxPool->unk_32308[racer->id], &racer->unk_124,
                                              sp4F8->scale * D_8076E568, sp4F8->scale * D_8076E56C,
-                                             sp4F8->scale * D_8076E570, &racer->unk_E8, &racer->unk_10C);
+                                             sp4F8->scale * D_8076E570, &racer->modelBasis, &racer->modelPos);
                     gSPMatrix(gfx++, &D_1000000.unk_32308[racer->id], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                     gSPDisplayList(gfx++, D_8076DB58[racer->machineIndex]);
                     gDPSetEnvColor(gfx++, racer->bodyR, racer->bodyG, racer->bodyB, 240);
@@ -5957,9 +5975,9 @@ block_115:
                 D_807A15DC[0].v.tc[1] = D_807A15DC[2].v.tc[0] = D_807A15DC[3].v.tc[0] = D_807A15DC[3].v.tc[1] = 0x3FF;
                 if (racer->unk_2B3 == 2) {
                     temp_fs0_6 = racer->speed * 0.9f;
-                    D_807A15DC[4].v.ob[0] = Math_Round(temp_fs4 - (racer->unk_E8.x.x * temp_fs0_6));
-                    D_807A15DC[4].v.ob[1] = Math_Round(temp_fs5 - (racer->unk_E8.x.y * temp_fs0_6));
-                    D_807A15DC[4].v.ob[2] = Math_Round(sp54C - (racer->unk_E8.x.z * temp_fs0_6));
+                    D_807A15DC[4].v.ob[0] = Math_Round(temp_fs4 - (racer->modelBasis.x.x * temp_fs0_6));
+                    D_807A15DC[4].v.ob[1] = Math_Round(temp_fs5 - (racer->modelBasis.x.y * temp_fs0_6));
+                    D_807A15DC[4].v.ob[2] = Math_Round(sp54C - (racer->modelBasis.x.z * temp_fs0_6));
                     D_807A15DC[4].v.tc[0] = 0x3FF;
                     D_807A15DC[4].v.tc[1] = 0;
                     D_807A15DC += 5;
@@ -6060,9 +6078,9 @@ block_115:
                             0x3FF;
                         if (racer->unk_2B3 == 2) {
                             temp_fs0_11 = racer->speed * 0.9f;
-                            D_807A15DC[4].v.ob[0] = Math_Round(temp_fs4 - (racer->unk_E8.x.x * temp_fs0_11));
-                            D_807A15DC[4].v.ob[1] = Math_Round(temp_fs5 - (racer->unk_E8.x.y * temp_fs0_11));
-                            D_807A15DC[4].v.ob[2] = Math_Round(sp54C - (racer->unk_E8.x.z * temp_fs0_11));
+                            D_807A15DC[4].v.ob[0] = Math_Round(temp_fs4 - (racer->modelBasis.x.x * temp_fs0_11));
+                            D_807A15DC[4].v.ob[1] = Math_Round(temp_fs5 - (racer->modelBasis.x.y * temp_fs0_11));
+                            D_807A15DC[4].v.ob[2] = Math_Round(sp54C - (racer->modelBasis.x.z * temp_fs0_11));
                             D_807A15DC[4].v.tc[0] = 0x3FF;
                             D_807A15DC[4].v.tc[1] = 0;
                             D_807A15DC += 5;
@@ -6120,31 +6138,31 @@ block_115:
     }
     gSPDisplayList(gfx++, D_4007FB8);
 
-    var_s3_6 = D_800D1C3C;
+    var_s3_6 = gExplosions1Count;
 
-    var_s7 = (D_800D1C38 - 1) & 0x1F;
+    var_s7 = (gExplosions1Index - 1) & 0x1F;
     while ((var_s3_6 != 0) && ((u32) (D_807A15E0 - 3) >= (u32) D_807A15DC)) {
-        temp_s1 = &D_800D17B8[var_s7];
+        temp_s1 = &gExplosions1[var_s7];
 
-        temp_fs1 = temp_s1->unk_18 * sp56C;
-        temp_fs3 = temp_s1->unk_18 * sp568;
-        temp_fs2 = temp_s1->unk_18 * sp564;
-        sp53C = temp_s1->unk_18 * sp560;
-        sp538 = temp_s1->unk_18 * sp55C;
-        sp534 = temp_s1->unk_18 * sp558;
+        temp_fs1 = temp_s1->scale * sp56C;
+        temp_fs3 = temp_s1->scale * sp568;
+        temp_fs2 = temp_s1->scale * sp564;
+        sp53C = temp_s1->scale * sp560;
+        sp538 = temp_s1->scale * sp55C;
+        sp534 = temp_s1->scale * sp558;
 
-        D_807A15DC[0].v.ob[0] = Math_Round(temp_s1->unk_00.x + temp_fs1);
-        D_807A15DC[0].v.ob[1] = Math_Round(temp_s1->unk_00.y + temp_fs3);
-        D_807A15DC[0].v.ob[2] = Math_Round(temp_s1->unk_00.z + temp_fs2);
-        D_807A15DC[2].v.ob[0] = Math_Round(temp_s1->unk_00.x - temp_fs1);
-        D_807A15DC[2].v.ob[1] = Math_Round(temp_s1->unk_00.y - temp_fs3);
-        D_807A15DC[2].v.ob[2] = Math_Round(temp_s1->unk_00.z - temp_fs2);
-        D_807A15DC[1].v.ob[0] = Math_Round(temp_s1->unk_00.x + sp53C);
-        D_807A15DC[1].v.ob[1] = Math_Round(temp_s1->unk_00.y + sp538);
-        D_807A15DC[1].v.ob[2] = Math_Round(temp_s1->unk_00.z + sp534);
-        D_807A15DC[3].v.ob[0] = Math_Round(temp_s1->unk_00.x - sp53C);
-        D_807A15DC[3].v.ob[1] = Math_Round(temp_s1->unk_00.y - sp538);
-        D_807A15DC[3].v.ob[2] = Math_Round(temp_s1->unk_00.z - sp534);
+        D_807A15DC[0].v.ob[0] = Math_Round(temp_s1->pos.x + temp_fs1);
+        D_807A15DC[0].v.ob[1] = Math_Round(temp_s1->pos.y + temp_fs3);
+        D_807A15DC[0].v.ob[2] = Math_Round(temp_s1->pos.z + temp_fs2);
+        D_807A15DC[2].v.ob[0] = Math_Round(temp_s1->pos.x - temp_fs1);
+        D_807A15DC[2].v.ob[1] = Math_Round(temp_s1->pos.y - temp_fs3);
+        D_807A15DC[2].v.ob[2] = Math_Round(temp_s1->pos.z - temp_fs2);
+        D_807A15DC[1].v.ob[0] = Math_Round(temp_s1->pos.x + sp53C);
+        D_807A15DC[1].v.ob[1] = Math_Round(temp_s1->pos.y + sp538);
+        D_807A15DC[1].v.ob[2] = Math_Round(temp_s1->pos.z + sp534);
+        D_807A15DC[3].v.ob[0] = Math_Round(temp_s1->pos.x - sp53C);
+        D_807A15DC[3].v.ob[1] = Math_Round(temp_s1->pos.y - sp538);
+        D_807A15DC[3].v.ob[2] = Math_Round(temp_s1->pos.z - sp534);
 
         D_807A15DC[0].v.tc[0] = D_807A15DC[1].v.tc[0] = D_807A15DC[1].v.tc[1] = D_807A15DC[2].v.tc[1] = 0;
         D_807A15DC[0].v.tc[1] = D_807A15DC[2].v.tc[0] = D_807A15DC[3].v.tc[0] = D_807A15DC[3].v.tc[1] = 0x7FF;
@@ -6152,15 +6170,15 @@ block_115:
         gSPVertex(gfx++, D_807A15DC, 4, 0);
         gDPPipeSync(gfx++);
 
-        if (temp_s1->unk_1C < 8) {
-            gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255 - (temp_s1->unk_1C * 16), 255);
-            gDPSetEnvColor(gfx++, 255, 255 - (temp_s1->unk_1C * 32), 0, 255);
+        if (temp_s1->timer < 8) {
+            gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255 - (temp_s1->timer * 16), 255);
+            gDPSetEnvColor(gfx++, 255, 255 - (temp_s1->timer * 32), 0, 255);
         } else {
-            gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255 - (temp_s1->unk_1C * 16), 255);
-            gDPSetEnvColor(gfx++, 0x1FF - (temp_s1->unk_1C * 32), 0, 0, 0x17F - (temp_s1->unk_1C * 16));
+            gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255 - (temp_s1->timer * 16), 255);
+            gDPSetEnvColor(gfx++, 0x1FF - (temp_s1->timer * 32), 0, 0, 0x17F - (temp_s1->timer * 16));
         }
 
-        gDPLoadTextureBlock(gfx++, D_8076D8D8[temp_s1->unk_1C >> 1], G_IM_FMT_IA, G_IM_SIZ_8b, 32, 32, 0,
+        gDPLoadTextureBlock(gfx++, D_8076D8D8[temp_s1->timer >> 1], G_IM_FMT_IA, G_IM_SIZ_8b, 32, 32, 0,
                             G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 0, 0, G_TX_NOLOD, G_TX_NOLOD);
 
         gSP2Triangles(gfx++, 0, 1, 3, 0, 1, 2, 3, 0);
@@ -6171,29 +6189,29 @@ block_115:
 
         D_807A15DC += 4;
     }
-    var_s3_6 = D_800D1D64;
-    var_s7 = (D_800D1D60 - 1) & 7;
+    var_s3_6 = gExplosions2Count;
+    var_s7 = (gExplosions2Index - 1) & 7;
     while ((var_s3_6 != 0) && ((D_807A15E0 - 3) >= D_807A15DC)) {
-        temp_s1 = &D_800D1C40[var_s7];
-        temp_fs1 = temp_s1->unk_18 * sp56C;
-        temp_fs3 = temp_s1->unk_18 * sp568;
-        temp_fs2 = temp_s1->unk_18 * sp564;
-        sp538 = temp_s1->unk_18 * sp55C;
-        sp53C = temp_s1->unk_18 * sp560;
-        sp534 = temp_s1->unk_18 * sp558;
+        temp_s1 = &gExplosions2[var_s7];
+        temp_fs1 = temp_s1->scale * sp56C;
+        temp_fs3 = temp_s1->scale * sp568;
+        temp_fs2 = temp_s1->scale * sp564;
+        sp538 = temp_s1->scale * sp55C;
+        sp53C = temp_s1->scale * sp560;
+        sp534 = temp_s1->scale * sp558;
 
-        D_807A15DC[0].v.ob[0] = Math_Round(temp_s1->unk_00.x + temp_fs1);
-        D_807A15DC[0].v.ob[1] = Math_Round(temp_s1->unk_00.y + temp_fs3);
-        D_807A15DC[0].v.ob[2] = Math_Round(temp_s1->unk_00.z + temp_fs2);
-        D_807A15DC[2].v.ob[0] = Math_Round(temp_s1->unk_00.x - temp_fs1);
-        D_807A15DC[2].v.ob[1] = Math_Round(temp_s1->unk_00.y - temp_fs3);
-        D_807A15DC[2].v.ob[2] = Math_Round(temp_s1->unk_00.z - temp_fs2);
-        D_807A15DC[1].v.ob[0] = Math_Round(temp_s1->unk_00.x + sp53C);
-        D_807A15DC[1].v.ob[1] = Math_Round(temp_s1->unk_00.y + sp538);
-        D_807A15DC[1].v.ob[2] = Math_Round(temp_s1->unk_00.z + sp534);
-        D_807A15DC[3].v.ob[0] = Math_Round(temp_s1->unk_00.x - sp53C);
-        D_807A15DC[3].v.ob[1] = Math_Round(temp_s1->unk_00.y - sp538);
-        D_807A15DC[3].v.ob[2] = Math_Round(temp_s1->unk_00.z - sp534);
+        D_807A15DC[0].v.ob[0] = Math_Round(temp_s1->pos.x + temp_fs1);
+        D_807A15DC[0].v.ob[1] = Math_Round(temp_s1->pos.y + temp_fs3);
+        D_807A15DC[0].v.ob[2] = Math_Round(temp_s1->pos.z + temp_fs2);
+        D_807A15DC[2].v.ob[0] = Math_Round(temp_s1->pos.x - temp_fs1);
+        D_807A15DC[2].v.ob[1] = Math_Round(temp_s1->pos.y - temp_fs3);
+        D_807A15DC[2].v.ob[2] = Math_Round(temp_s1->pos.z - temp_fs2);
+        D_807A15DC[1].v.ob[0] = Math_Round(temp_s1->pos.x + sp53C);
+        D_807A15DC[1].v.ob[1] = Math_Round(temp_s1->pos.y + sp538);
+        D_807A15DC[1].v.ob[2] = Math_Round(temp_s1->pos.z + sp534);
+        D_807A15DC[3].v.ob[0] = Math_Round(temp_s1->pos.x - sp53C);
+        D_807A15DC[3].v.ob[1] = Math_Round(temp_s1->pos.y - sp538);
+        D_807A15DC[3].v.ob[2] = Math_Round(temp_s1->pos.z - sp534);
 
         D_807A15DC[0].v.tc[0] = D_807A15DC[1].v.tc[0] = D_807A15DC[1].v.tc[1] = D_807A15DC[2].v.tc[1] = 0;
         D_807A15DC[0].v.tc[1] = D_807A15DC[2].v.tc[0] = D_807A15DC[3].v.tc[0] = D_807A15DC[3].v.tc[1] = 0x7FF;
@@ -6201,15 +6219,15 @@ block_115:
         gSPVertex(gfx++, D_807A15DC, 4, 0);
         gDPPipeSync(gfx++);
 
-        if (temp_s1->unk_1C < 16) {
-            gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255 - (temp_s1->unk_1C * 8), 255);
-            gDPSetEnvColor(gfx++, 255, 255 - (temp_s1->unk_1C * 16), 0, 255);
+        if (temp_s1->timer < 16) {
+            gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255 - (temp_s1->timer * 8), 255);
+            gDPSetEnvColor(gfx++, 255, 255 - (temp_s1->timer * 16), 0, 255);
         } else {
-            gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255 - (temp_s1->unk_1C * 8), 255);
-            gDPSetEnvColor(gfx++, 0x1FF - (temp_s1->unk_1C * 16), 0, 0, 0x17F - (temp_s1->unk_1C * 8));
+            gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255 - (temp_s1->timer * 8), 255);
+            gDPSetEnvColor(gfx++, 511 - (temp_s1->timer * 16), 0, 0, 383 - (temp_s1->timer * 8));
         }
 
-        gDPLoadTextureBlock(gfx++, D_8076D8D8[temp_s1->unk_1C >> 2], G_IM_FMT_IA, G_IM_SIZ_8b, 32, 32, 0,
+        gDPLoadTextureBlock(gfx++, D_8076D8D8[temp_s1->timer >> 2], G_IM_FMT_IA, G_IM_SIZ_8b, 32, 32, 0,
                             G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 0, 0, G_TX_NOLOD, G_TX_NOLOD);
 
         gSP2Triangles(gfx++, 0, 1, 3, 0, 1, 2, 3, 0);
@@ -6223,25 +6241,25 @@ block_115:
 
     gSPDisplayList(gfx++, D_4007FD8);
 
-    var_s3_6 = D_800D5804;
+    var_s3_6 = gMachineDebrisCount;
 
-    var_s7 = (D_800D5800 - 1) & 0x7F;
+    var_s7 = (gMachineDebrisIndex - 1) & 0x7F;
     while ((var_s3_6 != 0) && ((D_807A15E0 - 2) >= D_807A15DC)) {
 
-        temp_v0_13 = &D_800D2C00[var_s7];
-        D_807A15DC[0].v.ob[0] = temp_v0_13->unk_00.x;
-        D_807A15DC[0].v.ob[1] = temp_v0_13->unk_00.y;
-        D_807A15DC[0].v.ob[2] = temp_v0_13->unk_00.z;
-        D_807A15DC[1].v.ob[0] = temp_v0_13->unk_0C.x;
-        D_807A15DC[1].v.ob[1] = temp_v0_13->unk_0C.y;
-        D_807A15DC[1].v.ob[2] = temp_v0_13->unk_0C.z;
-        D_807A15DC[2].v.ob[0] = temp_v0_13->unk_18.x;
-        D_807A15DC[2].v.ob[1] = temp_v0_13->unk_18.y;
-        D_807A15DC[2].v.ob[2] = temp_v0_13->unk_18.z;
-        D_807A15DC[0].v.cn[0] = temp_v0_13->unk_48;
-        D_807A15DC[0].v.cn[1] = temp_v0_13->unk_4A;
-        D_807A15DC[0].v.cn[2] = temp_v0_13->unk_4C;
-        D_807A15DC[0].v.cn[3] = temp_v0_13->unk_4E;
+        temp_v0_13 = &gMachineDebris[var_s7];
+        D_807A15DC[0].v.ob[0] = temp_v0_13->cornerPos1.x;
+        D_807A15DC[0].v.ob[1] = temp_v0_13->cornerPos1.y;
+        D_807A15DC[0].v.ob[2] = temp_v0_13->cornerPos1.z;
+        D_807A15DC[1].v.ob[0] = temp_v0_13->cornerPos2.x;
+        D_807A15DC[1].v.ob[1] = temp_v0_13->cornerPos2.y;
+        D_807A15DC[1].v.ob[2] = temp_v0_13->cornerPos2.z;
+        D_807A15DC[2].v.ob[0] = temp_v0_13->cornerPos3.x;
+        D_807A15DC[2].v.ob[1] = temp_v0_13->cornerPos3.y;
+        D_807A15DC[2].v.ob[2] = temp_v0_13->cornerPos3.z;
+        D_807A15DC[0].v.cn[0] = temp_v0_13->red;
+        D_807A15DC[0].v.cn[1] = temp_v0_13->green;
+        D_807A15DC[0].v.cn[2] = temp_v0_13->blue;
+        D_807A15DC[0].v.cn[3] = temp_v0_13->alpha;
         gSPVertex(gfx++, D_807A15DC, 3, 0);
         gSP1Triangle(gfx++, 0, 1, 2, 0);
 
@@ -6252,19 +6270,19 @@ block_115:
 
     gSPDisplayList(gfx++, D_4008000);
 
-    var_s3_6 = D_800D25EC;
-    var_s7 = (D_800D25E8 - 1) & 0x1F;
+    var_s3_6 = gFlyingSparksCount;
+    var_s7 = (gFlyingSparksIndex - 1) & 0x1F;
     while ((var_s3_6 != 0) && ((D_807A15E0 - 2) >= D_807A15DC)) {
-        temp_s1_3 = &D_800D1D68[var_s7];
-        D_807A15DC[0].v.ob[0] = Math_Round(temp_s1_3->unk_00.x - (3.0f * temp_s1_3->unk_0C.x));
-        D_807A15DC[0].v.ob[1] = Math_Round(temp_s1_3->unk_00.y - (3.0f * temp_s1_3->unk_0C.y));
-        D_807A15DC[0].v.ob[2] = Math_Round(temp_s1_3->unk_00.z - (3.0f * temp_s1_3->unk_0C.z));
-        D_807A15DC[1].v.ob[0] = Math_Round(temp_s1_3->unk_00.x + temp_s1_3->unk_30.x);
-        D_807A15DC[1].v.ob[1] = Math_Round(temp_s1_3->unk_00.y + temp_s1_3->unk_30.y);
-        D_807A15DC[1].v.ob[2] = Math_Round(temp_s1_3->unk_00.z + temp_s1_3->unk_30.z);
-        D_807A15DC[2].v.ob[0] = Math_Round(temp_s1_3->unk_00.x - temp_s1_3->unk_30.x);
-        D_807A15DC[2].v.ob[1] = Math_Round(temp_s1_3->unk_00.y - temp_s1_3->unk_30.y);
-        D_807A15DC[2].v.ob[2] = Math_Round(temp_s1_3->unk_00.z - temp_s1_3->unk_30.z);
+        temp_s1_3 = &gFlyingSparks[var_s7];
+        D_807A15DC[0].v.ob[0] = Math_Round(temp_s1_3->pos.x - (3.0f * temp_s1_3->velocity.x));
+        D_807A15DC[0].v.ob[1] = Math_Round(temp_s1_3->pos.y - (3.0f * temp_s1_3->velocity.y));
+        D_807A15DC[0].v.ob[2] = Math_Round(temp_s1_3->pos.z - (3.0f * temp_s1_3->velocity.z));
+        D_807A15DC[1].v.ob[0] = Math_Round(temp_s1_3->pos.x + temp_s1_3->basis.z.x);
+        D_807A15DC[1].v.ob[1] = Math_Round(temp_s1_3->pos.y + temp_s1_3->basis.z.y);
+        D_807A15DC[1].v.ob[2] = Math_Round(temp_s1_3->pos.z + temp_s1_3->basis.z.z);
+        D_807A15DC[2].v.ob[0] = Math_Round(temp_s1_3->pos.x - temp_s1_3->basis.z.x);
+        D_807A15DC[2].v.ob[1] = Math_Round(temp_s1_3->pos.y - temp_s1_3->basis.z.y);
+        D_807A15DC[2].v.ob[2] = Math_Round(temp_s1_3->pos.z - temp_s1_3->basis.z.z);
 
         D_807A15DC[0].v.cn[0] = 0xFF;
         D_807A15DC[0].v.cn[1] = D_807A15DC[0].v.cn[2] = 0;
@@ -6282,18 +6300,18 @@ block_115:
 
     gSPDisplayList(gfx++, D_4008028);
 
-    var_s3_6 = D_800D17B4;
-    var_s7 = (D_800D17B0 - 1) & 0x1F;
+    var_s3_6 = gCollisionSparkCount;
+    var_s7 = (gCollisionSparkIndex - 1) & 0x1F;
     while ((var_s3_6 != 0) && ((D_807A15E0 - 3) >= D_807A15DC)) {
-        temp_s1_4 = &D_800D1330[var_s7];
-        temp_v0_14 = temp_s1_4->unk_20;
+        temp_s1_4 = &gCollisionSparks[var_s7];
+        temp_v0_14 = temp_s1_4->racer;
         if (temp_v0_14->unk_2B3 != 0) {
-            temp_fv1_6 = SQ(temp_s1_4->unk_1C - 1) * -0.15f;
-            temp_fs4 = temp_s1_4->unk_00.x + (temp_fv1_6 * temp_v0_14->unk_C0.y.x);
-            temp_fs5 = temp_s1_4->unk_00.y + (temp_fv1_6 * temp_v0_14->unk_C0.y.y);
-            sp54C = temp_s1_4->unk_00.z + (temp_fv1_6 * temp_v0_14->unk_C0.y.z);
+            temp_fv1_6 = SQ(temp_s1_4->timer - 1) * -0.15f;
+            temp_fs4 = temp_s1_4->pos.x + (temp_fv1_6 * temp_v0_14->trueBasis.y.x);
+            temp_fs5 = temp_s1_4->pos.y + (temp_fv1_6 * temp_v0_14->trueBasis.y.y);
+            sp54C = temp_s1_4->pos.z + (temp_fv1_6 * temp_v0_14->trueBasis.y.z);
 
-            temp_fv0_16 = temp_s1_4->unk_18;
+            temp_fv0_16 = temp_s1_4->scale;
             temp_fs1 = temp_fv0_16 * sp56C;
             temp_fs3 = temp_fv0_16 * sp568;
             temp_fs2 = temp_fv0_16 * sp564;
@@ -6316,11 +6334,11 @@ block_115:
             D_807A15DC[0].v.tc[0] = D_807A15DC[1].v.tc[0] = D_807A15DC[1].v.tc[1] = D_807A15DC[2].v.tc[1] = 0;
             D_807A15DC[0].v.tc[1] = D_807A15DC[2].v.tc[0] = D_807A15DC[3].v.tc[0] = D_807A15DC[3].v.tc[1] = 0x7FF;
 
-            gSPTexture(gfx++, 0x8000, 0x8000, 0, temp_s1_4->unk_1C >> 1, G_ON);
+            gSPTexture(gfx++, 0x8000, 0x8000, 0, temp_s1_4->timer >> 1, G_ON);
             gSPVertex(gfx++, D_807A15DC, 4, 0);
             gDPPipeSync(gfx++);
-            gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255 - (temp_s1_4->unk_1C * 8), 255);
-            gDPSetEnvColor(gfx++, 255, 255 - (temp_s1_4->unk_1C * 16), 0, 255 - (temp_s1_4->unk_1C * 4));
+            gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255 - (temp_s1_4->timer * 8), 255);
+            gDPSetEnvColor(gfx++, 255, 255 - (temp_s1_4->timer * 16), 0, 255 - (temp_s1_4->timer * 4));
             gSP2Triangles(gfx++, 0, 1, 3, 0, 1, 2, 3, 0);
             D_807A15DC += 4;
         }
@@ -6330,36 +6348,36 @@ block_115:
 
     gSPDisplayList(gfx++, D_4008130);
 
-    var_s3_6 = D_800D2A74;
-    var_s7 = (D_800D2A70 - 1) & 0x1F;
+    var_s3_6 = gSmokesCount;
+    var_s7 = (gSmokesIndex - 1) & 0x1F;
     while ((var_s3_6 != 0) && ((D_807A15E0 - 3) >= D_807A15DC)) {
-        temp_s1_5 = &D_800D25F0[var_s7];
-        if (temp_s1_5->unk_20->unk_2B3 != 0) {
-            temp_fv0_17 = temp_s1_5->unk_18;
+        temp_s1_5 = &gSmokes[var_s7];
+        if (temp_s1_5->racer->unk_2B3 != 0) {
+            temp_fv0_17 = temp_s1_5->scale;
             temp_fs1 = temp_fv0_17 * sp56C;
             temp_fs3 = temp_fv0_17 * sp568;
             temp_fs2 = temp_fv0_17 * sp564;
             sp53C = temp_fv0_17 * sp560;
             sp538 = temp_fv0_17 * sp55C;
             sp534 = temp_fv0_17 * sp558;
-            D_807A15DC[0].v.ob[0] = Math_Round(temp_s1_5->unk_00.x + temp_fs1);
-            D_807A15DC[0].v.ob[1] = Math_Round(temp_s1_5->unk_00.y + temp_fs3);
-            D_807A15DC[0].v.ob[2] = Math_Round(temp_s1_5->unk_00.z + temp_fs2);
-            D_807A15DC[2].v.ob[0] = Math_Round(temp_s1_5->unk_00.x - temp_fs1);
-            D_807A15DC[2].v.ob[1] = Math_Round(temp_s1_5->unk_00.y - temp_fs3);
-            D_807A15DC[2].v.ob[2] = Math_Round(temp_s1_5->unk_00.z - temp_fs2);
-            D_807A15DC[1].v.ob[0] = Math_Round(temp_s1_5->unk_00.x + sp53C);
-            D_807A15DC[1].v.ob[1] = Math_Round(temp_s1_5->unk_00.y + sp538);
-            D_807A15DC[1].v.ob[2] = Math_Round(temp_s1_5->unk_00.z + sp534);
-            D_807A15DC[3].v.ob[0] = Math_Round(temp_s1_5->unk_00.x - sp53C);
-            D_807A15DC[3].v.ob[1] = Math_Round(temp_s1_5->unk_00.y - sp538);
-            D_807A15DC[3].v.ob[2] = Math_Round(temp_s1_5->unk_00.z - sp534);
+            D_807A15DC[0].v.ob[0] = Math_Round(temp_s1_5->pos.x + temp_fs1);
+            D_807A15DC[0].v.ob[1] = Math_Round(temp_s1_5->pos.y + temp_fs3);
+            D_807A15DC[0].v.ob[2] = Math_Round(temp_s1_5->pos.z + temp_fs2);
+            D_807A15DC[2].v.ob[0] = Math_Round(temp_s1_5->pos.x - temp_fs1);
+            D_807A15DC[2].v.ob[1] = Math_Round(temp_s1_5->pos.y - temp_fs3);
+            D_807A15DC[2].v.ob[2] = Math_Round(temp_s1_5->pos.z - temp_fs2);
+            D_807A15DC[1].v.ob[0] = Math_Round(temp_s1_5->pos.x + sp53C);
+            D_807A15DC[1].v.ob[1] = Math_Round(temp_s1_5->pos.y + sp538);
+            D_807A15DC[1].v.ob[2] = Math_Round(temp_s1_5->pos.z + sp534);
+            D_807A15DC[3].v.ob[0] = Math_Round(temp_s1_5->pos.x - sp53C);
+            D_807A15DC[3].v.ob[1] = Math_Round(temp_s1_5->pos.y - sp538);
+            D_807A15DC[3].v.ob[2] = Math_Round(temp_s1_5->pos.z - sp534);
             D_807A15DC[0].v.tc[0] = D_807A15DC[1].v.tc[0] = D_807A15DC[1].v.tc[1] = D_807A15DC[2].v.tc[1] = 0;
             D_807A15DC[0].v.tc[1] = D_807A15DC[2].v.tc[0] = D_807A15DC[3].v.tc[0] = D_807A15DC[3].v.tc[1] = 0x7FF;
-            gSPTexture(gfx++, 0x8000, 0x8000, 0, temp_s1_5->unk_1C >> 1, G_ON);
+            gSPTexture(gfx++, 0x8000, 0x8000, 0, temp_s1_5->timer >> 1, G_ON);
             gSPVertex(gfx++, D_807A15DC, 4, 0);
             gDPPipeSync(gfx++);
-            gDPSetEnvColor(gfx++, 180, 150, 100, 230 - (temp_s1_4->unk_1C * 4));
+            gDPSetEnvColor(gfx++, 180, 150, 100, 230 - (temp_s1_4->timer * 4));
             gSP2Triangles(gfx++, 0, 1, 3, 0, 1, 2, 3, 0);
             D_807A15DC += 4;
         }
@@ -6379,10 +6397,10 @@ block_115:
     while ((racer >= gRacers) && ((D_807A15E0 - 3) >= D_807A15DC)) {
         if ((racer->pitForceFieldSize != 0.0f) && (racer->unk_2B3 != 0)) {
             temp_fs0_14 = 3.0f - ((1.0f - racer->pitForceFieldSize) * 19.0f);
-            temp_fs4 = racer->segmentPositionInfo.pos.x + (temp_fs0_14 * racer->unk_C0.y.x);
-            temp_fs5 = racer->segmentPositionInfo.pos.y + (temp_fs0_14 * racer->unk_C0.y.y);
+            temp_fs4 = racer->segmentPositionInfo.pos.x + (temp_fs0_14 * racer->trueBasis.y.x);
+            temp_fs5 = racer->segmentPositionInfo.pos.y + (temp_fs0_14 * racer->trueBasis.y.y);
             temp_fs0_15 = racer->pitForceFieldSize * 38.0f;
-            sp54C = racer->segmentPositionInfo.pos.z + (temp_fs0_14 * racer->unk_C0.y.z);
+            sp54C = racer->segmentPositionInfo.pos.z + (temp_fs0_14 * racer->trueBasis.y.z);
             temp_fs1 = temp_fs0_15 * sp56C;
             temp_fs3 = temp_fs0_15 * sp568;
             temp_fs2 = temp_fs0_15 * sp564;
@@ -6414,13 +6432,13 @@ block_115:
 
     gSPDisplayList(gfx++, aSetupFallExplosionDL);
 
-    var_s3_6 = D_800D2BFC;
-    var_s7 = (D_800D2BF8 - 1) & 0x1F;
+    var_s3_6 = gFallExplosionsCount;
+    var_s7 = (gFallExplosionsIndex - 1) & 0x1F;
     while ((var_s3_6 != 0) && ((D_807A15E0 - 7) >= D_807A15DC)) {
-        temp_s1_6 = &D_800D2A78[var_s7];
-        racer = temp_s1_6->unk_08;
-        temp_s4 = temp_s1_6->unk_04 - 5;
-        if (temp_s1_6->unk_04 == 0) {
+        temp_s1_6 = &gFallExplosions[var_s7];
+        racer = temp_s1_6->racer;
+        temp_s4 = temp_s1_6->timer - 5;
+        if (temp_s1_6->timer == 0) {
             break;
         }
 
@@ -6430,7 +6448,7 @@ block_115:
                 break;
             }
 
-            temp = SIN(((s32) (temp_s4 << 0xA) / 60)) * 163.64f;
+            temp = SIN(((s32) (temp_s4 << 10) / 60)) * 163.64f;
 
             if (temp_s4 < 20) {
                 sp5C4 = 255;
@@ -6438,7 +6456,7 @@ block_115:
                 sp5C4 = (s32) ((60 - temp_s4) * 255) / 40;
             }
 
-            temp_fs0_15 = temp * temp_s1_6->unk_00;
+            temp_fs0_15 = temp * temp_s1_6->scale;
             temp_fs1 = temp_fs0_15 * sp56C;
             D_807A15DC[0].v.ob[0] = Math_Round(racer->segmentPositionInfo.pos.x + temp_fs1);
             temp_fs2 = temp_fs0_15 * sp568;
@@ -6468,17 +6486,17 @@ block_115:
             D_807A15DC += 4;
         }
 
-        if (temp_s1_6->unk_04 < 0x1A) {
+        if (temp_s1_6->timer < 26) {
             if ((D_807A15E0 - 3) < D_807A15DC) {
                 break;
             }
-            temp_fs0_18 = (temp_s1_6->unk_00 * 163.64f * (f32) temp_s1_6->unk_04) / 26.0f;
-            temp_fs1 = racer->unk_C0.x.x * temp_fs0_18;
-            temp_fs3 = racer->unk_C0.x.y * temp_fs0_18;
-            temp_fs2 = racer->unk_C0.x.z * temp_fs0_18;
-            sp53C = racer->unk_C0.z.x * temp_fs0_18;
-            sp538 = racer->unk_C0.z.y * temp_fs0_18;
-            sp534 = racer->unk_C0.z.z * temp_fs0_18;
+            temp_fs0_18 = (temp_s1_6->scale * 163.64f * (f32) temp_s1_6->timer) / 26.0f;
+            temp_fs1 = racer->trueBasis.x.x * temp_fs0_18;
+            temp_fs3 = racer->trueBasis.x.y * temp_fs0_18;
+            temp_fs2 = racer->trueBasis.x.z * temp_fs0_18;
+            sp53C = racer->trueBasis.z.x * temp_fs0_18;
+            sp538 = racer->trueBasis.z.y * temp_fs0_18;
+            sp534 = racer->trueBasis.z.z * temp_fs0_18;
             D_807A15DC[0].v.ob[0] = Math_Round(racer->segmentPositionInfo.pos.x + temp_fs1);
             D_807A15DC[0].v.ob[1] = Math_Round(racer->segmentPositionInfo.pos.y + temp_fs3);
             D_807A15DC[0].v.ob[2] = Math_Round(racer->segmentPositionInfo.pos.z + temp_fs2);
@@ -6500,7 +6518,7 @@ block_115:
             gSPVertex(gfx++, D_807A15DC, 4, 0);
             gDPPipeSync(gfx++);
             gDPSetPrimColor(gfx++, 0, 0, 100, 255, 255, 255);
-            gDPSetEnvColor(gfx++, 0, 0, 255, (((26 - temp_s1_6->unk_04) * 255) / 26));
+            gDPSetEnvColor(gfx++, 0, 0, 255, (((26 - temp_s1_6->timer) * 255) / 26));
             gSP2Triangles(gfx++, 0, 1, 3, 0, 1, 2, 3, 0);
             D_807A15DC += 4;
         }
@@ -6574,7 +6592,7 @@ block_115:
         }
         gSPVertex(gfx++, D_400AA28, 4, 0);
         gSP2Triangles(gfx++, 0, 1, 2, 0, 0, 2, 3, 0);
-    } else if ((gTotalRacers >= 2) && !(playerRacer->stateFlags & (RACER_STATE_FLAGS_2000000 | RACER_STATE_RETIRED)) &&
+    } else if ((gTotalRacers >= 2) && !(playerRacer->stateFlags & (RACER_STATE_FINISHED | RACER_STATE_RETIRED)) &&
                (gGameMode != GAMEMODE_GP_END_CS)) {
         gSPDisplayList(gfx++, D_4007EA8);
         if ((gGameMode != GAMEMODE_PRACTICE) && (gGameMode != GAMEMODE_DEATH_RACE) &&
@@ -6590,7 +6608,7 @@ block_115:
                 racer = gRacersByPosition[i];
                 if (racer->machineLod != 0) {
                     if ((playerIndex != racer->id) &&
-                        !(racer->stateFlags & (RACER_STATE_CRASHED | RACER_STATE_FLAGS_2000000))) {
+                        !(racer->stateFlags & (RACER_STATE_CRASHED | RACER_STATE_FINISHED))) {
                         if (racer->id < playerIndex) {
                             var_s7 = ((s32) ((playerIndex - 1) * playerIndex) >> 1) + racer->id;
                         } else {
@@ -6601,9 +6619,9 @@ block_115:
                             continue;
                         }
 
-                        temp_fs4 = racer->segmentPositionInfo.pos.x + (20.0f * racer->unk_C0.y.x);
-                        temp_fs5 = racer->segmentPositionInfo.pos.y + (20.0f * racer->unk_C0.y.y);
-                        temp_fv0_19 = racer->segmentPositionInfo.pos.z + (20.0f * racer->unk_C0.y.z);
+                        temp_fs4 = racer->segmentPositionInfo.pos.x + (20.0f * racer->trueBasis.y.x);
+                        temp_fs5 = racer->segmentPositionInfo.pos.y + (20.0f * racer->trueBasis.y.y);
+                        temp_fv0_19 = racer->segmentPositionInfo.pos.z + (20.0f * racer->trueBasis.y.z);
                         temp_fv1_7 = 1.0f / (player->unk_19C.ww +
                                              ((player->unk_19C.wx * temp_fs4) + (player->unk_19C.wy * temp_fs5) +
                                               (player->unk_19C.wz * temp_fv0_19)));
@@ -6645,11 +6663,11 @@ block_115:
                 }
             }
             if ((gGameMode == GAMEMODE_GP_RACE) && (sRivalRacer != NULL) && (sRivalRacer->machineLod != 0) &&
-                !(sRivalRacer->stateFlags & (RACER_STATE_CRASHED | RACER_STATE_FLAGS_2000000)) &&
+                !(sRivalRacer->stateFlags & (RACER_STATE_CRASHED | RACER_STATE_FINISHED)) &&
                 (gRacers[0].position >= sRivalRacer->position)) {
-                temp_fs4 = sRivalRacer->segmentPositionInfo.pos.x + (20.0f * sRivalRacer->unk_C0.y.x);
-                temp_fs5 = sRivalRacer->segmentPositionInfo.pos.y + (20.0f * sRivalRacer->unk_C0.y.y);
-                temp_fv0_19 = sRivalRacer->segmentPositionInfo.pos.z + (20.0f * sRivalRacer->unk_C0.y.z);
+                temp_fs4 = sRivalRacer->segmentPositionInfo.pos.x + (20.0f * sRivalRacer->trueBasis.y.x);
+                temp_fs5 = sRivalRacer->segmentPositionInfo.pos.y + (20.0f * sRivalRacer->trueBasis.y.y);
+                temp_fv0_19 = sRivalRacer->segmentPositionInfo.pos.z + (20.0f * sRivalRacer->trueBasis.y.z);
                 temp_fv1_7 =
                     1.0f / (player->unk_19C.ww + ((player->unk_19C.wx * temp_fs4) + (player->unk_19C.wy * temp_fs5) +
                                                   (player->unk_19C.wz * temp_fv0_19)));
