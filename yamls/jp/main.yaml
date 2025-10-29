@@ -100,7 +100,7 @@
       - [0x1C970, c, leo_fault]
       - [0x1D580, c, sys_fault]
       - [0x1E970, c]
-      - [0x1F320, c]
+      - [0x1F320, c, camera]
       - [0x27110, c]
       - [0x3BBB0, hasm, game/mio0Decode]
       - [0x3BC60, c, audio/synthesis]
@@ -319,7 +319,7 @@
       - [0x7A800, .data, 1C8F0]
       - [0x7A810, .data, leo_fault]
       - [0x7ACE0, .data, sys_fault]
-      - [0x7AEC0, .data, 1F320]
+      - [0x7AEC0, .data, camera]
       - [0x7B0C0, .data, 27110]
       - [0x7CB20, data]
       - [0x7DB20, .data, audio/filter_data]
@@ -423,7 +423,7 @@
       - [0x83630, .rodata, leo_fault]
       - [0x83670, .rodata, sys_fault]
       - [0x83BB0, .rodata, 1E970]
-      - [0x83BD0, .rodata, 1F320]
+      - [0x83BD0, .rodata, camera]
       - [0x846F0, .rodata, 27110]
       - [0x84970, .rodata, audio/synthesis]
       - [0x84990, .rodata, audio/heap]
@@ -485,7 +485,7 @@
       - { type: .bss, vram: 0x8079FC80, name: leo_fault }
       - { type: .bss, vram: 0x8079FE80, name: sys_fault }
       - { type: .bss, vram: 0x807A0870, name: 1E970 }
-      - { type: .bss, vram: 0x807A0930, name: 1F320 }
+      - { type: .bss, vram: 0x807A0930, name: camera }
       - { type: .bss, vram: 0x807A15D0, name: 27110 }
       - { type: bss, vram: 0x807B3C20, name: 807B3C20 }
       - { type: .bss, vram: 0x807C1BE0, name: audio/general }
