@@ -213,9 +213,13 @@ Gfx* func_i3_DrawCourseMinimap(Gfx* gfx, s32 numPlayersIndex, s32 playerIndex) {
             continue;
         }
         playerMarkerLeftPos =
-            Math_Round(((gRacers[i].unk_0C.unk_1C.x * 64.0f * minimapScale) / 16000.0f) + (64 * minimapScale)) / 2;
+            Math_Round(((gRacers[i].segmentPositionInfo.segmentPos.x * 64.0f * minimapScale) / 16000.0f) +
+                       (64 * minimapScale)) /
+            2;
         playerMarkerRightPos =
-            Math_Round(((gRacers[i].unk_0C.unk_1C.z * 64.0f * minimapScale) / 16000.0f) + (64 * minimapScale)) / 2;
+            Math_Round(((gRacers[i].segmentPositionInfo.segmentPos.z * 64.0f * minimapScale) / 16000.0f) +
+                       (64 * minimapScale)) /
+            2;
         playerMarkerLeftPos += left;
         playerMarkerRightPos += top;
         gDPPipeSync(gfx++);
@@ -248,9 +252,13 @@ Gfx* func_i3_DrawCourseMinimap(Gfx* gfx, s32 numPlayersIndex, s32 playerIndex) {
                 racer = gRacersByPosition[0];
             }
             playerMarkerLeftPos =
-                Math_Round(((racer->unk_0C.unk_1C.x * 64.0f * minimapScale) / 16000.0f) + (64 * minimapScale)) / 2;
+                Math_Round(((racer->segmentPositionInfo.segmentPos.x * 64.0f * minimapScale) / 16000.0f) +
+                           (64 * minimapScale)) /
+                2;
             playerMarkerRightPos =
-                Math_Round(((racer->unk_0C.unk_1C.z * 64.0f * minimapScale) / 16000.0f) + (64 * minimapScale)) / 2;
+                Math_Round(((racer->segmentPositionInfo.segmentPos.z * 64.0f * minimapScale) / 16000.0f) +
+                           (64 * minimapScale)) /
+                2;
             playerMarkerLeftPos += left;
             playerMarkerRightPos += top;
 
@@ -262,12 +270,14 @@ Gfx* func_i3_DrawCourseMinimap(Gfx* gfx, s32 numPlayersIndex, s32 playerIndex) {
         } else if (gFastestGhostRacer != NULL) {
             // Ghost Racer Marker
             playerMarkerLeftPos =
-                Math_Round(((gFastestGhostRacer->racer->unk_0C.unk_1C.x * 64.0f * minimapScale) / 16000.0f) +
-                           (64 * minimapScale)) /
+                Math_Round(
+                    ((gFastestGhostRacer->racer->segmentPositionInfo.segmentPos.x * 64.0f * minimapScale) / 16000.0f) +
+                    (64 * minimapScale)) /
                 2;
             playerMarkerRightPos =
-                Math_Round(((gFastestGhostRacer->racer->unk_0C.unk_1C.z * 64.0f * minimapScale) / 16000.0f) +
-                           (64 * minimapScale)) /
+                Math_Round(
+                    ((gFastestGhostRacer->racer->segmentPositionInfo.segmentPos.z * 64.0f * minimapScale) / 16000.0f) +
+                    (64 * minimapScale)) /
                 2;
             playerMarkerLeftPos += left;
             playerMarkerRightPos += top;
@@ -283,12 +293,14 @@ Gfx* func_i3_DrawCourseMinimap(Gfx* gfx, s32 numPlayersIndex, s32 playerIndex) {
             return gfx;
         }
 
-        playerMarkerLeftPos = Math_Round(((gRacers[playerIndex].unk_0C.unk_1C.x * 64.0f * minimapScale) / 16000.0f) +
-                                         (64 * minimapScale)) /
-                              2;
-        playerMarkerRightPos = Math_Round(((gRacers[playerIndex].unk_0C.unk_1C.z * 64.0f * minimapScale) / 16000.0f) +
-                                          (64 * minimapScale)) /
-                               2;
+        playerMarkerLeftPos =
+            Math_Round(((gRacers[playerIndex].segmentPositionInfo.segmentPos.x * 64.0f * minimapScale) / 16000.0f) +
+                       (64 * minimapScale)) /
+            2;
+        playerMarkerRightPos =
+            Math_Round(((gRacers[playerIndex].segmentPositionInfo.segmentPos.z * 64.0f * minimapScale) / 16000.0f) +
+                       (64 * minimapScale)) /
+            2;
         playerMarkerLeftPos += left;
         playerMarkerRightPos += top;
 

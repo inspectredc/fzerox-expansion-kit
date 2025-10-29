@@ -22,8 +22,8 @@
 
 #define CONT_MASK (CONT_A | CONT_B | CONT_G | CONT_START | CONT_UP | CONT_DOWN | CONT_LEFT | CONT_RIGHT | CONT_L | CONT_R | CONT_E | CONT_D | CONT_C | CONT_F)
 
-#define BTN_R_Z_COMBO 0x80    // 0x80 - Hold R Press Z
-#define BTN_Z_R_COMBO 0x40    // 0x40 - Hold Z Press R
+#define BTN_R_Z_COMBO 0x80    // 0x80 - Hold R Double Tap Z
+#define BTN_Z_R_COMBO 0x40    // 0x40 - Hold Z Double Tap R
 
 #define STICK_UP 0x80
 #define STICK_DOWN 0x40

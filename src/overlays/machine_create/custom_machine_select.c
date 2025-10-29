@@ -512,16 +512,17 @@ void func_xk3_80133BD4(Object* machineObj) {
     }
 
     for (j = 1; j >= 0; j--) {
-        gRacers[j].unk_0C.unk_34.x = gRacers[j].unk_0C.unk_34.y = gRacers[j].unk_0C.unk_34.z = 0.0f;
-        gRacers[j].unk_C0.x.z = 1.0f;
-        gRacers[j].unk_C0.y.y = 1.0f;
-        gRacers[j].unk_C0.z.x = 1.0f;
-        gRacers[j].unk_C0.x.x = 0.0f;
-        gRacers[j].unk_C0.y.z = 0.0f;
-        gRacers[j].unk_C0.z.y = 0.0f;
-        gRacers[j].unk_C0.x.y = 0.0f;
-        gRacers[j].unk_C0.y.x = 0.0f;
-        gRacers[j].unk_C0.z.z = 0.0f;
+        gRacers[j].segmentPositionInfo.pos.x = gRacers[j].segmentPositionInfo.pos.y =
+            gRacers[j].segmentPositionInfo.pos.z = 0.0f;
+        gRacers[j].trueBasis.x.z = 1.0f;
+        gRacers[j].trueBasis.y.y = 1.0f;
+        gRacers[j].trueBasis.z.x = 1.0f;
+        gRacers[j].trueBasis.x.x = 0.0f;
+        gRacers[j].trueBasis.y.z = 0.0f;
+        gRacers[j].trueBasis.z.y = 0.0f;
+        gRacers[j].trueBasis.x.y = 0.0f;
+        gRacers[j].trueBasis.y.x = 0.0f;
+        gRacers[j].trueBasis.z.z = 0.0f;
     }
 }
 
@@ -771,13 +772,13 @@ void func_xk3_80134B04(Object* machineObj) {
         } else {
             var_fv0 = 0.0f;
         }
-        racer->unk_C0.x.x += var_fv0 * racer->unk_C0.z.x;
-        racer->unk_C0.x.y += var_fv0 * racer->unk_C0.z.y;
-        racer->unk_C0.x.z += var_fv0 * racer->unk_C0.z.z;
-        func_806F6D8C(&racer->unk_C0);
-        Matrix_SetLockedLookAt(&gGfxPool->unk_32308[i], NULL, D_8076E568, D_8076E56C, D_8076E570, racer->unk_C0.x.x,
-                               racer->unk_C0.x.y, racer->unk_C0.x.z, racer->unk_C0.y.x, racer->unk_C0.y.y,
-                               racer->unk_C0.y.z, racer->unk_0C.unk_34.x, racer->unk_0C.unk_34.y,
-                               racer->unk_0C.unk_34.z);
+        racer->trueBasis.x.x += var_fv0 * racer->trueBasis.z.x;
+        racer->trueBasis.x.y += var_fv0 * racer->trueBasis.z.y;
+        racer->trueBasis.x.z += var_fv0 * racer->trueBasis.z.z;
+        func_806F6D8C(&racer->trueBasis);
+        Matrix_SetLockedLookAt(&gGfxPool->unk_32308[i], NULL, D_8076E568, D_8076E56C, D_8076E570, racer->trueBasis.x.x,
+                               racer->trueBasis.x.y, racer->trueBasis.x.z, racer->trueBasis.y.x, racer->trueBasis.y.y,
+                               racer->trueBasis.y.z, racer->segmentPositionInfo.pos.x, racer->segmentPositionInfo.pos.y,
+                               racer->segmentPositionInfo.pos.z);
     }
 }
