@@ -498,7 +498,7 @@ Gfx* func_i3_DrawTimeRectangle(Gfx* gfx, s32 numPlayersIndex, s32 playerIndex) {
 
 extern s32 gTotalLapCount;
 extern s16 D_807A16CC;
-extern s16 D_807A16E0;
+extern s16 gEnableRaceSfx;
 extern s8 gGamePaused;
 
 Gfx* func_i3_UpdatePlayerHudInfo(Gfx* gfx, s32 numPlayersIndex, s32 playerIndex) {
@@ -532,11 +532,11 @@ Gfx* func_i3_UpdatePlayerHudInfo(Gfx* gfx, s32 numPlayersIndex, s32 playerIndex)
         if ((gRacers[playerIndex].position != 1) || (gGameMode == GAMEMODE_TIME_ATTACK)) {
             D_i3_8006D678[playerIndex].lapIntervalCounter = 90;
         }
-        if ((lap == 2) && !sSecondLapStarted && (D_807A16E0 != 0) && (gGameMode != GAMEMODE_PRACTICE)) {
+        if ((lap == 2) && !sSecondLapStarted && gEnableRaceSfx && (gGameMode != GAMEMODE_PRACTICE)) {
             Audio_TriggerSystemSE(NA_SE_17);
             sSecondLapStarted = true;
         }
-        if ((lap == gTotalLapCount) && !sFinalLapStarted && (D_807A16E0 != 0) && (gGameMode != GAMEMODE_PRACTICE)) {
+        if ((lap == gTotalLapCount) && !sFinalLapStarted && gEnableRaceSfx && (gGameMode != GAMEMODE_PRACTICE)) {
             Audio_TriggerSystemSE(NA_SE_18);
             sFinalLapStarted = true;
         }

@@ -10,7 +10,7 @@ typedef struct RacerPairInfo {
     Racer* trailRacer;
     f32 trailToLeadDistance;
     f32 leadToTrailDistance;
-    s32 unk_10;
+    bool areColliding;
 } RacerPairInfo; // size = 0x14
 
 typedef enum CourseEffects {

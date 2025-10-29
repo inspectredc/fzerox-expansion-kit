@@ -291,7 +291,7 @@ typedef struct Racer {
     /* 0x0E4 */ f32 tiltUpInput;
     /* 0x0E8 */ Mtx3F modelBasis;
     /* 0x10C */ Vec3f modelPos;
-    /* 0x118 */ Vec3f recoilStrength;
+    /* 0x118 */ Vec3f recoilTilt;
     /* 0x124 */ MtxF modelMatrix;
     /* 0x164 */ s8 modelMatrixInit;
     /* 0x165 */ s8 shadowMatrixInit;
@@ -324,7 +324,7 @@ typedef struct Racer {
     /* 0x1E8 */ f32 unk_1E8;
     /* 0x1EC */ f32 unk_1EC;
     /* 0x1F0 */ f32 unk_1F0;
-    /* 0x1F4 */ f32 unk_1F4;
+    /* 0x1F4 */ f32 collidingStrength;
     /* 0x1F8 */ f32 unk_1F8;
     /* 0x1FC */ f32 unk_1FC;
     /* 0x200 */ f32 unk_200;
@@ -339,7 +339,7 @@ typedef struct Racer {
     /* 0x224 */ f32 pitForceFieldSize;
     /* 0x228 */ f32 energy;
     /* 0x22C */ f32 maxEnergy;
-    /* 0x230 */ f32 unk_230;
+    /* 0x230 */ f32 energyRegain;
     /* 0x234 */ f32 unk_234;
     /* 0x238 */ f32 unk_238;
     /* 0x23C */ f32 raceDistance;
