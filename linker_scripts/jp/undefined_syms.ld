@@ -1307,7 +1307,7 @@ aSetupLandmineTextureDL = 0x8022380;
 aSetupCourseEffectTextureDL = 0x80223F8;
 aJumpFeatureTex = 0x8015A20;
 
-D_80146A8 = 0x80146A8;
+aVpFullScreen = 0x80146A8;
 aVpTopHalf = 0x80146B8;
 aVpBottomHalf = 0x80146C8;
 aVpLeftHalf = 0x80146D8;

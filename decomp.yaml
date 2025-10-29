@@ -54,7 +54,7 @@ tools:
             - leo_fault
             - sys_fault
             - "1E970"
-            - "1F320"
+            - "camera"
             - "27110"
             - audio
             - libultra
