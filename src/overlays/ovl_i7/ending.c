@@ -198,7 +198,7 @@ void EndingCutscene_Init(void) {
     func_807160A0();
     func_8070F0B0(COURSE_CONTEXT()->courseData.venue, COURSE_CONTEXT()->courseData.skybox);
     func_i3_800617A0();
-    func_i2_800AB6B0();
+    Effects_Init();
     Course_LandminesViewInteractDataInit();
     Course_JumpsViewInteractDataInit();
     Course_DecorationsViewInteractDataInit();
@@ -364,7 +364,7 @@ s32 EndingCutscene_Update(void) {
 
     Controller_SetGlobalInputs(&gSharedController);
     D_i7_8009AD10 = &D_8009A3A0[D_8079A35C];
-    func_i2_800AB82C();
+    Effects_Update();
     func_80726554();
     func_80717294();
     func_i3_80061C2C();
@@ -1091,9 +1091,9 @@ void func_i7_8009580C(void) {
                     var_s2->unk_04 = 0;
                     var_s2->unk_08 = var_s4->unk_180.x;
                     var_s2->unk_10 = var_s4->unk_180.z;
-                    var_s2->unk_14 = var_s4->unk_C0.x.x;
-                    var_s2->unk_18 = var_s4->unk_C0.x.y;
-                    var_s2->unk_1C = var_s4->unk_C0.x.z;
+                    var_s2->unk_14 = var_s4->trueBasis.x.x;
+                    var_s2->unk_18 = var_s4->trueBasis.x.y;
+                    var_s2->unk_1C = var_s4->trueBasis.x.z;
                     Audio_TriggerSystemSE(NA_SE_64);
                 }
                 break;
@@ -1131,9 +1131,9 @@ void func_i7_8009580C(void) {
                     var_s2->unk_0C = D_i7_80098F38[i];
                     var_s2->unk_04 = 0;
                 }
-                temp_fv0 = (var_s2->unk_0C + 120.0f) - var_s4->unk_168.y;
+                temp_fv0 = (var_s2->unk_0C + 120.0f) - var_s4->shadowPos.y;
                 if (temp_fv0 > 0.0f) {
-                    var_s4->unk_A4 += temp_fv0;
+                    var_s4->podiumHeight += temp_fv0;
                 }
                 break;
         }

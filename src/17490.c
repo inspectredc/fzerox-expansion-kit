@@ -1050,16 +1050,16 @@ void func_8070DD88(void) {
     func_8070DC94();
 }
 
-extern s16 D_807A15F0[];
-extern s16 D_807A15F8[];
+extern s16 gPlayerCharacters[];
+extern s16 gPlayerMachineSkins[];
 
 void func_8070DE6C(void) {
     s32 i;
     s32 j;
 
     for (i = 3; i >= 0; i--) {
-        D_807A15F0[i] = i;
-        D_807A15F8[i] = 0;
+        gPlayerCharacters[i] = i;
+        gPlayerMachineSkins[i] = 0;
     }
 
     for (i = 0; i < 8; i++) {

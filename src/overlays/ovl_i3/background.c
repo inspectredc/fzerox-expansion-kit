@@ -1201,12 +1201,15 @@ void func_i3_80064AD4(s32 arg0, unk_80141FF0* arg1, Player* player) {
         if (temp_fs0 <= 0.0f) {
             var_v1->unk_04[arg0] = 0;
         } else {
-            temp_fa1 = player->unk_19C.xw + ((player->unk_19C.xx * temp_fv0) + (player->unk_19C.xy * temp_fv1) +
-                                             (player->unk_19C.xz * temp_fa0));
-            temp_ft4 = player->unk_19C.yw + ((player->unk_19C.yx * temp_fv0) + (player->unk_19C.yy * temp_fv1) +
-                                             (player->unk_19C.yz * temp_fa0));
-            temp_ft5 = player->unk_19C.ww + ((player->unk_19C.wx * temp_fv0) + (player->unk_19C.wy * temp_fv1) +
-                                             (player->unk_19C.wz * temp_fa0));
+            temp_fa1 = ((player->unk_19C.m[0][0] * temp_fv0) + (player->unk_19C.m[1][0] * temp_fv1) +
+                        (player->unk_19C.m[2][0] * temp_fa0)) +
+                       player->unk_19C.m[3][0];
+            temp_ft4 = ((player->unk_19C.m[0][1] * temp_fv0) + (player->unk_19C.m[1][1] * temp_fv1) +
+                        (player->unk_19C.m[2][1] * temp_fa0)) +
+                       player->unk_19C.m[3][1];
+            temp_ft5 = ((player->unk_19C.m[0][3] * temp_fv0) + (player->unk_19C.m[1][3] * temp_fv1) +
+                        (player->unk_19C.m[2][3] * temp_fa0)) +
+                       player->unk_19C.m[3][3];
             var_v1->unk_14[arg0][0] = player->unk_F0 + ((temp_fa1 * player->unk_E8) / temp_ft5);
             var_v1->unk_14[arg0][1] = player->unk_F4 - ((temp_ft4 * player->unk_EC) / temp_ft5);
             ptr = var_v1->unk_14[arg0];

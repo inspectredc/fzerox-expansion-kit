@@ -249,7 +249,7 @@ void func_xk2_800EC91C(void) {
     func_xk2_800F13C4();
     func_xk2_800EF8B0();
     D_xk2_800F7040 = 4;
-    D_800D6CA0.unk_0C = gRacers[0].unk_0C.courseSegment->next->segmentIndex;
+    D_800D6CA0.unk_0C = gRacers[0].segmentPositionInfo.courseSegment->next->segmentIndex;
 }
 
 extern s32 D_xk1_8003A550;
@@ -307,7 +307,7 @@ void func_xk2_800EC9BC(void) {
 
 s32 func_xk2_800ECBC0(void) {
     if (gGamePaused) {
-        func_i2_800AB82C();
+        Effects_Update();
         func_80726554();
         func_80717294();
         func_i3_80061C2C();
@@ -324,7 +324,7 @@ s32 func_xk2_800ECBC0(void) {
         Audio_TriggerSystemSE(NA_SE_12);
         Audio_PauseSet(AUDIO_PAUSE_PAUSED);
     } else {
-        func_i2_800AB82C();
+        Effects_Update();
         func_80726554();
         func_80717294();
         func_i3_80061C2C();
@@ -338,7 +338,7 @@ s32 func_xk2_800ECBC0(void) {
             Audio_TestRunStart();
             func_8071D48C();
             func_807160A0();
-            func_i2_800AB6B0();
+            Effects_Init();
             D_xk2_80103FF4 = 1;
             D_xk2_80103FF8 = 0;
         }
