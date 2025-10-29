@@ -588,7 +588,7 @@ s32 func_i2_800B10A8(RacerSegmentPositionInfo* arg0, f32 arg1, f32 arg2, f32 arg
 }
 
 #ifdef NON_EQUIVALENT
-void func_i2_800B1AF0(CourseSegment* arg0, f32* arg1, f32* arg2) {
+void func_i2_800B1AF0(CourseSegment* segment, f32* arg1, f32* arg2) {
     f64 temp_ft5;
     f64 temp_fs0;
     f64 temp_fs1;
@@ -606,24 +606,24 @@ void func_i2_800B1AF0(CourseSegment* arg0, f32* arg1, f32* arg2) {
     f64 temp_ft5_2;
     f64 temp_fv0_6;
     f64 temp_ft4;
-    CourseSegment* temp_v0 = arg0->prev;
-    CourseSegment* temp_v1 = arg0->next;
-    CourseSegment* temp_a1 = temp_v1->next;
+    CourseSegment* prevSegment = segment->prev;
+    CourseSegment* nextSegment = segment->next;
+    CourseSegment* nextNextSegment = nextSegment->next;
 
-    temp_ft5 = arg0->pos.x - temp_v1->pos.x;
-    temp_fs2 = temp_v0->pos.x - temp_a1->pos.x + temp_ft5;
-    temp_fs0 = arg0->pos.y - temp_v1->pos.y;
-    temp_fs3 = temp_v0->pos.y - temp_a1->pos.y + temp_fs0;
-    temp_fs1 = arg0->pos.z - temp_v1->pos.z;
-    temp_fs4 = temp_v0->pos.z - temp_a1->pos.z + temp_fs1;
+    temp_ft5 = segment->pos.x - nextSegment->pos.x;
+    temp_fs2 = prevSegment->pos.x - nextNextSegment->pos.x + temp_ft5;
+    temp_fs0 = segment->pos.y - nextSegment->pos.y;
+    temp_fs3 = prevSegment->pos.y - nextNextSegment->pos.y + temp_fs0;
+    temp_fs1 = segment->pos.z - nextSegment->pos.z;
+    temp_fs4 = prevSegment->pos.z - nextNextSegment->pos.z + temp_fs1;
 
     sp58 = ((temp_ft5 * temp_fs2) + (temp_fs0 * temp_fs3) + (temp_fs1 * temp_fs4)) * 0.75;
     spB0 = SQ(sp58);
     spA8 = (SQ(temp_ft5) + SQ(temp_fs0) + SQ(temp_fs1)) * 9.0;
 
-    temp_fv0_5 = temp_v1->pos.x - temp_v0->pos.x;
-    temp_fa0_3 = temp_v1->pos.y - temp_v0->pos.y;
-    temp_fa1_3 = temp_v1->pos.z - temp_v0->pos.z;
+    temp_fv0_5 = nextSegment->pos.x - prevSegment->pos.x;
+    temp_fa0_3 = nextSegment->pos.y - prevSegment->pos.y;
+    temp_fa1_3 = nextSegment->pos.z - prevSegment->pos.z;
     sp60 = (SQ(temp_fs2) + SQ(temp_fs3) + SQ(temp_fs4)) * 0.0625;
     sp48 = sp60 - SQ(temp_fv0_5) - SQ(temp_fa0_3) - SQ(temp_fa1_3);
     temp_ft5_2 = sp48 * spA8;
@@ -642,9 +642,9 @@ void func_i2_800B1AF0(CourseSegment* arg0, f32* arg1, f32* arg2) {
         *arg1 = -1.0f;
     }
 
-    temp_fv0_5 = temp_a1->pos.x - arg0->pos.x;
-    temp_fa0_3 = temp_a1->pos.y - arg0->pos.y;
-    temp_fa1_3 = temp_a1->pos.z - arg0->pos.z;
+    temp_fv0_5 = nextNextSegment->pos.x - segment->pos.x;
+    temp_fa0_3 = nextNextSegment->pos.y - segment->pos.y;
+    temp_fa1_3 = nextNextSegment->pos.z - segment->pos.z;
     sp48 = sp60 - SQ(temp_fv0_5) - SQ(temp_fa0_3) - SQ(temp_fa1_3);
     temp_ft5_2 = sp48 * spA8;
     if (temp_ft5_2 <= spB0) {

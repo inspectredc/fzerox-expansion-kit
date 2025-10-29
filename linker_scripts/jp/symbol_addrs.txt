@@ -240,6 +240,7 @@ gPlayerRacersRetired = 0x807A16D8;
 gPlayerRacersFinished = 0x807A16DA;
 sLastMultiplayerTotalRacerCount = 0x807A16DC;
 sLastMultiplayerPlayerCount = 0x807A16DE;
+gEnableRaceSfx = 0x807A16E0;
 gRacersKOd = 0x807A16E2;
 sRaceFrameCount = 0x807A16E8;
 gPracticeBestLap = 0x807A16EC;
