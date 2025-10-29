@@ -245,7 +245,7 @@ extern u8 D_xk1_800333F0;
 extern s8 gSettingEverythingUnlocked;
 
 void func_xk3_80132F50(void) {
-    func_807160A0();
+    Camera_Init();
     gGreyscaleMachinePart = true;
     func_8071EB18();
     if (D_xk1_800333F0 != 0) {
@@ -260,7 +260,7 @@ void func_xk3_80132F50(void) {
     if (sMachinesUnlocked > 30) {
         sMachinesUnlocked = 30;
     }
-    func_80717294();
+    Camera_Update();
 }
 
 extern u16 gInputPressed;
@@ -428,7 +428,7 @@ extern s32 sMachineSelectIndex;
 
 void MachineCreate_MachineSelectUpdate(void) {
 
-    func_80717294();
+    Camera_Update();
     MachineCreate_MachineSelectHandleStickInputs();
 
     if (gControllers[gPlayerControlPorts[0]].buttonPressed & BTN_A) {
@@ -627,7 +627,7 @@ Gfx* func_xk3_8013430C(Gfx* gfx, s32 characterSlot) {
     return gfx;
 }
 
-extern Player gPlayers[];
+extern Camera gCameras[];
 extern GfxPool D_1000000;
 extern GfxPool* gGfxPool;
 
@@ -641,7 +641,7 @@ Gfx* func_xk3_80134408(Gfx* gfx, Object* machineObj) {
     gfx = Segment_SetTableAddresses(gfx);
     gSPClipRatio(gfx++, FRUSTRATIO_3);
 
-    gSPPerspNormalize(gfx++, gPlayers[0].unk_118);
+    gSPPerspNormalize(gfx++, gCameras[0].perspectiveScale);
 
     gSPMatrix(gfx++, &D_1000000.unk_1A208[0], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
     gSPDisplayList(gfx++, D_303A5F8);
@@ -775,7 +775,7 @@ void func_xk3_80134B04(Object* machineObj) {
         racer->trueBasis.x.x += var_fv0 * racer->trueBasis.z.x;
         racer->trueBasis.x.y += var_fv0 * racer->trueBasis.z.y;
         racer->trueBasis.x.z += var_fv0 * racer->trueBasis.z.z;
-        func_806F6D8C(&racer->trueBasis);
+        Math_OrthonormalizeAroundForward(&racer->trueBasis);
         Matrix_SetLockedLookAt(&gGfxPool->unk_32308[i], NULL, D_8076E568, D_8076E56C, D_8076E570, racer->trueBasis.x.x,
                                racer->trueBasis.x.y, racer->trueBasis.x.z, racer->trueBasis.y.x, racer->trueBasis.y.y,
                                racer->trueBasis.y.z, racer->segmentPositionInfo.pos.x, racer->segmentPositionInfo.pos.y,

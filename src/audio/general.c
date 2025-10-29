@@ -1779,7 +1779,7 @@ void Audio_LevelSEPopStack(u8 playerIndex) {
     }
 }
 
-extern Player gPlayers[];
+extern Camera gCameras[];
 
 void Audio_PlayerSEStart(u8 racerId, u8 sfxId) {
     f32 volumeScale;
@@ -1811,9 +1811,9 @@ void Audio_PlayerSEStart(u8 racerId, u8 sfxId) {
                 if (racerId == sAudioClosestRacerId) {
                     distance = sAudioClosestRacerDistance;
                 } else {
-                    vec.x = gRacers[racerId].segmentPositionInfo.pos.x - gPlayers[0].unk_50.x;
-                    vec.y = gRacers[racerId].segmentPositionInfo.pos.y - gPlayers[0].unk_50.y;
-                    vec.z = gRacers[racerId].segmentPositionInfo.pos.z - gPlayers[0].unk_50.z;
+                    vec.x = gRacers[racerId].segmentPositionInfo.pos.x - gCameras[0].eye.x;
+                    vec.y = gRacers[racerId].segmentPositionInfo.pos.y - gCameras[0].eye.y;
+                    vec.z = gRacers[racerId].segmentPositionInfo.pos.z - gCameras[0].eye.z;
 
                     distance = sqrtf(SQ_SUM(&vec));
                 }
@@ -1988,9 +1988,9 @@ void Audio_UpdateEnemyEngine(void) {
     if (((gGameMode == GAMEMODE_GP_RACE) || (gGameMode == GAMEMODE_PRACTICE) || (gGameMode == GAMEMODE_DEATH_RACE)) &&
         !sAudioLevelFadeoutActive && (gAudioPlayerFinishedState[0] == 0)) {
         if (gRacers[sAudioClosestRacerId].unk_17C > 9.0f) {
-            vec.x = gRacers[sAudioClosestRacerId].segmentPositionInfo.pos.x - gPlayers[0].unk_50.x;
-            vec.y = gRacers[sAudioClosestRacerId].segmentPositionInfo.pos.y - gPlayers[0].unk_50.y;
-            vec.z = gRacers[sAudioClosestRacerId].segmentPositionInfo.pos.z - gPlayers[0].unk_50.z;
+            vec.x = gRacers[sAudioClosestRacerId].segmentPositionInfo.pos.x - gCameras[0].eye.x;
+            vec.y = gRacers[sAudioClosestRacerId].segmentPositionInfo.pos.y - gCameras[0].eye.y;
+            vec.z = gRacers[sAudioClosestRacerId].segmentPositionInfo.pos.z - gCameras[0].eye.z;
             sAudioClosestRacerDistance = sqrtf(SQ_SUM(&vec));
         }
         if (gRacers[sAudioClosestRacerId].unk_17C > 9.0f) {
@@ -2089,9 +2089,9 @@ void func_807447CC(u8 playerId) {
             Vec3f vec;
             f32 temp;
 
-            vec.x = gRacers[playerId].segmentPositionInfo.pos.x - gPlayers[playerId].unk_50.x;
-            vec.y = gRacers[playerId].segmentPositionInfo.pos.y - gPlayers[playerId].unk_50.y;
-            vec.z = gRacers[playerId].segmentPositionInfo.pos.z - gPlayers[playerId].unk_50.z;
+            vec.x = gRacers[playerId].segmentPositionInfo.pos.x - gCameras[playerId].eye.x;
+            vec.y = gRacers[playerId].segmentPositionInfo.pos.y - gCameras[playerId].eye.y;
+            vec.z = gRacers[playerId].segmentPositionInfo.pos.z - gCameras[playerId].eye.z;
             temp = sqrtf(SQ_SUM(&vec));
             volumeScale = (-0.002f * temp + 1.2f) * 0.65f;
 
@@ -2108,9 +2108,9 @@ void func_807447CC(u8 playerId) {
         Vec3f vec;
         f32 temp;
 
-        vec.x = gRacers[playerId].segmentPositionInfo.pos.x - gPlayers[playerId].unk_50.x;
-        vec.y = gRacers[playerId].segmentPositionInfo.pos.y - gPlayers[playerId].unk_50.y;
-        vec.z = gRacers[playerId].segmentPositionInfo.pos.z - gPlayers[playerId].unk_50.z;
+        vec.x = gRacers[playerId].segmentPositionInfo.pos.x - gCameras[playerId].eye.x;
+        vec.y = gRacers[playerId].segmentPositionInfo.pos.y - gCameras[playerId].eye.y;
+        vec.z = gRacers[playerId].segmentPositionInfo.pos.z - gCameras[playerId].eye.z;
         temp = sqrtf(SQ_SUM(&vec));
         volumeScale = -0.002f * temp + 1.2f;
 

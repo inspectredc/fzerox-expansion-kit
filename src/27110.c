@@ -747,6 +747,7 @@ void func_80719F9C(Racer* racer) {
     }
 }
 
+// Stop racer sfx
 void func_8071A17C(Racer* racer) {
 
     if (gEnableRaceSfx) {
@@ -1124,7 +1125,7 @@ void func_8071B748(void) {
 
         if (racer->stateFlags & RACER_STATE_CRASHED) {
             racer->raceTime = 0;
-        } else if (racer->stateFlags & RACER_STATE_FLAGS_80000) {
+        } else if (racer->stateFlags & RACER_STATE_FALLING_OFF_TRACK) {
             racer->stateFlags &= ~RACER_STATE_ACTIVE;
             racer->stateFlags |= RACER_STATE_CRASHED;
             D_807A16D0++;
@@ -2493,7 +2494,7 @@ void func_8071FE24(Racer* racer) {
     func_8071F6F8(racer, 210.0f);
 }
 
-extern f32 D_i2_800C18F8[];
+extern f32 gTrackJoinUpperLength[];
 
 void func_8071FE44(Racer* racer) {
     f32 pipeRadius;
@@ -2577,12 +2578,15 @@ void func_8071FE44(Racer* racer) {
             racer->upFromGround.y = racer->segmentBasis.y.y;
             racer->upFromGround.z = racer->segmentBasis.y.z;
 
-            racer->tiltUp.x = (D_i2_800C18F8[TRACK_SHAPE_INDEX(TRACK_SHAPE_HALF_PIPE)] * racer->segmentBasis.y.x) +
-                              (var_fs0 * racer->segmentBasis.x.x);
-            racer->tiltUp.y = (D_i2_800C18F8[TRACK_SHAPE_INDEX(TRACK_SHAPE_HALF_PIPE)] * racer->segmentBasis.y.y) +
-                              (var_fs0 * racer->segmentBasis.x.y);
-            racer->tiltUp.z = (D_i2_800C18F8[TRACK_SHAPE_INDEX(TRACK_SHAPE_HALF_PIPE)] * racer->segmentBasis.y.z) +
-                              (var_fs0 * racer->segmentBasis.x.z);
+            racer->tiltUp.x =
+                (gTrackJoinUpperLength[TRACK_SHAPE_INDEX(TRACK_SHAPE_HALF_PIPE)] * racer->segmentBasis.y.x) +
+                (var_fs0 * racer->segmentBasis.x.x);
+            racer->tiltUp.y =
+                (gTrackJoinUpperLength[TRACK_SHAPE_INDEX(TRACK_SHAPE_HALF_PIPE)] * racer->segmentBasis.y.y) +
+                (var_fs0 * racer->segmentBasis.x.y);
+            racer->tiltUp.z =
+                (gTrackJoinUpperLength[TRACK_SHAPE_INDEX(TRACK_SHAPE_HALF_PIPE)] * racer->segmentBasis.y.z) +
+                (var_fs0 * racer->segmentBasis.x.z);
 
             var_fv1 = 1.0f / sqrtf(SQ(racer->tiltUp.x) + SQ(racer->tiltUp.y) + SQ(racer->tiltUp.z));
 
@@ -2960,12 +2964,15 @@ void func_80720E2C(Racer* racer) {
             racer->upFromGround.x = racer->segmentBasis.y.x;
             racer->upFromGround.y = racer->segmentBasis.y.y;
             racer->upFromGround.z = racer->segmentBasis.y.z;
-            racer->tiltUp.x = (D_i2_800C18F8[TRACK_SHAPE_INDEX(TRACK_SHAPE_HALF_PIPE)] * racer->upFromGround.x) +
-                              (var_fs0 * racer->segmentBasis.x.x);
-            racer->tiltUp.y = (D_i2_800C18F8[TRACK_SHAPE_INDEX(TRACK_SHAPE_HALF_PIPE)] * racer->upFromGround.y) +
-                              (var_fs0 * racer->segmentBasis.x.y);
-            racer->tiltUp.z = (D_i2_800C18F8[TRACK_SHAPE_INDEX(TRACK_SHAPE_HALF_PIPE)] * racer->upFromGround.z) +
-                              (var_fs0 * racer->segmentBasis.x.z);
+            racer->tiltUp.x =
+                (gTrackJoinUpperLength[TRACK_SHAPE_INDEX(TRACK_SHAPE_HALF_PIPE)] * racer->upFromGround.x) +
+                (var_fs0 * racer->segmentBasis.x.x);
+            racer->tiltUp.y =
+                (gTrackJoinUpperLength[TRACK_SHAPE_INDEX(TRACK_SHAPE_HALF_PIPE)] * racer->upFromGround.y) +
+                (var_fs0 * racer->segmentBasis.x.y);
+            racer->tiltUp.z =
+                (gTrackJoinUpperLength[TRACK_SHAPE_INDEX(TRACK_SHAPE_HALF_PIPE)] * racer->upFromGround.z) +
+                (var_fs0 * racer->segmentBasis.x.z);
 
             temp_fv1 = 1.0f / sqrtf(SQ(racer->tiltUp.x) + SQ(racer->tiltUp.y) + SQ(racer->tiltUp.z));
 
@@ -3240,7 +3247,7 @@ void func_80721CA8(Racer* racer) {
     if (!(racer->stateFlags & (RACER_STATE_CRASHED | RACER_STATE_SPINNING_OUT))) {
         func_8071ED54(racer, 120);
     }
-    racer->stateFlags = (racer->stateFlags & ~RACER_STATE_FLAGS_400000) | RACER_STATE_FLAGS_80000;
+    racer->stateFlags = (racer->stateFlags & ~RACER_STATE_FLAGS_400000) | RACER_STATE_FALLING_OFF_TRACK;
 
     if ((racer->id < gNumPlayers) && gEnableRaceSfx) {
         if (sCharacterVoices[racer->character] != VOICE_FEMALE) {
@@ -4062,7 +4069,7 @@ void func_80721D78(Racer* racer, Controller* controller) {
     racer->velocity.y += racer->acceleration.y;
     racer->velocity.z += racer->acceleration.z;
     racer->speed = sqrtf(SQ(racer->velocity.x) + SQ(racer->velocity.y) + SQ(racer->velocity.z));
-    if (racer->stateFlags & RACER_STATE_FLAGS_80000) {
+    if (racer->stateFlags & RACER_STATE_FALLING_OFF_TRACK) {
         racer->velocity.x *= 0.94f;
         racer->velocity.z *= 0.94f;
         racer->segmentPositionInfo.pos.x += racer->velocity.x;
@@ -4086,7 +4093,7 @@ void func_80721D78(Racer* racer, Controller* controller) {
             if (racer->id < gNumPlayers) {
                 func_8071A17C(racer);
             }
-            if ((racer->id < gNumPlayers) || (gRacers[0].stateFlags & RACER_STATE_FLAGS_80000)) {
+            if ((racer->id < gNumPlayers) || (gRacers[0].stateFlags & RACER_STATE_FALLING_OFF_TRACK)) {
                 Effects_SpawnExplosion1(racer->segmentPositionInfo.pos.x, racer->segmentPositionInfo.pos.y,
                                         racer->segmentPositionInfo.pos.z, 0.0f, 0.0f, 0.0f, 600.0f, racer);
                 if (gEnableRaceSfx) {
@@ -4190,7 +4197,7 @@ void func_80721D78(Racer* racer, Controller* controller) {
                                               (racer->segmentBasis.x.y * racer->segmentBasis.z.x);
                 }
             }
-            if (!(racer->stateFlags & (RACER_STATE_CRASHED | RACER_STATE_FINISHED | RACER_STATE_FLAGS_80000)) &&
+            if (!(racer->stateFlags & (RACER_STATE_CRASHED | RACER_STATE_FINISHED | RACER_STATE_FALLING_OFF_TRACK)) &&
                 (gRaceIntroTimer < 40) && (gGameMode != GAMEMODE_RECORDS)) {
 
                 sp128 -= racer->lapDistance;
@@ -4274,7 +4281,7 @@ void func_80721D78(Racer* racer, Controller* controller) {
     racer->trueBasis.y.x += 0.19f * racer->tiltUp.x;
     racer->trueBasis.y.y += 0.19f * racer->tiltUp.y;
     racer->trueBasis.y.z += 0.19f * racer->tiltUp.z;
-    if (func_806F6F64(&racer->trueBasis) != 0) {
+    if (Math_OrthonormalizeAroundUp(&racer->trueBasis) != 0) {
         racer->trueBasis = spE8;
     }
     if (racer->unk_198 != 0.0f) {
@@ -4828,7 +4835,7 @@ void func_8072643C(Racer* racer) {
 extern GfxPool* gGfxPool;
 extern s8 gGamePaused;
 extern s32 gFastestGhostTime;
-extern Player gPlayers[];
+extern Camera gCameras[];
 
 void func_80726554(void) {
     f32 xVelocityDiff;
@@ -4853,7 +4860,7 @@ void func_80726554(void) {
     Racer* racer;
     Racer* racer2;
     bool spC0;
-    Player* player;
+    Camera* camera;
 
     sRaceFrameCount++;
     spC0 = false;
@@ -4903,14 +4910,14 @@ void func_80726554(void) {
 
         for (i = gNumPlayers - 1; i >= 0; i--) {
             racer2 = &gRacers[i];
-            player = &gPlayers[i];
-            spCC.x.x = -player->unk_5C.x.x;
-            spCC.x.y = -player->unk_5C.x.y;
-            spCC.x.z = -player->unk_5C.x.z;
+            camera = &gCameras[i];
+            spCC.x.x = -camera->basis.x.x;
+            spCC.x.y = -camera->basis.x.y;
+            spCC.x.z = -camera->basis.x.z;
             spCC.y.x = racer2->trueBasis.y.x;
             spCC.y.y = racer2->trueBasis.y.y;
             spCC.y.z = racer2->trueBasis.y.z;
-            func_806F6F64(&spCC);
+            Math_OrthonormalizeAroundUp(&spCC);
             if (gRaceIntroTimer > 220) {
                 var_fs0 = (gRaceIntroTimer - 220) / 240.0f;
             } else if (gRaceIntroTimer > 30) {
@@ -4924,13 +4931,13 @@ void func_80726554(void) {
                                    spCC.y.x, spCC.y.y, spCC.y.z,
                                    (racer2->segmentPositionInfo.pos.x + (var_fs2 * racer2->trueBasis.y.x) +
                                     (50.0f * racer2->trueBasis.x.x)) -
-                                       (var_fs0 * player->unk_5C.x.x),
+                                       (var_fs0 * camera->basis.x.x),
                                    (racer2->segmentPositionInfo.pos.y + (var_fs2 * racer2->trueBasis.y.y) +
                                     (50.0f * racer2->trueBasis.x.y)) -
-                                       (var_fs0 * player->unk_5C.x.y),
+                                       (var_fs0 * camera->basis.x.y),
                                    (racer2->segmentPositionInfo.pos.z + (var_fs2 * racer2->trueBasis.y.z) +
                                     (50.0f * racer2->trueBasis.x.z)) -
-                                       (var_fs0 * player->unk_5C.x.z));
+                                       (var_fs0 * camera->basis.x.z));
         }
     }
 
@@ -5131,7 +5138,7 @@ void func_80726554(void) {
         racer2 = &gRacers[i];
         if ((racer2->maxSpeed < racer2->speed) &&
             !(racer2->stateFlags &
-              (RACER_STATE_CRASHED | RACER_STATE_AIRBORNE | RACER_STATE_FINISHED | RACER_STATE_FLAGS_80000)) &&
+              (RACER_STATE_CRASHED | RACER_STATE_AIRBORNE | RACER_STATE_FINISHED | RACER_STATE_FALLING_OFF_TRACK)) &&
             (D_807B37B8[i] == 0)) {
             racer2->maxSpeed = racer2->speed;
         }
@@ -5221,7 +5228,7 @@ void func_80726554(void) {
                     racer->trueBasis.y.x += 0.19f * racer->tiltUp.x;
                     racer->trueBasis.y.y += 0.19f * racer->tiltUp.y;
                     racer->trueBasis.y.z += 0.19f * racer->tiltUp.z;
-                    if (func_806F6F64(&racer->trueBasis) != 0) {
+                    if (Math_OrthonormalizeAroundUp(&racer->trueBasis) != 0) {
                         racer->trueBasis = spCC;
                     }
 
@@ -5253,7 +5260,7 @@ void func_80726554(void) {
                     racer->modelBasis.y.x += 0.19f * (racer->trueBasis.y.x + (var_fs0 * racer->trueBasis.z.x));
                     racer->modelBasis.y.y += 0.19f * (racer->trueBasis.y.y + (var_fs0 * racer->trueBasis.z.y));
                     racer->modelBasis.y.z += 0.19f * (racer->trueBasis.y.z + (var_fs0 * racer->trueBasis.z.z));
-                    func_806F6D8C(&racer->modelBasis);
+                    Math_OrthonormalizeAroundForward(&racer->modelBasis);
                     if (ghostRacer->ghost->replayEnd < ghostRacer->replayIndex) {
                         if (ghostRacer->scale != 0.f) {
                             ghostRacer->scale -= 0.02f;
@@ -5277,7 +5284,7 @@ void func_80726554(void) {
             racer2 = &gRacers[i];
             if ((((racer2->segmentBasis.x.x * racer2->velocity.x) + (racer2->segmentBasis.x.y * racer2->velocity.y) +
                   (racer2->segmentBasis.x.z * racer2->velocity.z)) < -0.3f) &&
-                !(racer2->stateFlags & (RACER_STATE_CRASHED | RACER_STATE_FLAGS_80000))) {
+                !(racer2->stateFlags & (RACER_STATE_CRASHED | RACER_STATE_FALLING_OFF_TRACK))) {
                 D_807B37B8[i]++;
                 if (D_807B37B8[i] == 100) {
                     Audio_TriggerSystemSE(NA_SE_60);
@@ -5383,7 +5390,7 @@ Gfx* func_80727F54(Gfx* gfx, s32 playerIndex) {
     s32 var_s3; // sp5CC
     s32 var_s4; // sp5C8
     s32 sp5C4;
-    Player* player;
+    Camera* camera;
     MtxF sp580;
     Racer* playerRacer;
     Racer* racer;
@@ -5421,35 +5428,37 @@ Gfx* func_80727F54(Gfx* gfx, s32 playerIndex) {
     GhostRacer* sp4F8;
     TexturePtr var_s2;
 
-    player = &gPlayers[playerIndex];
+    camera = &gCameras[playerIndex];
 
-    sp56C = (player->unk_5C.x.x * 100.0f) - player->unk_50.x;
-    sp568 = (player->unk_5C.x.y * 100.0f) - player->unk_50.y;
-    sp564 = (player->unk_5C.x.z * 100.0f) - player->unk_50.z;
+    sp56C = (camera->basis.x.x * 100.0f) - camera->eye.x;
+    sp568 = (camera->basis.x.y * 100.0f) - camera->eye.y;
+    sp564 = (camera->basis.x.z * 100.0f) - camera->eye.z;
 
-    sp580.m[3][2] = player->unk_11C.m[3][2] -
-                    (player->unk_11C.m[2][2] *
-                     (sp580.m[3][3] = ((-sp56C * player->unk_15C.m[0][2]) - (sp568 * player->unk_15C.m[1][2])) -
-                                      (sp564 * player->unk_15C.m[2][2])));
-    sp580.m[3][0] = (player->unk_11C.m[0][0] * ((sp56C * player->unk_15C.m[0][0]) + (sp568 * player->unk_15C.m[1][0]) +
-                                                (sp564 * player->unk_15C.m[2][0]))) -
-                    (player->unk_11C.m[2][0] * sp580.m[3][3]);
-    sp580.m[3][1] = (player->unk_11C.m[1][1] * ((sp56C * player->unk_15C.m[0][1]) + (sp568 * player->unk_15C.m[1][1]) +
-                                                (sp564 * player->unk_15C.m[2][1]))) -
-                    (player->unk_11C.m[2][1] * sp580.m[3][3]);
+    sp580.m[3][2] = camera->projectionMtx.m[3][2] -
+                    (camera->projectionMtx.m[2][2] *
+                     (sp580.m[3][3] = ((-sp56C * camera->viewMtx.m[0][2]) - (sp568 * camera->viewMtx.m[1][2])) -
+                                      (sp564 * camera->viewMtx.m[2][2])));
+    sp580.m[3][0] =
+        (camera->projectionMtx.m[0][0] *
+         ((sp56C * camera->viewMtx.m[0][0]) + (sp568 * camera->viewMtx.m[1][0]) + (sp564 * camera->viewMtx.m[2][0]))) -
+        (camera->projectionMtx.m[2][0] * sp580.m[3][3]);
+    sp580.m[3][1] =
+        (camera->projectionMtx.m[1][1] *
+         ((sp56C * camera->viewMtx.m[0][1]) + (sp568 * camera->viewMtx.m[1][1]) + (sp564 * camera->viewMtx.m[2][1]))) -
+        (camera->projectionMtx.m[2][1] * sp580.m[3][3]);
 
-    sp580.m[0][0] = player->unk_19C.m[0][0];
-    sp580.m[0][1] = player->unk_19C.m[0][1];
-    sp580.m[0][2] = player->unk_19C.m[0][2];
-    sp580.m[0][3] = player->unk_19C.m[0][3];
-    sp580.m[1][0] = player->unk_19C.m[1][0];
-    sp580.m[1][1] = player->unk_19C.m[1][1];
-    sp580.m[1][2] = player->unk_19C.m[1][2];
-    sp580.m[1][3] = player->unk_19C.m[1][3];
-    sp580.m[2][0] = player->unk_19C.m[2][0];
-    sp580.m[2][1] = player->unk_19C.m[2][1];
-    sp580.m[2][2] = player->unk_19C.m[2][2];
-    sp580.m[2][3] = player->unk_19C.m[2][3];
+    sp580.m[0][0] = camera->projectionViewMtx.m[0][0];
+    sp580.m[0][1] = camera->projectionViewMtx.m[0][1];
+    sp580.m[0][2] = camera->projectionViewMtx.m[0][2];
+    sp580.m[0][3] = camera->projectionViewMtx.m[0][3];
+    sp580.m[1][0] = camera->projectionViewMtx.m[1][0];
+    sp580.m[1][1] = camera->projectionViewMtx.m[1][1];
+    sp580.m[1][2] = camera->projectionViewMtx.m[1][2];
+    sp580.m[1][3] = camera->projectionViewMtx.m[1][3];
+    sp580.m[2][0] = camera->projectionViewMtx.m[2][0];
+    sp580.m[2][1] = camera->projectionViewMtx.m[2][1];
+    sp580.m[2][2] = camera->projectionViewMtx.m[2][2];
+    sp580.m[2][3] = camera->projectionViewMtx.m[2][3];
     if (gGameMode == GAMEMODE_GP_END_CS || gGameMode == GAMEMODE_COURSE_EDIT) {
         for (racer = sLastRacer; racer >= gRacers; racer--) {
             racer->machineLod = racer->unk_2B2 = 1;
@@ -5748,9 +5757,9 @@ block_115:
         var_s4 = gCurrentCourseInfo->unk_14[5];
     }
     if (gGameMode != GAMEMODE_GP_END_CS) {
-        gGfxPool->unk_33AE8[playerIndex].l.unk_08[0] = Math_Round((sp560 - player->unk_5C.x.x) * 16383.0f);
-        gGfxPool->unk_33AE8[playerIndex].l.unk_08[1] = Math_Round((sp55C - player->unk_5C.x.y) * 16383.0f);
-        gGfxPool->unk_33AE8[playerIndex].l.unk_08[2] = Math_Round((sp558 - player->unk_5C.x.z) * 16383.0f);
+        gGfxPool->unk_33AE8[playerIndex].l.unk_08[0] = Math_Round((sp560 - camera->basis.x.x) * 16383.0f);
+        gGfxPool->unk_33AE8[playerIndex].l.unk_08[1] = Math_Round((sp55C - camera->basis.x.y) * 16383.0f);
+        gGfxPool->unk_33AE8[playerIndex].l.unk_08[2] = Math_Round((sp558 - camera->basis.x.z) * 16383.0f);
         gSPDmaRead(gfx++, 0x8B0, D_8076E1F0, ARRAY_COUNT(D_8076E1F0));
         gSPLookAtY(gfx++, &D_1000000.unk_33AE8[playerIndex]);
         gDPSetFogColor(gfx++, var_s3, sp5C4, var_s4, 255);
@@ -5775,7 +5784,7 @@ block_115:
     }
     if (gGameMode == GAMEMODE_GP_END_CS) {
         gSPDisplayList(gfx++, D_90186C8);
-        Light_SetLookAtSource(&gGfxPool->unk_33B28, &player->unk_15C);
+        Light_SetLookAtSource(&gGfxPool->unk_33B28, &camera->viewMtx);
         gSPLookAt(gfx++, &gGfxPool->unk_33B28);
         gSPTexture(gfx++, D_8076E588, D_8076E588, 0, G_TX_RENDERTILE, G_ON);
 
@@ -5794,13 +5803,13 @@ block_115:
         gDPSetTile(gfx++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0x0000, G_TX_RENDERTILE, 0, G_TX_MIRROR | G_TX_WRAP, 5,
                    G_TX_NOLOD, G_TX_MIRROR | G_TX_WRAP, 5, G_TX_NOLOD);
 
-        D_807B37AC += ((player->unk_5C.z.x * gRacers->velocity.x) + (player->unk_5C.z.y * gRacers->velocity.y) +
-                       (player->unk_5C.z.z * gRacers->velocity.z)) *
+        D_807B37AC += ((camera->basis.z.x * gRacers->velocity.x) + (camera->basis.z.y * gRacers->velocity.y) +
+                       (camera->basis.z.z * gRacers->velocity.z)) *
                       D_8076E58C;
         var_s7 = (s32) (D_807B37AC * 4.0f) & 0xFF;
 
-        D_807B37B0 += ((player->unk_5C.y.x * gRacers->velocity.x) + (player->unk_5C.y.y * gRacers->velocity.y) +
-                       (player->unk_5C.y.z * gRacers->velocity.z)) *
+        D_807B37B0 += ((camera->basis.y.x * gRacers->velocity.x) + (camera->basis.y.y * gRacers->velocity.y) +
+                       (camera->basis.y.z * gRacers->velocity.z)) *
                       D_8076E58C;
         sp5C4 = (s32) (D_807B37B0 * 4.0f) & 0xFF;
 
@@ -5855,12 +5864,12 @@ block_115:
             gSPDisplayList(gfx++, D_8076DBD0[racer->machineIndex * 6 + racer->machineLod - 1]);
         }
     }
-    sp560 = player->unk_5C.z.x;
-    sp55C = player->unk_5C.z.y;
-    sp558 = player->unk_5C.z.z;
-    sp56C = player->unk_5C.y.x;
-    sp568 = player->unk_5C.y.y;
-    sp564 = player->unk_5C.y.z;
+    sp560 = camera->basis.z.x;
+    sp55C = camera->basis.z.y;
+    sp558 = camera->basis.z.z;
+    sp56C = camera->basis.y.x;
+    sp568 = camera->basis.y.y;
+    sp564 = camera->basis.y.z;
 
     gSPDisplayList(gfx++, aSetupBoosterDL);
 
@@ -6565,21 +6574,25 @@ block_115:
                 temp_fs4 = racer->segmentPositionInfo.pos.x + (20.0f * racer->trueBasis.y.x);
                 temp_fs5 = racer->segmentPositionInfo.pos.y + (20.0f * racer->trueBasis.y.y);
                 sp54C = racer->segmentPositionInfo.pos.z + (20.0f * racer->trueBasis.y.z);
-                sp574 = 1.0f / (((player->unk_19C.m[0][3] * temp_fs4) + (player->unk_19C.m[1][3] * temp_fs5) +
-                                 (player->unk_19C.m[2][3] * sp54C)) +
-                                player->unk_19C.m[3][3]);
-                sp56C = (((player->unk_19C.m[0][0] * temp_fs4) + (player->unk_19C.m[1][0] * temp_fs5) +
-                          (player->unk_19C.m[2][0] * sp54C)) +
-                         player->unk_19C.m[3][0]) *
-                        sp574;
-                sp568 = (((player->unk_19C.m[0][1] * temp_fs4) + (player->unk_19C.m[1][1] * temp_fs5) +
-                          (player->unk_19C.m[2][1] * sp54C)) +
-                         player->unk_19C.m[3][1]) *
-                        sp574;
-                sp564 = (((player->unk_19C.m[0][2] * temp_fs4) + (player->unk_19C.m[1][2] * temp_fs5) +
-                          (player->unk_19C.m[2][2] * sp54C)) +
-                         player->unk_19C.m[3][2]) *
-                        sp574;
+                sp574 = 1.0f / (((camera->projectionViewMtx.m[0][3] * temp_fs4) +
+                                 (camera->projectionViewMtx.m[1][3] * temp_fs5) +
+                                 (camera->projectionViewMtx.m[2][3] * sp54C)) +
+                                camera->projectionViewMtx.m[3][3]);
+                sp56C =
+                    (((camera->projectionViewMtx.m[0][0] * temp_fs4) + (camera->projectionViewMtx.m[1][0] * temp_fs5) +
+                      (camera->projectionViewMtx.m[2][0] * sp54C)) +
+                     camera->projectionViewMtx.m[3][0]) *
+                    sp574;
+                sp568 =
+                    (((camera->projectionViewMtx.m[0][1] * temp_fs4) + (camera->projectionViewMtx.m[1][1] * temp_fs5) +
+                      (camera->projectionViewMtx.m[2][1] * sp54C)) +
+                     camera->projectionViewMtx.m[3][1]) *
+                    sp574;
+                sp564 =
+                    (((camera->projectionViewMtx.m[0][2] * temp_fs4) + (camera->projectionViewMtx.m[1][2] * temp_fs5) +
+                      (camera->projectionViewMtx.m[2][2] * sp54C)) +
+                     camera->projectionViewMtx.m[3][2]) *
+                    sp574;
                 gDPPipeSync(gfx++);
                 gDPSetPrimDepth(gfx++, (s32) ((sp564 * 16352.0f) + 16352.0f), 0);
 
@@ -6588,8 +6601,8 @@ block_115:
                                         G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
                                         G_TX_NOLOD, G_TX_NOLOD);
 
-                    var_s7 = ((s32) ((player->unk_E8 * sp56C) + player->unk_F0 + 0.5f) - 12) << 2;
-                    sp5C4 = ((s32) ((-player->unk_EC * sp568) + player->unk_F4 + 0.5f) - 30) << 2;
+                    var_s7 = ((s32) ((camera->unk_E8 * sp56C) + camera->unk_F0 + 0.5f) - 12) << 2;
+                    sp5C4 = ((s32) ((-camera->unk_EC * sp568) + camera->unk_F4 + 0.5f) - 30) << 2;
                     gSPScisTextureRectangle(gfx++, var_s7, sp5C4, var_s7 + (24 * 4 - 1), sp5C4 + (30 * 4 - 1), 0, 0, 0,
                                             1 << 10, 1 << 10);
                 } else {
@@ -6597,8 +6610,8 @@ block_115:
                                         G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
                                         G_TX_NOLOD, G_TX_NOLOD);
 
-                    var_s7 = ((s32) ((player->unk_E8 * sp56C) + player->unk_F0 + 0.5f) - 8) << 2;
-                    sp5C4 = ((s32) ((-player->unk_EC * sp568) + player->unk_F4 + 0.5f) - 16) << 2;
+                    var_s7 = ((s32) ((camera->unk_E8 * sp56C) + camera->unk_F0 + 0.5f) - 8) << 2;
+                    sp5C4 = ((s32) ((-camera->unk_EC * sp568) + camera->unk_F4 + 0.5f) - 16) << 2;
                     gSPScisTextureRectangle(gfx++, var_s7, sp5C4, var_s7 + (16 * 4 - 1), sp5C4 + (16 * 4 - 1), 0, 0, 0,
                                             1 << 10, 1 << 10);
                 }
@@ -6610,29 +6623,33 @@ block_115:
                 temp_fs4 = sRivalRacer->segmentPositionInfo.pos.x + (20.0f * sRivalRacer->trueBasis.y.x);
                 temp_fs5 = sRivalRacer->segmentPositionInfo.pos.y + (20.0f * sRivalRacer->trueBasis.y.y);
                 sp54C = sRivalRacer->segmentPositionInfo.pos.z + (20.0f * sRivalRacer->trueBasis.y.z);
-                sp574 = 1.0f / (((player->unk_19C.m[0][3] * temp_fs4) + (player->unk_19C.m[1][3] * temp_fs5) +
-                                 (player->unk_19C.m[2][3] * sp54C)) +
-                                player->unk_19C.m[3][3]);
-                sp56C = (((player->unk_19C.m[0][0] * temp_fs4) + (player->unk_19C.m[1][0] * temp_fs5) +
-                          (player->unk_19C.m[2][0] * sp54C)) +
-                         player->unk_19C.m[3][0]) *
-                        sp574;
-                sp568 = (((player->unk_19C.m[0][1] * temp_fs4) + (player->unk_19C.m[1][1] * temp_fs5) +
-                          (player->unk_19C.m[2][1] * sp54C)) +
-                         player->unk_19C.m[3][1]) *
-                        sp574;
-                sp564 = (((player->unk_19C.m[0][2] * temp_fs4) + (player->unk_19C.m[1][2] * temp_fs5) +
-                          (player->unk_19C.m[2][2] * sp54C)) +
-                         player->unk_19C.m[3][2]) *
-                        sp574;
+                sp574 = 1.0f / (((camera->projectionViewMtx.m[0][3] * temp_fs4) +
+                                 (camera->projectionViewMtx.m[1][3] * temp_fs5) +
+                                 (camera->projectionViewMtx.m[2][3] * sp54C)) +
+                                camera->projectionViewMtx.m[3][3]);
+                sp56C =
+                    (((camera->projectionViewMtx.m[0][0] * temp_fs4) + (camera->projectionViewMtx.m[1][0] * temp_fs5) +
+                      (camera->projectionViewMtx.m[2][0] * sp54C)) +
+                     camera->projectionViewMtx.m[3][0]) *
+                    sp574;
+                sp568 =
+                    (((camera->projectionViewMtx.m[0][1] * temp_fs4) + (camera->projectionViewMtx.m[1][1] * temp_fs5) +
+                      (camera->projectionViewMtx.m[2][1] * sp54C)) +
+                     camera->projectionViewMtx.m[3][1]) *
+                    sp574;
+                sp564 =
+                    (((camera->projectionViewMtx.m[0][2] * temp_fs4) + (camera->projectionViewMtx.m[1][2] * temp_fs5) +
+                      (camera->projectionViewMtx.m[2][2] * sp54C)) +
+                     camera->projectionViewMtx.m[3][2]) *
+                    sp574;
                 gDPPipeSync(gfx++);
                 gDPSetPrimDepth(gfx++, (s32) ((sp564 * 16352.0f) + 16352.0f), 0);
                 gDPLoadTextureBlock(gfx++, aRivalMarkerTex, G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 16, 0,
                                     G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
                                     G_TX_NOLOD, G_TX_NOLOD);
 
-                var_s7 = ((s32) ((player->unk_E8 * sp56C) + player->unk_F0 + 0.5f) - 0x10) << 2;
-                sp5C4 = ((s32) ((-player->unk_EC * sp568) + player->unk_F4 + 0.5f) - 0x10) << 2;
+                var_s7 = ((s32) ((camera->unk_E8 * sp56C) + camera->unk_F0 + 0.5f) - 0x10) << 2;
+                sp5C4 = ((s32) ((-camera->unk_EC * sp568) + camera->unk_F4 + 0.5f) - 0x10) << 2;
                 gSPScisTextureRectangle(gfx++, var_s7, sp5C4, var_s7 + (32 * 4 - 1), sp5C4 + (16 * 4 - 1), 0, 0, 0,
                                         1 << 10, 1 << 10);
             }
@@ -6650,20 +6667,20 @@ block_115:
                 sp56C = playerRacer->segmentPositionInfo.pos.x - playerRacer->racerBehind->segmentPositionInfo.pos.x;
                 sp568 = playerRacer->segmentPositionInfo.pos.y - playerRacer->racerBehind->segmentPositionInfo.pos.y;
                 sp564 = playerRacer->segmentPositionInfo.pos.z - playerRacer->racerBehind->segmentPositionInfo.pos.z;
-                temp_fs2 = (sp56C * player->unk_5C.x.x) + (sp568 * player->unk_5C.x.y) + (sp564 * player->unk_5C.x.z);
+                temp_fs2 = (sp56C * camera->basis.x.x) + (sp568 * camera->basis.x.y) + (sp564 * camera->basis.x.z);
                 if (temp_fs2 < 0.0f) {
                     break;
                 }
-                temp_fs1 = (sp56C * player->unk_5C.z.x) + (sp568 * player->unk_5C.z.y) + (sp564 * player->unk_5C.z.z);
-                temp_fs3 = (sp56C * player->unk_5C.y.x) + (sp568 * player->unk_5C.y.y) + (sp564 * player->unk_5C.y.z);
+                temp_fs1 = (sp56C * camera->basis.z.x) + (sp568 * camera->basis.z.y) + (sp564 * camera->basis.z.z);
+                temp_fs3 = (sp56C * camera->basis.y.x) + (sp568 * camera->basis.y.y) + (sp564 * camera->basis.y.z);
                 temp_fv0 = SQ(temp_fs1) + SQ(temp_fs3);
 
                 if ((temp_fv0 < 0.1f)) {
                     break;
                 }
 
-                sp56C = ((player->unk_B8 - player->unk_B0) * 0.5f) + 4.0f;
-                sp568 = ((player->unk_BC - player->unk_B4) * 0.5f) - 4.0f;
+                sp56C = ((camera->unk_B8 - camera->unk_B0) * 0.5f) + 4.0f;
+                sp568 = ((camera->unk_BC - camera->unk_B4) * 0.5f) - 4.0f;
                 temp_fv0 = sqrtf((SQ(sp56C) + SQ(sp568)) / temp_fv0);
                 temp_fs1 *= temp_fv0;
                 temp_fs3 *= temp_fv0;
@@ -6691,8 +6708,8 @@ block_115:
                     gDPLoadTextureBlock_4b(gfx++, aCheckMarker1PTex, G_IM_FMT_IA, 32, 23, 0, G_TX_NOMIRROR | G_TX_WRAP,
                                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
-                    var_s7 = ((s32) (((player->unk_B0 + player->unk_B8) * 0.5f) + temp_fs1 + 0.5f) - 16) << 2;
-                    sp5C4 = ((s32) (((player->unk_B4 + player->unk_BC) * 0.5f) + temp_fs3 + 0.5f) - 28) << 2;
+                    var_s7 = ((s32) (((camera->unk_B0 + camera->unk_B8) * 0.5f) + temp_fs1 + 0.5f) - 16) << 2;
+                    sp5C4 = ((s32) (((camera->unk_B4 + camera->unk_BC) * 0.5f) + temp_fs3 + 0.5f) - 28) << 2;
 
                     gSPScisTextureRectangle(gfx++, var_s7, sp5C4, var_s7 + (32 * 4 - 1), sp5C4 + (23 * 4 - 1), 0, 0, 0,
                                             1 << 10, 1 << 10);
@@ -6700,8 +6717,8 @@ block_115:
                     gDPLoadTextureBlock_4b(gfx++, aCheckMarkerMPTex, G_IM_FMT_IA, 16, 10, 0, G_TX_NOMIRROR | G_TX_WRAP,
                                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
-                    var_s7 = ((s32) (((player->unk_B0 + player->unk_B8) * 0.5f) + temp_fs1 + 0.5f) - 8) << 2;
-                    sp5C4 = ((s32) (((player->unk_B4 + player->unk_BC) * 0.5f) + temp_fs3 + 0.5f) - 10) << 2;
+                    var_s7 = ((s32) (((camera->unk_B0 + camera->unk_B8) * 0.5f) + temp_fs1 + 0.5f) - 8) << 2;
+                    sp5C4 = ((s32) (((camera->unk_B4 + camera->unk_BC) * 0.5f) + temp_fs3 + 0.5f) - 10) << 2;
                     gSPScisTextureRectangle(gfx++, var_s7, sp5C4, var_s7 + (16 * 4 - 1), sp5C4 + (10 * 4 - 1), 0, 0, 0,
                                             1 << 10, 1 << 10);
                 }

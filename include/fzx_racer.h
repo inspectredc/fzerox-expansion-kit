@@ -29,7 +29,7 @@ typedef enum CourseEffects {
 #define RACER_STATE_TOUCHING_LANDMINE (1 << 16)
 #define RACER_STATE_FLAGS_20000 (1 << 17)
 #define RACER_STATE_RETIRED (1 << 18)
-#define RACER_STATE_FLAGS_80000 (1 << 19)
+#define RACER_STATE_FALLING_OFF_TRACK (1 << 19)
 #define RACER_STATE_CAN_BOOST (1 << 20)
 #define RACER_STATE_JUMP_BOOST (1 << 21)
 #define RACER_STATE_FLAGS_400000 (1 << 22)

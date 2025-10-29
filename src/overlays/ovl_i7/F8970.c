@@ -259,7 +259,7 @@ void func_i7_800960B0(void) {
     }
 }
 
-extern Player gPlayers[];
+extern Camera gCameras[];
 
 void func_i7_800967D8(void) {
     Racer* racer;
@@ -268,8 +268,8 @@ void func_i7_800967D8(void) {
     if (D_i7_8009AF64 == 1) {
         for (i = 0; i < gTotalRacers; i++) {
             racer = &gRacers[i];
-            Matrix_SetLockedLookAt(&D_i7_8009AD10->unk_3F0[i], NULL, 0.04f, 0.04f, 0.04f, -gPlayers[0].unk_5C.x.x,
-                                   -gPlayers[0].unk_5C.x.y, -gPlayers[0].unk_5C.x.z, racer->trueBasis.y.x,
+            Matrix_SetLockedLookAt(&D_i7_8009AD10->unk_3F0[i], NULL, 0.04f, 0.04f, 0.04f, -gCameras[0].basis.x.x,
+                                   -gCameras[0].basis.x.y, -gCameras[0].basis.x.z, racer->trueBasis.y.x,
                                    racer->trueBasis.y.y, racer->trueBasis.y.z,
                                    racer->shadowPos.x + ((racer->trueBasis.x.x * 23.0f * 3.0f) / 2) +
                                        (racer->trueBasis.z.x * 23.0f * 0.8f),
@@ -344,7 +344,7 @@ void func_i7_80096DAC(void) {
     s32 var_s1;
     s32 i;
     s32 j;
-    Player* var = &gPlayers[0];
+    Camera* var = &gCameras[0];
     unk_8014BF98* temp_s4;
     unk_8014BF94* temp_s0;
     bool var_a1;
@@ -424,8 +424,8 @@ void func_i7_80096DAC(void) {
                                 temp_s4->unk_24 = 1;
                                 temp_s4->unk_2C = 0x20;
                                 D_i7_8009B168 = 0;
-                                temp_s4->unk_00 = var->unk_5C.x.x * 700.0f;
-                                temp_s4->unk_08 = var->unk_5C.x.z * 700.0f;
+                                temp_s4->unk_00 = var->basis.x.x * 700.0f;
+                                temp_s4->unk_08 = var->basis.x.z * 700.0f;
                                 temp_s4->unk_18 = 0.0f;
                                 temp_s4->unk_20 = 0.0f;
                                 temp_s4->unk_04 = -500.0f;
@@ -470,8 +470,8 @@ void func_i7_80096DAC(void) {
                         var_fa0 = sqrtf(SQ(var_fs0_2) + SQ(temp_ft4) + SQ(temp_ft5));
 
                         if (var_fa0 != 0.0f) {
-                            var_fv1 = -((var->unk_5C.z.z * temp_ft5) +
-                                        ((var_fs0_2 * var->unk_5C.z.x) + (temp_ft4 * var->unk_5C.z.y))) /
+                            var_fv1 = -((var->basis.z.z * temp_ft5) +
+                                        ((var_fs0_2 * var->basis.z.x) + (temp_ft4 * var->basis.z.y))) /
                                       var_fa0;
                             var_fa0 *= var_fv1;
                         }
@@ -479,7 +479,7 @@ void func_i7_80096DAC(void) {
                             Audio_Hanabi((s32) (f32) (u32) (((var_fa0 + 1000.0f) / 2000.0f) * 127.0f), 0x40);
                         }
                     }
-                    var_fs1_2 = sqrtf(SQ(gPlayers[0].unk_5C.z.x) + SQ(gPlayers[0].unk_5C.z.z));
+                    var_fs1_2 = sqrtf(SQ(gCameras[0].basis.z.x) + SQ(gCameras[0].basis.z.z));
 
                     if (var_fs1_2 < 0.0001f) {
                         var_fs1_2 = 0.0001f;
@@ -552,11 +552,11 @@ void func_i7_80096DAC(void) {
 
                                 temp_fv0_6 = -(((var_s1 & 0x3F) - 0x20) * 0.12f);
 
-                                temp_s0->unk_18 = ((gPlayers[0].unk_5C.z.x * var_fs1_2 * 0.866f) -
-                                                   (gPlayers[0].unk_5C.z.z * var_fs1_2 * 0.5f)) *
+                                temp_s0->unk_18 = ((gCameras[0].basis.z.x * var_fs1_2 * 0.866f) -
+                                                   (gCameras[0].basis.z.z * var_fs1_2 * 0.5f)) *
                                                   temp_fv0_6;
-                                temp_s0->unk_20 = ((gPlayers[0].unk_5C.z.z * var_fs1_2 * 0.866f) +
-                                                   (gPlayers[0].unk_5C.z.x * var_fs1_2 * 0.5f)) *
+                                temp_s0->unk_20 = ((gCameras[0].basis.z.z * var_fs1_2 * 0.866f) +
+                                                   (gCameras[0].basis.z.x * var_fs1_2 * 0.5f)) *
                                                   temp_fv0_6;
 
                                 temp_s0->unk_1C = ((-(f32) ((var_s1 >> 6) - 0x48)) * 0.12f);
@@ -629,7 +629,7 @@ void func_i7_80096DAC(void) {
             var_fa0 = 1.0f / var_fa0;
             var_fs2 *= var_fa0;
             var_fs0 *= var_fa0;
-            if (((var_fs0 * var->unk_5C.x.z) + (var_fs2 * var->unk_5C.x.x)) < 0.4f) {
+            if (((var_fs0 * var->basis.x.z) + (var_fs2 * var->basis.x.x)) < 0.4f) {
                 temp_s4->unk_24 = 0;
                 temp_s4->unk_28 = 0;
                 temp_s4->unk_0C = temp_s4->unk_10 = 0x200;
@@ -643,29 +643,33 @@ void func_i7_80096DAC(void) {
         if (temp_s4->unk_24 >= 2) {
             if (temp_s4->unk_24 != 3) {
                 temp_s0 = &D_i7_8009AEB4[temp_s4->unk_2E];
-                temp_fv0_12 = var->unk_50.x + temp_s4->unk_00;
+                temp_fv0_12 = var->eye.x + temp_s4->unk_00;
                 temp_fv1_5 = temp_s4->unk_04;
-                temp_fa1 = var->unk_50.z + temp_s4->unk_08;
+                temp_fa1 = var->eye.z + temp_s4->unk_08;
 
-                var_fs0_2 = (temp_fv0_12 - var->unk_50.x);
-                temp_ft4 = (temp_fv1_5 - var->unk_50.y);
-                temp_ft5 = (temp_fa1 - var->unk_50.z);
-                var_fa0 = (var_fs0_2 * var->unk_5C.x.x) + (temp_ft4 * var->unk_5C.x.y) + (temp_ft5 * var->unk_5C.x.z);
+                var_fs0_2 = (temp_fv0_12 - var->eye.x);
+                temp_ft4 = (temp_fv1_5 - var->eye.y);
+                temp_ft5 = (temp_fa1 - var->eye.z);
+                var_fa0 = (var_fs0_2 * var->basis.x.x) + (temp_ft4 * var->basis.x.y) + (temp_ft5 * var->basis.x.z);
                 if (var_fa0 <= 0) {
                     temp_s4->unk_0C = temp_s4->unk_10 = 0x200;
                 } else {
-                    var_fs2 = ((var->unk_19C.m[0][0] * temp_fv0_12) + (var->unk_19C.m[1][0] * temp_fv1_5) +
-                               (var->unk_19C.m[2][0] * temp_fa1)) +
-                              var->unk_19C.m[3][0];
-                    var_fs1 = ((var->unk_19C.m[0][1] * temp_fv0_12) + (var->unk_19C.m[1][1] * temp_fv1_5) +
-                               (var->unk_19C.m[2][1] * temp_fa1)) +
-                              var->unk_19C.m[3][1];
-                    temp1 = ((var->unk_19C.m[0][2] * temp_fv0_12) + (var->unk_19C.m[1][2] * temp_fv1_5) +
-                             (var->unk_19C.m[2][2] * temp_fa1)) +
-                            var->unk_19C.m[3][2];
-                    var_fs0 = ((var->unk_19C.m[0][3] * temp_fv0_12) + (var->unk_19C.m[1][3] * temp_fv1_5) +
-                               (var->unk_19C.m[2][3] * temp_fa1)) +
-                              var->unk_19C.m[3][3];
+                    var_fs2 =
+                        ((var->projectionViewMtx.m[0][0] * temp_fv0_12) +
+                         (var->projectionViewMtx.m[1][0] * temp_fv1_5) + (var->projectionViewMtx.m[2][0] * temp_fa1)) +
+                        var->projectionViewMtx.m[3][0];
+                    var_fs1 =
+                        ((var->projectionViewMtx.m[0][1] * temp_fv0_12) +
+                         (var->projectionViewMtx.m[1][1] * temp_fv1_5) + (var->projectionViewMtx.m[2][1] * temp_fa1)) +
+                        var->projectionViewMtx.m[3][1];
+                    temp1 =
+                        ((var->projectionViewMtx.m[0][2] * temp_fv0_12) +
+                         (var->projectionViewMtx.m[1][2] * temp_fv1_5) + (var->projectionViewMtx.m[2][2] * temp_fa1)) +
+                        var->projectionViewMtx.m[3][2];
+                    var_fs0 =
+                        ((var->projectionViewMtx.m[0][3] * temp_fv0_12) +
+                         (var->projectionViewMtx.m[1][3] * temp_fv1_5) + (var->projectionViewMtx.m[2][3] * temp_fa1)) +
+                        var->projectionViewMtx.m[3][3];
                     if (func_i3_fabsf(var_fs0) < 0.001f) {
                         temp_s0->unk_0C = temp_s0->unk_10 = 0x200;
                     } else {
@@ -681,30 +685,33 @@ void func_i7_80096DAC(void) {
             } else {
                 for (j = temp_s4->unk_2E; j < temp_s4->unk_2E + temp_s4->unk_30; j++) {
                     temp_s0 = &D_i7_8009AEB4[j];
-                    temp_fv0_12 = gPlayers[0].unk_50.x + temp_s0->unk_00;
+                    temp_fv0_12 = gCameras[0].eye.x + temp_s0->unk_00;
                     temp_fv1_5 = temp_s0->unk_04;
-                    temp_fa1 = gPlayers[0].unk_50.z + temp_s0->unk_08;
+                    temp_fa1 = gCameras[0].eye.z + temp_s0->unk_08;
 
-                    var_fs0_2 = (temp_fv0_12 - var->unk_50.x);
-                    temp_ft4 = (temp_fv1_5 - var->unk_50.y);
-                    temp_ft5 = (temp_fa1 - var->unk_50.z);
-                    var_fa0 =
-                        (var_fs0_2 * var->unk_5C.x.x) + (temp_ft4 * var->unk_5C.x.y) + (temp_ft5 * var->unk_5C.x.z);
+                    var_fs0_2 = (temp_fv0_12 - var->eye.x);
+                    temp_ft4 = (temp_fv1_5 - var->eye.y);
+                    temp_ft5 = (temp_fa1 - var->eye.z);
+                    var_fa0 = (var_fs0_2 * var->basis.x.x) + (temp_ft4 * var->basis.x.y) + (temp_ft5 * var->basis.x.z);
                     if (var_fa0 <= 0) {
                         temp_s0->unk_0C = temp_s0->unk_10 = 0x200;
                     } else {
-                        var_fs2 = ((var->unk_19C.m[0][0] * temp_fv0_12) + (var->unk_19C.m[1][0] * temp_fv1_5) +
-                                   (var->unk_19C.m[2][0] * temp_fa1)) +
-                                  var->unk_19C.m[3][0];
-                        var_fs1 = ((var->unk_19C.m[0][1] * temp_fv0_12) + (var->unk_19C.m[1][1] * temp_fv1_5) +
-                                   (var->unk_19C.m[2][1] * temp_fa1)) +
-                                  var->unk_19C.m[3][1];
-                        temp1 = ((var->unk_19C.m[0][2] * temp_fv0_12) + (var->unk_19C.m[1][2] * temp_fv1_5) +
-                                 (var->unk_19C.m[2][2] * temp_fa1)) +
-                                var->unk_19C.m[3][2];
-                        var_fs0 = ((var->unk_19C.m[0][3] * temp_fv0_12) + (var->unk_19C.m[1][3] * temp_fv1_5) +
-                                   (var->unk_19C.m[2][3] * temp_fa1)) +
-                                  var->unk_19C.m[3][3];
+                        var_fs2 = ((var->projectionViewMtx.m[0][0] * temp_fv0_12) +
+                                   (var->projectionViewMtx.m[1][0] * temp_fv1_5) +
+                                   (var->projectionViewMtx.m[2][0] * temp_fa1)) +
+                                  var->projectionViewMtx.m[3][0];
+                        var_fs1 = ((var->projectionViewMtx.m[0][1] * temp_fv0_12) +
+                                   (var->projectionViewMtx.m[1][1] * temp_fv1_5) +
+                                   (var->projectionViewMtx.m[2][1] * temp_fa1)) +
+                                  var->projectionViewMtx.m[3][1];
+                        temp1 = ((var->projectionViewMtx.m[0][2] * temp_fv0_12) +
+                                 (var->projectionViewMtx.m[1][2] * temp_fv1_5) +
+                                 (var->projectionViewMtx.m[2][2] * temp_fa1)) +
+                                var->projectionViewMtx.m[3][2];
+                        var_fs0 = ((var->projectionViewMtx.m[0][3] * temp_fv0_12) +
+                                   (var->projectionViewMtx.m[1][3] * temp_fv1_5) +
+                                   (var->projectionViewMtx.m[2][3] * temp_fa1)) +
+                                  var->projectionViewMtx.m[3][3];
                         if (func_i3_fabsf(var_fs0) < 0.001f) {
                             temp_s0->unk_0C = temp_s0->unk_10 = 0x200;
                         } else {

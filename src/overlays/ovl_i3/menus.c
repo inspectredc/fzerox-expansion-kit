@@ -2,6 +2,7 @@
 #include "ovl_i3.h"
 #include "fzx_game.h"
 #include "fzx_racer.h"
+#include "fzx_camera.h"
 #include "fzx_assets.h"
 #include "fzx_font.h"
 
@@ -1585,7 +1586,7 @@ void func_i3_8004B158(s32 playerIndex) {
 }
 
 extern GfxPool D_1000000;
-extern Player gPlayers[];
+extern Camera gCameras[];
 extern GfxPool* gGfxPool;
 
 Gfx* func_i3_8004B1C8(Gfx* gfx, s32 playerIndex) {
@@ -1605,9 +1606,9 @@ Gfx* func_i3_8004B1C8(Gfx* gfx, s32 playerIndex) {
     f32 temp_fv0_2;
     s32 angle;
 
-    temp_fv0 = gPlayers[playerIndex].unk_5C.x.x;
-    temp_fv1 = gPlayers[playerIndex].unk_5C.x.y;
-    temp_fa1 = gPlayers[playerIndex].unk_5C.x.z;
+    temp_fv0 = gCameras[playerIndex].basis.x.x;
+    temp_fv1 = gCameras[playerIndex].basis.x.y;
+    temp_fa1 = gCameras[playerIndex].basis.x.z;
     sqrtf(SQ(temp_fv0) + SQ(temp_fv1) + SQ(temp_fa1));
 
     if (D_i3_8006D3C8[playerIndex] <= 10) {
@@ -1722,9 +1723,9 @@ Gfx* func_i3_8004B7D8(Gfx* gfx, s32 playerIndex) {
     f32 temp_fv0_2;
     f32 sp5C;
 
-    temp_fv0 = gPlayers[playerIndex].unk_5C.x.x;
-    temp_fv1 = gPlayers[playerIndex].unk_5C.x.y;
-    temp_fa1 = gPlayers[playerIndex].unk_5C.x.z;
+    temp_fv0 = gCameras[playerIndex].basis.x.x;
+    temp_fv1 = gCameras[playerIndex].basis.x.y;
+    temp_fa1 = gCameras[playerIndex].basis.x.z;
     sqrtf(SQ(temp_fv0) + SQ(temp_fv1) + SQ(temp_fa1));
     if ((gNumPlayers == 1) && (D_i3_8006D3D8[playerIndex] <= 0.02f)) {
         gControllers[gGameFrameCount % 4].unk_78 = 1;
@@ -4925,7 +4926,7 @@ extern s32 gCurrentGhostType;
 Gfx* func_i3_80057D90(Gfx* gfx, s32 playerIndex) {
     s32 i;
 
-    if (gPlayers[playerIndex].unk_04 == 10) {
+    if (gCameras[playerIndex].mode == CAMERA_MODE_10) {
         if ((gGameMode != GAMEMODE_TIME_ATTACK) ||
             ((gGameMode == GAMEMODE_TIME_ATTACK) && (gCurrentGhostType < GHOST_STAFF))) {
             if (D_i3_8006D3A8[playerIndex] == 0) {
@@ -5092,12 +5093,12 @@ Gfx* func_i3_8005823C(Gfx* gfx) {
 
         if ((gNumPlayers != 1) || (gGameMode != GAMEMODE_GP_RACE) || (sPlayer1Lives > 0) || (D_i3_8006D3F8[0] < 2)) {
             if (((gNumPlayers != 1) || (D_i3_8006D5C8[0] != 2)) &&
-                ((gNumPlayers != 1) || (gPlayers[playerIndex].unk_04 != 10) || (D_i3_8006D550[0] < 300))) {
+                ((gNumPlayers != 1) || (gCameras[playerIndex].mode != 10) || (D_i3_8006D550[0] < 300))) {
                 gfx = func_i3_DrawHUD(gfx);
             }
             for (i = 0; i < gNumPlayers; i++) {
                 if ((gNumPlayers != 1) ||
-                    ((D_i3_8006D5C8[i] != 2) && ((gPlayers[playerIndex].unk_04 != 10) || (D_i3_8006D550[0] < 300)))) {
+                    ((D_i3_8006D5C8[i] != 2) && ((gCameras[playerIndex].mode != 10) || (D_i3_8006D550[0] < 300)))) {
                     if (gNumPlayers == 1) {
                         gfx = func_i3_DrawRacePortraits(gfx);
                     }
@@ -5138,7 +5139,8 @@ Gfx* func_i3_8005823C(Gfx* gfx) {
         }
     }
     if (gNumPlayers == 1) {
-        if (((gPlayers[playerIndex].unk_04 == 4) || (gPlayers[playerIndex].unk_04 == 6)) && (D_i3_8006D3F8[0] == 0)) {
+        if (((gCameras[playerIndex].mode == CAMERA_MODE_4) || (gCameras[playerIndex].mode == CAMERA_MODE_6)) &&
+            (D_i3_8006D3F8[0] == 0)) {
             temp_ft5 = gRacers[playerIndex].raceDistance / gRacers[playerIndex].raceTime;
             if (gGameMode == GAMEMODE_GP_RACE) {
                 if (gRaceTimeIntervalToggle) {
@@ -5211,7 +5213,7 @@ Gfx* func_i3_8005823C(Gfx* gfx) {
         }
 
         if ((gGameMode == GAMEMODE_TIME_ATTACK) && !gGamePaused && (D_807B14F6 != 0) &&
-            (gPlayers[playerIndex].unk_04 == 6) && (D_i3_8006D3F8[0] == 0)) {
+            (gCameras[playerIndex].mode == CAMERA_MODE_6) && (D_i3_8006D3F8[0] == 0)) {
             gfx = func_i3_8004E5A8(gfx);
         }
         if (gGameMode != GAMEMODE_PRACTICE) {
@@ -5230,7 +5232,7 @@ Gfx* func_i3_8005823C(Gfx* gfx) {
                 D_i3_8006D4B8[playerIndex]++;
             }
         }
-        if (!gGamePaused && (gPlayers[playerIndex].unk_04 == 4)) {
+        if (!gGamePaused && (gCameras[playerIndex].mode == CAMERA_MODE_4)) {
             gDPPipeSync(gfx++);
             gDPSetScissor(gfx++, G_SC_NON_INTERLACE, 12, 16, 308, 224);
             D_i3_8006D564++;
@@ -5275,7 +5277,7 @@ Gfx* func_i3_8005823C(Gfx* gfx) {
                 }
             }
         }
-        if ((D_i3_8006D5C8[0] == 2) || ((gPlayers[playerIndex].unk_04 == 10) && (D_i3_8006D550[0] > 300))) {
+        if ((D_i3_8006D5C8[0] == 2) || ((gCameras[playerIndex].mode == CAMERA_MODE_10) && (D_i3_8006D550[0] > 300))) {
             if (!D_i3_8006D330[playerIndex]) {
                 D_i3_8006D330[playerIndex] = true;
                 if (gGameMode != GAMEMODE_TIME_ATTACK) {

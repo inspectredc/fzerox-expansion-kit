@@ -17,7 +17,7 @@ void func_i2_800AABD0(void) {
     func_i3_8005A464();
     func_806F5A50();
     func_8071D48C();
-    func_807160A0();
+    Camera_Init();
     Effects_Init();
     gGamePaused = false;
     func_i3_80044DD0();
@@ -43,7 +43,7 @@ void Race_Init(void) {
     }
     func_i3_80040158();
     func_8071D48C();
-    func_807160A0();
+    Camera_Init();
     func_8070F0B0(COURSE_CONTEXT()->courseData.venue, COURSE_CONTEXT()->courseData.skybox);
     func_i3_800617A0();
     Effects_Init();
@@ -61,7 +61,7 @@ s32 Race_Update(void) {
     func_i3_80044750();
     Effects_Update();
     func_80726554();
-    func_80717294();
+    Camera_Update();
     func_i3_80061C2C();
     func_800B94D8();
     func_8070304C();
@@ -75,7 +75,7 @@ extern Vtx* D_807A15E0;
 extern Vtx* D_800D65D0;
 extern GfxPool D_1000000;
 extern GfxPool* gGfxPool;
-extern Player gPlayers[];
+extern Camera gCameras[];
 extern FrameBuffer* gFrameBuffers[];
 extern s16 D_8076C7A4;
 extern s32 gNumPlayers;
@@ -179,50 +179,50 @@ Gfx* Race_Draw(Gfx* gfx) {
 
     switch (gNumPlayers) {
         case 1:
-            gSPPerspNormalize(gfx++, gPlayers[0].unk_118);
+            gSPPerspNormalize(gfx++, gCameras[0].perspectiveScale);
             gSPMatrix(gfx++, &D_1000000.unk_1A208[0], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
             gfx = func_80713E38(gfx, 0, 0);
             gfx = func_80727F54(gfx, 0);
             gfx = func_i3_80057D90(gfx, 0);
             break;
         case 2:
-            gSPPerspNormalize(gfx++, gPlayers[0].unk_118);
+            gSPPerspNormalize(gfx++, gCameras[0].perspectiveScale);
             gSPMatrix(gfx++, &D_1000000.unk_1A208[0], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
             gfx = func_80713E38(gfx, 1, 0);
             gfx = func_80727F54(gfx, 0);
-            gSPPerspNormalize(gfx++, gPlayers[1].unk_118);
+            gSPPerspNormalize(gfx++, gCameras[1].perspectiveScale);
             gSPMatrix(gfx++, &D_1000000.unk_1A208[1], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
             gfx = func_80713E38(gfx, 2, 1);
             gfx = func_80727F54(gfx, 1);
             break;
         case 3:
-            gSPPerspNormalize(gfx++, gPlayers[0].unk_118);
+            gSPPerspNormalize(gfx++, gCameras[0].perspectiveScale);
             gSPMatrix(gfx++, &D_1000000.unk_1A208[0], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
             gfx = func_80713E38(gfx, 5, 0);
             gfx = func_80727F54(gfx, 0);
-            gSPPerspNormalize(gfx++, gPlayers[1].unk_118);
+            gSPPerspNormalize(gfx++, gCameras[1].perspectiveScale);
             gSPMatrix(gfx++, &D_1000000.unk_1A208[1], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
             gfx = func_80713E38(gfx, 7, 1);
             gfx = func_80727F54(gfx, 1);
-            gSPPerspNormalize(gfx++, gPlayers[2].unk_118);
+            gSPPerspNormalize(gfx++, gCameras[2].perspectiveScale);
             gSPMatrix(gfx++, &D_1000000.unk_1A208[2], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
             gfx = func_80713E38(gfx, 6, 2);
             gfx = func_80727F54(gfx, 2);
             break;
         case 4:
-            gSPPerspNormalize(gfx++, gPlayers[0].unk_118);
+            gSPPerspNormalize(gfx++, gCameras[0].perspectiveScale);
             gSPMatrix(gfx++, &D_1000000.unk_1A208[0], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
             gfx = func_80713E38(gfx, 5, 0);
             gfx = func_80727F54(gfx, 0);
-            gSPPerspNormalize(gfx++, gPlayers[1].unk_118);
+            gSPPerspNormalize(gfx++, gCameras[1].perspectiveScale);
             gSPMatrix(gfx++, &D_1000000.unk_1A208[1], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
             gfx = func_80713E38(gfx, 7, 1);
             gfx = func_80727F54(gfx, 1);
-            gSPPerspNormalize(gfx++, gPlayers[2].unk_118);
+            gSPPerspNormalize(gfx++, gCameras[2].perspectiveScale);
             gSPMatrix(gfx++, &D_1000000.unk_1A208[2], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
             gfx = func_80713E38(gfx, 6, 2);
             gfx = func_80727F54(gfx, 2);
-            gSPPerspNormalize(gfx++, gPlayers[3].unk_118);
+            gSPPerspNormalize(gfx++, gCameras[3].perspectiveScale);
             gSPMatrix(gfx++, &D_1000000.unk_1A208[3], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
             gfx = func_80713E38(gfx, 8, 3);
             gfx = func_80727F54(gfx, 3);
