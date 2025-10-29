@@ -120,7 +120,7 @@ extern s32 D_xk2_80104CB4;
 extern s32 D_xk2_80104CB8;
 extern s32 D_xk2_80104CBC;
 extern s32 D_xk2_80104CC0;
-extern Player gPlayers[];
+extern Camera gCameras[];
 
 void func_xk2_800D7058(void) {
 
@@ -133,9 +133,10 @@ void func_xk2_800D7058(void) {
         if (D_xk2_80104CB4 > 300) {
             D_xk2_80104CB4 -= 300;
         } else if (D_xk2_80104CBC > 300) {
-            D_xk2_80104CB8 = D_xk2_80104CB8 + (gPlayers->unk_5C.x.x * 300.0f);
-            D_xk2_80104CBC = D_xk2_80104CBC + (gPlayers->unk_5C.x.y * 300.0f);
-            D_xk2_80104CC0 = D_xk2_80104CC0 + (gPlayers->unk_5C.x.z * 300.0f);
+            Camera* camera = gCameras;
+            D_xk2_80104CB8 = D_xk2_80104CB8 + (camera->basis.x.x * 300.0f);
+            D_xk2_80104CBC = D_xk2_80104CBC + (camera->basis.x.y * 300.0f);
+            D_xk2_80104CC0 = D_xk2_80104CC0 + (camera->basis.x.z * 300.0f);
         }
     }
 
@@ -172,44 +173,44 @@ void func_xk2_800D71E8(void) {
             D_xk2_80104CC0 += temp_fv0 * D_xk2_80128D40;
             break;
         case BTN_CUP:
-            D_xk2_80104CB8 += temp_fv0 * gPlayers->unk_5C.y.x;
-            D_xk2_80104CBC += temp_fv0 * gPlayers->unk_5C.y.y;
-            D_xk2_80104CC0 += temp_fv0 * gPlayers->unk_5C.y.z;
+            D_xk2_80104CB8 += temp_fv0 * gCameras[0].basis.y.x;
+            D_xk2_80104CBC += temp_fv0 * gCameras[0].basis.y.y;
+            D_xk2_80104CC0 += temp_fv0 * gCameras[0].basis.y.z;
             break;
         case BTN_CDOWN:
-            D_xk2_80104CB8 -= temp_fv0 * gPlayers->unk_5C.y.x;
-            D_xk2_80104CBC -= temp_fv0 * gPlayers->unk_5C.y.y;
-            D_xk2_80104CC0 -= temp_fv0 * gPlayers->unk_5C.y.z;
+            D_xk2_80104CB8 -= temp_fv0 * gCameras[0].basis.y.x;
+            D_xk2_80104CBC -= temp_fv0 * gCameras[0].basis.y.y;
+            D_xk2_80104CC0 -= temp_fv0 * gCameras[0].basis.y.z;
             break;
         case (BTN_CUP | BTN_CLEFT):
             temp_fv1 = -1.0f * temp_fv0;
             D_xk2_80104CB8 += temp_fv1 * D_xk2_80128D44;
             D_xk2_80104CC0 += temp_fv1 * D_xk2_80128D40;
-            D_xk2_80104CB8 += temp_fv0 * gPlayers->unk_5C.y.x;
-            D_xk2_80104CBC += temp_fv0 * gPlayers->unk_5C.y.y;
-            D_xk2_80104CC0 += temp_fv0 * gPlayers->unk_5C.y.z;
+            D_xk2_80104CB8 += temp_fv0 * gCameras[0].basis.y.x;
+            D_xk2_80104CBC += temp_fv0 * gCameras[0].basis.y.y;
+            D_xk2_80104CC0 += temp_fv0 * gCameras[0].basis.y.z;
             break;
         case (BTN_CDOWN | BTN_CLEFT):
             temp_fv1 = -1.0f * temp_fv0;
             D_xk2_80104CB8 += temp_fv1 * D_xk2_80128D44;
             D_xk2_80104CC0 += temp_fv1 * D_xk2_80128D40;
-            D_xk2_80104CB8 -= temp_fv0 * gPlayers->unk_5C.y.x;
-            D_xk2_80104CBC -= temp_fv0 * gPlayers->unk_5C.y.y;
-            D_xk2_80104CC0 -= temp_fv0 * gPlayers->unk_5C.y.z;
+            D_xk2_80104CB8 -= temp_fv0 * gCameras[0].basis.y.x;
+            D_xk2_80104CBC -= temp_fv0 * gCameras[0].basis.y.y;
+            D_xk2_80104CC0 -= temp_fv0 * gCameras[0].basis.y.z;
             break;
         case (BTN_CUP | BTN_CRIGHT):
             D_xk2_80104CB8 += temp_fv0 * D_xk2_80128D44;
             D_xk2_80104CC0 += temp_fv0 * D_xk2_80128D40;
-            D_xk2_80104CB8 += temp_fv0 * gPlayers->unk_5C.y.x;
-            D_xk2_80104CBC += temp_fv0 * gPlayers->unk_5C.y.y;
-            D_xk2_80104CC0 += temp_fv0 * gPlayers->unk_5C.y.z;
+            D_xk2_80104CB8 += temp_fv0 * gCameras[0].basis.y.x;
+            D_xk2_80104CBC += temp_fv0 * gCameras[0].basis.y.y;
+            D_xk2_80104CC0 += temp_fv0 * gCameras[0].basis.y.z;
             break;
         case (BTN_CDOWN | BTN_CRIGHT):
             D_xk2_80104CB8 += temp_fv0 * D_xk2_80128D44;
             D_xk2_80104CC0 += temp_fv0 * D_xk2_80128D40;
-            D_xk2_80104CB8 -= temp_fv0 * gPlayers->unk_5C.y.x;
-            D_xk2_80104CBC -= temp_fv0 * gPlayers->unk_5C.y.y;
-            D_xk2_80104CC0 -= temp_fv0 * gPlayers->unk_5C.y.z;
+            D_xk2_80104CB8 -= temp_fv0 * gCameras[0].basis.y.x;
+            D_xk2_80104CBC -= temp_fv0 * gCameras[0].basis.y.y;
+            D_xk2_80104CC0 -= temp_fv0 * gCameras[0].basis.y.z;
             break;
     }
 
@@ -3032,9 +3033,9 @@ void func_xk2_800DEB38(void) {
     D_xk2_80104CB8 = temp_v0->pos.x * 0.3f;
     D_xk2_80104CBC = temp_v0->pos.y * 0.3f;
     D_xk2_80104CC0 = temp_v0->pos.z * 0.3f;
-    gPlayers->unk_50.x = D_xk2_80104CB8;
-    gPlayers->unk_50.y = D_xk2_80104CBC + D_xk2_80104CB4;
-    gPlayers->unk_50.z = D_xk2_80104CC0;
+    gCameras[0].eye.x = D_xk2_80104CB8;
+    gCameras[0].eye.y = D_xk2_80104CBC + D_xk2_80104CB4;
+    gCameras[0].eye.z = D_xk2_80104CC0;
 }
 
 void func_xk2_800DEC1C(void) {
@@ -3119,7 +3120,7 @@ void func_xk2_800DEE20(void) {
         gRacers[0].machineSkinIndex = 0;
         gRacers[0].unk_1A8 = 0.5f;
         func_8071D48C();
-        func_807160A0();
+        Camera_Init();
         func_8070F0B0(COURSE_CONTEXT()->courseData.venue, COURSE_CONTEXT()->courseData.skybox);
         func_i3_800617A0();
         Effects_Init();

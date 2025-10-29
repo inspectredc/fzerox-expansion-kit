@@ -77,6 +77,8 @@ Fault_DisplayChar = 0x8070FE6C;
 Fault_SetFrameBuffer = 0x80710A38;
 Fault_Init = 0x80710A60;
 
+Camera_CalculateProjectionViewMtx = 0x80713204;
+
 Audio_PlayerFinished = 0x80740B98;
 Audio_PlayerLevelSEStart = 0x80740BF8;
 Audio_PlayerLevelSEStop = 0x80740CE8;
@@ -223,7 +225,7 @@ audioThreadCounter = 0x8079FE8C;
 unkThreadCounter = 0x8079FE90;
 gFaultMgr = 0x8079FE98; // size:0x9D8
 
-gPlayers = 0x807A0930; // size:0x770
+gCameras = 0x807A0930; // size:0x770
 gRaceIntroTimer = 0x807B15A8;
 gTotalRacers = 0x807A15D0;
 sLastRacer = 0x807A15D4;

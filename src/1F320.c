@@ -2,12 +2,13 @@
 #include "fzx_game.h"
 #include "fzx_racer.h"
 #include "fzx_assets.h"
+#include "fzx_camera.h"
 
-Player gPlayers[4];
+Camera gCameras[4];
 unk_struct_F8 D_807A10A0[4];
 unk_800E5D70 D_807A1480[4];
 unk_struct_20_2 D_807A1510[4];
-s32 D_807A1590;
+s32 sNumCameras;
 s32 D_807A1594;
 s16 D_807A1598;
 s16 D_807A159A;
@@ -144,31 +145,37 @@ unk_800CD970 D_8076D788[] = {
     { 1, 23, 80.0f, D_8076D750 }, { 0, 284, 60.0f, D_8076D6D4 },
 };
 
-const s32 D_80776C90[] = { 0 };
+const s32 kSingleCameraScissorBoxTypes[] = { SCISSOR_BOX_FULL_SCREEN };
 
-const s32 D_80776C94[] = { 1, 2 };
+const s32 kTwoCameraScissorBoxTypes[] = { SCISSOR_BOX_TOP_HALF, SCISSOR_BOX_BOTTOM_HALF };
 
-const s32 D_80776C9C[] = { 5, 7, 6 };
+const s32 kThreeCameraScissorBoxTypes[] = { SCISSOR_BOX_TOP_LEFT_QUARTER, SCISSOR_BOX_BOTTOM_LEFT_QUARTER,
+                                            SCISSOR_BOX_TOP_RIGHT_QUARTER };
 
-const s32 D_80776CA8[] = { 5, 7, 6, 8 };
+const s32 kFourCameraScissorBoxTypes[] = { SCISSOR_BOX_TOP_LEFT_QUARTER, SCISSOR_BOX_BOTTOM_LEFT_QUARTER,
+                                           SCISSOR_BOX_TOP_RIGHT_QUARTER, SCISSOR_BOX_BOTTOM_RIGHT_QUARTER };
 
-const s32* D_8076D7C4[] = {
-    NULL, D_80776C90, D_80776C94, D_80776C9C, D_80776CA8,
+const s32* sCameraScissorBoxTypes[] = {
+    NULL,
+    kSingleCameraScissorBoxTypes,
+    kTwoCameraScissorBoxTypes,
+    kThreeCameraScissorBoxTypes,
+    kFourCameraScissorBoxTypes,
 };
 
-ScissorBox D_8076D7D8 = { 12, 8, 308, 232 };
-ScissorBox D_8076D7E8 = { 12, 8, 307, 119 };
-ScissorBox D_8076D7F8 = { 12, 120, 307, 231 };
-ScissorBox D_8076D808 = { 12, 8, 159, 231 };
-ScissorBox D_8076D818 = { 160, 8, 307, 231 };
-ScissorBox D_8076D828 = { 12, 8, 159, 119 };
-ScissorBox D_8076D838 = { 160, 8, 307, 119 };
-ScissorBox D_8076D848 = { 12, 120, 159, 231 };
-ScissorBox D_8076D858 = { 160, 120, 307, 231 };
-ScissorBox D_8076D868 = { 86, 8, 233, 119 };
-ScissorBox D_8076D878 = { 86, 120, 233, 231 };
-ScissorBox D_8076D888 = { 12, 64, 159, 175 };
-ScissorBox D_8076D898 = { 160, 64, 307, 175 };
+ScissorBox gScissorBoxFullScreen = { 12, 8, 308, 232 };
+ScissorBox gScissorBoxTopHalf = { 12, 8, 307, 119 };
+ScissorBox gScissorBoxBottomHalf = { 12, 120, 307, 231 };
+ScissorBox gScissorBoxLeftHalf = { 12, 8, 159, 231 };
+ScissorBox gScissorBoxRightHalf = { 160, 8, 307, 231 };
+ScissorBox gScissorBoxTopLeftQuarter = { 12, 8, 159, 119 };
+ScissorBox gScissorBoxTopRightQuarter = { 160, 8, 307, 119 };
+ScissorBox gScissorBoxBottomLeftQuarter = { 12, 120, 159, 231 };
+ScissorBox gScissorBoxBottomRightQuarter = { 160, 120, 307, 231 };
+ScissorBox gScissorBoxTopCenterQuarter = { 86, 8, 233, 119 };
+ScissorBox gScissorBoxBottomCenterQuarter = { 86, 120, 233, 231 };
+ScissorBox gScissorBoxLeftCenterQuarter = { 12, 64, 159, 175 };
+ScissorBox gScissorBoxRightCenterQuarter = { 160, 64, 307, 175 };
 
 f32 D_8076D8A8 = 25.4629631f;
 f32 D_8076D8AC = 46.29629517f;
@@ -176,64 +183,65 @@ f32 D_8076D8B0 = 120.0f;
 s32 sMaxCameraLookBackRotate = 8;
 
 void func_80711B20(unk_struct_F8* arg0, unk_struct_20* arg1) {
-    arg0->unk_00 = 1;
-    arg0->unk_04.unk_58.unk_00.unk_00.unk_00 = *arg1;
+    arg0->type = 1;
+    arg0->sub_1_unk_5C = *arg1;
 }
 
 void func_80711B6C(unk_struct_F8* arg0, unk_redo_1* arg1) {
-    arg0->unk_00 = 1;
-    arg0->unk_04.unk_00 = arg1->unk_00;
-    arg0->unk_04.unk_58.unk_00.unk_00.unk_00 = arg1->unk_58;
+    arg0->type = 1;
+    arg0->unk_04 = arg1->unk_00;
+    arg0->sub_1_unk_5C = arg1->unk_58;
 }
 
 void func_80711BF0(unk_struct_F8* arg0, unk_struct_9C* arg1) {
-    arg0->unk_00 = 4;
-    arg0->unk_04.unk_58 = *arg1;
+    arg0->type = 4;
+    arg0->sub_4_unk_5C = *arg1;
 }
 
 void func_80711C30(unk_struct_F8* arg0, unk_8008112C_arg_1* arg1) {
-    arg0->unk_00 = 4;
-    arg0->unk_04.unk_00 = arg1->unk_00;
-    arg0->unk_04.unk_58 = arg1->unk_58;
+    arg0->type = 4;
+    arg0->unk_04 = arg1->unk_00;
+    arg0->sub_4_unk_5C = arg1->unk_58;
 }
 
-void func_80711CA8(unk_struct_F8* arg0, s32 arg1, unk_struct_54* arg2) {
-    arg0->unk_00 = arg1;
-    arg0->unk_04.unk_58.unk_00.unk_00 = *arg2;
+// type is 2 or 3
+void func_80711CA8(unk_struct_F8* arg0, s32 type, unk_struct_54* arg2) {
+    arg0->type = type;
+    arg0->sub_2_3_unk_5C = *arg2;
 }
 
-void func_80711CE4(unk_struct_F8* arg0, s32 arg1, unk_redo_2* arg2) {
-    arg0->unk_00 = arg1;
-    arg0->unk_04.unk_00 = arg2->unk_00;
-    arg0->unk_04.unk_58.unk_00.unk_00 = arg2->unk_58;
+// type is 2 or 3
+void func_80711CE4(unk_struct_F8* arg0, s32 type, unk_redo_2* arg2) {
+    arg0->type = type;
+    arg0->unk_04 = arg2->unk_00;
+    arg0->sub_2_3_unk_5C = arg2->unk_58;
 }
 
 void func_80711D58(unk_struct_F8* arg0, unk_struct_68* arg1) {
-    arg0->unk_00 = 5;
-    arg0->unk_04.unk_58.unk_00 = *arg1;
+    arg0->type = 5;
+    arg0->sub_5_unk_5C = *arg1;
 }
 
 void func_80711DA4(unk_struct_F8* arg0, unk_redo_3* arg1) {
-    arg0->unk_00 = 5;
-    arg0->unk_04.unk_00 = arg1->unk_00;
-    arg0->unk_04.unk_58.unk_00 = arg1->unk_58;
+    arg0->type = 5;
+    arg0->unk_04 = arg1->unk_00;
+    arg0->sub_5_unk_5C = arg1->unk_58;
 }
 
 void func_80711E28(unk_struct_F8* arg0) {
-    f32* var = arg0->unk_04.unk_00.unk_18;
+    unk_struct_58* var = &arg0->unk_04;
 
-    var[0] += (var[3] - var[0]) * var[6];
-    var[1] += (var[4] - var[1]) * var[6];
-    var[2] += (var[5] - var[2]) * var[6];
-    var[7] += (var[8] - var[7]) * var[9];
-    var[10] += (var[12] - var[10]) * var[14];
-    var[11] += (var[13] - var[11]) * var[15];
+    var->unk_18 += (var->unk_24 - var->unk_18) * var->unk_30;
+    var->unk_1C += (var->unk_28 - var->unk_1C) * var->unk_30;
+    var->unk_20 += (var->unk_2C - var->unk_20) * var->unk_30;
+    var->unk_34 += (var->unk_38 - var->unk_34) * var->unk_3C;
+    var->unk_40 += (var->unk_48 - var->unk_40) * var->unk_50;
+    var->unk_44 += (var->unk_4C - var->unk_44) * var->unk_54;
 }
 
-// Likely uses the previously defined structs
 void func_80711EDC(unk_struct_F8* arg0) {
-    unk_struct_20* var2 = &arg0->unk_04.unk_58.unk_00.unk_00.unk_00;
-    unk_struct_58* var = &arg0->unk_04.unk_00;
+    unk_struct_20* var2 = &arg0->sub_1_unk_5C;
+    unk_struct_58* var = &arg0->unk_04;
 
     var->unk_00.x += (var2->unk_00.x - var->unk_00.x) * var2->unk_18;
     var->unk_00.y += (var2->unk_00.y - var->unk_00.y) * var2->unk_18;
@@ -253,37 +261,37 @@ void func_80711F90(unk_struct_F8* arg0) {
     s32 temp_v0;
     f32 sp28;
     unk_struct_58* temp_v0_4;
-    unk_struct_54* temp_v1 = &arg0->unk_04.unk_58.unk_00.unk_00;
+    unk_struct_54* temp_v1 = &arg0->sub_2_3_unk_5C;
 
-    temp_v1->unk_30.x += (temp_v1->unk_30.y - temp_v1->unk_30.x) * temp_v1->unk_30.z;
-    temp_v1->unk_3C.x += (temp_v1->unk_3C.y - temp_v1->unk_3C.x) * temp_v1->unk_3C.z;
-    temp_v1->unk_48.x += (temp_v1->unk_48.y - temp_v1->unk_48.x) * temp_v1->unk_48.z;
-    temp_v0 = Math_Round(DEG_TO_FZXANG2(temp_v1->unk_3C.x));
+    temp_v1->unk_30 += (temp_v1->unk_34 - temp_v1->unk_30) * temp_v1->unk_38;
+    temp_v1->unk_3C += (temp_v1->unk_40 - temp_v1->unk_3C) * temp_v1->unk_44;
+    temp_v1->unk_48 += (temp_v1->unk_4C - temp_v1->unk_48) * temp_v1->unk_50;
+    temp_v0 = Math_Round(DEG_TO_FZXANG2(temp_v1->unk_3C));
 
-    sp3C = temp_v1->unk_30.x * SIN(temp_v0);
-    sp40 = temp_v1->unk_30.x * COS(temp_v0);
+    sp3C = temp_v1->unk_30 * SIN(temp_v0);
+    sp40 = temp_v1->unk_30 * COS(temp_v0);
 
-    temp_v0 = Math_Round(DEG_TO_FZXANG2(temp_v1->unk_48.x));
+    temp_v0 = Math_Round(DEG_TO_FZXANG2(temp_v1->unk_48));
     temp_fv0 = SIN(temp_v0) * sp40;
     temp_fv1 = COS(temp_v0) * sp40;
 
-    temp_fa0 = (temp_v1->unk_00.unk_0C.x * temp_fv1) + (temp_v1->unk_24.x * temp_fv0) + (temp_v1->unk_00.unk_18 * sp3C);
-    temp_ft5 = (temp_v1->unk_00.unk_0C.y * temp_fv1) + (temp_v1->unk_24.y * temp_fv0) + (temp_v1->unk_00.unk_1C * sp3C);
-    sp28 = (temp_v1->unk_00.unk_0C.z * temp_fv1) + (temp_v1->unk_24.z * temp_fv0) + (temp_v1->unk_20 * sp3C);
+    temp_fa0 = (temp_v1->unk_0C.x.x * temp_fv1) + (temp_v1->unk_0C.z.x * temp_fv0) + (temp_v1->unk_0C.y.x * sp3C);
+    temp_ft5 = (temp_v1->unk_0C.x.y * temp_fv1) + (temp_v1->unk_0C.z.y * temp_fv0) + (temp_v1->unk_0C.y.y * sp3C);
+    sp28 = (temp_v1->unk_0C.x.z * temp_fv1) + (temp_v1->unk_0C.z.z * temp_fv0) + (temp_v1->unk_0C.y.z * sp3C);
 
-    temp_v0_4 = &arg0->unk_04.unk_00;
-    switch (arg0->unk_00) {
+    temp_v0_4 = &arg0->unk_04;
+    switch (arg0->type) {
         case 2:
-            temp_v0_4->unk_00 = temp_v1->unk_00.unk_00;
-            temp_v0_4->unk_0C.x = temp_v1->unk_00.unk_00.x + temp_fa0;
-            temp_v0_4->unk_0C.y = temp_v1->unk_00.unk_00.y + temp_ft5;
-            temp_v0_4->unk_0C.z = temp_v1->unk_00.unk_00.z + sp28;
+            temp_v0_4->unk_00 = temp_v1->unk_00;
+            temp_v0_4->unk_0C.x = temp_v1->unk_00.x + temp_fa0;
+            temp_v0_4->unk_0C.y = temp_v1->unk_00.y + temp_ft5;
+            temp_v0_4->unk_0C.z = temp_v1->unk_00.z + sp28;
             break;
         case 3:
-            temp_v0_4->unk_0C = temp_v1->unk_00.unk_00;
-            temp_v0_4->unk_00.x = temp_v1->unk_00.unk_00.x + temp_fa0;
-            temp_v0_4->unk_00.y = temp_v1->unk_00.unk_00.y + temp_ft5;
-            temp_v0_4->unk_00.z = temp_v1->unk_00.unk_00.z + sp28;
+            temp_v0_4->unk_0C = temp_v1->unk_00;
+            temp_v0_4->unk_00.x = temp_v1->unk_00.x + temp_fa0;
+            temp_v0_4->unk_00.y = temp_v1->unk_00.y + temp_ft5;
+            temp_v0_4->unk_00.z = temp_v1->unk_00.z + sp28;
             break;
     }
 }
@@ -291,32 +299,32 @@ void func_80711F90(unk_struct_F8* arg0) {
 extern s32 gNumPlayers;
 extern s8 gGamePaused;
 
-void func_807121D4(unk_struct_F8* arg0, Player* player) {
+void func_807121D4(unk_struct_F8* arg0, Camera* camera) {
     s32 angle;
     f32 var_fv1;
     f32 spA4;
     Vec3f sp98;
     Vec3f sp8C;
-    Racer* racer = &gRacers[player->id];
+    Racer* racer = &gRacers[camera->id];
     Vec3f sp7C;
     Vec3f sp70;
     f32 temp_fv0;
-    unk_8008112C_arg_1* temp_s1 = &arg0->unk_04;
-    unk_struct_9C* temp_s2 = &arg0->unk_04.unk_58;
+    unk_struct_58* temp_s1 = &arg0->unk_04;
+    unk_struct_9C* temp_s2 = &arg0->sub_4_unk_5C;
 
-    temp_s2->unk_68[1] += (temp_s2->unk_68[2] - temp_s2->unk_68[1]) * temp_s2->unk_68[3];
-    temp_s2->unk_68[4] += (temp_s2->unk_68[5] - temp_s2->unk_68[4]) * temp_s2->unk_68[6];
-    temp_s2->unk_68[7] += (temp_s2->unk_68[8] - temp_s2->unk_68[7]) * temp_s2->unk_68[9];
+    temp_s2->unk_6C += (temp_s2->unk_70 - temp_s2->unk_6C) * temp_s2->unk_74;
+    temp_s2->unk_78 += (temp_s2->unk_7C - temp_s2->unk_78) * temp_s2->unk_80;
+    temp_s2->unk_84 += (temp_s2->unk_88 - temp_s2->unk_84) * temp_s2->unk_8C;
 
-    player->unk_20.x = racer->unk_180.x;
-    player->unk_20.y = racer->unk_180.y;
-    player->unk_20.z = racer->unk_180.z;
+    camera->racerPos.x = racer->unk_180.x;
+    camera->racerPos.y = racer->unk_180.y;
+    camera->racerPos.z = racer->unk_180.z;
 
     var_fv1 = (racer->unk_18C.x * racer->gravityUp.x) + (racer->unk_18C.y * racer->gravityUp.y) +
               (racer->unk_18C.z * racer->gravityUp.z);
-    sp98.x = (temp_s2->unk_00.unk_54.x - player->unk_20.x) + (var_fv1 * racer->gravityUp.x);
-    sp98.y = (temp_s2->unk_00.unk_54.y - player->unk_20.y) + (var_fv1 * racer->gravityUp.y);
-    sp98.z = (temp_s2->unk_00.unk_54.z - player->unk_20.z) + (var_fv1 * racer->gravityUp.z);
+    sp98.x = (temp_s2->unk_54.x - camera->racerPos.x) + (var_fv1 * racer->gravityUp.x);
+    sp98.y = (temp_s2->unk_54.y - camera->racerPos.y) + (var_fv1 * racer->gravityUp.y);
+    sp98.z = (temp_s2->unk_54.z - camera->racerPos.z) + (var_fv1 * racer->gravityUp.z);
     var_fv1 = sqrtf(SQ(sp98.x) + SQ(sp98.y) + SQ(sp98.z));
 
     if (var_fv1 < 0.01f) {
@@ -328,38 +336,39 @@ void func_807121D4(unk_struct_F8* arg0, Player* player) {
     sp98.y *= var_fv1;
     sp98.z *= var_fv1;
     if (!gGamePaused) {
-        temp_fv0 = temp_s2->unk_68[1];
-        temp_s2->unk_00.unk_54.x = player->unk_20.x + (temp_fv0 * sp98.x);
-        temp_s2->unk_00.unk_54.y = player->unk_20.y + (temp_fv0 * sp98.y);
-        temp_s2->unk_00.unk_54.z = player->unk_20.z + (temp_fv0 * sp98.z);
+        temp_fv0 = temp_s2->unk_6C;
+        temp_s2->unk_54.x = camera->racerPos.x + (temp_fv0 * sp98.x);
+        temp_s2->unk_54.y = camera->racerPos.y + (temp_fv0 * sp98.y);
+        temp_s2->unk_54.z = camera->racerPos.z + (temp_fv0 * sp98.z);
     }
 
-    temp_fv0 = (racer->unk_18C.x * player->unk_5C.y.x) + (racer->unk_18C.y * player->unk_5C.y.y) +
-               (racer->unk_18C.z * player->unk_5C.y.z);
-    if (temp_s2->unk_68[8] >= 50.0f) {
+    temp_fv0 = (racer->unk_18C.x * camera->basis.y.x) + (racer->unk_18C.y * camera->basis.y.y) +
+               (racer->unk_18C.z * camera->basis.y.z);
+    if (temp_s2->unk_88 >= 50.0f) {
         var_fv1 = 0.0f;
     } else {
-        var_fv1 = (50.0f - temp_s2->unk_68[8]) * 0.02f;
+        var_fv1 = (50.0f - temp_s2->unk_88) * 0.02f;
     }
 
-    temp_s1->unk_00.unk_00.x = player->unk_20.x + (var_fv1 * (racer->unk_18C.x - (temp_fv0 * player->unk_5C.y.x)));
-    temp_s1->unk_00.unk_00.y = player->unk_20.y + (var_fv1 * (racer->unk_18C.y - (temp_fv0 * player->unk_5C.y.y)));
-    temp_s1->unk_00.unk_00.z = player->unk_20.z + (var_fv1 * (racer->unk_18C.z - (temp_fv0 * player->unk_5C.y.z)));
-    sp8C.x = racer->gravityUp.x - player->unk_2C.y.x;
-    sp8C.y = racer->gravityUp.y - player->unk_2C.y.y;
-    sp8C.z = racer->gravityUp.z - player->unk_2C.y.z;
+    temp_s1->unk_00.x = camera->racerPos.x + (var_fv1 * (racer->unk_18C.x - (temp_fv0 * camera->basis.y.x)));
+    temp_s1->unk_00.y = camera->racerPos.y + (var_fv1 * (racer->unk_18C.y - (temp_fv0 * camera->basis.y.y)));
+    temp_s1->unk_00.z = camera->racerPos.z + (var_fv1 * (racer->unk_18C.z - (temp_fv0 * camera->basis.y.z)));
+    sp8C.x = racer->gravityUp.x - camera->racerBasis.y.x;
+    sp8C.y = racer->gravityUp.y - camera->racerBasis.y.y;
+    sp8C.z = racer->gravityUp.z - camera->racerBasis.y.z;
 
     var_fv1 = sqrtf(SQ(sp8C.x) + SQ(sp8C.y) + SQ(sp8C.z)) * 0.2f;
-    player->unk_2C.y.x += var_fv1 * sp8C.x;
-    temp_s2->unk_00.unk_00.unk_30.x = player->unk_2C.y.x;
-    player->unk_2C.y.y += var_fv1 * sp8C.y;
-    temp_s2->unk_00.unk_00.unk_30.y = player->unk_2C.y.y;
-    player->unk_2C.y.z += var_fv1 * sp8C.z;
 
-    temp_s2->unk_00.unk_00.unk_30.z = player->unk_2C.y.z;
-    sp7C.x = (temp_s2->unk_00.unk_00.unk_30.y * sp98.z) - (temp_s2->unk_00.unk_00.unk_30.z * sp98.y);
-    sp7C.y = (temp_s2->unk_00.unk_00.unk_30.z * sp98.x) - (temp_s2->unk_00.unk_00.unk_30.x * sp98.z);
-    sp7C.z = (temp_s2->unk_00.unk_00.unk_30.x * sp98.y) - (temp_s2->unk_00.unk_00.unk_30.y * sp98.x);
+    camera->racerBasis.y.x += var_fv1 * sp8C.x;
+    temp_s2->unk_24.y.x = camera->racerBasis.y.x;
+    camera->racerBasis.y.y += var_fv1 * sp8C.y;
+    temp_s2->unk_24.y.y = camera->racerBasis.y.y;
+    camera->racerBasis.y.z += var_fv1 * sp8C.z;
+    temp_s2->unk_24.y.z = camera->racerBasis.y.z;
+
+    sp7C.x = (temp_s2->unk_24.y.y * sp98.z) - (temp_s2->unk_24.y.z * sp98.y);
+    sp7C.y = (temp_s2->unk_24.y.z * sp98.x) - (temp_s2->unk_24.y.x * sp98.z);
+    sp7C.z = (temp_s2->unk_24.y.x * sp98.y) - (temp_s2->unk_24.y.y * sp98.x);
     var_fv1 = sqrtf(SQ(sp7C.x) + SQ(sp7C.y) + SQ(sp7C.z));
     if (var_fv1 < 0.1f) {
         return;
@@ -379,79 +388,73 @@ void func_807121D4(unk_struct_F8* arg0, Player* player) {
     sp70.x *= var_fv1;
     sp70.y *= var_fv1;
     sp70.z *= var_fv1;
-    angle = Math_Round(DEG_TO_FZXANG2(temp_s2->unk_68[4]));
+    angle = Math_Round(DEG_TO_FZXANG2(temp_s2->unk_78));
 
-    var_fv1 = temp_s2->unk_68[1] * SIN(angle) *
+    var_fv1 = temp_s2->unk_6C * SIN(angle) *
               ((sp70.x * racer->trueBasis.y.x) + (sp70.y * racer->trueBasis.y.y) + (sp70.z * racer->trueBasis.y.z));
-    spA4 = temp_s2->unk_68[1] * COS(angle);
+    spA4 = temp_s2->unk_6C * COS(angle);
 
-    angle = Math_Round(DEG_TO_FZXANG2(temp_s2->unk_68[8]));
+    angle = Math_Round(DEG_TO_FZXANG2(temp_s2->unk_88));
     temp_fv0 = COS(angle) * spA4;
     spA4 = SIN(angle) * spA4;
-    temp_s1->unk_00.unk_0C.x = player->unk_20.x + (spA4 * sp7C.x) + (temp_fv0 * sp98.x) + (var_fv1 * sp70.x);
-    temp_s1->unk_00.unk_0C.y = player->unk_20.y + (spA4 * sp7C.y) + (temp_fv0 * sp98.y) + (var_fv1 * sp70.y);
-    temp_s1->unk_00.unk_0C.z = player->unk_20.z + (spA4 * sp7C.z) + (temp_fv0 * sp98.z) + (var_fv1 * sp70.z);
-    temp_s2->unk_00.unk_00.unk_24.x = temp_s1->unk_00.unk_00.x - temp_s1->unk_00.unk_0C.x;
-    temp_s2->unk_00.unk_00.unk_24.y = temp_s1->unk_00.unk_00.y - temp_s1->unk_00.unk_0C.y;
-    temp_s2->unk_00.unk_00.unk_24.z = temp_s1->unk_00.unk_00.z - temp_s1->unk_00.unk_0C.z;
-    func_806F6D8C((Mtx3F*) &temp_s2->unk_00.unk_00.unk_24);
+    temp_s1->unk_0C.x = camera->racerPos.x + (spA4 * sp7C.x) + (temp_fv0 * sp98.x) + (var_fv1 * sp70.x);
+    temp_s1->unk_0C.y = camera->racerPos.y + (spA4 * sp7C.y) + (temp_fv0 * sp98.y) + (var_fv1 * sp70.y);
+    temp_s1->unk_0C.z = camera->racerPos.z + (spA4 * sp7C.z) + (temp_fv0 * sp98.z) + (var_fv1 * sp70.z);
+    temp_s2->unk_24.x.x = temp_s1->unk_00.x - temp_s1->unk_0C.x;
+    temp_s2->unk_24.x.y = temp_s1->unk_00.y - temp_s1->unk_0C.y;
+    temp_s2->unk_24.x.z = temp_s1->unk_00.z - temp_s1->unk_0C.z;
+    Math_OrthonormalizeAroundForward(&temp_s2->unk_24);
     if (!gGamePaused) {
-        temp_s1->unk_00.unk_18[3] = temp_s1->unk_00.unk_18[0] = temp_s2->unk_00.unk_00.unk_30.x;
-        temp_s1->unk_00.unk_18[4] = temp_s1->unk_00.unk_18[1] = temp_s2->unk_00.unk_00.unk_30.y;
-        temp_s1->unk_00.unk_18[5] = temp_s1->unk_00.unk_18[2] = temp_s2->unk_00.unk_00.unk_30.z;
+        temp_s1->unk_24 = temp_s1->unk_18 = temp_s2->unk_24.y.x;
+        temp_s1->unk_28 = temp_s1->unk_1C = temp_s2->unk_24.y.y;
+        temp_s1->unk_2C = temp_s1->unk_20 = temp_s2->unk_24.y.z;
     }
-    temp_s1->unk_00.unk_18[10] = 0.0f;
-    temp_s1->unk_00.unk_18[12] = 0.0f;
+    temp_s1->unk_40 = 0.0f;
+    temp_s1->unk_48 = 0.0f;
     if (gNumPlayers == 2) {
-        temp_s1->unk_00.unk_18[11] = -15.0f;
-        temp_s1->unk_00.unk_18[13] = -15.0f;
+        temp_s1->unk_44 = -15.0f;
+        temp_s1->unk_4C = -15.0f;
     } else {
-        temp_s1->unk_00.unk_18[11] = 77.0f;
-        temp_s1->unk_00.unk_18[13] = 77.0f;
+        temp_s1->unk_44 = 77.0f;
+        temp_s1->unk_4C = 77.0f;
     }
 }
 
 void func_80712864(unk_struct_F8* arg0) {
-    unk_struct_58* var = &arg0->unk_04.unk_00;
-    unk_struct_68* var2 = &arg0->unk_04.unk_58.unk_00;
+    unk_struct_58* var = &arg0->unk_04;
+    unk_struct_68* var2 = &arg0->sub_1_unk_5C;
 
-    var2->unk_00.unk_30.x += (var2->unk_00.unk_3C.x - var2->unk_00.unk_30.x) * var2->unk_60;
-    var2->unk_00.unk_30.y += (var2->unk_00.unk_3C.y - var2->unk_00.unk_30.y) * var2->unk_60;
-    var2->unk_00.unk_30.z += (var2->unk_00.unk_3C.z - var2->unk_00.unk_30.z) * var2->unk_60;
+    var2->unk_30.x += (var2->unk_3C.x - var2->unk_30.x) * var2->unk_60;
+    var2->unk_30.y += (var2->unk_3C.y - var2->unk_30.y) * var2->unk_60;
+    var2->unk_30.z += (var2->unk_3C.z - var2->unk_30.z) * var2->unk_60;
 
-    var2->unk_00.unk_48.x += (var2->unk_54.x - var2->unk_00.unk_48.x) * var2->unk_64;
-    var2->unk_00.unk_48.y += (var2->unk_54.y - var2->unk_00.unk_48.y) * var2->unk_64;
-    var2->unk_00.unk_48.z += (var2->unk_54.z - var2->unk_00.unk_48.z) * var2->unk_64;
+    var2->unk_48.x += (var2->unk_54.x - var2->unk_48.x) * var2->unk_64;
+    var2->unk_48.y += (var2->unk_54.y - var2->unk_48.y) * var2->unk_64;
+    var2->unk_48.z += (var2->unk_54.z - var2->unk_48.z) * var2->unk_64;
 
-    var->unk_00.x = var2->unk_00.unk_00.unk_00.x + (var2->unk_00.unk_24.x * var2->unk_00.unk_30.x) +
-                    (var2->unk_00.unk_00.unk_18 * var2->unk_00.unk_30.y) +
-                    (var2->unk_00.unk_00.unk_0C.x * var2->unk_00.unk_30.z);
-    var->unk_00.y = var2->unk_00.unk_00.unk_00.y + (var2->unk_00.unk_24.y * var2->unk_00.unk_30.x) +
-                    (var2->unk_00.unk_00.unk_1C * var2->unk_00.unk_30.y) +
-                    (var2->unk_00.unk_00.unk_0C.y * var2->unk_00.unk_30.z);
-    var->unk_00.z = var2->unk_00.unk_00.unk_00.z + (var2->unk_00.unk_24.z * var2->unk_00.unk_30.x) +
-                    (var2->unk_00.unk_20 * var2->unk_00.unk_30.y) +
-                    (var2->unk_00.unk_00.unk_0C.z * var2->unk_00.unk_30.z);
+    var->unk_00.x = var2->unk_00.x + (var2->unk_0C.z.x * var2->unk_30.x) + (var2->unk_0C.y.x * var2->unk_30.y) +
+                    (var2->unk_0C.x.x * var2->unk_30.z);
+    var->unk_00.y = var2->unk_00.y + (var2->unk_0C.z.y * var2->unk_30.x) + (var2->unk_0C.y.y * var2->unk_30.y) +
+                    (var2->unk_0C.x.y * var2->unk_30.z);
+    var->unk_00.z = var2->unk_00.z + (var2->unk_0C.z.z * var2->unk_30.x) + (var2->unk_0C.y.z * var2->unk_30.y) +
+                    (var2->unk_0C.x.z * var2->unk_30.z);
 
-    var->unk_0C.x = var2->unk_00.unk_00.unk_00.x + (var2->unk_00.unk_24.x * var2->unk_00.unk_48.x) +
-                    (var2->unk_00.unk_00.unk_18 * var2->unk_00.unk_48.y) +
-                    (var2->unk_00.unk_00.unk_0C.x * var2->unk_00.unk_48.z);
-    var->unk_0C.y = var2->unk_00.unk_00.unk_00.y + (var2->unk_00.unk_24.y * var2->unk_00.unk_48.x) +
-                    (var2->unk_00.unk_00.unk_1C * var2->unk_00.unk_48.y) +
-                    (var2->unk_00.unk_00.unk_0C.y * var2->unk_00.unk_48.z);
-    var->unk_0C.z = var2->unk_00.unk_00.unk_00.z + (var2->unk_00.unk_24.z * var2->unk_00.unk_48.x) +
-                    (var2->unk_00.unk_20 * var2->unk_00.unk_48.y) +
-                    (var2->unk_00.unk_00.unk_0C.z * var2->unk_00.unk_48.z);
+    var->unk_0C.x = var2->unk_00.x + (var2->unk_0C.z.x * var2->unk_48.x) + (var2->unk_0C.y.x * var2->unk_48.y) +
+                    (var2->unk_0C.x.x * var2->unk_48.z);
+    var->unk_0C.y = var2->unk_00.y + (var2->unk_0C.z.y * var2->unk_48.x) + (var2->unk_0C.y.y * var2->unk_48.y) +
+                    (var2->unk_0C.x.y * var2->unk_48.z);
+    var->unk_0C.z = var2->unk_00.z + (var2->unk_0C.z.z * var2->unk_48.x) + (var2->unk_0C.y.z * var2->unk_48.y) +
+                    (var2->unk_0C.x.z * var2->unk_48.z);
 }
 
-void func_80712AA8(unk_struct_F8* arg0, Player* player) {
+void func_80712AA8(unk_struct_F8* arg0, Camera* camera) {
 
-    switch (arg0->unk_00) {
+    switch (arg0->type) {
         case 1:
             func_80711EDC(arg0);
             break;
         case 4:
-            func_807121D4(arg0, player);
+            func_807121D4(arg0, camera);
             break;
         case 2:
         case 3:
@@ -465,78 +468,78 @@ void func_80712AA8(unk_struct_F8* arg0, Player* player) {
 }
 
 void func_80712B34(unk_struct_F8* arg0, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32* arg4) {
-    unk_8008112C_arg_1* temp_v0_3 = &arg0->unk_04;
-    unk_struct_9C* temp_v0 = &arg0->unk_04.unk_58;
+    unk_struct_58* temp_v0_3 = &arg0->unk_04;
+    f32* temp_v0 = &arg0->sub_4_unk_5C;
 
     if (arg1 != NULL) {
-        temp_v0->unk_00.unk_00.unk_00.unk_00.x = arg1->x;
-        temp_v0->unk_00.unk_00.unk_00.unk_00.y = arg1->y;
-        temp_v0->unk_00.unk_00.unk_00.unk_00.z = arg1->z;
+        temp_v0[0] = arg1->x;
+        temp_v0[1] = arg1->y;
+        temp_v0[2] = arg1->z;
     }
     if (arg2 != NULL) {
-        temp_v0->unk_00.unk_00.unk_00.unk_0C.x = arg2->x;
-        temp_v0->unk_00.unk_00.unk_00.unk_0C.y = arg2->y;
-        temp_v0->unk_00.unk_00.unk_00.unk_0C.z = arg2->z;
+        temp_v0[3] = arg2->x;
+        temp_v0[4] = arg2->y;
+        temp_v0[5] = arg2->z;
     }
     if (arg3 != NULL) {
-        temp_v0_3->unk_00.unk_18[3] = arg3->x;
-        temp_v0_3->unk_00.unk_18[4] = arg3->y;
-        temp_v0_3->unk_00.unk_18[5] = arg3->z;
+        temp_v0_3->unk_24 = arg3->x;
+        temp_v0_3->unk_28 = arg3->y;
+        temp_v0_3->unk_2C = arg3->z;
     }
     if (arg4 != NULL) {
-        arg0->unk_04.unk_00.unk_18[8] = *arg4;
+        temp_v0_3->unk_38 = *arg4;
     }
 }
 
 void func_80712BBC(unk_struct_F8* arg0, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32* arg4) {
-    unk_8008112C_arg_1* temp_v0_3 = &arg0->unk_04;
-    unk_struct_9C* temp_v0 = &arg0->unk_04.unk_58;
+    unk_struct_58* temp_v0_3 = &arg0->unk_04;
+    f32* temp_v0 = &arg0->sub_4_unk_5C;
 
     if (arg1 != NULL) {
-        temp_v0->unk_00.unk_00.unk_00.unk_00.x = arg1->x;
-        temp_v0->unk_00.unk_00.unk_00.unk_00.y = arg1->y;
-        temp_v0->unk_00.unk_00.unk_00.unk_00.z = arg1->z;
+        temp_v0[0] = arg1->x;
+        temp_v0[1] = arg1->y;
+        temp_v0[2] = arg1->z;
     }
     if (arg2 != NULL) {
-        temp_v0->unk_00.unk_00.unk_30.y = arg2->x;
-        temp_v0->unk_00.unk_00.unk_48.y = arg2->y;
-        temp_v0->unk_00.unk_00.unk_3C.y = arg2->z;
+        temp_v0[13] = arg2->x;
+        temp_v0[19] = arg2->y;
+        temp_v0[16] = arg2->z;
     }
     if (arg3 != NULL) {
-        temp_v0_3->unk_00.unk_18[3] = arg3->x;
-        temp_v0_3->unk_00.unk_18[4] = arg3->y;
-        temp_v0_3->unk_00.unk_18[5] = arg3->z;
+        temp_v0_3->unk_24 = arg3->x;
+        temp_v0_3->unk_28 = arg3->y;
+        temp_v0_3->unk_2C = arg3->z;
     }
     if (arg4 != NULL) {
-        arg0->unk_04.unk_00.unk_18[8] = *arg4;
+        temp_v0_3->unk_38 = *arg4;
     }
 }
 
 void func_80712C44(unk_struct_F8* arg0, Vec3f* arg1, Mtx3F* arg2, Vec3f* arg3, Vec3f* arg4, Vec3f* arg5, f32* arg6) {
     unk_struct_58* temp_v0_4 = &arg0->unk_04.unk_00;
-    unk_struct_68* temp_v0 = &arg0->unk_04.unk_58.unk_00;
+    unk_struct_68* temp_v0 = &arg0->sub_5_unk_5C;
 
     if (arg1 != NULL) {
-        temp_v0->unk_00.unk_00.unk_00.x = arg1->x;
-        temp_v0->unk_00.unk_00.unk_00.y = arg1->y;
-        temp_v0->unk_00.unk_00.unk_00.z = arg1->z;
+        temp_v0->unk_00.x = arg1->x;
+        temp_v0->unk_00.y = arg1->y;
+        temp_v0->unk_00.z = arg1->z;
     }
     if (arg2 != NULL) {
-        temp_v0->unk_00.unk_00.unk_0C.x += arg2->x.x * 0.2f;
-        temp_v0->unk_00.unk_00.unk_0C.y += arg2->x.y * 0.2f;
-        temp_v0->unk_00.unk_00.unk_0C.z += arg2->x.z * 0.2f;
-        temp_v0->unk_00.unk_00.unk_18 += arg2->y.x * 0.2f;
-        temp_v0->unk_00.unk_00.unk_1C += arg2->y.y * 0.2f;
-        temp_v0->unk_00.unk_20 += arg2->y.z * 0.2f;
-        temp_v0->unk_00.unk_24.x += arg2->z.x * 0.2f;
-        temp_v0->unk_00.unk_24.y += arg2->z.y * 0.2f;
-        temp_v0->unk_00.unk_24.z += arg2->z.z * 0.2f;
-        func_806F6D8C((Mtx3F*) &temp_v0->unk_00.unk_00.unk_0C);
+        temp_v0->unk_0C.x.x += arg2->x.x * 0.2f;
+        temp_v0->unk_0C.x.y += arg2->x.y * 0.2f;
+        temp_v0->unk_0C.x.z += arg2->x.z * 0.2f;
+        temp_v0->unk_0C.y.x += arg2->y.x * 0.2f;
+        temp_v0->unk_0C.y.y += arg2->y.y * 0.2f;
+        temp_v0->unk_0C.y.z += arg2->y.z * 0.2f;
+        temp_v0->unk_0C.z.x += arg2->z.x * 0.2f;
+        temp_v0->unk_0C.z.y += arg2->z.y * 0.2f;
+        temp_v0->unk_0C.z.z += arg2->z.z * 0.2f;
+        Math_OrthonormalizeAroundForward(&temp_v0->unk_0C);
     }
     if (arg3 != NULL) {
-        temp_v0->unk_00.unk_3C.x = arg3->x;
-        temp_v0->unk_00.unk_3C.y = arg3->y;
-        temp_v0->unk_00.unk_3C.z = arg3->z;
+        temp_v0->unk_3C.x = arg3->x;
+        temp_v0->unk_3C.y = arg3->y;
+        temp_v0->unk_3C.z = arg3->z;
     }
     if (arg4 != NULL) {
         temp_v0->unk_54.x = arg4->x;
@@ -544,36 +547,36 @@ void func_80712C44(unk_struct_F8* arg0, Vec3f* arg1, Mtx3F* arg2, Vec3f* arg3, V
         temp_v0->unk_54.z = arg4->z;
     }
     if (arg5 != NULL) {
-        temp_v0_4->unk_18[3] = arg5->x;
-        temp_v0_4->unk_18[4] = arg5->y;
-        temp_v0_4->unk_18[5] = arg5->z;
+        temp_v0_4->unk_24 = arg5->x;
+        temp_v0_4->unk_28 = arg5->y;
+        temp_v0_4->unk_2C = arg5->z;
     }
     if (arg6 != NULL) {
-        temp_v0_4->unk_18[8] = *arg6;
+        temp_v0_4->unk_38 = *arg6;
     }
 }
 
 void func_80712DE0(unk_struct_F8* arg0, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32* arg4) {
-    unk_8008112C_arg_1* temp_v0_3 = &arg0->unk_04;
-    unk_struct_9C* temp_v0 = &arg0->unk_04.unk_58;
+    unk_struct_58* temp_v0_3 = &arg0->unk_04;
+    unk_struct_9C* temp_v0 = &arg0->sub_4_unk_5C;
 
     if (arg1 != NULL) {
-        temp_v0->unk_00.unk_00.unk_48.x = arg1->x;
-        temp_v0->unk_00.unk_00.unk_48.y = arg1->y;
-        temp_v0->unk_00.unk_00.unk_48.z = arg1->z;
+        temp_v0->unk_48.x = arg1->x;
+        temp_v0->unk_48.y = arg1->y;
+        temp_v0->unk_48.z = arg1->z;
     }
     if (arg2 != NULL) {
-        temp_v0->unk_68[2] = arg2->x;
-        temp_v0->unk_68[8] = arg2->y;
-        temp_v0->unk_68[5] = arg2->z;
+        temp_v0->unk_70 = arg2->x;
+        temp_v0->unk_88 = arg2->y;
+        temp_v0->unk_7C = arg2->z;
     }
     if (arg3 != NULL) {
-        temp_v0_3->unk_00.unk_18[3] = arg3->x;
-        temp_v0_3->unk_00.unk_18[4] = arg3->y;
-        temp_v0_3->unk_00.unk_18[5] = arg3->z;
+        temp_v0_3->unk_24 = arg3->x;
+        temp_v0_3->unk_28 = arg3->y;
+        temp_v0_3->unk_2C = arg3->z;
     }
     if (arg4 != NULL) {
-        arg0->unk_04.unk_00.unk_18[8] = *arg4;
+        temp_v0_3->unk_38 = *arg4;
     }
 }
 
@@ -617,85 +620,92 @@ Mtx3F* func_80712FE4(Mtx3F* arg0, CourseSegment* arg1, f32 arg2) {
     return arg0;
 }
 
-void func_80713064(Player* player, unk_8008112C_arg_1* arg1, unk_struct_9C* arg2, s32 arg3) {
+void func_80713064(Camera* camera, unk_struct_58* arg1, unk_struct_9C* arg2, s32 arg3) {
     Vec3f* var_v0;
 
     if (arg3 == 2) {
-        var_v0 = &D_80776A78[player->cameraSetting];
+        var_v0 = &D_80776A78[camera->setting];
     } else {
-        var_v0 = &D_80776A48[player->cameraSetting];
+        var_v0 = &D_80776A48[camera->setting];
     }
-    arg2->unk_68[2] = var_v0->y;
-    arg2->unk_68[5] = var_v0->z;
-    arg1->unk_00.unk_18[8] = player->unk_14 = var_v0->x;
+    arg2->unk_70 = var_v0->y;
+    arg2->unk_7C = var_v0->z;
+    arg1->unk_38 = camera->unk_14 = var_v0->x;
 
-    player->unk_10 = 2;
+    camera->unk_10 = 2;
 
-    switch (player->cameraSetting) {
+    switch (camera->setting) {
         case 1:
         case 2:
-            player->unk_10 |= 1;
+            camera->unk_10 |= 1;
             break;
         default:
             break;
     }
 }
 
-void func_807130F8(Player* player, unk_struct_F8* arg1) {
-    player->unk_50 = arg1->unk_04.unk_00.unk_0C;
+void func_807130F8(Camera* camera, unk_struct_F8* arg1) {
+    camera->eye = arg1->unk_04.unk_0C;
 
-    player->unk_88 = arg1->unk_04.unk_00.unk_00;
+    camera->at = arg1->unk_04.unk_00;
 
-    player->unk_5C.y.x = arg1->unk_04.unk_00.unk_18[0];
-    player->unk_5C.y.y = arg1->unk_04.unk_00.unk_18[1];
-    player->unk_5C.y.z = arg1->unk_04.unk_00.unk_18[2];
-    player->unk_94.x = arg1->unk_04.unk_00.unk_18[7];
-    player->unk_94.y = arg1->unk_04.unk_00.unk_18[10];
-    player->unk_94.z = arg1->unk_04.unk_00.unk_18[11];
+    camera->basis.y.x = arg1->unk_04.unk_18;
+    camera->basis.y.y = arg1->unk_04.unk_1C;
+    camera->basis.y.z = arg1->unk_04.unk_20;
+    camera->fovAngle = arg1->unk_04.unk_34;
+    camera->frustrumCenterX = arg1->unk_04.unk_40;
+    camera->frustrumCenterY = arg1->unk_04.unk_44;
 }
 
-void func_8071315C(Player* player) {
-    Mtx3F* temp_a0;
-    f32 temp_fv0;
-    f32 temp_fv0_2;
-    f32 temp_fv1;
+void func_8071315C(Camera* camera) {
+    f32 x;
+    f32 z;
+    f32 normalizingFactor;
 
-    player->unk_5C.x.x = player->unk_88.x - player->unk_50.x;
-    player->unk_5C.x.y = player->unk_88.y - player->unk_50.y;
-    player->unk_5C.x.z = player->unk_88.z - player->unk_50.z;
+    camera->basis.x.x = camera->at.x - camera->eye.x;
+    camera->basis.x.y = camera->at.y - camera->eye.y;
+    camera->basis.x.z = camera->at.z - camera->eye.z;
 
-    func_806F6D8C(&player->unk_5C);
-    temp_fv0 = player->unk_5C.x.x;
-    temp_fv1 = player->unk_5C.x.z;
-    temp_fv0_2 = sqrtf(SQ(temp_fv0) + SQ(temp_fv1));
-    if (temp_fv0_2 != 0.0f) {
-        player->unk_80 = (f32) (player->unk_5C.x.x / temp_fv0_2);
-        player->unk_84 = (f32) (player->unk_5C.x.z / temp_fv0_2);
+    Math_OrthonormalizeAroundForward(&camera->basis);
+    x = camera->basis.x.x;
+    z = camera->basis.x.z;
+    normalizingFactor = sqrtf(SQ(x) + SQ(z));
+    if (normalizingFactor != 0.0f) {
+        camera->unk_80 = camera->basis.x.x / normalizingFactor;
+        camera->unk_84 = camera->basis.x.z / normalizingFactor;
     }
 }
 
-void func_80713204(MtxF* arg0, MtxF* arg1, MtxF* arg2) {
-    arg0->m[0][0] = (arg1->m[0][0] * arg2->m[0][0]) + (arg1->m[2][0] * arg2->m[0][2]);
-    arg0->m[0][1] = (arg1->m[1][1] * arg2->m[0][1]) + (arg1->m[2][1] * arg2->m[0][2]);
-    arg0->m[0][2] = arg1->m[2][2] * arg2->m[0][2];
-    arg0->m[0][3] = -arg2->m[0][2];
-    arg0->m[1][0] = (arg1->m[0][0] * arg2->m[1][0]) + (arg1->m[2][0] * arg2->m[1][2]);
-    arg0->m[1][1] = (arg1->m[1][1] * arg2->m[1][1]) + (arg1->m[2][1] * arg2->m[1][2]);
-    arg0->m[1][2] = arg1->m[2][2] * arg2->m[1][2];
-    arg0->m[1][3] = -arg2->m[1][2];
-    arg0->m[2][0] = (arg1->m[0][0] * arg2->m[2][0]) + (arg1->m[2][0] * arg2->m[2][2]);
-    arg0->m[2][1] = (arg1->m[1][1] * arg2->m[2][1]) + (arg1->m[2][1] * arg2->m[2][2]);
-    arg0->m[2][2] = arg1->m[2][2] * arg2->m[2][2];
-    arg0->m[2][3] = -arg2->m[2][2];
-    arg0->m[3][0] = (arg1->m[0][0] * arg2->m[3][0]) + (arg1->m[2][0] * arg2->m[3][2]);
-    arg0->m[3][1] = (arg1->m[1][1] * arg2->m[3][1]) + (arg1->m[2][1] * arg2->m[3][2]);
-    arg0->m[3][2] = (arg1->m[2][2] * arg2->m[3][2]) + arg1->m[3][2];
-    arg0->m[3][3] = -arg2->m[3][2];
+void Camera_CalculateProjectionViewMtx(MtxF* projectionViewMtx, MtxF* projectionMtx, MtxF* viewMtx) {
+    projectionViewMtx->m[0][0] =
+        (projectionMtx->m[0][0] * viewMtx->m[0][0]) + (projectionMtx->m[2][0] * viewMtx->m[0][2]);
+    projectionViewMtx->m[0][1] =
+        (projectionMtx->m[1][1] * viewMtx->m[0][1]) + (projectionMtx->m[2][1] * viewMtx->m[0][2]);
+    projectionViewMtx->m[0][2] = projectionMtx->m[2][2] * viewMtx->m[0][2];
+    projectionViewMtx->m[0][3] = -viewMtx->m[0][2];
+    projectionViewMtx->m[1][0] =
+        (projectionMtx->m[0][0] * viewMtx->m[1][0]) + (projectionMtx->m[2][0] * viewMtx->m[1][2]);
+    projectionViewMtx->m[1][1] =
+        (projectionMtx->m[1][1] * viewMtx->m[1][1]) + (projectionMtx->m[2][1] * viewMtx->m[1][2]);
+    projectionViewMtx->m[1][2] = projectionMtx->m[2][2] * viewMtx->m[1][2];
+    projectionViewMtx->m[1][3] = -viewMtx->m[1][2];
+    projectionViewMtx->m[2][0] =
+        (projectionMtx->m[0][0] * viewMtx->m[2][0]) + (projectionMtx->m[2][0] * viewMtx->m[2][2]);
+    projectionViewMtx->m[2][1] =
+        (projectionMtx->m[1][1] * viewMtx->m[2][1]) + (projectionMtx->m[2][1] * viewMtx->m[2][2]);
+    projectionViewMtx->m[2][2] = projectionMtx->m[2][2] * viewMtx->m[2][2];
+    projectionViewMtx->m[2][3] = -viewMtx->m[2][2];
+    projectionViewMtx->m[3][0] =
+        (projectionMtx->m[0][0] * viewMtx->m[3][0]) + (projectionMtx->m[2][0] * viewMtx->m[3][2]);
+    projectionViewMtx->m[3][1] =
+        (projectionMtx->m[1][1] * viewMtx->m[3][1]) + (projectionMtx->m[2][1] * viewMtx->m[3][2]);
+    projectionViewMtx->m[3][2] = (projectionMtx->m[2][2] * viewMtx->m[3][2]) + projectionMtx->m[3][2];
+    projectionViewMtx->m[3][3] = -viewMtx->m[3][2];
 }
 
-void func_807133A0(MtxF* mtxF, Mtx* mtx2) {
+void Camera_MatrixToMtx(MtxF* mtxF, Mtx* mtx2) {
     s32 pad[3];
-    s64 var_v1;
+    s64 longValue;
     f32 temp_fv0;
     s32 i;
     s32 j;
@@ -705,57 +715,56 @@ void func_807133A0(MtxF* mtxF, Mtx* mtx2) {
         for (j = 3; j >= 0; j--) {
             temp_fv0 = mtxF->m[i][j] * 65536.0f;
             if (temp_fv0 < 0.0f) {
-                var_v1 = temp_fv0 - 0.5f;
+                longValue = temp_fv0 - 0.5f;
             } else {
-                var_v1 = temp_fv0 + 0.5f;
+                longValue = temp_fv0 + 0.5f;
             }
 
-            mtx->u.i[i][j] = var_v1 >> 0x10;
-            mtx->u.f[i][j] = var_v1 & 0xFFFF;
+            mtx->u.i[i][j] = longValue >> 0x10;
+            mtx->u.f[i][j] = longValue & 0xFFFF;
         }
     }
 }
 
-void func_807134AC(GfxPool* arg0, Player* player) {
-    Vec3f sp74;
-    Vec3f sp68;
+void func_807134AC(GfxPool* gfxPool, Camera* camera) {
+    Vec3f at;
+    Vec3f eye;
     f32 var_fv0;
-    f32 temp_fa0;
+    f32 fovAngle;
     s32 pad[2];
 
-    Matrix_SetFrustrum(&arg0->unk_1A008[player->id], &player->unk_11C, player->unk_94.x, player->unk_A0, player->unk_A4,
-                       player->unk_A8, player->unk_94.y, player->unk_AC, player->unk_94.z, &player->unk_118);
-    sp68 = player->unk_50;
-    sp74 = player->unk_88;
+    Matrix_SetFrustrum(&gfxPool->unk_1A008[camera->id], &camera->projectionMtx, camera->fovAngle, camera->near,
+                       camera->far, camera->fovScaleX, camera->frustrumCenterX, camera->fovScaleY,
+                       camera->frustrumCenterY, &camera->perspectiveScale);
+    eye = camera->eye;
+    at = camera->at;
 
-    Matrix_SetLookAt(&arg0->unk_1A108[player->id], &player->unk_15C, sp68.x, sp68.y, sp68.z, sp74.x, sp74.y, sp74.z,
-                     player->unk_5C.y.x, player->unk_5C.y.y, player->unk_5C.y.z);
-    func_80713204(&player->unk_19C, &player->unk_11C, &player->unk_15C);
+    Matrix_SetLookAt(&gfxPool->unk_1A108[camera->id], &camera->viewMtx, eye.x, eye.y, eye.z, at.x, at.y, at.z,
+                     camera->basis.y.x, camera->basis.y.y, camera->basis.y.z);
+    Camera_CalculateProjectionViewMtx(&camera->projectionViewMtx, &camera->projectionMtx, &camera->viewMtx);
     if (gNumPlayers != 2) {
-        if (player->unk_19C.m[3][1] >= 0.0f) {
-            var_fv0 = player->unk_19C.m[3][1];
-        } else {
-            var_fv0 = -player->unk_19C.m[3][1];
-        }
+        var_fv0 = ABS(camera->projectionViewMtx.m[3][1]);
+
         if (var_fv0 > 30000.0f) {
             var_fv0 -= 30000.0f;
-            var_fv0 /= 2767.0f;
+            var_fv0 /= SHT_MAX - 30000.0f;
             if (var_fv0 >= 1.0f) {
                 var_fv0 = 1.0f;
             }
-            temp_fa0 = player->unk_94.x + ((85.0f - player->unk_94.x) * var_fv0);
+            fovAngle = camera->fovAngle + ((85.0f - camera->fovAngle) * var_fv0);
 
-            Matrix_SetFrustrum(&arg0->unk_1A008[player->id], &player->unk_11C, temp_fa0, player->unk_A0, player->unk_A4,
-                               player->unk_A8, player->unk_94.y, player->unk_AC, player->unk_94.z, &player->unk_118);
-            func_80713204(&player->unk_19C, &player->unk_11C, &player->unk_15C);
+            Matrix_SetFrustrum(&gfxPool->unk_1A008[camera->id], &camera->projectionMtx, fovAngle, camera->near,
+                               camera->far, camera->fovScaleX, camera->frustrumCenterX, camera->fovScaleY,
+                               camera->frustrumCenterY, &camera->perspectiveScale);
+            Camera_CalculateProjectionViewMtx(&camera->projectionViewMtx, &camera->projectionMtx, &camera->viewMtx);
         }
     }
-    func_807133A0(&player->unk_19C, &arg0->unk_1A208[player->id]);
+    Camera_MatrixToMtx(&camera->projectionViewMtx, &gfxPool->unk_1A208[camera->id]);
 }
 
 extern s32 D_807A16C8;
 
-void func_8071370C(Player* arg0) {
+void func_8071370C(Camera* camera) {
     Racer* racer;
     f32 var_fv1;
     f32 var_fa0;
@@ -764,14 +773,14 @@ void func_8071370C(Player* arg0) {
     f32 sp18;
 
     racer = &gRacers[D_807A16C8];
-    sp20 = racer->segmentPositionInfo.pos.x - arg0->unk_50.x;
-    sp1C = racer->segmentPositionInfo.pos.y - arg0->unk_50.y;
-    sp18 = racer->segmentPositionInfo.pos.z - arg0->unk_50.z;
+    sp20 = racer->segmentPositionInfo.pos.x - camera->eye.x;
+    sp1C = racer->segmentPositionInfo.pos.y - camera->eye.y;
+    sp18 = racer->segmentPositionInfo.pos.z - camera->eye.z;
 
-    var_fv1 = sqrtf((sp20 * sp20) + (sp1C * sp1C) + (sp18 * sp18));
+    var_fv1 = sqrtf(SQ(sp20) + SQ(sp1C) + SQ(sp18));
 
     if (var_fv1 != 0.0f) {
-        var_fa0 = -((arg0->unk_5C.z.x * sp20) + (sp1C * arg0->unk_5C.z.y) + (sp18 * arg0->unk_5C.z.z)) / var_fv1;
+        var_fa0 = -((camera->basis.z.x * sp20) + (sp1C * camera->basis.z.y) + (sp18 * camera->basis.z.z)) / var_fv1;
         var_fv1 *= var_fa0;
     }
     if ((var_fv1 >= -1000.0f) && (var_fv1 <= 1000.0f)) {
@@ -779,7 +788,7 @@ void func_8071370C(Player* arg0) {
     }
 }
 
-void func_807138CC(f32* x, f32* y, f32* z) {
+void Camera_NormalizeXYZ(f32* x, f32* y, f32* z) {
     f32 normalizeScale;
 
     normalizeScale = 1.0f / (SQ(*x) + SQ(*y) + SQ(*z));
@@ -788,7 +797,7 @@ void func_807138CC(f32* x, f32* y, f32* z) {
     *z *= normalizeScale;
 }
 
-void func_8071391C(MtxF* mtxF, f32 angle, f32 x, f32 y, f32 z) {
+void Camera_SetAxisRotation(MtxF* mtxF, f32 angle, f32 x, f32 y, f32 z) {
     s32 pad[2];
     f32 temp_fa0;
     f32 temp_ft1;
@@ -796,12 +805,12 @@ void func_8071391C(MtxF* mtxF, f32 angle, f32 x, f32 y, f32 z) {
     f32 sp18;
     f32 temp_fv0;
     f32 sin;
-    s32 temp_v0;
+    s32 binAngle;
 
-    func_807138CC(&x, &y, &z);
-    temp_v0 = Math_Round(DEG_TO_FZXANG2(angle));
-    sin = SIN(temp_v0);
-    cos = COS(temp_v0);
+    Camera_NormalizeXYZ(&x, &y, &z);
+    binAngle = Math_Round(DEG_TO_FZXANG2(angle));
+    sin = SIN(binAngle);
+    cos = COS(binAngle);
     temp_fv0 = 1.0f - cos;
     temp_ft1 = x * y * temp_fv0;
     temp_fa0 = y * z * temp_fv0;
@@ -910,18 +919,18 @@ u8* func_80713D78(u8* arg0, u32 arg1, unk_800832EC_arg_2* arg2) {
 
 extern s32 gGameMode;
 extern GfxPool D_1000000;
-extern Player gPlayers[];
+extern Camera gCameras[];
 
-Gfx* func_80713E38(Gfx* gfx, s32 arg1, s32 playerIndex) {
-    Player* player = &gPlayers[playerIndex];
+Gfx* func_80713E38(Gfx* gfx, s32 scissorBoxType, s32 playerIndex) {
+    Camera* camera = &gCameras[playerIndex];
 
-    switch (player->unk_E0) {
+    switch (camera->unk_E0) {
         case 1:
             gSPViewport(gfx++, &D_1000000.unk_362C8[playerIndex]);
-            gDPSetScissor(gfx++, G_SC_NON_INTERLACE, player->unk_B0, player->unk_B4, player->unk_B8, player->unk_BC);
+            gDPSetScissor(gfx++, G_SC_NON_INTERLACE, camera->unk_B0, camera->unk_B4, camera->unk_B8, camera->unk_BC);
             break;
         default:
-            gfx = func_806F6360(gfx, arg1);
+            gfx = func_806F6360(gfx, scissorBoxType);
             if ((gNumPlayers == 1) && (gGameMode != GAMEMODE_RECORDS) && (gGameMode != GAMEMODE_GP_END_CS)) {
                 gDPSetScissor(gfx++, G_SC_NON_INTERLACE, 12, 16, 308, 224);
             }
@@ -933,9 +942,9 @@ Gfx* func_80713E38(Gfx* gfx, s32 arg1, s32 playerIndex) {
 
 void func_80713F8C(s32 arg0, f32 arg1, f32 arg2, f32 arg3) {
 
-    D_807A10A0[arg0].unk_04.unk_58.unk_68[1] = D_807A10A0[arg0].unk_04.unk_58.unk_68[2] = arg1;
-    D_807A10A0[arg0].unk_04.unk_58.unk_68[4] = D_807A10A0[arg0].unk_04.unk_58.unk_68[5] = arg2;
-    D_807A10A0[arg0].unk_04.unk_58.unk_68[7] = D_807A10A0[arg0].unk_04.unk_58.unk_68[8] = arg3;
+    D_807A10A0[arg0].sub_4_unk_5C.unk_6C = D_807A10A0[arg0].sub_4_unk_5C.unk_70 = arg1;
+    D_807A10A0[arg0].sub_4_unk_5C.unk_78 = D_807A10A0[arg0].sub_4_unk_5C.unk_7C = arg2;
+    D_807A10A0[arg0].sub_4_unk_5C.unk_84 = D_807A10A0[arg0].sub_4_unk_5C.unk_88 = arg3;
 }
 
 void func_80713FD4(unk_800E5D70* arg0, unk_struct_F8* arg1) {
@@ -967,7 +976,7 @@ void func_8071400C(unk_800E5D70* arg0, s32 arg1) {
 }
 
 void func_8071402C(unk_800E5D70* arg0, f32* arg1) {
-    arg0->unk_00->unk_04.unk_00.unk_18[13] = *arg1;
+    arg0->unk_00->unk_04.unk_4C = *arg1;
 }
 
 bool func_8071403C(unk_800E5D70* arg0) {
@@ -1375,7 +1384,6 @@ void func_807152EC(unk_800E5D70* arg0, unk_80085494_arg_2* arg1) {
     func_80712C44(arg0->unk_00, &sp58, &sp34, &sp64.unk_00[0], &sp64.unk_00[1], &sp64.unk_00[2], &sp64.unk_24);
 }
 
-// TODO: sort out unk_struct_20 and unk_struct_68 (conflicting struct copies)
 void func_807153A0(unk_800E5D70* arg0, unk_struct_14* arg1) {
     s32 pad[4];
     unk_struct_9C* temp_v0;
@@ -1385,9 +1393,9 @@ void func_807153A0(unk_800E5D70* arg0, unk_struct_14* arg1) {
 
     func_80715E1C(sp38, arg0->unk_0C, arg1);
     temp_v1 = arg0->unk_18;
-    temp_v0 = &arg0->unk_00->unk_04.unk_58;
-    *((Mtx3F*) &temp_v0->unk_00.unk_00.unk_00) = *arg0->unk_14;
-    *((Vec3f*) &temp_v0->unk_00.unk_60) = temp_v1->tiltUp;
+    temp_v0 = &arg0->unk_00->sub_4_unk_5C;
+    temp_v0->unk_00 = *arg0->unk_14;
+    temp_v0->unk_60 = temp_v1->tiltUp;
     temp_v0->unk_90 = temp_v1->speed;
     temp_v0->unk_98 = temp_v1->segmentPositionInfo.courseSegment->trackSegmentInfo;
     sp2C.x = sp38[0].x + arg0->unk_10->x;
@@ -1406,9 +1414,9 @@ void func_80715490(unk_800E5D70* arg0, unk_struct_14* arg1) {
 
     func_80715E60(sp34, arg0->unk_0C, arg1);
     temp_v1 = arg0->unk_18;
-    temp_v0 = &arg0->unk_00->unk_04.unk_58;
-    *((Mtx3F*) &temp_v0->unk_00.unk_00.unk_00) = *arg0->unk_14;
-    *((Vec3f*) &temp_v0->unk_00.unk_60) = temp_v1->tiltUp;
+    temp_v0 = &arg0->unk_00->sub_4_unk_5C;
+    temp_v0->unk_00 = *arg0->unk_14;
+    temp_v0->unk_60 = temp_v1->tiltUp;
     temp_v0->unk_90 = temp_v1->speed;
     temp_v0->unk_98 = temp_v1->segmentPositionInfo.courseSegment->trackSegmentInfo;
     sp28.x = sp34[0].x + arg0->unk_10->x;
@@ -1427,9 +1435,9 @@ void func_80715580(unk_800E5D70* arg0, unk_80085434_arg_2* arg1) {
 
     func_80715EC0(&sp34, arg0->unk_0C, arg1);
     temp_v1 = arg0->unk_18;
-    temp_v0 = &arg0->unk_00->unk_04.unk_58;
-    *((Mtx3F*) &temp_v0->unk_00.unk_00.unk_00) = *arg0->unk_14;
-    *((Vec3f*) &temp_v0->unk_00.unk_60) = temp_v1->tiltUp;
+    temp_v0 = &arg0->unk_00->sub_4_unk_5C;
+    temp_v0->unk_00 = *arg0->unk_14;
+    temp_v0->unk_60 = temp_v1->tiltUp;
     temp_v0->unk_90 = temp_v1->speed;
     temp_v0->unk_98 = temp_v1->segmentPositionInfo.courseSegment->trackSegmentInfo;
     sp28.x = sp34.unk_00[0].x + arg0->unk_10->x;
@@ -1448,9 +1456,9 @@ void func_80715674(unk_800E5D70* arg0, unk_80085494_arg_2* arg1) {
 
     func_80715F20(&sp38, arg0->unk_0C, arg1);
     temp_v1 = arg0->unk_18;
-    temp_v0 = &arg0->unk_00->unk_04.unk_58;
-    *((Mtx3F*) &temp_v0->unk_00.unk_00.unk_00) = *arg0->unk_14;
-    *((Vec3f*) &temp_v0->unk_00.unk_60) = temp_v1->tiltUp;
+    temp_v0 = &arg0->unk_00->sub_4_unk_5C;
+    temp_v0->unk_00 = *arg0->unk_14;
+    temp_v0->unk_60 = temp_v1->tiltUp;
     temp_v0->unk_90 = temp_v1->speed;
     temp_v0->unk_98 = temp_v1->segmentPositionInfo.courseSegment->trackSegmentInfo;
     sp2C.x = sp38.unk_00[0].x + arg0->unk_10->x;
@@ -1607,13 +1615,13 @@ void func_80715F9C(void) {
     unk_800E5D70* var_s1;
     s32 i;
     Racer* temp_a3;
-    Player* var_s0;
+    Camera* var_s0;
     unk_struct_20_2* var_s4;
     unk_struct_F8* var_s3;
 
-    for (i = 0, var_s0 = gPlayers, var_s1 = D_807A1480, var_s3 = D_807A10A0, var_s4 = D_807A1510; i < 4; i++) {
+    for (i = 0, var_s0 = gCameras, var_s1 = D_807A1480, var_s3 = D_807A10A0, var_s4 = D_807A1510; i < 4; i++) {
         var_s0->id = (s16) i;
-        var_s0->cameraSetting = 2;
+        var_s0->setting = 2;
         var_s0->unk_E0 = 0;
         func_80713FD4(var_s1, var_s3);
         func_80713FDC(var_s1, var_s4);
@@ -1630,51 +1638,41 @@ void func_80715F9C(void) {
 
 extern s8 D_8076C7D8;
 
-// FAKE! Very hacky tricks to get 1 to load into v0
-void func_807160A0(void) {
+void Camera_Init(void) {
     s32 i;
-    Player* var_s0;
-    Racer* temp_a3;
-    s32 v0;
+    Camera* camera;
+    Racer* racer;
 
     D_807A1594 = 0;
 
-    for (i = 0, var_s0 = gPlayers; i < 4; i++, var_s0++) {
-        temp_a3 = &gRacers[var_s0->id];
-        func_80713FE4(&D_807A1480[i], &temp_a3->unk_180, &temp_a3->trueBasis, temp_a3);
+    for (i = 0, camera = gCameras; i < 4; i++, camera++) {
+        racer = &gRacers[camera->id];
+        func_80713FE4(&D_807A1480[i], &racer->unk_180, &racer->trueBasis, racer);
     }
     switch (gGameMode) {
         case GAMEMODE_FLX_TITLE:
-            v0 = 0;
-            if (1) {}
-            D_807A1590 = ++v0;
-            gPlayers[0].unk_04 = 0;
-            func_807166B8(gPlayers, D_807A10A0, D_807A1480);
+            sNumCameras = 1;
+            gCameras[0].mode = CAMERA_MODE_TITLE;
+            Camera_InitMode(gCameras, D_807A10A0, D_807A1480);
             break;
         case GAMEMODE_CREATE_MACHINE:
         case GAMEMODE_FLX_MACHINE_SELECT:
-            v0 = 0;
-            if (1) {}
-            D_807A1590 = ++v0;
-            gPlayers[0].unk_04 = v0;
-            func_807166B8(gPlayers, D_807A10A0, D_807A1480);
+            sNumCameras = 1;
+            gCameras[0].mode = CAMERA_MODE_MACHINE_SELECT_CREATE;
+            Camera_InitMode(gCameras, D_807A10A0, D_807A1480);
             break;
         case GAMEMODE_LX_MACHINE_SETTINGS:
         case GAMEMODE_LX_GP_RACE_NEXT_MACHINE_SETTINGS:
-            v0 = 0;
-            if (1) {}
-            D_807A1590 = ++v0;
-            gPlayers[0].unk_04 = 2;
-            func_807166B8(gPlayers, D_807A10A0, D_807A1480);
+            sNumCameras = 1;
+            gCameras[0].mode = CAMERA_MODE_MACHINE_SETTINGS;
+            Camera_InitMode(gCameras, D_807A10A0, D_807A1480);
             break;
         case GAMEMODE_FLX_COURSE_SELECT:
         case GAMEMODE_FLX_GP_RACE_NEXT_COURSE:
         case GAMEMODE_FLX_RECORDS_COURSE_SELECT:
-            v0 = 0;
-            if (1) {}
-            D_807A1590 = ++v0;
-            gPlayers[0].unk_04 = 3;
-            func_807166B8(gPlayers, D_807A10A0, D_807A1480);
+            sNumCameras = 1;
+            gCameras[0].mode = CAMERA_MODE_COURSE_SELECT;
+            Camera_InitMode(gCameras, D_807A10A0, D_807A1480);
             break;
         case GAMEMODE_GP_RACE:
         case GAMEMODE_PRACTICE:
@@ -1683,78 +1681,72 @@ void func_807160A0(void) {
         case GAMEMODE_VS_3P:
         case GAMEMODE_VS_4P:
             D_8076D6C0 = -1;
-            D_807A1590 = gNumPlayers;
-            for (i = 0; i < D_807A1590; i++) {
+            sNumCameras = gNumPlayers;
+            for (i = 0; i < sNumCameras; i++) {
                 if (D_8076C7D8 != 0) {
-                    gPlayers[i].unk_04 = 15;
+                    gCameras[i].mode = CAMERA_MODE_15;
                 } else {
-                    gPlayers[i].unk_04 = 4;
+                    gCameras[i].mode = CAMERA_MODE_4;
                 }
 
-                gPlayers[i].unk_20 = gRacers[i].segmentPositionInfo.pos;
+                gCameras[i].racerPos = gRacers[i].segmentPositionInfo.pos;
 
-                gPlayers[i].unk_2C = gRacers[i].trueBasis;
+                gCameras[i].racerBasis = gRacers[i].trueBasis;
 
-                func_807166B8(&gPlayers[i], &D_807A10A0[i], &D_807A1480[i]);
+                Camera_InitMode(&gCameras[i], &D_807A10A0[i], &D_807A1480[i]);
             }
 
             break;
         case GAMEMODE_TIME_ATTACK:
-            v0 = 0;
-            if (1) {}
             D_8076D6C0 = -1;
             if (D_8076C7D8 != 0) {
-                D_807A1590 = ++v0;
-                gPlayers[0].unk_04 = 15;
+                sNumCameras = 1;
+                gCameras[0].mode = CAMERA_MODE_15;
             } else {
-                D_807A1590 = 2;
-                gPlayers[0].unk_04 = 4;
+                sNumCameras = 2;
+                gCameras[0].mode = CAMERA_MODE_4;
             }
-            gPlayers[0].unk_20 = gRacers[0].segmentPositionInfo.pos;
-            gPlayers[0].unk_2C = gRacers[0].trueBasis;
+            gCameras[0].racerPos = gRacers[0].segmentPositionInfo.pos;
+            gCameras[0].racerBasis = gRacers[0].trueBasis;
 
-            gPlayers[1].unk_04 = 12;
-            for (i = 0; i < D_807A1590; i++) {
-                func_807166B8(&gPlayers[i], &D_807A10A0[i], &D_807A1480[i]);
+            gCameras[1].mode = CAMERA_MODE_12;
+            for (i = 0; i < sNumCameras; i++) {
+                Camera_InitMode(&gCameras[i], &D_807A10A0[i], &D_807A1480[i]);
             }
             break;
         case GAMEMODE_COURSE_EDIT:
-            v0 = 0;
-            if (1) {}
-            D_807A1590 = ++v0;
-            gPlayers[0].unk_04 = 6;
+            sNumCameras = 1;
+            gCameras[0].mode = CAMERA_MODE_6;
 
-            gPlayers[0].unk_20 = gRacers[0].segmentPositionInfo.pos;
-            gPlayers[0].unk_2C = gRacers[0].trueBasis;
+            gCameras[0].racerPos = gRacers[0].segmentPositionInfo.pos;
+            gCameras[0].racerBasis = gRacers[0].trueBasis;
 
-            for (i = 0; i < D_807A1590; i++) {
-                func_807166B8(&gPlayers[i], &D_807A10A0[i], &D_807A1480[i]);
+            for (i = 0; i < sNumCameras; i++) {
+                Camera_InitMode(&gCameras[i], &D_807A10A0[i], &D_807A1480[i]);
             }
             break;
         case GAMEMODE_RECORDS:
 
-            D_807A1590 = 2;
-            gPlayers[0].unk_04 = 0xB;
-            gPlayers[0].unk_20 = gRacers[0].segmentPositionInfo.pos;
-            gPlayers[0].unk_2C = gRacers[0].trueBasis;
-            gPlayers[1].unk_04 = 0xC;
-            for (i = 0; i < D_807A1590; i++) {
-                func_807166B8(&gPlayers[i], &D_807A10A0[i], &D_807A1480[i]);
+            sNumCameras = 2;
+            gCameras[0].mode = CAMERA_MODE_11;
+            gCameras[0].racerPos = gRacers[0].segmentPositionInfo.pos;
+            gCameras[0].racerBasis = gRacers[0].trueBasis;
+            gCameras[1].mode = CAMERA_MODE_12;
+            for (i = 0; i < sNumCameras; i++) {
+                Camera_InitMode(&gCameras[i], &D_807A10A0[i], &D_807A1480[i]);
             }
             break;
         case GAMEMODE_GP_END_CS:
-            v0 = 0;
-            if (1) {}
-            D_807A1590 = ++v0;
-            gPlayers[0].unk_04 = 0xE;
-            func_807166B8(gPlayers, D_807A10A0, D_807A1480);
+            sNumCameras = 1;
+            gCameras[0].mode = CAMERA_MODE_14;
+            Camera_InitMode(gCameras, D_807A10A0, D_807A1480);
             break;
     }
 }
 
 extern s16 gPlayer1OverallPosition;
 
-void func_807166B8(Player* player, unk_struct_F8* arg1, unk_800E5D70* arg2) {
+void Camera_InitMode(Camera* camera, unk_struct_F8* arg1, unk_800E5D70* arg2) {
     s32 pad;
     s32 sp48;
     bool sp44;
@@ -1764,177 +1756,177 @@ void func_807166B8(Player* player, unk_struct_F8* arg1, unk_800E5D70* arg2) {
     Vec3f sp2C;
     Racer* racer;
 
-    player->cameraLookBackRotate = 0;
-    player->unk_18 = 0;
-    player->unk_1C = 0;
+    camera->lookBackRotate = 0;
+    camera->unk_18 = 0;
+    camera->unk_1C = 0;
     sp44 = false;
 
-    switch (player->unk_04) {
-        case 1:
-        case 12:
-            player->unk_A0 = 16.0f;
-            player->unk_A4 = 8192.0f;
-            player->unk_A8 = 320.0f;
-            player->unk_AC = 240.0f;
+    switch (camera->mode) {
+        case CAMERA_MODE_MACHINE_SELECT_CREATE:
+        case CAMERA_MODE_12:
+            camera->near = 16.0f;
+            camera->far = 8192.0f;
+            camera->fovScaleX = SCREEN_WIDTH;
+            camera->fovScaleY = SCREEN_HEIGHT;
             func_80711CE4(arg1, 2, &D_807766A8);
             break;
-        case 2:
-            player->unk_A0 = 16.0f;
-            player->unk_A4 = 8192.0f;
-            player->unk_A8 = 320.0f;
-            player->unk_AC = 240.0f;
+        case CAMERA_MODE_MACHINE_SETTINGS:
+            camera->near = 16.0f;
+            camera->far = 8192.0f;
+            camera->fovScaleX = SCREEN_WIDTH;
+            camera->fovScaleY = SCREEN_HEIGHT;
             func_80711CE4(arg1, 2, &D_80776754);
             if (gNumPlayers >= 2) {
-                arg1->unk_04.unk_58.unk_00.unk_00.unk_48.x = arg1->unk_04.unk_58.unk_00.unk_00.unk_48.y = 30.0f;
+                arg1->sub_2_3_unk_5C.unk_48 = arg1->sub_2_3_unk_5C.unk_4C = 30.0f;
             }
             break;
-        case 3:
-            player->unk_A0 = 16.0f;
-            player->unk_A4 = 16384.0f;
-            player->unk_A8 = 320.0f;
-            player->unk_AC = 240.0f;
+        case CAMERA_MODE_COURSE_SELECT:
+            camera->near = 16.0f;
+            camera->far = 16384.0f;
+            camera->fovScaleX = SCREEN_WIDTH;
+            camera->fovScaleY = SCREEN_HEIGHT;
             func_80711CE4(arg1, 2, &D_80776800);
             break;
-        case 4:
+        case CAMERA_MODE_4:
             func_80711CE4(arg1, 2, &D_8077699C);
             if (gNumPlayers == 2) {
-                player->unk_A0 = 16.0f;
-                player->unk_A4 = 8192.0f;
-                arg1->unk_04.unk_00.unk_18[11] = arg1->unk_04.unk_00.unk_18[13] = -15.0f;
-                arg1->unk_04.unk_00.unk_18[7] = arg1->unk_04.unk_00.unk_18[8] = 100.0f;
+                camera->near = 16.0f;
+                camera->far = 8192.0f;
+                arg1->unk_04.unk_44 = arg1->unk_04.unk_4C = -15.0f;
+                arg1->unk_04.unk_34 = arg1->unk_04.unk_38 = 100.0f;
             } else {
-                player->unk_A0 = 16.0f;
-                player->unk_A4 = 8192.0f;
+                camera->near = 16.0f;
+                camera->far = 8192.0f;
             }
-            player->unk_A8 = 320.0f;
-            player->unk_AC = 240.0f;
-            sp44 = 1;
+            camera->fovScaleX = SCREEN_WIDTH;
+            camera->fovScaleY = SCREEN_HEIGHT;
+            sp44 = true;
             break;
-        case 6:
-        case 15:
+        case CAMERA_MODE_6:
+        case CAMERA_MODE_15:
             if (D_8076C7D8 != 0) {
                 sp48 = 2;
             } else {
-                sp48 = player->cameraSetting;
+                sp48 = camera->setting;
             }
             if (gNumPlayers == 2) {
-                player->unk_A0 = 16.0f;
-                player->unk_A4 = 8192.0f;
-                player->unk_A8 = 320.0f;
-                player->unk_AC = 240.0f;
+                camera->near = 16.0f;
+                camera->far = 8192.0f;
+                camera->fovScaleX = SCREEN_WIDTH;
+                camera->fovScaleY = SCREEN_HEIGHT;
 
                 func_80711C30(arg1, &D_80776B9C);
 
                 sp38 = &D_80776A78[sp48];
             } else {
-                player->unk_A0 = 16.0f;
-                player->unk_A4 = 8192.0f;
-                player->unk_A8 = 320.0f;
-                player->unk_AC = 240.0f;
+                camera->near = 16.0f;
+                camera->far = 8192.0f;
+                camera->fovScaleX = SCREEN_WIDTH;
+                camera->fovScaleY = SCREEN_HEIGHT;
 
                 func_80711C30(arg1, &D_80776AA8);
 
                 sp38 = &D_80776A48[sp48];
             }
-            arg1->unk_04.unk_58.unk_68[2] = arg1->unk_04.unk_58.unk_68[1] = sp38->y;
-            arg1->unk_04.unk_58.unk_68[5] = arg1->unk_04.unk_58.unk_68[4] = sp38->z;
-            arg1->unk_04.unk_00.unk_18[8] = arg1->unk_04.unk_00.unk_18[7] = sp38->x;
+            arg1->sub_4_unk_5C.unk_70 = arg1->sub_4_unk_5C.unk_6C = sp38->y;
+            arg1->sub_4_unk_5C.unk_7C = arg1->sub_4_unk_5C.unk_78 = sp38->z;
+            arg1->unk_04.unk_38 = arg1->unk_04.unk_34 = sp38->x;
 
-            Math_Round(DEG_TO_FZXANG2(arg1->unk_04.unk_58.unk_68[4]));
-            racer = &gRacers[player->id];
-            arg1->unk_04.unk_58.unk_00.unk_54.x = racer->unk_180.x - (sp38->y * racer->trueBasis.x.x);
-            arg1->unk_04.unk_58.unk_00.unk_54.y = racer->unk_180.y - (sp38->y * racer->trueBasis.x.y);
-            arg1->unk_04.unk_58.unk_00.unk_54.z = racer->unk_180.z - (sp38->y * racer->trueBasis.x.z);
-            player->unk_14 = arg1->unk_04.unk_00.unk_18[8];
-            player->unk_10 = 0;
+            Math_Round(DEG_TO_FZXANG2(arg1->sub_4_unk_5C.unk_78));
+            racer = &gRacers[camera->id];
+            arg1->sub_4_unk_5C.unk_54.x = racer->unk_180.x - (sp38->y * racer->trueBasis.x.x);
+            arg1->sub_4_unk_5C.unk_54.y = racer->unk_180.y - (sp38->y * racer->trueBasis.x.y);
+            arg1->sub_4_unk_5C.unk_54.z = racer->unk_180.z - (sp38->y * racer->trueBasis.x.z);
+            camera->unk_14 = arg1->unk_04.unk_38;
+            camera->unk_10 = 0;
             if ((sp48 == 1) || (sp48 == 2)) {
-                player->unk_10 |= 1;
+                camera->unk_10 |= 1;
             }
             sp44 = true;
             break;
-        case 7:
-            sp2C = arg1->unk_04.unk_00.unk_0C;
+        case CAMERA_MODE_FALLING_OFF_TRACK:
+            sp2C = arg1->unk_04.unk_0C;
             func_80711B6C(arg1, &D_807763D0);
-            arg1->unk_04.unk_00.unk_18[7] = arg1->unk_04.unk_00.unk_18[8] = 80.0f;
-            arg1->unk_04.unk_58.unk_00.unk_00.unk_00.unk_0C = sp2C;
+            arg1->unk_04.unk_34 = arg1->unk_04.unk_38 = 80.0f;
+            arg1->sub_1_unk_5C.unk_0C = sp2C;
             if (gNumPlayers == 2) {
-                arg1->unk_04.unk_00.unk_18[11] = arg1->unk_04.unk_00.unk_18[13] = -50.0f;
+                arg1->unk_04.unk_44 = arg1->unk_04.unk_4C = -50.0f;
             }
             break;
-        case 8:
+        case CAMERA_MODE_8:
             func_80711B6C(arg1, &D_807763D0);
-            arg1->unk_04.unk_00.unk_18[8] = D_8076D788[0].unk_04;
+            arg1->unk_04.unk_38 = D_8076D788[0].unk_04;
             if (gNumPlayers == 2) {
-                arg1->unk_04.unk_00.unk_18[11] = arg1->unk_04.unk_00.unk_18[13] = -30.0f;
+                arg1->unk_04.unk_44 = arg1->unk_04.unk_4C = -30.0f;
             }
 
-            racer = &gRacers[player->id];
-            func_80718F58(&D_807A15A0[player->id], racer->segmentPositionInfo.courseSegment,
+            racer = &gRacers[camera->id];
+            func_80718F58(&D_807A15A0[camera->id], racer->segmentPositionInfo.courseSegment,
                           racer->segmentPositionInfo.segmentTValue, &D_8076D788[0]);
             break;
-        case 9:
-            racer = &gRacers[player->id];
+        case CAMERA_MODE_9:
+            racer = &gRacers[camera->id];
 
             func_80711CE4(arg1, 2, &D_80776448);
             if (gNumPlayers == 2) {
-                arg1->unk_04.unk_00.unk_18[11] = arg1->unk_04.unk_00.unk_18[13] = -30.0f;
+                arg1->unk_04.unk_44 = arg1->unk_04.unk_4C = -30.0f;
             }
-            arg1->unk_04.unk_00.unk_18[7] = arg1->unk_04.unk_00.unk_18[8] = 80.0f;
-            arg1->unk_04.unk_58.unk_00.unk_00.unk_30.x = arg1->unk_04.unk_58.unk_00.unk_00.unk_30.y = 125.0f;
-            arg1->unk_04.unk_58.unk_00.unk_00.unk_3C.x = arg1->unk_04.unk_58.unk_00.unk_00.unk_3C.y = 35.0f;
-            arg1->unk_04.unk_58.unk_00.unk_00.unk_48.x = arg1->unk_04.unk_58.unk_00.unk_00.unk_48.y = -50.0f;
+            arg1->unk_04.unk_34 = arg1->unk_04.unk_38 = 80.0f;
+            arg1->sub_2_3_unk_5C.unk_30 = arg1->sub_2_3_unk_5C.unk_34 = 125.0f;
+            arg1->sub_2_3_unk_5C.unk_3C = arg1->sub_2_3_unk_5C.unk_40 = 35.0f;
+            arg1->sub_2_3_unk_5C.unk_48 = arg1->sub_2_3_unk_5C.unk_4C = -50.0f;
 
-            *(Mtx3F*) &arg1->unk_04.unk_58.unk_00.unk_00.unk_00.unk_0C = racer->trueBasis;
+            arg1->sub_2_3_unk_5C.unk_0C = racer->trueBasis;
 
-            arg1->unk_04.unk_58.unk_00.unk_00.unk_00.unk_18 = racer->tiltUp.x;
-            arg1->unk_04.unk_58.unk_00.unk_00.unk_00.unk_1C = racer->tiltUp.y;
-            arg1->unk_04.unk_58.unk_00.unk_00.unk_20 = racer->tiltUp.z;
+            arg1->sub_2_3_unk_5C.unk_0C.y.x = racer->tiltUp.x;
+            arg1->sub_2_3_unk_5C.unk_0C.y.y = racer->tiltUp.y;
+            arg1->sub_2_3_unk_5C.unk_0C.y.z = racer->tiltUp.z;
             break;
-        case 10:
-            sp2C = arg1->unk_04.unk_00.unk_0C;
+        case CAMERA_MODE_10:
+            sp2C = arg1->unk_04.unk_0C;
             func_80711B6C(arg1, &D_807763D0);
-            arg1->unk_04.unk_00.unk_18[7] = arg1->unk_04.unk_00.unk_18[8] = 80.0f;
-            arg1->unk_04.unk_58.unk_00.unk_00.unk_00.unk_0C = sp2C;
+            arg1->unk_04.unk_34 = arg1->unk_04.unk_38 = 80.0f;
+            arg1->sub_1_unk_5C.unk_0C = sp2C;
             break;
-        case 11:
-            player->unk_A0 = 16.0f;
-            player->unk_A4 = 8192.0f;
-            player->unk_A8 = 320.0f;
-            player->unk_AC = 240.0f;
+        case CAMERA_MODE_11:
+            camera->near = 16.0f;
+            camera->far = 8192.0f;
+            camera->fovScaleX = SCREEN_WIDTH;
+            camera->fovScaleY = SCREEN_HEIGHT;
             func_80711C30(arg1, &D_80776AA8);
-            arg1->unk_04.unk_58.unk_68[2] = arg1->unk_04.unk_58.unk_68[1] = D_80776A48[1].y;
-            arg1->unk_04.unk_58.unk_68[5] = arg1->unk_04.unk_58.unk_68[4] = 15.0f;
-            arg1->unk_04.unk_00.unk_18[8] = arg1->unk_04.unk_00.unk_18[7] = D_80776A48[1].x;
+            arg1->sub_4_unk_5C.unk_70 = arg1->sub_4_unk_5C.unk_6C = D_80776A48[1].y;
+            arg1->sub_4_unk_5C.unk_7C = arg1->sub_4_unk_5C.unk_78 = 15.0f;
+            arg1->unk_04.unk_38 = arg1->unk_04.unk_34 = D_80776A48[1].x;
             angle = 15.0f;
             sp38 = &D_80776A48[1];
             Math_Round(DEG_TO_FZXANG2(angle));
             racer = &gRacers[0];
-            arg1->unk_04.unk_58.unk_00.unk_54.x = racer->unk_180.x - (sp38->y * racer->trueBasis.x.x);
-            arg1->unk_04.unk_58.unk_00.unk_54.y = racer->unk_180.y - (sp38->y * racer->trueBasis.x.y);
-            arg1->unk_04.unk_58.unk_00.unk_54.z = racer->unk_180.z - (sp38->y * racer->trueBasis.x.z);
-            player->unk_14 = arg1->unk_04.unk_00.unk_18[8];
-            player->unk_10 = 0;
+            arg1->sub_4_unk_5C.unk_54.x = racer->unk_180.x - (sp38->y * racer->trueBasis.x.x);
+            arg1->sub_4_unk_5C.unk_54.y = racer->unk_180.y - (sp38->y * racer->trueBasis.x.y);
+            arg1->sub_4_unk_5C.unk_54.z = racer->unk_180.z - (sp38->y * racer->trueBasis.x.z);
+            camera->unk_14 = arg1->unk_04.unk_38;
+            camera->unk_10 = 0;
             sp44 = true;
             break;
-        case 13:
-            player->unk_A0 = 512.0f;
-            player->unk_A4 = 8192.0f;
-            player->unk_A8 = 320.0f;
-            player->unk_AC = 240.0f;
+        case CAMERA_MODE_13:
+            camera->near = 512.0f;
+            camera->far = 8192.0f;
+            camera->fovScaleX = SCREEN_WIDTH;
+            camera->fovScaleY = SCREEN_HEIGHT;
             func_80711B6C(arg1, &D_807768AC);
             break;
-        case 14:
-            player->unk_A0 = 16.0f;
-            player->unk_A4 = 8192.0f;
-            player->unk_A8 = 320.0f;
-            player->unk_AC = 240.0f;
+        case CAMERA_MODE_14:
+            camera->near = 16.0f;
+            camera->far = 8192.0f;
+            camera->fovScaleX = SCREEN_WIDTH;
+            camera->fovScaleY = SCREEN_HEIGHT;
             func_80711CE4(arg1, 3, &D_80776448);
-            arg1->unk_04.unk_58.unk_00.unk_00.unk_00.unk_00.x = 196.0f;
-            arg1->unk_04.unk_58.unk_00.unk_00.unk_00.unk_00.y = 25.0f;
-            arg1->unk_04.unk_58.unk_00.unk_00.unk_00.unk_00.z = -3000.0f;
-            arg1->unk_04.unk_58.unk_00.unk_00.unk_30.x = arg1->unk_04.unk_58.unk_00.unk_00.unk_30.y = 258.0f;
-            arg1->unk_04.unk_58.unk_00.unk_00.unk_3C.x = arg1->unk_04.unk_58.unk_00.unk_00.unk_3C.y = -7.0f;
-            arg1->unk_04.unk_58.unk_00.unk_00.unk_48.x = arg1->unk_04.unk_58.unk_00.unk_00.unk_48.y = 269.0f;
+            arg1->sub_2_3_unk_5C.unk_00.x = 196.0f;
+            arg1->sub_2_3_unk_5C.unk_00.y = 25.0f;
+            arg1->sub_2_3_unk_5C.unk_00.z = -3000.0f;
+            arg1->sub_2_3_unk_5C.unk_30 = arg1->sub_2_3_unk_5C.unk_34 = 258.0f;
+            arg1->sub_2_3_unk_5C.unk_3C = arg1->sub_2_3_unk_5C.unk_40 = -7.0f;
+            arg1->sub_2_3_unk_5C.unk_48 = arg1->sub_2_3_unk_5C.unk_4C = 269.0f;
             sp44 = true;
             if (gPlayer1OverallPosition < 4) {
                 D_807A1598 = gPlayer1OverallPosition - 1;
@@ -1944,95 +1936,95 @@ void func_807166B8(Player* player, unk_struct_F8* arg1, unk_800E5D70* arg2) {
             break;
     }
     if (sp44) {
-        player->unk_E0 = 0;
-        player->unk_E4 = player->unk_E6 = 0;
-        func_80716F38(player);
+        camera->unk_E0 = 0;
+        camera->unk_E4 = camera->unk_E6 = 0;
+        func_80716F38(camera);
     }
 }
 
-extern s32 D_807A1590;
+extern s32 sNumCameras;
 
-void func_80716F38(Player* player) {
-    s32* temp = D_8076D7C4[D_807A1590];
-    s32 temp2 = temp[player->id];
-    Vp* sp24;
-    ScissorBox* sp20;
+void func_80716F38(Camera* camera) {
+    s32* scissorBoxTypes = sCameraScissorBoxTypes[sNumCameras];
+    s32 scissorBoxType = scissorBoxTypes[camera->id];
+    Vp* vp;
+    ScissorBox* scissorBox;
 
-    switch (temp2) {
-        case 0:
-            sp24 = Segment_SegmentedToVirtual(&D_80146A8);
-            sp20 = &D_8076D7D8;
+    switch (scissorBoxType) {
+        case SCISSOR_BOX_FULL_SCREEN:
+            vp = Segment_SegmentedToVirtual(&aVpFullScreen);
+            scissorBox = &gScissorBoxFullScreen;
             break;
-        case 1:
-            sp24 = Segment_SegmentedToVirtual(&D_80146B8);
-            sp20 = &D_8076D7E8;
+        case SCISSOR_BOX_TOP_HALF:
+            vp = Segment_SegmentedToVirtual(&aVpTopHalf);
+            scissorBox = &gScissorBoxTopHalf;
             break;
-        case 2:
-            sp24 = Segment_SegmentedToVirtual(&D_80146C8);
-            sp20 = &D_8076D7F8;
+        case SCISSOR_BOX_BOTTOM_HALF:
+            vp = Segment_SegmentedToVirtual(&aVpBottomHalf);
+            scissorBox = &gScissorBoxBottomHalf;
             break;
-        case 3:
-            sp24 = Segment_SegmentedToVirtual(&D_80146D8);
-            sp20 = &D_8076D808;
+        case SCISSOR_BOX_LEFT_HALF:
+            vp = Segment_SegmentedToVirtual(&aVpLeftHalf);
+            scissorBox = &gScissorBoxLeftHalf;
             break;
-        case 4:
-            sp24 = Segment_SegmentedToVirtual(&D_80146E8);
-            sp20 = &D_8076D818;
+        case SCISSOR_BOX_RIGHT_HALF:
+            vp = Segment_SegmentedToVirtual(&aVpRightHalf);
+            scissorBox = &gScissorBoxRightHalf;
             break;
-        case 5:
-            sp24 = Segment_SegmentedToVirtual(&D_80146F8);
-            sp20 = &D_8076D828;
+        case SCISSOR_BOX_TOP_LEFT_QUARTER:
+            vp = Segment_SegmentedToVirtual(&aVpTopLeftQuarter);
+            scissorBox = &gScissorBoxTopLeftQuarter;
             break;
-        case 6:
-            sp24 = Segment_SegmentedToVirtual(&D_8014708);
-            sp20 = &D_8076D838;
+        case SCISSOR_BOX_TOP_RIGHT_QUARTER:
+            vp = Segment_SegmentedToVirtual(&aVpTopRightQuarter);
+            scissorBox = &gScissorBoxTopRightQuarter;
             break;
-        case 7:
-            sp24 = Segment_SegmentedToVirtual(&D_8014718);
-            sp20 = &D_8076D848;
+        case SCISSOR_BOX_BOTTOM_LEFT_QUARTER:
+            vp = Segment_SegmentedToVirtual(&aVpBottomLeftQuarter);
+            scissorBox = &gScissorBoxBottomLeftQuarter;
             break;
-        case 8:
-            sp24 = Segment_SegmentedToVirtual(&D_8014728);
-            sp20 = &D_8076D858;
+        case SCISSOR_BOX_BOTTOM_RIGHT_QUARTER:
+            vp = Segment_SegmentedToVirtual(&aVpBottomRightQuarter);
+            scissorBox = &gScissorBoxBottomRightQuarter;
             break;
-        case 9:
-            sp24 = Segment_SegmentedToVirtual(&D_8014738);
-            sp20 = &D_8076D868;
+        case SCISSOR_BOX_TOP_CENTER_QUARTER:
+            vp = Segment_SegmentedToVirtual(&aVpTopCenterQuarter);
+            scissorBox = &gScissorBoxTopCenterQuarter;
             break;
-        case 10:
-            sp24 = Segment_SegmentedToVirtual(&D_8014748);
-            sp20 = &D_8076D878;
+        case SCISSOR_BOX_BOTTOM_CENTER_QUARTER:
+            vp = Segment_SegmentedToVirtual(&aVpBottomCenterQuarter);
+            scissorBox = &gScissorBoxBottomCenterQuarter;
             break;
-        case 11:
-            sp24 = Segment_SegmentedToVirtual(&D_8014758);
-            sp20 = &D_8076D888;
+        case SCISSOR_BOX_LEFT_CENTER_QUARTER:
+            vp = Segment_SegmentedToVirtual(&aVpLeftCenterQuarter);
+            scissorBox = &gScissorBoxLeftCenterQuarter;
             break;
-        case 12:
-            sp24 = Segment_SegmentedToVirtual(&D_8014768);
-            sp20 = &D_8076D898;
+        case SCISSOR_BOX_RIGHT_CENTER_QUARTER:
+            vp = Segment_SegmentedToVirtual(&aVpRightCenterQuarter);
+            scissorBox = &gScissorBoxRightCenterQuarter;
             break;
     }
 
-    player->unk_E8 = player->unk_F8 = player->unk_108 = sp24->vp.vscale[0] * 0.25f;
-    player->unk_EC = player->unk_FC = player->unk_10C = sp24->vp.vscale[1] * 0.25f;
+    camera->unk_E8 = camera->unk_F8 = camera->unk_108 = vp->vp.vscale[0] * 0.25f;
+    camera->unk_EC = camera->unk_FC = camera->unk_10C = vp->vp.vscale[1] * 0.25f;
 
-    player->unk_F0 = sp24->vp.vtrans[0] * 0.25f;
-    player->unk_F4 = sp24->vp.vtrans[1] * 0.25f;
+    camera->unk_F0 = vp->vp.vtrans[0] * 0.25f;
+    camera->unk_F4 = vp->vp.vtrans[1] * 0.25f;
 
-    player->unk_100 = player->unk_110 = player->unk_F0 - player->unk_E8;
-    player->unk_104 = player->unk_114 = player->unk_F4 - player->unk_EC;
+    camera->unk_100 = camera->unk_110 = camera->unk_F0 - camera->unk_E8;
+    camera->unk_104 = camera->unk_114 = camera->unk_F4 - camera->unk_EC;
 
-    player->unk_B0 = player->unk_C0 = player->unk_D0 = sp20->left;
-    player->unk_B4 = player->unk_C4 = player->unk_D4 = sp20->top;
-    player->unk_B8 = player->unk_C8 = player->unk_D8 = sp20->right;
-    player->unk_BC = player->unk_CC = player->unk_DC = sp20->bottom;
+    camera->unk_B0 = camera->unk_C0 = camera->unk_D0 = scissorBox->left;
+    camera->unk_B4 = camera->unk_C4 = camera->unk_D4 = scissorBox->top;
+    camera->unk_B8 = camera->unk_C8 = camera->unk_D8 = scissorBox->right;
+    camera->unk_BC = camera->unk_CC = camera->unk_DC = scissorBox->bottom;
 }
 
-void func_80717294(void) {
+void Camera_Update(void) {
     s32 i;
 
-    for (i = 0; i < D_807A1590; i++) {
-        func_80717354(&gPlayers[i], &D_807A10A0[i], &D_807A1480[i]);
+    for (i = 0; i < sNumCameras; i++) {
+        Camera_UpdateMode(&gCameras[i], &D_807A10A0[i], &D_807A1480[i]);
     }
 
     if ((gGameMode == GAMEMODE_VS_2P) || (gGameMode == GAMEMODE_VS_3P) || (gGameMode == GAMEMODE_VS_4P)) {
@@ -2042,7 +2034,7 @@ void func_80717294(void) {
 
 extern GfxPool* gGfxPool;
 
-void func_80717354(Player* player, unk_struct_F8* arg1, unk_800E5D70* arg2) {
+void Camera_UpdateMode(Camera* camera, unk_struct_F8* arg1, unk_800E5D70* arg2) {
     f32 temp_fa0;
     f32 temp_fa1;
     f32 temp_ft4;
@@ -2052,108 +2044,107 @@ void func_80717354(Player* player, unk_struct_F8* arg1, unk_800E5D70* arg2) {
     f32 var_fv1_3;
     f32 var_fv1_4;
     bool var_v0;
-    u32 temp_s4;
-    u32 var_v1;
+    u32 startMode;
+    u32 mode;
 
     do {
-        temp_s4 = var_v1 = player->unk_04;
-        switch (var_v1) {
-            case 0:
-            case 1:
-            case 2:
-            case 16:
-            default:
+        startMode = mode = camera->mode;
+        switch (mode) {
+            case CAMERA_MODE_TITLE:
+            case CAMERA_MODE_MACHINE_SELECT_CREATE:
+            case CAMERA_MODE_MACHINE_SETTINGS:
+            case CAMERA_MODE_16:
                 break;
-            case 3:
-                func_80718964(player, arg1);
+            case CAMERA_MODE_COURSE_SELECT:
+                Camera_UpdateCourseSelect(camera, arg1);
                 break;
-            case 4:
+            case CAMERA_MODE_4:
                 if (!gGamePaused) {
-                    func_807181F8(player, arg1);
+                    func_807181F8(camera, arg1);
                 }
                 break;
-            case 5:
+            case CAMERA_MODE_5:
 
                 var_v0 = true;
 
-                temp_fv0 = arg1->unk_04.unk_00.unk_18[8] - arg1->unk_04.unk_00.unk_18[7];
+                temp_fv0 = arg1->unk_04.unk_38 - arg1->unk_04.unk_34;
                 if (ABS(temp_fv0) > 0.5f) {
                     var_v0 = false;
                 }
 
-                temp_fv0 = arg1->unk_04.unk_00.unk_18[13] - arg1->unk_04.unk_00.unk_18[11];
+                temp_fv0 = arg1->unk_04.unk_4C - arg1->unk_04.unk_44;
                 if (ABS(temp_fv0) > 0.5f) {
                     var_v0 = false;
                 }
 
-                temp_fv0 = arg1->unk_04.unk_58.unk_68[2] - arg1->unk_04.unk_58.unk_68[1];
+                temp_fv0 = arg1->sub_4_unk_5C.unk_70 - arg1->sub_4_unk_5C.unk_6C;
                 if (ABS(temp_fv0) > 0.5f) {
                     var_v0 = false;
                 }
 
-                temp_fv0 = arg1->unk_04.unk_58.unk_68[5] - arg1->unk_04.unk_58.unk_68[4];
+                temp_fv0 = arg1->sub_4_unk_5C.unk_7C - arg1->sub_4_unk_5C.unk_78;
                 if (ABS(temp_fv0) > 0.5f) {
                     var_v0 = false;
                 }
 
                 if (var_v0) {
-                    player->unk_04 = 6;
-                    arg1->unk_04.unk_00.unk_18[9] = 0.2f;
-                    arg1->unk_04.unk_00.unk_18[6] = 1.0f;
-                    arg1->unk_04.unk_00.unk_18[14] = 0.1f;
-                    arg1->unk_04.unk_00.unk_18[15] = 0.2f;
-                    arg1->unk_04.unk_58.unk_68[3] = 0.2f;
-                    arg1->unk_04.unk_58.unk_68[6] = 0.2f;
+                    camera->mode = CAMERA_MODE_6;
+                    arg1->unk_04.unk_3C = 0.2f;
+                    arg1->unk_04.unk_30 = 1.0f;
+                    arg1->unk_04.unk_50 = 0.1f;
+                    arg1->unk_04.unk_54 = 0.2f;
+                    arg1->sub_4_unk_5C.unk_74 = 0.2f;
+                    arg1->sub_4_unk_5C.unk_80 = 0.2f;
                 }
                 break;
-            case 6:
-                func_80718530(player, arg1, arg2);
+            case CAMERA_MODE_6:
+                func_80718530(camera, arg1, arg2);
                 break;
-            case 15:
-                func_80718908(player, arg1, arg2);
+            case CAMERA_MODE_15:
+                func_80718908(camera, arg1, arg2);
                 break;
-            case 7:
+            case CAMERA_MODE_FALLING_OFF_TRACK:
                 if (!gGamePaused) {
-                    func_80718AB0(player, arg1);
+                    func_80718AB0(camera, arg1);
                 }
                 break;
-            case 8:
+            case CAMERA_MODE_8:
                 if (!gGamePaused) {
-                    func_80718AFC(player, arg1, arg2);
+                    func_80718AFC(camera, arg1, arg2);
                 }
                 break;
-            case 9:
+            case CAMERA_MODE_9:
                 if (!gGamePaused) {
-                    func_807191B0(player, arg1, arg2);
+                    func_807191B0(camera, arg1, arg2);
                 }
                 break;
-            case 10:
+            case CAMERA_MODE_10:
                 if (!gGamePaused) {
-                    func_80719140(player, arg1, arg2);
+                    func_80719140(camera, arg1, arg2);
                 }
                 break;
-            case 11:
-                func_80719420(player, arg1, arg2);
+            case CAMERA_MODE_11:
+                func_80719420(camera, arg1, arg2);
                 break;
-            case 14:
-                func_80719480(player, arg1, arg2);
+            case CAMERA_MODE_14:
+                func_80719480(camera, arg1, arg2);
                 break;
         }
-        var_v1 = player->unk_04;
-    } while (temp_s4 != var_v1);
+        mode = camera->mode;
+    } while (startMode != mode);
 
-    func_80712AA8(arg1, player);
-    func_807176B4(player, arg1);
-    func_807130F8(player, arg1);
-    func_8071315C(player);
-    func_807134AC(gGfxPool, player);
+    func_80712AA8(arg1, camera);
+    func_807176B4(camera, arg1);
+    func_807130F8(camera, arg1);
+    func_8071315C(camera);
+    func_807134AC(gGfxPool, camera);
     if ((gGameMode == GAMEMODE_GP_RACE) || (gGameMode == GAMEMODE_PRACTICE) || (gGameMode == GAMEMODE_TIME_ATTACK) ||
         (gGameMode == GAMEMODE_DEATH_RACE)) {
-        func_8071370C(player);
+        func_8071370C(camera);
     }
 }
 
-void func_807176B4(Player* player, unk_struct_F8* arg1) {
+void func_807176B4(Camera* camera, unk_struct_F8* arg1) {
     Vec3f* var_s1;
     s32 angle;
     f32 temp1;
@@ -2162,29 +2153,29 @@ void func_807176B4(Player* player, unk_struct_F8* arg1) {
     Mtx3F sp48;
     f32 temp_fv0;
     f32 temp_fv1;
-    unk_8008112C_arg_1* temp_v1 = &arg1->unk_04;
-    Racer* temp_s0;
+    unk_struct_58* temp_v1 = &arg1->unk_04;
+    Racer* racer;
 
-    if (player->unk_04 == 4) {
+    if (camera->mode == CAMERA_MODE_4) {
         if (gNumPlayers == 2) {
             var_s1 = &D_80776A78[2];
         } else {
             var_s1 = &D_80776A48[2];
         }
 
-        temp_s0 = &gRacers[player->id];
+        racer = &gRacers[camera->id];
 
-        sp48.x.x = 0.0f - (var_s1->y * temp_s0->trueBasis.x.x);
-        sp48.x.y = 0.0f - (var_s1->y * temp_s0->trueBasis.x.y);
-        sp48.x.z = 0.0f - (var_s1->y * temp_s0->trueBasis.x.z);
+        sp48.x.x = 0.0f - (var_s1->y * racer->trueBasis.x.x);
+        sp48.x.y = 0.0f - (var_s1->y * racer->trueBasis.x.y);
+        sp48.x.z = 0.0f - (var_s1->y * racer->trueBasis.x.z);
         temp_fv1 = 1.0f / sqrtf(SQ(sp48.x.x) + SQ(sp48.x.y) + SQ(sp48.x.z));
         sp48.x.x *= temp_fv1;
         sp48.x.y *= temp_fv1;
         sp48.x.z *= temp_fv1;
 
-        sp48.z.x = (temp_s0->trueBasis.y.y * sp48.x.z) - (temp_s0->trueBasis.y.z * sp48.x.y);
-        sp48.z.y = (temp_s0->trueBasis.y.z * sp48.x.x) - (temp_s0->trueBasis.y.x * sp48.x.z);
-        sp48.z.z = (temp_s0->trueBasis.y.x * sp48.x.y) - (temp_s0->trueBasis.y.y * sp48.x.x);
+        sp48.z.x = (racer->trueBasis.y.y * sp48.x.z) - (racer->trueBasis.y.z * sp48.x.y);
+        sp48.z.y = (racer->trueBasis.y.z * sp48.x.x) - (racer->trueBasis.y.x * sp48.x.z);
+        sp48.z.z = (racer->trueBasis.y.x * sp48.x.y) - (racer->trueBasis.y.y * sp48.x.x);
         temp_fv1 = 1.0f / sqrtf(SQ(sp48.z.x) + SQ(sp48.z.y) + SQ(sp48.z.z));
         sp48.z.x *= temp_fv1;
         sp48.z.y *= temp_fv1;
@@ -2200,236 +2191,235 @@ void func_807176B4(Player* player, unk_struct_F8* arg1) {
 
         angle = Math_Round(DEG_TO_FZXANG2(var_s1->z));
 
-        temp_fv0 =
-            (SIN(angle) * var_s1->y) * ((sp48.y.x * temp_s0->trueBasis.y.x) + (sp48.y.y * temp_s0->trueBasis.y.y) +
-                                        (sp48.y.z * temp_s0->trueBasis.y.z));
+        temp_fv0 = (SIN(angle) * var_s1->y) * ((sp48.y.x * racer->trueBasis.y.x) + (sp48.y.y * racer->trueBasis.y.y) +
+                                               (sp48.y.z * racer->trueBasis.y.z));
         temp_fv1 = COS(angle) * var_s1->y;
 
-        temp1 = (temp_s0->unk_180.x + (temp_fv1 * sp48.x.x) + (temp_fv0 * sp48.y.x));
-        temp2 = (temp_s0->unk_180.y + (temp_fv1 * sp48.x.y) + (temp_fv0 * sp48.y.y));
-        temp3 = (temp_s0->unk_180.z + (temp_fv1 * sp48.x.z) + (temp_fv0 * sp48.y.z));
+        temp1 = (racer->unk_180.x + (temp_fv1 * sp48.x.x) + (temp_fv0 * sp48.y.x));
+        temp2 = (racer->unk_180.y + (temp_fv1 * sp48.x.y) + (temp_fv0 * sp48.y.y));
+        temp3 = (racer->unk_180.z + (temp_fv1 * sp48.x.z) + (temp_fv0 * sp48.y.z));
 
-        temp_fv0 = (f32) (player->unk_1C - 1) / 300.0f;
+        temp_fv0 = (f32) (camera->unk_1C - 1) / 300.0f;
 
         temp_fv0 = (-2.0f * temp_fv0 * temp_fv0 * temp_fv0) + (3.0f * temp_fv0 * temp_fv0);
 
-        temp_v1->unk_00.unk_0C.x = ((1.0f - temp_fv0) * temp_v1->unk_00.unk_0C.x) + (temp_fv0 * temp1);
-        temp_v1->unk_00.unk_0C.y = ((1.0f - temp_fv0) * temp_v1->unk_00.unk_0C.y) + (temp_fv0 * temp2);
-        temp_v1->unk_00.unk_0C.z = ((1.0f - temp_fv0) * temp_v1->unk_00.unk_0C.z) + (temp_fv0 * temp3);
+        temp_v1->unk_0C.x = ((1.0f - temp_fv0) * temp_v1->unk_0C.x) + (temp_fv0 * temp1);
+        temp_v1->unk_0C.y = ((1.0f - temp_fv0) * temp_v1->unk_0C.y) + (temp_fv0 * temp2);
+        temp_v1->unk_0C.z = ((1.0f - temp_fv0) * temp_v1->unk_0C.z) + (temp_fv0 * temp3);
 
-        sp48.x.x = temp_v1->unk_00.unk_00.x - temp_v1->unk_00.unk_0C.x;
-        sp48.x.y = temp_v1->unk_00.unk_00.y - temp_v1->unk_00.unk_0C.y;
-        sp48.x.z = temp_v1->unk_00.unk_00.z - temp_v1->unk_00.unk_0C.z;
-        sp48.y.x = temp_s0->trueBasis.y.x;
-        sp48.y.y = temp_s0->trueBasis.y.y;
-        sp48.y.z = temp_s0->trueBasis.y.z;
-        func_806F6D8C(&sp48);
-        temp_v1->unk_00.unk_18[3] = sp48.y.x;
-        temp_v1->unk_00.unk_18[0] = temp_v1->unk_00.unk_18[3];
-        temp_v1->unk_00.unk_18[4] = sp48.y.y;
-        temp_v1->unk_00.unk_18[1] = temp_v1->unk_00.unk_18[4];
-        temp_v1->unk_00.unk_18[5] = sp48.y.z;
-        temp_v1->unk_00.unk_18[2] = temp_v1->unk_00.unk_18[5];
+        sp48.x.x = temp_v1->unk_00.x - temp_v1->unk_0C.x;
+        sp48.x.y = temp_v1->unk_00.y - temp_v1->unk_0C.y;
+        sp48.x.z = temp_v1->unk_00.z - temp_v1->unk_0C.z;
+        sp48.y.x = racer->trueBasis.y.x;
+        sp48.y.y = racer->trueBasis.y.y;
+        sp48.y.z = racer->trueBasis.y.z;
+        Math_OrthonormalizeAroundForward(&sp48);
+        temp_v1->unk_24 = sp48.y.x;
+        temp_v1->unk_18 = temp_v1->unk_24;
+        temp_v1->unk_28 = sp48.y.y;
+        temp_v1->unk_1C = temp_v1->unk_28;
+        temp_v1->unk_2C = sp48.y.z;
+        temp_v1->unk_20 = temp_v1->unk_2C;
     }
 }
 
 extern s32 D_8006D544;
 extern s32 D_8006D548;
 extern s32 D_800BF040;
-extern s32 D_807A1590;
+extern s32 sNumCameras;
 extern s16 D_807A16CC;
 
 void func_80717B20(void) {
     Racer* var_a1;
     f32 temp_fv0;
     s32 i;
-    Player* var_a0;
+    Camera* var_a0;
     Vp* vp;
 
     if (D_8076D6C0 == -1) {
         if ((D_807A16CC != 0) && (D_8006D544 != 0)) {
             D_800BF040 = 30;
 
-            for (i = 0, var_a0 = gPlayers; i < D_807A1590; i++, var_a0++) {
+            for (i = 0, var_a0 = gCameras; i < sNumCameras; i++, var_a0++) {
                 var_a1 = &gRacers[i];
                 if (var_a1->position == 1) {
                     D_8076D6C0 = i;
                 }
                 var_a0->unk_E0 = 1;
                 var_a0->unk_E4 = 0;
-                var_a0->unk_E6 = 0x1E;
+                var_a0->unk_E6 = 30;
             }
 
             switch (gGameMode) {
                 case GAMEMODE_VS_2P:
                     if (D_8076D6C0 == 0) {
-                        gPlayers[0].unk_D4 = 8.0f;
-                        gPlayers[0].unk_DC = 231.0f;
-                        gPlayers[0].unk_10C = 120.0f;
-                        gPlayers[0].unk_114 = 0.0f;
-                        gPlayers[1].unk_D4 = 231.0f;
-                        gPlayers[1].unk_DC = 231.0f;
-                        gPlayers[1].unk_10C = 0.0f;
-                        gPlayers[1].unk_114 = 240.0f;
+                        gCameras[0].unk_D4 = 8.0f;
+                        gCameras[0].unk_DC = 231.0f;
+                        gCameras[0].unk_10C = 120.0f;
+                        gCameras[0].unk_114 = 0.0f;
+                        gCameras[1].unk_D4 = 231.0f;
+                        gCameras[1].unk_DC = 231.0f;
+                        gCameras[1].unk_10C = 0.0f;
+                        gCameras[1].unk_114 = 240.0f;
                     } else {
-                        gPlayers[0].unk_D4 = 8.0f;
-                        gPlayers[0].unk_DC = 8.0f;
-                        gPlayers[0].unk_10C = 0.0f;
-                        gPlayers[0].unk_114 = 0.0f;
-                        gPlayers[1].unk_D4 = 8.0f;
-                        gPlayers[1].unk_DC = 231.0f;
-                        gPlayers[1].unk_10C = 120.0f;
-                        gPlayers[1].unk_114 = 0.0f;
+                        gCameras[0].unk_D4 = 8.0f;
+                        gCameras[0].unk_DC = 8.0f;
+                        gCameras[0].unk_10C = 0.0f;
+                        gCameras[0].unk_114 = 0.0f;
+                        gCameras[1].unk_D4 = 8.0f;
+                        gCameras[1].unk_DC = 231.0f;
+                        gCameras[1].unk_10C = 120.0f;
+                        gCameras[1].unk_114 = 0.0f;
                     }
                     break;
                 case GAMEMODE_VS_3P:
                 case GAMEMODE_VS_4P:
                     switch (D_8076D6C0) {
                         case 0:
-                            gPlayers[0].unk_D0 = 12.0f;
-                            gPlayers[0].unk_D4 = 8.0f;
-                            gPlayers[0].unk_D8 = 307.0f;
-                            gPlayers[0].unk_DC = 231.0f;
-                            gPlayers[0].unk_108 = 160.0f;
-                            gPlayers[0].unk_10C = 120.0f;
-                            gPlayers[0].unk_110 = 0.0f;
-                            gPlayers[0].unk_114 = 0.0f;
-                            gPlayers[1].unk_D0 = 12.0f;
-                            gPlayers[1].unk_D4 = 231.0f;
-                            gPlayers[1].unk_D8 = 307.0f;
-                            gPlayers[1].unk_DC = 231.0f;
-                            gPlayers[1].unk_108 = 160.0f;
-                            gPlayers[1].unk_10C = 0.0f;
-                            gPlayers[1].unk_110 = 0.0f;
-                            gPlayers[1].unk_114 = 240.0f;
-                            gPlayers[2].unk_D0 = 307.0f;
-                            gPlayers[2].unk_D4 = 8.0f;
-                            gPlayers[2].unk_DC = 231.0f;
-                            gPlayers[2].unk_D8 = 307.0f;
-                            gPlayers[2].unk_108 = 0.0f;
-                            gPlayers[2].unk_10C = 120.0f;
-                            gPlayers[2].unk_110 = 320.0f;
-                            gPlayers[2].unk_114 = 0.0f;
-                            gPlayers[3].unk_D0 = 307.0f;
-                            gPlayers[3].unk_D4 = 231.0f;
-                            gPlayers[3].unk_D8 = 307.0f;
-                            gPlayers[3].unk_DC = 231.0f;
-                            gPlayers[3].unk_108 = 0.0f;
-                            gPlayers[3].unk_10C = 0.0f;
-                            gPlayers[3].unk_110 = 320.0f;
-                            gPlayers[3].unk_114 = 240.0f;
+                            gCameras[0].unk_D0 = 12.0f;
+                            gCameras[0].unk_D4 = 8.0f;
+                            gCameras[0].unk_D8 = 307.0f;
+                            gCameras[0].unk_DC = 231.0f;
+                            gCameras[0].unk_108 = 160.0f;
+                            gCameras[0].unk_10C = 120.0f;
+                            gCameras[0].unk_110 = 0.0f;
+                            gCameras[0].unk_114 = 0.0f;
+                            gCameras[1].unk_D0 = 12.0f;
+                            gCameras[1].unk_D4 = 231.0f;
+                            gCameras[1].unk_D8 = 307.0f;
+                            gCameras[1].unk_DC = 231.0f;
+                            gCameras[1].unk_108 = 160.0f;
+                            gCameras[1].unk_10C = 0.0f;
+                            gCameras[1].unk_110 = 0.0f;
+                            gCameras[1].unk_114 = 240.0f;
+                            gCameras[2].unk_D0 = 307.0f;
+                            gCameras[2].unk_D4 = 8.0f;
+                            gCameras[2].unk_DC = 231.0f;
+                            gCameras[2].unk_D8 = 307.0f;
+                            gCameras[2].unk_108 = 0.0f;
+                            gCameras[2].unk_10C = 120.0f;
+                            gCameras[2].unk_110 = 320.0f;
+                            gCameras[2].unk_114 = 0.0f;
+                            gCameras[3].unk_D0 = 307.0f;
+                            gCameras[3].unk_D4 = 231.0f;
+                            gCameras[3].unk_D8 = 307.0f;
+                            gCameras[3].unk_DC = 231.0f;
+                            gCameras[3].unk_108 = 0.0f;
+                            gCameras[3].unk_10C = 0.0f;
+                            gCameras[3].unk_110 = 320.0f;
+                            gCameras[3].unk_114 = 240.0f;
                             break;
                         case 1:
-                            gPlayers[0].unk_D0 = 12.0f;
-                            gPlayers[0].unk_D4 = 8.0f;
-                            gPlayers[0].unk_D8 = 307.0f;
-                            gPlayers[0].unk_DC = 8.0f;
-                            gPlayers[0].unk_108 = 160.0f;
-                            gPlayers[0].unk_10C = 0.0f;
-                            gPlayers[0].unk_110 = 0.0f;
-                            gPlayers[0].unk_114 = 0.0f;
-                            gPlayers[1].unk_D0 = 12.0f;
-                            gPlayers[1].unk_D4 = 8.0f;
-                            gPlayers[1].unk_D8 = 307.0f;
-                            gPlayers[1].unk_DC = 231.0f;
-                            gPlayers[1].unk_108 = 160.0f;
-                            gPlayers[1].unk_10C = 120.0f;
-                            gPlayers[1].unk_110 = 0.0f;
-                            gPlayers[1].unk_114 = 0.0f;
-                            gPlayers[2].unk_D0 = 307.0f;
-                            gPlayers[2].unk_D4 = 8.0f;
-                            gPlayers[2].unk_D8 = 307.0f;
-                            gPlayers[2].unk_DC = 8.0f;
-                            gPlayers[2].unk_108 = 0.0f;
-                            gPlayers[2].unk_10C = 0.0f;
-                            gPlayers[2].unk_110 = 320.0f;
-                            gPlayers[2].unk_114 = 0.0f;
-                            gPlayers[3].unk_D0 = 307.0f;
-                            gPlayers[3].unk_D4 = 8.0f;
-                            gPlayers[3].unk_D8 = 307.0f;
-                            gPlayers[3].unk_DC = 231.0f;
-                            gPlayers[3].unk_108 = 0.0f;
-                            gPlayers[3].unk_10C = 120.0f;
-                            gPlayers[3].unk_110 = 320.0f;
-                            gPlayers[3].unk_114 = 0.0f;
+                            gCameras[0].unk_D0 = 12.0f;
+                            gCameras[0].unk_D4 = 8.0f;
+                            gCameras[0].unk_D8 = 307.0f;
+                            gCameras[0].unk_DC = 8.0f;
+                            gCameras[0].unk_108 = 160.0f;
+                            gCameras[0].unk_10C = 0.0f;
+                            gCameras[0].unk_110 = 0.0f;
+                            gCameras[0].unk_114 = 0.0f;
+                            gCameras[1].unk_D0 = 12.0f;
+                            gCameras[1].unk_D4 = 8.0f;
+                            gCameras[1].unk_D8 = 307.0f;
+                            gCameras[1].unk_DC = 231.0f;
+                            gCameras[1].unk_108 = 160.0f;
+                            gCameras[1].unk_10C = 120.0f;
+                            gCameras[1].unk_110 = 0.0f;
+                            gCameras[1].unk_114 = 0.0f;
+                            gCameras[2].unk_D0 = 307.0f;
+                            gCameras[2].unk_D4 = 8.0f;
+                            gCameras[2].unk_D8 = 307.0f;
+                            gCameras[2].unk_DC = 8.0f;
+                            gCameras[2].unk_108 = 0.0f;
+                            gCameras[2].unk_10C = 0.0f;
+                            gCameras[2].unk_110 = 320.0f;
+                            gCameras[2].unk_114 = 0.0f;
+                            gCameras[3].unk_D0 = 307.0f;
+                            gCameras[3].unk_D4 = 8.0f;
+                            gCameras[3].unk_D8 = 307.0f;
+                            gCameras[3].unk_DC = 231.0f;
+                            gCameras[3].unk_108 = 0.0f;
+                            gCameras[3].unk_10C = 120.0f;
+                            gCameras[3].unk_110 = 320.0f;
+                            gCameras[3].unk_114 = 0.0f;
                             break;
                         case 2:
-                            gPlayers[0].unk_D0 = 12.0f;
-                            gPlayers[0].unk_D4 = 8.0f;
-                            gPlayers[0].unk_D8 = 12.0f;
-                            gPlayers[0].unk_DC = 231.0f;
-                            gPlayers[0].unk_108 = 0.0f;
-                            gPlayers[0].unk_10C = 120.0f;
-                            gPlayers[0].unk_110 = 0.0f;
-                            gPlayers[0].unk_114 = 0.0f;
-                            gPlayers[1].unk_D0 = 12.0f;
-                            gPlayers[1].unk_D4 = 231.0f;
-                            gPlayers[1].unk_D8 = 12.0f;
-                            gPlayers[1].unk_DC = 231.0f;
-                            gPlayers[1].unk_108 = 0.0f;
-                            gPlayers[1].unk_10C = 0.0f;
-                            gPlayers[1].unk_110 = 0.0f;
-                            gPlayers[1].unk_114 = 240.0f;
-                            gPlayers[2].unk_D0 = 12.0f;
-                            gPlayers[2].unk_D4 = 8.0f;
-                            gPlayers[2].unk_D8 = 307.0f;
-                            gPlayers[2].unk_DC = 231.0f;
-                            gPlayers[2].unk_108 = 160.0f;
-                            gPlayers[2].unk_10C = 120.0f;
-                            gPlayers[2].unk_110 = 0.0f;
-                            gPlayers[2].unk_114 = 0.0f;
-                            gPlayers[3].unk_D0 = 12.0f;
-                            gPlayers[3].unk_D4 = 231.0f;
-                            gPlayers[3].unk_D8 = 307.0f;
-                            gPlayers[3].unk_DC = 231.0f;
-                            gPlayers[3].unk_108 = 160.0f;
-                            gPlayers[3].unk_10C = 0.0f;
-                            gPlayers[3].unk_110 = 0.0f;
-                            gPlayers[3].unk_114 = 240.0f;
+                            gCameras[0].unk_D0 = 12.0f;
+                            gCameras[0].unk_D4 = 8.0f;
+                            gCameras[0].unk_D8 = 12.0f;
+                            gCameras[0].unk_DC = 231.0f;
+                            gCameras[0].unk_108 = 0.0f;
+                            gCameras[0].unk_10C = 120.0f;
+                            gCameras[0].unk_110 = 0.0f;
+                            gCameras[0].unk_114 = 0.0f;
+                            gCameras[1].unk_D0 = 12.0f;
+                            gCameras[1].unk_D4 = 231.0f;
+                            gCameras[1].unk_D8 = 12.0f;
+                            gCameras[1].unk_DC = 231.0f;
+                            gCameras[1].unk_108 = 0.0f;
+                            gCameras[1].unk_10C = 0.0f;
+                            gCameras[1].unk_110 = 0.0f;
+                            gCameras[1].unk_114 = 240.0f;
+                            gCameras[2].unk_D0 = 12.0f;
+                            gCameras[2].unk_D4 = 8.0f;
+                            gCameras[2].unk_D8 = 307.0f;
+                            gCameras[2].unk_DC = 231.0f;
+                            gCameras[2].unk_108 = 160.0f;
+                            gCameras[2].unk_10C = 120.0f;
+                            gCameras[2].unk_110 = 0.0f;
+                            gCameras[2].unk_114 = 0.0f;
+                            gCameras[3].unk_D0 = 12.0f;
+                            gCameras[3].unk_D4 = 231.0f;
+                            gCameras[3].unk_D8 = 307.0f;
+                            gCameras[3].unk_DC = 231.0f;
+                            gCameras[3].unk_108 = 160.0f;
+                            gCameras[3].unk_10C = 0.0f;
+                            gCameras[3].unk_110 = 0.0f;
+                            gCameras[3].unk_114 = 240.0f;
                             break;
                         case 3:
-                            gPlayers[0].unk_108 = 0.0f;
-                            gPlayers[0].unk_10C = 0.0f;
-                            gPlayers[0].unk_D0 = 12.0f;
-                            gPlayers[0].unk_D8 = 12.0f;
-                            gPlayers[0].unk_110 = 0.0f;
-                            gPlayers[0].unk_114 = 0.0f;
-                            gPlayers[0].unk_D4 = 8.0f;
-                            gPlayers[0].unk_DC = 8.0f;
-                            gPlayers[1].unk_D0 = 12.0f;
-                            gPlayers[1].unk_D8 = 12.0f;
-                            gPlayers[2].unk_D0 = 12.0f;
-                            gPlayers[3].unk_D0 = 12.0f;
-                            gPlayers[1].unk_D4 = 8.0f;
-                            gPlayers[2].unk_D4 = 8.0f;
-                            gPlayers[2].unk_DC = 8.0f;
-                            gPlayers[3].unk_D4 = 8.0f;
-                            gPlayers[1].unk_10C = 120.0f;
-                            gPlayers[3].unk_10C = 120.0f;
-                            gPlayers[1].unk_DC = 231.0f;
-                            gPlayers[3].unk_DC = 231.0f;
-                            gPlayers[2].unk_108 = 160.0f;
-                            gPlayers[3].unk_108 = 160.0f;
-                            gPlayers[2].unk_D8 = 307.0f;
-                            gPlayers[3].unk_D8 = 307.0f;
-                            gPlayers[1].unk_108 = 0.0f;
-                            gPlayers[1].unk_110 = 0.0f;
-                            gPlayers[1].unk_114 = 0.0f;
-                            gPlayers[2].unk_10C = 0.0f;
-                            gPlayers[2].unk_110 = 0.0f;
-                            gPlayers[2].unk_114 = 0.0f;
-                            gPlayers[3].unk_110 = 0.0f;
-                            gPlayers[3].unk_114 = 0.0f;
+                            gCameras[0].unk_108 = 0.0f;
+                            gCameras[0].unk_10C = 0.0f;
+                            gCameras[0].unk_D0 = 12.0f;
+                            gCameras[0].unk_D8 = 12.0f;
+                            gCameras[0].unk_110 = 0.0f;
+                            gCameras[0].unk_114 = 0.0f;
+                            gCameras[0].unk_D4 = 8.0f;
+                            gCameras[0].unk_DC = 8.0f;
+                            gCameras[1].unk_D0 = 12.0f;
+                            gCameras[1].unk_D8 = 12.0f;
+                            gCameras[2].unk_D0 = 12.0f;
+                            gCameras[3].unk_D0 = 12.0f;
+                            gCameras[1].unk_D4 = 8.0f;
+                            gCameras[2].unk_D4 = 8.0f;
+                            gCameras[2].unk_DC = 8.0f;
+                            gCameras[3].unk_D4 = 8.0f;
+                            gCameras[1].unk_10C = 120.0f;
+                            gCameras[3].unk_10C = 120.0f;
+                            gCameras[1].unk_DC = 231.0f;
+                            gCameras[3].unk_DC = 231.0f;
+                            gCameras[2].unk_108 = 160.0f;
+                            gCameras[3].unk_108 = 160.0f;
+                            gCameras[2].unk_D8 = 307.0f;
+                            gCameras[3].unk_D8 = 307.0f;
+                            gCameras[1].unk_108 = 0.0f;
+                            gCameras[1].unk_110 = 0.0f;
+                            gCameras[1].unk_114 = 0.0f;
+                            gCameras[2].unk_10C = 0.0f;
+                            gCameras[2].unk_110 = 0.0f;
+                            gCameras[2].unk_114 = 0.0f;
+                            gCameras[3].unk_110 = 0.0f;
+                            gCameras[3].unk_114 = 0.0f;
                             break;
                     }
                     break;
             }
         }
-    } else if ((gPlayers[D_8076D6C0].unk_E4 == 0x1E) && (D_8006D548 == 0)) {
+    } else if ((gCameras[D_8076D6C0].unk_E4 == 0x1E) && (D_8006D548 == 0)) {
         D_8006D548 = 1;
     }
 
-    for (i = 0, var_a0 = gPlayers; i < D_807A1590; i++, var_a0++) {
+    for (i = 0, var_a0 = gCameras; i < sNumCameras; i++, var_a0++) {
         if (var_a0->unk_E0 == 1) {
             if (var_a0->unk_E4 < var_a0->unk_E6) {
                 var_a0->unk_E4++;
@@ -2460,26 +2450,25 @@ void func_80717B20(void) {
     }
 }
 
-void func_807181F8(Player* player, unk_struct_F8* arg1) {
+void func_807181F8(Camera* camera, unk_struct_F8* arg1) {
     Vec3f* var_v1;
     f32 temp_fv0;
     s32 index;
-    unk_8008112C_arg_1* temp_a0 = &arg1->unk_04;
-    Racer* temp_t3 = &gRacers[player->id];
-    unk_struct_9C* temp_a3 = &arg1->unk_04.unk_58;
-    Racer* temp_t4;
+    unk_struct_58* temp_a0 = &arg1->unk_04;
+    Racer* racer = &gRacers[camera->id];
+    unk_struct_54* temp_a3 = &arg1->sub_2_3_unk_5C;
+    unk_struct_9C* temp_a3_2 = &arg1->sub_4_unk_5C;
     s32 pad[5];
 
-    temp_a3->unk_00.unk_00.unk_00.unk_00 = temp_t3->unk_180;
+    temp_a3->unk_00 = racer->unk_180;
+    temp_a3->unk_0C = racer->trueBasis;
 
-    *((Mtx3F*) &arg1->unk_04.unk_58.unk_00.unk_00.unk_00.unk_0C) = temp_t3->trueBasis;
-
-    temp_fv0 = (f32) player->unk_1C / 300.0f;
+    temp_fv0 = (f32) camera->unk_1C / 300.0f;
     temp_fv0 = (-2.0f * temp_fv0 * temp_fv0 * temp_fv0) + (3.0f * temp_fv0 * temp_fv0);
-    arg1->unk_04.unk_58.unk_00.unk_00.unk_30.y = (-880.0f * temp_fv0) + 1000.0f;
-    arg1->unk_04.unk_58.unk_00.unk_00.unk_48.y = (-360.0f * temp_fv0) + 180.0f;
+    temp_a3->unk_34 = (-880.0f * temp_fv0) + 1000.0f;
+    temp_a3->unk_4C = (-360.0f * temp_fv0) + 180.0f;
 
-    if (player->unk_1C >= 0x12C) {
+    if (camera->unk_1C >= 300) {
         if (gNumPlayers == 2) {
             func_80711BF0(arg1, &D_80776B9C.unk_58);
             var_v1 = &D_80776A78[2];
@@ -2487,44 +2476,45 @@ void func_807181F8(Player* player, unk_struct_F8* arg1) {
             func_80711BF0(arg1, &D_80776AA8.unk_58);
             var_v1 = &D_80776A48[2];
         }
-        player->unk_04 = 5;
-        temp_a3->unk_00.unk_00.unk_48.x = 0.0f;
-        temp_a3->unk_00.unk_00.unk_48.y = 0.0f;
-        temp_a3->unk_00.unk_00.unk_48.z = 0.0f;
+        camera->mode = CAMERA_MODE_5;
 
-        temp_a3->unk_68[1] = var_v1->y;
-        temp_a3->unk_68[4] = var_v1->z;
-        temp_a0->unk_00.unk_18[7] = var_v1->x;
+        temp_a3_2->unk_48.x = 0.0f;
+        temp_a3_2->unk_48.y = 0.0f;
+        temp_a3_2->unk_48.z = 0.0f;
+
+        temp_a3_2->unk_6C = var_v1->y;
+        temp_a3_2->unk_78 = var_v1->z;
+        temp_a0->unk_34 = var_v1->x;
 
         if (gNumPlayers == 2) {
-            var_v1 = &D_80776A78[player->cameraSetting];
+            var_v1 = &D_80776A78[camera->setting];
         } else {
-            var_v1 = &D_80776A48[player->cameraSetting];
+            var_v1 = &D_80776A48[camera->setting];
         }
-        temp_a3->unk_68[2] = var_v1->y;
-        temp_a3->unk_68[5] = var_v1->z;
-        temp_a0->unk_00.unk_18[8] = var_v1->x;
+        temp_a3_2->unk_70 = var_v1->y;
+        temp_a3_2->unk_7C = var_v1->z;
+        temp_a0->unk_38 = var_v1->x;
 
-        temp_t4 = &gRacers[player->id];
-        temp_a3->unk_00.unk_54.x = temp_t4->unk_180.x - (var_v1->y * temp_t4->trueBasis.x.x);
-        temp_a3->unk_00.unk_54.y = temp_t4->unk_180.y - (var_v1->y * temp_t4->trueBasis.x.y);
-        temp_a3->unk_00.unk_54.z = temp_t4->unk_180.z - (var_v1->y * temp_t4->trueBasis.x.z);
+        racer = &gRacers[camera->id];
+        temp_a3_2->unk_54.x = racer->unk_180.x - (var_v1->y * racer->trueBasis.x.x);
+        temp_a3_2->unk_54.y = racer->unk_180.y - (var_v1->y * racer->trueBasis.x.y);
+        temp_a3_2->unk_54.z = racer->unk_180.z - (var_v1->y * racer->trueBasis.x.z);
 
-        player->unk_20 = temp_t4->unk_180;
-        player->unk_2C = temp_t4->trueBasis;
+        camera->racerPos = racer->unk_180;
+        camera->racerBasis = racer->trueBasis;
 
-        player->unk_14 = arg1->unk_04.unk_00.unk_18[8];
-        player->unk_10 = 0;
-        if ((player->cameraSetting == 1) || (player->cameraSetting == 2)) {
-            player->unk_10 |= 1;
+        camera->unk_14 = arg1->unk_04.unk_38;
+        camera->unk_10 = 0;
+        if ((camera->setting == 1) || (camera->setting == 2)) {
+            camera->unk_10 |= 1;
         }
-        temp_a3->unk_68[6] = 0.1f;
-        temp_a3->unk_68[3] = 0.1f;
-        temp_a0->unk_00.unk_18[6] = 0.1f;
-        temp_a0->unk_00.unk_18[9] = 0.1f;
-        temp_a0->unk_00.unk_18[15] = 0.1f;
+        temp_a3_2->unk_80 = 0.1f;
+        temp_a3_2->unk_74 = 0.1f;
+        temp_a0->unk_30 = 0.1f;
+        temp_a0->unk_3C = 0.1f;
+        temp_a0->unk_54 = 0.1f;
     } else {
-        player->unk_1C++;
+        camera->unk_1C++;
     }
 }
 
@@ -2532,7 +2522,7 @@ extern s16 D_807A16CC;
 extern s32 gCurrentGhostType;
 extern s32 gFastestGhostTime;
 
-void func_80718530(Player* player, unk_struct_F8* arg1, unk_800E5D70* arg2) {
+void func_80718530(Camera* camera, unk_struct_F8* arg1, unk_800E5D70* arg2) {
     f32 var_fa0;
     f32 var_fv1;
     s32 playerIndex;
@@ -2540,36 +2530,36 @@ void func_80718530(Player* player, unk_struct_F8* arg1, unk_800E5D70* arg2) {
     unk_8008112C_arg_1* temp_a1;
     s32 pad[4];
     Racer* temp_t0;
-    unk_struct_9C* temp_a2 = &arg1->unk_04.unk_58;
+    unk_struct_9C* temp_a2 = &arg1->sub_4_unk_5C;
     Controller* controller;
 
-    playerIndex = player->id;
+    playerIndex = camera->id;
     temp_t0 = &gRacers[playerIndex];
     if (!gGamePaused) {
-        if (temp_t0->stateFlags & RACER_STATE_FLAGS_80000) {
-            player->unk_04 = 7;
-            func_807166B8(player, arg1, arg2);
+        if (temp_t0->stateFlags & RACER_STATE_FALLING_OFF_TRACK) {
+            camera->mode = CAMERA_MODE_FALLING_OFF_TRACK;
+            Camera_InitMode(camera, arg1, arg2);
             return;
         }
         if (temp_t0->stateFlags & RACER_STATE_FINISHED) {
             if ((gNumPlayers >= 2) && (D_807A16CC != 0)) {
-                player->unk_04 = 9;
-                func_807166B8(player, arg1, arg2);
+                camera->mode = CAMERA_MODE_9;
+                Camera_InitMode(camera, arg1, arg2);
                 return;
             }
             if (gGameMode == GAMEMODE_TIME_ATTACK) {
                 if ((gCurrentGhostType != GHOST_STAFF) && (gCurrentGhostType != GHOST_CELEBRITY) &&
                     (gCurrentGhostType != GHOST_CHAMP)) {
-                    player->unk_04 = 8;
+                    camera->mode = CAMERA_MODE_8;
                 } else if (temp_t0->raceTime < gFastestGhostTime) {
-                    player->unk_04 = 8;
+                    camera->mode = CAMERA_MODE_8;
                 } else {
-                    player->unk_04 = 10;
+                    camera->mode = CAMERA_MODE_10;
                 }
             } else {
-                player->unk_04 = 8;
+                camera->mode = CAMERA_MODE_8;
             }
-            func_807166B8(player, arg1, arg2);
+            Camera_InitMode(camera, arg1, arg2);
             return;
         }
     }
@@ -2579,200 +2569,197 @@ void func_80718530(Player* player, unk_struct_F8* arg1, unk_800E5D70* arg2) {
 
     if (!(temp_t0->stateFlags & RACER_STATE_RETIRED) && (controller->buttonPressed & BTN_CRIGHT)) {
         var_v1 = true;
-        if (++player->cameraSetting == 4) {
-            player->cameraSetting = 0;
+        if (++camera->setting == 4) {
+            camera->setting = 0;
         }
     }
     if (var_v1) {
-        func_80713064(player, &arg1->unk_04, temp_a2, gNumPlayers);
+        func_80713064(camera, &arg1->unk_04, temp_a2, gNumPlayers);
     }
     temp_a1 = &arg1->unk_04;
     if ((D_8076D6C4 != 0) && (!gGamePaused)) {
         if ((controller->buttonCurrent & BTN_CUP) && !(temp_t0->stateFlags & RACER_STATE_RETIRED)) {
-            if (++player->cameraLookBackRotate > sMaxCameraLookBackRotate) {
-                player->cameraLookBackRotate = sMaxCameraLookBackRotate;
+            if (++camera->lookBackRotate > sMaxCameraLookBackRotate) {
+                camera->lookBackRotate = sMaxCameraLookBackRotate;
             }
         } else {
-            if (--player->cameraLookBackRotate < 0) {
-                player->cameraLookBackRotate = 0;
+            if (--camera->lookBackRotate < 0) {
+                camera->lookBackRotate = 0;
             }
         }
-        temp_a2->unk_68[8] = (player->cameraLookBackRotate * 180.0f) / sMaxCameraLookBackRotate;
+        temp_a2->unk_88 = (camera->lookBackRotate * 180.0f) / sMaxCameraLookBackRotate;
     }
-    if (player->unk_10 & 1) {
+    if (camera->unk_10 & 1) {
 
         var_fv1 = sqrtf(SQ(temp_t0->unk_5C.x) + SQ(temp_t0->unk_5C.z)) - D_8076D8A8;
         if (var_fv1 < 0.0f) {
-            var_fa0 = player->unk_14;
+            var_fa0 = camera->unk_14;
         } else {
             var_fv1 /= (D_8076D8AC - D_8076D8A8);
             if (var_fv1 > 1.0f) {
                 var_fv1 = 1.0f;
             }
 
-            var_fa0 = player->unk_14 + ((120.0f - player->unk_14) * var_fv1);
+            var_fa0 = camera->unk_14 + ((120.0f - camera->unk_14) * var_fv1);
         }
-        if (player->unk_10 & 2) {
-            temp_a1->unk_00.unk_18[8] = var_fa0;
+        if (camera->unk_10 & 2) {
+            temp_a1->unk_00.unk_38 = var_fa0;
         } else {
-            temp_a1->unk_00.unk_18[8] = var_fa0;
-            temp_a1->unk_00.unk_18[7] = var_fa0;
+            temp_a1->unk_00.unk_38 = var_fa0;
+            temp_a1->unk_00.unk_34 = var_fa0;
         }
     }
-    var_fv1 = temp_a1->unk_00.unk_18[8] - temp_a1->unk_00.unk_18[7];
+    var_fv1 = temp_a1->unk_00.unk_38 - temp_a1->unk_00.unk_34;
 
     if (ABS(var_fv1) < 0.1f) {
-        player->unk_10 &= ~2;
+        camera->unk_10 &= ~2;
     }
 }
 
-void func_80718908(Player* player, unk_struct_F8* arg1, unk_800E5D70* arg2) {
-    s32 playerIndex = player->id;
+void func_80718908(Camera* camera, unk_struct_F8* arg1, unk_800E5D70* arg2) {
+    s32 playerIndex = camera->id;
 
-    if (gRacers[playerIndex].stateFlags & RACER_STATE_FLAGS_80000) {
-        player->unk_04 = 7;
-        func_807166B8(player, arg1, arg2);
+    if (gRacers[playerIndex].stateFlags & RACER_STATE_FALLING_OFF_TRACK) {
+        camera->mode = CAMERA_MODE_FALLING_OFF_TRACK;
+        Camera_InitMode(camera, arg1, arg2);
     }
 }
 
 extern s8 D_8007B9DC;
 
-void func_80718964(Player* player, unk_struct_F8* arg1) {
+void Camera_UpdateCourseSelect(Camera* camera, unk_struct_F8* arg1) {
     s32 i;
-    unk_struct_9C* temp_v0 = &arg1->unk_04.unk_58;
+    unk_struct_54* temp_v0 = &arg1->sub_2_3_unk_5C;
 
     if (D_8007B9DC != 0) {
-        temp_v0->unk_00.unk_00.unk_48.y += 1.0f;
-        if (temp_v0->unk_00.unk_00.unk_48.y >= 360.0f) {
-            temp_v0->unk_00.unk_00.unk_48.y -= 360.0f;
+        temp_v0->unk_4C += 1.0f;
+        if (temp_v0->unk_4C >= 360.0f) {
+            temp_v0->unk_4C -= 360.0f;
         }
-        if (player->unk_18 == 0) {
+        if (camera->unk_18 == 0) {
             for (i = 0; i < gNumPlayers; i++) {
                 Controller* controller = &gControllers[gPlayerControlPorts[i]];
 
                 if (controller->buttonCurrent & BTN_CUP) {
-                    temp_v0->unk_00.unk_00.unk_3C.y += 0.1f;
+                    temp_v0->unk_40 += 0.1f;
                 }
                 if (controller->buttonCurrent & BTN_CDOWN) {
-                    temp_v0->unk_00.unk_00.unk_3C.y -= 0.1f;
+                    temp_v0->unk_40 -= 0.1f;
                 }
             }
         } else {
-            player->unk_18 = 0;
-            temp_v0->unk_00.unk_00.unk_3C.y = 20.0f;
+            camera->unk_18 = 0;
+            temp_v0->unk_40 = 20.0f;
         }
 
-        if (temp_v0->unk_00.unk_00.unk_3C.y < -50.0f) {
-            temp_v0->unk_00.unk_00.unk_3C.y = -50.0f;
-        } else if (temp_v0->unk_00.unk_00.unk_3C.y > 90.0f) {
-            temp_v0->unk_00.unk_00.unk_3C.y = 90.0f;
+        if (temp_v0->unk_40 < -50.0f) {
+            temp_v0->unk_40 = -50.0f;
+        } else if (temp_v0->unk_40 > 90.0f) {
+            temp_v0->unk_40 = 90.0f;
         }
     }
 }
 
-void func_80718AB0(Player* player, unk_struct_F8* arg1) {
-    arg1->unk_04.unk_58.unk_00.unk_00.unk_00.unk_00 = gRacers[player->id].unk_180;
+void func_80718AB0(Camera* camera, unk_struct_F8* arg1) {
+    unk_struct_20* temp_v0 = &arg1->sub_1_unk_5C;
+
+    temp_v0->unk_00 = gRacers[camera->id].unk_180;
 }
 
-void func_80718AFC(Player* player, unk_struct_F8* arg1, unk_800E5D70* arg2) {
-    unk_struct_9C* temp_v1 = &arg1->unk_04.unk_58;
-    Vec3f* temp_s1 = &D_807A15A0[player->id];
-    unk_800CD970* temp_a3 = &D_8076D788[player->unk_18];
-    unk_8008112C_arg_1* temp_t0 = &arg1->unk_04;
+void func_80718AFC(Camera* camera, unk_struct_F8* arg1, unk_800E5D70* arg2) {
+    s32 pad;
+    Vec3f* temp_s1 = &D_807A15A0[camera->id];
+    unk_800CD970* temp_a3 = &D_8076D788[camera->unk_18];
+    unk_struct_58* temp_t0 = &arg1->unk_04;
     s16 temp_t1 = temp_a3->unk_00;
-    Racer* temp_t2 = &gRacers[player->id];
+    Racer* temp_t2 = &gRacers[camera->id];
+    unk_struct_68* temp_v1 = &arg1->sub_5_unk_5C;
+    unk_struct_20* temp_v1_2 = &arg1->sub_1_unk_5C;
     unk_800CD8B0* temp_v0_2;
-    s32 pad[2];
 
-    if (temp_t2->stateFlags & RACER_STATE_FLAGS_80000) {
-        player->unk_04 = 7;
-        func_807166B8(player, arg1, arg2);
+    if (temp_t2->stateFlags & RACER_STATE_FALLING_OFF_TRACK) {
+        camera->mode = CAMERA_MODE_FALLING_OFF_TRACK;
+        Camera_InitMode(camera, arg1, arg2);
         return;
     }
     switch (temp_a3->unk_00) {
         case 0:
-            temp_v1->unk_00.unk_00.unk_00.unk_00 = temp_t2->unk_180;
-            temp_v1->unk_00.unk_00.unk_00.unk_0C.x = temp_s1->x;
-            temp_v1->unk_00.unk_00.unk_00.unk_0C.y = temp_s1->y;
-            temp_v1->unk_00.unk_00.unk_00.unk_0C.z = temp_s1->z;
+            temp_v1_2->unk_00 = temp_t2->unk_180;
+            temp_v1_2->unk_0C.x = temp_s1->x;
+            temp_v1_2->unk_0C.y = temp_s1->y;
+            temp_v1_2->unk_0C.z = temp_s1->z;
             break;
         case 1:
             temp_v0_2 = (unk_800CD8B0*) temp_a3->unk_08;
 
-            *((Mtx3F*) &temp_v1->unk_00.unk_00.unk_00.unk_0C) = temp_t2->trueBasis;
+            temp_v1->unk_0C = temp_t2->trueBasis;
 
-            temp_t0->unk_00.unk_18[3] = temp_v1->unk_00.unk_00.unk_00.unk_18;
-            temp_t0->unk_00.unk_18[4] = temp_v1->unk_00.unk_00.unk_00.unk_1C;
-            temp_t0->unk_00.unk_18[5] = temp_v1->unk_00.unk_00.unk_20;
-            temp_v1->unk_00.unk_00.unk_00.unk_00 = temp_t2->unk_180;
+            temp_t0->unk_24 = temp_v1->unk_0C.y.x;
+            temp_t0->unk_28 = temp_v1->unk_0C.y.y;
+            temp_t0->unk_2C = temp_v1->unk_0C.y.z;
+            temp_v1->unk_00 = temp_t2->unk_180;
 
-            temp_v1->unk_00.unk_00.unk_3C.x =
-                temp_v0_2->unk_00.x +
-                ((((temp_v0_2->unk_0C.x - temp_v0_2->unk_00.x) * player->unk_1C) / temp_a3->unk_02) *
-                 temp_v0_2->unk_30);
-            temp_v1->unk_00.unk_00.unk_3C.y =
-                temp_v0_2->unk_00.y +
-                ((((temp_v0_2->unk_0C.y - temp_v0_2->unk_00.y) * player->unk_1C) / temp_a3->unk_02) *
-                 temp_v0_2->unk_30);
-            temp_v1->unk_00.unk_00.unk_3C.z =
-                temp_v0_2->unk_00.z +
-                ((((temp_v0_2->unk_0C.z - temp_v0_2->unk_00.z) * player->unk_1C) / temp_a3->unk_02) *
-                 temp_v0_2->unk_30);
+            temp_v1->unk_3C.x = temp_v0_2->unk_00.x +
+                                ((((temp_v0_2->unk_0C.x - temp_v0_2->unk_00.x) * camera->unk_1C) / temp_a3->unk_02) *
+                                 temp_v0_2->unk_30);
+            temp_v1->unk_3C.y = temp_v0_2->unk_00.y +
+                                ((((temp_v0_2->unk_0C.y - temp_v0_2->unk_00.y) * camera->unk_1C) / temp_a3->unk_02) *
+                                 temp_v0_2->unk_30);
+            temp_v1->unk_3C.z = temp_v0_2->unk_00.z +
+                                ((((temp_v0_2->unk_0C.z - temp_v0_2->unk_00.z) * camera->unk_1C) / temp_a3->unk_02) *
+                                 temp_v0_2->unk_30);
 
-            temp_v1->unk_00.unk_54.x =
-                temp_v0_2->unk_18.x +
-                ((((temp_v0_2->unk_24.x - temp_v0_2->unk_18.x) * player->unk_1C) / temp_a3->unk_02) *
-                 temp_v0_2->unk_34);
-            temp_v1->unk_00.unk_54.y =
-                temp_v0_2->unk_18.y +
-                ((((temp_v0_2->unk_24.y - temp_v0_2->unk_18.y) * player->unk_1C) / temp_a3->unk_02) *
-                 temp_v0_2->unk_34);
-            temp_v1->unk_00.unk_54.z =
-                temp_v0_2->unk_18.z +
-                ((((temp_v0_2->unk_24.z - temp_v0_2->unk_18.z) * player->unk_1C) / temp_a3->unk_02) *
-                 temp_v0_2->unk_34);
+            temp_v1->unk_54.x = temp_v0_2->unk_18.x +
+                                ((((temp_v0_2->unk_24.x - temp_v0_2->unk_18.x) * camera->unk_1C) / temp_a3->unk_02) *
+                                 temp_v0_2->unk_34);
+            temp_v1->unk_54.y = temp_v0_2->unk_18.y +
+                                ((((temp_v0_2->unk_24.y - temp_v0_2->unk_18.y) * camera->unk_1C) / temp_a3->unk_02) *
+                                 temp_v0_2->unk_34);
+            temp_v1->unk_54.z = temp_v0_2->unk_18.z +
+                                ((((temp_v0_2->unk_24.z - temp_v0_2->unk_18.z) * camera->unk_1C) / temp_a3->unk_02) *
+                                 temp_v0_2->unk_34);
         default:
             break;
     }
 
-    if (player->unk_1C >= temp_a3->unk_02) {
-        player->unk_1C = 0;
-        if (++player->unk_18 >= 5) {
-            player->unk_04 = 9;
-            func_807166B8(player, arg1, arg2);
+    if (camera->unk_1C >= temp_a3->unk_02) {
+        camera->unk_1C = 0;
+        if (++camera->unk_18 >= 5) {
+            camera->mode = CAMERA_MODE_9;
+            Camera_InitMode(camera, arg1, arg2);
             return;
         }
-        temp_a3 = &D_8076D788[player->unk_18];
-        temp_t0->unk_00.unk_18[8] = temp_a3->unk_04;
+        temp_a3 = &D_8076D788[camera->unk_18];
+        temp_t0->unk_38 = temp_a3->unk_04;
 
         switch (temp_a3->unk_00) {
             case 0:
                 if (temp_t1 != temp_a3->unk_00) {
                     func_80711B20(arg1, &D_807763D0.unk_58);
                 }
-                temp_t0->unk_00.unk_18[3] = 0.0f;
-                temp_t0->unk_00.unk_18[4] = 1.0f;
-                temp_t0->unk_00.unk_18[5] = 0.0f;
+                temp_t0->unk_24 = 0.0f;
+                temp_t0->unk_28 = 1.0f;
+                temp_t0->unk_2C = 0.0f;
                 func_80718F58(temp_s1, temp_t2->segmentPositionInfo.courseSegment,
                               temp_t2->segmentPositionInfo.segmentTValue, temp_a3);
-                temp_v1->unk_00.unk_00.unk_00.unk_00 = temp_t2->unk_180;
-                temp_v1->unk_00.unk_00.unk_00.unk_0C.x = temp_s1->x;
-                temp_v1->unk_00.unk_00.unk_00.unk_0C.y = temp_s1->y;
-                temp_v1->unk_00.unk_00.unk_00.unk_0C.z = temp_s1->z;
+                temp_v1_2->unk_00 = temp_t2->unk_180;
+                temp_v1_2->unk_0C.x = temp_s1->x;
+                temp_v1_2->unk_0C.y = temp_s1->y;
+                temp_v1_2->unk_0C.z = temp_s1->z;
                 break;
             case 1:
                 if (temp_t1 != temp_a3->unk_00) {
                     func_80711D58(arg1, &D_807765E8.unk_58);
                 }
                 temp_v0_2 = (unk_800CD8B0*) temp_a3->unk_08;
-                temp_v1->unk_00.unk_00.unk_3C = temp_v0_2->unk_00;
-                temp_v1->unk_00.unk_54 = temp_v0_2->unk_18;
+                temp_v1->unk_3C = temp_v0_2->unk_00;
+                temp_v1->unk_54 = temp_v0_2->unk_18;
                 break;
             default:
                 break;
         }
     } else {
-        player->unk_1C++;
+        camera->unk_1C++;
     }
 }
 
@@ -2828,78 +2815,78 @@ void func_80718F58(Vec3f* arg0, CourseSegment* arg1, f32 arg2, unk_800CD970* arg
     arg0->z += (sp2C.y.z * var_fa0) + (sp2C.z.z * var_fv0);
 }
 
-void func_80719140(Player* player, unk_struct_F8* arg1, unk_800E5D70* arg2) {
+void func_80719140(Camera* camera, unk_struct_F8* arg1, unk_800E5D70* arg2) {
 
-    if (player->unk_1C <= 60) {
-        arg1->unk_04.unk_58.unk_00.unk_00.unk_00.unk_00 = gRacers[player->id].segmentPositionInfo.pos;
-        player->unk_1C++;
+    if (camera->unk_1C <= 60) {
+        arg1->sub_1_unk_5C.unk_00 = gRacers[camera->id].segmentPositionInfo.pos;
+        camera->unk_1C++;
     }
 }
 
-void func_807191B0(Player* player, unk_struct_F8* arg1, unk_800E5D70* arg2) {
+void func_807191B0(Camera* camera, unk_struct_F8* arg1, unk_800E5D70* arg2) {
     s32 pad;
     f32 temp;
-    unk_struct_9C* temp_v1 = &arg1->unk_04.unk_58;
-    Racer* temp_a3 = &gRacers[player->id];
+    unk_struct_54* temp_v1 = &arg1->sub_2_3_unk_5C;
+    Racer* temp_a3 = &gRacers[camera->id];
     unk_8008112C_arg_1* temp_a0 = &arg1->unk_04;
 
-    if (temp_a3->stateFlags & RACER_STATE_FLAGS_80000) {
-        player->unk_04 = 7;
-        func_807166B8(player, arg1, arg2);
+    if (temp_a3->stateFlags & RACER_STATE_FALLING_OFF_TRACK) {
+        camera->mode = CAMERA_MODE_FALLING_OFF_TRACK;
+        Camera_InitMode(camera, arg1, arg2);
         return;
     }
-    temp_v1->unk_00.unk_00.unk_00.unk_18 += temp_a3->tiltUp.x * 0.3f;
-    temp_v1->unk_00.unk_00.unk_00.unk_1C += temp_a3->tiltUp.y * 0.3f;
-    temp_v1->unk_00.unk_00.unk_20 += temp_a3->tiltUp.z * 0.3f;
+    temp_v1->unk_0C.y.x += temp_a3->tiltUp.x * 0.3f;
+    temp_v1->unk_0C.y.y += temp_a3->tiltUp.y * 0.3f;
+    temp_v1->unk_0C.y.z += temp_a3->tiltUp.z * 0.3f;
 
-    func_806F6F64((Mtx3F*) &temp_v1->unk_00.unk_00.unk_00.unk_0C);
+    Math_OrthonormalizeAroundUp(&temp_v1->unk_0C);
 
-    temp_a0->unk_00.unk_18[3] = temp_v1->unk_00.unk_00.unk_00.unk_18;
-    temp_a0->unk_00.unk_18[4] = temp_v1->unk_00.unk_00.unk_00.unk_1C;
-    temp_a0->unk_00.unk_18[5] = temp_v1->unk_00.unk_00.unk_20;
+    temp_a0->unk_00.unk_24 = temp_v1->unk_0C.y.x;
+    temp_a0->unk_00.unk_28 = temp_v1->unk_0C.y.y;
+    temp_a0->unk_00.unk_2C = temp_v1->unk_0C.y.z;
 
-    temp_v1->unk_00.unk_00.unk_00.unk_00 = temp_a3->unk_180;
+    temp_v1->unk_00 = temp_a3->unk_180;
 
-    switch (player->unk_18) {
+    switch (camera->unk_18) {
         case 0:
-            if (++player->unk_1C >= 180) {
-                player->unk_18 = 1;
-                player->unk_1C = 0;
-                temp_v1->unk_00.unk_00.unk_30.z = 0.005f;
+            if (++camera->unk_1C >= 180) {
+                camera->unk_18 = 1;
+                camera->unk_1C = 0;
+                temp_v1->unk_38 = 0.005f;
             }
             break;
         case 1:
-            if (++player->unk_1C >= 300) {
-                player->unk_1C = 0;
-                temp_v1->unk_00.unk_00.unk_30.y = (Math_Rand1() % 451) + 50.0f;
+            if (++camera->unk_1C >= 300) {
+                camera->unk_1C = 0;
+                temp_v1->unk_34 = (Math_Rand1() % 451) + 50.0f;
             }
-            temp_v1->unk_00.unk_00.unk_48.y += 0.4f;
+            temp_v1->unk_4C += 0.4f;
 
-            if (temp_v1->unk_00.unk_00.unk_48.y >= 360.0f) {
-                temp_v1->unk_00.unk_00.unk_48.y -= 360.0f;
+            if (temp_v1->unk_4C >= 360.0f) {
+                temp_v1->unk_4C -= 360.0f;
             }
             break;
         default:
             break;
     }
 
-    if ((D_8076D6C0 == player->id) && (gNumPlayers == 2)) {
+    if ((D_8076D6C0 == camera->id) && (gNumPlayers == 2)) {
 
-        if (player->unk_E4 < player->unk_E6) {
-            temp = (f32) (player->unk_E4 + 1) / player->unk_E6;
-            arg1->unk_04.unk_00.unk_18[13] = -30.0f - (-30.0f * temp);
+        if (camera->unk_E4 < camera->unk_E6) {
+            temp = (f32) (camera->unk_E4 + 1) / camera->unk_E6;
+            arg1->unk_04.unk_4C = -30.0f - (-30.0f * temp);
         } else {
-            arg1->unk_04.unk_00.unk_18[13] = 0.0f;
+            arg1->unk_04.unk_4C = 0.0f;
         }
     }
 }
 
-void func_80719420(Player* player, unk_struct_F8* arg1, unk_800E5D70* arg2) {
-    Racer* racer = &gRacers[player->id];
+void func_80719420(Camera* camera, unk_struct_F8* arg1, unk_800E5D70* arg2) {
+    Racer* racer = &gRacers[camera->id];
 
-    if (racer->stateFlags & RACER_STATE_FLAGS_80000) {
-        player->unk_04 = 7;
-        func_807166B8(player, arg1, arg2);
+    if (racer->stateFlags & RACER_STATE_FALLING_OFF_TRACK) {
+        camera->mode = CAMERA_MODE_FALLING_OFF_TRACK;
+        Camera_InitMode(camera, arg1, arg2);
     }
 }
 
@@ -2911,31 +2898,33 @@ extern unk_struct_C D_8009A090[];
 extern unk_struct_C D_8009A210[];
 extern u16 D_8009AD16;
 
-void func_80719480(Player* player, unk_struct_F8* arg1, unk_800E5D70* arg2) {
+void func_80719480(Camera* camera, unk_struct_F8* arg1, unk_800E5D70* arg2) {
     s32 var_s3 = true;
     Racer* temp_a3;
-    unk_struct_9C* temp_v0;
+    unk_struct_68* temp_v0_2;
+    unk_struct_54* temp_v0 = &arg1->sub_2_3_unk_5C;
     unk_struct_C* var_a1;
 
     while (var_s3) {
 
         var_s3 = false;
-        switch (player->unk_18) {
+        switch (camera->unk_18) {
             case 0:
                 if (func_80719868(1)) {
                     if (D_8009AD16 & 0x40) {
                         var_s3 = true;
-                        player->unk_18 = 2;
+                        camera->unk_18 = 2;
                         func_80711D58(arg1, &D_807765E8.unk_58);
-                        arg1->unk_04.unk_58.unk_00.unk_00.unk_3C.z = 0.0f;
-                        arg1->unk_04.unk_58.unk_00.unk_00.unk_3C.y = 0.0f;
-                        arg1->unk_04.unk_58.unk_00.unk_00.unk_3C.x = 0.0f;
-                        arg1->unk_04.unk_58.unk_00.unk_54.x = 0.0f;
-                        arg1->unk_04.unk_58.unk_00.unk_54.y = 37.0f;
-                        arg1->unk_04.unk_58.unk_00.unk_54.z = -132.0f;
+                        temp_v0_2 = &arg1->sub_5_unk_5C;
+                        temp_v0_2->unk_3C.z = 0.0f;
+                        temp_v0_2->unk_3C.y = 0.0f;
+                        temp_v0_2->unk_3C.x = 0.0f;
+                        temp_v0_2->unk_54.x = 0.0f;
+                        temp_v0_2->unk_54.y = 37.0f;
+                        temp_v0_2->unk_54.z = -132.0f;
                     } else {
-                        player->unk_18 = 1;
-                        player->unk_1C = 0;
+                        camera->unk_18 = 1;
+                        camera->unk_1C = 0;
                         if (D_807A1598 == 0) {
                             var_a1 = D_800993D0;
                         } else if (D_807A1598 == 1) {
@@ -2945,54 +2934,55 @@ void func_80719480(Player* player, unk_struct_F8* arg1, unk_800E5D70* arg2) {
                         }
                         func_80714000(arg2, var_a1);
                         temp_a3 = &gRacers[D_807A1598];
-                        func_80713FE4(&D_807A1480[player->id], &temp_a3->unk_180, &temp_a3->trueBasis, temp_a3);
+                        func_80713FE4(&D_807A1480[camera->id], &temp_a3->unk_180, &temp_a3->trueBasis, temp_a3);
                     }
                 }
                 break;
             case 1:
                 if (func_8071403C(arg2)) {
-                    player->unk_18 = 2;
-                    arg1->unk_04.unk_58.unk_00.unk_00.unk_3C.x = 0.0f;
-                    arg1->unk_04.unk_58.unk_00.unk_00.unk_3C.y = 0.0f;
-                    arg1->unk_04.unk_58.unk_00.unk_00.unk_3C.z = 0.0f;
-                    arg1->unk_04.unk_58.unk_00.unk_54.x = 0.0f;
-                    arg1->unk_04.unk_58.unk_00.unk_54.y = 37.0f;
+                    camera->unk_18 = 2;
+                    temp_v0_2 = &arg1->sub_5_unk_5C;
+                    temp_v0_2->unk_3C.x = 0.0f;
+                    temp_v0_2->unk_3C.y = 0.0f;
+                    temp_v0_2->unk_3C.z = 0.0f;
+                    temp_v0_2->unk_54.x = 0.0f;
+                    temp_v0_2->unk_54.y = 37.0f;
                     var_s3 = true;
-                    temp_v0 = &arg1->unk_04.unk_58;
                     if (D_8009AD16 & 2) {
-                        temp_v0->unk_00.unk_54.z = 132.0f;
+                        temp_v0_2->unk_54.z = 132.0f;
                     } else {
-                        temp_v0->unk_00.unk_54.z = -132.0f;
+                        temp_v0_2->unk_54.z = -132.0f;
                     }
                 }
                 break;
             case 2:
                 temp_a3 = &gRacers[D_807A1598];
-                *((Mtx3F*) &arg1->unk_04.unk_58.unk_00.unk_00.unk_00.unk_0C) = temp_a3->trueBasis;
-                arg1->unk_04.unk_58.unk_00.unk_00.unk_00.unk_00 = temp_a3->unk_180;
+                temp_v0_2 = &arg1->sub_5_unk_5C;
+                temp_v0_2->unk_0C = temp_a3->trueBasis;
+                temp_v0_2->unk_00 = temp_a3->unk_180;
                 if (func_80719868(4)) {
-                    player->unk_18 = 3;
-                    player->unk_1C = 0;
+                    camera->unk_18 = 3;
+                    camera->unk_1C = 0;
                     temp_a3 = &gRacers[2];
-                    func_80713FE4(&D_807A1480[player->id], &temp_a3->unk_180, &temp_a3->trueBasis, temp_a3);
+                    func_80713FE4(&D_807A1480[camera->id], &temp_a3->unk_180, &temp_a3->trueBasis, temp_a3);
                     func_80714000(arg2, D_8009A210);
                 }
                 break;
             case 3:
                 if (func_8071403C(arg2) && func_80719868(3)) {
-                    player->unk_18 = 4;
-                    player->unk_1C = 0;
+                    camera->unk_18 = 4;
+                    camera->unk_1C = 0;
                     temp_a3 = &gRacers[1];
-                    func_80713FE4(&D_807A1480[player->id], &temp_a3->unk_180, &temp_a3->trueBasis, temp_a3);
+                    func_80713FE4(&D_807A1480[camera->id], &temp_a3->unk_180, &temp_a3->trueBasis, temp_a3);
                     func_80714000(arg2, D_8009A090);
                 }
                 break;
             case 4:
                 if (func_8071403C(arg2) && func_80719868(2)) {
-                    player->unk_18 = 5;
-                    player->unk_1C = 0;
+                    camera->unk_18 = 5;
+                    camera->unk_1C = 0;
                     temp_a3 = &gRacers[0];
-                    func_80713FE4(&D_807A1480[player->id], &temp_a3->unk_180, &temp_a3->trueBasis, temp_a3);
+                    func_80713FE4(&D_807A1480[camera->id], &temp_a3->unk_180, &temp_a3->trueBasis, temp_a3);
                     func_80714000(arg2, D_80099F70);
                 }
                 break;
@@ -3001,8 +2991,6 @@ void func_80719480(Player* player, unk_struct_F8* arg1, unk_800E5D70* arg2) {
                 break;
         }
     }
-    // FAKE, likely some recast somewhere
-    if (!arg1) {}
 }
 
 void func_8071985C(s32 arg0) {
@@ -3021,7 +3009,7 @@ bool func_80719868(s32 arg0) {
 
 Gfx* func_80719890(Gfx* gfx) {
 
-    gSPPerspNormalize(gfx++, gPlayers[0].unk_118);
-    gSPMatrix(gfx++, &D_1000000.unk_1A208[gPlayers[0].id], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
-    return func_80713E38(gfx, 0, gPlayers->id);
+    gSPPerspNormalize(gfx++, gCameras[0].perspectiveScale);
+    gSPMatrix(gfx++, &D_1000000.unk_1A208[gCameras[0].id], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
+    return func_80713E38(gfx, 0, gCameras[0].id);
 }

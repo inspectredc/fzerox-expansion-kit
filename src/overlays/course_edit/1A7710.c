@@ -23,7 +23,7 @@ s32 func_xk2_800F5D10(void) {
 }
 
 extern GfxPool* gGfxPool;
-extern Player gPlayers[];
+extern Camera gCameras[];
 
 void func_xk2_800F5D1C(void) {
     static s32 D_xk2_80119688 = 0;
@@ -41,7 +41,7 @@ void func_xk2_800F5D1C(void) {
     D_xk2_80119688 = (D_xk2_80119688 + 8) % 360;
     spB4 = (D_xk2_80119688 * 0x1000) / 360;
 
-    Matrix_SetAxisRotation(NULL, &sp70, 1.0f, spB4, gPlayers->unk_5C.x.x, gPlayers->unk_5C.x.y, gPlayers->unk_5C.x.z,
+    Matrix_SetAxisRotation(NULL, &sp70, 1.0f, spB4, gCameras[0].basis.x.x, gCameras[0].basis.x.y, gCameras[0].basis.x.z,
                            0.0f, 0.0f, 0.0f);
 
     vtx = gGfxPool->unk_365E8;
@@ -137,9 +137,9 @@ void func_xk2_800F5F2C(void) {
         D_xk2_80104CB8 = D_807B3C20.unk_0000[D_xk2_80119684].pos.x * 0.3f;
         D_xk2_80104CBC = D_807B3C20.unk_0000[D_xk2_80119684].pos.y * 0.3f;
         D_xk2_80104CC0 = D_807B3C20.unk_0000[D_xk2_80119684].pos.z * 0.3f;
-        gPlayers->unk_50.x = D_xk2_80104CB8;
-        gPlayers->unk_50.y = D_xk2_80104CBC + D_xk2_80104CB4;
-        gPlayers->unk_50.z = D_xk2_80104CC0;
+        gCameras[0].eye.x = D_xk2_80104CB8;
+        gCameras[0].eye.y = D_xk2_80104CBC + D_xk2_80104CB4;
+        gCameras[0].eye.z = D_xk2_80104CC0;
     } else {
         D_xk2_8011968C = 8;
     }

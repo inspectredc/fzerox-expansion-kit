@@ -69,7 +69,7 @@ void func_xk2_800F13C4(void) {
 }
 
 extern Mtx D_2000000[];
-extern Player gPlayers[];
+extern Camera gCameras[];
 extern bool gInCourseEditTestRun;
 extern unk_80128C94 D_6000000;
 extern unk_80128C94* D_80128C94;
@@ -81,7 +81,7 @@ Gfx* func_xk2_800F1428(Gfx* gfx) {
     s32 pad[9];
     s32 temp_v0;
     s32 temp_v1;
-    Player* player = gPlayers;
+    Camera* camera = gCameras;
     Mtx spC8;
     MtxF sp88;
 
@@ -89,16 +89,16 @@ Gfx* func_xk2_800F1428(Gfx* gfx) {
         return func_80719890(gfx);
     }
     if (gInCourseEditTestRun) {
-        Matrix_SetFrustrum(&D_80128C94->unk_0000, NULL, (gPlayers[0].unk_94.x * 320.0f) / 240.0f, 32.0f, 4096.0f,
+        Matrix_SetFrustrum(&D_80128C94->unk_0000, NULL, (gCameras[0].fovAngle * 320.0f) / 240.0f, 32.0f, 4096.0f,
                            320.0f, 0.0f, 240.0f, 0.0f, &sp13E);
     } else {
-        Matrix_SetFrustrum(&D_80128C94->unk_0000, NULL, (gPlayers[0].unk_94.x * 320.0f) / 240.0f, 128.0f, 32768.0f,
+        Matrix_SetFrustrum(&D_80128C94->unk_0000, NULL, (gCameras[0].fovAngle * 320.0f) / 240.0f, 128.0f, 32768.0f,
                            320.0f, 0.0f, 240.0f, 0.0f, &sp13E);
         sp13E = 0x10;
     }
     gSPPerspNormalize(gfx++, sp13E);
     gSPMatrix(gfx++, &D_6000000.unk_0000, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
-    Matrix_FromMtx(&D_80128C94->unk_0000, &gPlayers[0].unk_11C);
+    Matrix_FromMtx(&D_80128C94->unk_0000, &gCameras[0].projectionMtx);
     temp_v0 = (D_xk2_80104CB0 * 0x1000) / 360;
     D_xk2_80128D64 = SIN(temp_v0);
     D_xk2_80128D68 = COS(temp_v0);
@@ -106,35 +106,35 @@ Gfx* func_xk2_800F1428(Gfx* gfx) {
     D_xk2_80128D60 = SIN(temp_v1) * D_xk2_80128D68;
     D_xk2_80128D64 = (-1.0f * D_xk2_80128D64);
     D_xk2_80128D68 = COS(temp_v1) * (-1.0f * D_xk2_80128D68);
-    gPlayers[0].unk_5C.x.x = D_xk2_80128D60;
-    gPlayers[0].unk_5C.x.y = D_xk2_80128D64;
-    gPlayers[0].unk_5C.x.z = D_xk2_80128D68;
+    gCameras[0].basis.x.x = D_xk2_80128D60;
+    gCameras[0].basis.x.y = D_xk2_80128D64;
+    gCameras[0].basis.x.z = D_xk2_80128D68;
 
-    gPlayers[0].unk_50.x = D_xk2_80104CB8 - (D_xk2_80104CB4 * D_xk2_80128D60);
-    gPlayers[0].unk_50.y = D_xk2_80104CBC - (D_xk2_80104CB4 * D_xk2_80128D64);
-    gPlayers[0].unk_50.z = D_xk2_80104CC0 - (D_xk2_80104CB4 * D_xk2_80128D68);
+    gCameras[0].eye.x = D_xk2_80104CB8 - (D_xk2_80104CB4 * D_xk2_80128D60);
+    gCameras[0].eye.y = D_xk2_80104CBC - (D_xk2_80104CB4 * D_xk2_80128D64);
+    gCameras[0].eye.z = D_xk2_80104CC0 - (D_xk2_80104CB4 * D_xk2_80128D68);
 
     D_xk2_80128D40 = SIN(temp_v1);
     D_xk2_80128D44 = COS(temp_v1);
 
-    gPlayers[0].unk_5C.y.x = 0 - (D_xk2_80128D64 * D_xk2_80128D40);
-    gPlayers[0].unk_5C.y.y = (D_xk2_80128D60 * D_xk2_80128D40) - (D_xk2_80128D68 * D_xk2_80128D44);
-    gPlayers[0].unk_5C.y.z = D_xk2_80128D64 * D_xk2_80128D44;
+    gCameras[0].basis.y.x = 0 - (D_xk2_80128D64 * D_xk2_80128D40);
+    gCameras[0].basis.y.y = (D_xk2_80128D60 * D_xk2_80128D40) - (D_xk2_80128D68 * D_xk2_80128D44);
+    gCameras[0].basis.y.z = D_xk2_80128D64 * D_xk2_80128D44;
 
-    gPlayers[0].unk_5C.z.x = (D_xk2_80128D68 * gPlayers[0].unk_5C.y.y) - (D_xk2_80128D64 * gPlayers[0].unk_5C.y.z);
-    gPlayers[0].unk_5C.z.y = (D_xk2_80128D60 * gPlayers[0].unk_5C.y.z) - (D_xk2_80128D68 * gPlayers[0].unk_5C.y.x);
-    gPlayers[0].unk_5C.z.z = (D_xk2_80128D64 * gPlayers[0].unk_5C.y.x) - (D_xk2_80128D60 * gPlayers[0].unk_5C.y.y);
-    Matrix_SetLookAt(&D_80128C94->unk_0040, NULL, gPlayers[0].unk_50.x, gPlayers[0].unk_50.y, gPlayers[0].unk_50.z,
-                     D_xk2_80104CB8, D_xk2_80104CBC, D_xk2_80104CC0, gPlayers[0].unk_5C.y.x, gPlayers[0].unk_5C.y.y,
-                     gPlayers[0].unk_5C.y.z);
+    gCameras[0].basis.z.x = (D_xk2_80128D68 * gCameras[0].basis.y.y) - (D_xk2_80128D64 * gCameras[0].basis.y.z);
+    gCameras[0].basis.z.y = (D_xk2_80128D60 * gCameras[0].basis.y.z) - (D_xk2_80128D68 * gCameras[0].basis.y.x);
+    gCameras[0].basis.z.z = (D_xk2_80128D64 * gCameras[0].basis.y.x) - (D_xk2_80128D60 * gCameras[0].basis.y.y);
+    Matrix_SetLookAt(&D_80128C94->unk_0040, NULL, gCameras[0].eye.x, gCameras[0].eye.y, gCameras[0].eye.z,
+                     D_xk2_80104CB8, D_xk2_80104CBC, D_xk2_80104CC0, gCameras[0].basis.y.x, gCameras[0].basis.y.y,
+                     gCameras[0].basis.y.z);
 
     gSPMatrix(gfx++, &D_6000000.unk_0040, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_PROJECTION);
     gSPMatrix(gfx++, D_2000000, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    Matrix_FromMtx(&D_80128C94->unk_0040, &gPlayers[0].unk_15C);
-    func_80713204(&gPlayers[0].unk_19C, &gPlayers[0].unk_11C, &gPlayers[0].unk_15C);
+    Matrix_FromMtx(&D_80128C94->unk_0040, &gCameras[0].viewMtx);
+    Camera_CalculateProjectionViewMtx(&gCameras[0].projectionViewMtx, &gCameras[0].projectionMtx, &gCameras[0].viewMtx);
     Matrix_SetLockedLookAt(&spC8, NULL, 0.3f, 0.3f, 0.3f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f);
     Matrix_FromMtx(&spC8, &sp88);
-    func_xk2_800F1FF0(&sp88, &gPlayers[0].unk_19C, &gPlayers[0].unk_19C);
+    func_xk2_800F1FF0(&sp88, &gCameras[0].projectionViewMtx, &gCameras[0].projectionViewMtx);
     return gfx;
 }
 #else
@@ -168,8 +168,8 @@ void func_xk2_800F1938(void) {
     if (gCourseEditCursorYPos < 0x38) {
         return;
     }
-    temp_dfv0 = gPlayers[0].unk_94.x;
-    temp_dfv1 = ((gPlayers[0].unk_94.x * 320.0f) / 240.0f);
+    temp_dfv0 = gCameras[0].fovAngle;
+    temp_dfv1 = ((gCameras[0].fovAngle * 320.0f) / 240.0f);
     temp_dfv1 = ((gCourseEditCursorXPos - 0xA0) / 320.0) * temp_dfv1;
     temp_dfv0 = ((gCourseEditCursorYPos - 0x78) / 240.0) * temp_dfv0;
 
@@ -179,19 +179,19 @@ void func_xk2_800F1938(void) {
     temp_fa0 = ((10000.0f * SIN((s32) temp_dfv1)) / COS((s32) temp_dfv1));
     temp_fa1 = ((10000.0f * SIN((s32) temp_dfv0)) / COS((s32) temp_dfv0));
 
-    sp88 = gPlayers[0].unk_50.x + (gPlayers[0].unk_5C.x.x * 10000.0f);
-    sp8C = gPlayers[0].unk_50.y + (gPlayers[0].unk_5C.x.y * 10000.0f);
-    sp90 = gPlayers[0].unk_50.z + (gPlayers[0].unk_5C.x.z * 10000.0f);
+    sp88 = gCameras[0].eye.x + (gCameras[0].basis.x.x * 10000.0f);
+    sp8C = gCameras[0].eye.y + (gCameras[0].basis.x.y * 10000.0f);
+    sp90 = gCameras[0].eye.z + (gCameras[0].basis.x.z * 10000.0f);
 
-    sp88 = ((sp88 - (temp_fa1 * gPlayers[0].unk_5C.y.x)) - (temp_fa0 * gPlayers[0].unk_5C.z.x));
-    sp8C = ((sp8C - (temp_fa1 * gPlayers[0].unk_5C.y.y)) - (temp_fa0 * gPlayers[0].unk_5C.z.y));
-    sp90 = ((sp90 - (temp_fa1 * gPlayers[0].unk_5C.y.z)) - (temp_fa0 * gPlayers[0].unk_5C.z.z));
+    sp88 = ((sp88 - (temp_fa1 * gCameras[0].basis.y.x)) - (temp_fa0 * gCameras[0].basis.z.x));
+    sp8C = ((sp8C - (temp_fa1 * gCameras[0].basis.y.y)) - (temp_fa0 * gCameras[0].basis.z.y));
+    sp90 = ((sp90 - (temp_fa1 * gCameras[0].basis.y.z)) - (temp_fa0 * gCameras[0].basis.z.z));
 
-    if (gPlayers[0].unk_50.y <= sp8C) {
-        var_fa1 = sp8C - gPlayers[0].unk_50.y;
+    if (gCameras[0].eye.y <= sp8C) {
+        var_fa1 = sp8C - gCameras[0].eye.y;
         var_fv0 = var_fa1;
     } else {
-        var_fa1 = sp8C - gPlayers[0].unk_50.y;
+        var_fa1 = sp8C - gCameras[0].eye.y;
         var_fv0 = -var_fa1;
     }
     if (var_fv0 < 10.0f) {
@@ -203,8 +203,8 @@ void func_xk2_800F1938(void) {
             var_fv1 = (((temp_v1->pos.y + temp_v1->next->pos.y) * 0.3f) / 2);
         } else {
             var_fv1 = (((temp_v1->pos.y + temp_v1->next->pos.y) * 0.3f) / 2);
-            if (gPlayers[0].unk_50.y < var_fv1) {
-                var_fv1 = (gPlayers[0].unk_50.y - 256.0f);
+            if (gCameras[0].eye.y < var_fv1) {
+                var_fv1 = (gCameras[0].eye.y - 256.0f);
                 if (var_fv1 < 0.0) {
                     var_fv1 = 0.0;
                 }
@@ -228,19 +228,19 @@ void func_xk2_800F1938(void) {
         radiusLeft = 260.0f;
         radiusRight = 260.0f;
     }
-    if (gPlayers[0].unk_50.y != 0.0f) {
+    if (gCameras[0].eye.y != 0.0f) {
         // FAKE
-        var_fv0_2 = (var_fv1 - (1 * gPlayers[0].unk_50.y)) / (pad = var_fa1);
+        var_fv0_2 = (var_fv1 - (1 * gCameras[0].eye.y)) / (pad = var_fa1);
     } else {
-        var_fv0_2 = (var_fv1 - (1 * sp8C)) / (gPlayers[0].unk_50.y - sp8C);
+        var_fv0_2 = (var_fv1 - (1 * sp8C)) / (gCameras[0].eye.y - sp8C);
     }
     if ((var_fv0_2 > 100000.0) || (var_fv0_2 < -10000.0)) {
         return;
     }
 
-    D_800D6CA0.unk_28.pos.x = ((sp88 - gPlayers[0].unk_50.x) * var_fv0_2) + gPlayers[0].unk_50.x;
+    D_800D6CA0.unk_28.pos.x = ((sp88 - gCameras[0].eye.x) * var_fv0_2) + gCameras[0].eye.x;
     D_800D6CA0.unk_28.pos.y = var_fv1;
-    D_800D6CA0.unk_28.pos.z = ((sp90 - gPlayers[0].unk_50.z) * var_fv0_2) + gPlayers[0].unk_50.z;
+    D_800D6CA0.unk_28.pos.z = ((sp90 - gCameras[0].eye.z) * var_fv0_2) + gCameras[0].eye.z;
     D_800D6CA0.unk_28.pos.x /= 0.3f;
     D_800D6CA0.unk_28.pos.y /= 0.3f;
     D_800D6CA0.unk_28.pos.z /= 0.3f;

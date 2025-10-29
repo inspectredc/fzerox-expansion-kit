@@ -82,13 +82,13 @@ void func_i5_800770B4(void) {
     if (D_i5_8007B074 >= 7) {
         D_i5_8007B074--;
     }
-    func_80717294();
+    Camera_Update();
 }
 
 extern GfxPool D_1000000;
 extern GfxPool* gGfxPool;
 extern s32 D_8079A35C;
-extern Player gPlayers[];
+extern Camera gCameras[];
 extern s32 gSelectedMode;
 extern s32 gCupType;
 extern u8 gEditCupTrackNames[][9];
@@ -122,7 +122,7 @@ Gfx* func_i5_800774F0(Gfx* gfx) {
 
     gDPSetRenderMode(gfx++, G_RM_OPA_SURF, G_RM_OPA_SURF2);
     gDPSetCombineMode(gfx++, G_CC_PRIMITIVE, G_CC_PRIMITIVE);
-    gSPPerspNormalize(gfx++, gPlayers[0].unk_118);
+    gSPPerspNormalize(gfx++, gCameras[0].perspectiveScale);
     gSPMatrix(gfx++, D_1000000.unk_1A008, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
     gSPMatrix(gfx++, D_1000000.unk_1A108, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 

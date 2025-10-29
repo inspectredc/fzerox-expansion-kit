@@ -195,7 +195,7 @@ void EndingCutscene_Init(void) {
     Course_Init();
     func_i3_80040158();
     func_8071D48C();
-    func_807160A0();
+    Camera_Init();
     func_8070F0B0(COURSE_CONTEXT()->courseData.venue, COURSE_CONTEXT()->courseData.skybox);
     func_i3_800617A0();
     Effects_Init();
@@ -366,7 +366,7 @@ s32 EndingCutscene_Update(void) {
     D_i7_8009AD10 = &D_8009A3A0[D_8079A35C];
     Effects_Update();
     func_80726554();
-    func_80717294();
+    Camera_Update();
     func_i3_80061C2C();
     func_800B94D8();
     func_8070304C();
@@ -559,7 +559,7 @@ s32 func_i7_8009318C(void) {
 }
 
 extern Gfx D_8076CE28[];
-extern Player gPlayers[];
+extern Camera gCameras[];
 extern FrameBuffer* gFrameBuffers[];
 extern s32 D_8079A364;
 extern GfxPool* gGfxPool;
@@ -602,7 +602,7 @@ Gfx* EndingCutscene_Draw(Gfx* gfx) {
     gSPClipRatio(gfx++, FRUSTRATIO_3);
     gDPPipeSync(gfx++);
     gDPSetColorImage(gfx++, G_IM_FMT_RGBA, G_IM_SIZ_16b, SCREEN_WIDTH, OS_PHYSICAL_TO_K0(gFrameBuffers[D_8079A364]));
-    gSPPerspNormalize(gfx++, gPlayers[0].unk_118);
+    gSPPerspNormalize(gfx++, gCameras[0].perspectiveScale);
     gSPMatrix(gfx++, D_1000000.unk_1A208, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
 
     gfx = func_80713E38(gfx, 0, 0);

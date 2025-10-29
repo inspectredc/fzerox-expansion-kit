@@ -381,7 +381,7 @@ void CourseSelect_Init(void) {
         sCourseSelectCup = gCupSelectOption;
     }
 
-    func_807160A0();
+    Camera_Init();
     Object_Init(OBJECT_FRAMEBUFFER, 0, 0, 1);
     Object_Init(OBJECT_COURSE_SELECT_BACKGROUND, 0, 0, 2);
     if (gGameMode != GAMEMODE_FLX_RECORDS_COURSE_SELECT) {
@@ -449,7 +449,7 @@ void NextCourseSelect_Init(void) {
     } else {
         sCourseSelectCup = gCupSelectOption;
     }
-    func_807160A0();
+    Camera_Init();
     Object_Init(OBJECT_FRAMEBUFFER, 0, 0, 1);
     Object_Init(OBJECT_COURSE_SELECT_BACKGROUND, 0, 0, 2);
     Object_Init(OBJECT_COURSE_SELECT_MODEL, 0, 0, 8);
@@ -469,7 +469,7 @@ extern s32 gTransitionState;
 extern u16 gInputPressed;
 extern s32 gCupType;
 extern u16 gInputButtonPressed;
-extern Player gPlayers[];
+extern Camera gCameras[];
 extern u8 gEditCupTrackNames[][9];
 
 s32 CourseSelect_Update(void) {
@@ -491,7 +491,7 @@ s32 CourseSelect_Update(void) {
         sp110 = false;
     }
 
-    func_80717294();
+    Camera_Update();
     if (gTransitionState != TRANSITION_INACTIVE) {
         return gGameMode;
     }
@@ -669,14 +669,14 @@ s32 CourseSelect_Update(void) {
 
             if ((gInputPressed & BTN_LEFT) && (sCourseSelectTrackNo > 0)) {
                 sCourseSelectTrackNo--;
-                gPlayers[0].unk_18 = 1;
+                gCameras[0].unk_18 = 1;
                 LEFT_ARROW_ROTATION_CHANGE(Object_Get(OBJECT_COURSE_SELECT_ARROWS)) += 0x200;
                 Audio_TriggerSystemSE(NA_SE_30);
             }
 
             if ((gInputPressed & BTN_RIGHT) && (sCourseSelectTrackNo < 5)) {
                 sCourseSelectTrackNo++;
-                gPlayers[0].unk_18 = 1;
+                gCameras[0].unk_18 = 1;
                 RIGHT_ARROW_ROTATION_CHANGE(Object_Get(OBJECT_COURSE_SELECT_ARROWS)) += 0x200;
                 Audio_TriggerSystemSE(NA_SE_30);
             }
@@ -740,7 +740,7 @@ s32 CourseSelect_Update(void) {
 }
 
 s32 NextCourseSelect_Update(void) {
-    func_80717294();
+    Camera_Update();
     if (gTransitionState != TRANSITION_INACTIVE) {
         return gGameMode;
     }

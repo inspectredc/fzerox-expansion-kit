@@ -4,6 +4,7 @@
 #include "fzx_game.h"
 #include "fzx_object.h"
 #include "fzx_bordered_box.h"
+#include "fzx_camera.h"
 #include "fzx_assets.h"
 #include "src/overlays/ovl_i2/transition.h"
 
@@ -652,7 +653,7 @@ Gfx* func_i6_80083F54(Gfx* gfx) {
     s32 var_t5;
 
     if ((D_i6_8008A7A8 == 1) || (D_i6_8008A7A8 == 2)) {
-        gfx = func_806F6360(gfx, 0);
+        gfx = func_806F6360(gfx, SCISSOR_BOX_FULL_SCREEN);
         gSPDisplayList(gfx++, D_8014810);
         gDPSetTextureFilter(gfx++, G_TF_POINT);
         gDPSetRenderMode(gfx++, G_RM_XLU_SURF, G_RM_NOOP2);
