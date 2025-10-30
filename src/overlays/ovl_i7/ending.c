@@ -1089,8 +1089,8 @@ void func_i7_8009580C(void) {
                 if (D_i7_8009AE48 & (1 << i)) {
                     var_s2->unk_00 = 1;
                     var_s2->unk_04 = 0;
-                    var_s2->unk_08 = var_s4->unk_180.x;
-                    var_s2->unk_10 = var_s4->unk_180.z;
+                    var_s2->unk_08 = var_s4->focusPos.x;
+                    var_s2->unk_10 = var_s4->focusPos.z;
                     var_s2->unk_14 = var_s4->trueBasis.x.x;
                     var_s2->unk_18 = var_s4->trueBasis.x.y;
                     var_s2->unk_1C = var_s4->trueBasis.x.z;

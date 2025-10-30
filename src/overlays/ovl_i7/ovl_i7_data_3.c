@@ -1,4 +1,5 @@
 #include "global.h"
+#include "fzx_camera.h"
 
 void func_807141C0(unk_800E5D70* arg0, unk_redo_3* arg1);
 void func_8071400C(unk_800E5D70* arg0, s32 arg1);

@@ -141,7 +141,7 @@ void func_i3_InitCourseMinimap(void) {
 }
 
 extern s16 gSettingVsCom;
-extern s8 D_8076C7D8;
+extern s8 gTitleDemoState;
 extern s32 gGameMode;
 extern s32 gTotalRacers;
 extern Racer* gRacersByPosition[];
@@ -160,7 +160,7 @@ Gfx* func_i3_DrawCourseMinimap(Gfx* gfx, s32 numPlayersIndex, s32 playerIndex) {
     s32 playerMarkerRightPos;
 
     if ((controller->buttonPressed & BTN_CLEFT) && (numPlayersIndex >= 2)) {
-        if (D_8076C7D8 == 0) {
+        if (gTitleDemoState == TITLE_DEMO_INACTIVE) {
             gPlayerMinimapLapCounterToggle[playerIndex] = (gPlayerMinimapLapCounterToggle[playerIndex] + 1) % 2;
         }
     }

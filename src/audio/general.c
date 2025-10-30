@@ -1926,7 +1926,7 @@ void Audio_PlayerSEPopStack(u8 racerId) {
 }
 
 extern s32 gNumPlayers;
-extern s8 D_8076C7D8;
+extern s8 gTitleDemoState;
 extern s32 gGameMode;
 
 void func_807442E4(void) {
@@ -1951,12 +1951,13 @@ void func_807442E4(void) {
                         break;
                 }
 
-                if ((temp_lo > 2100) && (temp_lo < 2110) && (gGameMode == GAMEMODE_FLX_TITLE) && (D_8076C7D8 == 0)) {
+                if ((temp_lo > 2100) && (temp_lo < 2110) && (gGameMode == GAMEMODE_FLX_TITLE) &&
+                    (gTitleDemoState == TITLE_DEMO_INACTIVE)) {
                     if (!note) {}
-                    D_8076C7D8 = 1;
+                    gTitleDemoState = TITLE_DEMO_ACTIVE;
                 }
-                if ((temp_lo > 8200) && (temp_lo < 8210) && (D_8076C7D8 == 1)) {
-                    D_8076C7D8 = 3;
+                if ((temp_lo > 8200) && (temp_lo < 8210) && (gTitleDemoState == TITLE_DEMO_ACTIVE)) {
+                    gTitleDemoState = TITLE_DEMO_START_EXIT;
                 }
                 if (temp_lo > 250 && temp_lo < 260) {
                     AUDIOCMD_GLOBAL_INIT_SEQPLAYER(0, SEQ_SOUND_EFFECTS, 0, 0);

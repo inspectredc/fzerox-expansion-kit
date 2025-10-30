@@ -191,7 +191,7 @@ void CourseEdit_Init(void) {
     func_xk2_800E6F9C();
     D_8076C77C = 3;
     D_8076C7A8 = 3;
-    gCameras[0].fovAngle = 40.0f;
+    gCameras[0].fov = 40.0f;
     func_xk1_8002D86C(9, 2);
     func_xk1_8002D880(0x18);
     func_xk2_800E77F0();
@@ -245,7 +245,7 @@ void func_xk2_800EC91C(void) {
     Audio_PauseSet(AUDIO_PAUSE_UNPAUSED);
     Audio_TestRunEnd();
     D_8076C77C = 3;
-    gCameras[0].fovAngle = 40.0f;
+    gCameras[0].fov = 40.0f;
     func_xk2_800F13C4();
     func_xk2_800EF8B0();
     D_xk2_800F7040 = 4;

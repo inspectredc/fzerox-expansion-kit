@@ -94,6 +94,13 @@ typedef enum MenuChangeMode {
     /* 16 */ MENU_CHANGE_16,
 } MenuChangeMode;
 
+typedef enum TitleDemoState {
+    /* 0 */ TITLE_DEMO_INACTIVE,
+    /* 1 */ TITLE_DEMO_ACTIVE,
+    /* 2 */ TITLE_DEMO_EXIT,
+    /* 3 */ TITLE_DEMO_START_EXIT,
+} TitleDemoState;
+
 typedef enum Difficulty {
     /* 0 */ NOVICE,
     /* 1 */ STANDARD,
