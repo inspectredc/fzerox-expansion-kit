@@ -523,7 +523,7 @@ s32 func_80719910(s32 position) {
 
 extern s32 gNumPlayers;
 extern s32 gGameMode;
-extern s8 D_8076C7D8;
+extern s8 gTitleDemoState;
 
 // Set up racer positions before the start line
 void func_80719958(void) {
@@ -548,8 +548,8 @@ void func_80719958(void) {
         t -= 7.3f / Course_SplineGetTangent(racerStartSegment, t, &gRacers[0].segmentPositionInfo.segmentForward);
     }
 
-    if ((gGameMode != GAMEMODE_RECORDS) && (gGameMode != GAMEMODE_GP_END_CS) && (D_8076C7D8 == 0) &&
-        (gGameMode != GAMEMODE_COURSE_EDIT)) {
+    if ((gGameMode != GAMEMODE_RECORDS) && (gGameMode != GAMEMODE_GP_END_CS) &&
+        (gTitleDemoState == TITLE_DEMO_INACTIVE) && (gGameMode != GAMEMODE_COURSE_EDIT)) {
         if ((gGameMode == GAMEMODE_GP_RACE) || (gGameMode == GAMEMODE_PRACTICE) || (gGameMode == GAMEMODE_DEATH_RACE)) {
             height = 1.99f;
         } else {
@@ -638,7 +638,8 @@ void func_80719D70(void) {
     Racer* var_v0;
     Racer* var_v1;
 
-    if ((gGameMode != GAMEMODE_GP_RACE) || ((gTotalRacers - gRacersRetired) < 2) || (D_8076C7D8 != 0)) {
+    if ((gGameMode != GAMEMODE_GP_RACE) || ((gTotalRacers - gRacersRetired) < 2) ||
+        (gTitleDemoState != TITLE_DEMO_INACTIVE)) {
         sRivalRacer = NULL;
         return;
     }
@@ -1534,15 +1535,15 @@ void func_8071CE08(Racer* racer) {
     racer->bodyLowEnergyGradientR = racer->bodyRF - racer->bodyLowEnergyR;
     racer->bodyLowEnergyGradientG = racer->bodyGF - racer->bodyLowEnergyG;
     racer->bodyLowEnergyGradientB = racer->bodyBF - racer->bodyLowEnergyB;
-    if ((D_8076C7D8 != 0) || (gGameMode == GAMEMODE_PRACTICE) || (gGameMode == GAMEMODE_DEATH_RACE) ||
-        (gGameMode == GAMEMODE_COURSE_EDIT)) {
+    if ((gTitleDemoState != TITLE_DEMO_INACTIVE) || (gGameMode == GAMEMODE_PRACTICE) ||
+        (gGameMode == GAMEMODE_DEATH_RACE) || (gGameMode == GAMEMODE_COURSE_EDIT)) {
         racer->stateFlags =
             RACER_STATE_ACTIVE | RACER_STATE_FLAGS_20000000 | RACER_STATE_CAN_BOOST | RACER_STATE_FLAGS_8000;
     } else {
         racer->stateFlags = RACER_STATE_ACTIVE | RACER_STATE_FLAGS_20000000 | RACER_STATE_FLAGS_8000;
     }
     if ((racer->id >= gNumPlayers) || (D_8076E59C != 0) || (gGameMode == GAMEMODE_RECORDS) ||
-        (gGameMode == GAMEMODE_GP_END_CS) || (D_8076C7D8 != 0)) {
+        (gGameMode == GAMEMODE_GP_END_CS) || (gTitleDemoState != TITLE_DEMO_INACTIVE)) {
         racer->stateFlags |= RACER_STATE_CPU_CONTROLLED;
     }
     racer->segmentPositionInfo.segmentLengthProportion = Course_SplineGetLengthInfo(
@@ -1552,7 +1553,7 @@ void func_8071CE08(Racer* racer) {
                           &racer->segmentBasis, racer->segmentPositionInfo.segmentLengthProportion);
 
     racer->modelBasis = racer->trueBasis = racer->segmentBasis;
-    racer->modelPos = racer->unk_180 = racer->segmentPositionInfo.pos;
+    racer->modelPos = racer->focusPos = racer->segmentPositionInfo.pos;
 
     racer->gravityUp.x = racer->tiltUp.x = racer->upFromGround.x = racer->trueBasis.y.x;
     racer->gravityUp.y = racer->tiltUp.y = racer->upFromGround.y = racer->trueBasis.y.y;
@@ -1579,8 +1580,8 @@ void func_8071CE08(Racer* racer) {
     var_fs0 = racer->attackHighlightScale = racer->unk_1E8 = racer->recoilTilt.x = racer->recoilTilt.y =
         racer->recoilTilt.z = racer->pitForceFieldSize = racer->jumpBoost = racer->tiltUpInput = racer->unk_238 =
             racer->unk_200 = racer->heightAboveGround = racer->accelerationForce = racer->driftAttackForce =
-                racer->speed = racer->maxSpeed = racer->unk_198 = racer->unk_18C.x = racer->unk_18C.y =
-                    racer->unk_18C.z = racer->unk_68.x = racer->unk_68.y = racer->unk_68.z = racer->unk_5C.x =
+                racer->speed = racer->maxSpeed = racer->unk_198 = racer->focusVelocity.x = racer->focusVelocity.y =
+                    racer->focusVelocity.z = racer->unk_68.x = racer->unk_68.y = racer->unk_68.z = racer->unk_5C.x =
                         racer->unk_5C.y = racer->unk_5C.z = racer->unk_80.x = racer->unk_80.y = racer->unk_80.z =
                             racer->velocity.x = racer->velocity.y = racer->velocity.z = var_fs0 = 0.0f;
     racer->podiumHeight = racer->energyRegain = 0.0f;
@@ -1708,7 +1709,7 @@ void func_8071D48C(void) {
         }
     }
     sLastRacer = &gRacers[gTotalRacers - 1];
-    if (D_8076C7D8 != 0) {
+    if (gTitleDemoState != TITLE_DEMO_INACTIVE) {
         for (i = 29; i >= 0; i--) {
             gRacers[i].character = i;
             gRacers[i].machineSkinIndex = 0;
@@ -1775,7 +1776,8 @@ void func_8071D48C(void) {
             racer->maxEnergy *= 0.5f;
         }
     }
-    if ((gGameMode != GAMEMODE_RECORDS) && (gGameMode != GAMEMODE_GP_END_CS) && (D_8076C7D8 == 0)) {
+    if ((gGameMode != GAMEMODE_RECORDS) && (gGameMode != GAMEMODE_GP_END_CS) &&
+        (gTitleDemoState == TITLE_DEMO_INACTIVE)) {
         gEnableRaceSfx = true;
         if (gGameMode == GAMEMODE_COURSE_EDIT) {
             D_8076E5A0 = 0;
@@ -1792,7 +1794,7 @@ void func_8071D48C(void) {
         gEnableRaceSfx = false;
         gRaceIntroTimer = 0;
 
-        if (D_8076C7D8 != 0 && gGameMode != GAMEMODE_RECORDS) {
+        if (gTitleDemoState != TITLE_DEMO_INACTIVE && gGameMode != GAMEMODE_RECORDS) {
             D_8076E5A0 = 1;
         } else {
             D_8076E5A0 = 0;
@@ -4290,17 +4292,17 @@ void func_80721D78(Racer* racer, Controller* controller) {
         sp128 = racer->unk_17C;
     }
 
-    var_fa1 = racer->unk_180.x;
-    var_fv1 = racer->unk_180.x = racer->segmentPositionInfo.pos.x - (sp128 * racer->trueBasis.y.x);
-    racer->unk_18C.x = var_fv1 - var_fa1;
+    var_fa1 = racer->focusPos.x;
+    var_fv1 = racer->focusPos.x = racer->segmentPositionInfo.pos.x - (sp128 * racer->trueBasis.y.x);
+    racer->focusVelocity.x = var_fv1 - var_fa1;
 
-    var_fa1 = racer->unk_180.y;
-    var_fv1 = racer->unk_180.y = racer->segmentPositionInfo.pos.y - (sp128 * racer->trueBasis.y.y);
-    racer->unk_18C.y = var_fv1 - var_fa1;
+    var_fa1 = racer->focusPos.y;
+    var_fv1 = racer->focusPos.y = racer->segmentPositionInfo.pos.y - (sp128 * racer->trueBasis.y.y);
+    racer->focusVelocity.y = var_fv1 - var_fa1;
 
-    var_fa1 = racer->unk_180.z;
-    var_fv1 = racer->unk_180.z = racer->segmentPositionInfo.pos.z - (sp128 * racer->trueBasis.y.z);
-    racer->unk_18C.z = var_fv1 - var_fa1;
+    var_fa1 = racer->focusPos.z;
+    var_fv1 = racer->focusPos.z = racer->segmentPositionInfo.pos.z - (sp128 * racer->trueBasis.y.z);
+    racer->focusVelocity.z = var_fv1 - var_fa1;
 
     racer->unk_80.x = racer->segmentPositionInfo.pos.x - sp10C.x;
     racer->unk_80.y = racer->segmentPositionInfo.pos.y - sp10C.y;
@@ -4868,7 +4870,7 @@ void func_80726554(void) {
         if (!gGamePaused) {
             if (gRaceIntroTimer == 460) {
                 func_8070DA84();
-                if (D_8076C7D8 == 0) {
+                if (gTitleDemoState == TITLE_DEMO_INACTIVE) {
                     Audio_StartDemo();
                 }
             }
@@ -6523,7 +6525,7 @@ block_115:
                     if (gRaceIntroTimer == 40) {
                         Audio_TriggerSystemSE(NA_SE_11);
                     }
-                    if ((gRaceIntroTimer == 1) && (D_8076C7D8 == 0)) {
+                    if ((gRaceIntroTimer == 1) && (gTitleDemoState == TITLE_DEMO_INACTIVE)) {
                         if (gCurrentCourseInfo->courseIndex < COURSE_EDIT_1) {
                             func_8070DAA4(D_8076F2FC[gCurrentCourseInfo->courseIndex]);
                         } else if (gCurrentCourseInfo->courseIndex == COURSE_DEATH_RACE) {

@@ -366,7 +366,7 @@ extern s32 gNumPlayers;
 extern s32 gGameMode;
 extern s32 gDifficulty;
 extern s32 gCourseIndex;
-extern s8 D_8076C7D8;
+extern s8 gTitleDemoState;
 extern s32 D_807A1700;
 extern s32 D_i3_80069E74;
 extern s16 D_800D5810[];
@@ -403,8 +403,8 @@ void func_i3_8003F364(void) {
         gRacers[i].id = i;
     }
 
-    if ((gGameMode != GAMEMODE_GP_RACE) || (D_807A1700 == 1) || (D_8076C7D8 == 1) || (D_i3_80069E74 != 0) ||
-        (gNumPlayers >= 2)) {
+    if ((gGameMode != GAMEMODE_GP_RACE) || (D_807A1700 == 1) || (gTitleDemoState == TITLE_DEMO_ACTIVE) ||
+        (D_i3_80069E74 != 0) || (gNumPlayers >= 2)) {
         for (racer = gRacers; racer < &gRacers[gTotalRacers]; racer++) {
             switch (gGameMode) {
                 case GAMEMODE_GP_RACE:
@@ -428,8 +428,8 @@ void func_i3_8003F364(void) {
         }
     }
     if ((gNumPlayers == 1) && (gTotalRacers != 1)) {
-        if ((gGameMode != GAMEMODE_GP_END_CS) &&
-            ((gGameMode != GAMEMODE_GP_RACE) || (D_807A1700 == 1) || (D_8076C7D8 == 1) || (D_i3_80069E74 != 0))) {
+        if ((gGameMode != GAMEMODE_GP_END_CS) && ((gGameMode != GAMEMODE_GP_RACE) || (D_807A1700 == 1) ||
+                                                  (gTitleDemoState == TITLE_DEMO_ACTIVE) || (D_i3_80069E74 != 0))) {
             for (i = 0; i < 100; i++) {
                 m = (Math_Rand2() % (gTotalRacers - 1)) + 1;
                 k = (Math_Rand1() % (gTotalRacers - 1)) + 1;
@@ -531,8 +531,8 @@ void func_i3_8003F364(void) {
             }
         }
     }
-    if ((gGameMode != GAMEMODE_GP_RACE) || (D_807A1700 == 1) || ((gCourseIndex % 6) == 0) || (D_8076C7D8 == 1) ||
-        (D_i3_80069E74 != 0)) {
+    if ((gGameMode != GAMEMODE_GP_RACE) || (D_807A1700 == 1) || ((gCourseIndex % 6) == 0) ||
+        (gTitleDemoState == TITLE_DEMO_ACTIVE) || (D_i3_80069E74 != 0)) {
         tempRacer = gRacers;
         gRacers[0].unk_368 = 0xFF;
         gRacers[0].unk_350 = 0xFF;
@@ -586,7 +586,8 @@ void func_i3_8003F364(void) {
         }
     }
 
-    if (((gGameMode == GAMEMODE_GP_RACE) && (D_i3_8006AF34[gCourseIndex] == 1)) || (D_8076C7D8 == 1)) {
+    if (((gGameMode == GAMEMODE_GP_RACE) && (D_i3_8006AF34[gCourseIndex] == 1)) ||
+        (gTitleDemoState == TITLE_DEMO_ACTIVE)) {
         var_a1 = 4;
         for (var_a3 = 0; var_a3 < gTotalRacers; var_a3++) {
             for (j = 1; j < gTotalRacers; j++) {
@@ -1279,7 +1280,7 @@ void Cpu_GenerateInputs(Racer* racer, Controller* controller) {
                     func_i3_8003FF5C(racer);
                 }
             }
-        } else if ((racer->lap >= 2) || (D_8076C7D8 == 1)) {
+        } else if ((racer->lap >= 2) || (gTitleDemoState == TITLE_DEMO_ACTIVE)) {
             if ((racer->unk_398 == 0) || ((u32) (racer->id + gGameFrameCount) % 64) < 4) {
                 func_i3_8003FF5C(racer);
             }

@@ -408,7 +408,7 @@ void func_i3_80061C2C(void) {
 
         var_s1->unk_00 = var_s2->eye.x + (var_s2->unk_80 * D_i3_8006BDC8);
         var_s1->unk_08 = var_s2->eye.z + (var_s2->unk_84 * D_i3_8006BDC8);
-        temp_v0 = Math_Round(var_s2->fovAngle * 5.688889f);
+        temp_v0 = Math_Round(var_s2->fov * 5.688889f);
         temp_fa0 = TAN(temp_v0);
 
         var_s1->unk_0C = (var_s1->unk_10 + D_i3_8006BDC8) * temp_fa0 * 1.5f;

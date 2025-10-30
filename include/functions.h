@@ -10,6 +10,7 @@
 #include "other_types.h"
 #include "unk_structs.h"
 #include "controller.h"
+#include "fzx_camera.h"
 #include "fzx_course.h"
 #include "fzx_save.h"
 #include "fzx_ghost.h"
@@ -229,22 +230,22 @@ void func_80715E60(Vec3f*, unk_struct_20_2*, unk_struct_14*);
 void func_80715EC0(unk_80085434_arg_0*, unk_struct_20_2*, unk_80085434_arg_2*);
 void func_80715F20(unk_80085494_arg_0*, unk_struct_20_2*, unk_80085494_arg_2*);
 void func_80715F9C(void);
-void Camera_InitMode(Camera*, unk_struct_F8*, unk_800E5D70*);
+void Camera_InitMode(Camera*, CameraSettings*, unk_800E5D70*);
 void func_80716F38(Camera* camera);
-void Camera_UpdateMode(Camera*, unk_struct_F8*, unk_800E5D70*);
-void func_807176B4(Camera*, unk_struct_F8*);
+void Camera_UpdateMode(Camera*, CameraSettings*, unk_800E5D70*);
+void func_807176B4(Camera*, CameraSettings*);
 void func_80717B20(void);
-void func_807181F8(Camera*, unk_struct_F8*);
-void func_80718530(Camera*, unk_struct_F8*, unk_800E5D70*);
-void func_80718908(Camera*, unk_struct_F8*, unk_800E5D70*);
-void Camera_UpdateCourseSelect(Camera*, unk_struct_F8*);
-void func_80718AB0(Camera*, unk_struct_F8*);
-void func_80718AFC(Camera*, unk_struct_F8*, unk_800E5D70*);
+void func_807181F8(Camera*, CameraSettings*);
+void func_80718530(Camera*, CameraSettings*, unk_800E5D70*);
+void func_80718908(Camera*, CameraSettings*, unk_800E5D70*);
+void Camera_UpdateCourseSelect(Camera*, CameraSettings*);
+void func_80718AB0(Camera*, CameraSettings*);
+void func_80718AFC(Camera*, CameraSettings*, unk_800E5D70*);
 void func_80718F58(Vec3f*, CourseSegment*, f32, unk_800CD970*);
-void func_80719140(Camera*, unk_struct_F8*, unk_800E5D70*);
-void func_807191B0(Camera*, unk_struct_F8*, unk_800E5D70*);
-void func_80719420(Camera*, unk_struct_F8*, unk_800E5D70*);
-void Camera_UpdateEnding(Camera*, unk_struct_F8*, unk_800E5D70*);
+void func_80719140(Camera*, CameraSettings*, unk_800E5D70*);
+void func_807191B0(Camera*, CameraSettings*, unk_800E5D70*);
+void func_80719420(Camera*, CameraSettings*, unk_800E5D70*);
+void Camera_UpdateEnding(Camera*, CameraSettings*, unk_800E5D70*);
 void func_8071985C(s32);
 bool func_80719868(s32);
 Gfx* func_80719890(Gfx*);

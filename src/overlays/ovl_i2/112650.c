@@ -2442,7 +2442,7 @@ extern s32 gRandMask1;
 extern s32 gRandSeed2;
 extern s32 gRandMask2;
 extern s32 gGameMode;
-extern s8 D_8076C7D8;
+extern s8 gTitleDemoState;
 extern s32 gCourseIndex;
 
 void Course_GenerateRandomCourse(void) {
@@ -2474,7 +2474,8 @@ void Course_GenerateRandomCourse(void) {
     f32 var_fs1;
 
     // Restore random generation seeding if track is re-done
-    if ((gGameMode == GAMEMODE_GP_RACE) && (D_8076C7D8 == 0) && (gCourseIndex == gLastRandomCourseIndex)) {
+    if ((gGameMode == GAMEMODE_GP_RACE) && (gTitleDemoState == TITLE_DEMO_INACTIVE) &&
+        (gCourseIndex == gLastRandomCourseIndex)) {
         Math_Rand1Init(sRandomCourseInitSeed1, sRandomCourseInitMask1);
         Math_Rand2Init(sRandomCourseInitSeed2, sRandomCourseInitMask2);
     }

@@ -89,11 +89,11 @@ Gfx* func_xk2_800F1428(Gfx* gfx) {
         return func_80719890(gfx);
     }
     if (gInCourseEditTestRun) {
-        Matrix_SetFrustrum(&D_80128C94->unk_0000, NULL, (gCameras[0].fovAngle * 320.0f) / 240.0f, 32.0f, 4096.0f,
-                           320.0f, 0.0f, 240.0f, 0.0f, &sp13E);
+        Matrix_SetFrustrum(&D_80128C94->unk_0000, NULL, (gCameras[0].fov * 320.0f) / 240.0f, 32.0f, 4096.0f, 320.0f,
+                           0.0f, 240.0f, 0.0f, &sp13E);
     } else {
-        Matrix_SetFrustrum(&D_80128C94->unk_0000, NULL, (gCameras[0].fovAngle * 320.0f) / 240.0f, 128.0f, 32768.0f,
-                           320.0f, 0.0f, 240.0f, 0.0f, &sp13E);
+        Matrix_SetFrustrum(&D_80128C94->unk_0000, NULL, (gCameras[0].fov * 320.0f) / 240.0f, 128.0f, 32768.0f, 320.0f,
+                           0.0f, 240.0f, 0.0f, &sp13E);
         sp13E = 0x10;
     }
     gSPPerspNormalize(gfx++, sp13E);
@@ -168,8 +168,8 @@ void func_xk2_800F1938(void) {
     if (gCourseEditCursorYPos < 0x38) {
         return;
     }
-    temp_dfv0 = gCameras[0].fovAngle;
-    temp_dfv1 = ((gCameras[0].fovAngle * 320.0f) / 240.0f);
+    temp_dfv0 = gCameras[0].fov;
+    temp_dfv1 = ((gCameras[0].fov * 320.0f) / 240.0f);
     temp_dfv1 = ((gCourseEditCursorXPos - 0xA0) / 320.0) * temp_dfv1;
     temp_dfv0 = ((gCourseEditCursorYPos - 0x78) / 240.0) * temp_dfv0;
 

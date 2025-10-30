@@ -99,6 +99,7 @@ gNumPlayers = 0x8076C7C8;
 gCupType = 0x8076C7CC;
 gDifficulty = 0x8076C7D0;
 gTotalLapCount = 0x8076C7D4;
+gTitleDemoState = 0x8076C7D8;
 sTitleDemoNumPlayerState = 0x8076C7DC;
 sTitleDemoCoursesState = 0x8076C7E0;
 sTitleDemoGameModes = 0x8076C7F0;
