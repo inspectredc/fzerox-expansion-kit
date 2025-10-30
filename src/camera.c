@@ -10,7 +10,7 @@ unk_800E5D70 D_807A1480[4];
 unk_struct_20_2 D_807A1510[4];
 s32 sNumCameras;
 s32 D_807A1594;
-s16 D_807A1598;
+s16 sCameraEndingFocusRacer;
 s16 D_807A159A;
 UNUSED s16 D_807A159C;
 Vec3f D_807A15A0[4];
@@ -83,14 +83,14 @@ const unk_redo_2 D_8077699C = {
       0.0f, 1000.0f, 1000.0f, 1.0f, 35.0f, 35.0f, 1.0f, 180.0f, 180.0f, 1.0f },
 };
 
-const Vec3f D_80776A48[] = {
+const unk_80776A48 D_80776A48[] = {
     { 80.0f, 400.0f, 50.0f },
     { 75.0f, 90.0f, 25.0f },
     { 75.0f, 120.0f, 35.0f },
     { 100.0f, 120.0f, 50.0f },
 };
 
-const Vec3f D_80776A78[] = {
+const unk_80776A48 D_80776A78[] = {
     { 100.0f, 400.0f, 50.0f },
     { 90.0f, 100.0f, 25.0f },
     { 100.0f, 120.0f, 35.0f },
@@ -231,24 +231,24 @@ void func_80711DA4(unk_struct_F8* arg0, unk_redo_3* arg1) {
 void func_80711E28(unk_struct_F8* arg0) {
     unk_struct_58* var = &arg0->unk_04;
 
-    var->unk_18 += (var->unk_24 - var->unk_18) * var->unk_30;
-    var->unk_1C += (var->unk_28 - var->unk_1C) * var->unk_30;
-    var->unk_20 += (var->unk_2C - var->unk_20) * var->unk_30;
-    var->unk_34 += (var->unk_38 - var->unk_34) * var->unk_3C;
-    var->unk_40 += (var->unk_48 - var->unk_40) * var->unk_50;
-    var->unk_44 += (var->unk_4C - var->unk_44) * var->unk_54;
+    var->up.x += (var->targetUp.x - var->up.x) * var->upStepFactor;
+    var->up.y += (var->targetUp.y - var->up.y) * var->upStepFactor;
+    var->up.z += (var->targetUp.z - var->up.z) * var->upStepFactor;
+    var->fov += (var->targetFov - var->fov) * var->fovStepFactor;
+    var->frustrumCenterX += (var->targetFrustrumCenterX - var->frustrumCenterX) * var->frustrumCenterXStepFactor;
+    var->frustrumCenterY += (var->targetFrustrumCenterY - var->frustrumCenterY) * var->frustrumCenterYStepFactor;
 }
 
 void func_80711EDC(unk_struct_F8* arg0) {
     unk_struct_20* var2 = &arg0->sub_1_unk_5C;
     unk_struct_58* var = &arg0->unk_04;
 
-    var->unk_00.x += (var2->unk_00.x - var->unk_00.x) * var2->unk_18;
-    var->unk_00.y += (var2->unk_00.y - var->unk_00.y) * var2->unk_18;
-    var->unk_00.z += (var2->unk_00.z - var->unk_00.z) * var2->unk_18;
-    var->unk_0C.x += (var2->unk_0C.x - var->unk_0C.x) * var2->unk_1C;
-    var->unk_0C.y += (var2->unk_0C.y - var->unk_0C.y) * var2->unk_1C;
-    var->unk_0C.z += (var2->unk_0C.z - var->unk_0C.z) * var2->unk_1C;
+    var->at.x += (var2->unk_00.x - var->at.x) * var2->unk_18;
+    var->at.y += (var2->unk_00.y - var->at.y) * var2->unk_18;
+    var->at.z += (var2->unk_00.z - var->at.z) * var2->unk_18;
+    var->eye.x += (var2->unk_0C.x - var->eye.x) * var2->unk_1C;
+    var->eye.y += (var2->unk_0C.y - var->eye.y) * var2->unk_1C;
+    var->eye.z += (var2->unk_0C.z - var->eye.z) * var2->unk_1C;
 }
 
 void func_80711F90(unk_struct_F8* arg0) {
@@ -260,7 +260,7 @@ void func_80711F90(unk_struct_F8* arg0) {
     f32 temp_fv1;
     s32 temp_v0;
     f32 sp28;
-    unk_struct_58* temp_v0_4;
+    unk_struct_58* temp_v0_4 = &arg0->unk_04;
     unk_struct_54* temp_v1 = &arg0->sub_2_3_unk_5C;
 
     temp_v1->unk_30 += (temp_v1->unk_34 - temp_v1->unk_30) * temp_v1->unk_38;
@@ -279,19 +279,19 @@ void func_80711F90(unk_struct_F8* arg0) {
     temp_ft5 = (temp_v1->unk_0C.x.y * temp_fv1) + (temp_v1->unk_0C.z.y * temp_fv0) + (temp_v1->unk_0C.y.y * sp3C);
     sp28 = (temp_v1->unk_0C.x.z * temp_fv1) + (temp_v1->unk_0C.z.z * temp_fv0) + (temp_v1->unk_0C.y.z * sp3C);
 
-    temp_v0_4 = &arg0->unk_04;
+    
     switch (arg0->type) {
         case 2:
-            temp_v0_4->unk_00 = temp_v1->unk_00;
-            temp_v0_4->unk_0C.x = temp_v1->unk_00.x + temp_fa0;
-            temp_v0_4->unk_0C.y = temp_v1->unk_00.y + temp_ft5;
-            temp_v0_4->unk_0C.z = temp_v1->unk_00.z + sp28;
+            temp_v0_4->at = temp_v1->unk_00;
+            temp_v0_4->eye.x = temp_v1->unk_00.x + temp_fa0;
+            temp_v0_4->eye.y = temp_v1->unk_00.y + temp_ft5;
+            temp_v0_4->eye.z = temp_v1->unk_00.z + sp28;
             break;
         case 3:
-            temp_v0_4->unk_0C = temp_v1->unk_00;
-            temp_v0_4->unk_00.x = temp_v1->unk_00.x + temp_fa0;
-            temp_v0_4->unk_00.y = temp_v1->unk_00.y + temp_ft5;
-            temp_v0_4->unk_00.z = temp_v1->unk_00.z + sp28;
+            temp_v0_4->eye = temp_v1->unk_00;
+            temp_v0_4->at.x = temp_v1->unk_00.x + temp_fa0;
+            temp_v0_4->at.y = temp_v1->unk_00.y + temp_ft5;
+            temp_v0_4->at.z = temp_v1->unk_00.z + sp28;
             break;
     }
 }
@@ -316,15 +316,15 @@ void func_807121D4(unk_struct_F8* arg0, Camera* camera) {
     temp_s2->unk_78 += (temp_s2->unk_7C - temp_s2->unk_78) * temp_s2->unk_80;
     temp_s2->unk_84 += (temp_s2->unk_88 - temp_s2->unk_84) * temp_s2->unk_8C;
 
-    camera->racerPos.x = racer->unk_180.x;
-    camera->racerPos.y = racer->unk_180.y;
-    camera->racerPos.z = racer->unk_180.z;
+    camera->focusPos.x = racer->unk_180.x;
+    camera->focusPos.y = racer->unk_180.y;
+    camera->focusPos.z = racer->unk_180.z;
 
     var_fv1 = (racer->unk_18C.x * racer->gravityUp.x) + (racer->unk_18C.y * racer->gravityUp.y) +
               (racer->unk_18C.z * racer->gravityUp.z);
-    sp98.x = (temp_s2->unk_54.x - camera->racerPos.x) + (var_fv1 * racer->gravityUp.x);
-    sp98.y = (temp_s2->unk_54.y - camera->racerPos.y) + (var_fv1 * racer->gravityUp.y);
-    sp98.z = (temp_s2->unk_54.z - camera->racerPos.z) + (var_fv1 * racer->gravityUp.z);
+    sp98.x = (temp_s2->unk_54.x - camera->focusPos.x) + (var_fv1 * racer->gravityUp.x);
+    sp98.y = (temp_s2->unk_54.y - camera->focusPos.y) + (var_fv1 * racer->gravityUp.y);
+    sp98.z = (temp_s2->unk_54.z - camera->focusPos.z) + (var_fv1 * racer->gravityUp.z);
     var_fv1 = sqrtf(SQ(sp98.x) + SQ(sp98.y) + SQ(sp98.z));
 
     if (var_fv1 < 0.01f) {
@@ -337,9 +337,9 @@ void func_807121D4(unk_struct_F8* arg0, Camera* camera) {
     sp98.z *= var_fv1;
     if (!gGamePaused) {
         temp_fv0 = temp_s2->unk_6C;
-        temp_s2->unk_54.x = camera->racerPos.x + (temp_fv0 * sp98.x);
-        temp_s2->unk_54.y = camera->racerPos.y + (temp_fv0 * sp98.y);
-        temp_s2->unk_54.z = camera->racerPos.z + (temp_fv0 * sp98.z);
+        temp_s2->unk_54.x = camera->focusPos.x + (temp_fv0 * sp98.x);
+        temp_s2->unk_54.y = camera->focusPos.y + (temp_fv0 * sp98.y);
+        temp_s2->unk_54.z = camera->focusPos.z + (temp_fv0 * sp98.z);
     }
 
     temp_fv0 = (racer->unk_18C.x * camera->basis.y.x) + (racer->unk_18C.y * camera->basis.y.y) +
@@ -350,25 +350,22 @@ void func_807121D4(unk_struct_F8* arg0, Camera* camera) {
         var_fv1 = (50.0f - temp_s2->unk_88) * 0.02f;
     }
 
-    temp_s1->unk_00.x = camera->racerPos.x + (var_fv1 * (racer->unk_18C.x - (temp_fv0 * camera->basis.y.x)));
-    temp_s1->unk_00.y = camera->racerPos.y + (var_fv1 * (racer->unk_18C.y - (temp_fv0 * camera->basis.y.y)));
-    temp_s1->unk_00.z = camera->racerPos.z + (var_fv1 * (racer->unk_18C.z - (temp_fv0 * camera->basis.y.z)));
+    temp_s1->at.x = camera->focusPos.x + (var_fv1 * (racer->unk_18C.x - (temp_fv0 * camera->basis.y.x)));
+    temp_s1->at.y = camera->focusPos.y + (var_fv1 * (racer->unk_18C.y - (temp_fv0 * camera->basis.y.y)));
+    temp_s1->at.z = camera->focusPos.z + (var_fv1 * (racer->unk_18C.z - (temp_fv0 * camera->basis.y.z)));
     sp8C.x = racer->gravityUp.x - camera->racerBasis.y.x;
     sp8C.y = racer->gravityUp.y - camera->racerBasis.y.y;
     sp8C.z = racer->gravityUp.z - camera->racerBasis.y.z;
 
     var_fv1 = sqrtf(SQ(sp8C.x) + SQ(sp8C.y) + SQ(sp8C.z)) * 0.2f;
 
-    camera->racerBasis.y.x += var_fv1 * sp8C.x;
-    temp_s2->unk_24.y.x = camera->racerBasis.y.x;
-    camera->racerBasis.y.y += var_fv1 * sp8C.y;
-    temp_s2->unk_24.y.y = camera->racerBasis.y.y;
-    camera->racerBasis.y.z += var_fv1 * sp8C.z;
-    temp_s2->unk_24.y.z = camera->racerBasis.y.z;
+    temp_s2->basis.y.x = camera->racerBasis.y.x += var_fv1 * sp8C.x;
+    temp_s2->basis.y.y = camera->racerBasis.y.y += var_fv1 * sp8C.y;
+    temp_s2->basis.y.z = camera->racerBasis.y.z += var_fv1 * sp8C.z;
 
-    sp7C.x = (temp_s2->unk_24.y.y * sp98.z) - (temp_s2->unk_24.y.z * sp98.y);
-    sp7C.y = (temp_s2->unk_24.y.z * sp98.x) - (temp_s2->unk_24.y.x * sp98.z);
-    sp7C.z = (temp_s2->unk_24.y.x * sp98.y) - (temp_s2->unk_24.y.y * sp98.x);
+    sp7C.x = (temp_s2->basis.y.y * sp98.z) - (temp_s2->basis.y.z * sp98.y);
+    sp7C.y = (temp_s2->basis.y.z * sp98.x) - (temp_s2->basis.y.x * sp98.z);
+    sp7C.z = (temp_s2->basis.y.x * sp98.y) - (temp_s2->basis.y.y * sp98.x);
     var_fv1 = sqrtf(SQ(sp7C.x) + SQ(sp7C.y) + SQ(sp7C.z));
     if (var_fv1 < 0.1f) {
         return;
@@ -397,32 +394,32 @@ void func_807121D4(unk_struct_F8* arg0, Camera* camera) {
     angle = Math_Round(DEG_TO_FZXANG2(temp_s2->unk_88));
     temp_fv0 = COS(angle) * spA4;
     spA4 = SIN(angle) * spA4;
-    temp_s1->unk_0C.x = camera->racerPos.x + (spA4 * sp7C.x) + (temp_fv0 * sp98.x) + (var_fv1 * sp70.x);
-    temp_s1->unk_0C.y = camera->racerPos.y + (spA4 * sp7C.y) + (temp_fv0 * sp98.y) + (var_fv1 * sp70.y);
-    temp_s1->unk_0C.z = camera->racerPos.z + (spA4 * sp7C.z) + (temp_fv0 * sp98.z) + (var_fv1 * sp70.z);
-    temp_s2->unk_24.x.x = temp_s1->unk_00.x - temp_s1->unk_0C.x;
-    temp_s2->unk_24.x.y = temp_s1->unk_00.y - temp_s1->unk_0C.y;
-    temp_s2->unk_24.x.z = temp_s1->unk_00.z - temp_s1->unk_0C.z;
-    Math_OrthonormalizeAroundForward(&temp_s2->unk_24);
+    temp_s1->eye.x = camera->focusPos.x + (spA4 * sp7C.x) + (temp_fv0 * sp98.x) + (var_fv1 * sp70.x);
+    temp_s1->eye.y = camera->focusPos.y + (spA4 * sp7C.y) + (temp_fv0 * sp98.y) + (var_fv1 * sp70.y);
+    temp_s1->eye.z = camera->focusPos.z + (spA4 * sp7C.z) + (temp_fv0 * sp98.z) + (var_fv1 * sp70.z);
+    temp_s2->basis.x.x = temp_s1->at.x - temp_s1->eye.x;
+    temp_s2->basis.x.y = temp_s1->at.y - temp_s1->eye.y;
+    temp_s2->basis.x.z = temp_s1->at.z - temp_s1->eye.z;
+    Math_OrthonormalizeAroundForward(&temp_s2->basis);
     if (!gGamePaused) {
-        temp_s1->unk_24 = temp_s1->unk_18 = temp_s2->unk_24.y.x;
-        temp_s1->unk_28 = temp_s1->unk_1C = temp_s2->unk_24.y.y;
-        temp_s1->unk_2C = temp_s1->unk_20 = temp_s2->unk_24.y.z;
+        temp_s1->targetUp.x = temp_s1->up.x = temp_s2->basis.y.x;
+        temp_s1->targetUp.y = temp_s1->up.y = temp_s2->basis.y.y;
+        temp_s1->targetUp.z = temp_s1->up.z = temp_s2->basis.y.z;
     }
-    temp_s1->unk_40 = 0.0f;
-    temp_s1->unk_48 = 0.0f;
+    temp_s1->frustrumCenterX = 0.0f;
+    temp_s1->targetFrustrumCenterX = 0.0f;
     if (gNumPlayers == 2) {
-        temp_s1->unk_44 = -15.0f;
-        temp_s1->unk_4C = -15.0f;
+        temp_s1->frustrumCenterY = -15.0f;
+        temp_s1->targetFrustrumCenterY = -15.0f;
     } else {
-        temp_s1->unk_44 = 77.0f;
-        temp_s1->unk_4C = 77.0f;
+        temp_s1->frustrumCenterY = 77.0f;
+        temp_s1->targetFrustrumCenterY = 77.0f;
     }
 }
 
 void func_80712864(unk_struct_F8* arg0) {
     unk_struct_58* var = &arg0->unk_04;
-    unk_struct_68* var2 = &arg0->sub_1_unk_5C;
+    unk_struct_68* var2 = &arg0->sub_5_unk_5C;
 
     var2->unk_30.x += (var2->unk_3C.x - var2->unk_30.x) * var2->unk_60;
     var2->unk_30.y += (var2->unk_3C.y - var2->unk_30.y) * var2->unk_60;
@@ -432,18 +429,18 @@ void func_80712864(unk_struct_F8* arg0) {
     var2->unk_48.y += (var2->unk_54.y - var2->unk_48.y) * var2->unk_64;
     var2->unk_48.z += (var2->unk_54.z - var2->unk_48.z) * var2->unk_64;
 
-    var->unk_00.x = var2->unk_00.x + (var2->unk_0C.z.x * var2->unk_30.x) + (var2->unk_0C.y.x * var2->unk_30.y) +
+    var->at.x = var2->unk_00.x + (var2->unk_0C.z.x * var2->unk_30.x) + (var2->unk_0C.y.x * var2->unk_30.y) +
                     (var2->unk_0C.x.x * var2->unk_30.z);
-    var->unk_00.y = var2->unk_00.y + (var2->unk_0C.z.y * var2->unk_30.x) + (var2->unk_0C.y.y * var2->unk_30.y) +
+    var->at.y = var2->unk_00.y + (var2->unk_0C.z.y * var2->unk_30.x) + (var2->unk_0C.y.y * var2->unk_30.y) +
                     (var2->unk_0C.x.y * var2->unk_30.z);
-    var->unk_00.z = var2->unk_00.z + (var2->unk_0C.z.z * var2->unk_30.x) + (var2->unk_0C.y.z * var2->unk_30.y) +
+    var->at.z = var2->unk_00.z + (var2->unk_0C.z.z * var2->unk_30.x) + (var2->unk_0C.y.z * var2->unk_30.y) +
                     (var2->unk_0C.x.z * var2->unk_30.z);
 
-    var->unk_0C.x = var2->unk_00.x + (var2->unk_0C.z.x * var2->unk_48.x) + (var2->unk_0C.y.x * var2->unk_48.y) +
+    var->eye.x = var2->unk_00.x + (var2->unk_0C.z.x * var2->unk_48.x) + (var2->unk_0C.y.x * var2->unk_48.y) +
                     (var2->unk_0C.x.x * var2->unk_48.z);
-    var->unk_0C.y = var2->unk_00.y + (var2->unk_0C.z.y * var2->unk_48.x) + (var2->unk_0C.y.y * var2->unk_48.y) +
+    var->eye.y = var2->unk_00.y + (var2->unk_0C.z.y * var2->unk_48.x) + (var2->unk_0C.y.y * var2->unk_48.y) +
                     (var2->unk_0C.x.y * var2->unk_48.z);
-    var->unk_0C.z = var2->unk_00.z + (var2->unk_0C.z.z * var2->unk_48.x) + (var2->unk_0C.y.z * var2->unk_48.y) +
+    var->eye.z = var2->unk_00.z + (var2->unk_0C.z.z * var2->unk_48.x) + (var2->unk_0C.y.z * var2->unk_48.y) +
                     (var2->unk_0C.x.z * var2->unk_48.z);
 }
 
@@ -469,54 +466,54 @@ void func_80712AA8(unk_struct_F8* arg0, Camera* camera) {
 
 void func_80712B34(unk_struct_F8* arg0, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32* arg4) {
     unk_struct_58* temp_v0_3 = &arg0->unk_04;
-    f32* temp_v0 = &arg0->sub_4_unk_5C;
+    unk_struct_20* temp_v0 = &arg0->sub_1_unk_5C;
 
     if (arg1 != NULL) {
-        temp_v0[0] = arg1->x;
-        temp_v0[1] = arg1->y;
-        temp_v0[2] = arg1->z;
+        temp_v0->unk_00.x = arg1->x;
+        temp_v0->unk_00.y = arg1->y;
+        temp_v0->unk_00.z = arg1->z;
     }
     if (arg2 != NULL) {
-        temp_v0[3] = arg2->x;
-        temp_v0[4] = arg2->y;
-        temp_v0[5] = arg2->z;
+        temp_v0->unk_0C.x = arg2->x;
+        temp_v0->unk_0C.y = arg2->y;
+        temp_v0->unk_0C.z = arg2->z;
     }
     if (arg3 != NULL) {
-        temp_v0_3->unk_24 = arg3->x;
-        temp_v0_3->unk_28 = arg3->y;
-        temp_v0_3->unk_2C = arg3->z;
+        temp_v0_3->targetUp.x = arg3->x;
+        temp_v0_3->targetUp.y = arg3->y;
+        temp_v0_3->targetUp.z = arg3->z;
     }
     if (arg4 != NULL) {
-        temp_v0_3->unk_38 = *arg4;
+        temp_v0_3->targetFov = *arg4;
     }
 }
 
 void func_80712BBC(unk_struct_F8* arg0, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32* arg4) {
     unk_struct_58* temp_v0_3 = &arg0->unk_04;
-    f32* temp_v0 = &arg0->sub_4_unk_5C;
+    unk_struct_54* temp_v0 = &arg0->sub_2_3_unk_5C;
 
     if (arg1 != NULL) {
-        temp_v0[0] = arg1->x;
-        temp_v0[1] = arg1->y;
-        temp_v0[2] = arg1->z;
+        temp_v0->unk_00.x = arg1->x;
+        temp_v0->unk_00.y = arg1->y;
+        temp_v0->unk_00.z = arg1->z;
     }
     if (arg2 != NULL) {
-        temp_v0[13] = arg2->x;
-        temp_v0[19] = arg2->y;
-        temp_v0[16] = arg2->z;
+        temp_v0->unk_34 = arg2->x;
+        temp_v0->unk_4C = arg2->y;
+        temp_v0->unk_40 = arg2->z;
     }
     if (arg3 != NULL) {
-        temp_v0_3->unk_24 = arg3->x;
-        temp_v0_3->unk_28 = arg3->y;
-        temp_v0_3->unk_2C = arg3->z;
+        temp_v0_3->targetUp.x = arg3->x;
+        temp_v0_3->targetUp.y = arg3->y;
+        temp_v0_3->targetUp.z = arg3->z;
     }
     if (arg4 != NULL) {
-        temp_v0_3->unk_38 = *arg4;
+        temp_v0_3->targetFov = *arg4;
     }
 }
 
 void func_80712C44(unk_struct_F8* arg0, Vec3f* arg1, Mtx3F* arg2, Vec3f* arg3, Vec3f* arg4, Vec3f* arg5, f32* arg6) {
-    unk_struct_58* temp_v0_4 = &arg0->unk_04.unk_00;
+    unk_struct_58* temp_v0_4 = &arg0->unk_04;
     unk_struct_68* temp_v0 = &arg0->sub_5_unk_5C;
 
     if (arg1 != NULL) {
@@ -547,12 +544,12 @@ void func_80712C44(unk_struct_F8* arg0, Vec3f* arg1, Mtx3F* arg2, Vec3f* arg3, V
         temp_v0->unk_54.z = arg4->z;
     }
     if (arg5 != NULL) {
-        temp_v0_4->unk_24 = arg5->x;
-        temp_v0_4->unk_28 = arg5->y;
-        temp_v0_4->unk_2C = arg5->z;
+        temp_v0_4->targetUp.x = arg5->x;
+        temp_v0_4->targetUp.y = arg5->y;
+        temp_v0_4->targetUp.z = arg5->z;
     }
     if (arg6 != NULL) {
-        temp_v0_4->unk_38 = *arg6;
+        temp_v0_4->targetFov = *arg6;
     }
 }
 
@@ -571,12 +568,12 @@ void func_80712DE0(unk_struct_F8* arg0, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f
         temp_v0->unk_7C = arg2->z;
     }
     if (arg3 != NULL) {
-        temp_v0_3->unk_24 = arg3->x;
-        temp_v0_3->unk_28 = arg3->y;
-        temp_v0_3->unk_2C = arg3->z;
+        temp_v0_3->targetUp.x = arg3->x;
+        temp_v0_3->targetUp.y = arg3->y;
+        temp_v0_3->targetUp.z = arg3->z;
     }
     if (arg4 != NULL) {
-        temp_v0_3->unk_38 = *arg4;
+        temp_v0_3->targetFov = *arg4;
     }
 }
 
@@ -621,16 +618,16 @@ Mtx3F* func_80712FE4(Mtx3F* arg0, CourseSegment* arg1, f32 arg2) {
 }
 
 void func_80713064(Camera* camera, unk_struct_58* arg1, unk_struct_9C* arg2, s32 arg3) {
-    Vec3f* var_v0;
+    unk_80776A48* var_v0;
 
     if (arg3 == 2) {
         var_v0 = &D_80776A78[camera->setting];
     } else {
         var_v0 = &D_80776A48[camera->setting];
     }
-    arg2->unk_70 = var_v0->y;
-    arg2->unk_7C = var_v0->z;
-    arg1->unk_38 = camera->unk_14 = var_v0->x;
+    arg2->unk_70 = var_v0->unk_04;
+    arg2->unk_7C = var_v0->unk_08;
+    arg1->targetFov = camera->unk_14 = var_v0->fov;
 
     camera->unk_10 = 2;
 
@@ -645,16 +642,16 @@ void func_80713064(Camera* camera, unk_struct_58* arg1, unk_struct_9C* arg2, s32
 }
 
 void func_807130F8(Camera* camera, unk_struct_F8* arg1) {
-    camera->eye = arg1->unk_04.unk_0C;
+    
+    camera->eye = arg1->unk_04.eye;
+    camera->at = arg1->unk_04.at;
 
-    camera->at = arg1->unk_04.unk_00;
-
-    camera->basis.y.x = arg1->unk_04.unk_18;
-    camera->basis.y.y = arg1->unk_04.unk_1C;
-    camera->basis.y.z = arg1->unk_04.unk_20;
-    camera->fovAngle = arg1->unk_04.unk_34;
-    camera->frustrumCenterX = arg1->unk_04.unk_40;
-    camera->frustrumCenterY = arg1->unk_04.unk_44;
+    camera->basis.y.x = arg1->unk_04.up.x;
+    camera->basis.y.y = arg1->unk_04.up.y;
+    camera->basis.y.z = arg1->unk_04.up.z;
+    camera->fov = arg1->unk_04.fov;
+    camera->frustrumCenterX = arg1->unk_04.frustrumCenterX;
+    camera->frustrumCenterY = arg1->unk_04.frustrumCenterY;
 }
 
 void func_8071315C(Camera* camera) {
@@ -730,10 +727,10 @@ void func_807134AC(GfxPool* gfxPool, Camera* camera) {
     Vec3f at;
     Vec3f eye;
     f32 var_fv0;
-    f32 fovAngle;
+    f32 fov;
     s32 pad[2];
 
-    Matrix_SetFrustrum(&gfxPool->unk_1A008[camera->id], &camera->projectionMtx, camera->fovAngle, camera->near,
+    Matrix_SetFrustrum(&gfxPool->unk_1A008[camera->id], &camera->projectionMtx, camera->fov, camera->near,
                        camera->far, camera->fovScaleX, camera->frustrumCenterX, camera->fovScaleY,
                        camera->frustrumCenterY, &camera->perspectiveScale);
     eye = camera->eye;
@@ -751,9 +748,9 @@ void func_807134AC(GfxPool* gfxPool, Camera* camera) {
             if (var_fv0 >= 1.0f) {
                 var_fv0 = 1.0f;
             }
-            fovAngle = camera->fovAngle + ((85.0f - camera->fovAngle) * var_fv0);
+            fov = camera->fov + ((85.0f - camera->fov) * var_fv0);
 
-            Matrix_SetFrustrum(&gfxPool->unk_1A008[camera->id], &camera->projectionMtx, fovAngle, camera->near,
+            Matrix_SetFrustrum(&gfxPool->unk_1A008[camera->id], &camera->projectionMtx, fov, camera->near,
                                camera->far, camera->fovScaleX, camera->frustrumCenterX, camera->fovScaleY,
                                camera->frustrumCenterY, &camera->perspectiveScale);
             Camera_CalculateProjectionViewMtx(&camera->projectionViewMtx, &camera->projectionMtx, &camera->viewMtx);
@@ -976,7 +973,7 @@ void func_8071400C(unk_800E5D70* arg0, s32 arg1) {
 }
 
 void func_8071402C(unk_800E5D70* arg0, f32* arg1) {
-    arg0->unk_00->unk_04.unk_4C = *arg1;
+    arg0->unk_00->unk_04.targetFrustrumCenterY = *arg1;
 }
 
 bool func_8071403C(unk_800E5D70* arg0) {
@@ -1402,7 +1399,7 @@ void func_807153A0(unk_800E5D70* arg0, unk_struct_14* arg1) {
     sp2C.y = sp38[0].y + arg0->unk_10->y;
     sp2C.z = sp38[0].z + arg0->unk_10->z;
 
-    func_80712DE0(arg0->unk_00, &sp2C, &sp38[1], 0, 0);
+    func_80712DE0(arg0->unk_00, &sp2C, &sp38[1], NULL, NULL);
 }
 
 void func_80715490(unk_800E5D70* arg0, unk_struct_14* arg1) {
@@ -1423,7 +1420,7 @@ void func_80715490(unk_800E5D70* arg0, unk_struct_14* arg1) {
     sp28.y = sp34[0].y + arg0->unk_10->y;
     sp28.z = sp34[0].z + arg0->unk_10->z;
 
-    func_80712DE0(arg0->unk_00, &sp28, &sp34[1], &sp34[2], 0);
+    func_80712DE0(arg0->unk_00, &sp28, &sp34[1], &sp34[2], NULL);
 }
 
 void func_80715580(unk_800E5D70* arg0, unk_80085434_arg_2* arg1) {
@@ -1689,7 +1686,7 @@ void Camera_Init(void) {
                     gCameras[i].mode = CAMERA_MODE_4;
                 }
 
-                gCameras[i].racerPos = gRacers[i].segmentPositionInfo.pos;
+                gCameras[i].focusPos = gRacers[i].segmentPositionInfo.pos;
 
                 gCameras[i].racerBasis = gRacers[i].trueBasis;
 
@@ -1706,7 +1703,7 @@ void Camera_Init(void) {
                 sNumCameras = 2;
                 gCameras[0].mode = CAMERA_MODE_4;
             }
-            gCameras[0].racerPos = gRacers[0].segmentPositionInfo.pos;
+            gCameras[0].focusPos = gRacers[0].segmentPositionInfo.pos;
             gCameras[0].racerBasis = gRacers[0].trueBasis;
 
             gCameras[1].mode = CAMERA_MODE_12;
@@ -1718,7 +1715,7 @@ void Camera_Init(void) {
             sNumCameras = 1;
             gCameras[0].mode = CAMERA_MODE_6;
 
-            gCameras[0].racerPos = gRacers[0].segmentPositionInfo.pos;
+            gCameras[0].focusPos = gRacers[0].segmentPositionInfo.pos;
             gCameras[0].racerBasis = gRacers[0].trueBasis;
 
             for (i = 0; i < sNumCameras; i++) {
@@ -1729,7 +1726,7 @@ void Camera_Init(void) {
 
             sNumCameras = 2;
             gCameras[0].mode = CAMERA_MODE_11;
-            gCameras[0].racerPos = gRacers[0].segmentPositionInfo.pos;
+            gCameras[0].focusPos = gRacers[0].segmentPositionInfo.pos;
             gCameras[0].racerBasis = gRacers[0].trueBasis;
             gCameras[1].mode = CAMERA_MODE_12;
             for (i = 0; i < sNumCameras; i++) {
@@ -1738,7 +1735,7 @@ void Camera_Init(void) {
             break;
         case GAMEMODE_GP_END_CS:
             sNumCameras = 1;
-            gCameras[0].mode = CAMERA_MODE_14;
+            gCameras[0].mode = CAMERA_MODE_ENDING;
             Camera_InitMode(gCameras, D_807A10A0, D_807A1480);
             break;
     }
@@ -1752,7 +1749,7 @@ void Camera_InitMode(Camera* camera, unk_struct_F8* arg1, unk_800E5D70* arg2) {
     bool sp44;
     f32 angle;
     s32 pad2;
-    Vec3f* sp38;
+    unk_80776A48* sp38;
     Vec3f sp2C;
     Racer* racer;
 
@@ -1792,8 +1789,8 @@ void Camera_InitMode(Camera* camera, unk_struct_F8* arg1, unk_800E5D70* arg2) {
             if (gNumPlayers == 2) {
                 camera->near = 16.0f;
                 camera->far = 8192.0f;
-                arg1->unk_04.unk_44 = arg1->unk_04.unk_4C = -15.0f;
-                arg1->unk_04.unk_34 = arg1->unk_04.unk_38 = 100.0f;
+                arg1->unk_04.frustrumCenterY = arg1->unk_04.targetFrustrumCenterY = -15.0f;
+                arg1->unk_04.fov = arg1->unk_04.targetFov = 100.0f;
             } else {
                 camera->near = 16.0f;
                 camera->far = 8192.0f;
@@ -1828,16 +1825,16 @@ void Camera_InitMode(Camera* camera, unk_struct_F8* arg1, unk_800E5D70* arg2) {
 
                 sp38 = &D_80776A48[sp48];
             }
-            arg1->sub_4_unk_5C.unk_70 = arg1->sub_4_unk_5C.unk_6C = sp38->y;
-            arg1->sub_4_unk_5C.unk_7C = arg1->sub_4_unk_5C.unk_78 = sp38->z;
-            arg1->unk_04.unk_38 = arg1->unk_04.unk_34 = sp38->x;
+            arg1->sub_4_unk_5C.unk_70 = arg1->sub_4_unk_5C.unk_6C = sp38->unk_04;
+            arg1->sub_4_unk_5C.unk_7C = arg1->sub_4_unk_5C.unk_78 = sp38->unk_08;
+            arg1->unk_04.targetFov = arg1->unk_04.fov = sp38->fov;
 
             Math_Round(DEG_TO_FZXANG2(arg1->sub_4_unk_5C.unk_78));
             racer = &gRacers[camera->id];
-            arg1->sub_4_unk_5C.unk_54.x = racer->unk_180.x - (sp38->y * racer->trueBasis.x.x);
-            arg1->sub_4_unk_5C.unk_54.y = racer->unk_180.y - (sp38->y * racer->trueBasis.x.y);
-            arg1->sub_4_unk_5C.unk_54.z = racer->unk_180.z - (sp38->y * racer->trueBasis.x.z);
-            camera->unk_14 = arg1->unk_04.unk_38;
+            arg1->sub_4_unk_5C.unk_54.x = racer->unk_180.x - (sp38->unk_04 * racer->trueBasis.x.x);
+            arg1->sub_4_unk_5C.unk_54.y = racer->unk_180.y - (sp38->unk_04 * racer->trueBasis.x.y);
+            arg1->sub_4_unk_5C.unk_54.z = racer->unk_180.z - (sp38->unk_04 * racer->trueBasis.x.z);
+            camera->unk_14 = arg1->unk_04.targetFov;
             camera->unk_10 = 0;
             if ((sp48 == 1) || (sp48 == 2)) {
                 camera->unk_10 |= 1;
@@ -1845,19 +1842,19 @@ void Camera_InitMode(Camera* camera, unk_struct_F8* arg1, unk_800E5D70* arg2) {
             sp44 = true;
             break;
         case CAMERA_MODE_FALLING_OFF_TRACK:
-            sp2C = arg1->unk_04.unk_0C;
+            sp2C = arg1->unk_04.eye;
             func_80711B6C(arg1, &D_807763D0);
-            arg1->unk_04.unk_34 = arg1->unk_04.unk_38 = 80.0f;
+            arg1->unk_04.fov = arg1->unk_04.targetFov = 80.0f;
             arg1->sub_1_unk_5C.unk_0C = sp2C;
             if (gNumPlayers == 2) {
-                arg1->unk_04.unk_44 = arg1->unk_04.unk_4C = -50.0f;
+                arg1->unk_04.frustrumCenterY = arg1->unk_04.targetFrustrumCenterY = -50.0f;
             }
             break;
         case CAMERA_MODE_8:
             func_80711B6C(arg1, &D_807763D0);
-            arg1->unk_04.unk_38 = D_8076D788[0].unk_04;
+            arg1->unk_04.targetFov = D_8076D788[0].unk_04;
             if (gNumPlayers == 2) {
-                arg1->unk_04.unk_44 = arg1->unk_04.unk_4C = -30.0f;
+                arg1->unk_04.frustrumCenterY = arg1->unk_04.targetFrustrumCenterY = -30.0f;
             }
 
             racer = &gRacers[camera->id];
@@ -1869,9 +1866,9 @@ void Camera_InitMode(Camera* camera, unk_struct_F8* arg1, unk_800E5D70* arg2) {
 
             func_80711CE4(arg1, 2, &D_80776448);
             if (gNumPlayers == 2) {
-                arg1->unk_04.unk_44 = arg1->unk_04.unk_4C = -30.0f;
+                arg1->unk_04.frustrumCenterY = arg1->unk_04.targetFrustrumCenterY = -30.0f;
             }
-            arg1->unk_04.unk_34 = arg1->unk_04.unk_38 = 80.0f;
+            arg1->unk_04.fov = arg1->unk_04.targetFov = 80.0f;
             arg1->sub_2_3_unk_5C.unk_30 = arg1->sub_2_3_unk_5C.unk_34 = 125.0f;
             arg1->sub_2_3_unk_5C.unk_3C = arg1->sub_2_3_unk_5C.unk_40 = 35.0f;
             arg1->sub_2_3_unk_5C.unk_48 = arg1->sub_2_3_unk_5C.unk_4C = -50.0f;
@@ -1883,9 +1880,9 @@ void Camera_InitMode(Camera* camera, unk_struct_F8* arg1, unk_800E5D70* arg2) {
             arg1->sub_2_3_unk_5C.unk_0C.y.z = racer->tiltUp.z;
             break;
         case CAMERA_MODE_10:
-            sp2C = arg1->unk_04.unk_0C;
+            sp2C = arg1->unk_04.eye;
             func_80711B6C(arg1, &D_807763D0);
-            arg1->unk_04.unk_34 = arg1->unk_04.unk_38 = 80.0f;
+            arg1->unk_04.fov = arg1->unk_04.targetFov = 80.0f;
             arg1->sub_1_unk_5C.unk_0C = sp2C;
             break;
         case CAMERA_MODE_11:
@@ -1894,17 +1891,17 @@ void Camera_InitMode(Camera* camera, unk_struct_F8* arg1, unk_800E5D70* arg2) {
             camera->fovScaleX = SCREEN_WIDTH;
             camera->fovScaleY = SCREEN_HEIGHT;
             func_80711C30(arg1, &D_80776AA8);
-            arg1->sub_4_unk_5C.unk_70 = arg1->sub_4_unk_5C.unk_6C = D_80776A48[1].y;
-            arg1->sub_4_unk_5C.unk_7C = arg1->sub_4_unk_5C.unk_78 = 15.0f;
-            arg1->unk_04.unk_38 = arg1->unk_04.unk_34 = D_80776A48[1].x;
-            angle = 15.0f;
             sp38 = &D_80776A48[1];
+            arg1->sub_4_unk_5C.unk_70 = arg1->sub_4_unk_5C.unk_6C = sp38->unk_04;
+            arg1->sub_4_unk_5C.unk_7C = arg1->sub_4_unk_5C.unk_78 = 15.0f;
+            arg1->unk_04.targetFov = arg1->unk_04.fov = sp38->fov;
+            angle = 15.0f;
             Math_Round(DEG_TO_FZXANG2(angle));
             racer = &gRacers[0];
-            arg1->sub_4_unk_5C.unk_54.x = racer->unk_180.x - (sp38->y * racer->trueBasis.x.x);
-            arg1->sub_4_unk_5C.unk_54.y = racer->unk_180.y - (sp38->y * racer->trueBasis.x.y);
-            arg1->sub_4_unk_5C.unk_54.z = racer->unk_180.z - (sp38->y * racer->trueBasis.x.z);
-            camera->unk_14 = arg1->unk_04.unk_38;
+            arg1->sub_4_unk_5C.unk_54.x = racer->unk_180.x - (sp38->unk_04 * racer->trueBasis.x.x);
+            arg1->sub_4_unk_5C.unk_54.y = racer->unk_180.y - (sp38->unk_04 * racer->trueBasis.x.y);
+            arg1->sub_4_unk_5C.unk_54.z = racer->unk_180.z - (sp38->unk_04 * racer->trueBasis.x.z);
+            camera->unk_14 = arg1->unk_04.targetFov;
             camera->unk_10 = 0;
             sp44 = true;
             break;
@@ -1915,7 +1912,7 @@ void Camera_InitMode(Camera* camera, unk_struct_F8* arg1, unk_800E5D70* arg2) {
             camera->fovScaleY = SCREEN_HEIGHT;
             func_80711B6C(arg1, &D_807768AC);
             break;
-        case CAMERA_MODE_14:
+        case CAMERA_MODE_ENDING:
             camera->near = 16.0f;
             camera->far = 8192.0f;
             camera->fovScaleX = SCREEN_WIDTH;
@@ -1929,9 +1926,9 @@ void Camera_InitMode(Camera* camera, unk_struct_F8* arg1, unk_800E5D70* arg2) {
             arg1->sub_2_3_unk_5C.unk_48 = arg1->sub_2_3_unk_5C.unk_4C = 269.0f;
             sp44 = true;
             if (gPlayer1OverallPosition < 4) {
-                D_807A1598 = gPlayer1OverallPosition - 1;
+                sCameraEndingFocusRacer = gPlayer1OverallPosition - 1;
             } else {
-                D_807A1598 = 0;
+                sCameraEndingFocusRacer = 0;
             }
             break;
     }
@@ -2067,12 +2064,12 @@ void Camera_UpdateMode(Camera* camera, unk_struct_F8* arg1, unk_800E5D70* arg2) 
 
                 var_v0 = true;
 
-                temp_fv0 = arg1->unk_04.unk_38 - arg1->unk_04.unk_34;
+                temp_fv0 = arg1->unk_04.targetFov - arg1->unk_04.fov;
                 if (ABS(temp_fv0) > 0.5f) {
                     var_v0 = false;
                 }
 
-                temp_fv0 = arg1->unk_04.unk_4C - arg1->unk_04.unk_44;
+                temp_fv0 = arg1->unk_04.targetFrustrumCenterY - arg1->unk_04.frustrumCenterY;
                 if (ABS(temp_fv0) > 0.5f) {
                     var_v0 = false;
                 }
@@ -2089,10 +2086,10 @@ void Camera_UpdateMode(Camera* camera, unk_struct_F8* arg1, unk_800E5D70* arg2) 
 
                 if (var_v0) {
                     camera->mode = CAMERA_MODE_6;
-                    arg1->unk_04.unk_3C = 0.2f;
-                    arg1->unk_04.unk_30 = 1.0f;
-                    arg1->unk_04.unk_50 = 0.1f;
-                    arg1->unk_04.unk_54 = 0.2f;
+                    arg1->unk_04.fovStepFactor = 0.2f;
+                    arg1->unk_04.upStepFactor = 1.0f;
+                    arg1->unk_04.frustrumCenterXStepFactor = 0.1f;
+                    arg1->unk_04.frustrumCenterYStepFactor = 0.2f;
                     arg1->sub_4_unk_5C.unk_74 = 0.2f;
                     arg1->sub_4_unk_5C.unk_80 = 0.2f;
                 }
@@ -2126,8 +2123,8 @@ void Camera_UpdateMode(Camera* camera, unk_struct_F8* arg1, unk_800E5D70* arg2) 
             case CAMERA_MODE_11:
                 func_80719420(camera, arg1, arg2);
                 break;
-            case CAMERA_MODE_14:
-                func_80719480(camera, arg1, arg2);
+            case CAMERA_MODE_ENDING:
+                Camera_UpdateEnding(camera, arg1, arg2);
                 break;
         }
         mode = camera->mode;
@@ -2145,7 +2142,7 @@ void Camera_UpdateMode(Camera* camera, unk_struct_F8* arg1, unk_800E5D70* arg2) 
 }
 
 void func_807176B4(Camera* camera, unk_struct_F8* arg1) {
-    Vec3f* var_s1;
+    unk_80776A48* var_s1;
     s32 angle;
     f32 temp1;
     f32 temp2;
@@ -2165,9 +2162,9 @@ void func_807176B4(Camera* camera, unk_struct_F8* arg1) {
 
         racer = &gRacers[camera->id];
 
-        sp48.x.x = 0.0f - (var_s1->y * racer->trueBasis.x.x);
-        sp48.x.y = 0.0f - (var_s1->y * racer->trueBasis.x.y);
-        sp48.x.z = 0.0f - (var_s1->y * racer->trueBasis.x.z);
+        sp48.x.x = 0.0f - (var_s1->unk_04 * racer->trueBasis.x.x);
+        sp48.x.y = 0.0f - (var_s1->unk_04 * racer->trueBasis.x.y);
+        sp48.x.z = 0.0f - (var_s1->unk_04 * racer->trueBasis.x.z);
         temp_fv1 = 1.0f / sqrtf(SQ(sp48.x.x) + SQ(sp48.x.y) + SQ(sp48.x.z));
         sp48.x.x *= temp_fv1;
         sp48.x.y *= temp_fv1;
@@ -2189,11 +2186,11 @@ void func_807176B4(Camera* camera, unk_struct_F8* arg1) {
         sp48.y.y *= temp_fv1;
         sp48.y.z *= temp_fv1;
 
-        angle = Math_Round(DEG_TO_FZXANG2(var_s1->z));
+        angle = Math_Round(DEG_TO_FZXANG2(var_s1->unk_08));
 
-        temp_fv0 = (SIN(angle) * var_s1->y) * ((sp48.y.x * racer->trueBasis.y.x) + (sp48.y.y * racer->trueBasis.y.y) +
+        temp_fv0 = (SIN(angle) * var_s1->unk_04) * ((sp48.y.x * racer->trueBasis.y.x) + (sp48.y.y * racer->trueBasis.y.y) +
                                                (sp48.y.z * racer->trueBasis.y.z));
-        temp_fv1 = COS(angle) * var_s1->y;
+        temp_fv1 = COS(angle) * var_s1->unk_04;
 
         temp1 = (racer->unk_180.x + (temp_fv1 * sp48.x.x) + (temp_fv0 * sp48.y.x));
         temp2 = (racer->unk_180.y + (temp_fv1 * sp48.x.y) + (temp_fv0 * sp48.y.y));
@@ -2203,23 +2200,20 @@ void func_807176B4(Camera* camera, unk_struct_F8* arg1) {
 
         temp_fv0 = (-2.0f * temp_fv0 * temp_fv0 * temp_fv0) + (3.0f * temp_fv0 * temp_fv0);
 
-        temp_v1->unk_0C.x = ((1.0f - temp_fv0) * temp_v1->unk_0C.x) + (temp_fv0 * temp1);
-        temp_v1->unk_0C.y = ((1.0f - temp_fv0) * temp_v1->unk_0C.y) + (temp_fv0 * temp2);
-        temp_v1->unk_0C.z = ((1.0f - temp_fv0) * temp_v1->unk_0C.z) + (temp_fv0 * temp3);
+        temp_v1->eye.x = ((1.0f - temp_fv0) * temp_v1->eye.x) + (temp_fv0 * temp1);
+        temp_v1->eye.y = ((1.0f - temp_fv0) * temp_v1->eye.y) + (temp_fv0 * temp2);
+        temp_v1->eye.z = ((1.0f - temp_fv0) * temp_v1->eye.z) + (temp_fv0 * temp3);
 
-        sp48.x.x = temp_v1->unk_00.x - temp_v1->unk_0C.x;
-        sp48.x.y = temp_v1->unk_00.y - temp_v1->unk_0C.y;
-        sp48.x.z = temp_v1->unk_00.z - temp_v1->unk_0C.z;
+        sp48.x.x = temp_v1->at.x - temp_v1->eye.x;
+        sp48.x.y = temp_v1->at.y - temp_v1->eye.y;
+        sp48.x.z = temp_v1->at.z - temp_v1->eye.z;
         sp48.y.x = racer->trueBasis.y.x;
         sp48.y.y = racer->trueBasis.y.y;
         sp48.y.z = racer->trueBasis.y.z;
         Math_OrthonormalizeAroundForward(&sp48);
-        temp_v1->unk_24 = sp48.y.x;
-        temp_v1->unk_18 = temp_v1->unk_24;
-        temp_v1->unk_28 = sp48.y.y;
-        temp_v1->unk_1C = temp_v1->unk_28;
-        temp_v1->unk_2C = sp48.y.z;
-        temp_v1->unk_20 = temp_v1->unk_2C;
+        temp_v1->up.x = temp_v1->targetUp.x = sp48.y.x;
+        temp_v1->up.y = temp_v1->targetUp.y = sp48.y.y;
+        temp_v1->up.z = temp_v1->targetUp.z = sp48.y.z;
     }
 }
 
@@ -2451,7 +2445,7 @@ void func_80717B20(void) {
 }
 
 void func_807181F8(Camera* camera, unk_struct_F8* arg1) {
-    Vec3f* var_v1;
+    unk_80776A48* var_v1;
     f32 temp_fv0;
     s32 index;
     unk_struct_58* temp_a0 = &arg1->unk_04;
@@ -2482,37 +2476,37 @@ void func_807181F8(Camera* camera, unk_struct_F8* arg1) {
         temp_a3_2->unk_48.y = 0.0f;
         temp_a3_2->unk_48.z = 0.0f;
 
-        temp_a3_2->unk_6C = var_v1->y;
-        temp_a3_2->unk_78 = var_v1->z;
-        temp_a0->unk_34 = var_v1->x;
+        temp_a3_2->unk_6C = var_v1->unk_04;
+        temp_a3_2->unk_78 = var_v1->unk_08;
+        temp_a0->fov = var_v1->fov;
 
         if (gNumPlayers == 2) {
             var_v1 = &D_80776A78[camera->setting];
         } else {
             var_v1 = &D_80776A48[camera->setting];
         }
-        temp_a3_2->unk_70 = var_v1->y;
-        temp_a3_2->unk_7C = var_v1->z;
-        temp_a0->unk_38 = var_v1->x;
+        temp_a3_2->unk_70 = var_v1->unk_04;
+        temp_a3_2->unk_7C = var_v1->unk_08;
+        temp_a0->targetFov = var_v1->fov;
 
         racer = &gRacers[camera->id];
-        temp_a3_2->unk_54.x = racer->unk_180.x - (var_v1->y * racer->trueBasis.x.x);
-        temp_a3_2->unk_54.y = racer->unk_180.y - (var_v1->y * racer->trueBasis.x.y);
-        temp_a3_2->unk_54.z = racer->unk_180.z - (var_v1->y * racer->trueBasis.x.z);
+        temp_a3_2->unk_54.x = racer->unk_180.x - (var_v1->unk_04 * racer->trueBasis.x.x);
+        temp_a3_2->unk_54.y = racer->unk_180.y - (var_v1->unk_04 * racer->trueBasis.x.y);
+        temp_a3_2->unk_54.z = racer->unk_180.z - (var_v1->unk_04 * racer->trueBasis.x.z);
 
-        camera->racerPos = racer->unk_180;
+        camera->focusPos = racer->unk_180;
         camera->racerBasis = racer->trueBasis;
 
-        camera->unk_14 = arg1->unk_04.unk_38;
+        camera->unk_14 = arg1->unk_04.targetFov;
         camera->unk_10 = 0;
         if ((camera->setting == 1) || (camera->setting == 2)) {
             camera->unk_10 |= 1;
         }
         temp_a3_2->unk_80 = 0.1f;
         temp_a3_2->unk_74 = 0.1f;
-        temp_a0->unk_30 = 0.1f;
-        temp_a0->unk_3C = 0.1f;
-        temp_a0->unk_54 = 0.1f;
+        temp_a0->upStepFactor = 0.1f;
+        temp_a0->fovStepFactor = 0.1f;
+        temp_a0->frustrumCenterYStepFactor = 0.1f;
     } else {
         camera->unk_1C++;
     }
@@ -2527,7 +2521,7 @@ void func_80718530(Camera* camera, unk_struct_F8* arg1, unk_800E5D70* arg2) {
     f32 var_fv1;
     s32 playerIndex;
     bool var_v1;
-    unk_8008112C_arg_1* temp_a1;
+    unk_struct_58* temp_a1;
     s32 pad[4];
     Racer* temp_t0;
     unk_struct_9C* temp_a2 = &arg1->sub_4_unk_5C;
@@ -2603,13 +2597,13 @@ void func_80718530(Camera* camera, unk_struct_F8* arg1, unk_800E5D70* arg2) {
             var_fa0 = camera->unk_14 + ((120.0f - camera->unk_14) * var_fv1);
         }
         if (camera->unk_10 & 2) {
-            temp_a1->unk_00.unk_38 = var_fa0;
+            temp_a1->targetFov = var_fa0;
         } else {
-            temp_a1->unk_00.unk_38 = var_fa0;
-            temp_a1->unk_00.unk_34 = var_fa0;
+            temp_a1->targetFov = var_fa0;
+            temp_a1->fov = var_fa0;
         }
     }
-    var_fv1 = temp_a1->unk_00.unk_38 - temp_a1->unk_00.unk_34;
+    var_fv1 = temp_a1->targetFov - temp_a1->fov;
 
     if (ABS(var_fv1) < 0.1f) {
         camera->unk_10 &= ~2;
@@ -2694,9 +2688,9 @@ void func_80718AFC(Camera* camera, unk_struct_F8* arg1, unk_800E5D70* arg2) {
 
             temp_v1->unk_0C = temp_t2->trueBasis;
 
-            temp_t0->unk_24 = temp_v1->unk_0C.y.x;
-            temp_t0->unk_28 = temp_v1->unk_0C.y.y;
-            temp_t0->unk_2C = temp_v1->unk_0C.y.z;
+            temp_t0->targetUp.x = temp_v1->unk_0C.y.x;
+            temp_t0->targetUp.y = temp_v1->unk_0C.y.y;
+            temp_t0->targetUp.z = temp_v1->unk_0C.y.z;
             temp_v1->unk_00 = temp_t2->unk_180;
 
             temp_v1->unk_3C.x = temp_v0_2->unk_00.x +
@@ -2730,16 +2724,16 @@ void func_80718AFC(Camera* camera, unk_struct_F8* arg1, unk_800E5D70* arg2) {
             return;
         }
         temp_a3 = &D_8076D788[camera->unk_18];
-        temp_t0->unk_38 = temp_a3->unk_04;
+        temp_t0->targetFov = temp_a3->unk_04;
 
         switch (temp_a3->unk_00) {
             case 0:
                 if (temp_t1 != temp_a3->unk_00) {
                     func_80711B20(arg1, &D_807763D0.unk_58);
                 }
-                temp_t0->unk_24 = 0.0f;
-                temp_t0->unk_28 = 1.0f;
-                temp_t0->unk_2C = 0.0f;
+                temp_t0->targetUp.x = 0.0f;
+                temp_t0->targetUp.y = 1.0f;
+                temp_t0->targetUp.z = 0.0f;
                 func_80718F58(temp_s1, temp_t2->segmentPositionInfo.courseSegment,
                               temp_t2->segmentPositionInfo.segmentTValue, temp_a3);
                 temp_v1_2->unk_00 = temp_t2->unk_180;
@@ -2828,7 +2822,7 @@ void func_807191B0(Camera* camera, unk_struct_F8* arg1, unk_800E5D70* arg2) {
     f32 temp;
     unk_struct_54* temp_v1 = &arg1->sub_2_3_unk_5C;
     Racer* temp_a3 = &gRacers[camera->id];
-    unk_8008112C_arg_1* temp_a0 = &arg1->unk_04;
+    unk_struct_58* temp_a0 = &arg1->unk_04;
 
     if (temp_a3->stateFlags & RACER_STATE_FALLING_OFF_TRACK) {
         camera->mode = CAMERA_MODE_FALLING_OFF_TRACK;
@@ -2841,9 +2835,9 @@ void func_807191B0(Camera* camera, unk_struct_F8* arg1, unk_800E5D70* arg2) {
 
     Math_OrthonormalizeAroundUp(&temp_v1->unk_0C);
 
-    temp_a0->unk_00.unk_24 = temp_v1->unk_0C.y.x;
-    temp_a0->unk_00.unk_28 = temp_v1->unk_0C.y.y;
-    temp_a0->unk_00.unk_2C = temp_v1->unk_0C.y.z;
+    temp_a0->targetUp.x = temp_v1->unk_0C.y.x;
+    temp_a0->targetUp.y = temp_v1->unk_0C.y.y;
+    temp_a0->targetUp.z = temp_v1->unk_0C.y.z;
 
     temp_v1->unk_00 = temp_a3->unk_180;
 
@@ -2874,9 +2868,9 @@ void func_807191B0(Camera* camera, unk_struct_F8* arg1, unk_800E5D70* arg2) {
 
         if (camera->unk_E4 < camera->unk_E6) {
             temp = (f32) (camera->unk_E4 + 1) / camera->unk_E6;
-            arg1->unk_04.unk_4C = -30.0f - (-30.0f * temp);
+            arg1->unk_04.targetFrustrumCenterY = -30.0f - (-30.0f * temp);
         } else {
-            arg1->unk_04.unk_4C = 0.0f;
+            arg1->unk_04.targetFrustrumCenterY = 0.0f;
         }
     }
 }
@@ -2898,9 +2892,9 @@ extern unk_struct_C D_8009A090[];
 extern unk_struct_C D_8009A210[];
 extern u16 D_8009AD16;
 
-void func_80719480(Camera* camera, unk_struct_F8* arg1, unk_800E5D70* arg2) {
+void Camera_UpdateEnding(Camera* camera, unk_struct_F8* arg1, unk_800E5D70* arg2) {
     s32 var_s3 = true;
-    Racer* temp_a3;
+    Racer* racer;
     unk_struct_68* temp_v0_2;
     unk_struct_54* temp_v0 = &arg1->sub_2_3_unk_5C;
     unk_struct_C* var_a1;
@@ -2916,25 +2910,23 @@ void func_80719480(Camera* camera, unk_struct_F8* arg1, unk_800E5D70* arg2) {
                         camera->unk_18 = 2;
                         func_80711D58(arg1, &D_807765E8.unk_58);
                         temp_v0_2 = &arg1->sub_5_unk_5C;
-                        temp_v0_2->unk_3C.z = 0.0f;
-                        temp_v0_2->unk_3C.y = 0.0f;
-                        temp_v0_2->unk_3C.x = 0.0f;
+                        temp_v0_2->unk_3C.x = temp_v0_2->unk_3C.y = temp_v0_2->unk_3C.z = 0.0f;
                         temp_v0_2->unk_54.x = 0.0f;
                         temp_v0_2->unk_54.y = 37.0f;
                         temp_v0_2->unk_54.z = -132.0f;
                     } else {
                         camera->unk_18 = 1;
                         camera->unk_1C = 0;
-                        if (D_807A1598 == 0) {
+                        if (sCameraEndingFocusRacer == 0) {
                             var_a1 = D_800993D0;
-                        } else if (D_807A1598 == 1) {
+                        } else if (sCameraEndingFocusRacer == 1) {
                             var_a1 = D_80099A60;
                         } else {
                             var_a1 = D_800996E0;
                         }
                         func_80714000(arg2, var_a1);
-                        temp_a3 = &gRacers[D_807A1598];
-                        func_80713FE4(&D_807A1480[camera->id], &temp_a3->unk_180, &temp_a3->trueBasis, temp_a3);
+                        racer = &gRacers[sCameraEndingFocusRacer];
+                        func_80713FE4(&D_807A1480[camera->id], &racer->unk_180, &racer->trueBasis, racer);
                     }
                 }
                 break;
@@ -2956,15 +2948,15 @@ void func_80719480(Camera* camera, unk_struct_F8* arg1, unk_800E5D70* arg2) {
                 }
                 break;
             case 2:
-                temp_a3 = &gRacers[D_807A1598];
+                racer = &gRacers[sCameraEndingFocusRacer];
                 temp_v0_2 = &arg1->sub_5_unk_5C;
-                temp_v0_2->unk_0C = temp_a3->trueBasis;
-                temp_v0_2->unk_00 = temp_a3->unk_180;
+                temp_v0_2->unk_0C = racer->trueBasis;
+                temp_v0_2->unk_00 = racer->unk_180;
                 if (func_80719868(4)) {
                     camera->unk_18 = 3;
                     camera->unk_1C = 0;
-                    temp_a3 = &gRacers[2];
-                    func_80713FE4(&D_807A1480[camera->id], &temp_a3->unk_180, &temp_a3->trueBasis, temp_a3);
+                    racer = &gRacers[2];
+                    func_80713FE4(&D_807A1480[camera->id], &racer->unk_180, &racer->trueBasis, racer);
                     func_80714000(arg2, D_8009A210);
                 }
                 break;
@@ -2972,8 +2964,8 @@ void func_80719480(Camera* camera, unk_struct_F8* arg1, unk_800E5D70* arg2) {
                 if (func_8071403C(arg2) && func_80719868(3)) {
                     camera->unk_18 = 4;
                     camera->unk_1C = 0;
-                    temp_a3 = &gRacers[1];
-                    func_80713FE4(&D_807A1480[camera->id], &temp_a3->unk_180, &temp_a3->trueBasis, temp_a3);
+                    racer = &gRacers[1];
+                    func_80713FE4(&D_807A1480[camera->id], &racer->unk_180, &racer->trueBasis, racer);
                     func_80714000(arg2, D_8009A090);
                 }
                 break;
@@ -2981,8 +2973,8 @@ void func_80719480(Camera* camera, unk_struct_F8* arg1, unk_800E5D70* arg2) {
                 if (func_8071403C(arg2) && func_80719868(2)) {
                     camera->unk_18 = 5;
                     camera->unk_1C = 0;
-                    temp_a3 = &gRacers[0];
-                    func_80713FE4(&D_807A1480[camera->id], &temp_a3->unk_180, &temp_a3->trueBasis, temp_a3);
+                    racer = &gRacers[0];
+                    func_80713FE4(&D_807A1480[camera->id], &racer->unk_180, &racer->trueBasis, racer);
                     func_80714000(arg2, D_80099F70);
                 }
                 break;

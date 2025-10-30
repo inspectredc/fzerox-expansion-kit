@@ -56,9 +56,15 @@ typedef enum CameraMode {
     /* 11 */ CAMERA_MODE_11,
     /* 12 */ CAMERA_MODE_12,
     /* 13 */ CAMERA_MODE_13,
-    /* 14 */ CAMERA_MODE_14,
+    /* 14 */ CAMERA_MODE_ENDING,
     /* 15 */ CAMERA_MODE_15,
     /* 16 */ CAMERA_MODE_16,
 } CameraMode;
+
+typedef struct unk_80776A48 {
+    f32 fov;
+    f32 unk_04;
+    f32 unk_08;
+} unk_80776A48;
 
 #endif // FZX_CAMERA_H
