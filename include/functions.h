@@ -244,7 +244,7 @@ void func_80718F58(Vec3f*, CourseSegment*, f32, unk_800CD970*);
 void func_80719140(Camera*, unk_struct_F8*, unk_800E5D70*);
 void func_807191B0(Camera*, unk_struct_F8*, unk_800E5D70*);
 void func_80719420(Camera*, unk_struct_F8*, unk_800E5D70*);
-void func_80719480(Camera*, unk_struct_F8*, unk_800E5D70*);
+void Camera_UpdateEnding(Camera*, unk_struct_F8*, unk_800E5D70*);
 void func_8071985C(s32);
 bool func_80719868(s32);
 Gfx* func_80719890(Gfx*);

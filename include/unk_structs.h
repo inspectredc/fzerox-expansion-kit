@@ -66,14 +66,14 @@ typedef struct Camera {
     f32 unk_14;
     s32 unk_18;
     s32 unk_1C;
-    Vec3f racerPos;
+    Vec3f focusPos;
     Mtx3F racerBasis;
     Vec3f eye;
     Mtx3F basis;
     f32 unk_80;
     f32 unk_84;
     Vec3f at;
-    f32 fovAngle;
+    f32 fov;
     f32 frustrumCenterX;
     f32 frustrumCenterY;
     f32 near;
@@ -490,7 +490,7 @@ typedef struct unk_struct_68 {
 
 typedef struct unk_struct_9C {
     Mtx3F unk_00;
-    Mtx3F unk_24;
+    Mtx3F basis;
     Vec3f unk_48;
     Vec3f unk_54;
     Vec3f unk_60;
@@ -509,24 +509,20 @@ typedef struct unk_struct_9C {
 } unk_struct_9C; // size = 0x9C
 
 typedef struct unk_struct_58 {
-    Vec3f unk_00;
-    Vec3f unk_0C;
-    f32 unk_18;
-    f32 unk_1C;
-    f32 unk_20;
-    f32 unk_24;
-    f32 unk_28;
-    f32 unk_2C;
-    f32 unk_30;
-    f32 unk_34;
-    f32 unk_38;
-    f32 unk_3C;
-    f32 unk_40;
-    f32 unk_44;
-    f32 unk_48;
-    f32 unk_4C;
-    f32 unk_50;
-    f32 unk_54;
+    /* 0x00 */ Vec3f at;
+    /* 0x0C */ Vec3f eye;
+    /* 0x18 */ Vec3f up;
+    /* 0x24 */ Vec3f targetUp;
+    /* 0x30 */ f32 upStepFactor;
+    /* 0x34 */ f32 fov;
+    /* 0x38 */ f32 targetFov;
+    /* 0x3C */ f32 fovStepFactor;
+    /* 0x40 */ f32 frustrumCenterX;
+    /* 0x44 */ f32 frustrumCenterY;
+    /* 0x48 */ f32 targetFrustrumCenterX;
+    /* 0x4C */ f32 targetFrustrumCenterY;
+    /* 0x50 */ f32 frustrumCenterXStepFactor;
+    /* 0x54 */ f32 frustrumCenterYStepFactor;
 } unk_struct_58; // size = 0x58
 
 typedef struct unk_redo_1 {
