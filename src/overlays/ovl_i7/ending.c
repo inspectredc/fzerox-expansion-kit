@@ -592,7 +592,7 @@ Gfx* EndingCutscene_Draw(Gfx* gfx) {
     D_800D65D0 = gGfxPool->unk_1A308;
     D_807A15DC = gGfxPool->unk_2A308;
     D_807A15E0 = &gGfxPool->unk_2A308[0x7FF];
-    gfx = func_i3_8006339C(gfx, 0, 0);
+    gfx = func_i3_8006339C(gfx, 0, SCISSOR_BOX_FULL_SCREEN);
     gfx = func_i2_800BDE60(gfx, 0);
     gfx = Course_GadgetsDraw(gfx, 0);
     gfx = func_i7_80095D14(gfx);
@@ -605,7 +605,7 @@ Gfx* EndingCutscene_Draw(Gfx* gfx) {
     gSPPerspNormalize(gfx++, gCameras[0].perspectiveScale);
     gSPMatrix(gfx++, D_1000000.unk_1A208, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
 
-    gfx = func_80713E38(gfx, 0, 0);
+    gfx = func_80713E38(gfx, SCISSOR_BOX_FULL_SCREEN, 0);
     gfx = func_80727F54(gfx, 0);
     gfx = func_i7_800969B8(gfx);
     return func_i7_80093A18(gfx);
@@ -1126,7 +1126,7 @@ void func_i7_8009580C(void) {
                 }
 
                 var_s2->unk_0C = (((D_i7_80098F38[i] - -160.0f) * var_s2->unk_04) / 270.0f) + -160.0f;
-                if (var_s2->unk_04 >= 0x10E) {
+                if (var_s2->unk_04 >= 270) {
                     var_s2->unk_00 = 2;
                     var_s2->unk_0C = D_i7_80098F38[i];
                     var_s2->unk_04 = 0;

@@ -1,13 +1,13 @@
 #include "global.h"
 #include "fzx_camera.h"
 
-void func_807141C0(unk_800E5D70* arg0, unk_redo_3* arg1);
+void func_807141C0(unk_800E5D70* arg0, CameraLocalAnchorData* arg1);
 void func_8071400C(unk_800E5D70* arg0, s32 arg1);
 void func_807150E0(unk_800E5D70* arg0, unk_80085434_arg_2* arg1);
 void func_8071523C(unk_800E5D70* arg0, unk_80085434_arg_2* arg1);
 void func_807152EC(unk_800E5D70* arg0, unk_80085494_arg_2* arg1);
 
-extern const unk_redo_3 D_807765E8;
+extern const CameraLocalAnchorData D_807765E8;
 
 f32 D_i7_80099EA0[] = { 0.0f, 0.0f, 0.0f, -25.0f, -25.0f, -25.0f };
 

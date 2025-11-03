@@ -57,63 +57,6 @@ typedef struct unk_80225800 {
     /* 0x2640 */ Mtx decorationMtx[32];
 } unk_80225800; // size = 0x2E40
 
-typedef struct Camera {
-    s32 id;
-    s32 mode;
-    s32 setting;
-    s32 lookBackRotate;
-    s32 fovFlags;
-    f32 targetFov;
-    s32 unk_18;
-    s32 timer;
-    Vec3f focusPos;
-    Mtx3F racerBasis;
-    Vec3f eye;
-    Mtx3F basis;
-    f32 unk_80;
-    f32 unk_84;
-    Vec3f at;
-    f32 fov;
-    f32 frustrumCenterX;
-    f32 frustrumCenterY;
-    f32 near;
-    f32 far;
-    f32 fovScaleX;
-    f32 fovScaleY;
-    f32 unk_B0;
-    f32 unk_B4;
-    f32 unk_B8;
-    f32 unk_BC;
-    f32 unk_C0;
-    f32 unk_C4;
-    f32 unk_C8;
-    f32 unk_CC;
-    f32 unk_D0;
-    f32 unk_D4;
-    f32 unk_D8;
-    f32 unk_DC;
-    s32 unk_E0;
-    s16 unk_E4;
-    s16 unk_E6;
-    f32 unk_E8;
-    f32 unk_EC;
-    f32 unk_F0;
-    f32 unk_F4;
-    f32 unk_F8;
-    f32 unk_FC;
-    f32 unk_100;
-    f32 unk_104;
-    f32 unk_108;
-    f32 unk_10C;
-    f32 unk_110;
-    f32 unk_114;
-    u16 perspectiveScale;
-    s8 unk_11A[0x2];
-    MtxF projectionMtx;
-    MtxF viewMtx;
-    MtxF projectionViewMtx;
-} Camera; // size = 0x1DC
-
 typedef struct CourseSegment {
     /* 0x00 */ Vec3f pos;
     /* 0x0C */ Vec3f up;

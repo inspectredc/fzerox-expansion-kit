@@ -47,19 +47,88 @@ typedef enum CameraMode {
     /*  2 */ CAMERA_MODE_MACHINE_SETTINGS,
     /*  3 */ CAMERA_MODE_COURSE_SELECT,
     /*  4 */ CAMERA_MODE_RACE_INTRO,
-    /*  5 */ CAMERA_MODE_5,
-    /*  6 */ CAMERA_MODE_6,
+    /*  5 */ CAMERA_MODE_SETUP_RACE,
+    /*  6 */ CAMERA_MODE_RACE,
     /*  7 */ CAMERA_MODE_FALLING_OFF_TRACK,
     /*  8 */ CAMERA_MODE_FINISHED_SUCCESS,
     /*  9 */ CAMERA_MODE_FINISHED_SPECTATE,
     /* 10 */ CAMERA_MODE_FINISHED_LOSER,
-    /* 11 */ CAMERA_MODE_11,
-    /* 12 */ CAMERA_MODE_12,
+    /* 11 */ CAMERA_MODE_RECORDS_RACE,
+    /* 12 */ CAMERA_MODE_RECORDS_ENTRY,
     /* 13 */ CAMERA_MODE_13,
     /* 14 */ CAMERA_MODE_ENDING,
     /* 15 */ CAMERA_MODE_TITLE_DEMO,
     /* 16 */ CAMERA_MODE_16,
 } CameraMode;
+
+typedef enum CameraSetting {
+    /* 0 */ CAMERA_RACE_SETTING_OVERHEAD,
+    /* 1 */ CAMERA_RACE_SETTING_CLOSE_BEHIND,
+    /* 2 */ CAMERA_RACE_SETTING_REGULAR,
+    /* 3 */ CAMERA_RACE_SETTING_WIDE,
+    /* 4 */ CAMERA_RACE_SETTING_MAX,
+} CameraSetting;
+
+typedef enum CameraCourseSelectState {
+    /* 0 */ CAMERA_COURSE_SELECT_ACCEPT_INPUTS,
+    /* 1 */ CAMERA_COURSE_SELECT_DISABLED,
+} CameraCourseSelectState;
+
+typedef struct Camera {
+    s32 id;
+    s32 mode;
+    s32 raceSetting;
+    s32 lookBackRotate;
+    s32 fovFlags;
+    f32 targetFov;
+    s32 state;
+    s32 timer;
+    Vec3f focusPos;
+    Mtx3F racerBasis;
+    Vec3f eye;
+    Mtx3F basis;
+    f32 unk_80;
+    f32 unk_84;
+    Vec3f at;
+    f32 fov;
+    f32 frustrumCenterX;
+    f32 frustrumCenterY;
+    f32 near;
+    f32 far;
+    f32 fovScaleX;
+    f32 fovScaleY;
+    f32 currentScissorLeft;
+    f32 currentScissorTop;
+    f32 currentScissorRight;
+    f32 currentScissorBottom;
+    f32 startScissorLeft;
+    f32 startScissorTop;
+    f32 startScissorRight;
+    f32 startScissorBottom;
+    f32 endScissorLeft;
+    f32 endScissorTop;
+    f32 endScissorRight;
+    f32 endScissorBottom;
+    s32 vpTransitionState;
+    s16 transitionTimer;
+    s16 transitionTime;
+    f32 currentVpScaleX;
+    f32 currentVpScaleY;
+    f32 currentVpTransX;
+    f32 currentVpTransY;
+    f32 startVpScaleX;
+    f32 startVpScaleY;
+    f32 startVpTransX;
+    f32 startVpTransY;
+    f32 endVpScaleX;
+    f32 endVpScaleY;
+    f32 endVpTransX;
+    f32 endVpTransY;
+    u16 perspectiveScale;
+    MtxF projectionMtx;
+    MtxF viewMtx;
+    MtxF projectionViewMtx;
+} Camera; // size = 0x1DC
 
 typedef struct unk_80776A48 {
     /* 0x0 */ f32 fov;
@@ -67,59 +136,15 @@ typedef struct unk_80776A48 {
     /* 0x8 */ f32 pitch;
 } unk_80776A48; // size = 0xC
 
-typedef struct unk_struct_20 {
-    /* 0x00 */ Vec3f targetAt;
-    /* 0x0C */ Vec3f targetEye;
-    /* 0x18 */ f32 atLerpFactor;
-    /* 0x1C */ f32 eyeLerpFactor;
-} unk_struct_20; // size = 0x20
+typedef enum CameraType {
+    /* 1 */ CAMERA_TYPE_AT_EYE = 1,
+    /* 2 */ CAMERA_TYPE_ORBIT_AT,
+    /* 3 */ CAMERA_TYPE_ORBIT_EYE,
+    /* 4 */ CAMERA_TYPE_FOLLOW_SMOOTH,
+    /* 5 */ CAMERA_TYPE_LOCAL_ANCHOR,
+} CameraType;
 
-typedef struct unk_struct_54 {
-    /* 0x00 */ Vec3f anchorPos; // type 2 anchor around at, type 3 anchor around eye
-    /* 0x0C */ Mtx3F basis;
-    /* 0x30 */ f32 distance;
-    /* 0x34 */ f32 targetDistance;
-    /* 0x38 */ f32 distanceLerpFactor;
-    /* 0x3C */ f32 pitch;
-    /* 0x40 */ f32 targetPitch;
-    /* 0x44 */ f32 pitchLerpFactor;
-    /* 0x48 */ f32 yaw;
-    /* 0x4C */ f32 targetYaw;
-    /* 0x50 */ f32 yawLerpFactor;
-} unk_struct_54; // size = 0x54
-
-typedef struct unk_struct_68 {
-    /* 0x00 */ Vec3f unk_00;
-    /* 0x0C */ Mtx3F unk_0C;
-    /* 0x30 */ Vec3f unk_30;
-    /* 0x3C */ Vec3f unk_3C;
-    /* 0x48 */ Vec3f unk_48;
-    /* 0x54 */ Vec3f unk_54;
-    /* 0x60 */ f32 unk_60;
-    /* 0x64 */ f32 unk_64;
-} unk_struct_68; // size = 0x68
-
-typedef struct unk_struct_9C {
-    /* 0x00 */ Mtx3F racerBasis;
-    /* 0x24 */ Mtx3F basis;
-    /* 0x48 */ Vec3f unk_48;
-    /* 0x54 */ Vec3f anchorPoint;
-    /* 0x60 */ Vec3f tiltUp;
-    /* 0x6C */ f32 distance;
-    /* 0x70 */ f32 targetDistance;
-    /* 0x74 */ f32 distanceLerpFactor;
-    /* 0x78 */ f32 pitch;
-    /* 0x7C */ f32 targetPitch;
-    /* 0x80 */ f32 pitchLerpFactor;
-    /* 0x84 */ f32 yaw;
-    /* 0x88 */ f32 targetYaw;
-    /* 0x8C */ f32 yawLerpFactor;
-    /* 0x90 */ f32 speed;
-    /* 0x94 */ f32 unk_94;
-    /* 0x98 */ s32 trackSegmentInfo;
-} unk_struct_9C; // size = 0x9C
-
-typedef struct unk_struct_58 {
+typedef struct CameraParameters {
     /* 0x00 */ Vec3f at;
     /* 0x0C */ Vec3f eye;
     /* 0x18 */ Vec3f up;
@@ -134,38 +159,90 @@ typedef struct unk_struct_58 {
     /* 0x4C */ f32 targetFrustrumCenterY;
     /* 0x50 */ f32 frustrumCenterXLerpFactor;
     /* 0x54 */ f32 frustrumCenterYLerpFactor;
-} unk_struct_58; // size = 0x58
+} CameraParameters; // size = 0x58
 
-typedef struct unk_redo_1 {
-    /* 0x00 */ unk_struct_58 unk_00;
-    /* 0x58 */ unk_struct_20 unk_58;
-} unk_redo_1; // size = 0x78
+typedef struct CameraTypeAtEye {
+    /* 0x00 */ Vec3f targetAt;
+    /* 0x0C */ Vec3f targetEye;
+    /* 0x18 */ f32 atLerpFactor;
+    /* 0x1C */ f32 eyeLerpFactor;
+} CameraTypeAtEye; // size = 0x20
 
-typedef struct unk_redo_2 {
-    /* 0x00 */ unk_struct_58 unk_00;
-    /* 0x58 */ unk_struct_54 unk_58;
-} unk_redo_2; // size = 0xAC
+typedef struct CameraTypeOrbit {
+    /* 0x00 */ Vec3f anchorPos; // type 2 anchor around at, type 3 anchor around eye
+    /* 0x0C */ Mtx3F basis;
+    /* 0x30 */ f32 distance;
+    /* 0x34 */ f32 targetDistance;
+    /* 0x38 */ f32 distanceLerpFactor;
+    /* 0x3C */ f32 pitch;
+    /* 0x40 */ f32 targetPitch;
+    /* 0x44 */ f32 pitchLerpFactor;
+    /* 0x48 */ f32 yaw;
+    /* 0x4C */ f32 targetYaw;
+    /* 0x50 */ f32 yawLerpFactor;
+} CameraTypeOrbit; // size = 0x54
 
-typedef struct unk_redo_3 {
-    /* 0x00 */ unk_struct_58 unk_00;
-    /* 0x58 */ unk_struct_68 unk_58;
-} unk_redo_3; // size = 0xC0
+typedef struct CameraTypeFollowSmooth {
+    /* 0x00 */ Mtx3F racerBasis;
+    /* 0x24 */ Mtx3F basis;
+    /* 0x48 */ Vec3f centerPos;
+    /* 0x54 */ Vec3f anchorPoint;
+    /* 0x60 */ Vec3f tiltUp;
+    /* 0x6C */ f32 distance;
+    /* 0x70 */ f32 targetDistance;
+    /* 0x74 */ f32 distanceLerpFactor;
+    /* 0x78 */ f32 pitch;
+    /* 0x7C */ f32 targetPitch;
+    /* 0x80 */ f32 pitchLerpFactor;
+    /* 0x84 */ f32 yaw;
+    /* 0x88 */ f32 targetYaw;
+    /* 0x8C */ f32 yawLerpFactor;
+    /* 0x90 */ f32 speed;
+    /* 0x94 */ f32 unk_94;
+    /* 0x98 */ s32 trackSegmentInfo;
+} CameraTypeFollowSmooth; // size = 0x9C
 
-typedef struct unk_8008112C_arg_1 {
-    /* 0x00 */ unk_struct_58 unk_00;
-    /* 0x58 */ unk_struct_9C unk_58;
-} unk_8008112C_arg_1; // size = 0xF4
+typedef struct CameraTypeLocalAnchor {
+    /* 0x00 */ Vec3f anchorPoint;
+    /* 0x0C */ Mtx3F basis;
+    /* 0x30 */ Vec3f localAtCoordinates; // x-side z-depth
+    /* 0x3C */ Vec3f targetLocalAt;
+    /* 0x48 */ Vec3f localEyeCoordinates; // x-side z-depth
+    /* 0x54 */ Vec3f targetLocalEye;
+    /* 0x60 */ f32 localAtLerpFactor;
+    /* 0x64 */ f32 localEyeLerpFactor;
+} CameraTypeLocalAnchor; // size = 0x68
 
 typedef struct CameraSettings {
     s32 type;
-    unk_struct_58 unk_04;
+    CameraParameters parameters;
     union {
-        unk_struct_20 sub_1_unk_5C;
-        unk_struct_54 sub_2_3_unk_5C;
-        unk_struct_9C sub_4_unk_5C;
-        unk_struct_68 sub_5_unk_5C;
+        CameraTypeAtEye atEye;
+        CameraTypeOrbit orbit;
+        CameraTypeFollowSmooth followSmooth;
+        CameraTypeLocalAnchor localAnchor;
     };
 } CameraSettings; // size = 0xF8
+
+typedef struct CameraAtEyeData {
+    /* 0x00 */ CameraParameters parameters;
+    /* 0x58 */ CameraTypeAtEye data;
+} CameraAtEyeData; // size = 0x78
+
+typedef struct CameraOrbitData {
+    /* 0x00 */ CameraParameters parameters;
+    /* 0x58 */ CameraTypeOrbit data;
+} CameraOrbitData; // size = 0xAC
+
+typedef struct CameraFollowSmoothData {
+    /* 0x00 */ CameraParameters parameters;
+    /* 0x58 */ CameraTypeFollowSmooth data;
+} CameraFollowSmoothData; // size = 0xF4
+
+typedef struct CameraLocalAnchorData {
+    /* 0x00 */ CameraParameters parameters;
+    /* 0x58 */ CameraTypeLocalAnchor data;
+} CameraLocalAnchorData; // size = 0xC0
 
 typedef struct unk_struct_14 {
     s32 unk_00;
@@ -233,20 +310,27 @@ typedef struct unk_8076D6C8 {
 } unk_8076D6C8; // size 0x4
 
 typedef struct unk_800CD8B0 {
-    Vec3f unk_00;
-    Vec3f unk_0C;
-    Vec3f unk_18;
-    Vec3f unk_24;
-    f32 unk_30;
-    f32 unk_34;
+    Vec3f startAt;
+    Vec3f endAt;
+    Vec3f startEye;
+    Vec3f endEye;
+    f32 atTranslationScale;
+    f32 eyeTranslationScale;
 } unk_800CD8B0; // size 0x38
 
 typedef struct unk_800CD970 {
     s16 type;
-    s16 unk_02;
+    s16 time;
     f32 fov;
     void* unk_08;
 } unk_800CD970; // size 0xC
+
+typedef struct unk_800832EC_arg_2 {
+    u32 unk_00;
+    u32 unk_04;
+    s32* unk_08;
+    u8* unk_0C;
+} unk_800832EC_arg_2;
 
 #define CAMERA_FOV_FLAG_1 1
 #define CAMERA_FOV_FLAG_2 2

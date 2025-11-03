@@ -1203,11 +1203,11 @@ void func_i3_80064AD4(s32 arg0, unk_80141FF0* arg1, Camera* camera) {
                 ((camera->projectionViewMtx.m[0][3] * temp_fv0) + (camera->projectionViewMtx.m[1][3] * temp_fv1) +
                  (camera->projectionViewMtx.m[2][3] * temp_fa0)) +
                 camera->projectionViewMtx.m[3][3];
-            var_v1->unk_14[arg0][0] = camera->unk_F0 + ((temp_fa1 * camera->unk_E8) / temp_ft5);
-            var_v1->unk_14[arg0][1] = camera->unk_F4 - ((temp_ft4 * camera->unk_EC) / temp_ft5);
+            var_v1->unk_14[arg0][0] = camera->currentVpTransX + ((temp_fa1 * camera->currentVpScaleX) / temp_ft5);
+            var_v1->unk_14[arg0][1] = camera->currentVpTransY - ((temp_ft4 * camera->currentVpScaleY) / temp_ft5);
             ptr = var_v1->unk_14[arg0];
-            if ((ptr[0] < camera->unk_B0) || (camera->unk_B8 < ptr[0]) || ((ptr[1] < camera->unk_B4)) ||
-                (camera->unk_BC < ptr[1])) {
+            if ((ptr[0] < camera->currentScissorLeft) || (camera->currentScissorRight < ptr[0]) ||
+                ((ptr[1] < camera->currentScissorTop)) || (camera->currentScissorBottom < ptr[1])) {
                 var_v1->unk_04[arg0] = 0;
             } else {
                 var_v1->unk_04[arg0] = 1;
