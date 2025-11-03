@@ -673,11 +673,13 @@ void func_i7_80096DAC(void) {
                     if (func_i3_fabsf(var_fs0) < 0.001f) {
                         temp_s0->unk_0C = temp_s0->unk_10 = 0x200;
                     } else {
-                        temp_s4->unk_0C = var->unk_F0 + ((var_fs2 * var->unk_E8) / var_fs0);
-                        temp_s4->unk_10 = var->unk_F4 - ((var_fs1 * var->unk_EC) / var_fs0);
+                        temp_s4->unk_0C = var->currentVpTransX + ((var_fs2 * var->currentVpScaleX) / var_fs0);
+                        temp_s4->unk_10 = var->currentVpTransY - ((var_fs1 * var->currentVpScaleY) / var_fs0);
 
-                        if ((temp_s4->unk_0C < var->unk_B0) || (var->unk_B8 < temp_s4->unk_0C) ||
-                            (temp_s4->unk_10 < var->unk_B4) || (var->unk_BC < temp_s4->unk_10)) {
+                        if ((temp_s4->unk_0C < var->currentScissorLeft) ||
+                            (var->currentScissorRight < temp_s4->unk_0C) ||
+                            (temp_s4->unk_10 < var->currentScissorTop) ||
+                            (var->currentScissorBottom < temp_s4->unk_10)) {
                             temp_s4->unk_0C = temp_s4->unk_10 = 0x200;
                         }
                     }
@@ -715,11 +717,13 @@ void func_i7_80096DAC(void) {
                         if (func_i3_fabsf(var_fs0) < 0.001f) {
                             temp_s0->unk_0C = temp_s0->unk_10 = 0x200;
                         } else {
-                            temp_s0->unk_0C = var->unk_F0 + ((var_fs2 * var->unk_E8) / var_fs0);
-                            temp_s0->unk_10 = var->unk_F4 - ((var_fs1 * var->unk_EC) / var_fs0);
+                            temp_s0->unk_0C = var->currentVpTransX + ((var_fs2 * var->currentVpScaleX) / var_fs0);
+                            temp_s0->unk_10 = var->currentVpTransY - ((var_fs1 * var->currentVpScaleY) / var_fs0);
 
-                            if ((temp_s0->unk_0C < var->unk_B0) || (var->unk_B8 < temp_s0->unk_0C) ||
-                                (temp_s0->unk_10 < var->unk_B4) || (var->unk_BC < temp_s0->unk_10)) {
+                            if ((temp_s0->unk_0C < var->currentScissorLeft) ||
+                                (var->currentScissorRight < temp_s0->unk_0C) ||
+                                (temp_s0->unk_10 < var->currentScissorTop) ||
+                                (var->currentScissorBottom < temp_s0->unk_10)) {
                                 temp_s0->unk_0C = temp_s0->unk_10 = 0x200;
                             }
                         }

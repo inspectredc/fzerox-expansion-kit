@@ -749,7 +749,7 @@ Gfx* Records_Draw(Gfx* gfx) {
     D_800D65D0 = gGfxPool->unk_1A308;
     D_807A15DC = gGfxPool->unk_2A308;
     D_807A15E0 = &gGfxPool->unk_2A308[0x7FF];
-    gfx = func_i3_8006339C(gfx, 0, 0);
+    gfx = func_i3_8006339C(gfx, 0, SCISSOR_BOX_FULL_SCREEN);
     gfx = func_i2_800BDE60(gfx, 0);
     gfx = Course_GadgetsDraw(gfx, 0);
     gfx = func_i3_80065560(gfx, sRecordsCourseIndex);

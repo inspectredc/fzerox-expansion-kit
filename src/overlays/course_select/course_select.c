@@ -669,14 +669,14 @@ s32 CourseSelect_Update(void) {
 
             if ((gInputPressed & BTN_LEFT) && (sCourseSelectTrackNo > 0)) {
                 sCourseSelectTrackNo--;
-                gCameras[0].unk_18 = 1;
+                gCameras[0].state = CAMERA_COURSE_SELECT_DISABLED;
                 LEFT_ARROW_ROTATION_CHANGE(Object_Get(OBJECT_COURSE_SELECT_ARROWS)) += 0x200;
                 Audio_TriggerSystemSE(NA_SE_30);
             }
 
             if ((gInputPressed & BTN_RIGHT) && (sCourseSelectTrackNo < 5)) {
                 sCourseSelectTrackNo++;
-                gCameras[0].unk_18 = 1;
+                gCameras[0].state = CAMERA_COURSE_SELECT_DISABLED;
                 RIGHT_ARROW_ROTATION_CHANGE(Object_Get(OBJECT_COURSE_SELECT_ARROWS)) += 0x200;
                 Audio_TriggerSystemSE(NA_SE_30);
             }

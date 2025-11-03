@@ -1,12 +1,12 @@
 #include "global.h"
 #include "fzx_camera.h"
 
-void func_807141C0(unk_800E5D70* arg0, unk_redo_3* arg1);
+void func_807141C0(unk_800E5D70* arg0, CameraLocalAnchorData* arg1);
 void func_8071400C(unk_800E5D70* arg0, s32 arg1);
 void func_807150E0(unk_800E5D70* arg0, unk_80085434_arg_2* arg1);
 void func_8071523C(unk_800E5D70* arg0, unk_80085434_arg_2* arg1);
 
-extern const unk_redo_3 D_807765E8;
+extern const CameraLocalAnchorData D_807765E8;
 
 f32 D_i7_80098F50[] = { 0.0f, 0.0f, 0.0f, 0.0f };
 
@@ -155,6 +155,7 @@ unk_struct_14 D_i7_800993A8[] = {
     { 7, D_i7_80099344, D_i7_80099360, D_i7_8009937C, D_i7_80099398 },
 };
 
+// P1 Focus
 unk_struct_C D_i7_800993D0[] = {
     { 0, func_807141C0, &D_807765E8 },
     { 0, func_8071400C, 4 },
@@ -234,6 +235,7 @@ unk_80085434_arg_2 D_i7_800996AC = {
     { 4, D_i7_80099698, D_i7_800996A8 },
 };
 
+// P3 Focus
 unk_struct_C D_i7_800996E0[] = {
     { 0, func_807141C0, &D_807765E8 },
     { 0, func_8071400C, 4 },
@@ -336,6 +338,7 @@ unk_struct_14 D_i7_80099A38[] = {
     { 4, D_i7_80099A04, D_i7_80099A14, D_i7_80099A24, D_i7_80099A34 },
 };
 
+// P2 Focus
 unk_struct_C D_i7_80099A60[] = {
     { 0, func_807141C0, &D_807765E8 },
     { 0, func_8071400C, 4 },

@@ -21,7 +21,7 @@ s32 D_807A1620[4];
 s32 D_807A1630[4];
 s32 D_807A1640[4];
 Racer* gRacersByPosition[30];
-s32 D_807A16C8;
+s32 gNearestRacer;
 s16 D_807A16CC;
 s16 sSpunOutRacers;
 s16 D_807A16D0;
@@ -1337,7 +1337,7 @@ void func_8071BE0C(void) {
     for (i = gTotalRacers - 1; i > 0; i--) {
         if (sRacerPairInfo[(i * (i - 1)) >> 1].trailToLeadDistance < closestDistance) {
             closestDistance = sRacerPairInfo[(i * (i - 1)) >> 1].trailToLeadDistance;
-            D_807A16C8 = i;
+            gNearestRacer = i;
         }
     }
 }
@@ -5300,7 +5300,7 @@ void func_80726554(void) {
         if (gNumPlayers == 1) {
             func_8071BE0C();
             if (gEnableRaceSfx) {
-                Audio_SetNearestEnemy(D_807A16C8);
+                Audio_SetNearestEnemy(gNearestRacer);
             }
         }
         if ((gRacersByPosition[0]->id < gNumPlayers) && (gGameMode != GAMEMODE_DEATH_RACE) &&
@@ -6603,8 +6603,8 @@ block_115:
                                         G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
                                         G_TX_NOLOD, G_TX_NOLOD);
 
-                    var_s7 = ((s32) ((camera->unk_E8 * sp56C) + camera->unk_F0 + 0.5f) - 12) << 2;
-                    sp5C4 = ((s32) ((-camera->unk_EC * sp568) + camera->unk_F4 + 0.5f) - 30) << 2;
+                    var_s7 = ((s32) ((camera->currentVpScaleX * sp56C) + camera->currentVpTransX + 0.5f) - 12) << 2;
+                    sp5C4 = ((s32) ((-camera->currentVpScaleY * sp568) + camera->currentVpTransY + 0.5f) - 30) << 2;
                     gSPScisTextureRectangle(gfx++, var_s7, sp5C4, var_s7 + (24 * 4 - 1), sp5C4 + (30 * 4 - 1), 0, 0, 0,
                                             1 << 10, 1 << 10);
                 } else {
@@ -6612,8 +6612,8 @@ block_115:
                                         G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
                                         G_TX_NOLOD, G_TX_NOLOD);
 
-                    var_s7 = ((s32) ((camera->unk_E8 * sp56C) + camera->unk_F0 + 0.5f) - 8) << 2;
-                    sp5C4 = ((s32) ((-camera->unk_EC * sp568) + camera->unk_F4 + 0.5f) - 16) << 2;
+                    var_s7 = ((s32) ((camera->currentVpScaleX * sp56C) + camera->currentVpTransX + 0.5f) - 8) << 2;
+                    sp5C4 = ((s32) ((-camera->currentVpScaleY * sp568) + camera->currentVpTransY + 0.5f) - 16) << 2;
                     gSPScisTextureRectangle(gfx++, var_s7, sp5C4, var_s7 + (16 * 4 - 1), sp5C4 + (16 * 4 - 1), 0, 0, 0,
                                             1 << 10, 1 << 10);
                 }
@@ -6650,8 +6650,8 @@ block_115:
                                     G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
                                     G_TX_NOLOD, G_TX_NOLOD);
 
-                var_s7 = ((s32) ((camera->unk_E8 * sp56C) + camera->unk_F0 + 0.5f) - 0x10) << 2;
-                sp5C4 = ((s32) ((-camera->unk_EC * sp568) + camera->unk_F4 + 0.5f) - 0x10) << 2;
+                var_s7 = ((s32) ((camera->currentVpScaleX * sp56C) + camera->currentVpTransX + 0.5f) - 0x10) << 2;
+                sp5C4 = ((s32) ((-camera->currentVpScaleY * sp568) + camera->currentVpTransY + 0.5f) - 0x10) << 2;
                 gSPScisTextureRectangle(gfx++, var_s7, sp5C4, var_s7 + (32 * 4 - 1), sp5C4 + (16 * 4 - 1), 0, 0, 0,
                                         1 << 10, 1 << 10);
             }
@@ -6681,8 +6681,8 @@ block_115:
                     break;
                 }
 
-                sp56C = ((camera->unk_B8 - camera->unk_B0) * 0.5f) + 4.0f;
-                sp568 = ((camera->unk_BC - camera->unk_B4) * 0.5f) - 4.0f;
+                sp56C = ((camera->currentScissorRight - camera->currentScissorLeft) * 0.5f) + 4.0f;
+                sp568 = ((camera->currentScissorBottom - camera->currentScissorTop) * 0.5f) - 4.0f;
                 temp_fv0 = sqrtf((SQ(sp56C) + SQ(sp568)) / temp_fv0);
                 temp_fs1 *= temp_fv0;
                 temp_fs3 *= temp_fv0;
@@ -6710,8 +6710,14 @@ block_115:
                     gDPLoadTextureBlock_4b(gfx++, aCheckMarker1PTex, G_IM_FMT_IA, 32, 23, 0, G_TX_NOMIRROR | G_TX_WRAP,
                                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
-                    var_s7 = ((s32) (((camera->unk_B0 + camera->unk_B8) * 0.5f) + temp_fs1 + 0.5f) - 16) << 2;
-                    sp5C4 = ((s32) (((camera->unk_B4 + camera->unk_BC) * 0.5f) + temp_fs3 + 0.5f) - 28) << 2;
+                    var_s7 =
+                        ((s32) (((camera->currentScissorLeft + camera->currentScissorRight) * 0.5f) + temp_fs1 + 0.5f) -
+                         16)
+                        << 2;
+                    sp5C4 =
+                        ((s32) (((camera->currentScissorTop + camera->currentScissorBottom) * 0.5f) + temp_fs3 + 0.5f) -
+                         28)
+                        << 2;
 
                     gSPScisTextureRectangle(gfx++, var_s7, sp5C4, var_s7 + (32 * 4 - 1), sp5C4 + (23 * 4 - 1), 0, 0, 0,
                                             1 << 10, 1 << 10);
@@ -6719,8 +6725,14 @@ block_115:
                     gDPLoadTextureBlock_4b(gfx++, aCheckMarkerMPTex, G_IM_FMT_IA, 16, 10, 0, G_TX_NOMIRROR | G_TX_WRAP,
                                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
-                    var_s7 = ((s32) (((camera->unk_B0 + camera->unk_B8) * 0.5f) + temp_fs1 + 0.5f) - 8) << 2;
-                    sp5C4 = ((s32) (((camera->unk_B4 + camera->unk_BC) * 0.5f) + temp_fs3 + 0.5f) - 10) << 2;
+                    var_s7 =
+                        ((s32) (((camera->currentScissorLeft + camera->currentScissorRight) * 0.5f) + temp_fs1 + 0.5f) -
+                         8)
+                        << 2;
+                    sp5C4 =
+                        ((s32) (((camera->currentScissorTop + camera->currentScissorBottom) * 0.5f) + temp_fs3 + 0.5f) -
+                         10)
+                        << 2;
                     gSPScisTextureRectangle(gfx++, var_s7, sp5C4, var_s7 + (16 * 4 - 1), sp5C4 + (10 * 4 - 1), 0, 0, 0,
                                             1 << 10, 1 << 10);
                 }

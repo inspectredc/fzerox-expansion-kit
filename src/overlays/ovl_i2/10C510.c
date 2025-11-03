@@ -125,40 +125,40 @@ Gfx* Race_Draw(Gfx* gfx) {
     D_807A15E0 = &gGfxPool->unk_2A308[0x7FF];
     switch (gNumPlayers) {
         case 1:
-            gfx = func_i3_8006339C(gfx, 0, 0);
+            gfx = func_i3_8006339C(gfx, 0, SCISSOR_BOX_FULL_SCREEN);
             gfx = func_i2_800BDE60(gfx, 0);
             gfx = Course_GadgetsDraw(gfx, 0);
             break;
         case 2:
-            gfx = func_i3_8006339C(gfx, 0, 1);
+            gfx = func_i3_8006339C(gfx, 0, SCISSOR_BOX_TOP_HALF);
             gfx = func_i2_800BDE60(gfx, 0);
             gfx = Course_GadgetsDraw(gfx, 0);
-            gfx = func_i3_8006339C(gfx, 1, 2);
+            gfx = func_i3_8006339C(gfx, 1, SCISSOR_BOX_BOTTOM_HALF);
             gfx = func_i2_800BDE60(gfx, 1);
             gfx = Course_GadgetsDraw(gfx, 1);
             break;
         case 3:
-            gfx = func_i3_8006339C(gfx, 0, 5);
+            gfx = func_i3_8006339C(gfx, 0, SCISSOR_BOX_TOP_LEFT_QUARTER);
             gfx = func_i2_800BDE60(gfx, 0);
             gfx = Course_GadgetsDraw(gfx, 0);
-            gfx = func_i3_8006339C(gfx, 1, 7);
+            gfx = func_i3_8006339C(gfx, 1, SCISSOR_BOX_BOTTOM_LEFT_QUARTER);
             gfx = func_i2_800BDE60(gfx, 1);
             gfx = Course_GadgetsDraw(gfx, 1);
-            gfx = func_i3_8006339C(gfx, 2, 6);
+            gfx = func_i3_8006339C(gfx, 2, SCISSOR_BOX_TOP_RIGHT_QUARTER);
             gfx = func_i2_800BDE60(gfx, 2);
             gfx = Course_GadgetsDraw(gfx, 2);
             break;
         case 4:
-            gfx = func_i3_8006339C(gfx, 0, 5);
+            gfx = func_i3_8006339C(gfx, 0, SCISSOR_BOX_TOP_LEFT_QUARTER);
             gfx = func_i2_800BDE60(gfx, 0);
             gfx = Course_GadgetsDraw(gfx, 0);
-            gfx = func_i3_8006339C(gfx, 1, 7);
+            gfx = func_i3_8006339C(gfx, 1, SCISSOR_BOX_BOTTOM_LEFT_QUARTER);
             gfx = func_i2_800BDE60(gfx, 1);
             gfx = Course_GadgetsDraw(gfx, 1);
-            gfx = func_i3_8006339C(gfx, 2, 6);
+            gfx = func_i3_8006339C(gfx, 2, SCISSOR_BOX_TOP_RIGHT_QUARTER);
             gfx = func_i2_800BDE60(gfx, 2);
             gfx = Course_GadgetsDraw(gfx, 2);
-            gfx = func_i3_8006339C(gfx, 3, 8);
+            gfx = func_i3_8006339C(gfx, 3, SCISSOR_BOX_BOTTOM_RIGHT_QUARTER);
             gfx = func_i2_800BDE60(gfx, 3);
             gfx = Course_GadgetsDraw(gfx, 3);
             break;
@@ -181,50 +181,50 @@ Gfx* Race_Draw(Gfx* gfx) {
         case 1:
             gSPPerspNormalize(gfx++, gCameras[0].perspectiveScale);
             gSPMatrix(gfx++, &D_1000000.unk_1A208[0], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
-            gfx = func_80713E38(gfx, 0, 0);
+            gfx = func_80713E38(gfx, SCISSOR_BOX_FULL_SCREEN, 0);
             gfx = func_80727F54(gfx, 0);
             gfx = func_i3_80057D90(gfx, 0);
             break;
         case 2:
             gSPPerspNormalize(gfx++, gCameras[0].perspectiveScale);
             gSPMatrix(gfx++, &D_1000000.unk_1A208[0], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
-            gfx = func_80713E38(gfx, 1, 0);
+            gfx = func_80713E38(gfx, SCISSOR_BOX_TOP_HALF, 0);
             gfx = func_80727F54(gfx, 0);
             gSPPerspNormalize(gfx++, gCameras[1].perspectiveScale);
             gSPMatrix(gfx++, &D_1000000.unk_1A208[1], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
-            gfx = func_80713E38(gfx, 2, 1);
+            gfx = func_80713E38(gfx, SCISSOR_BOX_BOTTOM_HALF, 1);
             gfx = func_80727F54(gfx, 1);
             break;
         case 3:
             gSPPerspNormalize(gfx++, gCameras[0].perspectiveScale);
             gSPMatrix(gfx++, &D_1000000.unk_1A208[0], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
-            gfx = func_80713E38(gfx, 5, 0);
+            gfx = func_80713E38(gfx, SCISSOR_BOX_TOP_LEFT_QUARTER, 0);
             gfx = func_80727F54(gfx, 0);
             gSPPerspNormalize(gfx++, gCameras[1].perspectiveScale);
             gSPMatrix(gfx++, &D_1000000.unk_1A208[1], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
-            gfx = func_80713E38(gfx, 7, 1);
+            gfx = func_80713E38(gfx, SCISSOR_BOX_BOTTOM_LEFT_QUARTER, 1);
             gfx = func_80727F54(gfx, 1);
             gSPPerspNormalize(gfx++, gCameras[2].perspectiveScale);
             gSPMatrix(gfx++, &D_1000000.unk_1A208[2], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
-            gfx = func_80713E38(gfx, 6, 2);
+            gfx = func_80713E38(gfx, SCISSOR_BOX_TOP_RIGHT_QUARTER, 2);
             gfx = func_80727F54(gfx, 2);
             break;
         case 4:
             gSPPerspNormalize(gfx++, gCameras[0].perspectiveScale);
             gSPMatrix(gfx++, &D_1000000.unk_1A208[0], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
-            gfx = func_80713E38(gfx, 5, 0);
+            gfx = func_80713E38(gfx, SCISSOR_BOX_TOP_LEFT_QUARTER, 0);
             gfx = func_80727F54(gfx, 0);
             gSPPerspNormalize(gfx++, gCameras[1].perspectiveScale);
             gSPMatrix(gfx++, &D_1000000.unk_1A208[1], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
-            gfx = func_80713E38(gfx, 7, 1);
+            gfx = func_80713E38(gfx, SCISSOR_BOX_BOTTOM_LEFT_QUARTER, 1);
             gfx = func_80727F54(gfx, 1);
             gSPPerspNormalize(gfx++, gCameras[2].perspectiveScale);
             gSPMatrix(gfx++, &D_1000000.unk_1A208[2], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
-            gfx = func_80713E38(gfx, 6, 2);
+            gfx = func_80713E38(gfx, SCISSOR_BOX_TOP_RIGHT_QUARTER, 2);
             gfx = func_80727F54(gfx, 2);
             gSPPerspNormalize(gfx++, gCameras[3].perspectiveScale);
             gSPMatrix(gfx++, &D_1000000.unk_1A208[3], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
-            gfx = func_80713E38(gfx, 8, 3);
+            gfx = func_80713E38(gfx, SCISSOR_BOX_BOTTOM_RIGHT_QUARTER, 3);
             gfx = func_80727F54(gfx, 3);
             break;
     }

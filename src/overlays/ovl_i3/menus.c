@@ -358,7 +358,7 @@ void func_i3_80044DD0(void) {
     D_i3_8006D5D8 = 0;
 
     for (i = 0; i < 5; i++) {
-        D_i3_8006D5D8 += D_8076D788[i].unk_02;
+        D_i3_8006D5D8 += D_8076D788[i].time;
     }
 
     for (i = 0; i < 4; i++) {
@@ -5141,7 +5141,8 @@ Gfx* func_i3_8005823C(Gfx* gfx) {
         }
     }
     if (gNumPlayers == 1) {
-        if (((gCameras[playerIndex].mode == CAMERA_MODE_RACE_INTRO) || (gCameras[playerIndex].mode == CAMERA_MODE_6)) &&
+        if (((gCameras[playerIndex].mode == CAMERA_MODE_RACE_INTRO) ||
+             (gCameras[playerIndex].mode == CAMERA_MODE_RACE)) &&
             (D_i3_8006D3F8[0] == 0)) {
             temp_ft5 = gRacers[playerIndex].raceDistance / gRacers[playerIndex].raceTime;
             if (gGameMode == GAMEMODE_GP_RACE) {
@@ -5217,7 +5218,7 @@ Gfx* func_i3_8005823C(Gfx* gfx) {
         }
 
         if ((gGameMode == GAMEMODE_TIME_ATTACK) && !gGamePaused && (D_807B14F6 != 0) &&
-            (gCameras[playerIndex].mode == CAMERA_MODE_6) && (D_i3_8006D3F8[0] == 0)) {
+            (gCameras[playerIndex].mode == CAMERA_MODE_RACE) && (D_i3_8006D3F8[0] == 0)) {
             gfx = func_i3_8004E5A8(gfx);
         }
         if (gGameMode != GAMEMODE_PRACTICE) {
