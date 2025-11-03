@@ -118,7 +118,7 @@ void Game_Init(void) {
     gQueuedGameMode = GAMEMODE_FLX_TITLE;
     func_8071ED34();
     func_i2_800B904C();
-    func_80715F9C();
+    Camera_StartInit();
     Transition_Init();
     func_8070F0D0();
     Arena_EndInit();

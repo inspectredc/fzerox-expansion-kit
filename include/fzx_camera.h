@@ -61,13 +61,10 @@ typedef enum CameraMode {
     /* 16 */ CAMERA_MODE_16,
 } CameraMode;
 
-typedef enum CameraSetting {
-    /* 0 */ CAMERA_RACE_SETTING_OVERHEAD,
-    /* 1 */ CAMERA_RACE_SETTING_CLOSE_BEHIND,
-    /* 2 */ CAMERA_RACE_SETTING_REGULAR,
-    /* 3 */ CAMERA_RACE_SETTING_WIDE,
-    /* 4 */ CAMERA_RACE_SETTING_MAX,
-} CameraSetting;
+typedef enum CameraViewportTransitionState {
+    /* 0 */ CAMERA_VP_TRANSITION_INACTIVE,
+    /* 1 */ CAMERA_VP_TRANSITION_ACTIVE,
+} CameraViewportTransitionState;
 
 typedef enum CameraCourseSelectState {
     /* 0 */ CAMERA_COURSE_SELECT_ACCEPT_INPUTS,
@@ -130,11 +127,22 @@ typedef struct Camera {
     MtxF projectionViewMtx;
 } Camera; // size = 0x1DC
 
-typedef struct unk_80776A48 {
+typedef enum CameraRaceSetting {
+    /* 0 */ CAMERA_RACE_SETTING_OVERHEAD,
+    /* 1 */ CAMERA_RACE_SETTING_CLOSE_BEHIND,
+    /* 2 */ CAMERA_RACE_SETTING_REGULAR,
+    /* 3 */ CAMERA_RACE_SETTING_WIDE,
+    /* 4 */ CAMERA_RACE_SETTING_MAX,
+} CameraRaceSetting;
+
+#define CAMERA_FOV_FLAG_1 1
+#define CAMERA_FOV_FLAG_2 2
+
+typedef struct CameraRaceSettingInfo {
     /* 0x0 */ f32 fov;
     /* 0x4 */ f32 distance;
     /* 0x8 */ f32 pitch;
-} unk_80776A48; // size = 0xC
+} CameraRaceSettingInfo; // size = 0xC
 
 typedef enum CameraType {
     /* 1 */ CAMERA_TYPE_AT_EYE = 1,
@@ -244,64 +252,68 @@ typedef struct CameraLocalAnchorData {
     /* 0x58 */ CameraTypeLocalAnchor data;
 } CameraLocalAnchorData; // size = 0xC0
 
-typedef struct unk_struct_14 {
-    s32 unk_00;
-    f32* unk_04[3];
-    s32* unk_10;
-} unk_struct_14; // size = 0x14
+typedef struct CubicBSpline3fData {
+    s32 controlPointCount;
+    f32* controlPoints[3];
+    s32* times;
+} CubicBSpline3fData; // size = 0x14
 
-typedef struct unk_80085154_arg_2 {
-    s32 unk_00;
-    f32* unk_04;
-    s32* unk_08;
-} unk_80085154_arg_2; // size = 0xC
+typedef struct CubicBSpline1fData {
+    s32 controlPointCount;
+    f32* controlPoints;
+    s32* times;
+} CubicBSpline1fData; // size = 0xC
 
-typedef struct unk_80085434_arg_2 {
-    unk_struct_14 unk_00[2];
-    unk_80085154_arg_2 unk_28;
-} unk_80085434_arg_2; // size = 0x34
+typedef struct CubicBSpline331Data {
+    CubicBSpline3fData vecData[2];
+    CubicBSpline1fData floatData;
+} CubicBSpline331Data; // size = 0x34
 
-typedef struct unk_80085494_arg_2 {
-    unk_struct_14 unk_00[3];
-    unk_80085154_arg_2 unk_3C;
-} unk_80085494_arg_2; // size = 0x48
+typedef struct CubicBSpline3331Data {
+    CubicBSpline3fData vecData[3];
+    CubicBSpline1fData floatData;
+} CubicBSpline3331Data; // size = 0x48
 
-typedef struct unk_80085434_arg_0 {
-    Vec3f unk_00[2];
-    f32 unk_18;
-} unk_80085434_arg_0; // size = 0x1C
+typedef struct InterpolateOut331Data {
+    Vec3f vecData[2];
+    f32 floatData;
+} InterpolateOut331Data; // size = 0x1C
 
-typedef struct unk_80085494_arg_0 {
-    Vec3f unk_00[3];
-    f32 unk_24;
-} unk_80085494_arg_0; // size = 0x28
+typedef struct InterpolateOut3331Data {
+    Vec3f vecData[3];
+    f32 floatData;
+} InterpolateOut3331Data; // size = 0x28
 
-typedef struct unk_struct_8 {
-    s32 unk_00;
-    s32 unk_04;
-} unk_struct_8; // size = 0x8
+typedef struct SplineControlPointTimer {
+    s32 timer;
+    s32 controlPoint;
+} SplineControlPointTimer; // size = 0x8
 
-typedef struct unk_struct_20_2 {
-    unk_struct_8 unk_00[4];
-} unk_struct_20_2; // size = 0x20
+typedef struct SplineControlPointTimers {
+    SplineControlPointTimer controlPointTimer[4];
+} SplineControlPointTimers; // size = 0x20
 
-typedef struct unk_struct_C {
-    s32 unk_00;
-    void* unk_04;
-    void* unk_08;
-} unk_struct_C; // size = 0xC
+#define CAMERA_SCRIPT_NEXT 0
+#define CAMERA_SCRIPT_CLEAR -1
+#define CAMERA_SCRIPT_BREAK -2
 
-typedef struct unk_800E5D70 {
-    CameraSettings* unk_00;
-    unk_struct_C* unk_04;
-    s32 unk_08;
-    unk_struct_20_2* unk_0C;
+typedef struct CameraScript {
+    s32 time;
+    void* updateFunc;
+    void* updateData;
+} CameraScript; // size = 0xC
+
+typedef struct CameraScriptManager {
+    CameraSettings* settings;
+    CameraScript* script;
+    s32 timer;
+    SplineControlPointTimers* controlPointTimers;
     Vec3f* focusPos;
     Mtx3F* basis;
     Racer* racer;
-    Vec3f* unk_1C;
-    Mtx3F* unk_20;
-} unk_800E5D70; // size = 0x24
+    Vec3f* eyeAnchorPoint;
+    Mtx3F* eyeBasis;
+} CameraScriptManager; // size = 0x24
 
 typedef struct unk_8076D6C8 {
     f32 unk_00;
@@ -332,7 +344,10 @@ typedef struct unk_800832EC_arg_2 {
     u8* unk_0C;
 } unk_800832EC_arg_2;
 
-#define CAMERA_FOV_FLAG_1 1
-#define CAMERA_FOV_FLAG_2 2
+void Camera_ScriptSetLocalAnchorData(CameraScriptManager* scriptMgr, CameraLocalAnchorData* localAnchorData);
+void Camera_ScriptSetControlPointTimerCount(CameraScriptManager* scriptMgr, s32 timersCount);
+void Camera_ScriptUpdateLocalAnchorBasisAtEye(CameraScriptManager* scriptMgr, CubicBSpline331Data* splineData);
+void Camera_ScriptUpdateLocalAnchorBasisAtEyeFov(CameraScriptManager* scriptMgr, CubicBSpline331Data* splineData);
+void Camera_ScriptUpdateLocalAnchorBasisAtEyeUpFov(CameraScriptManager* scriptMgr, CubicBSpline3331Data* splineData);
 
 #endif // FZX_CAMERA_H

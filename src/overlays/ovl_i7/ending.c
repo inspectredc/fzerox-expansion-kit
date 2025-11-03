@@ -605,7 +605,7 @@ Gfx* EndingCutscene_Draw(Gfx* gfx) {
     gSPPerspNormalize(gfx++, gCameras[0].perspectiveScale);
     gSPMatrix(gfx++, D_1000000.unk_1A208, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
 
-    gfx = func_80713E38(gfx, SCISSOR_BOX_FULL_SCREEN, 0);
+    gfx = Camera_Draw(gfx, SCISSOR_BOX_FULL_SCREEN, 0);
     gfx = func_80727F54(gfx, 0);
     gfx = func_i7_800969B8(gfx);
     return func_i7_80093A18(gfx);

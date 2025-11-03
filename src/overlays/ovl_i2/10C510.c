@@ -181,50 +181,50 @@ Gfx* Race_Draw(Gfx* gfx) {
         case 1:
             gSPPerspNormalize(gfx++, gCameras[0].perspectiveScale);
             gSPMatrix(gfx++, &D_1000000.unk_1A208[0], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
-            gfx = func_80713E38(gfx, SCISSOR_BOX_FULL_SCREEN, 0);
+            gfx = Camera_Draw(gfx, SCISSOR_BOX_FULL_SCREEN, 0);
             gfx = func_80727F54(gfx, 0);
             gfx = func_i3_80057D90(gfx, 0);
             break;
         case 2:
             gSPPerspNormalize(gfx++, gCameras[0].perspectiveScale);
             gSPMatrix(gfx++, &D_1000000.unk_1A208[0], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
-            gfx = func_80713E38(gfx, SCISSOR_BOX_TOP_HALF, 0);
+            gfx = Camera_Draw(gfx, SCISSOR_BOX_TOP_HALF, 0);
             gfx = func_80727F54(gfx, 0);
             gSPPerspNormalize(gfx++, gCameras[1].perspectiveScale);
             gSPMatrix(gfx++, &D_1000000.unk_1A208[1], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
-            gfx = func_80713E38(gfx, SCISSOR_BOX_BOTTOM_HALF, 1);
+            gfx = Camera_Draw(gfx, SCISSOR_BOX_BOTTOM_HALF, 1);
             gfx = func_80727F54(gfx, 1);
             break;
         case 3:
             gSPPerspNormalize(gfx++, gCameras[0].perspectiveScale);
             gSPMatrix(gfx++, &D_1000000.unk_1A208[0], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
-            gfx = func_80713E38(gfx, SCISSOR_BOX_TOP_LEFT_QUARTER, 0);
+            gfx = Camera_Draw(gfx, SCISSOR_BOX_TOP_LEFT_QUARTER, 0);
             gfx = func_80727F54(gfx, 0);
             gSPPerspNormalize(gfx++, gCameras[1].perspectiveScale);
             gSPMatrix(gfx++, &D_1000000.unk_1A208[1], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
-            gfx = func_80713E38(gfx, SCISSOR_BOX_BOTTOM_LEFT_QUARTER, 1);
+            gfx = Camera_Draw(gfx, SCISSOR_BOX_BOTTOM_LEFT_QUARTER, 1);
             gfx = func_80727F54(gfx, 1);
             gSPPerspNormalize(gfx++, gCameras[2].perspectiveScale);
             gSPMatrix(gfx++, &D_1000000.unk_1A208[2], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
-            gfx = func_80713E38(gfx, SCISSOR_BOX_TOP_RIGHT_QUARTER, 2);
+            gfx = Camera_Draw(gfx, SCISSOR_BOX_TOP_RIGHT_QUARTER, 2);
             gfx = func_80727F54(gfx, 2);
             break;
         case 4:
             gSPPerspNormalize(gfx++, gCameras[0].perspectiveScale);
             gSPMatrix(gfx++, &D_1000000.unk_1A208[0], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
-            gfx = func_80713E38(gfx, SCISSOR_BOX_TOP_LEFT_QUARTER, 0);
+            gfx = Camera_Draw(gfx, SCISSOR_BOX_TOP_LEFT_QUARTER, 0);
             gfx = func_80727F54(gfx, 0);
             gSPPerspNormalize(gfx++, gCameras[1].perspectiveScale);
             gSPMatrix(gfx++, &D_1000000.unk_1A208[1], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
-            gfx = func_80713E38(gfx, SCISSOR_BOX_BOTTOM_LEFT_QUARTER, 1);
+            gfx = Camera_Draw(gfx, SCISSOR_BOX_BOTTOM_LEFT_QUARTER, 1);
             gfx = func_80727F54(gfx, 1);
             gSPPerspNormalize(gfx++, gCameras[2].perspectiveScale);
             gSPMatrix(gfx++, &D_1000000.unk_1A208[2], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
-            gfx = func_80713E38(gfx, SCISSOR_BOX_TOP_RIGHT_QUARTER, 2);
+            gfx = Camera_Draw(gfx, SCISSOR_BOX_TOP_RIGHT_QUARTER, 2);
             gfx = func_80727F54(gfx, 2);
             gSPPerspNormalize(gfx++, gCameras[3].perspectiveScale);
             gSPMatrix(gfx++, &D_1000000.unk_1A208[3], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
-            gfx = func_80713E38(gfx, SCISSOR_BOX_BOTTOM_RIGHT_QUARTER, 3);
+            gfx = Camera_Draw(gfx, SCISSOR_BOX_BOTTOM_RIGHT_QUARTER, 3);
             gfx = func_80727F54(gfx, 3);
             break;
     }

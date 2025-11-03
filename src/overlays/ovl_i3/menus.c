@@ -83,7 +83,7 @@ s32 D_i3_8006D520[4];
 s32 D_i3_8006D530[4];
 s32 D_i3_8006D540;
 s32 D_8006D544;
-s32 D_8006D548;
+bool D_8006D548;
 s32 D_i3_8006D550[4];
 s32 D_i3_8006D560;
 s32 D_i3_8006D564;
@@ -1161,7 +1161,7 @@ Gfx* func_i3_80049D74(Gfx* gfx, s32 playerIndex) {
                 case 2:
                 case 3:
                     var_a1 = 0;
-                    D_8006D548 = 1;
+                    D_8006D548 = true;
                     break;
             }
             break;
@@ -1183,7 +1183,7 @@ Gfx* func_i3_80049D74(Gfx* gfx, s32 playerIndex) {
                     break;
                 case 3:
                     var_a1 = 0;
-                    D_8006D548 = 1;
+                    D_8006D548 = true;
                     break;
             }
             spA8 = spB0 - 0x14;
@@ -1339,7 +1339,7 @@ Gfx* func_i3_8004A330(Gfx* gfx, s32 playerIndex) {
                 case 2:
                 case 3:
                     var_a1 = 0;
-                    D_8006D548 = 1;
+                    D_8006D548 = true;
                     break;
             }
             break;
@@ -1361,7 +1361,7 @@ Gfx* func_i3_8004A330(Gfx* gfx, s32 playerIndex) {
                     break;
                 case 3:
                     var_a1 = 0;
-                    D_8006D548 = 1;
+                    D_8006D548 = true;
                     break;
             }
             spA8 = spB0 - 0x14;
@@ -5504,7 +5504,7 @@ Gfx* func_i3_8005823C(Gfx* gfx) {
         if ((D_807A16CC == 1) && (gTitleDemoState == TITLE_DEMO_INACTIVE)) {
             if (D_i3_8006D4E8 > 0) {
                 D_8006D544 = 1;
-                if (D_8006D548 != 0) {
+                if (D_8006D548) {
                     gfx = func_i3_DrawVsResultsScreen(gfx);
                 }
             } else {
