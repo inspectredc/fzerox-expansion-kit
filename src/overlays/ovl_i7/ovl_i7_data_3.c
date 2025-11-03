@@ -1,12 +1,6 @@
 #include "global.h"
 #include "fzx_camera.h"
 
-void func_807141C0(unk_800E5D70* arg0, CameraLocalAnchorData* arg1);
-void func_8071400C(unk_800E5D70* arg0, s32 arg1);
-void func_807150E0(unk_800E5D70* arg0, unk_80085434_arg_2* arg1);
-void func_8071523C(unk_800E5D70* arg0, unk_80085434_arg_2* arg1);
-void func_807152EC(unk_800E5D70* arg0, unk_80085494_arg_2* arg1);
-
 extern const CameraLocalAnchorData D_807765E8;
 
 f32 D_i7_80099EA0[] = { 0.0f, 0.0f, 0.0f, -25.0f, -25.0f, -25.0f };
@@ -25,15 +19,15 @@ f32 D_i7_80099F24[] = { 199.0f, 199.0f, 154.0f, 154.0f, 154.0f, 154.0f };
 
 s32 D_i7_80099F3C[] = { 160, 160, 160 };
 
-unk_struct_14 D_i7_80099F48[] = {
+CubicBSpline3fData D_i7_80099F48[] = {
     { 6, D_i7_80099EA0, D_i7_80099EB8, D_i7_80099ED0, D_i7_80099EE8 },
     { 6, D_i7_80099EF4, D_i7_80099F0C, D_i7_80099F24, D_i7_80099F3C },
 };
 
-unk_struct_C D_i7_80099F70[] = {
-    { 0, func_807141C0, &D_807765E8 },
-    { 0, func_8071400C, 4 },
-    { 480, func_807150E0, D_i7_80099F48 },
+CameraScript D_i7_80099F70[] = {
+    { 0, Camera_ScriptSetLocalAnchorData, &D_807765E8 },
+    { 0, Camera_ScriptSetControlPointTimerCount, 4 },
+    { 480, Camera_ScriptUpdateLocalAnchorBasisAtEye, D_i7_80099F48 },
     { -2, NULL, 0 },
 };
 
@@ -57,7 +51,7 @@ f32 D_i7_8009A048[] = { 60.0f, 74.0f, 74.0f, 74.0f };
 
 s32 D_i7_8009A058[] = { 300 };
 
-unk_80085434_arg_2 D_i7_8009A05C = {
+CubicBSpline331Data D_i7_8009A05C = {
     {
         { 6, D_i7_80099FA0, D_i7_80099FB8, D_i7_80099FD0, D_i7_80099FE8 },
         { 6, D_i7_80099FF4, D_i7_8009A00C, D_i7_8009A024, D_i7_8009A03C },
@@ -65,10 +59,10 @@ unk_80085434_arg_2 D_i7_8009A05C = {
     { 4, D_i7_8009A048, D_i7_8009A058 },
 };
 
-unk_struct_C D_i7_8009A090[] = {
-    { 0, func_807141C0, &D_807765E8 },
-    { 0, func_8071400C, 4 },
-    { 300, func_8071523C, &D_i7_8009A05C },
+CameraScript D_i7_8009A090[] = {
+    { 0, Camera_ScriptSetLocalAnchorData, &D_807765E8 },
+    { 0, Camera_ScriptSetControlPointTimerCount, 4 },
+    { 300, Camera_ScriptUpdateLocalAnchorBasisAtEyeFov, &D_i7_8009A05C },
     { -2, NULL, 0 },
 };
 
@@ -100,7 +94,7 @@ f32 D_i7_8009A1AC[] = { 75.0f, 75.0f, 60.0f, 60.0f, 91.4f };
 
 s32 D_i7_8009A1C0[] = { 130, 170 };
 
-unk_80085494_arg_2 D_i7_8009A1C8 = {
+CubicBSpline3331Data D_i7_8009A1C8 = {
     {
         { 6, D_i7_8009A0C0, D_i7_8009A0D8, D_i7_8009A0F0, D_i7_8009A108 },
         { 6, D_i7_8009A114, D_i7_8009A12C, D_i7_8009A144, D_i7_8009A15C },
@@ -109,9 +103,9 @@ unk_80085494_arg_2 D_i7_8009A1C8 = {
     { 5, D_i7_8009A1AC, D_i7_8009A1C0 },
 };
 
-unk_struct_C D_i7_8009A210[] = {
-    { 0, func_807141C0, &D_807765E8 },
-    { 0, func_8071400C, 4 },
-    { 300, func_807152EC, &D_i7_8009A1C8 },
+CameraScript D_i7_8009A210[] = {
+    { 0, Camera_ScriptSetLocalAnchorData, &D_807765E8 },
+    { 0, Camera_ScriptSetControlPointTimerCount, 4 },
+    { 300, Camera_ScriptUpdateLocalAnchorBasisAtEyeUpFov, &D_i7_8009A1C8 },
     { -2, 0, 0 },
 };

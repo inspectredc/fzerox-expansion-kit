@@ -283,7 +283,7 @@ void func_i3_800617A0(void) {
     f32 var_fs1;
     CourseInfo* temp_v0;
     unk_80141FF0* var_s0;
-    Camera* var_s1;
+    Camera* camera;
 
     D_i3_8006D950 = gNumPlayers;
     D_8076CE20 = false;
@@ -301,8 +301,8 @@ void func_i3_800617A0(void) {
         var_fs0 = 0.0f - var_fs0;
     }
 
-    for (var_s0 = D_i3_8006D7D0, var_s1 = gCameras, i = 0; i < D_i3_8006D950; var_s0++, var_s1++, i++) {
-        func_i3_80061B34(var_s1, var_s0, D_i3_8006D960.unk_00, var_fs1, var_fs0);
+    for (var_s0 = D_i3_8006D7D0, camera = gCameras, i = 0; i < D_i3_8006D950; var_s0++, camera++, i++) {
+        func_i3_80061B34(camera, var_s0, D_i3_8006D960.unk_00, var_fs1, var_fs0);
     }
 
     temp_v0 = &gCourseInfos[gCourseIndex];
@@ -387,7 +387,7 @@ extern GfxPool* gGfxPool;
 
 void func_i3_80061C2C(void) {
     s32 pad[3];
-    Camera* var_s2;
+    Camera* camera;
     unk_80141FF0* var_s1;
     Vtx* vtx;
     s32 i;
@@ -404,65 +404,62 @@ void func_i3_80061C2C(void) {
     f32 var_fv0;
     bool var_s3;
 
-    for (i = 0, var_s1 = D_i3_8006D7D0, var_s2 = gCameras; i < D_i3_8006D950; i++, var_s1++, var_s2++) {
+    for (i = 0, var_s1 = D_i3_8006D7D0, camera = gCameras; i < D_i3_8006D950; i++, var_s1++, camera++) {
 
-        var_s1->unk_00 = var_s2->eye.x + (var_s2->unk_80 * D_i3_8006BDC8);
-        var_s1->unk_08 = var_s2->eye.z + (var_s2->unk_84 * D_i3_8006BDC8);
-        temp_v0 = Math_Round(var_s2->fov * 5.688889f);
+        var_s1->unk_00 = camera->eye.x + (camera->unk_80 * D_i3_8006BDC8);
+        var_s1->unk_08 = camera->eye.z + (camera->unk_84 * D_i3_8006BDC8);
+        temp_v0 = Math_Round(camera->fov * 5.688889f);
         temp_fa0 = TAN(temp_v0);
 
         var_s1->unk_0C = (var_s1->unk_10 + D_i3_8006BDC8) * temp_fa0 * 1.5f;
         var_s1->unk_14 = var_s1->unk_0C * var_s1->unk_5C;
 
-        temp2 = var_s2->unk_80;
-        temp = var_s2->unk_84;
+        temp2 = camera->unk_80;
+        temp = camera->unk_84;
         temp_fs3 = var_s1->unk_10 * temp2;
         temp_fs4 = var_s1->unk_10 * temp;
         temp_fs1 = var_s1->unk_0C * temp;
         temp_fs2 = var_s1->unk_0C * (0.0f - temp2);
 
         vtx = &gGfxPool->unk_33B48[i * 28 + 2 * 4];
-        func_i3_80062034(vtx, var_s1, var_s2, temp_fa0);
+        func_i3_80062034(vtx, var_s1, camera, temp_fa0);
 
         vtx = &gGfxPool->unk_33B48[i * 28 + 0 * 4];
-        func_i3_80062694(vtx, var_s1, var_s2, temp_fs3, temp_fs4, 0.0f, 0.0f, temp_fs1, temp_fs2, 255, 0);
+        func_i3_80062694(vtx, var_s1, camera, temp_fs3, temp_fs4, 0.0f, 0.0f, temp_fs1, temp_fs2, 255, 0);
 
         vtx = &gGfxPool->unk_33B48[i * 28 + 1 * 4];
-        func_i3_80062694(vtx, var_s1, var_s2, 0.0f, 0.0f, 0.0f - temp_fs3, 0.0f - temp_fs4, temp_fs1, temp_fs2, 0, 255);
+        func_i3_80062694(vtx, var_s1, camera, 0.0f, 0.0f, 0.0f - temp_fs3, 0.0f - temp_fs4, temp_fs1, temp_fs2, 0, 255);
 
         if (D_i3_8006D96C > 0) {
-            temp_fv1 = (var_s1->unk_04 + var_s1->unk_3C.unk_04) - var_s2->eye.y;
-            if (temp_fv1 != 0.0f) {
-                if (temp_fv1 >= 0.f) {
-                    var_fv0 = temp_fv1;
-                } else {
-                    var_fv0 = -temp_fv1;
-                }
-                var_fv0 /= 100.0f;
-                if (var_fv0 > 1.0f) {
-                    var_fv0 = 1.0f;
-                }
-                if (temp_fv1 > 0.0f) {
-                    var_s3 = true;
-                } else {
-                    var_s3 = false;
-                }
-
-                vtx = &gGfxPool->unk_33B48[i * 28 + 3 * 4];
-                func_i3_80062C84(vtx, var_s1, var_s2, &var_s1->unk_3C, temp_fs3, temp_fs4, 0.0f, 0.0f, temp_fs1,
-                                 temp_fs2, 255, ((1.0f - var_fv0) * 255.0f), var_s3);
-
-                vtx = &gGfxPool->unk_33B48[i * 28 + 4 * 4];
-                func_i3_80062C84(vtx, var_s1, var_s2, &var_s1->unk_3C, 0.0f, 0.0f, 0.0f - temp_fs3, 0.0f - temp_fs4,
-                                 temp_fs1, temp_fs2, ((1.0f - var_fv0) * 255.0f), 255, var_s3);
-
-                goto block_12;
+            temp_fv1 = (var_s1->unk_04 + var_s1->unk_3C.unk_04) - camera->eye.y;
+            if (temp_fv1 == 0.0f) {
+                continue;
             }
-        } else {
-        block_12:
-            if (D_i3_8006D968 & 1) {
-                func_i3_80064AD4(i, var_s1, var_s2);
+            if (temp_fv1 >= 0.f) {
+                var_fv0 = temp_fv1;
+            } else {
+                var_fv0 = -temp_fv1;
             }
+            var_fv0 /= 100.0f;
+            if (var_fv0 > 1.0f) {
+                var_fv0 = 1.0f;
+            }
+            if (temp_fv1 > 0.0f) {
+                var_s3 = true;
+            } else {
+                var_s3 = false;
+            }
+
+            vtx = &gGfxPool->unk_33B48[i * 28 + 3 * 4];
+            func_i3_80062C84(vtx, var_s1, camera, &var_s1->unk_3C, temp_fs3, temp_fs4, 0.0f, 0.0f, temp_fs1, temp_fs2,
+                             255, ((1.0f - var_fv0) * 255.0f), var_s3);
+
+            vtx = &gGfxPool->unk_33B48[i * 28 + 4 * 4];
+            func_i3_80062C84(vtx, var_s1, camera, &var_s1->unk_3C, 0.0f, 0.0f, 0.0f - temp_fs3, 0.0f - temp_fs4,
+                             temp_fs1, temp_fs2, ((1.0f - var_fv0) * 255.0f), 255, var_s3);
+        }
+        if (D_i3_8006D968 & 1) {
+            func_i3_80064AD4(i, var_s1, camera);
         }
     }
     if (D_i3_8006D956 != 0) {
@@ -802,7 +799,7 @@ Gfx* func_i3_8006339C(Gfx* gfx, s32 playerIndex, s32 arg2) {
 
     gSPMatrix(gfx++, &D_1000000.unk_1A208[playerIndex], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
 
-    gfx = func_80713E38(gfx, arg2, playerIndex);
+    gfx = Camera_Draw(gfx, arg2, playerIndex);
     gSPDisplayList(gfx++, D_303A9E0);
 
     if (D_i3_8006D954 != 0) {

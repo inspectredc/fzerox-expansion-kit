@@ -5,9 +5,9 @@
 #include "fzx_camera.h"
 
 Camera gCameras[4];
-CameraSettings gCameraSettings[4];
-unk_800E5D70 D_807A1480[4];
-unk_struct_20_2 D_807A1510[4];
+CameraSettings sCameraSettings[4];
+CameraScriptManager sCameraScriptMgrs[4];
+SplineControlPointTimers sSplineControlPointTimers[4];
 s32 sNumCameras;
 s32 D_807A1594;
 s16 sCameraEndingFocusRacer;
@@ -95,14 +95,14 @@ const CameraOrbitData D_8077699C = {
       0.0f, 1000.0f, 1000.0f, 1.0f, 35.0f, 35.0f, 1.0f, 180.0f, 180.0f, 1.0f },
 };
 
-const unk_80776A48 D_80776A48[] = {
+const CameraRaceSettingInfo D_80776A48[] = {
     { 80.0f, 400.0f, 50.0f },
     { 75.0f, 90.0f, 25.0f },
     { 75.0f, 120.0f, 35.0f },
     { 100.0f, 120.0f, 50.0f },
 };
 
-const unk_80776A48 D_80776A78[] = {
+const CameraRaceSettingInfo D_80776A78[] = {
     { 100.0f, 400.0f, 50.0f },
     { 90.0f, 100.0f, 25.0f },
     { 100.0f, 120.0f, 35.0f },
@@ -125,7 +125,7 @@ const CameraFollowSmoothData D_80776B9C = {
       0.0f, 400.0f, 400.0f, 0.2f, 50.0f, 50.0f, 0.2f, 0.0f, 0.0f, 1.0f, 0.0f, 300.0f, 0 },
 };
 
-s32 D_8076D6C0 = -1;
+s32 sMultiplayerFocusCameraId = -1;
 s32 D_8076D6C4 = 1;
 
 unk_8076D6C8 D_8076D6C8 = {
@@ -491,117 +491,119 @@ void Camera_SettingsUpdate(CameraSettings* cameraSettings, Camera* camera) {
     Camera_SettingsUpdateCommon(cameraSettings);
 }
 
-void func_80712B34(CameraSettings* cameraSettings, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32* arg4) {
+void Camera_ScriptUpdateAtEyeTargets(CameraSettings* cameraSettings, Vec3f* at, Vec3f* eye, Vec3f* up, f32* fov) {
     CameraParameters* params = &cameraSettings->parameters;
     CameraTypeAtEye* atEye = &cameraSettings->atEye;
 
-    if (arg1 != NULL) {
-        atEye->targetAt.x = arg1->x;
-        atEye->targetAt.y = arg1->y;
-        atEye->targetAt.z = arg1->z;
+    if (at != NULL) {
+        atEye->targetAt.x = at->x;
+        atEye->targetAt.y = at->y;
+        atEye->targetAt.z = at->z;
     }
-    if (arg2 != NULL) {
-        atEye->targetEye.x = arg2->x;
-        atEye->targetEye.y = arg2->y;
-        atEye->targetEye.z = arg2->z;
+    if (eye != NULL) {
+        atEye->targetEye.x = eye->x;
+        atEye->targetEye.y = eye->y;
+        atEye->targetEye.z = eye->z;
     }
-    if (arg3 != NULL) {
-        params->targetUp.x = arg3->x;
-        params->targetUp.y = arg3->y;
-        params->targetUp.z = arg3->z;
+    if (up != NULL) {
+        params->targetUp.x = up->x;
+        params->targetUp.y = up->y;
+        params->targetUp.z = up->z;
     }
-    if (arg4 != NULL) {
-        params->targetFov = *arg4;
+    if (fov != NULL) {
+        params->targetFov = *fov;
     }
 }
 
-void func_80712BBC(CameraSettings* cameraSettings, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32* arg4) {
+void Camera_ScriptUpdateOrbitTargets(CameraSettings* cameraSettings, Vec3f* anchorPos, Vec3f* distanceYawPitch,
+                                     Vec3f* up, f32* fov) {
     CameraParameters* params = &cameraSettings->parameters;
     CameraTypeOrbit* orbit = &cameraSettings->orbit;
 
-    if (arg1 != NULL) {
-        orbit->anchorPos.x = arg1->x;
-        orbit->anchorPos.y = arg1->y;
-        orbit->anchorPos.z = arg1->z;
+    if (anchorPos != NULL) {
+        orbit->anchorPos.x = anchorPos->x;
+        orbit->anchorPos.y = anchorPos->y;
+        orbit->anchorPos.z = anchorPos->z;
     }
-    if (arg2 != NULL) {
-        orbit->targetDistance = arg2->v[0];
-        orbit->targetYaw = arg2->v[1];
-        orbit->targetPitch = arg2->v[2];
+    if (distanceYawPitch != NULL) {
+        orbit->targetDistance = distanceYawPitch->v[0];
+        orbit->targetYaw = distanceYawPitch->v[1];
+        orbit->targetPitch = distanceYawPitch->v[2];
     }
-    if (arg3 != NULL) {
-        params->targetUp.x = arg3->x;
-        params->targetUp.y = arg3->y;
-        params->targetUp.z = arg3->z;
+    if (up != NULL) {
+        params->targetUp.x = up->x;
+        params->targetUp.y = up->y;
+        params->targetUp.z = up->z;
     }
-    if (arg4 != NULL) {
-        params->targetFov = *arg4;
+    if (fov != NULL) {
+        params->targetFov = *fov;
     }
 }
 
-void func_80712C44(CameraSettings* cameraSettings, Vec3f* arg1, Mtx3F* arg2, Vec3f* arg3, Vec3f* arg4, Vec3f* arg5,
-                   f32* arg6) {
+void Camera_ScriptUpdateLocalAnchorTargets(CameraSettings* cameraSettings, Vec3f* anchorPoint, Mtx3F* basis,
+                                           Vec3f* localAt, Vec3f* localEye, Vec3f* up, f32* fov) {
     CameraParameters* params = &cameraSettings->parameters;
     CameraTypeLocalAnchor* localAnchor = &cameraSettings->localAnchor;
 
-    if (arg1 != NULL) {
-        localAnchor->anchorPoint.x = arg1->x;
-        localAnchor->anchorPoint.y = arg1->y;
-        localAnchor->anchorPoint.z = arg1->z;
+    if (anchorPoint != NULL) {
+        localAnchor->anchorPoint.x = anchorPoint->x;
+        localAnchor->anchorPoint.y = anchorPoint->y;
+        localAnchor->anchorPoint.z = anchorPoint->z;
     }
-    if (arg2 != NULL) {
-        localAnchor->basis.x.x += arg2->x.x * 0.2f;
-        localAnchor->basis.x.y += arg2->x.y * 0.2f;
-        localAnchor->basis.x.z += arg2->x.z * 0.2f;
-        localAnchor->basis.y.x += arg2->y.x * 0.2f;
-        localAnchor->basis.y.y += arg2->y.y * 0.2f;
-        localAnchor->basis.y.z += arg2->y.z * 0.2f;
-        localAnchor->basis.z.x += arg2->z.x * 0.2f;
-        localAnchor->basis.z.y += arg2->z.y * 0.2f;
-        localAnchor->basis.z.z += arg2->z.z * 0.2f;
+    if (basis != NULL) {
+        localAnchor->basis.x.x += basis->x.x * 0.2f;
+        localAnchor->basis.x.y += basis->x.y * 0.2f;
+        localAnchor->basis.x.z += basis->x.z * 0.2f;
+        localAnchor->basis.y.x += basis->y.x * 0.2f;
+        localAnchor->basis.y.y += basis->y.y * 0.2f;
+        localAnchor->basis.y.z += basis->y.z * 0.2f;
+        localAnchor->basis.z.x += basis->z.x * 0.2f;
+        localAnchor->basis.z.y += basis->z.y * 0.2f;
+        localAnchor->basis.z.z += basis->z.z * 0.2f;
         Math_OrthonormalizeAroundForward(&localAnchor->basis);
     }
-    if (arg3 != NULL) {
-        localAnchor->targetLocalAt.x = arg3->x;
-        localAnchor->targetLocalAt.y = arg3->y;
-        localAnchor->targetLocalAt.z = arg3->z;
+    if (localAt != NULL) {
+        localAnchor->targetLocalAt.x = localAt->x;
+        localAnchor->targetLocalAt.y = localAt->y;
+        localAnchor->targetLocalAt.z = localAt->z;
     }
-    if (arg4 != NULL) {
-        localAnchor->targetLocalEye.x = arg4->x;
-        localAnchor->targetLocalEye.y = arg4->y;
-        localAnchor->targetLocalEye.z = arg4->z;
+    if (localEye != NULL) {
+        localAnchor->targetLocalEye.x = localEye->x;
+        localAnchor->targetLocalEye.y = localEye->y;
+        localAnchor->targetLocalEye.z = localEye->z;
     }
-    if (arg5 != NULL) {
-        params->targetUp.x = arg5->x;
-        params->targetUp.y = arg5->y;
-        params->targetUp.z = arg5->z;
+    if (up != NULL) {
+        params->targetUp.x = up->x;
+        params->targetUp.y = up->y;
+        params->targetUp.z = up->z;
     }
-    if (arg6 != NULL) {
-        params->targetFov = *arg6;
+    if (fov != NULL) {
+        params->targetFov = *fov;
     }
 }
 
-void func_80712DE0(CameraSettings* cameraSettings, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32* arg4) {
+void Camera_ScriptUpdateFollowSmoothTargets(CameraSettings* cameraSettings, Vec3f* center, Vec3f* distanceYawPitch,
+                                            Vec3f* up, f32* fov) {
     CameraParameters* params = &cameraSettings->parameters;
     CameraTypeFollowSmooth* followSmooth = &cameraSettings->followSmooth;
 
-    if (arg1 != NULL) {
-        followSmooth->centerPos.x = arg1->x;
-        followSmooth->centerPos.y = arg1->y;
-        followSmooth->centerPos.z = arg1->z;
+    if (center != NULL) {
+        followSmooth->centerPos.x = center->x;
+        followSmooth->centerPos.y = center->y;
+        followSmooth->centerPos.z = center->z;
     }
-    if (arg2 != NULL) {
-        followSmooth->targetDistance = arg2->v[0];
-        followSmooth->targetYaw = arg2->v[1];
-        followSmooth->targetPitch = arg2->v[2];
+    if (distanceYawPitch != NULL) {
+        followSmooth->targetDistance = distanceYawPitch->v[0];
+        followSmooth->targetYaw = distanceYawPitch->v[1];
+        followSmooth->targetPitch = distanceYawPitch->v[2];
     }
-    if (arg3 != NULL) {
-        params->targetUp.x = arg3->x;
-        params->targetUp.y = arg3->y;
-        params->targetUp.z = arg3->z;
+    if (up != NULL) {
+        params->targetUp.x = up->x;
+        params->targetUp.y = up->y;
+        params->targetUp.z = up->z;
     }
-    if (arg4 != NULL) {
-        params->targetFov = *arg4;
+    if (fov != NULL) {
+        params->targetFov = *fov;
     }
 }
 
@@ -646,7 +648,7 @@ Mtx3F* func_80712FE4(Mtx3F* basis, CourseSegment* segment, f32 t) {
 }
 
 void Camera_RaceSettingChanged(Camera* camera, CameraParameters* arg1, CameraTypeFollowSmooth* arg2, s32 numPlayers) {
-    unk_80776A48* var_v0;
+    CameraRaceSettingInfo* var_v0;
 
     if (numPlayers == 2) {
         var_v0 = &D_80776A78[camera->raceSetting];
@@ -669,17 +671,17 @@ void Camera_RaceSettingChanged(Camera* camera, CameraParameters* arg1, CameraTyp
     }
 }
 
-void func_807130F8(Camera* camera, CameraSettings* arg1) {
+void Camera_UpdateFromSettings(Camera* camera, CameraSettings* cameraSettings) {
 
-    camera->eye = arg1->parameters.eye;
-    camera->at = arg1->parameters.at;
+    camera->eye = cameraSettings->parameters.eye;
+    camera->at = cameraSettings->parameters.at;
 
-    camera->basis.y.x = arg1->parameters.up.x;
-    camera->basis.y.y = arg1->parameters.up.y;
-    camera->basis.y.z = arg1->parameters.up.z;
-    camera->fov = arg1->parameters.fov;
-    camera->frustrumCenterX = arg1->parameters.frustrumCenterX;
-    camera->frustrumCenterY = arg1->parameters.frustrumCenterY;
+    camera->basis.y.x = cameraSettings->parameters.up.x;
+    camera->basis.y.y = cameraSettings->parameters.up.y;
+    camera->basis.y.z = cameraSettings->parameters.up.z;
+    camera->fov = cameraSettings->parameters.fov;
+    camera->frustrumCenterX = cameraSettings->parameters.frustrumCenterX;
+    camera->frustrumCenterY = cameraSettings->parameters.frustrumCenterY;
 }
 
 void func_8071315C(Camera* camera) {
@@ -789,23 +791,23 @@ void Camera_UpdateProjectionViewMtx(GfxPool* gfxPool, Camera* camera) {
 
 extern s32 gNearestRacer;
 
-void func_8071370C(Camera* camera) {
+void Camera_UpdateEnemyEnginePan(Camera* camera) {
     Racer* racer;
     f32 var_fv1;
     f32 var_fa0;
-    f32 sp20;
-    f32 sp1C;
-    f32 sp18;
+    f32 x;
+    f32 y;
+    f32 z;
 
     racer = &gRacers[gNearestRacer];
-    sp20 = racer->segmentPositionInfo.pos.x - camera->eye.x;
-    sp1C = racer->segmentPositionInfo.pos.y - camera->eye.y;
-    sp18 = racer->segmentPositionInfo.pos.z - camera->eye.z;
+    x = racer->segmentPositionInfo.pos.x - camera->eye.x;
+    y = racer->segmentPositionInfo.pos.y - camera->eye.y;
+    z = racer->segmentPositionInfo.pos.z - camera->eye.z;
 
-    var_fv1 = sqrtf(SQ(sp20) + SQ(sp1C) + SQ(sp18));
+    var_fv1 = sqrtf(SQ(x) + SQ(y) + SQ(z));
 
     if (var_fv1 != 0.0f) {
-        var_fa0 = -((camera->basis.z.x * sp20) + (sp1C * camera->basis.z.y) + (sp18 * camera->basis.z.z)) / var_fv1;
+        var_fa0 = -((camera->basis.z.x * x) + (y * camera->basis.z.y) + (z * camera->basis.z.z)) / var_fv1;
         var_fv1 *= var_fa0;
     }
     if ((var_fv1 >= -1000.0f) && (var_fv1 <= 1000.0f)) {
@@ -939,11 +941,11 @@ extern s32 gGameMode;
 extern GfxPool D_1000000;
 extern Camera gCameras[];
 
-Gfx* func_80713E38(Gfx* gfx, s32 scissorBoxType, s32 playerIndex) {
+Gfx* Camera_Draw(Gfx* gfx, s32 scissorBoxType, s32 playerIndex) {
     Camera* camera = &gCameras[playerIndex];
 
     switch (camera->vpTransitionState) {
-        case 1:
+        case CAMERA_VP_TRANSITION_ACTIVE:
             gSPViewport(gfx++, &D_1000000.unk_362C8[playerIndex]);
             gDPSetScissor(gfx++, G_SC_NON_INTERLACE, camera->currentScissorLeft, camera->currentScissorTop,
                           camera->currentScissorRight, camera->currentScissorBottom);
@@ -959,692 +961,724 @@ Gfx* func_80713E38(Gfx* gfx, s32 scissorBoxType, s32 playerIndex) {
     return gfx;
 }
 
-void func_80713F8C(s32 cameraId, f32 distance, f32 pitch, f32 yaw) {
+void Camera_SettingsFollowSmoothSetDistancePitchYaw(s32 cameraId, f32 distance, f32 pitch, f32 yaw) {
 
-    gCameraSettings[cameraId].followSmooth.distance = gCameraSettings[cameraId].followSmooth.targetDistance = distance;
-    gCameraSettings[cameraId].followSmooth.pitch = gCameraSettings[cameraId].followSmooth.targetPitch = pitch;
-    gCameraSettings[cameraId].followSmooth.yaw = gCameraSettings[cameraId].followSmooth.targetYaw = yaw;
+    sCameraSettings[cameraId].followSmooth.distance = sCameraSettings[cameraId].followSmooth.targetDistance = distance;
+    sCameraSettings[cameraId].followSmooth.pitch = sCameraSettings[cameraId].followSmooth.targetPitch = pitch;
+    sCameraSettings[cameraId].followSmooth.yaw = sCameraSettings[cameraId].followSmooth.targetYaw = yaw;
 }
 
-void func_80713FD4(unk_800E5D70* arg0, CameraSettings* cameraSettings) {
-    arg0->unk_00 = cameraSettings;
+void Camera_ScriptSetSettings(CameraScriptManager* scriptMgr, CameraSettings* cameraSettings) {
+    scriptMgr->settings = cameraSettings;
 }
 
-void func_80713FDC(unk_800E5D70* arg0, unk_struct_20_2* arg1) {
-    arg0->unk_0C = arg1;
+void Camera_ScriptSetControlPointTimers(CameraScriptManager* scriptMgr, SplineControlPointTimers* timers) {
+    scriptMgr->controlPointTimers = timers;
 }
 
-void func_80713FE4(unk_800E5D70* arg0, Vec3f* focusPos, Mtx3F* basis, Racer* racer) {
-    arg0->focusPos = focusPos;
-    arg0->basis = basis;
-    arg0->racer = racer;
+void func_80713FE4(CameraScriptManager* scriptMgr, Vec3f* focusPos, Mtx3F* basis, Racer* racer) {
+    scriptMgr->focusPos = focusPos;
+    scriptMgr->basis = basis;
+    scriptMgr->racer = racer;
 }
 
-void func_80713FF4(unk_800E5D70* arg0, Vec3f* arg1, Mtx3F* arg2) {
-    arg0->unk_1C = arg1;
-    arg0->unk_20 = arg2;
+void func_80713FF4(CameraScriptManager* scriptMgr, Vec3f* eyeAnchorPoint, Mtx3F* eyeBasis) {
+    scriptMgr->eyeAnchorPoint = eyeAnchorPoint;
+    scriptMgr->eyeBasis = eyeBasis;
 }
 
-void func_80714000(unk_800E5D70* arg0, unk_struct_C* arg1) {
-    arg0->unk_04 = arg1;
-    arg0->unk_08 = 0;
+void Camera_ScriptSetScript(CameraScriptManager* scriptMgr, CameraScript* script) {
+    scriptMgr->script = script;
+    scriptMgr->timer = 0;
 }
 
-void func_8071400C(unk_800E5D70* arg0, s32 arg1) {
-    func_80715768(arg0->unk_0C, arg1);
+void Camera_ScriptSetControlPointTimerCount(CameraScriptManager* scriptMgr, s32 timersCount) {
+    Camera_ScriptInitControlPointTimers(scriptMgr->controlPointTimers, timersCount);
 }
 
-void func_8071402C(unk_800E5D70* arg0, f32* arg1) {
-    arg0->unk_00->parameters.targetFrustrumCenterY = *arg1;
+void Camera_ScriptSetFrustrumCenterY(CameraScriptManager* scriptMgr, f32* frustrumCenterY) {
+    scriptMgr->settings->parameters.targetFrustrumCenterY = *frustrumCenterY;
 }
 
-bool func_8071403C(unk_800E5D70* arg0) {
-    bool ret;
-    unk_struct_C* var_s0;
+bool Camera_ScriptUpdate(CameraScriptManager* scriptMgr) {
+    bool completedScript;
+    CameraScript* script;
 
     while (true) {
-        ret = false;
-        var_s0 = arg0->unk_04;
-        if (var_s0 == NULL) {
+        completedScript = false;
+        script = scriptMgr->script;
+        if (script == NULL) {
             return true;
         }
 
-        if (var_s0->unk_04 != NULL) {
-            ((void (*)(unk_800E5D70*, void*)) var_s0->unk_04)(arg0, var_s0->unk_08);
+        if (script->updateFunc != NULL) {
+            ((void (*)(CameraScriptManager*, void*)) script->updateFunc)(scriptMgr, script->updateData);
         }
-        switch (var_s0->unk_00) {
-            case 0:
-                arg0->unk_04++;
+        switch (script->time) {
+            case CAMERA_SCRIPT_NEXT:
+                scriptMgr->script++;
                 continue;
-            case -1:
-                arg0->unk_08 = 0;
-                var_s0 = NULL;
-                ret = true;
+            case CAMERA_SCRIPT_CLEAR:
+                scriptMgr->timer = 0;
+                script = NULL;
+                completedScript = true;
                 break;
-            case -2:
-                arg0->unk_08++;
-                ret = true;
+            case CAMERA_SCRIPT_BREAK:
+                scriptMgr->timer++;
+                completedScript = true;
                 break;
             default:
-                if (++arg0->unk_08 >= var_s0->unk_00) {
-                    var_s0++;
-                    arg0->unk_08 = 0;
+                if (++scriptMgr->timer >= script->time) {
+                    script++;
+                    scriptMgr->timer = 0;
                 }
                 break;
         }
         break;
     }
 
-    arg0->unk_04 = var_s0;
-    return ret;
+    scriptMgr->script = script;
+    return completedScript;
 }
 
-void func_80714130(unk_800E5D70* arg0, CameraAtEyeData* arg1) {
-    Camera_SettingsSetAtEyeWithParameters(arg0->unk_00, arg1);
+void Camera_ScriptSetAtEyeData(CameraScriptManager* scriptMgr, CameraAtEyeData* atEyeData) {
+    Camera_SettingsSetAtEyeWithParameters(scriptMgr->settings, atEyeData);
 }
 
-void func_80714150(unk_800E5D70* arg0, CameraOrbitData* arg1) {
-    Camera_SettingsSetOrbitWithParameters(arg0->unk_00, CAMERA_TYPE_ORBIT_AT, arg1);
+void Camera_ScriptSetOrbitAtData(CameraScriptManager* scriptMgr, CameraOrbitData* orbitData) {
+    Camera_SettingsSetOrbitWithParameters(scriptMgr->settings, CAMERA_TYPE_ORBIT_AT, orbitData);
 }
 
-void func_80714178(unk_800E5D70* arg0, CameraOrbitData* arg1) {
-    Camera_SettingsSetOrbitWithParameters(arg0->unk_00, CAMERA_TYPE_ORBIT_EYE, arg1);
+void Camera_ScriptSetOrbitEyeData(CameraScriptManager* scriptMgr, CameraOrbitData* orbitData) {
+    Camera_SettingsSetOrbitWithParameters(scriptMgr->settings, CAMERA_TYPE_ORBIT_EYE, orbitData);
 }
 
-void func_807141A0(unk_800E5D70* arg0, CameraFollowSmoothData* arg1) {
-    Camera_SettingsSetFollowSmoothWithParameters(arg0->unk_00, arg1);
+void Camera_ScriptSetFollowSmoothData(CameraScriptManager* scriptMgr, CameraFollowSmoothData* followSmoothData) {
+    Camera_SettingsSetFollowSmoothWithParameters(scriptMgr->settings, followSmoothData);
 }
 
-void func_807141C0(unk_800E5D70* arg0, CameraLocalAnchorData* arg1) {
-    Camera_SettingsSetLocalAnchorWithParameters(arg0->unk_00, arg1);
+void Camera_ScriptSetLocalAnchorData(CameraScriptManager* scriptMgr, CameraLocalAnchorData* localAnchorData) {
+    Camera_SettingsSetLocalAnchorWithParameters(scriptMgr->settings, localAnchorData);
 }
 
-void func_80083754(unk_800E5D70* arg0, unk_struct_14* arg1) {
-    Vec3f sp38[2];
-    Vec3f sp2C;
+void Camera_ScriptUpdateAtEyeFocusAtEye(CameraScriptManager* scriptMgr, CubicBSpline3fData* splineData) {
+    Vec3f interpData[2];
+    Vec3f at;
 
-    func_80715E1C(sp38, arg0->unk_0C, arg1);
-    sp2C.x = sp38[0].x + arg0->focusPos->x;
-    sp2C.y = sp38[0].y + arg0->focusPos->y;
-    sp2C.z = sp38[0].z + arg0->focusPos->z;
-    func_80712B34(arg0->unk_00, &sp2C, &sp38[1], NULL, NULL);
+    Camera_UpdateInterpolateBSpline33f(interpData, scriptMgr->controlPointTimers, splineData);
+    at.x = interpData[0].x + scriptMgr->focusPos->x;
+    at.y = interpData[0].y + scriptMgr->focusPos->y;
+    at.z = interpData[0].z + scriptMgr->focusPos->z;
+    Camera_ScriptUpdateAtEyeTargets(scriptMgr->settings, &at, &interpData[1], NULL, NULL);
 }
 
-void func_80714268(unk_800E5D70* arg0, unk_struct_14* arg1) {
-    Vec3f sp34[3];
-    Vec3f sp28;
+void Camera_ScriptUpdateAtEyeFocusAtEyeUp(CameraScriptManager* scriptMgr, CubicBSpline3fData* splineData) {
+    Vec3f interpData[3];
+    Vec3f at;
 
-    func_80715E60(sp34, arg0->unk_0C, arg1);
-    sp28.x = sp34[0].x + arg0->focusPos->x;
-    sp28.y = sp34[0].y + arg0->focusPos->y;
-    sp28.z = sp34[0].z + arg0->focusPos->z;
-    func_80712B34(arg0->unk_00, &sp28, &sp34[1], &sp34[2], NULL);
+    Camera_UpdateInterpolateBSpline333f(interpData, scriptMgr->controlPointTimers, splineData);
+    at.x = interpData[0].x + scriptMgr->focusPos->x;
+    at.y = interpData[0].y + scriptMgr->focusPos->y;
+    at.z = interpData[0].z + scriptMgr->focusPos->z;
+    Camera_ScriptUpdateAtEyeTargets(scriptMgr->settings, &at, &interpData[1], &interpData[2], NULL);
 }
 
-void func_807142F0(unk_800E5D70* arg0, unk_80085434_arg_2* arg1) {
-    unk_80085434_arg_0 sp34;
-    Vec3f sp28;
+void Camera_ScriptUpdateAtEyeFocusAtEyeFov(CameraScriptManager* scriptMgr, CubicBSpline331Data* splineData) {
+    InterpolateOut331Data interpData;
+    Vec3f at;
 
-    func_80715EC0(&sp34, arg0->unk_0C, arg1);
-    sp28.x = sp34.unk_00[0].x + arg0->focusPos->x;
-    sp28.y = sp34.unk_00[0].y + arg0->focusPos->y;
-    sp28.z = sp34.unk_00[0].z + arg0->focusPos->z;
-    func_80712B34(arg0->unk_00, &sp28, &sp34.unk_00[1], NULL, &sp34.unk_18);
+    Camera_UpdateInterpolateBSpline331f(&interpData, scriptMgr->controlPointTimers, splineData);
+    at.x = interpData.vecData[0].x + scriptMgr->focusPos->x;
+    at.y = interpData.vecData[0].y + scriptMgr->focusPos->y;
+    at.z = interpData.vecData[0].z + scriptMgr->focusPos->z;
+    Camera_ScriptUpdateAtEyeTargets(scriptMgr->settings, &at, &interpData.vecData[1], NULL, &interpData.floatData);
 }
 
-void func_8071437C(unk_800E5D70* arg0, unk_80085494_arg_2* arg1) {
-    unk_80085494_arg_0 sp38;
-    Vec3f sp2C;
+void Camera_ScriptUpdateAtEyeFocusAtEyeUpFov(CameraScriptManager* scriptMgr, CubicBSpline3331Data* splineData) {
+    InterpolateOut3331Data interpData;
+    Vec3f at;
 
-    func_80715F20(&sp38, arg0->unk_0C, arg1);
-    sp2C.x = sp38.unk_00[0].x + arg0->focusPos->x;
-    sp2C.y = sp38.unk_00[0].y + arg0->focusPos->y;
-    sp2C.z = sp38.unk_00[0].z + arg0->focusPos->z;
-    func_80712B34(arg0->unk_00, &sp2C, &sp38.unk_00[1], &sp38.unk_00[2], &sp38.unk_24);
+    Camera_UpdateInterpolateBSpline3331f(&interpData, scriptMgr->controlPointTimers, splineData);
+    at.x = interpData.vecData[0].x + scriptMgr->focusPos->x;
+    at.y = interpData.vecData[0].y + scriptMgr->focusPos->y;
+    at.z = interpData.vecData[0].z + scriptMgr->focusPos->z;
+    Camera_ScriptUpdateAtEyeTargets(scriptMgr->settings, &at, &interpData.vecData[1], &interpData.vecData[2],
+                                    &interpData.floatData);
 }
 
-void func_80714408(unk_800E5D70* arg0, unk_struct_14* arg1) {
-    Vec3f sp48[2];
-    Vec3f sp3C;
-    Vec3f sp30;
+void Camera_ScriptUpdateAtEyeFocusAnchorAtEye(CameraScriptManager* scriptMgr, CubicBSpline3fData* splineData) {
+    Vec3f interpData[2];
+    Vec3f at;
+    Vec3f eye;
 
-    func_80715E1C(sp48, arg0->unk_0C, arg1);
-    sp3C.x = sp48[0].x + arg0->focusPos->x;
-    sp3C.y = sp48[0].y + arg0->focusPos->y;
-    sp3C.z = sp48[0].z + arg0->focusPos->z;
+    Camera_UpdateInterpolateBSpline33f(interpData, scriptMgr->controlPointTimers, splineData);
+    at.x = interpData[0].x + scriptMgr->focusPos->x;
+    at.y = interpData[0].y + scriptMgr->focusPos->y;
+    at.z = interpData[0].z + scriptMgr->focusPos->z;
 
-    sp30.x =
-        arg0->unk_1C->x + arg0->unk_20->x.x * sp48[1].z + arg0->unk_20->y.x * sp48[1].y + arg0->unk_20->z.x * sp48[1].x;
-    sp30.y =
-        arg0->unk_1C->y + arg0->unk_20->x.y * sp48[1].z + arg0->unk_20->y.y * sp48[1].y + arg0->unk_20->z.y * sp48[1].x;
-    sp30.z =
-        arg0->unk_1C->z + arg0->unk_20->x.z * sp48[1].z + arg0->unk_20->y.z * sp48[1].y + arg0->unk_20->z.z * sp48[1].x;
-    func_80712B34(arg0->unk_00, &sp3C, &sp30, NULL, NULL);
+    eye.x = scriptMgr->eyeAnchorPoint->x + scriptMgr->eyeBasis->x.x * interpData[1].z +
+            scriptMgr->eyeBasis->y.x * interpData[1].y + scriptMgr->eyeBasis->z.x * interpData[1].x;
+    eye.y = scriptMgr->eyeAnchorPoint->y + scriptMgr->eyeBasis->x.y * interpData[1].z +
+            scriptMgr->eyeBasis->y.y * interpData[1].y + scriptMgr->eyeBasis->z.y * interpData[1].x;
+    eye.z = scriptMgr->eyeAnchorPoint->z + scriptMgr->eyeBasis->x.z * interpData[1].z +
+            scriptMgr->eyeBasis->y.z * interpData[1].y + scriptMgr->eyeBasis->z.z * interpData[1].x;
+    Camera_ScriptUpdateAtEyeTargets(scriptMgr->settings, &at, &eye, NULL, NULL);
 }
 
-void func_80714538(unk_800E5D70* arg0, unk_struct_14* arg1) {
-    Vec3f sp44[3];
-    Vec3f sp38;
-    Vec3f sp2C;
+void Camera_ScriptUpdateAtEyeFocusAnchorAtEyeUp(CameraScriptManager* scriptMgr, CubicBSpline3fData* splineData) {
+    Vec3f interpData[3];
+    Vec3f at;
+    Vec3f eye;
 
-    func_80715E60(sp44, arg0->unk_0C, arg1);
-    sp38.x = sp44[0].x + arg0->focusPos->x;
-    sp38.y = sp44[0].y + arg0->focusPos->y;
-    sp38.z = sp44[0].z + arg0->focusPos->z;
+    Camera_UpdateInterpolateBSpline333f(interpData, scriptMgr->controlPointTimers, splineData);
+    at.x = interpData[0].x + scriptMgr->focusPos->x;
+    at.y = interpData[0].y + scriptMgr->focusPos->y;
+    at.z = interpData[0].z + scriptMgr->focusPos->z;
 
-    sp2C.x =
-        arg0->unk_1C->x + arg0->unk_20->x.x * sp44[1].z + arg0->unk_20->y.x * sp44[1].y + arg0->unk_20->z.x * sp44[1].x;
-    sp2C.y =
-        arg0->unk_1C->y + arg0->unk_20->x.y * sp44[1].z + arg0->unk_20->y.y * sp44[1].y + arg0->unk_20->z.y * sp44[1].x;
-    sp2C.z =
-        arg0->unk_1C->z + arg0->unk_20->x.z * sp44[1].z + arg0->unk_20->y.z * sp44[1].y + arg0->unk_20->z.z * sp44[1].x;
-    func_80712B34(arg0->unk_00, &sp38, &sp2C, &sp44[2], NULL);
+    eye.x = scriptMgr->eyeAnchorPoint->x + scriptMgr->eyeBasis->x.x * interpData[1].z +
+            scriptMgr->eyeBasis->y.x * interpData[1].y + scriptMgr->eyeBasis->z.x * interpData[1].x;
+    eye.y = scriptMgr->eyeAnchorPoint->y + scriptMgr->eyeBasis->x.y * interpData[1].z +
+            scriptMgr->eyeBasis->y.y * interpData[1].y + scriptMgr->eyeBasis->z.y * interpData[1].x;
+    eye.z = scriptMgr->eyeAnchorPoint->z + scriptMgr->eyeBasis->x.z * interpData[1].z +
+            scriptMgr->eyeBasis->y.z * interpData[1].y + scriptMgr->eyeBasis->z.z * interpData[1].x;
+    Camera_ScriptUpdateAtEyeTargets(scriptMgr->settings, &at, &eye, &interpData[2], NULL);
 }
 
-void func_80714668(unk_800E5D70* arg0, unk_80085434_arg_2* arg1) {
-    unk_80085434_arg_0 sp44;
-    Vec3f sp38;
-    Vec3f sp2C;
+void Camera_ScriptUpdateAtEyeFocusAnchorAtEyeFov(CameraScriptManager* scriptMgr, CubicBSpline331Data* splineData) {
+    InterpolateOut331Data interpData;
+    Vec3f at;
+    Vec3f eye;
 
-    func_80715EC0(&sp44, arg0->unk_0C, arg1);
-    sp38.x = sp44.unk_00[0].x + arg0->focusPos->x;
-    sp38.y = sp44.unk_00[0].y + arg0->focusPos->y;
-    sp38.z = sp44.unk_00[0].z + arg0->focusPos->z;
+    Camera_UpdateInterpolateBSpline331f(&interpData, scriptMgr->controlPointTimers, splineData);
+    at.x = interpData.vecData[0].x + scriptMgr->focusPos->x;
+    at.y = interpData.vecData[0].y + scriptMgr->focusPos->y;
+    at.z = interpData.vecData[0].z + scriptMgr->focusPos->z;
 
-    sp2C.x = arg0->unk_1C->x + arg0->unk_20->x.x * sp44.unk_00[1].z + arg0->unk_20->y.x * sp44.unk_00[1].y +
-             arg0->unk_20->z.x * sp44.unk_00[1].x;
-    sp2C.y = arg0->unk_1C->y + arg0->unk_20->x.y * sp44.unk_00[1].z + arg0->unk_20->y.y * sp44.unk_00[1].y +
-             arg0->unk_20->z.y * sp44.unk_00[1].x;
-    sp2C.z = arg0->unk_1C->z + arg0->unk_20->x.z * sp44.unk_00[1].z + arg0->unk_20->y.z * sp44.unk_00[1].y +
-             arg0->unk_20->z.z * sp44.unk_00[1].x;
-    func_80712B34(arg0->unk_00, &sp38, &sp2C, NULL, &sp44.unk_18);
+    eye.x = scriptMgr->eyeAnchorPoint->x + scriptMgr->eyeBasis->x.x * interpData.vecData[1].z +
+            scriptMgr->eyeBasis->y.x * interpData.vecData[1].y + scriptMgr->eyeBasis->z.x * interpData.vecData[1].x;
+    eye.y = scriptMgr->eyeAnchorPoint->y + scriptMgr->eyeBasis->x.y * interpData.vecData[1].z +
+            scriptMgr->eyeBasis->y.y * interpData.vecData[1].y + scriptMgr->eyeBasis->z.y * interpData.vecData[1].x;
+    eye.z = scriptMgr->eyeAnchorPoint->z + scriptMgr->eyeBasis->x.z * interpData.vecData[1].z +
+            scriptMgr->eyeBasis->y.z * interpData.vecData[1].y + scriptMgr->eyeBasis->z.z * interpData.vecData[1].x;
+    Camera_ScriptUpdateAtEyeTargets(scriptMgr->settings, &at, &eye, NULL, &interpData.floatData);
 }
 
-void func_8071479C(unk_800E5D70* arg0, unk_80085494_arg_2* arg1) {
-    unk_80085494_arg_0 sp48;
-    Vec3f sp3C;
-    Vec3f sp30;
+void Camera_ScriptUpdateAtEyeFocusAnchorAtEyeUpFov(CameraScriptManager* scriptMgr, CubicBSpline3331Data* splineData) {
+    InterpolateOut3331Data interpData;
+    Vec3f at;
+    Vec3f eye;
 
-    func_80715F20(&sp48, arg0->unk_0C, arg1);
-    sp3C.x = sp48.unk_00[0].x + arg0->focusPos->x;
-    sp3C.y = sp48.unk_00[0].y + arg0->focusPos->y;
-    sp3C.z = sp48.unk_00[0].z + arg0->focusPos->z;
+    Camera_UpdateInterpolateBSpline3331f(&interpData, scriptMgr->controlPointTimers, splineData);
+    at.x = interpData.vecData[0].x + scriptMgr->focusPos->x;
+    at.y = interpData.vecData[0].y + scriptMgr->focusPos->y;
+    at.z = interpData.vecData[0].z + scriptMgr->focusPos->z;
 
-    sp30.x = arg0->unk_1C->x + arg0->unk_20->x.x * sp48.unk_00[1].z + arg0->unk_20->y.x * sp48.unk_00[1].y +
-             arg0->unk_20->z.x * sp48.unk_00[1].x;
-    sp30.y = arg0->unk_1C->y + arg0->unk_20->x.y * sp48.unk_00[1].z + arg0->unk_20->y.y * sp48.unk_00[1].y +
-             arg0->unk_20->z.y * sp48.unk_00[1].x;
-    sp30.z = arg0->unk_1C->z + arg0->unk_20->x.z * sp48.unk_00[1].z + arg0->unk_20->y.z * sp48.unk_00[1].y +
-             arg0->unk_20->z.z * sp48.unk_00[1].x;
-    func_80712B34(arg0->unk_00, &sp3C, &sp30, &sp48.unk_00[2], &sp48.unk_24);
+    eye.x = scriptMgr->eyeAnchorPoint->x + scriptMgr->eyeBasis->x.x * interpData.vecData[1].z +
+            scriptMgr->eyeBasis->y.x * interpData.vecData[1].y + scriptMgr->eyeBasis->z.x * interpData.vecData[1].x;
+    eye.y = scriptMgr->eyeAnchorPoint->y + scriptMgr->eyeBasis->x.y * interpData.vecData[1].z +
+            scriptMgr->eyeBasis->y.y * interpData.vecData[1].y + scriptMgr->eyeBasis->z.y * interpData.vecData[1].x;
+    eye.z = scriptMgr->eyeAnchorPoint->z + scriptMgr->eyeBasis->x.z * interpData.vecData[1].z +
+            scriptMgr->eyeBasis->y.z * interpData.vecData[1].y + scriptMgr->eyeBasis->z.z * interpData.vecData[1].x;
+    Camera_ScriptUpdateAtEyeTargets(scriptMgr->settings, &at, &eye, &interpData.vecData[2], &interpData.floatData);
 }
 
-void func_807148D0(unk_800E5D70* arg0, unk_struct_14* arg1) {
-    Vec3f sp20[2];
+void Camera_ScriptUpdateAtEyeAtEye(CameraScriptManager* scriptMgr, CubicBSpline3fData* splineData) {
+    Vec3f interpData[2];
 
-    func_80715E1C(sp20, arg0->unk_0C, arg1);
-    func_80712B34(arg0->unk_00, &sp20[0], &sp20[1], NULL, NULL);
+    Camera_UpdateInterpolateBSpline33f(interpData, scriptMgr->controlPointTimers, splineData);
+    Camera_ScriptUpdateAtEyeTargets(scriptMgr->settings, &interpData[0], &interpData[1], NULL, NULL);
 }
 
-void func_8071491C(unk_800E5D70* arg0, unk_struct_14* arg1) {
-    Vec3f sp24[3];
+void Camera_ScriptUpdateAtEyeAtEyeUp(CameraScriptManager* scriptMgr, CubicBSpline3fData* splineData) {
+    Vec3f interpData[3];
 
-    func_80715E60(sp24, arg0->unk_0C, arg1);
-    func_80712B34(arg0->unk_00, &sp24[0], &sp24[1], &sp24[2], NULL);
+    Camera_UpdateInterpolateBSpline333f(interpData, scriptMgr->controlPointTimers, splineData);
+    Camera_ScriptUpdateAtEyeTargets(scriptMgr->settings, &interpData[0], &interpData[1], &interpData[2], NULL);
 }
 
-void func_80714968(unk_800E5D70* arg0, unk_80085434_arg_2* arg1) {
-    unk_80085434_arg_0 sp24;
+void Camera_ScriptUpdateAtEyeAtEyeFov(CameraScriptManager* scriptMgr, CubicBSpline331Data* splineData) {
+    InterpolateOut331Data interpData;
 
-    func_80715EC0(&sp24, arg0->unk_0C, arg1);
-    func_80712B34(arg0->unk_00, &sp24.unk_00[0], &sp24.unk_00[1], NULL, &sp24.unk_18);
+    Camera_UpdateInterpolateBSpline331f(&interpData, scriptMgr->controlPointTimers, splineData);
+    Camera_ScriptUpdateAtEyeTargets(scriptMgr->settings, &interpData.vecData[0], &interpData.vecData[1], NULL,
+                                    &interpData.floatData);
 }
 
-void func_807149B8(unk_800E5D70* arg0, unk_80085494_arg_2* arg1) {
-    unk_80085494_arg_0 sp20;
+void Camera_ScriptUpdateAtEyeAtEyeUpFov(CameraScriptManager* scriptMgr, CubicBSpline3331Data* splineData) {
+    InterpolateOut3331Data interpData;
 
-    func_80715F20(&sp20, arg0->unk_0C, arg1);
-    func_80712B34(arg0->unk_00, &sp20.unk_00[0], &sp20.unk_00[1], &sp20.unk_00[2], &sp20.unk_24);
+    Camera_UpdateInterpolateBSpline3331f(&interpData, scriptMgr->controlPointTimers, splineData);
+    Camera_ScriptUpdateAtEyeTargets(scriptMgr->settings, &interpData.vecData[0], &interpData.vecData[1],
+                                    &interpData.vecData[2], &interpData.floatData);
 }
 
-void func_80714A08(unk_800E5D70* arg0, unk_struct_14* arg1) {
-    Vec3f sp20[2];
+void Camera_ScriptUpdateOrbitAnchorDistanceYawPitch(CameraScriptManager* scriptMgr, CubicBSpline3fData* splineData) {
+    Vec3f interpData[2];
 
-    func_80715E1C(sp20, arg0->unk_0C, arg1);
-    func_80712BBC(arg0->unk_00, &sp20[0], &sp20[1], NULL, NULL);
+    Camera_UpdateInterpolateBSpline33f(interpData, scriptMgr->controlPointTimers, splineData);
+    Camera_ScriptUpdateOrbitTargets(scriptMgr->settings, &interpData[0], &interpData[1], NULL, NULL);
 }
 
-void func_80714A54(unk_800E5D70* arg0, unk_struct_14* arg1) {
-    Vec3f sp24[3];
+void Camera_ScriptUpdateOrbitAnchorDistanceYawPitchUp(CameraScriptManager* scriptMgr, CubicBSpline3fData* splineData) {
+    Vec3f interpData[3];
 
-    func_80715E60(sp24, arg0->unk_0C, arg1);
-    func_80712BBC(arg0->unk_00, &sp24[0], &sp24[1], &sp24[2], NULL);
+    Camera_UpdateInterpolateBSpline333f(interpData, scriptMgr->controlPointTimers, splineData);
+    Camera_ScriptUpdateOrbitTargets(scriptMgr->settings, &interpData[0], &interpData[1], &interpData[2], NULL);
 }
 
-void func_80714AA0(unk_800E5D70* arg0, unk_80085434_arg_2* arg1) {
-    unk_80085434_arg_0 sp24;
+void Camera_ScriptUpdateOrbitAnchorDistanceYawPitchFov(CameraScriptManager* scriptMgr,
+                                                       CubicBSpline331Data* splineData) {
+    InterpolateOut331Data interpData;
 
-    func_80715EC0(&sp24, arg0->unk_0C, arg1);
-    func_80712BBC(arg0->unk_00, &sp24.unk_00[0], &sp24.unk_00[1], NULL, &sp24.unk_18);
+    Camera_UpdateInterpolateBSpline331f(&interpData, scriptMgr->controlPointTimers, splineData);
+    Camera_ScriptUpdateOrbitTargets(scriptMgr->settings, &interpData.vecData[0], &interpData.vecData[1], NULL,
+                                    &interpData.floatData);
 }
 
-void func_80714AF0(unk_800E5D70* arg0, unk_80085494_arg_2* arg1) {
-    unk_80085494_arg_0 sp20;
+void Camera_ScriptUpdateOrbitAnchorDistanceYawPitchUpFov(CameraScriptManager* scriptMgr,
+                                                         CubicBSpline3331Data* splineData) {
+    InterpolateOut3331Data interpData;
 
-    func_80715F20(&sp20, arg0->unk_0C, arg1);
-    func_80712BBC(arg0->unk_00, &sp20.unk_00[0], &sp20.unk_00[1], &sp20.unk_00[2], &sp20.unk_24);
+    Camera_UpdateInterpolateBSpline3331f(&interpData, scriptMgr->controlPointTimers, splineData);
+    Camera_ScriptUpdateOrbitTargets(scriptMgr->settings, &interpData.vecData[0], &interpData.vecData[1],
+                                    &interpData.vecData[2], &interpData.floatData);
 }
 
-void func_80714B40(unk_800E5D70* arg0, unk_struct_14* arg1) {
-    Vec3f sp20[2];
+void Camera_ScriptUpdateOrbitDistanceYawPitchAnchor(CameraScriptManager* scriptMgr, CubicBSpline3fData* splineData) {
+    Vec3f interpData[2];
 
-    func_80715E1C(sp20, arg0->unk_0C, arg1);
-    func_80712BBC(arg0->unk_00, &sp20[1], &sp20[0], NULL, NULL);
+    Camera_UpdateInterpolateBSpline33f(interpData, scriptMgr->controlPointTimers, splineData);
+    Camera_ScriptUpdateOrbitTargets(scriptMgr->settings, &interpData[1], &interpData[0], NULL, NULL);
 }
 
-void func_80714B8C(unk_800E5D70* arg0, unk_struct_14* arg1) {
-    Vec3f sp24[3];
+void Camera_ScriptUpdateOrbitDistanceYawPitchAnchorUp(CameraScriptManager* scriptMgr, CubicBSpline3fData* splineData) {
+    Vec3f interpData[3];
 
-    func_80715E60(sp24, arg0->unk_0C, arg1);
-    func_80712BBC(arg0->unk_00, &sp24[1], &sp24[0], &sp24[2], NULL);
+    Camera_UpdateInterpolateBSpline333f(interpData, scriptMgr->controlPointTimers, splineData);
+    Camera_ScriptUpdateOrbitTargets(scriptMgr->settings, &interpData[1], &interpData[0], &interpData[2], NULL);
 }
 
-void func_80714BD8(unk_800E5D70* arg0, unk_80085434_arg_2* arg1) {
-    unk_80085434_arg_0 sp24;
+void Camera_ScriptUpdateOrbitDistanceYawPitchAnchorFov(CameraScriptManager* scriptMgr,
+                                                       CubicBSpline331Data* splineData) {
+    InterpolateOut331Data interpData;
 
-    func_80715EC0(&sp24, arg0->unk_0C, arg1);
-    func_80712BBC(arg0->unk_00, &sp24.unk_00[1], &sp24.unk_00[0], NULL, &sp24.unk_18);
+    Camera_UpdateInterpolateBSpline331f(&interpData, scriptMgr->controlPointTimers, splineData);
+    Camera_ScriptUpdateOrbitTargets(scriptMgr->settings, &interpData.vecData[1], &interpData.vecData[0], NULL,
+                                    &interpData.floatData);
 }
 
-void func_80714C28(unk_800E5D70* arg0, unk_80085494_arg_2* arg1) {
-    unk_80085494_arg_0 sp20;
+void Camera_ScriptUpdateOrbitDistanceYawPitchAnchorFovUp(CameraScriptManager* scriptMgr,
+                                                         CubicBSpline3331Data* splineData) {
+    InterpolateOut3331Data interpData;
 
-    func_80715F20(&sp20, arg0->unk_0C, arg1);
-    func_80712BBC(arg0->unk_00, &sp20.unk_00[1], &sp20.unk_00[0], &sp20.unk_00[2], &sp20.unk_24);
+    Camera_UpdateInterpolateBSpline3331f(&interpData, scriptMgr->controlPointTimers, splineData);
+    Camera_ScriptUpdateOrbitTargets(scriptMgr->settings, &interpData.vecData[1], &interpData.vecData[0],
+                                    &interpData.vecData[2], &interpData.floatData);
 }
 
-void func_80714C78(unk_800E5D70* arg0, unk_struct_14* arg1) {
+void Camera_ScriptUpdateOrbitAngledAnchorDistanceYawPitch(CameraScriptManager* scriptMgr,
+                                                          CubicBSpline3fData* splineData) {
     s32 sp64;
     s32 temp_v0;
     f32 sp5C;
     f32 sp58;
     f32 temp_fv0;
-    Vec3f sp3C[2];
-    Vec3f sp30;
+    Vec3f interpData[2];
+    Vec3f anchorPos;
     s32 pad;
 
-    func_80715E1C(sp3C, arg0->unk_0C, arg1);
+    Camera_UpdateInterpolateBSpline33f(interpData, scriptMgr->controlPointTimers, splineData);
     //! @bug uninitialised angles
     sp64 = Math_Round(DEG_TO_FZXANG2(sp5C));
     temp_v0 = Math_Round(DEG_TO_FZXANG2(sp58));
-    temp_fv0 = COS(temp_v0) * sp3C[0].x;
-    sp30.x = COS(sp64) * temp_fv0 + arg0->focusPos->x;
-    sp30.y = sp3C[0].x * SIN(temp_v0) + arg0->focusPos->y;
-    sp30.z = arg0->focusPos->z - SIN(sp64) * temp_fv0;
-    func_80712BBC(arg0->unk_00, &sp30, &sp3C[1], NULL, NULL);
+    temp_fv0 = COS(temp_v0) * interpData[0].x;
+    anchorPos.x = COS(sp64) * temp_fv0 + scriptMgr->focusPos->x;
+    anchorPos.y = interpData[0].x * SIN(temp_v0) + scriptMgr->focusPos->y;
+    anchorPos.z = scriptMgr->focusPos->z - SIN(sp64) * temp_fv0;
+    Camera_ScriptUpdateOrbitTargets(scriptMgr->settings, &anchorPos, &interpData[1], NULL, NULL);
 }
 
-void func_80714D90(unk_800E5D70* arg0, unk_struct_14* arg1) {
+void Camera_ScriptUpdateOrbitAngledAnchorDistanceYawPitchUp(CameraScriptManager* scriptMgr,
+                                                            CubicBSpline3fData* splineData) {
     s32 sp6C;
     s32 temp_v0;
     f32 sp64;
     f32 sp60;
     f32 temp_fv0;
-    Vec3f sp38[3];
-    Vec3f sp2C;
+    Vec3f interpData[3];
+    Vec3f anchorPos;
     s32 pad;
 
-    func_80715E60(sp38, arg0->unk_0C, arg1);
+    Camera_UpdateInterpolateBSpline333f(interpData, scriptMgr->controlPointTimers, splineData);
     //! @bug uninitialised angles
     sp6C = Math_Round(DEG_TO_FZXANG2(sp64));
     temp_v0 = Math_Round(DEG_TO_FZXANG2(sp60));
-    temp_fv0 = COS(temp_v0) * sp38[0].x;
-    sp2C.x = COS(sp6C) * temp_fv0 + arg0->focusPos->x;
-    sp2C.y = sp38[0].x * SIN(temp_v0) + arg0->focusPos->y;
-    sp2C.z = arg0->focusPos->z - SIN(sp6C) * temp_fv0;
-    func_80712BBC(arg0->unk_00, &sp2C, &sp38[1], &sp38[2], NULL);
+    temp_fv0 = COS(temp_v0) * interpData[0].x;
+    anchorPos.x = COS(sp6C) * temp_fv0 + scriptMgr->focusPos->x;
+    anchorPos.y = interpData[0].x * SIN(temp_v0) + scriptMgr->focusPos->y;
+    anchorPos.z = scriptMgr->focusPos->z - SIN(sp6C) * temp_fv0;
+    Camera_ScriptUpdateOrbitTargets(scriptMgr->settings, &anchorPos, &interpData[1], &interpData[2], NULL);
 }
 
-void func_80714EA8(unk_800E5D70* arg0, unk_80085434_arg_2* arg1) {
+void Camera_ScriptUpdateOrbitAngledAnchorDistanceYawPitchFov(CameraScriptManager* scriptMgr,
+                                                             CubicBSpline331Data* splineData) {
     s32 sp64;
     s32 temp_v0;
     f32 sp5C;
     f32 sp58;
     f32 temp_fv0;
-    unk_80085434_arg_0 sp38;
-    Vec3f sp2C;
+    InterpolateOut331Data interpData;
+    Vec3f anchorPos;
     s32 pad;
 
-    func_80715EC0(&sp38, arg0->unk_0C, arg1);
+    Camera_UpdateInterpolateBSpline331f(&interpData, scriptMgr->controlPointTimers, splineData);
     //! @bug uninitialised angles
     sp64 = Math_Round(DEG_TO_FZXANG2(sp5C));
     temp_v0 = Math_Round(DEG_TO_FZXANG2(sp58));
-    temp_fv0 = COS(temp_v0) * sp38.unk_00[0].x;
-    sp2C.x = COS(sp64) * temp_fv0 + arg0->focusPos->x;
-    sp2C.y = sp38.unk_00[0].x * SIN(temp_v0) + arg0->focusPos->y;
-    sp2C.z = arg0->focusPos->z - SIN(sp64) * temp_fv0;
-    func_80712BBC(arg0->unk_00, &sp2C, &sp38.unk_00[1], NULL, &sp38.unk_18);
+    temp_fv0 = COS(temp_v0) * interpData.vecData[0].x;
+    anchorPos.x = COS(sp64) * temp_fv0 + scriptMgr->focusPos->x;
+    anchorPos.y = interpData.vecData[0].x * SIN(temp_v0) + scriptMgr->focusPos->y;
+    anchorPos.z = scriptMgr->focusPos->z - SIN(sp64) * temp_fv0;
+    Camera_ScriptUpdateOrbitTargets(scriptMgr->settings, &anchorPos, &interpData.vecData[1], NULL,
+                                    &interpData.floatData);
 }
 
-void func_80714FC4(unk_800E5D70* arg0, unk_80085494_arg_2* arg1) {
+void Camera_ScriptUpdateOrbitAngledAnchorDistanceYawPitchUpFov(CameraScriptManager* scriptMgr,
+                                                               CubicBSpline3331Data* splineData) {
     s32 sp74;
     s32 temp_v0;
     f32 sp6C;
     f32 sp68;
     f32 temp_fv0;
-    unk_80085494_arg_0 sp3C;
-    Vec3f sp30;
+    InterpolateOut3331Data interpData;
+    Vec3f anchorPos;
     s32 pad;
 
-    func_80715F20(&sp3C, arg0->unk_0C, arg1);
+    Camera_UpdateInterpolateBSpline3331f(&interpData, scriptMgr->controlPointTimers, splineData);
     //! @bug uninitialised angles
     sp74 = Math_Round(DEG_TO_FZXANG2(sp6C));
     temp_v0 = Math_Round(DEG_TO_FZXANG2(sp68));
-    temp_fv0 = COS(temp_v0) * sp3C.unk_00[0].x;
-    sp30.x = COS(sp74) * temp_fv0 + arg0->focusPos->x;
-    sp30.y = sp3C.unk_00[0].x * SIN(temp_v0) + arg0->focusPos->y;
-    sp30.z = arg0->focusPos->z - SIN(sp74) * temp_fv0;
-    func_80712BBC(arg0->unk_00, &sp30, &sp3C.unk_00[1], &sp3C.unk_00[2], &sp3C.unk_24);
+    temp_fv0 = COS(temp_v0) * interpData.vecData[0].x;
+    anchorPos.x = COS(sp74) * temp_fv0 + scriptMgr->focusPos->x;
+    anchorPos.y = interpData.vecData[0].x * SIN(temp_v0) + scriptMgr->focusPos->y;
+    anchorPos.z = scriptMgr->focusPos->z - SIN(sp74) * temp_fv0;
+    Camera_ScriptUpdateOrbitTargets(scriptMgr->settings, &anchorPos, &interpData.vecData[1], &interpData.vecData[2],
+                                    &interpData.floatData);
 }
 
-void func_807150E0(unk_800E5D70* arg0, unk_80085434_arg_2* arg1) {
+void Camera_ScriptUpdateLocalAnchorBasisAtEye(CameraScriptManager* scriptMgr, CubicBSpline331Data* splineData) {
     s32 pad;
-    Vec3f sp64[2];
-    Vec3f sp58;
-    Mtx3F sp34;
+    Vec3f interpData[2];
+    Vec3f anchorPoint;
+    Mtx3F basis;
 
-    func_80715E1C(sp64, arg0->unk_0C, arg1->unk_00);
-    sp58.x = arg0->focusPos->x;
-    sp58.y = arg0->focusPos->y;
-    sp58.z = arg0->focusPos->z;
-    sp34 = *arg0->basis;
-    func_80712C44(arg0->unk_00, &sp58, &sp34, &sp64[0], &sp64[1], NULL, NULL);
+    Camera_UpdateInterpolateBSpline33f(interpData, scriptMgr->controlPointTimers, splineData->vecData);
+    anchorPoint.x = scriptMgr->focusPos->x;
+    anchorPoint.y = scriptMgr->focusPos->y;
+    anchorPoint.z = scriptMgr->focusPos->z;
+    basis = *scriptMgr->basis;
+    Camera_ScriptUpdateLocalAnchorTargets(scriptMgr->settings, &anchorPoint, &basis, &interpData[0], &interpData[1],
+                                          NULL, NULL);
 }
 
-void func_8071518C(unk_800E5D70* arg0, unk_struct_14* arg1) {
+void Camera_ScriptUpdateLocalAnchorBasisAtEyeUp(CameraScriptManager* scriptMgr, CubicBSpline3fData* splineData) {
     s32 pad;
-    Vec3f sp60[3];
-    Vec3f sp54;
-    Mtx3F sp30;
+    Vec3f interpData[3];
+    Vec3f anchorPoint;
+    Mtx3F basis;
 
-    func_80715E60(sp60, arg0->unk_0C, arg1);
-    sp54.x = arg0->focusPos->x;
-    sp54.y = arg0->focusPos->y;
-    sp54.z = arg0->focusPos->z;
-    sp30 = *arg0->basis;
-    func_80712C44(arg0->unk_00, &sp54, &sp30, &sp60[0], &sp60[1], &sp60[2], NULL);
+    Camera_UpdateInterpolateBSpline333f(interpData, scriptMgr->controlPointTimers, splineData);
+    anchorPoint.x = scriptMgr->focusPos->x;
+    anchorPoint.y = scriptMgr->focusPos->y;
+    anchorPoint.z = scriptMgr->focusPos->z;
+    basis = *scriptMgr->basis;
+    Camera_ScriptUpdateLocalAnchorTargets(scriptMgr->settings, &anchorPoint, &basis, &interpData[0], &interpData[1],
+                                          &interpData[2], NULL);
 }
 
-void func_8071523C(unk_800E5D70* arg0, unk_80085434_arg_2* arg1) {
+void Camera_ScriptUpdateLocalAnchorBasisAtEyeFov(CameraScriptManager* scriptMgr, CubicBSpline331Data* splineData) {
     s32 pad;
-    unk_80085434_arg_0 sp60;
-    Vec3f sp54;
-    Mtx3F sp30;
+    InterpolateOut331Data interpData;
+    Vec3f anchorPoint;
+    Mtx3F basis;
 
-    func_80715EC0(&sp60, arg0->unk_0C, arg1);
-    sp54.x = arg0->focusPos->x;
-    sp54.y = arg0->focusPos->y;
-    sp54.z = arg0->focusPos->z;
-    sp30 = *arg0->basis;
-    func_80712C44(arg0->unk_00, &sp54, &sp30, &sp60.unk_00[0], &sp60.unk_00[1], NULL, &sp60.unk_18);
+    Camera_UpdateInterpolateBSpline331f(&interpData, scriptMgr->controlPointTimers, splineData);
+    anchorPoint.x = scriptMgr->focusPos->x;
+    anchorPoint.y = scriptMgr->focusPos->y;
+    anchorPoint.z = scriptMgr->focusPos->z;
+    basis = *scriptMgr->basis;
+    Camera_ScriptUpdateLocalAnchorTargets(scriptMgr->settings, &anchorPoint, &basis, &interpData.vecData[0],
+                                          &interpData.vecData[1], NULL, &interpData.floatData);
 }
 
-void func_807152EC(unk_800E5D70* arg0, unk_80085494_arg_2* arg1) {
+void Camera_ScriptUpdateLocalAnchorBasisAtEyeUpFov(CameraScriptManager* scriptMgr, CubicBSpline3331Data* splineData) {
     s32 pad;
-    unk_80085494_arg_0 sp64;
-    Vec3f sp58;
-    Mtx3F sp34;
+    InterpolateOut3331Data interpData;
+    Vec3f anchorPoint;
+    Mtx3F basis;
 
-    func_80715F20(&sp64, arg0->unk_0C, arg1);
-    sp58.x = arg0->focusPos->x;
-    sp58.y = arg0->focusPos->y;
-    sp58.z = arg0->focusPos->z;
-    sp34 = *arg0->basis;
-    func_80712C44(arg0->unk_00, &sp58, &sp34, &sp64.unk_00[0], &sp64.unk_00[1], &sp64.unk_00[2], &sp64.unk_24);
+    Camera_UpdateInterpolateBSpline3331f(&interpData, scriptMgr->controlPointTimers, splineData);
+    anchorPoint.x = scriptMgr->focusPos->x;
+    anchorPoint.y = scriptMgr->focusPos->y;
+    anchorPoint.z = scriptMgr->focusPos->z;
+    basis = *scriptMgr->basis;
+    Camera_ScriptUpdateLocalAnchorTargets(scriptMgr->settings, &anchorPoint, &basis, &interpData.vecData[0],
+                                          &interpData.vecData[1], &interpData.vecData[2], &interpData.floatData);
 }
 
-void func_807153A0(unk_800E5D70* arg0, unk_struct_14* arg1) {
+void Camera_ScriptUpdateFollowSmoothCenterDistanceYawPitch(CameraScriptManager* scriptMgr,
+                                                           CubicBSpline3fData* splineData) {
     s32 pad[4];
     CameraTypeFollowSmooth* followSmooth;
     Racer* racer;
-    Vec3f sp38[2];
-    Vec3f sp2C;
+    Vec3f interpData[2];
+    Vec3f center;
 
-    func_80715E1C(sp38, arg0->unk_0C, arg1);
-    racer = arg0->racer;
-    followSmooth = &arg0->unk_00->followSmooth;
-    followSmooth->racerBasis = *arg0->basis;
+    Camera_UpdateInterpolateBSpline33f(interpData, scriptMgr->controlPointTimers, splineData);
+    racer = scriptMgr->racer;
+    followSmooth = &scriptMgr->settings->followSmooth;
+    followSmooth->racerBasis = *scriptMgr->basis;
     followSmooth->tiltUp = racer->tiltUp;
     followSmooth->speed = racer->speed;
     followSmooth->trackSegmentInfo = racer->segmentPositionInfo.courseSegment->trackSegmentInfo;
-    sp2C.x = sp38[0].x + arg0->focusPos->x;
-    sp2C.y = sp38[0].y + arg0->focusPos->y;
-    sp2C.z = sp38[0].z + arg0->focusPos->z;
+    center.x = interpData[0].x + scriptMgr->focusPos->x;
+    center.y = interpData[0].y + scriptMgr->focusPos->y;
+    center.z = interpData[0].z + scriptMgr->focusPos->z;
 
-    func_80712DE0(arg0->unk_00, &sp2C, &sp38[1], NULL, NULL);
+    Camera_ScriptUpdateFollowSmoothTargets(scriptMgr->settings, &center, &interpData[1], NULL, NULL);
 }
 
-void func_80715490(unk_800E5D70* arg0, unk_struct_14* arg1) {
+void Camera_ScriptUpdateFollowSmoothCenterDistanceYawPitchUp(CameraScriptManager* scriptMgr,
+                                                             CubicBSpline3fData* splineData) {
     s32 pad[4];
     CameraTypeFollowSmooth* followSmooth;
     Racer* racer;
-    Vec3f sp34[3];
-    Vec3f sp28;
+    Vec3f interpData[3];
+    Vec3f center;
 
-    func_80715E60(sp34, arg0->unk_0C, arg1);
-    racer = arg0->racer;
-    followSmooth = &arg0->unk_00->followSmooth;
-    followSmooth->racerBasis = *arg0->basis;
+    Camera_UpdateInterpolateBSpline333f(interpData, scriptMgr->controlPointTimers, splineData);
+    racer = scriptMgr->racer;
+    followSmooth = &scriptMgr->settings->followSmooth;
+    followSmooth->racerBasis = *scriptMgr->basis;
     followSmooth->tiltUp = racer->tiltUp;
     followSmooth->speed = racer->speed;
     followSmooth->trackSegmentInfo = racer->segmentPositionInfo.courseSegment->trackSegmentInfo;
-    sp28.x = sp34[0].x + arg0->focusPos->x;
-    sp28.y = sp34[0].y + arg0->focusPos->y;
-    sp28.z = sp34[0].z + arg0->focusPos->z;
+    center.x = interpData[0].x + scriptMgr->focusPos->x;
+    center.y = interpData[0].y + scriptMgr->focusPos->y;
+    center.z = interpData[0].z + scriptMgr->focusPos->z;
 
-    func_80712DE0(arg0->unk_00, &sp28, &sp34[1], &sp34[2], NULL);
+    Camera_ScriptUpdateFollowSmoothTargets(scriptMgr->settings, &center, &interpData[1], &interpData[2], NULL);
 }
 
-void func_80715580(unk_800E5D70* arg0, unk_80085434_arg_2* arg1) {
+void Camera_ScriptUpdateFollowSmoothCenterDistanceYawPitchFov(CameraScriptManager* scriptMgr,
+                                                              CubicBSpline331Data* splineData) {
     s32 pad[6];
     CameraTypeFollowSmooth* followSmooth;
     Racer* racer;
-    unk_80085434_arg_0 sp34;
-    Vec3f sp28;
+    InterpolateOut331Data interpData;
+    Vec3f center;
 
-    func_80715EC0(&sp34, arg0->unk_0C, arg1);
-    racer = arg0->racer;
-    followSmooth = &arg0->unk_00->followSmooth;
-    followSmooth->racerBasis = *arg0->basis;
+    Camera_UpdateInterpolateBSpline331f(&interpData, scriptMgr->controlPointTimers, splineData);
+    racer = scriptMgr->racer;
+    followSmooth = &scriptMgr->settings->followSmooth;
+    followSmooth->racerBasis = *scriptMgr->basis;
     followSmooth->tiltUp = racer->tiltUp;
     followSmooth->speed = racer->speed;
     followSmooth->trackSegmentInfo = racer->segmentPositionInfo.courseSegment->trackSegmentInfo;
-    sp28.x = sp34.unk_00[0].x + arg0->focusPos->x;
-    sp28.y = sp34.unk_00[0].y + arg0->focusPos->y;
-    sp28.z = sp34.unk_00[0].z + arg0->focusPos->z;
+    center.x = interpData.vecData[0].x + scriptMgr->focusPos->x;
+    center.y = interpData.vecData[0].y + scriptMgr->focusPos->y;
+    center.z = interpData.vecData[0].z + scriptMgr->focusPos->z;
 
-    func_80712DE0(arg0->unk_00, &sp28, &sp34.unk_00[1], NULL, &sp34.unk_18);
+    Camera_ScriptUpdateFollowSmoothTargets(scriptMgr->settings, &center, &interpData.vecData[1], NULL,
+                                           &interpData.floatData);
 }
 
-void func_80715674(unk_800E5D70* arg0, unk_80085494_arg_2* arg1) {
+void Camera_ScriptUpdateFollowSmoothCenterDistanceYawPitchUpFov(CameraScriptManager* scriptMgr,
+                                                                CubicBSpline3331Data* splineData) {
     s32 pad[4];
     CameraTypeFollowSmooth* followSmooth;
     Racer* racer;
-    unk_80085494_arg_0 sp38;
-    Vec3f sp2C;
+    InterpolateOut3331Data interpData;
+    Vec3f center;
 
-    func_80715F20(&sp38, arg0->unk_0C, arg1);
-    racer = arg0->racer;
-    followSmooth = &arg0->unk_00->followSmooth;
-    followSmooth->racerBasis = *arg0->basis;
+    Camera_UpdateInterpolateBSpline3331f(&interpData, scriptMgr->controlPointTimers, splineData);
+    racer = scriptMgr->racer;
+    followSmooth = &scriptMgr->settings->followSmooth;
+    followSmooth->racerBasis = *scriptMgr->basis;
     followSmooth->tiltUp = racer->tiltUp;
     followSmooth->speed = racer->speed;
     followSmooth->trackSegmentInfo = racer->segmentPositionInfo.courseSegment->trackSegmentInfo;
-    sp2C.x = sp38.unk_00[0].x + arg0->focusPos->x;
-    sp2C.y = sp38.unk_00[0].y + arg0->focusPos->y;
-    sp2C.z = sp38.unk_00[0].z + arg0->focusPos->z;
+    center.x = interpData.vecData[0].x + scriptMgr->focusPos->x;
+    center.y = interpData.vecData[0].y + scriptMgr->focusPos->y;
+    center.z = interpData.vecData[0].z + scriptMgr->focusPos->z;
 
-    func_80712DE0(arg0->unk_00, &sp2C, &sp38.unk_00[1], &sp38.unk_00[2], &sp38.unk_24);
+    Camera_ScriptUpdateFollowSmoothTargets(scriptMgr->settings, &center, &interpData.vecData[1], &interpData.vecData[2],
+                                           &interpData.floatData);
 }
 
-void func_80715768(unk_struct_20_2* arg0, s32 arg1) {
+void Camera_ScriptInitControlPointTimers(SplineControlPointTimers* timers, s32 timersCount) {
     s32 i;
 
-    for (i = 0; i < arg1; i++) {
-        arg0->unk_00[i].unk_04 = 0;
-        arg0->unk_00[i].unk_00 = 0;
+    for (i = 0; i < timersCount; i++) {
+        timers->controlPointTimer[i].timer = timers->controlPointTimer[i].controlPoint = 0;
     }
 }
 
-f32 func_807157DC(f32 arg0, s32 arg1, f32* arg2, s32 arg3) {
-    s32 pad[2];
-    f32 temp_fa1;
-    f32 temp_fv0;
-    f32 temp_fv1;
-    f32 sp10;
-    f32 spC;
-    f32 sp8;
-    f32 sp4;
+f32 Camera_InterpolateBSpline(f32 t, s32 startPoint, f32* pointData, s32 totalPointCount) {
+    f32 oneMinusT;
+    f32 oneMinusTSquare;
+    f32 oneMinusTCube;
+    f32 tSquare;
+    f32 tCube;
+    f32 b3;
+    f32 b2;
+    f32 b1;
+    f32 b0;
 
-    if (arg1 == 0) {
-        temp_fv0 = 1.0f - arg0;
-        temp_fv1 = SQ(arg0);
-        sp4 = CB(temp_fv0);
-        temp_fa1 = temp_fv1 * arg0;
-        sp8 = (((temp_fa1 * 21.0f) / 12.0f) - (temp_fv1 * 9.0f / 2.0f)) + (arg0 * 3.0f);
-        spC = ((-temp_fa1 * 11.0f) / 12.0f) + (temp_fv1 * 3.0f / 2.0f);
-        sp10 = temp_fa1 / 6.0f;
-    } else if (arg1 == 1) {
-        temp_fv0 = 1.0f - arg0;
-        temp_fv1 = SQ(arg0);
-        sp4 = CB(temp_fv0) / 4.0f;
-        temp_fa1 = temp_fv1 * arg0;
-        sp8 = (((temp_fa1 * 7.0f) / 12.0f) - (temp_fv1 * 5.0f / 4.0f)) + (arg0 / 4.0f) + 7.0f / 12.0f;
-        spC = (-temp_fa1 / 2.0f) + (temp_fv1 / 2.0f) + (arg0 / 2.0f) + 1.0f / 6.0f;
-        sp10 = temp_fa1 / 6.0f;
-    } else if ((arg3 < 7) || (arg1 < (arg3 - 5))) {
-        temp_fv0 = 1.0f - arg0;
-        temp_fv1 = SQ(arg0);
-        temp_fa1 = temp_fv1 * arg0;
-        sp4 = CB(temp_fv0) / 6.0f;
-        sp8 = ((temp_fa1 / 2.0f) - temp_fv1) + 2.0f / 3.0f;
-        spC = (-temp_fa1 / 2.0f) + (temp_fv1 / 2.0f) + (arg0 / 2.0f) + 1.0f / 6.0f;
-        sp10 = temp_fa1 / 6.0f;
-    } else if (arg1 == arg3 - 5) {
-        temp_fv0 = 1.0f - arg0;
-        temp_fv1 = temp_fv0 * temp_fv0;
-        temp_fa1 = temp_fv1 * temp_fv0;
-        sp4 = temp_fa1 / 6.0f;
-        sp8 = (-temp_fa1 / 2.0f) + (temp_fv1 / 2.0f) + (temp_fv0 / 2.0f) + 1.0f / 6.0f;
-        spC = (((temp_fa1 * 7.0f) / 12.0f) - (temp_fv1 * 5.0f / 4.0f)) + (temp_fv0 / 4.0f) + 7.0f / 12.0f;
-        sp10 = CB(arg0) / 4.0f;
-    } else if (arg1 == arg3 - 4) {
-        temp_fv0 = 1.0f - arg0;
-        temp_fv1 = temp_fv0 * temp_fv0;
-        temp_fa1 = temp_fv1 * temp_fv0;
-        sp4 = temp_fa1 / 6.0f;
-        sp8 = ((-temp_fa1 * 11.0f) / 12.0f) + (temp_fv1 * 3.0f / 2.0f);
-        spC = (((temp_fa1 * 21.0f) / 12.0f) - (temp_fv1 * 9.0f / 2.0f)) + (temp_fv0 * 3.0f);
-        sp10 = CB(arg0);
+    if (startPoint == 0) {
+        oneMinusT = 1.0f - t;
+        tSquare = SQ(t);
+        tCube = CB(t);
+        b0 = CB(oneMinusT);
+        b1 = (((tCube * 21.0f) / 12.0f) - (tSquare * 9.0f / 2.0f)) + (t * 3.0f);
+        b2 = ((-tCube * 11.0f) / 12.0f) + (tSquare * 3.0f / 2.0f);
+        b3 = tCube / 6.0f;
+    } else if (startPoint == 1) {
+        oneMinusT = 1.0f - t;
+        tSquare = SQ(t);
+        tCube = CB(t);
+        b0 = CB(oneMinusT) / 4.0f;
+        b1 = (((tCube * 7.0f) / 12.0f) - (tSquare * 5.0f / 4.0f)) + (t / 4.0f) + 7.0f / 12.0f;
+        b2 = (-tCube / 2.0f) + (tSquare / 2.0f) + (t / 2.0f) + 1.0f / 6.0f;
+        b3 = tCube / 6.0f;
+    } else if ((totalPointCount < 7) || (startPoint < (totalPointCount - 5))) {
+        oneMinusT = 1.0f - t;
+        tSquare = SQ(t);
+        tCube = CB(t);
+        b0 = CB(oneMinusT) / 6.0f;
+        b1 = ((tCube / 2.0f) - tSquare) + 2.0f / 3.0f;
+        b2 = (-tCube / 2.0f) + (tSquare / 2.0f) + (t / 2.0f) + 1.0f / 6.0f;
+        b3 = tCube / 6.0f;
+    } else if (startPoint == totalPointCount - 5) {
+        oneMinusT = 1.0f - t;
+        oneMinusTSquare = SQ(oneMinusT);
+        oneMinusTCube = CB(oneMinusT);
+        b0 = oneMinusTCube / 6.0f;
+        b1 = (-oneMinusTCube / 2.0f) + (oneMinusTSquare / 2.0f) + (oneMinusT / 2.0f) + 1.0f / 6.0f;
+        b2 = (((oneMinusTCube * 7.0f) / 12.0f) - (oneMinusTSquare * 5.0f / 4.0f)) + (oneMinusT / 4.0f) + 7.0f / 12.0f;
+        b3 = CB(t) / 4.0f;
+    } else if (startPoint == totalPointCount - 4) {
+        oneMinusT = 1.0f - t;
+        oneMinusTSquare = SQ(oneMinusT);
+        oneMinusTCube = CB(oneMinusT);
+        b0 = oneMinusTCube / 6.0f;
+        b1 = ((-oneMinusTCube * 11.0f) / 12.0f) + (oneMinusTSquare * 3.0f / 2.0f);
+        b2 = (((oneMinusTCube * 21.0f) / 12.0f) - (oneMinusTSquare * 9.0f / 2.0f)) + (oneMinusT * 3.0f);
+        b3 = CB(t);
     }
 
-    return sp4 * arg2[arg1] + sp8 * arg2[arg1 + 1] + spC * arg2[arg1 + 2] + sp10 * arg2[arg1 + 3];
+    return b0 * pointData[startPoint] + b1 * pointData[startPoint + 1] + b2 * pointData[startPoint + 2] +
+           b3 * pointData[startPoint + 3];
 }
 
-void func_80715BE0(f32* arg0, unk_struct_8* arg1, unk_80085154_arg_2* arg2) {
-    s32 temp_s0;
-    s32 temp_t2;
-    s32 temp_t6;
-    s32 temp_t9;
-    s32 var_s0;
-    s32 var_v0;
+void Camera_UpdateInterpolateBSpline1f(f32* interpolatedData, SplineControlPointTimer* controlPointTimer,
+                                       CubicBSpline1fData* splineData) {
 
-    while (arg2->unk_08[arg1->unk_04] == 0) {
-        arg1->unk_04++;
+    while (splineData->times[controlPointTimer->controlPoint] == 0) {
+        controlPointTimer->controlPoint++;
     }
 
-    *arg0 =
-        func_807157DC((f32) arg1->unk_00 / (f32) arg2->unk_08[arg1->unk_04], arg1->unk_04, arg2->unk_04, arg2->unk_00);
+    *interpolatedData = Camera_InterpolateBSpline(
+        (f32) controlPointTimer->timer / (f32) splineData->times[controlPointTimer->controlPoint],
+        controlPointTimer->controlPoint, splineData->controlPoints, splineData->controlPointCount);
 
-    arg1->unk_00++;
+    controlPointTimer->timer++;
 
-    if (arg1->unk_00 >= arg2->unk_08[arg1->unk_04]) {
-        arg1->unk_00 = 0;
-        arg1->unk_04++;
-        if (arg1->unk_04 >= (arg2->unk_00 - 3)) {
-            arg1->unk_04 = -1;
+    if (controlPointTimer->timer >= splineData->times[controlPointTimer->controlPoint]) {
+        controlPointTimer->timer = 0;
+        controlPointTimer->controlPoint++;
+        if (controlPointTimer->controlPoint >= (splineData->controlPointCount - 3)) {
+            controlPointTimer->controlPoint = -1;
         }
     }
 }
 
-void func_80715CD8(Vec3f* arg0, unk_struct_8* arg1, unk_struct_14* arg2) {
-    s32 temp_s0;
-    s32 temp_t2;
-    s32 temp_t6;
-    s32 temp_t9;
-    s32 var_s0;
-    s32 var_v0;
+void Camera_UpdateInterpolateBSpline3f(Vec3f* interpolatedVecData, SplineControlPointTimer* controlPointTimer,
+                                       CubicBSpline3fData* splineData) {
     s32 i;
 
-    while (arg2->unk_10[arg1->unk_04] == 0) {
-        arg1->unk_04++;
+    while (splineData->times[controlPointTimer->controlPoint] == 0) {
+        controlPointTimer->controlPoint++;
     }
 
     for (i = 0; i < 3; i++) {
-        arg0->v[i] = func_807157DC((f32) arg1->unk_00 / (f32) arg2->unk_10[arg1->unk_04], arg1->unk_04, arg2->unk_04[i],
-                                   arg2->unk_00);
+        interpolatedVecData->v[i] = Camera_InterpolateBSpline(
+            (f32) controlPointTimer->timer / (f32) splineData->times[controlPointTimer->controlPoint],
+            controlPointTimer->controlPoint, splineData->controlPoints[i], splineData->controlPointCount);
     }
 
-    arg1->unk_00++;
+    controlPointTimer->timer++;
 
-    if (arg1->unk_00 >= arg2->unk_10[arg1->unk_04]) {
-        arg1->unk_00 = 0;
-        arg1->unk_04++;
-        if (arg1->unk_04 >= (arg2->unk_00 - 3)) {
-            arg1->unk_04 = -1;
+    if (controlPointTimer->timer >= splineData->times[controlPointTimer->controlPoint]) {
+        controlPointTimer->timer = 0;
+        controlPointTimer->controlPoint++;
+        if (controlPointTimer->controlPoint >= (splineData->controlPointCount - 3)) {
+            controlPointTimer->controlPoint = -1;
         }
     }
 }
 
-void func_80715E1C(Vec3f* arg0, unk_struct_20_2* arg1, unk_struct_14* arg2) {
-    func_80715CD8(&arg0[0], &arg1->unk_00[0], &arg2[0]);
-    func_80715CD8(&arg0[1], &arg1->unk_00[1], &arg2[1]);
+void Camera_UpdateInterpolateBSpline33f(Vec3f* interpolatedData, SplineControlPointTimers* timers,
+                                        CubicBSpline3fData* splineData) {
+    Camera_UpdateInterpolateBSpline3f(&interpolatedData[0], &timers->controlPointTimer[0], &splineData[0]);
+    Camera_UpdateInterpolateBSpline3f(&interpolatedData[1], &timers->controlPointTimer[1], &splineData[1]);
 }
 
-void func_80715E60(Vec3f* arg0, unk_struct_20_2* arg1, unk_struct_14* arg2) {
-    func_80715CD8(&arg0[0], &arg1->unk_00[0], &arg2[0]);
-    func_80715CD8(&arg0[1], &arg1->unk_00[1], &arg2[1]);
-    func_80715CD8(&arg0[2], &arg1->unk_00[2], &arg2[2]);
+void Camera_UpdateInterpolateBSpline333f(Vec3f* interpolatedData, SplineControlPointTimers* timers,
+                                         CubicBSpline3fData* splineData) {
+    Camera_UpdateInterpolateBSpline3f(&interpolatedData[0], &timers->controlPointTimer[0], &splineData[0]);
+    Camera_UpdateInterpolateBSpline3f(&interpolatedData[1], &timers->controlPointTimer[1], &splineData[1]);
+    Camera_UpdateInterpolateBSpline3f(&interpolatedData[2], &timers->controlPointTimer[2], &splineData[2]);
 }
 
-void func_80715EC0(unk_80085434_arg_0* arg0, unk_struct_20_2* arg1, unk_80085434_arg_2* arg2) {
-    func_80715CD8(&arg0->unk_00[0], &arg1->unk_00[0], &arg2->unk_00[0]);
-    func_80715CD8(&arg0->unk_00[1], &arg1->unk_00[1], &arg2->unk_00[1]);
-    func_80715BE0(&arg0->unk_18, &arg1->unk_00[2], &arg2->unk_28);
+void Camera_UpdateInterpolateBSpline331f(InterpolateOut331Data* interpolatedData, SplineControlPointTimers* timers,
+                                         CubicBSpline331Data* splineData) {
+    Camera_UpdateInterpolateBSpline3f(&interpolatedData->vecData[0], &timers->controlPointTimer[0],
+                                      &splineData->vecData[0]);
+    Camera_UpdateInterpolateBSpline3f(&interpolatedData->vecData[1], &timers->controlPointTimer[1],
+                                      &splineData->vecData[1]);
+    Camera_UpdateInterpolateBSpline1f(&interpolatedData->floatData, &timers->controlPointTimer[2],
+                                      &splineData->floatData);
 }
 
-void func_80715F20(unk_80085494_arg_0* arg0, unk_struct_20_2* arg1, unk_80085494_arg_2* arg2) {
-    func_80715CD8(&arg0->unk_00[0], &arg1->unk_00[0], &arg2->unk_00[0]);
-    func_80715CD8(&arg0->unk_00[1], &arg1->unk_00[1], &arg2->unk_00[1]);
-    func_80715CD8(&arg0->unk_00[2], &arg1->unk_00[2], &arg2->unk_00[2]);
-    func_80715BE0(&arg0->unk_24, &arg1->unk_00[3], &arg2->unk_3C);
+void Camera_UpdateInterpolateBSpline3331f(InterpolateOut3331Data* interpolatedData, SplineControlPointTimers* timers,
+                                          CubicBSpline3331Data* splineData) {
+    Camera_UpdateInterpolateBSpline3f(&interpolatedData->vecData[0], &timers->controlPointTimer[0],
+                                      &splineData->vecData[0]);
+    Camera_UpdateInterpolateBSpline3f(&interpolatedData->vecData[1], &timers->controlPointTimer[1],
+                                      &splineData->vecData[1]);
+    Camera_UpdateInterpolateBSpline3f(&interpolatedData->vecData[2], &timers->controlPointTimer[2],
+                                      &splineData->vecData[2]);
+    Camera_UpdateInterpolateBSpline1f(&interpolatedData->floatData, &timers->controlPointTimer[3],
+                                      &splineData->floatData);
 }
 
-void func_80715F9C(void) {
-    unk_800E5D70* var_s1;
+void Camera_StartInit(void) {
+    CameraScriptManager* var_s1;
     s32 i;
     Racer* racer;
     Camera* camera;
-    unk_struct_20_2* var_s4;
+    SplineControlPointTimers* var_s4;
     CameraSettings* cameraSettings;
 
-    for (i = 0, camera = gCameras, var_s1 = D_807A1480, cameraSettings = gCameraSettings, var_s4 = D_807A1510; i < 4;
-         i++) {
+    for (i = 0, camera = gCameras, var_s1 = sCameraScriptMgrs, cameraSettings = sCameraSettings,
+        var_s4 = sSplineControlPointTimers;
+         i < 4; i++) {
         camera->id = (s16) i;
         camera->raceSetting = CAMERA_RACE_SETTING_REGULAR;
-        camera->vpTransitionState = 0;
-        func_80713FD4(var_s1, cameraSettings);
-        func_80713FDC(var_s1, var_s4);
+        camera->vpTransitionState = CAMERA_VP_TRANSITION_INACTIVE;
+        Camera_ScriptSetSettings(var_s1, cameraSettings);
+        Camera_ScriptSetControlPointTimers(var_s1, var_s4);
         racer = &gRacers[camera->id];
         func_80713FE4(var_s1, &racer->focusPos, &racer->trueBasis, racer);
 
@@ -1667,32 +1701,32 @@ void Camera_Init(void) {
 
     for (i = 0, camera = gCameras; i < 4; i++, camera++) {
         racer = &gRacers[camera->id];
-        func_80713FE4(&D_807A1480[i], &racer->focusPos, &racer->trueBasis, racer);
+        func_80713FE4(&sCameraScriptMgrs[i], &racer->focusPos, &racer->trueBasis, racer);
     }
     switch (gGameMode) {
         case GAMEMODE_FLX_TITLE:
             sNumCameras = 1;
             gCameras[0].mode = CAMERA_MODE_TITLE;
-            Camera_InitMode(gCameras, gCameraSettings, D_807A1480);
+            Camera_InitMode(gCameras, sCameraSettings, sCameraScriptMgrs);
             break;
         case GAMEMODE_CREATE_MACHINE:
         case GAMEMODE_FLX_MACHINE_SELECT:
             sNumCameras = 1;
             gCameras[0].mode = CAMERA_MODE_MACHINE_SELECT_CREATE;
-            Camera_InitMode(gCameras, gCameraSettings, D_807A1480);
+            Camera_InitMode(gCameras, sCameraSettings, sCameraScriptMgrs);
             break;
         case GAMEMODE_LX_MACHINE_SETTINGS:
         case GAMEMODE_LX_GP_RACE_NEXT_MACHINE_SETTINGS:
             sNumCameras = 1;
             gCameras[0].mode = CAMERA_MODE_MACHINE_SETTINGS;
-            Camera_InitMode(gCameras, gCameraSettings, D_807A1480);
+            Camera_InitMode(gCameras, sCameraSettings, sCameraScriptMgrs);
             break;
         case GAMEMODE_FLX_COURSE_SELECT:
         case GAMEMODE_FLX_GP_RACE_NEXT_COURSE:
         case GAMEMODE_FLX_RECORDS_COURSE_SELECT:
             sNumCameras = 1;
             gCameras[0].mode = CAMERA_MODE_COURSE_SELECT;
-            Camera_InitMode(gCameras, gCameraSettings, D_807A1480);
+            Camera_InitMode(gCameras, sCameraSettings, sCameraScriptMgrs);
             break;
         case GAMEMODE_GP_RACE:
         case GAMEMODE_PRACTICE:
@@ -1700,7 +1734,7 @@ void Camera_Init(void) {
         case GAMEMODE_VS_2P:
         case GAMEMODE_VS_3P:
         case GAMEMODE_VS_4P:
-            D_8076D6C0 = -1;
+            sMultiplayerFocusCameraId = -1;
             sNumCameras = gNumPlayers;
             for (i = 0; i < sNumCameras; i++) {
                 if (gTitleDemoState != TITLE_DEMO_INACTIVE) {
@@ -1713,12 +1747,12 @@ void Camera_Init(void) {
 
                 gCameras[i].racerBasis = gRacers[i].trueBasis;
 
-                Camera_InitMode(&gCameras[i], &gCameraSettings[i], &D_807A1480[i]);
+                Camera_InitMode(&gCameras[i], &sCameraSettings[i], &sCameraScriptMgrs[i]);
             }
 
             break;
         case GAMEMODE_TIME_ATTACK:
-            D_8076D6C0 = -1;
+            sMultiplayerFocusCameraId = -1;
             if (gTitleDemoState != TITLE_DEMO_INACTIVE) {
                 sNumCameras = 1;
                 gCameras[0].mode = CAMERA_MODE_TITLE_DEMO;
@@ -1730,7 +1764,7 @@ void Camera_Init(void) {
             gCameras[0].racerBasis = gRacers[0].trueBasis;
             gCameras[1].mode = CAMERA_MODE_RECORDS_ENTRY;
             for (i = 0; i < sNumCameras; i++) {
-                Camera_InitMode(&gCameras[i], &gCameraSettings[i], &D_807A1480[i]);
+                Camera_InitMode(&gCameras[i], &sCameraSettings[i], &sCameraScriptMgrs[i]);
             }
             break;
         case GAMEMODE_COURSE_EDIT:
@@ -1740,7 +1774,7 @@ void Camera_Init(void) {
             gCameras[0].racerBasis = gRacers[0].trueBasis;
 
             for (i = 0; i < sNumCameras; i++) {
-                Camera_InitMode(&gCameras[i], &gCameraSettings[i], &D_807A1480[i]);
+                Camera_InitMode(&gCameras[i], &sCameraSettings[i], &sCameraScriptMgrs[i]);
             }
             break;
         case GAMEMODE_RECORDS:
@@ -1750,33 +1784,33 @@ void Camera_Init(void) {
             gCameras[0].racerBasis = gRacers[0].trueBasis;
             gCameras[1].mode = CAMERA_MODE_RECORDS_ENTRY;
             for (i = 0; i < sNumCameras; i++) {
-                Camera_InitMode(&gCameras[i], &gCameraSettings[i], &D_807A1480[i]);
+                Camera_InitMode(&gCameras[i], &sCameraSettings[i], &sCameraScriptMgrs[i]);
             }
             break;
         case GAMEMODE_GP_END_CS:
             sNumCameras = 1;
             gCameras[0].mode = CAMERA_MODE_ENDING;
-            Camera_InitMode(gCameras, gCameraSettings, D_807A1480);
+            Camera_InitMode(gCameras, sCameraSettings, sCameraScriptMgrs);
             break;
     }
 }
 
 extern s16 gPlayer1OverallPosition;
 
-void Camera_InitMode(Camera* camera, CameraSettings* arg1, unk_800E5D70* arg2) {
+void Camera_InitMode(Camera* camera, CameraSettings* cameraSettings, CameraScriptManager* scriptMgr) {
     s32 pad;
     s32 sp48;
-    bool sp44;
+    bool initViewport;
     f32 angle;
     s32 pad2;
-    unk_80776A48* sp38;
-    Vec3f sp2C;
+    CameraRaceSettingInfo* sp38;
+    Vec3f eye;
     Racer* racer;
 
     camera->lookBackRotate = 0;
     camera->state = 0;
     camera->timer = 0;
-    sp44 = false;
+    initViewport = false;
 
     switch (camera->mode) {
         case CAMERA_MODE_MACHINE_SELECT_CREATE:
@@ -1785,16 +1819,16 @@ void Camera_InitMode(Camera* camera, CameraSettings* arg1, unk_800E5D70* arg2) {
             camera->far = 8192.0f;
             camera->fovScaleX = SCREEN_WIDTH;
             camera->fovScaleY = SCREEN_HEIGHT;
-            Camera_SettingsSetOrbitWithParameters(arg1, CAMERA_TYPE_ORBIT_AT, &D_807766A8);
+            Camera_SettingsSetOrbitWithParameters(cameraSettings, CAMERA_TYPE_ORBIT_AT, &D_807766A8);
             break;
         case CAMERA_MODE_MACHINE_SETTINGS:
             camera->near = 16.0f;
             camera->far = 8192.0f;
             camera->fovScaleX = SCREEN_WIDTH;
             camera->fovScaleY = SCREEN_HEIGHT;
-            Camera_SettingsSetOrbitWithParameters(arg1, CAMERA_TYPE_ORBIT_AT, &D_80776754);
+            Camera_SettingsSetOrbitWithParameters(cameraSettings, CAMERA_TYPE_ORBIT_AT, &D_80776754);
             if (gNumPlayers >= 2) {
-                arg1->orbit.yaw = arg1->orbit.targetYaw = 30.0f;
+                cameraSettings->orbit.yaw = cameraSettings->orbit.targetYaw = 30.0f;
             }
             break;
         case CAMERA_MODE_COURSE_SELECT:
@@ -1802,22 +1836,22 @@ void Camera_InitMode(Camera* camera, CameraSettings* arg1, unk_800E5D70* arg2) {
             camera->far = 16384.0f;
             camera->fovScaleX = SCREEN_WIDTH;
             camera->fovScaleY = SCREEN_HEIGHT;
-            Camera_SettingsSetOrbitWithParameters(arg1, CAMERA_TYPE_ORBIT_AT, &D_80776800);
+            Camera_SettingsSetOrbitWithParameters(cameraSettings, CAMERA_TYPE_ORBIT_AT, &D_80776800);
             break;
         case CAMERA_MODE_RACE_INTRO:
-            Camera_SettingsSetOrbitWithParameters(arg1, CAMERA_TYPE_ORBIT_AT, &D_8077699C);
+            Camera_SettingsSetOrbitWithParameters(cameraSettings, CAMERA_TYPE_ORBIT_AT, &D_8077699C);
             if (gNumPlayers == 2) {
                 camera->near = 16.0f;
                 camera->far = 8192.0f;
-                arg1->parameters.frustrumCenterY = arg1->parameters.targetFrustrumCenterY = -15.0f;
-                arg1->parameters.fov = arg1->parameters.targetFov = 100.0f;
+                cameraSettings->parameters.frustrumCenterY = cameraSettings->parameters.targetFrustrumCenterY = -15.0f;
+                cameraSettings->parameters.fov = cameraSettings->parameters.targetFov = 100.0f;
             } else {
                 camera->near = 16.0f;
                 camera->far = 8192.0f;
             }
             camera->fovScaleX = SCREEN_WIDTH;
             camera->fovScaleY = SCREEN_HEIGHT;
-            sp44 = true;
+            initViewport = true;
             break;
         case CAMERA_MODE_RACE:
         case CAMERA_MODE_TITLE_DEMO:
@@ -1832,7 +1866,7 @@ void Camera_InitMode(Camera* camera, CameraSettings* arg1, unk_800E5D70* arg2) {
                 camera->fovScaleX = SCREEN_WIDTH;
                 camera->fovScaleY = SCREEN_HEIGHT;
 
-                Camera_SettingsSetFollowSmoothWithParameters(arg1, &D_80776B9C);
+                Camera_SettingsSetFollowSmoothWithParameters(cameraSettings, &D_80776B9C);
 
                 sp38 = &D_80776A78[sp48];
             } else {
@@ -1841,40 +1875,40 @@ void Camera_InitMode(Camera* camera, CameraSettings* arg1, unk_800E5D70* arg2) {
                 camera->fovScaleX = SCREEN_WIDTH;
                 camera->fovScaleY = SCREEN_HEIGHT;
 
-                Camera_SettingsSetFollowSmoothWithParameters(arg1, &D_80776AA8);
+                Camera_SettingsSetFollowSmoothWithParameters(cameraSettings, &D_80776AA8);
 
                 sp38 = &D_80776A48[sp48];
             }
-            arg1->followSmooth.targetDistance = arg1->followSmooth.distance = sp38->distance;
-            arg1->followSmooth.targetPitch = arg1->followSmooth.pitch = sp38->pitch;
-            arg1->parameters.targetFov = arg1->parameters.fov = sp38->fov;
+            cameraSettings->followSmooth.targetDistance = cameraSettings->followSmooth.distance = sp38->distance;
+            cameraSettings->followSmooth.targetPitch = cameraSettings->followSmooth.pitch = sp38->pitch;
+            cameraSettings->parameters.targetFov = cameraSettings->parameters.fov = sp38->fov;
 
-            Math_Round(DEG_TO_FZXANG2(arg1->followSmooth.pitch));
+            Math_Round(DEG_TO_FZXANG2(cameraSettings->followSmooth.pitch));
             racer = &gRacers[camera->id];
-            arg1->followSmooth.anchorPoint.x = racer->focusPos.x - (sp38->distance * racer->trueBasis.x.x);
-            arg1->followSmooth.anchorPoint.y = racer->focusPos.y - (sp38->distance * racer->trueBasis.x.y);
-            arg1->followSmooth.anchorPoint.z = racer->focusPos.z - (sp38->distance * racer->trueBasis.x.z);
-            camera->targetFov = arg1->parameters.targetFov;
+            cameraSettings->followSmooth.anchorPoint.x = racer->focusPos.x - (sp38->distance * racer->trueBasis.x.x);
+            cameraSettings->followSmooth.anchorPoint.y = racer->focusPos.y - (sp38->distance * racer->trueBasis.x.y);
+            cameraSettings->followSmooth.anchorPoint.z = racer->focusPos.z - (sp38->distance * racer->trueBasis.x.z);
+            camera->targetFov = cameraSettings->parameters.targetFov;
             camera->fovFlags = 0;
             if ((sp48 == CAMERA_RACE_SETTING_CLOSE_BEHIND) || (sp48 == CAMERA_RACE_SETTING_REGULAR)) {
                 camera->fovFlags |= CAMERA_FOV_FLAG_1;
             }
-            sp44 = true;
+            initViewport = true;
             break;
         case CAMERA_MODE_FALLING_OFF_TRACK:
-            sp2C = arg1->parameters.eye;
-            Camera_SettingsSetAtEyeWithParameters(arg1, &D_807763D0);
-            arg1->parameters.fov = arg1->parameters.targetFov = 80.0f;
-            arg1->atEye.targetEye = sp2C;
+            eye = cameraSettings->parameters.eye;
+            Camera_SettingsSetAtEyeWithParameters(cameraSettings, &D_807763D0);
+            cameraSettings->parameters.fov = cameraSettings->parameters.targetFov = 80.0f;
+            cameraSettings->atEye.targetEye = eye;
             if (gNumPlayers == 2) {
-                arg1->parameters.frustrumCenterY = arg1->parameters.targetFrustrumCenterY = -50.0f;
+                cameraSettings->parameters.frustrumCenterY = cameraSettings->parameters.targetFrustrumCenterY = -50.0f;
             }
             break;
         case CAMERA_MODE_FINISHED_SUCCESS:
-            Camera_SettingsSetAtEyeWithParameters(arg1, &D_807763D0);
-            arg1->parameters.targetFov = D_8076D788[0].fov;
+            Camera_SettingsSetAtEyeWithParameters(cameraSettings, &D_807763D0);
+            cameraSettings->parameters.targetFov = D_8076D788[0].fov;
             if (gNumPlayers == 2) {
-                arg1->parameters.frustrumCenterY = arg1->parameters.targetFrustrumCenterY = -30.0f;
+                cameraSettings->parameters.frustrumCenterY = cameraSettings->parameters.targetFrustrumCenterY = -30.0f;
             }
 
             racer = &gRacers[camera->id];
@@ -1884,67 +1918,67 @@ void Camera_InitMode(Camera* camera, CameraSettings* arg1, unk_800E5D70* arg2) {
         case CAMERA_MODE_FINISHED_SPECTATE:
             racer = &gRacers[camera->id];
 
-            Camera_SettingsSetOrbitWithParameters(arg1, 2, &D_80776448);
+            Camera_SettingsSetOrbitWithParameters(cameraSettings, 2, &D_80776448);
             if (gNumPlayers == 2) {
-                arg1->parameters.frustrumCenterY = arg1->parameters.targetFrustrumCenterY = -30.0f;
+                cameraSettings->parameters.frustrumCenterY = cameraSettings->parameters.targetFrustrumCenterY = -30.0f;
             }
-            arg1->parameters.fov = arg1->parameters.targetFov = 80.0f;
-            arg1->orbit.distance = arg1->orbit.targetDistance = 125.0f;
-            arg1->orbit.pitch = arg1->orbit.targetPitch = 35.0f;
-            arg1->orbit.yaw = arg1->orbit.targetYaw = -50.0f;
+            cameraSettings->parameters.fov = cameraSettings->parameters.targetFov = 80.0f;
+            cameraSettings->orbit.distance = cameraSettings->orbit.targetDistance = 125.0f;
+            cameraSettings->orbit.pitch = cameraSettings->orbit.targetPitch = 35.0f;
+            cameraSettings->orbit.yaw = cameraSettings->orbit.targetYaw = -50.0f;
 
-            arg1->orbit.basis = racer->trueBasis;
+            cameraSettings->orbit.basis = racer->trueBasis;
 
-            arg1->orbit.basis.y.x = racer->tiltUp.x;
-            arg1->orbit.basis.y.y = racer->tiltUp.y;
-            arg1->orbit.basis.y.z = racer->tiltUp.z;
+            cameraSettings->orbit.basis.y.x = racer->tiltUp.x;
+            cameraSettings->orbit.basis.y.y = racer->tiltUp.y;
+            cameraSettings->orbit.basis.y.z = racer->tiltUp.z;
             break;
         case CAMERA_MODE_FINISHED_LOSER:
-            sp2C = arg1->parameters.eye;
-            Camera_SettingsSetAtEyeWithParameters(arg1, &D_807763D0);
-            arg1->parameters.fov = arg1->parameters.targetFov = 80.0f;
-            arg1->atEye.targetEye = sp2C;
+            eye = cameraSettings->parameters.eye;
+            Camera_SettingsSetAtEyeWithParameters(cameraSettings, &D_807763D0);
+            cameraSettings->parameters.fov = cameraSettings->parameters.targetFov = 80.0f;
+            cameraSettings->atEye.targetEye = eye;
             break;
         case CAMERA_MODE_RECORDS_RACE:
             camera->near = 16.0f;
             camera->far = 8192.0f;
             camera->fovScaleX = SCREEN_WIDTH;
             camera->fovScaleY = SCREEN_HEIGHT;
-            Camera_SettingsSetFollowSmoothWithParameters(arg1, &D_80776AA8);
-            sp38 = &D_80776A48[1];
-            arg1->followSmooth.targetDistance = arg1->followSmooth.distance = sp38->distance;
-            arg1->followSmooth.targetPitch = arg1->followSmooth.pitch = 15.0f;
-            arg1->parameters.targetFov = arg1->parameters.fov = sp38->fov;
+            Camera_SettingsSetFollowSmoothWithParameters(cameraSettings, &D_80776AA8);
+            sp38 = &D_80776A48[CAMERA_RACE_SETTING_CLOSE_BEHIND];
+            cameraSettings->followSmooth.targetDistance = cameraSettings->followSmooth.distance = sp38->distance;
+            cameraSettings->followSmooth.targetPitch = cameraSettings->followSmooth.pitch = 15.0f;
+            cameraSettings->parameters.targetFov = cameraSettings->parameters.fov = sp38->fov;
             angle = 15.0f;
             Math_Round(DEG_TO_FZXANG2(angle));
             racer = &gRacers[0];
-            arg1->followSmooth.anchorPoint.x = racer->focusPos.x - (sp38->distance * racer->trueBasis.x.x);
-            arg1->followSmooth.anchorPoint.y = racer->focusPos.y - (sp38->distance * racer->trueBasis.x.y);
-            arg1->followSmooth.anchorPoint.z = racer->focusPos.z - (sp38->distance * racer->trueBasis.x.z);
-            camera->targetFov = arg1->parameters.targetFov;
+            cameraSettings->followSmooth.anchorPoint.x = racer->focusPos.x - (sp38->distance * racer->trueBasis.x.x);
+            cameraSettings->followSmooth.anchorPoint.y = racer->focusPos.y - (sp38->distance * racer->trueBasis.x.y);
+            cameraSettings->followSmooth.anchorPoint.z = racer->focusPos.z - (sp38->distance * racer->trueBasis.x.z);
+            camera->targetFov = cameraSettings->parameters.targetFov;
             camera->fovFlags = 0;
-            sp44 = true;
+            initViewport = true;
             break;
         case CAMERA_MODE_13:
             camera->near = 512.0f;
             camera->far = 8192.0f;
             camera->fovScaleX = SCREEN_WIDTH;
             camera->fovScaleY = SCREEN_HEIGHT;
-            Camera_SettingsSetAtEyeWithParameters(arg1, &D_807768AC);
+            Camera_SettingsSetAtEyeWithParameters(cameraSettings, &D_807768AC);
             break;
         case CAMERA_MODE_ENDING:
             camera->near = 16.0f;
             camera->far = 8192.0f;
             camera->fovScaleX = SCREEN_WIDTH;
             camera->fovScaleY = SCREEN_HEIGHT;
-            Camera_SettingsSetOrbitWithParameters(arg1, CAMERA_TYPE_ORBIT_EYE, &D_80776448);
-            arg1->orbit.anchorPos.x = 196.0f;
-            arg1->orbit.anchorPos.y = 25.0f;
-            arg1->orbit.anchorPos.z = -3000.0f;
-            arg1->orbit.distance = arg1->orbit.targetDistance = 258.0f;
-            arg1->orbit.pitch = arg1->orbit.targetPitch = -7.0f;
-            arg1->orbit.yaw = arg1->orbit.targetYaw = 269.0f;
-            sp44 = true;
+            Camera_SettingsSetOrbitWithParameters(cameraSettings, CAMERA_TYPE_ORBIT_EYE, &D_80776448);
+            cameraSettings->orbit.anchorPos.x = 196.0f;
+            cameraSettings->orbit.anchorPos.y = 25.0f;
+            cameraSettings->orbit.anchorPos.z = -3000.0f;
+            cameraSettings->orbit.distance = cameraSettings->orbit.targetDistance = 258.0f;
+            cameraSettings->orbit.pitch = cameraSettings->orbit.targetPitch = -7.0f;
+            cameraSettings->orbit.yaw = cameraSettings->orbit.targetYaw = 269.0f;
+            initViewport = true;
             if (gPlayer1OverallPosition < 4) {
                 sCameraEndingFocusRacer = gPlayer1OverallPosition - 1;
             } else {
@@ -1952,16 +1986,16 @@ void Camera_InitMode(Camera* camera, CameraSettings* arg1, unk_800E5D70* arg2) {
             }
             break;
     }
-    if (sp44) {
-        camera->vpTransitionState = 0;
+    if (initViewport) {
+        camera->vpTransitionState = CAMERA_VP_TRANSITION_INACTIVE;
         camera->transitionTimer = camera->transitionTime = 0;
-        func_80716F38(camera);
+        Camera_InitViewport(camera);
     }
 }
 
 extern s32 sNumCameras;
 
-void func_80716F38(Camera* camera) {
+void Camera_InitViewport(Camera* camera) {
     s32* scissorBoxTypes = sCameraScissorBoxTypes[sNumCameras];
     s32 scissorBoxType = scissorBoxTypes[camera->id];
     Vp* vp;
@@ -2041,17 +2075,17 @@ void Camera_Update(void) {
     s32 i;
 
     for (i = 0; i < sNumCameras; i++) {
-        Camera_UpdateMode(&gCameras[i], &gCameraSettings[i], &D_807A1480[i]);
+        Camera_UpdateMode(&gCameras[i], &sCameraSettings[i], &sCameraScriptMgrs[i]);
     }
 
     if ((gGameMode == GAMEMODE_VS_2P) || (gGameMode == GAMEMODE_VS_3P) || (gGameMode == GAMEMODE_VS_4P)) {
-        func_80717B20();
+        Camera_UpdateViewportTransition();
     }
 }
 
 extern GfxPool* gGfxPool;
 
-void Camera_UpdateMode(Camera* camera, CameraSettings* cameraSettings, unk_800E5D70* arg2) {
+void Camera_UpdateMode(Camera* camera, CameraSettings* cameraSettings, CameraScriptManager* scriptMgr) {
     f32 temp_fa0;
     f32 temp_fa1;
     f32 temp_ft4;
@@ -2115,10 +2149,10 @@ void Camera_UpdateMode(Camera* camera, CameraSettings* cameraSettings, unk_800E5
                 }
                 break;
             case CAMERA_MODE_RACE:
-                Camera_UpdateRace(camera, cameraSettings, arg2);
+                Camera_UpdateRace(camera, cameraSettings, scriptMgr);
                 break;
             case CAMERA_MODE_TITLE_DEMO:
-                Camera_UpdateTitleDemo(camera, cameraSettings, arg2);
+                Camera_UpdateTitleDemo(camera, cameraSettings, scriptMgr);
                 break;
             case CAMERA_MODE_FALLING_OFF_TRACK:
                 if (!gGamePaused) {
@@ -2127,147 +2161,147 @@ void Camera_UpdateMode(Camera* camera, CameraSettings* cameraSettings, unk_800E5
                 break;
             case CAMERA_MODE_FINISHED_SUCCESS:
                 if (!gGamePaused) {
-                    Camera_UpdateFinishedSuccess(camera, cameraSettings, arg2);
+                    Camera_UpdateFinishedSuccess(camera, cameraSettings, scriptMgr);
                 }
                 break;
             case CAMERA_MODE_FINISHED_SPECTATE:
                 if (!gGamePaused) {
-                    Camera_UpdateFinishedSpectate(camera, cameraSettings, arg2);
+                    Camera_UpdateFinishedSpectate(camera, cameraSettings, scriptMgr);
                 }
                 break;
             case CAMERA_MODE_FINISHED_LOSER:
                 if (!gGamePaused) {
-                    Camera_UpdateFinishedLoser(camera, cameraSettings, arg2);
+                    Camera_UpdateFinishedLoser(camera, cameraSettings, scriptMgr);
                 }
                 break;
             case CAMERA_MODE_RECORDS_RACE:
-                Camera_UpdateRecordsRace(camera, cameraSettings, arg2);
+                Camera_UpdateRecordsRace(camera, cameraSettings, scriptMgr);
                 break;
             case CAMERA_MODE_ENDING:
-                Camera_UpdateEnding(camera, cameraSettings, arg2);
+                Camera_UpdateEnding(camera, cameraSettings, scriptMgr);
                 break;
         }
         mode = camera->mode;
     } while (startMode != mode);
 
     Camera_SettingsUpdate(cameraSettings, camera);
-    func_807176B4(camera, cameraSettings);
-    func_807130F8(camera, cameraSettings);
+    Camera_SettingsUpdateRaceIntroStart(camera, cameraSettings);
+    Camera_UpdateFromSettings(camera, cameraSettings);
     func_8071315C(camera);
     Camera_UpdateProjectionViewMtx(gGfxPool, camera);
     if ((gGameMode == GAMEMODE_GP_RACE) || (gGameMode == GAMEMODE_PRACTICE) || (gGameMode == GAMEMODE_TIME_ATTACK) ||
         (gGameMode == GAMEMODE_DEATH_RACE)) {
-        func_8071370C(camera);
+        Camera_UpdateEnemyEnginePan(camera);
     }
 }
 
-void func_807176B4(Camera* camera, CameraSettings* cameraSettings) {
-    unk_80776A48* var_s1;
+void Camera_SettingsUpdateRaceIntroStart(Camera* camera, CameraSettings* cameraSettings) {
+    CameraRaceSettingInfo* var_s1;
     s32 angle;
     f32 temp1;
     f32 temp2;
     f32 temp3;
-    Mtx3F sp48;
+    Mtx3F basis;
     f32 temp_fv0;
     f32 temp_fv1;
-    CameraParameters* temp_v1 = &cameraSettings->parameters;
+    CameraParameters* params = &cameraSettings->parameters;
     Racer* racer;
 
     if (camera->mode == CAMERA_MODE_RACE_INTRO) {
         if (gNumPlayers == 2) {
-            var_s1 = &D_80776A78[2];
+            var_s1 = &D_80776A78[CAMERA_RACE_SETTING_REGULAR];
         } else {
-            var_s1 = &D_80776A48[2];
+            var_s1 = &D_80776A48[CAMERA_RACE_SETTING_REGULAR];
         }
 
         racer = &gRacers[camera->id];
 
-        sp48.x.x = 0.0f - (var_s1->distance * racer->trueBasis.x.x);
-        sp48.x.y = 0.0f - (var_s1->distance * racer->trueBasis.x.y);
-        sp48.x.z = 0.0f - (var_s1->distance * racer->trueBasis.x.z);
-        temp_fv1 = 1.0f / sqrtf(SQ(sp48.x.x) + SQ(sp48.x.y) + SQ(sp48.x.z));
-        sp48.x.x *= temp_fv1;
-        sp48.x.y *= temp_fv1;
-        sp48.x.z *= temp_fv1;
+        basis.x.x = 0.0f - (var_s1->distance * racer->trueBasis.x.x);
+        basis.x.y = 0.0f - (var_s1->distance * racer->trueBasis.x.y);
+        basis.x.z = 0.0f - (var_s1->distance * racer->trueBasis.x.z);
+        temp_fv1 = 1.0f / sqrtf(SQ(basis.x.x) + SQ(basis.x.y) + SQ(basis.x.z));
+        basis.x.x *= temp_fv1;
+        basis.x.y *= temp_fv1;
+        basis.x.z *= temp_fv1;
 
-        sp48.z.x = (racer->trueBasis.y.y * sp48.x.z) - (racer->trueBasis.y.z * sp48.x.y);
-        sp48.z.y = (racer->trueBasis.y.z * sp48.x.x) - (racer->trueBasis.y.x * sp48.x.z);
-        sp48.z.z = (racer->trueBasis.y.x * sp48.x.y) - (racer->trueBasis.y.y * sp48.x.x);
-        temp_fv1 = 1.0f / sqrtf(SQ(sp48.z.x) + SQ(sp48.z.y) + SQ(sp48.z.z));
-        sp48.z.x *= temp_fv1;
-        sp48.z.y *= temp_fv1;
-        sp48.z.z *= temp_fv1;
+        basis.z.x = (racer->trueBasis.y.y * basis.x.z) - (racer->trueBasis.y.z * basis.x.y);
+        basis.z.y = (racer->trueBasis.y.z * basis.x.x) - (racer->trueBasis.y.x * basis.x.z);
+        basis.z.z = (racer->trueBasis.y.x * basis.x.y) - (racer->trueBasis.y.y * basis.x.x);
+        temp_fv1 = 1.0f / sqrtf(SQ(basis.z.x) + SQ(basis.z.y) + SQ(basis.z.z));
+        basis.z.x *= temp_fv1;
+        basis.z.y *= temp_fv1;
+        basis.z.z *= temp_fv1;
 
-        sp48.y.x = (sp48.x.y * sp48.z.z) - (sp48.x.z * sp48.z.y);
-        sp48.y.y = (sp48.x.z * sp48.z.x) - (sp48.x.x * sp48.z.z);
-        sp48.y.z = (sp48.x.x * sp48.z.y) - (sp48.x.y * sp48.z.x);
-        temp_fv1 = 1.0f / sqrtf(SQ(sp48.y.x) + SQ(sp48.y.y) + SQ(sp48.y.z));
-        sp48.y.x *= temp_fv1;
-        sp48.y.y *= temp_fv1;
-        sp48.y.z *= temp_fv1;
+        basis.y.x = (basis.x.y * basis.z.z) - (basis.x.z * basis.z.y);
+        basis.y.y = (basis.x.z * basis.z.x) - (basis.x.x * basis.z.z);
+        basis.y.z = (basis.x.x * basis.z.y) - (basis.x.y * basis.z.x);
+        temp_fv1 = 1.0f / sqrtf(SQ(basis.y.x) + SQ(basis.y.y) + SQ(basis.y.z));
+        basis.y.x *= temp_fv1;
+        basis.y.y *= temp_fv1;
+        basis.y.z *= temp_fv1;
 
         angle = Math_Round(DEG_TO_FZXANG2(var_s1->pitch));
 
         temp_fv0 =
-            (SIN(angle) * var_s1->distance) *
-            ((sp48.y.x * racer->trueBasis.y.x) + (sp48.y.y * racer->trueBasis.y.y) + (sp48.y.z * racer->trueBasis.y.z));
+            (SIN(angle) * var_s1->distance) * ((basis.y.x * racer->trueBasis.y.x) + (basis.y.y * racer->trueBasis.y.y) +
+                                               (basis.y.z * racer->trueBasis.y.z));
         temp_fv1 = COS(angle) * var_s1->distance;
 
-        temp1 = (racer->focusPos.x + (temp_fv1 * sp48.x.x) + (temp_fv0 * sp48.y.x));
-        temp2 = (racer->focusPos.y + (temp_fv1 * sp48.x.y) + (temp_fv0 * sp48.y.y));
-        temp3 = (racer->focusPos.z + (temp_fv1 * sp48.x.z) + (temp_fv0 * sp48.y.z));
+        temp1 = (racer->focusPos.x + (temp_fv1 * basis.x.x) + (temp_fv0 * basis.y.x));
+        temp2 = (racer->focusPos.y + (temp_fv1 * basis.x.y) + (temp_fv0 * basis.y.y));
+        temp3 = (racer->focusPos.z + (temp_fv1 * basis.x.z) + (temp_fv0 * basis.y.z));
 
         temp_fv0 = (f32) (camera->timer - 1) / 300.0f;
 
         temp_fv0 = (-2.0f * temp_fv0 * temp_fv0 * temp_fv0) + (3.0f * temp_fv0 * temp_fv0);
 
-        temp_v1->eye.x = ((1.0f - temp_fv0) * temp_v1->eye.x) + (temp_fv0 * temp1);
-        temp_v1->eye.y = ((1.0f - temp_fv0) * temp_v1->eye.y) + (temp_fv0 * temp2);
-        temp_v1->eye.z = ((1.0f - temp_fv0) * temp_v1->eye.z) + (temp_fv0 * temp3);
+        params->eye.x = ((1.0f - temp_fv0) * params->eye.x) + (temp_fv0 * temp1);
+        params->eye.y = ((1.0f - temp_fv0) * params->eye.y) + (temp_fv0 * temp2);
+        params->eye.z = ((1.0f - temp_fv0) * params->eye.z) + (temp_fv0 * temp3);
 
-        sp48.x.x = temp_v1->at.x - temp_v1->eye.x;
-        sp48.x.y = temp_v1->at.y - temp_v1->eye.y;
-        sp48.x.z = temp_v1->at.z - temp_v1->eye.z;
-        sp48.y.x = racer->trueBasis.y.x;
-        sp48.y.y = racer->trueBasis.y.y;
-        sp48.y.z = racer->trueBasis.y.z;
-        Math_OrthonormalizeAroundForward(&sp48);
-        temp_v1->up.x = temp_v1->targetUp.x = sp48.y.x;
-        temp_v1->up.y = temp_v1->targetUp.y = sp48.y.y;
-        temp_v1->up.z = temp_v1->targetUp.z = sp48.y.z;
+        basis.x.x = params->at.x - params->eye.x;
+        basis.x.y = params->at.y - params->eye.y;
+        basis.x.z = params->at.z - params->eye.z;
+        basis.y.x = racer->trueBasis.y.x;
+        basis.y.y = racer->trueBasis.y.y;
+        basis.y.z = racer->trueBasis.y.z;
+        Math_OrthonormalizeAroundForward(&basis);
+        params->up.x = params->targetUp.x = basis.y.x;
+        params->up.y = params->targetUp.y = basis.y.y;
+        params->up.z = params->targetUp.z = basis.y.z;
     }
 }
 
 extern s32 D_8006D544;
-extern s32 D_8006D548;
-extern s32 D_800BF040;
+extern bool D_8006D548;
+extern s32 D_i2_800BF040;
 extern s32 sNumCameras;
 extern s16 D_807A16CC;
 
-void func_80717B20(void) {
+void Camera_UpdateViewportTransition(void) {
     Racer* racer;
     f32 temp_fv0;
     s32 i;
     Camera* camera;
     Vp* vp;
 
-    if (D_8076D6C0 == -1) {
+    if (sMultiplayerFocusCameraId == -1) {
         if ((D_807A16CC != 0) && (D_8006D544 != 0)) {
-            D_800BF040 = 30;
+            D_i2_800BF040 = 30;
 
             for (i = 0, camera = gCameras; i < sNumCameras; i++, camera++) {
                 racer = &gRacers[i];
                 if (racer->position == 1) {
-                    D_8076D6C0 = i;
+                    sMultiplayerFocusCameraId = i;
                 }
-                camera->vpTransitionState = 1;
+                camera->vpTransitionState = CAMERA_VP_TRANSITION_ACTIVE;
                 camera->transitionTimer = 0;
                 camera->transitionTime = 30;
             }
 
             switch (gGameMode) {
                 case GAMEMODE_VS_2P:
-                    if (D_8076D6C0 == 0) {
+                    if (sMultiplayerFocusCameraId == 0) {
                         gCameras[0].endScissorTop = 8.0f;
                         gCameras[0].endScissorBottom = 231.0f;
                         gCameras[0].endVpScaleY = 120.0f;
@@ -2289,7 +2323,7 @@ void func_80717B20(void) {
                     break;
                 case GAMEMODE_VS_3P:
                 case GAMEMODE_VS_4P:
-                    switch (D_8076D6C0) {
+                    switch (sMultiplayerFocusCameraId) {
                         case 0:
                             gCameras[0].endScissorLeft = 12.0f;
                             gCameras[0].endScissorTop = 8.0f;
@@ -2430,52 +2464,49 @@ void func_80717B20(void) {
                     break;
             }
         }
-    } else if ((gCameras[D_8076D6C0].transitionTimer == 30) && (D_8006D548 == 0)) {
-        D_8006D548 = 1;
+    } else if ((gCameras[sMultiplayerFocusCameraId].transitionTimer == 30) && !D_8006D548) {
+        D_8006D548 = true;
     }
 
     for (i = 0, camera = gCameras; i < sNumCameras; i++, camera++) {
-        if (camera->vpTransitionState == 1) {
-            if (camera->transitionTimer < camera->transitionTime) {
-                camera->transitionTimer++;
-            }
-
-            temp_fv0 = (f32) camera->transitionTimer / camera->transitionTime;
-
-            camera->currentScissorLeft =
-                camera->startScissorLeft + ((camera->endScissorLeft - camera->startScissorLeft) * temp_fv0);
-            camera->currentScissorTop =
-                camera->startScissorTop + ((camera->endScissorTop - camera->startScissorTop) * temp_fv0);
-            camera->currentScissorRight =
-                camera->startScissorRight + ((camera->endScissorRight - camera->startScissorRight) * temp_fv0);
-            camera->currentScissorBottom =
-                camera->startScissorBottom + ((camera->endScissorBottom - camera->startScissorBottom) * temp_fv0);
-            camera->currentVpScaleX =
-                camera->startVpScaleX + ((camera->endVpScaleX - camera->startVpScaleX) * temp_fv0);
-            camera->currentVpScaleY =
-                camera->startVpScaleY + ((camera->endVpScaleY - camera->startVpScaleY) * temp_fv0);
-            camera->currentVpTransX = camera->startVpTransX +
-                                      ((camera->endVpTransX - camera->startVpTransX) * temp_fv0) +
-                                      camera->currentVpScaleX;
-            camera->currentVpTransY = camera->startVpTransY +
-                                      ((camera->endVpTransY - camera->startVpTransY) * temp_fv0) +
-                                      camera->currentVpScaleY;
-
-            vp = &gGfxPool->unk_362C8[i];
-            vp->vp.vscale[0] = camera->currentVpScaleX * 4.0f;
-            vp->vp.vscale[1] = camera->currentVpScaleY * 4.0f;
-            vp->vp.vscale[2] = 0x1FF;
-            vp->vp.vscale[3] = 0;
-            vp->vp.vtrans[0] = camera->currentVpTransX * 4.0f;
-            vp->vp.vtrans[1] = camera->currentVpTransY * 4.0f;
-            vp->vp.vtrans[2] = 0x1FF;
-            vp->vp.vtrans[3] = 0;
+        if (camera->vpTransitionState != CAMERA_VP_TRANSITION_ACTIVE) {
+            continue;
         }
+        if (camera->transitionTimer < camera->transitionTime) {
+            camera->transitionTimer++;
+        }
+
+        temp_fv0 = (f32) camera->transitionTimer / camera->transitionTime;
+
+        camera->currentScissorLeft =
+            camera->startScissorLeft + ((camera->endScissorLeft - camera->startScissorLeft) * temp_fv0);
+        camera->currentScissorTop =
+            camera->startScissorTop + ((camera->endScissorTop - camera->startScissorTop) * temp_fv0);
+        camera->currentScissorRight =
+            camera->startScissorRight + ((camera->endScissorRight - camera->startScissorRight) * temp_fv0);
+        camera->currentScissorBottom =
+            camera->startScissorBottom + ((camera->endScissorBottom - camera->startScissorBottom) * temp_fv0);
+        camera->currentVpScaleX = camera->startVpScaleX + ((camera->endVpScaleX - camera->startVpScaleX) * temp_fv0);
+        camera->currentVpScaleY = camera->startVpScaleY + ((camera->endVpScaleY - camera->startVpScaleY) * temp_fv0);
+        camera->currentVpTransX = camera->startVpTransX + ((camera->endVpTransX - camera->startVpTransX) * temp_fv0) +
+                                  camera->currentVpScaleX;
+        camera->currentVpTransY = camera->startVpTransY + ((camera->endVpTransY - camera->startVpTransY) * temp_fv0) +
+                                  camera->currentVpScaleY;
+
+        vp = &gGfxPool->unk_362C8[i];
+        vp->vp.vscale[0] = camera->currentVpScaleX * 4.0f;
+        vp->vp.vscale[1] = camera->currentVpScaleY * 4.0f;
+        vp->vp.vscale[2] = 0x1FF;
+        vp->vp.vscale[3] = 0;
+        vp->vp.vtrans[0] = camera->currentVpTransX * 4.0f;
+        vp->vp.vtrans[1] = camera->currentVpTransY * 4.0f;
+        vp->vp.vtrans[2] = 0x1FF;
+        vp->vp.vtrans[3] = 0;
     }
 }
 
 void Camera_UpdateRaceIntro(Camera* camera, CameraSettings* cameraSettings) {
-    unk_80776A48* var_v1;
+    CameraRaceSettingInfo* var_v1;
     f32 temp_fv0;
     s32 index;
     CameraParameters* params = &cameraSettings->parameters;
@@ -2495,10 +2526,10 @@ void Camera_UpdateRaceIntro(Camera* camera, CameraSettings* cameraSettings) {
     if (camera->timer >= 300) {
         if (gNumPlayers == 2) {
             Camera_SettingsSetFollowSmooth(cameraSettings, &D_80776B9C.data);
-            var_v1 = &D_80776A78[2];
+            var_v1 = &D_80776A78[CAMERA_RACE_SETTING_REGULAR];
         } else {
             Camera_SettingsSetFollowSmooth(cameraSettings, &D_80776AA8.data);
-            var_v1 = &D_80776A48[2];
+            var_v1 = &D_80776A48[CAMERA_RACE_SETTING_REGULAR];
         }
         camera->mode = CAMERA_MODE_SETUP_RACE;
 
@@ -2546,7 +2577,7 @@ extern s16 D_807A16CC;
 extern s32 gCurrentGhostType;
 extern s32 gFastestGhostTime;
 
-void Camera_UpdateRace(Camera* camera, CameraSettings* cameraSettings, unk_800E5D70* arg2) {
+void Camera_UpdateRace(Camera* camera, CameraSettings* cameraSettings, CameraScriptManager* arg2) {
     f32 var_fa0;
     f32 var_fv1;
     s32 playerIndex;
@@ -2640,7 +2671,7 @@ void Camera_UpdateRace(Camera* camera, CameraSettings* cameraSettings, unk_800E5
     }
 }
 
-void Camera_UpdateTitleDemo(Camera* camera, CameraSettings* cameraSettings, unk_800E5D70* arg2) {
+void Camera_UpdateTitleDemo(Camera* camera, CameraSettings* cameraSettings, CameraScriptManager* arg2) {
     s32 playerIndex = camera->id;
 
     if (gRacers[playerIndex].stateFlags & RACER_STATE_FALLING_OFF_TRACK) {
@@ -2690,7 +2721,7 @@ void Camera_UpdateFallingOffTrack(Camera* camera, CameraSettings* cameraSettings
     atEye->targetAt = gRacers[camera->id].focusPos;
 }
 
-void Camera_UpdateFinishedSuccess(Camera* camera, CameraSettings* cameraSettings, unk_800E5D70* arg2) {
+void Camera_UpdateFinishedSuccess(Camera* camera, CameraSettings* cameraSettings, CameraScriptManager* arg2) {
     s32 pad;
     Vec3f* temp_s1 = &D_807A15A0[camera->id];
     unk_800CD970* temp_a3 = &D_8076D788[camera->state];
@@ -2793,7 +2824,7 @@ void Camera_UpdateFinishedSuccess(Camera* camera, CameraSettings* cameraSettings
     }
 }
 
-void func_80718F58(Vec3f* eyePos, CourseSegment* segment, f32 arg2, unk_800CD970* arg3) {
+void func_80718F58(Vec3f* eyePos, CourseSegment* segment, f32 racerTValue, unk_800CD970* arg3) {
     f32 abs;
     f32 t;
     f32 temp_fa1;
@@ -2803,7 +2834,7 @@ void func_80718F58(Vec3f* eyePos, CourseSegment* segment, f32 arg2, unk_800CD970
     Mtx3F segmentBasis;
     unk_8076D6C8* sp28 = (unk_8076D6C8*) arg3->unk_08;
 
-    t = func_80712E68(&segment, arg2, sp28->unk_00);
+    t = func_80712E68(&segment, racerTValue, sp28->unk_00);
 
     Course_SplineGetPosition(segment, t, eyePos);
     func_80712FE4(&segmentBasis, segment, t);
@@ -2845,7 +2876,7 @@ void func_80718F58(Vec3f* eyePos, CourseSegment* segment, f32 arg2, unk_800CD970
     eyePos->z += (segmentBasis.y.z * var_fa0) + (segmentBasis.z.z * var_fv0);
 }
 
-void Camera_UpdateFinishedLoser(Camera* camera, CameraSettings* cameraSettings, unk_800E5D70* arg2) {
+void Camera_UpdateFinishedLoser(Camera* camera, CameraSettings* cameraSettings, CameraScriptManager* arg2) {
     CameraTypeAtEye* atEye = &cameraSettings->atEye;
 
     if (camera->timer <= 60) {
@@ -2854,7 +2885,7 @@ void Camera_UpdateFinishedLoser(Camera* camera, CameraSettings* cameraSettings, 
     }
 }
 
-void Camera_UpdateFinishedSpectate(Camera* camera, CameraSettings* cameraSettings, unk_800E5D70* arg2) {
+void Camera_UpdateFinishedSpectate(Camera* camera, CameraSettings* cameraSettings, CameraScriptManager* arg2) {
     s32 pad;
     f32 temp;
     CameraTypeOrbit* orbit = &cameraSettings->orbit;
@@ -2901,7 +2932,7 @@ void Camera_UpdateFinishedSpectate(Camera* camera, CameraSettings* cameraSetting
             break;
     }
 
-    if ((D_8076D6C0 == camera->id) && (gNumPlayers == 2)) {
+    if ((sMultiplayerFocusCameraId == camera->id) && (gNumPlayers == 2)) {
 
         if (camera->transitionTimer < camera->transitionTime) {
             temp = (f32) (camera->transitionTimer + 1) / camera->transitionTime;
@@ -2912,7 +2943,7 @@ void Camera_UpdateFinishedSpectate(Camera* camera, CameraSettings* cameraSetting
     }
 }
 
-void Camera_UpdateRecordsRace(Camera* camera, CameraSettings* cameraSettings, unk_800E5D70* arg2) {
+void Camera_UpdateRecordsRace(Camera* camera, CameraSettings* cameraSettings, CameraScriptManager* arg2) {
     Racer* racer = &gRacers[camera->id];
 
     if (racer->stateFlags & RACER_STATE_FALLING_OFF_TRACK) {
@@ -2921,19 +2952,19 @@ void Camera_UpdateRecordsRace(Camera* camera, CameraSettings* cameraSettings, un
     }
 }
 
-extern unk_struct_C D_i7_800993D0[];
-extern unk_struct_C D_i7_800996E0[];
-extern unk_struct_C D_i7_80099A60[];
-extern unk_struct_C D_i7_80099F70[];
-extern unk_struct_C D_i7_8009A090[];
-extern unk_struct_C D_i7_8009A210[];
+extern CameraScript D_i7_800993D0[];
+extern CameraScript D_i7_800996E0[];
+extern CameraScript D_i7_80099A60[];
+extern CameraScript D_i7_80099F70[];
+extern CameraScript D_i7_8009A090[];
+extern CameraScript D_i7_8009A210[];
 extern u16 D_8009AD16;
 
-void Camera_UpdateEnding(Camera* camera, CameraSettings* cameraSettings, unk_800E5D70* arg2) {
+void Camera_UpdateEnding(Camera* camera, CameraSettings* cameraSettings, CameraScriptManager* arg2) {
     s32 var_s3 = true;
     Racer* racer;
     CameraTypeLocalAnchor* localAnchor = &cameraSettings->localAnchor;
-    unk_struct_C* var_a1;
+    CameraScript* var_a1;
 
     while (var_s3) {
 
@@ -2961,14 +2992,14 @@ void Camera_UpdateEnding(Camera* camera, CameraSettings* cameraSettings, unk_800
                         } else {
                             var_a1 = D_i7_800996E0;
                         }
-                        func_80714000(arg2, var_a1);
+                        Camera_ScriptSetScript(arg2, var_a1);
                         racer = &gRacers[sCameraEndingFocusRacer];
-                        func_80713FE4(&D_807A1480[camera->id], &racer->focusPos, &racer->trueBasis, racer);
+                        func_80713FE4(&sCameraScriptMgrs[camera->id], &racer->focusPos, &racer->trueBasis, racer);
                     }
                 }
                 break;
             case 1:
-                if (func_8071403C(arg2)) {
+                if (Camera_ScriptUpdate(arg2)) {
                     camera->state = 2;
                     localAnchor = &cameraSettings->localAnchor;
                     localAnchor->targetLocalAt.x = 0.0f;
@@ -2993,30 +3024,30 @@ void Camera_UpdateEnding(Camera* camera, CameraSettings* cameraSettings, unk_800
                     camera->state = 3;
                     camera->timer = 0;
                     racer = &gRacers[2];
-                    func_80713FE4(&D_807A1480[camera->id], &racer->focusPos, &racer->trueBasis, racer);
-                    func_80714000(arg2, D_i7_8009A210);
+                    func_80713FE4(&sCameraScriptMgrs[camera->id], &racer->focusPos, &racer->trueBasis, racer);
+                    Camera_ScriptSetScript(arg2, D_i7_8009A210);
                 }
                 break;
             case 3:
-                if (func_8071403C(arg2) && func_80719868(3)) {
+                if (Camera_ScriptUpdate(arg2) && func_80719868(3)) {
                     camera->state = 4;
                     camera->timer = 0;
                     racer = &gRacers[1];
-                    func_80713FE4(&D_807A1480[camera->id], &racer->focusPos, &racer->trueBasis, racer);
-                    func_80714000(arg2, D_i7_8009A090);
+                    func_80713FE4(&sCameraScriptMgrs[camera->id], &racer->focusPos, &racer->trueBasis, racer);
+                    Camera_ScriptSetScript(arg2, D_i7_8009A090);
                 }
                 break;
             case 4:
-                if (func_8071403C(arg2) && func_80719868(2)) {
+                if (Camera_ScriptUpdate(arg2) && func_80719868(2)) {
                     camera->state = 5;
                     camera->timer = 0;
                     racer = &gRacers[0];
-                    func_80713FE4(&D_807A1480[camera->id], &racer->focusPos, &racer->trueBasis, racer);
-                    func_80714000(arg2, D_i7_80099F70);
+                    func_80713FE4(&sCameraScriptMgrs[camera->id], &racer->focusPos, &racer->trueBasis, racer);
+                    Camera_ScriptSetScript(arg2, D_i7_80099F70);
                 }
                 break;
             case 5:
-                func_8071403C(arg2);
+                Camera_ScriptUpdate(arg2);
                 break;
         }
     }
@@ -3040,5 +3071,5 @@ Gfx* func_80719890(Gfx* gfx) {
 
     gSPPerspNormalize(gfx++, gCameras[0].perspectiveScale);
     gSPMatrix(gfx++, &D_1000000.unk_1A208[gCameras[0].id], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
-    return func_80713E38(gfx, SCISSOR_BOX_FULL_SCREEN, gCameras[0].id);
+    return Camera_Draw(gfx, SCISSOR_BOX_FULL_SCREEN, gCameras[0].id);
 }
