@@ -73,6 +73,11 @@ typedef enum CameraCourseSelectState {
 
 #define CAMERA_FINISHED_SUCCESS_STATE_COUNT 5
 
+typedef enum CameraFinishedSpectateState {
+    /* 0 */ CAMERA_FINISHED_SPECTATE_STILL_ON_RACER,
+    /* 1 */ CAMERA_FINISHED_SPECTATE_ROTATE_AROUND_RACER,
+} CameraFinishedSpectateState;
+
 typedef enum CameraEndingState {
     /* 0 */ CAMERA_ENDING_DRIVE_INTO_CAMERA,
     /* 1 */ CAMERA_ENDING_FOLLOW_RACER,
