@@ -1236,7 +1236,7 @@ void func_i3_UpdatePortraitScales(void) {
     for (i = 0; i < gTotalRacers; i++) {
         if (gRacers[i].stateFlags & RACER_STATE_FINISHED) {
             sPortraitTextureScale[i] = 1.0f;
-        } else if (gRacers[i].stateFlags & RACER_STATE_FLAGS_80000) {
+        } else if (gRacers[i].stateFlags & RACER_STATE_FALLING_OFF_TRACK) {
             sPortraitTextureScale[i] -= 0.01f;
             if (sPortraitTextureScale[i] < 0.01f) {
                 sPortraitTextureScale[i] = 0.01f;
@@ -1254,7 +1254,7 @@ void func_i3_8005DEB8(void) {
 
     for (i = 0; i < 6; i++) {
         racer = gRacersByPosition[i];
-        if (racer->stateFlags & RACER_STATE_FLAGS_80000 && racer->position < 6) {
+        if (racer->stateFlags & RACER_STATE_FALLING_OFF_TRACK && racer->position < 6) {
             D_i3_8006B60C[i][1] = 90;
             D_i3_8006B60C[i][2] = racer->character;
         }

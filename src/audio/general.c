@@ -1779,7 +1779,7 @@ void Audio_LevelSEPopStack(u8 playerIndex) {
     }
 }
 
-extern Player gPlayers[];
+extern Camera gCameras[];
 
 void Audio_PlayerSEStart(u8 racerId, u8 sfxId) {
     f32 volumeScale;
@@ -1811,9 +1811,9 @@ void Audio_PlayerSEStart(u8 racerId, u8 sfxId) {
                 if (racerId == sAudioClosestRacerId) {
                     distance = sAudioClosestRacerDistance;
                 } else {
-                    vec.x = gRacers[racerId].segmentPositionInfo.pos.x - gPlayers[0].unk_50.x;
-                    vec.y = gRacers[racerId].segmentPositionInfo.pos.y - gPlayers[0].unk_50.y;
-                    vec.z = gRacers[racerId].segmentPositionInfo.pos.z - gPlayers[0].unk_50.z;
+                    vec.x = gRacers[racerId].segmentPositionInfo.pos.x - gCameras[0].eye.x;
+                    vec.y = gRacers[racerId].segmentPositionInfo.pos.y - gCameras[0].eye.y;
+                    vec.z = gRacers[racerId].segmentPositionInfo.pos.z - gCameras[0].eye.z;
 
                     distance = sqrtf(SQ_SUM(&vec));
                 }
@@ -1926,7 +1926,7 @@ void Audio_PlayerSEPopStack(u8 racerId) {
 }
 
 extern s32 gNumPlayers;
-extern s8 D_8076C7D8;
+extern s8 gTitleDemoState;
 extern s32 gGameMode;
 
 void func_807442E4(void) {
@@ -1951,12 +1951,13 @@ void func_807442E4(void) {
                         break;
                 }
 
-                if ((temp_lo > 2100) && (temp_lo < 2110) && (gGameMode == GAMEMODE_FLX_TITLE) && (D_8076C7D8 == 0)) {
+                if ((temp_lo > 2100) && (temp_lo < 2110) && (gGameMode == GAMEMODE_FLX_TITLE) &&
+                    (gTitleDemoState == TITLE_DEMO_INACTIVE)) {
                     if (!note) {}
-                    D_8076C7D8 = 1;
+                    gTitleDemoState = TITLE_DEMO_ACTIVE;
                 }
-                if ((temp_lo > 8200) && (temp_lo < 8210) && (D_8076C7D8 == 1)) {
-                    D_8076C7D8 = 3;
+                if ((temp_lo > 8200) && (temp_lo < 8210) && (gTitleDemoState == TITLE_DEMO_ACTIVE)) {
+                    gTitleDemoState = TITLE_DEMO_START_EXIT;
                 }
                 if (temp_lo > 250 && temp_lo < 260) {
                     AUDIOCMD_GLOBAL_INIT_SEQPLAYER(0, SEQ_SOUND_EFFECTS, 0, 0);
@@ -1988,9 +1989,9 @@ void Audio_UpdateEnemyEngine(void) {
     if (((gGameMode == GAMEMODE_GP_RACE) || (gGameMode == GAMEMODE_PRACTICE) || (gGameMode == GAMEMODE_DEATH_RACE)) &&
         !sAudioLevelFadeoutActive && (gAudioPlayerFinishedState[0] == 0)) {
         if (gRacers[sAudioClosestRacerId].unk_17C > 9.0f) {
-            vec.x = gRacers[sAudioClosestRacerId].segmentPositionInfo.pos.x - gPlayers[0].unk_50.x;
-            vec.y = gRacers[sAudioClosestRacerId].segmentPositionInfo.pos.y - gPlayers[0].unk_50.y;
-            vec.z = gRacers[sAudioClosestRacerId].segmentPositionInfo.pos.z - gPlayers[0].unk_50.z;
+            vec.x = gRacers[sAudioClosestRacerId].segmentPositionInfo.pos.x - gCameras[0].eye.x;
+            vec.y = gRacers[sAudioClosestRacerId].segmentPositionInfo.pos.y - gCameras[0].eye.y;
+            vec.z = gRacers[sAudioClosestRacerId].segmentPositionInfo.pos.z - gCameras[0].eye.z;
             sAudioClosestRacerDistance = sqrtf(SQ_SUM(&vec));
         }
         if (gRacers[sAudioClosestRacerId].unk_17C > 9.0f) {
@@ -2089,9 +2090,9 @@ void func_807447CC(u8 playerId) {
             Vec3f vec;
             f32 temp;
 
-            vec.x = gRacers[playerId].segmentPositionInfo.pos.x - gPlayers[playerId].unk_50.x;
-            vec.y = gRacers[playerId].segmentPositionInfo.pos.y - gPlayers[playerId].unk_50.y;
-            vec.z = gRacers[playerId].segmentPositionInfo.pos.z - gPlayers[playerId].unk_50.z;
+            vec.x = gRacers[playerId].segmentPositionInfo.pos.x - gCameras[playerId].eye.x;
+            vec.y = gRacers[playerId].segmentPositionInfo.pos.y - gCameras[playerId].eye.y;
+            vec.z = gRacers[playerId].segmentPositionInfo.pos.z - gCameras[playerId].eye.z;
             temp = sqrtf(SQ_SUM(&vec));
             volumeScale = (-0.002f * temp + 1.2f) * 0.65f;
 
@@ -2108,9 +2109,9 @@ void func_807447CC(u8 playerId) {
         Vec3f vec;
         f32 temp;
 
-        vec.x = gRacers[playerId].segmentPositionInfo.pos.x - gPlayers[playerId].unk_50.x;
-        vec.y = gRacers[playerId].segmentPositionInfo.pos.y - gPlayers[playerId].unk_50.y;
-        vec.z = gRacers[playerId].segmentPositionInfo.pos.z - gPlayers[playerId].unk_50.z;
+        vec.x = gRacers[playerId].segmentPositionInfo.pos.x - gCameras[playerId].eye.x;
+        vec.y = gRacers[playerId].segmentPositionInfo.pos.y - gCameras[playerId].eye.y;
+        vec.z = gRacers[playerId].segmentPositionInfo.pos.z - gCameras[playerId].eye.z;
         temp = sqrtf(SQ_SUM(&vec));
         volumeScale = -0.002f * temp + 1.2f;
 

@@ -2,17 +2,17 @@
 #include "fzx_game.h"
 #include "fzx_course.h"
 
-s32 D_8076C7C0 = GAMEMODE_FLX_TITLE;
+s32 gPostEadDemoGameMode = GAMEMODE_FLX_TITLE;
 s32 D_8076C7C4 = 0;
 s32 gNumPlayers = 1;
 s32 gCupType = JACK_CUP;
 s32 gDifficulty = NOVICE;
 s32 gTotalLapCount = 3;
-s8 D_8076C7D8 = 0;
+s8 gTitleDemoState = TITLE_DEMO_INACTIVE;
 s8 sTitleDemoNumPlayerState = 0;
 s8 sTitleDemoCoursesState = 0;
 UNUSED s32 D_8076C7E4 = 0;
-u16 D_8076C7E8 = 0;
+u16 sTitleDemoCounter = 0;
 s8 D_8076C7EC = false;
 s32 sTitleDemoGameModes[] = { GAMEMODE_GP_RACE, GAMEMODE_VS_2P, GAMEMODE_VS_4P };
 s32 sTitleDemoNumPlayers[] = { 1, 2, 4 };
@@ -118,7 +118,7 @@ void Game_Init(void) {
     gQueuedGameMode = GAMEMODE_FLX_TITLE;
     func_8071ED34();
     func_i2_800B904C();
-    func_80715F9C();
+    Camera_StartInit();
     Transition_Init();
     func_8070F0D0();
     Arena_EndInit();
@@ -137,7 +137,7 @@ void func_806F4BB4(void) {
     switch (gMenuChangeMode) {
         case MENU_CHANGE_RETRY:
             if (D_8076C7C4 != 0) {
-                D_8076C7C0 = GAMEMODE_TIME_ATTACK;
+                gPostEadDemoGameMode = GAMEMODE_TIME_ATTACK;
                 gGameModeChangeState = GAMEMODE_CHANGE_START;
                 gQueuedGameMode = GAMEMODE_EAD_DEMO;
                 D_8076C7C4 = 2;
@@ -147,7 +147,7 @@ void func_806F4BB4(void) {
             break;
         case MENU_CHANGE_QUIT:
             if (D_8076C7C4 != 0) {
-                D_8076C7C0 = GAMEMODE_FLX_TITLE;
+                gPostEadDemoGameMode = GAMEMODE_FLX_TITLE;
                 gGameModeChangeState = GAMEMODE_CHANGE_START;
                 gQueuedGameMode = GAMEMODE_EAD_DEMO;
                 D_8076C7C4 = 2;
@@ -158,7 +158,7 @@ void func_806F4BB4(void) {
             break;
         case MENU_CHANGE_CHANGE_COURSE:
             if (D_8076C7C4 != 0) {
-                D_8076C7C0 = GAMEMODE_FLX_COURSE_SELECT;
+                gPostEadDemoGameMode = GAMEMODE_FLX_COURSE_SELECT;
                 gGameModeChangeState = GAMEMODE_CHANGE_START;
                 gQueuedGameMode = GAMEMODE_EAD_DEMO;
                 D_8076C7C4 = 2;
@@ -169,7 +169,7 @@ void func_806F4BB4(void) {
             break;
         case MENU_CHANGE_CHANGE_MACHINE:
             if (D_8076C7C4 != 0) {
-                D_8076C7C0 = GAMEMODE_FLX_MACHINE_SELECT;
+                gPostEadDemoGameMode = GAMEMODE_FLX_MACHINE_SELECT;
                 gGameModeChangeState = GAMEMODE_CHANGE_START;
                 gQueuedGameMode = GAMEMODE_EAD_DEMO;
                 D_8076C7C4 = 2;
@@ -225,7 +225,7 @@ void func_806F4BB4(void) {
             break;
         case MENU_CHANGE_SETTINGS:
             if (D_8076C7C4 != 0) {
-                D_8076C7C0 = GAMEMODE_LX_MACHINE_SETTINGS;
+                gPostEadDemoGameMode = GAMEMODE_LX_MACHINE_SETTINGS;
                 gGameModeChangeState = GAMEMODE_CHANGE_START;
                 gQueuedGameMode = GAMEMODE_EAD_DEMO;
                 D_8076C7C4 = 2;
@@ -250,8 +250,6 @@ void func_806F4BB4(void) {
     }
 }
 
-extern s8 D_8076C7D8;
-
 void func_806F4FC8(void) {
     static u16 D_8076C92C = BGM_MUTE_CITY;
     s32 bgm = D_8076C92C;
@@ -264,7 +262,7 @@ void func_806F4FC8(void) {
         case GAMEMODE_VS_4P:
         case GAMEMODE_TIME_ATTACK:
         case GAMEMODE_DEATH_RACE:
-            if (D_8076C7D8 == 0) {
+            if (gTitleDemoState == TITLE_DEMO_INACTIVE) {
                 D_8076C92C = BGM_MUTE_CITY;
             }
             return;
@@ -320,17 +318,17 @@ extern u16 gInputButtonPressed;
 void func_806F5118(void) {
 
     if (gGameMode != gQueuedGameMode) {
-        D_8076C7D8 = 0;
-        D_8076C7E8 = 0;
+        gTitleDemoState = TITLE_DEMO_INACTIVE;
+        sTitleDemoCounter = 0;
         return;
     }
     Controller_SetGlobalInputs(&gSharedController);
     switch (gGameMode) {
         case GAMEMODE_FLX_TITLE:
             if (gControllersConnected != 0) {
-                D_8076C7E8++;
+                sTitleDemoCounter++;
             }
-            if ((D_8076C7D8 != 0) && (gControllersConnected != 0)) {
+            if ((gTitleDemoState != TITLE_DEMO_INACTIVE) && (gControllersConnected != 0)) {
 
                 gQueuedGameMode = sTitleDemoGameModes[sTitleDemoNumPlayerState];
                 gNumPlayers = sTitleDemoNumPlayers[sTitleDemoNumPlayerState];
@@ -343,8 +341,8 @@ void func_806F5118(void) {
                 if (sTitleDemoCoursesState >= ARRAY_COUNT(sTitleDemoCourses)) {
                     sTitleDemoCoursesState = 0;
                 }
-                D_8076C7E8 = 0;
-                D_8076C7D8 = 1;
+                sTitleDemoCounter = 0;
+                gTitleDemoState = TITLE_DEMO_ACTIVE;
                 gDifficulty = MASTER;
             }
             break;
@@ -355,20 +353,20 @@ void func_806F5118(void) {
         case GAMEMODE_VS_4P:
         case GAMEMODE_TIME_ATTACK:
         case GAMEMODE_DEATH_RACE:
-            if (D_8076C7D8 != 0) {
-                D_8076C7E8++;
-                switch (D_8076C7D8) {
-                    case 1:
+            if (gTitleDemoState != TITLE_DEMO_INACTIVE) {
+                sTitleDemoCounter++;
+                switch (gTitleDemoState) {
+                    case TITLE_DEMO_ACTIVE:
                         if (!(gInputButtonPressed & (BTN_A | BTN_START))) {
                             break;
                         }
                         /* fallthrough */
-                    case 3:
+                    case TITLE_DEMO_START_EXIT:
                         gQueuedGameMode = GAMEMODE_FLX_TITLE;
-                        D_8076C7E8 = 0;
-                        D_8076C7D8 = 2;
+                        sTitleDemoCounter = 0;
+                        gTitleDemoState = TITLE_DEMO_EXIT;
                         break;
-                    case 2:
+                    case TITLE_DEMO_EXIT:
                         break;
                 }
             }
@@ -461,8 +459,8 @@ void func_806F5310(void) {
                     break;
             }
             gGameMode = gQueuedGameMode;
-            if (D_8076C7D8 == 2) {
-                D_8076C7D8 = 0;
+            if (gTitleDemoState == TITLE_DEMO_EXIT) {
+                gTitleDemoState = TITLE_DEMO_INACTIVE;
             }
             gGamePaused = false;
             Arena_StartInit();
@@ -478,7 +476,7 @@ void func_806F5310(void) {
                 case GAMEMODE_CREATE_MACHINE:
                 case GAMEMODE_DEATH_RACE:
                 case GAMEMODE_EAD_DEMO:
-                    if (D_8076C7D8 == 0) {
+                    if (gTitleDemoState == TITLE_DEMO_INACTIVE) {
                         func_8070DA84();
                     }
                     break;
@@ -551,7 +549,7 @@ void func_806F5310(void) {
                 case GAMEMODE_TIME_ATTACK:
                 case GAMEMODE_DEATH_RACE:
                     func_i3_UpdateCharacterPortraits();
-                    if (D_8076C7D8 == 0) {
+                    if (gTitleDemoState == TITLE_DEMO_INACTIVE) {
                         if (gCurrentCourseInfo->courseIndex < COURSE_EDIT_1) {
                             Audio_DDBgmReady(D_i2_800BF044[gCurrentCourseInfo->courseIndex]);
                         } else if (gCurrentCourseInfo->courseIndex == COURSE_DEATH_RACE) {

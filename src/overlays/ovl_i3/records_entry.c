@@ -162,7 +162,7 @@ extern s32 D_8079A364;
 extern Mtx D_2028A00;
 extern Lights0 D_2028A40;
 extern Gfx D_8076CE28[];
-extern Player gPlayers[];
+extern Camera gCameras[];
 extern char* gTrackNames[];
 extern u32 gGameFrameCount;
 extern s16 D_807A16F2;
@@ -424,7 +424,7 @@ Gfx* func_i3_80065560(Gfx* gfx, s32 courseIndex) {
     gSPLoadUcodeL(gfx++, gspF3DFLX2_Rej_fifo);
     gfx = Segment_SetTableAddresses(gfx);
     gSPClipRatio(gfx++, FRUSTRATIO_3);
-    gSPPerspNormalize(gfx++, gPlayers[1].unk_118);
+    gSPPerspNormalize(gfx++, gCameras[1].perspectiveScale);
     gSPMatrix(gfx++, &D_1000000.unk_1A208[1], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
     gSPDisplayList(gfx++, D_303A5F8);
     gSPNumLights(gfx++, NUMLIGHTS_1);

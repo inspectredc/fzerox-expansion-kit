@@ -261,8 +261,8 @@ void Game_ThreadEntry(void* entry) {
     gOvlCourseSelectVramEnd = osVirtualToPhysical(SEGMENT_VRAM_END(course_select));
     gOvl6VramStart = osVirtualToPhysical(SEGMENT_VRAM_START(ovl_i6));
     gOvl6VramEnd = osVirtualToPhysical(SEGMENT_VRAM_END(ovl_i6));
-    gOvl7VramStart = osVirtualToPhysical(SEGMENT_VRAM_START(ovl_i7));
-    gOvl7VramEnd = osVirtualToPhysical(SEGMENT_VRAM_END(ovl_i7));
+    gOvl7VramStart = osVirtualToPhysical(SEGMENT_VRAM_START(ending));
+    gOvl7VramEnd = osVirtualToPhysical(SEGMENT_VRAM_END(ending));
     gOvl8VramStart = osVirtualToPhysical(SEGMENT_VRAM_START(records));
     gOvl8VramEnd = osVirtualToPhysical(SEGMENT_VRAM_END(records));
     gOvl9VramStart = osVirtualToPhysical(SEGMENT_VRAM_START(ovl_i9));
@@ -381,11 +381,11 @@ void Game_ThreadEntry(void* entry) {
     func_80703E08(SEGMENT_DISK_START(ovl_i6), SEGMENT_VRAM_START(ovl_i6), SEGMENT_DISK_SIZE(ovl_i6),
                   SEGMENT_BSS_SIZE(ovl_i6));
 
-    CLEAR_OVERLAY_CACHE(SEGMENT_TEXT_START(ovl_i7), SEGMENT_TEXT_SIZE(ovl_i7), SEGMENT_DATA_START(ovl_i7),
-                        SEGMENT_DATA_SIZE(ovl_i7));
+    CLEAR_OVERLAY_CACHE(SEGMENT_TEXT_START(ending), SEGMENT_TEXT_SIZE(ending), SEGMENT_DATA_START(ending),
+                        SEGMENT_DATA_SIZE(ending));
 
-    func_80703E08(SEGMENT_DISK_START(ovl_i7), SEGMENT_VRAM_START(ovl_i7), SEGMENT_DISK_SIZE(ovl_i7),
-                  SEGMENT_BSS_SIZE(ovl_i7));
+    func_80703E08(SEGMENT_DISK_START(ending), SEGMENT_VRAM_START(ending), SEGMENT_DISK_SIZE(ending),
+                  SEGMENT_BSS_SIZE(ending));
 
     CLEAR_OVERLAY_CACHE(SEGMENT_TEXT_START(records), SEGMENT_TEXT_SIZE(records), SEGMENT_DATA_START(records),
                         SEGMENT_DATA_SIZE(records));

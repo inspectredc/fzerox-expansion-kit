@@ -7,6 +7,8 @@
 #define M_DTOR	(M_PI / 180.0f)
 #define M_RTOD	(180.0f / M_PI)
 
+#define SHT_MAX 32767.0f
+
 #define LCG_MULTIPLIER 1103515245
 #define LCG_INCREMENT_1 12345
 #define LCG_INCREMENT_2 67890
@@ -50,10 +52,10 @@ typedef struct Vec3fFlip {
 } Vec3fFlip;
 
 typedef float Mtx3F_t[3][3];
-typedef union {
-    struct {
-        Vec3f x,y,z;
-    };
+typedef struct {
+    Vec3f x; // forward
+    Vec3f y; // up
+    Vec3f z; // side (left)
 } Mtx3F; // size = 0x24
 
 typedef float MtxF_t[4][4];

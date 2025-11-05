@@ -1307,6 +1307,20 @@ aSetupLandmineTextureDL = 0x8022380;
 aSetupCourseEffectTextureDL = 0x80223F8;
 aJumpFeatureTex = 0x8015A20;
 
+aVpFullScreen = 0x80146A8;
+aVpTopHalf = 0x80146B8;
+aVpBottomHalf = 0x80146C8;
+aVpLeftHalf = 0x80146D8;
+aVpRightHalf = 0x80146E8;
+aVpTopLeftQuarter = 0x80146F8;
+aVpTopRightQuarter = 0x8014708;
+aVpBottomLeftQuarter = 0x8014718;
+aVpBottomRightQuarter = 0x8014728;
+aVpTopCenterQuarter = 0x8014738;
+aVpBottomCenterQuarter = 0x8014748;
+aVpLeftCenterQuarter = 0x8014758;
+aVpRightCenterQuarter = 0x8014768;
+
 // temp segment addrs
 
 framebuffer_unused_VRAM = 0x803DBC00;

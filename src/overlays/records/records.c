@@ -3,6 +3,7 @@
 #include "fzx_racer.h"
 #include "fzx_course.h"
 #include "fzx_bordered_box.h"
+#include "fzx_camera.h"
 #include "fzx_assets.h"
 #include "records.h"
 #include "src/overlays/ovl_i2/transition.h"
@@ -167,7 +168,7 @@ void Records_Init(void) {
 
     func_i3_80040158();
     func_8071D48C();
-    func_807160A0();
+    Camera_Init();
     func_8070F0B0(COURSE_CONTEXT()->courseData.venue, COURSE_CONTEXT()->courseData.skybox);
     func_i3_800617A0();
     Course_LandminesViewInteractDataInit();
@@ -347,7 +348,7 @@ s32 Records_Update(void) {
     sGhostMarkerRenderInfo = &sGhostMarkerRenderInfos[D_8079A35C];
     func_8070D220();
     func_80726554();
-    func_80717294();
+    Camera_Update();
     func_i3_80061C2C();
     func_800B94D8();
     func_8070304C();
@@ -412,7 +413,7 @@ s32 Records_Update(void) {
         case 0:
             sRecordsRetireCleanupTimer = -1;
             func_8071D48C();
-            func_807160A0();
+            Camera_Init();
             break;
         default:
             sRecordsRetireCleanupTimer--;
@@ -748,7 +749,7 @@ Gfx* Records_Draw(Gfx* gfx) {
     D_800D65D0 = gGfxPool->unk_1A308;
     D_807A15DC = gGfxPool->unk_2A308;
     D_807A15E0 = &gGfxPool->unk_2A308[0x7FF];
-    gfx = func_i3_8006339C(gfx, 0, 0);
+    gfx = func_i3_8006339C(gfx, 0, SCISSOR_BOX_FULL_SCREEN);
     gfx = func_i2_800BDE60(gfx, 0);
     gfx = Course_GadgetsDraw(gfx, 0);
     gfx = func_i3_80065560(gfx, sRecordsCourseIndex);
@@ -804,7 +805,7 @@ extern Mtx D_2000000[];
 
 Gfx* Records_DrawGhostMarker(Gfx* gfx) {
 
-    gfx = func_806F6360(gfx, 0);
+    gfx = func_806F6360(gfx, SCISSOR_BOX_FULL_SCREEN);
     gSPDisplayList(gfx++, D_8014810);
     gDPSetCombineLERP(gfx++, 0, 0, 0, TEXEL0, TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0, TEXEL0, 0, SHADE, 0);
     gDPSetRenderMode(gfx++, G_RM_XLU_SURF, G_RM_XLU_SURF2);

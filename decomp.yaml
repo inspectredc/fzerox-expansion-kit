@@ -54,7 +54,7 @@ tools:
             - leo_fault
             - sys_fault
             - "1E970"
-            - "1F320"
+            - "camera"
             - "27110"
             - audio
             - libultra
@@ -99,9 +99,9 @@ tools:
           paths:
             - overlays/ovl_i6
         - id: ovl_i7
-          name: ovl_i7
+          name: ending
           paths:
-            - overlays/ovl_i7
+            - overlays/ending
         - id: ovl_i8
           name: records
           paths:

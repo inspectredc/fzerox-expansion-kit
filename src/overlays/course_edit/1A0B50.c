@@ -60,10 +60,10 @@ const f32 D_xk2_80104390[] = {
     9.494526863, 8.788786888, 8.021718979, 7.17367506,  6.211544991, 5.070877075, 3.58506608,  0,
 };
 
-extern Player gPlayers[];
+extern Camera gCameras[];
 
 s32 func_xk2_800EF090(Vec3f arg0, s32* arg1, s32* arg2) {
-    Player* player = gPlayers;
+    Camera* camera = gCameras;
     f32 temp_fa0;
     f32 temp_fv1;
     f32 sp30;
@@ -71,23 +71,23 @@ s32 func_xk2_800EF090(Vec3f arg0, s32* arg1, s32* arg2) {
     f32 temp_fv0;
     s32 pad2;
 
-    temp_fv0 = (player->unk_19C.m[0][2] * arg0.x) + (player->unk_19C.m[1][2] * arg0.y) +
-               (player->unk_19C.m[2][2] * arg0.z) + player->unk_19C.m[3][2];
+    temp_fv0 = (camera->projectionViewMtx.m[0][2] * arg0.x) + (camera->projectionViewMtx.m[1][2] * arg0.y) +
+               (camera->projectionViewMtx.m[2][2] * arg0.z) + camera->projectionViewMtx.m[3][2];
     if ((temp_fv0 < 0.0f) || (temp_fv0 > 65536.0f)) {
         return -1;
     }
-    temp_fv1 = 1.0f / (((player->unk_19C.m[0][3] * arg0.x) + (player->unk_19C.m[1][3] * arg0.y) +
-                        (player->unk_19C.m[2][3] * arg0.z)) +
-                       player->unk_19C.m[3][3]);
-    temp_fv0 = ((player->unk_19C.m[0][0] * arg0.x) + (player->unk_19C.m[1][0] * arg0.y) +
-                (player->unk_19C.m[2][0] * arg0.z) + player->unk_19C.m[3][0]) *
+    temp_fv1 = 1.0f / (((camera->projectionViewMtx.m[0][3] * arg0.x) + (camera->projectionViewMtx.m[1][3] * arg0.y) +
+                        (camera->projectionViewMtx.m[2][3] * arg0.z)) +
+                       camera->projectionViewMtx.m[3][3]);
+    temp_fv0 = ((camera->projectionViewMtx.m[0][0] * arg0.x) + (camera->projectionViewMtx.m[1][0] * arg0.y) +
+                (camera->projectionViewMtx.m[2][0] * arg0.z) + camera->projectionViewMtx.m[3][0]) *
                temp_fv1;
     if ((temp_fv0 < -1.0f) || (temp_fv0 > 1.0f)) {
         return -1;
     }
     sp30 = (160.0f * temp_fv0) + 160.0f;
-    temp_fv0 = ((player->unk_19C.m[0][1] * arg0.x) + (player->unk_19C.m[1][1] * arg0.y) +
-                (player->unk_19C.m[2][1] * arg0.z) + player->unk_19C.m[3][1]) *
+    temp_fv0 = ((camera->projectionViewMtx.m[0][1] * arg0.x) + (camera->projectionViewMtx.m[1][1] * arg0.y) +
+                (camera->projectionViewMtx.m[2][1] * arg0.z) + camera->projectionViewMtx.m[3][1]) *
                temp_fv1;
     if ((temp_fv0 < -1.0f) || (temp_fv0 > 1.0f)) {
         return -1;
@@ -106,7 +106,7 @@ s32 func_xk2_800EF090(Vec3f arg0, s32* arg1, s32* arg2) {
 }
 
 s32 func_xk2_800EF2F0(Vec3f arg0) {
-    Player* player = gPlayers;
+    Camera* camera = gCameras;
     f32 temp_fa0;
     f32 temp_fv1;
     f32 sp30;
@@ -114,23 +114,23 @@ s32 func_xk2_800EF2F0(Vec3f arg0) {
     f32 temp_fv0;
     s32 pad2;
 
-    temp_fv0 = (player->unk_19C.m[0][2] * arg0.x) + (player->unk_19C.m[1][2] * arg0.y) +
-               (player->unk_19C.m[2][2] * arg0.z) + player->unk_19C.m[3][2];
+    temp_fv0 = (camera->projectionViewMtx.m[0][2] * arg0.x) + (camera->projectionViewMtx.m[1][2] * arg0.y) +
+               (camera->projectionViewMtx.m[2][2] * arg0.z) + camera->projectionViewMtx.m[3][2];
     if ((temp_fv0 < 0.0f) || (temp_fv0 > 65536.0f)) {
         return -1;
     }
-    temp_fv1 = 1.0f / (((player->unk_19C.m[0][3] * arg0.x) + (player->unk_19C.m[1][3] * arg0.y) +
-                        (player->unk_19C.m[2][3] * arg0.z)) +
-                       player->unk_19C.m[3][3]);
-    temp_fv0 = ((player->unk_19C.m[0][0] * arg0.x) + (player->unk_19C.m[1][0] * arg0.y) +
-                (player->unk_19C.m[2][0] * arg0.z) + player->unk_19C.m[3][0]) *
+    temp_fv1 = 1.0f / (((camera->projectionViewMtx.m[0][3] * arg0.x) + (camera->projectionViewMtx.m[1][3] * arg0.y) +
+                        (camera->projectionViewMtx.m[2][3] * arg0.z)) +
+                       camera->projectionViewMtx.m[3][3]);
+    temp_fv0 = ((camera->projectionViewMtx.m[0][0] * arg0.x) + (camera->projectionViewMtx.m[1][0] * arg0.y) +
+                (camera->projectionViewMtx.m[2][0] * arg0.z) + camera->projectionViewMtx.m[3][0]) *
                temp_fv1;
     if ((temp_fv0 < -1.0f) || (temp_fv0 > 1.0f)) {
         return -1;
     }
     sp30 = (160.0f * temp_fv0) + 160.0f;
-    temp_fv0 = ((player->unk_19C.m[0][1] * arg0.x) + (player->unk_19C.m[1][1] * arg0.y) +
-                (player->unk_19C.m[2][1] * arg0.z) + player->unk_19C.m[3][1]) *
+    temp_fv0 = ((camera->projectionViewMtx.m[0][1] * arg0.x) + (camera->projectionViewMtx.m[1][1] * arg0.y) +
+                (camera->projectionViewMtx.m[2][1] * arg0.z) + camera->projectionViewMtx.m[3][1]) *
                temp_fv1;
     if ((temp_fv0 < -1.0f) || (temp_fv0 > 1.0f)) {
         return -1;

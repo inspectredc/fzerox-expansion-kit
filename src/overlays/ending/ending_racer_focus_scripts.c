@@ -1,11 +1,7 @@
 #include "global.h"
+#include "fzx_camera.h"
 
-void func_807141C0(unk_800E5D70* arg0, unk_redo_3* arg1);
-void func_8071400C(unk_800E5D70* arg0, s32 arg1);
-void func_807150E0(unk_800E5D70* arg0, unk_80085434_arg_2* arg1);
-void func_8071523C(unk_800E5D70* arg0, unk_80085434_arg_2* arg1);
-
-extern const unk_redo_3 D_807765E8;
+extern const CameraLocalAnchorData kDefaultLocalAnchorData;
 
 f32 D_i7_80098F50[] = { 0.0f, 0.0f, 0.0f, 0.0f };
 
@@ -23,7 +19,7 @@ f32 D_i7_80098FAC[] = { -700.0f, 87.0f, 92.0f, 92.0f, 92.0f };
 
 s32 D_i7_80098FC0[] = { 180, 180 };
 
-unk_struct_14 D_i7_80098FC8[] = {
+CubicBSpline3fData D_i7_80098FC8[] = {
     { 4, D_i7_80098F50, D_i7_80098F60, D_i7_80098F70, D_i7_80098F80 },
     { 5, D_i7_80098F84, D_i7_80098F98, D_i7_80098FAC, D_i7_80098FC0 },
 };
@@ -48,7 +44,7 @@ f32 D_i7_800990B8[] = { 60.0f, 60.0f, 60.0f, 60.0f };
 
 s32 D_i7_800990C8[] = { 540 };
 
-unk_80085434_arg_2 D_i7_800990CC = {
+CubicBSpline331Data D_i7_800990CC = {
     {
         { 6, D_i7_80098FF0, D_i7_80099008, D_i7_80099020, D_i7_80099038 },
         { 8, D_i7_80099044, D_i7_80099064, D_i7_80099084, D_i7_800990A4 },
@@ -76,7 +72,7 @@ f32 D_i7_80099168[] = { 60.0f, 79.0f, 79.0f, 79.0f };
 
 s32 D_i7_80099178[] = { 120 };
 
-unk_80085434_arg_2 D_i7_8009917C = {
+CubicBSpline331Data D_i7_8009917C = {
     {
         { 4, D_i7_80099100, D_i7_80099110, D_i7_80099120, D_i7_80099130 },
         { 4, D_i7_80099134, D_i7_80099144, D_i7_80099154, D_i7_80099164 },
@@ -100,7 +96,7 @@ f32 D_i7_80099204[] = { 42.0f, 98.0f, 98.0f, 98.0f };
 
 s32 D_i7_80099214[] = { 120 };
 
-unk_struct_14 D_i7_80099218[] = {
+CubicBSpline3fData D_i7_80099218[] = {
     { 4, D_i7_800991B0, D_i7_800991C0, D_i7_800991D0, D_i7_800991E0 },
     { 4, D_i7_800991E4, D_i7_800991F4, D_i7_80099204, D_i7_80099214 },
 };
@@ -125,7 +121,7 @@ f32 D_i7_800992B8[] = { 60.0f, 74.0f, 74.0f, 74.0f };
 
 s32 D_i7_800992C8[] = { 300 };
 
-unk_80085434_arg_2 D_i7_800992CC = {
+CubicBSpline331Data D_i7_800992CC = {
     {
         { 4, D_i7_80099240, D_i7_80099250, D_i7_80099260, D_i7_80099270 },
         { 5, D_i7_80099274, D_i7_80099288, D_i7_8009929C, D_i7_800992B0 },
@@ -149,34 +145,36 @@ f32 D_i7_8009937C[] = { -110.0f, -34.0f, 38.0f, 108.0f, 108.0f, 108.0f, 108.0f }
 
 s32 D_i7_80099398[] = { 120, 60, 60, 180 };
 
-unk_struct_14 D_i7_800993A8[] = {
+CubicBSpline3fData D_i7_800993A8[] = {
     { 5, D_i7_80099300, D_i7_80099314, D_i7_80099328, D_i7_8009933C },
     { 7, D_i7_80099344, D_i7_80099360, D_i7_8009937C, D_i7_80099398 },
 };
 
-unk_struct_C D_i7_800993D0[] = {
-    { 0, func_807141C0, &D_807765E8 },
-    { 0, func_8071400C, 4 },
-    { 360, func_807150E0, D_i7_80098FC8 },
-    { 0, func_807141C0, &D_807765E8 },
-    { 0, func_8071400C, 4 },
-    { 540, func_807150E0, &D_i7_800990CC },
-    { 0, func_807141C0, &D_807765E8 },
-    { 0, func_8071400C, 4 },
-    { 120, func_807150E0, &D_i7_8009917C },
-    { 0, func_807141C0, &D_807765E8 },
-    { 0, func_8071400C, 4 },
-    { 120, func_807150E0, D_i7_80099218 },
-    { 0, func_807141C0, &D_807765E8 },
-    { 0, func_8071400C, 4 },
-    { 300, func_807150E0, &D_i7_800992CC },
-    { 0, func_807141C0, &D_807765E8 },
-    { 0, func_8071400C, 4 },
-    { 420, func_807150E0, D_i7_800993A8 },
-    { -2, NULL, 0 },
-    { 0, NULL, 0 },
+// P1 Focus
+CameraScript gEndingPosition1FocusScript[] = {
+    { CAMERA_SCRIPT_NEXT, Camera_ScriptSetLocalAnchorData, &kDefaultLocalAnchorData },
+    { CAMERA_SCRIPT_NEXT, Camera_ScriptSetControlPointTimerCount, 4 },
+    { 360, Camera_ScriptUpdateLocalAnchorBasisAtEye, D_i7_80098FC8 },
+    { CAMERA_SCRIPT_NEXT, Camera_ScriptSetLocalAnchorData, &kDefaultLocalAnchorData },
+    { CAMERA_SCRIPT_NEXT, Camera_ScriptSetControlPointTimerCount, 4 },
+    { 540, Camera_ScriptUpdateLocalAnchorBasisAtEye, &D_i7_800990CC },
+    { CAMERA_SCRIPT_NEXT, Camera_ScriptSetLocalAnchorData, &kDefaultLocalAnchorData },
+    { CAMERA_SCRIPT_NEXT, Camera_ScriptSetControlPointTimerCount, 4 },
+    { 120, Camera_ScriptUpdateLocalAnchorBasisAtEye, &D_i7_8009917C },
+    { CAMERA_SCRIPT_NEXT, Camera_ScriptSetLocalAnchorData, &kDefaultLocalAnchorData },
+    { CAMERA_SCRIPT_NEXT, Camera_ScriptSetControlPointTimerCount, 4 },
+    { 120, Camera_ScriptUpdateLocalAnchorBasisAtEye, D_i7_80099218 },
+    { CAMERA_SCRIPT_NEXT, Camera_ScriptSetLocalAnchorData, &kDefaultLocalAnchorData },
+    { CAMERA_SCRIPT_NEXT, Camera_ScriptSetControlPointTimerCount, 4 },
+    { 300, Camera_ScriptUpdateLocalAnchorBasisAtEye, &D_i7_800992CC },
+    { CAMERA_SCRIPT_NEXT, Camera_ScriptSetLocalAnchorData, &kDefaultLocalAnchorData },
+    { CAMERA_SCRIPT_NEXT, Camera_ScriptSetControlPointTimerCount, 4 },
+    { 420, Camera_ScriptUpdateLocalAnchorBasisAtEye, D_i7_800993A8 },
+    { CAMERA_SCRIPT_BREAK, NULL, 0 },
+    { CAMERA_SCRIPT_NEXT, NULL, 0 },
 };
 
+// New File?
 f32 D_i7_800994C0[] = { 0.0f, 0.0f, 0.0f, -125.0f, -125.0f, -125.0f, -125.0f, -125.0f };
 
 f32 D_i7_800994E0[] = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
@@ -197,7 +195,7 @@ f32 D_i7_800995A8[] = { 70.0f, 70.0f, 70.0f, 70.0f };
 
 s32 D_i7_800995B8[] = { 900 };
 
-unk_80085434_arg_2 D_i7_800995BC = {
+CubicBSpline331Data D_i7_800995BC = {
     {
         { 8, D_i7_800994C0, D_i7_800994E0, D_i7_80099500, D_i7_80099520 },
         { 8, D_i7_80099534, D_i7_80099554, D_i7_80099574, D_i7_80099594 },
@@ -225,7 +223,7 @@ f32 D_i7_80099698[] = { 70.0f, 60.0f, 60.0f, 60.0f };
 
 s32 D_i7_800996A8[] = { 960 };
 
-unk_80085434_arg_2 D_i7_800996AC = {
+CubicBSpline331Data D_i7_800996AC = {
     {
         { 4, D_i7_800995F0, D_i7_80099600, D_i7_80099610, D_i7_80099620 },
         { 8, D_i7_80099624, D_i7_80099644, D_i7_80099664, D_i7_80099684 },
@@ -233,17 +231,19 @@ unk_80085434_arg_2 D_i7_800996AC = {
     { 4, D_i7_80099698, D_i7_800996A8 },
 };
 
-unk_struct_C D_i7_800996E0[] = {
-    { 0, func_807141C0, &D_807765E8 },
-    { 0, func_8071400C, 4 },
-    { 900, func_8071523C, &D_i7_800995BC },
-    { 0, func_807141C0, &D_807765E8 },
-    { 0, func_8071400C, 4 },
-    { 960, func_8071523C, &D_i7_800996AC },
-    { -2, NULL, 0 },
-    { 0, NULL, 0 },
+// P3 Focus
+CameraScript gEndingPosition3FocusScript[] = {
+    { CAMERA_SCRIPT_NEXT, Camera_ScriptSetLocalAnchorData, &kDefaultLocalAnchorData },
+    { CAMERA_SCRIPT_NEXT, Camera_ScriptSetControlPointTimerCount, 4 },
+    { 900, Camera_ScriptUpdateLocalAnchorBasisAtEyeFov, &D_i7_800995BC },
+    { CAMERA_SCRIPT_NEXT, Camera_ScriptSetLocalAnchorData, &kDefaultLocalAnchorData },
+    { CAMERA_SCRIPT_NEXT, Camera_ScriptSetControlPointTimerCount, 4 },
+    { 960, Camera_ScriptUpdateLocalAnchorBasisAtEyeFov, &D_i7_800996AC },
+    { CAMERA_SCRIPT_BREAK, NULL, 0 },
+    { CAMERA_SCRIPT_NEXT, NULL, 0 },
 };
 
+// New File?
 f32 D_i7_80099740[] = { 146.0f, 146.0f, 146.0f, 0.0f, 0.0f, 0.0f };
 
 f32 D_i7_80099758[] = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
@@ -260,7 +260,7 @@ f32 D_i7_800997D4[] = { -82.0f, -82.0f, -82.0f, 27.0f, 113.0f, 113.0f, 113.0f, 1
 
 s32 D_i7_800997F4[] = { 250, 125, 75, 75, 75 };
 
-unk_struct_14 D_i7_80099808[] = {
+CubicBSpline3fData D_i7_80099808[] = {
     { 6, D_i7_80099740, D_i7_80099758, D_i7_80099770, D_i7_80099788 },
     { 8, D_i7_80099794, D_i7_800997B4, D_i7_800997D4, D_i7_800997F4 },
 };
@@ -281,7 +281,7 @@ f32 D_i7_800998B4[] = { 113.0f, 27.0f, 13.0f, 13.0f, 13.0f, 13.0f };
 
 s32 D_i7_800998CC[] = { 300, 150, 150 };
 
-unk_struct_14 D_i7_800998D8[] = {
+CubicBSpline3fData D_i7_800998D8[] = {
     { 6, D_i7_80099830, D_i7_80099848, D_i7_80099860, D_i7_80099878 },
     { 6, D_i7_80099884, D_i7_8009989C, D_i7_800998B4, D_i7_800998CC },
 };
@@ -306,7 +306,7 @@ f32 D_i7_80099988[] = { 90.0f, 60.0f, 60.0f, 60.0f };
 
 s32 D_i7_80099998[] = { 300 };
 
-unk_80085434_arg_2 D_i7_8009999C = {
+CubicBSpline331Data D_i7_8009999C = {
     {
         { 4, D_i7_80099900, D_i7_80099910, D_i7_80099920, D_i7_80099930 },
         { 6, D_i7_80099934, D_i7_8009994C, D_i7_80099964, D_i7_8009997C },
@@ -330,23 +330,24 @@ f32 D_i7_80099A24[] = { 563.0f, 132.0f, 132.0f, 132.0f };
 
 s32 D_i7_80099A34[] = { 360 };
 
-unk_struct_14 D_i7_80099A38[] = {
+CubicBSpline3fData D_i7_80099A38[] = {
     { 4, D_i7_800999D0, D_i7_800999E0, D_i7_800999F0, D_i7_80099A00 },
     { 4, D_i7_80099A04, D_i7_80099A14, D_i7_80099A24, D_i7_80099A34 },
 };
 
-unk_struct_C D_i7_80099A60[] = {
-    { 0, func_807141C0, &D_807765E8 },
-    { 0, func_8071400C, 4 },
-    { 600, func_807150E0, D_i7_80099808 },
-    { 0, func_807141C0, &D_807765E8 },
-    { 0, func_8071400C, 4 },
-    { 600, func_807150E0, D_i7_800998D8 },
-    { 0, func_807141C0, &D_807765E8 },
-    { 0, func_8071400C, 4 },
-    { 300, func_807150E0, &D_i7_8009999C },
-    { 0, func_807141C0, &D_807765E8 },
-    { 0, func_8071400C, 4 },
-    { 360, func_807150E0, D_i7_80099A38 },
-    { -2, NULL, 0 },
+// P2 Focus
+CameraScript gEndingPosition2FocusScript[] = {
+    { CAMERA_SCRIPT_NEXT, Camera_ScriptSetLocalAnchorData, &kDefaultLocalAnchorData },
+    { CAMERA_SCRIPT_NEXT, Camera_ScriptSetControlPointTimerCount, 4 },
+    { 600, Camera_ScriptUpdateLocalAnchorBasisAtEye, D_i7_80099808 },
+    { CAMERA_SCRIPT_NEXT, Camera_ScriptSetLocalAnchorData, &kDefaultLocalAnchorData },
+    { CAMERA_SCRIPT_NEXT, Camera_ScriptSetControlPointTimerCount, 4 },
+    { 600, Camera_ScriptUpdateLocalAnchorBasisAtEye, D_i7_800998D8 },
+    { CAMERA_SCRIPT_NEXT, Camera_ScriptSetLocalAnchorData, &kDefaultLocalAnchorData },
+    { CAMERA_SCRIPT_NEXT, Camera_ScriptSetControlPointTimerCount, 4 },
+    { 300, Camera_ScriptUpdateLocalAnchorBasisAtEye, &D_i7_8009999C },
+    { CAMERA_SCRIPT_NEXT, Camera_ScriptSetLocalAnchorData, &kDefaultLocalAnchorData },
+    { CAMERA_SCRIPT_NEXT, Camera_ScriptSetControlPointTimerCount, 4 },
+    { 360, Camera_ScriptUpdateLocalAnchorBasisAtEye, D_i7_80099A38 },
+    { CAMERA_SCRIPT_BREAK, NULL, 0 },
 };

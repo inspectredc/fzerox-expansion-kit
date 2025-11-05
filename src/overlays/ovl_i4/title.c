@@ -485,8 +485,8 @@ Gfx* func_i4_80074EE0(Gfx* gfx, Object* arg1) {
                             false);
 }
 
-extern s8 D_8076C7D8;
+extern s8 gTitleDemoState;
 
 void Title_DiskDriveUpdate(Object* arg0) {
-    if (gRamDDCompatible != 0 && (D_i4_80077070 != -1) && (D_8076C7D8 == 0)) {}
+    if (gRamDDCompatible != 0 && (D_i4_80077070 != -1) && (gTitleDemoState == TITLE_DEMO_INACTIVE)) {}
 }

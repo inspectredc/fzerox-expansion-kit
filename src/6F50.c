@@ -1,4 +1,5 @@
 #include "global.h"
+#include "fzx_game.h"
 #include "fzx_racer.h"
 #include "fzx_thread.h"
 #include "fzx_course.h"
@@ -3536,7 +3537,7 @@ extern OSMesgQueue gMFSMesgQ;
 extern s32 D_8079F9B4;
 extern s32 gMfsError;
 extern u8 D_i2_800BF044[];
-extern s8 D_8076C7D8;
+extern s8 gTitleDemoState;
 
 UNUSED s32 D_80773738 = 0;
 
@@ -3634,7 +3635,7 @@ void Course_Load(s32 courseIndex) {
         ghostName[5] = (courseIndex / 10) + '0';
         ghostName[6] = (courseIndex % 10) + '0';
         Save_ClearCourseRecord(DDSave_GetCachedCourseRecord());
-        if (D_8076C7D8 == 0) {
+        if (gTitleDemoState == TITLE_DEMO_INACTIVE) {
             func_8076852C(MFS_ENTRY_WORKING_DIR, ghostName, "GOST", COURSE_CONTEXT(), sizeof(CourseContext));
             osRecvMesg(&gMFSMesgQ, NULL, OS_MESG_BLOCK);
         }

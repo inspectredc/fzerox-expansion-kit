@@ -10,6 +10,7 @@
 #include "other_types.h"
 #include "unk_structs.h"
 #include "controller.h"
+#include "fzx_camera.h"
 #include "fzx_course.h"
 #include "fzx_save.h"
 #include "fzx_ghost.h"
@@ -44,8 +45,8 @@ u32 Math_Rand1(void);
 u32 Math_Rand2(void);
 s32 Math_Round(f32 num);
 Gfx* func_806F6360(Gfx*, s32);
-s32 func_806F6D8C(Mtx3F* mtx);
-s32 func_806F6F64(Mtx3F* mtx);
+s32 Math_OrthonormalizeAroundForward(Mtx3F* basis);
+s32 Math_OrthonormalizeAroundUp(Mtx3F* basis);
 void func_806F7138(s32, s32, s32, s32*, s32*, s32*);
 void Matrix_ToMtx(MtxF* src, Mtx* dest2);
 void Matrix_FromMtx(Mtx* src2, MtxF* dest);
@@ -160,9 +161,9 @@ Gfx* func_8070DEE0(Gfx* gfx, TexturePtr texture, TexturePtr palette, s32 format,
 void func_8070E79C(u16*, s32);
 s32 func_8070EB90(u16*, u16*, s32);
 void func_8070F0B0(s32 venue, s32 skybox);
-Gfx* func_80713E38(Gfx*, s32, s32);
-void func_807160A0(void);
-void func_80717294(void);
+Gfx* Camera_Draw(Gfx*, s32, s32);
+void Camera_Init(void);
+void Camera_Update(void);
 void func_8071D48C(void);
 void func_8071E988(void);
 void func_8071E9C4(void);
@@ -222,32 +223,32 @@ void LeoFault_DrawErrorMessageNumber(Gfx** gfxP, s32 posX, s32 posY, s8* str);
 void LeoFault_DrawErrorMessage(Gfx** gfxP, s32 posX, s32 posY, u8* codes);
 void LeoFault_CopyFontToRam(s32* code, u8* ramAddr);
 
-void func_80713204(MtxF*, MtxF*, MtxF*);
-void func_80715768(unk_struct_20_2*, s32);
-void func_80715E1C(Vec3f*, unk_struct_20_2*, unk_struct_14*);
-void func_80715E60(Vec3f*, unk_struct_20_2*, unk_struct_14*);
-void func_80715EC0(unk_80085434_arg_0*, unk_struct_20_2*, unk_80085434_arg_2*);
-void func_80715F20(unk_80085494_arg_0*, unk_struct_20_2*, unk_80085494_arg_2*);
-void func_80715F9C(void);
-void func_807166B8(Player*, unk_struct_F8*, unk_800E5D70*);
-void func_80716F38(Player* player);
-void func_80717354(Player*, unk_struct_F8*, unk_800E5D70*);
-void func_807176B4(Player*, unk_struct_F8*);
-void func_80717B20(void);
-void func_807181F8(Player*, unk_struct_F8*);
-void func_80718530(Player*, unk_struct_F8*, unk_800E5D70*);
-void func_80718908(Player*, unk_struct_F8*, unk_800E5D70*);
-void func_80718964(Player*, unk_struct_F8*);
-void func_80718AB0(Player*, unk_struct_F8*);
-void func_80718AFC(Player*, unk_struct_F8*, unk_800E5D70*);
-void func_80718F58(Vec3f*, CourseSegment*, f32, unk_800CD970*);
-void func_80719140(Player*, unk_struct_F8*, unk_800E5D70*);
-void func_807191B0(Player*, unk_struct_F8*, unk_800E5D70*);
-void func_80719420(Player*, unk_struct_F8*, unk_800E5D70*);
-void func_80719480(Player*, unk_struct_F8*, unk_800E5D70*);
-void func_8071985C(s32);
-bool func_80719868(s32);
-Gfx* func_80719890(Gfx*);
+void Camera_CalculateProjectionViewMtx(MtxF*, MtxF*, MtxF*);
+void Camera_ScriptInitControlPointTimers(SplineControlPointTimers*, s32);
+void Camera_UpdateInterpolateBSpline33f(Vec3f*, SplineControlPointTimers*, CubicBSpline3fData*);
+void Camera_UpdateInterpolateBSpline333f(Vec3f*, SplineControlPointTimers*, CubicBSpline3fData*);
+void Camera_UpdateInterpolateBSpline331f(InterpolateOut331Data*, SplineControlPointTimers*, CubicBSpline331Data*);
+void Camera_UpdateInterpolateBSpline3331f(InterpolateOut3331Data*, SplineControlPointTimers*, CubicBSpline3331Data*);
+void Camera_StartInit(void);
+void Camera_InitMode(Camera*, CameraSettings*, CameraScriptManager*);
+void Camera_InitViewport(Camera* camera);
+void Camera_UpdateMode(Camera*, CameraSettings*, CameraScriptManager*);
+void Camera_SettingsUpdateRaceIntroStart(Camera*, CameraSettings*);
+void Camera_UpdateViewportTransition(void);
+void Camera_UpdateRaceIntro(Camera*, CameraSettings*);
+void Camera_UpdateRace(Camera*, CameraSettings*, CameraScriptManager*);
+void Camera_UpdateTitleDemo(Camera*, CameraSettings*, CameraScriptManager*);
+void Camera_UpdateCourseSelect(Camera*, CameraSettings*);
+void Camera_UpdateFallingOffTrack(Camera*, CameraSettings*);
+void Camera_UpdateFinishedSuccess(Camera*, CameraSettings*, CameraScriptManager*);
+void Camera_SetupFinishedSuccessFollowRacer(Vec3f*, CourseSegment*, f32, FinishedSuccessScript*);
+void Camera_UpdateFinishedLoser(Camera*, CameraSettings*, CameraScriptManager*);
+void Camera_UpdateFinishedSpectate(Camera*, CameraSettings*, CameraScriptManager*);
+void Camera_UpdateRecordsRace(Camera*, CameraSettings*, CameraScriptManager*);
+void Camera_UpdateEnding(Camera*, CameraSettings*, CameraScriptManager*);
+void Camera_SendEndingCameraMessage(s32);
+bool Camera_CheckEndingCameraMessage(s32);
+Gfx* Camera_DrawCourseEditTestRun(Gfx*);
 
 f32 func_8071A2C8(f32);
 void func_8071A358(void);
@@ -506,7 +507,7 @@ Gfx* func_i3_DrawSpeed(Gfx*, s32, s32, f32, bool, bool);
 
 void func_i4_80073EA0(void);
 
-Gfx* func_i7_80098650(Gfx* gfx);
+Gfx* EndingCutsceneEffects_DrawFireworks(Gfx* gfx);
 
 void Records_InitData(void);
 bool Records_CourseHasNoRecords(s32 courseIndex);
