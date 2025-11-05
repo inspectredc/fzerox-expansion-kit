@@ -1,7 +1,7 @@
 #include "global.h"
 #include "fzx_camera.h"
 
-extern const CameraLocalAnchorData D_807765E8;
+extern const CameraLocalAnchorData kDefaultLocalAnchorData;
 
 f32 D_i7_80098F50[] = { 0.0f, 0.0f, 0.0f, 0.0f };
 
@@ -151,29 +151,30 @@ CubicBSpline3fData D_i7_800993A8[] = {
 };
 
 // P1 Focus
-CameraScript D_i7_800993D0[] = {
-    { 0, Camera_ScriptSetLocalAnchorData, &D_807765E8 },
-    { 0, Camera_ScriptSetControlPointTimerCount, 4 },
+CameraScript gEndingPosition1FocusScript[] = {
+    { CAMERA_SCRIPT_NEXT, Camera_ScriptSetLocalAnchorData, &kDefaultLocalAnchorData },
+    { CAMERA_SCRIPT_NEXT, Camera_ScriptSetControlPointTimerCount, 4 },
     { 360, Camera_ScriptUpdateLocalAnchorBasisAtEye, D_i7_80098FC8 },
-    { 0, Camera_ScriptSetLocalAnchorData, &D_807765E8 },
-    { 0, Camera_ScriptSetControlPointTimerCount, 4 },
+    { CAMERA_SCRIPT_NEXT, Camera_ScriptSetLocalAnchorData, &kDefaultLocalAnchorData },
+    { CAMERA_SCRIPT_NEXT, Camera_ScriptSetControlPointTimerCount, 4 },
     { 540, Camera_ScriptUpdateLocalAnchorBasisAtEye, &D_i7_800990CC },
-    { 0, Camera_ScriptSetLocalAnchorData, &D_807765E8 },
-    { 0, Camera_ScriptSetControlPointTimerCount, 4 },
+    { CAMERA_SCRIPT_NEXT, Camera_ScriptSetLocalAnchorData, &kDefaultLocalAnchorData },
+    { CAMERA_SCRIPT_NEXT, Camera_ScriptSetControlPointTimerCount, 4 },
     { 120, Camera_ScriptUpdateLocalAnchorBasisAtEye, &D_i7_8009917C },
-    { 0, Camera_ScriptSetLocalAnchorData, &D_807765E8 },
-    { 0, Camera_ScriptSetControlPointTimerCount, 4 },
+    { CAMERA_SCRIPT_NEXT, Camera_ScriptSetLocalAnchorData, &kDefaultLocalAnchorData },
+    { CAMERA_SCRIPT_NEXT, Camera_ScriptSetControlPointTimerCount, 4 },
     { 120, Camera_ScriptUpdateLocalAnchorBasisAtEye, D_i7_80099218 },
-    { 0, Camera_ScriptSetLocalAnchorData, &D_807765E8 },
-    { 0, Camera_ScriptSetControlPointTimerCount, 4 },
+    { CAMERA_SCRIPT_NEXT, Camera_ScriptSetLocalAnchorData, &kDefaultLocalAnchorData },
+    { CAMERA_SCRIPT_NEXT, Camera_ScriptSetControlPointTimerCount, 4 },
     { 300, Camera_ScriptUpdateLocalAnchorBasisAtEye, &D_i7_800992CC },
-    { 0, Camera_ScriptSetLocalAnchorData, &D_807765E8 },
-    { 0, Camera_ScriptSetControlPointTimerCount, 4 },
+    { CAMERA_SCRIPT_NEXT, Camera_ScriptSetLocalAnchorData, &kDefaultLocalAnchorData },
+    { CAMERA_SCRIPT_NEXT, Camera_ScriptSetControlPointTimerCount, 4 },
     { 420, Camera_ScriptUpdateLocalAnchorBasisAtEye, D_i7_800993A8 },
-    { -2, NULL, 0 },
-    { 0, NULL, 0 },
+    { CAMERA_SCRIPT_BREAK, NULL, 0 },
+    { CAMERA_SCRIPT_NEXT, NULL, 0 },
 };
 
+// New File?
 f32 D_i7_800994C0[] = { 0.0f, 0.0f, 0.0f, -125.0f, -125.0f, -125.0f, -125.0f, -125.0f };
 
 f32 D_i7_800994E0[] = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
@@ -231,17 +232,18 @@ CubicBSpline331Data D_i7_800996AC = {
 };
 
 // P3 Focus
-CameraScript D_i7_800996E0[] = {
-    { 0, Camera_ScriptSetLocalAnchorData, &D_807765E8 },
-    { 0, Camera_ScriptSetControlPointTimerCount, 4 },
+CameraScript gEndingPosition3FocusScript[] = {
+    { CAMERA_SCRIPT_NEXT, Camera_ScriptSetLocalAnchorData, &kDefaultLocalAnchorData },
+    { CAMERA_SCRIPT_NEXT, Camera_ScriptSetControlPointTimerCount, 4 },
     { 900, Camera_ScriptUpdateLocalAnchorBasisAtEyeFov, &D_i7_800995BC },
-    { 0, Camera_ScriptSetLocalAnchorData, &D_807765E8 },
-    { 0, Camera_ScriptSetControlPointTimerCount, 4 },
+    { CAMERA_SCRIPT_NEXT, Camera_ScriptSetLocalAnchorData, &kDefaultLocalAnchorData },
+    { CAMERA_SCRIPT_NEXT, Camera_ScriptSetControlPointTimerCount, 4 },
     { 960, Camera_ScriptUpdateLocalAnchorBasisAtEyeFov, &D_i7_800996AC },
-    { -2, NULL, 0 },
-    { 0, NULL, 0 },
+    { CAMERA_SCRIPT_BREAK, NULL, 0 },
+    { CAMERA_SCRIPT_NEXT, NULL, 0 },
 };
 
+// New File?
 f32 D_i7_80099740[] = { 146.0f, 146.0f, 146.0f, 0.0f, 0.0f, 0.0f };
 
 f32 D_i7_80099758[] = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
@@ -334,18 +336,18 @@ CubicBSpline3fData D_i7_80099A38[] = {
 };
 
 // P2 Focus
-CameraScript D_i7_80099A60[] = {
-    { 0, Camera_ScriptSetLocalAnchorData, &D_807765E8 },
-    { 0, Camera_ScriptSetControlPointTimerCount, 4 },
+CameraScript gEndingPosition2FocusScript[] = {
+    { CAMERA_SCRIPT_NEXT, Camera_ScriptSetLocalAnchorData, &kDefaultLocalAnchorData },
+    { CAMERA_SCRIPT_NEXT, Camera_ScriptSetControlPointTimerCount, 4 },
     { 600, Camera_ScriptUpdateLocalAnchorBasisAtEye, D_i7_80099808 },
-    { 0, Camera_ScriptSetLocalAnchorData, &D_807765E8 },
-    { 0, Camera_ScriptSetControlPointTimerCount, 4 },
+    { CAMERA_SCRIPT_NEXT, Camera_ScriptSetLocalAnchorData, &kDefaultLocalAnchorData },
+    { CAMERA_SCRIPT_NEXT, Camera_ScriptSetControlPointTimerCount, 4 },
     { 600, Camera_ScriptUpdateLocalAnchorBasisAtEye, D_i7_800998D8 },
-    { 0, Camera_ScriptSetLocalAnchorData, &D_807765E8 },
-    { 0, Camera_ScriptSetControlPointTimerCount, 4 },
+    { CAMERA_SCRIPT_NEXT, Camera_ScriptSetLocalAnchorData, &kDefaultLocalAnchorData },
+    { CAMERA_SCRIPT_NEXT, Camera_ScriptSetControlPointTimerCount, 4 },
     { 300, Camera_ScriptUpdateLocalAnchorBasisAtEye, &D_i7_8009999C },
-    { 0, Camera_ScriptSetLocalAnchorData, &D_807765E8 },
-    { 0, Camera_ScriptSetControlPointTimerCount, 4 },
+    { CAMERA_SCRIPT_NEXT, Camera_ScriptSetLocalAnchorData, &kDefaultLocalAnchorData },
+    { CAMERA_SCRIPT_NEXT, Camera_ScriptSetControlPointTimerCount, 4 },
     { 360, Camera_ScriptUpdateLocalAnchorBasisAtEye, D_i7_80099A38 },
-    { -2, NULL, 0 },
+    { CAMERA_SCRIPT_BREAK, NULL, 0 },
 };

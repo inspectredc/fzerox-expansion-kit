@@ -6,7 +6,7 @@
 
 s32 D_8006CFF0;
 s32 D_i3_8006CFF4;
-s32 D_i3_8006CFF8;
+s32 gSlowRacersForPodium;
 s32 D_i3_8006CFFC;
 Racer* sPlayerRacer;
 UNUSED s32 D_i3_8006D004;
@@ -396,7 +396,7 @@ void func_i3_8003F364(void) {
     } else {
         D_i3_8006D088 = 0;
     }
-    D_i3_8006CFFC = D_i3_8006CFF8 = 0;
+    D_i3_8006CFFC = gSlowRacersForPodium = 0;
     sPlayerRacer = gRacers;
 
     for (i = 0; i < gTotalRacers; i++) {
@@ -2062,7 +2062,7 @@ void Cpu_GenerateInputs(Racer* racer, Controller* controller) {
             if (racer->id < gNumPlayers) {
                 controller->buttonPressed &= ~BTN_B;
             }
-            if (D_i3_8006CFF8 != 0) {
+            if (gSlowRacersForPodium) {
                 // FAKE!
                 if (1) {}
                 var_a1 = 0;

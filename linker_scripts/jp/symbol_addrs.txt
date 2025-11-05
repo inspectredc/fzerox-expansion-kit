@@ -78,6 +78,7 @@ Fault_SetFrameBuffer = 0x80710A38;
 Fault_Init = 0x80710A60;
 
 Camera_CalculateProjectionViewMtx = 0x80713204;
+Camera_DrawCourseEditTestRun = 0x80719890;
 
 Audio_PlayerFinished = 0x80740B98;
 Audio_PlayerLevelSEStart = 0x80740BF8;
@@ -587,17 +588,17 @@ D_807B6528 = 0x807B6528; // size:0x2904
 
 D_807794F0 = 0x807794F0; // force_migration:True
 
-D_807763D0 = 0x807763D0; // size:0x78
+kDefaultAtEyeData = 0x807763D0; // size:0x78
 D_80776448 = 0x80776448; // size:0xAC
 D_807764F4 = 0x807764F4; // size:0xF4
-D_807765E8 = 0x807765E8; // size:0xC0
+kDefaultLocalAnchorData = 0x807765E8; // size:0xC0
 D_807766A8 = 0x807766A8; // size:0xAC
 D_80776754 = 0x80776754; // size:0xAC
 D_80776800 = 0x80776800; // size:0xAC
 D_807768AC = 0x807768AC; // size:0x78
 D_80776924 = 0x80776924; // size:0x78
 D_8077699C = 0x8077699C; // size:0xAC
-D_80776A48 = 0x80776A48; // size:0x30
-D_80776A78 = 0x80776A78; // size:0x30
+kRegularCameraRaceSettings = 0x80776A48; // size:0x30
+kWidescreenCameraRaceSettings = 0x80776A78; // size:0x30
 D_80776AA8 = 0x80776AA8; // size:0xF4
 D_80776B9C = 0x80776B9C; // size:0xF4

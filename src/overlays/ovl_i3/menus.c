@@ -109,7 +109,7 @@ f32 D_i3_8006D5B0;
 f32 D_i3_8006D5B4;
 s32 D_i3_8006D5B8[4];
 s32 D_i3_8006D5C8[4];
-s32 D_i3_8006D5D8;
+s32 sFinishedSuccessTime;
 char D_i3_8006D5E0[32];
 
 TexturePtr D_i3_8006B310[] = {
@@ -336,7 +336,7 @@ Gfx* func_i3_80044CCC(Gfx* gfx, s32 left, s32 top, s32 right, s32 bottom, s32 re
     return gfx;
 }
 
-extern unk_800CD970 D_8076D788[];
+extern FinishedSuccessScript gFinishedSuccessScript[];
 extern s16 gRacersRemaining;
 extern s32 D_8006CFF0;
 extern s16 gPlayerLives[];
@@ -355,10 +355,10 @@ void func_i3_80044DD0(void) {
     D_i3_8006D1C8.z = Math_Rand2() % 256 / 255.0f * 0.3f + 5.12f - 0.15f;
 
     gRacersRemaining = gTotalRacers;
-    D_i3_8006D5D8 = 0;
+    sFinishedSuccessTime = 0;
 
     for (i = 0; i < 5; i++) {
-        D_i3_8006D5D8 += D_8076D788[i].time;
+        sFinishedSuccessTime += gFinishedSuccessScript[i].time;
     }
 
     for (i = 0; i < 4; i++) {
@@ -5057,7 +5057,7 @@ Gfx* func_i3_8005823C(Gfx* gfx) {
                 D_i3_8006D5B8[i] = 36000;
             }
 
-            if (D_i3_8006D5D8 < D_i3_8006D5B8[i]) {
+            if (sFinishedSuccessTime < D_i3_8006D5B8[i]) {
                 D_i3_8006D5C8[i] = 2;
             } else {
                 D_i3_8006D5C8[i] = 1;

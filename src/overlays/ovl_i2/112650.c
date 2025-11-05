@@ -4222,7 +4222,7 @@ Gfx* func_i2_800BDAA4(Gfx* gfx) {
 
 extern Camera gCameras[];
 
-Gfx* func_i2_800BDE60(Gfx* gfx, s32 playerIndex) {
+Gfx* func_i2_800BDE60(Gfx* gfx, s32 cameraIndex) {
     MtxF sp60;
     f32 var_fv1;
     f32 temp_fa0;
@@ -4243,7 +4243,7 @@ Gfx* func_i2_800BDE60(Gfx* gfx, s32 playerIndex) {
     Camera* camera;
     s32 i;
 
-    camera = &gCameras[playerIndex];
+    camera = &gCameras[cameraIndex];
     racer = &gRacers[camera->id];
 
     D_i2_800D6C74 = gfx;

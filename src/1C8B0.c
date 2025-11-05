@@ -12,7 +12,7 @@ void func_8070F0B0(s32 venue, s32 skybox) {
 }
 
 s8 gRecordNameEntered[4];
-s16 D_8079FC7C;
+s16 gForceCredits;
 
 void func_8070F0D0(void) {
     s32 i;
@@ -21,7 +21,7 @@ void func_8070F0D0(void) {
         gRecordNameEntered[i] = 0;
     }
 
-    D_8079FC7C = 0;
+    gForceCredits = false;
 }
 
 Gfx D_8076CE28[] = {
