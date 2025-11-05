@@ -146,7 +146,7 @@ extern CourseFeature gCourseFeatures[];
 extern CourseEffectsInfo gCourseEffectsInfo;
 extern CourseEffect gCourseEffects[];
 extern unk_807B3C20 D_807B6528;
-extern Player gPlayers[];
+extern Camera gCameras[];
 extern s16 D_8076C7A8;
 extern s32 D_8076C964;
 extern GfxPool* gGfxPool;
@@ -191,7 +191,7 @@ void CourseEdit_Init(void) {
     func_xk2_800E6F9C();
     D_8076C77C = 3;
     D_8076C7A8 = 3;
-    gPlayers->unk_94.x = 40.0f;
+    gCameras[0].fov = 40.0f;
     func_xk1_8002D86C(9, 2);
     func_xk1_8002D880(0x18);
     func_xk2_800E77F0();
@@ -226,7 +226,7 @@ void func_xk2_800EC8AC(void) {
     gGamePaused = false;
     Audio_TriggerSystemSE(NA_SE_12);
     Audio_PauseSet(AUDIO_PAUSE_UNPAUSED);
-    if ((gRacers[0].stateFlags & RACER_STATE_FLAGS_80000) && (D_xk2_80103FF8 == 0)) {
+    if ((gRacers[0].stateFlags & RACER_STATE_FALLING_OFF_TRACK) && (D_xk2_80103FF8 == 0)) {
         D_xk2_80103FF4 = 0;
         D_xk2_80103FF8 = 1;
         D_xk2_80103FF0 = 0x78;
@@ -245,7 +245,7 @@ void func_xk2_800EC91C(void) {
     Audio_PauseSet(AUDIO_PAUSE_UNPAUSED);
     Audio_TestRunEnd();
     D_8076C77C = 3;
-    gPlayers->unk_94.x = 40.0f;
+    gCameras[0].fov = 40.0f;
     func_xk2_800F13C4();
     func_xk2_800EF8B0();
     D_xk2_800F7040 = 4;
@@ -309,7 +309,7 @@ s32 func_xk2_800ECBC0(void) {
     if (gGamePaused) {
         Effects_Update();
         func_80726554();
-        func_80717294();
+        Camera_Update();
         func_i3_80061C2C();
         func_800B94D8();
         func_xk2_800E5B6C();
@@ -326,7 +326,7 @@ s32 func_xk2_800ECBC0(void) {
     } else {
         Effects_Update();
         func_80726554();
-        func_80717294();
+        Camera_Update();
         func_i3_80061C2C();
         func_800B94D8();
         if ((gRacers[0].stateFlags & RACER_STATE_RETIRED) && (D_xk2_80103FF8 == 0)) {
@@ -337,7 +337,7 @@ s32 func_xk2_800ECBC0(void) {
         if ((D_xk2_80103FF0 <= 60) && (D_xk2_80103FF4 == 0)) {
             Audio_TestRunStart();
             func_8071D48C();
-            func_807160A0();
+            Camera_Init();
             Effects_Init();
             D_xk2_80103FF4 = 1;
             D_xk2_80103FF8 = 0;
@@ -638,7 +638,7 @@ void func_xk2_800ED6A4(Gfx** gfxP) {
 }
 
 extern Gfx D_8076CAF8[];
-extern Vp D_80146A8;
+extern Vp aVpFullScreen;
 extern s32 D_8079A364;
 extern FrameBuffer* gFrameBuffers[];
 
@@ -655,7 +655,7 @@ Gfx* CourseEdit_Draw(Gfx* gfx) {
     gSPDisplayList(gfx++, D_8076CAF8);
     gSPDisplayList(gfx++, D_xk2_80104004[D_8079A364]);
     gDPSetColorImage(gfx++, G_IM_FMT_RGBA, G_IM_SIZ_16b, SCREEN_WIDTH, PHYSICAL_TO_VIRTUAL(gFrameBuffers[D_8079A364]));
-    gSPViewport(gfx++, &D_80146A8);
+    gSPViewport(gfx++, &aVpFullScreen);
     gfx = func_xk2_800F1428(gfx);
     gSPDisplayList(gfx++, D_9014A38);
     gfx = func_xk2_800DF5FC(gfx);

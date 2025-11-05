@@ -823,7 +823,7 @@ void MachineSelect_Init(void) {
 
     D_8076C7A8 = 3;
     D_8076E568 = D_8076E56C = D_8076E570 = 0.1f;
-    func_807160A0();
+    Camera_Init();
     func_8071A358();
     gMachineSelectState = MACHINE_SELECT_ACTIVE;
 
@@ -888,7 +888,7 @@ void MachineSettings_Init(void) {
     s32 i;
 
     D_8076C7A8 = 3;
-    func_807160A0();
+    Camera_Init();
     func_8071A358();
     gMachineSettingsState = MACHINE_SETTINGS_ACTIVE;
 
@@ -946,7 +946,7 @@ s32 MachineSelect_Update(void) {
     s16 pad2;
     s16 lastMachineIndex;
 
-    func_80717294();
+    Camera_Update();
 
     for (i = 3; i >= 0; i--) {
 
@@ -1093,7 +1093,7 @@ s32 MachineSettings_Update(void) {
     f32 var_fa1;
     s32 stickX;
 
-    func_80717294();
+    Camera_Update();
     if (gTransitionState != TRANSITION_INACTIVE) {
         return gGameMode;
     }
@@ -1608,7 +1608,7 @@ Gfx* MachineSelect_CursorDraw(Gfx* gfx, Object* cursorObj) {
     return gfx;
 }
 
-extern Player gPlayers[];
+extern Camera gCameras[];
 extern GfxPool D_1000000;
 extern GfxPool* gGfxPool;
 
@@ -1618,7 +1618,7 @@ Gfx* MachineSelect_MachineDraw(Gfx* gfx, Object* machineObj) {
     s32 j;
 
     gSPLoadUcodeL(gfx++, gspF3DEX2_Rej_fifo);
-    gSPPerspNormalize(gfx++, gPlayers[0].unk_118);
+    gSPPerspNormalize(gfx++, gCameras[0].perspectiveScale);
 
     gSPMatrix(gfx++, D_1000000.unk_1A208, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
 
@@ -1712,7 +1712,7 @@ Gfx* MachineSettings_NameDraw(Gfx* gfx) {
 Gfx* MachineSettings_MachineDraw(Gfx* gfx, Object* machineObj) {
     s32 i;
 
-    gSPPerspNormalize(gfx++, gPlayers[0].unk_118);
+    gSPPerspNormalize(gfx++, gCameras[0].perspectiveScale);
 
     gSPMatrix(gfx++, D_1000000.unk_1A208, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
 
@@ -1758,7 +1758,7 @@ Gfx* MachineSettings_MachineDraw(Gfx* gfx, Object* machineObj) {
 
     gSPDisplayList(gfx++, D_90186C8);
 
-    Light_SetLookAtSource(&gGfxPool->unk_33B28, &gPlayers[0].unk_15C);
+    Light_SetLookAtSource(&gGfxPool->unk_33B28, &gCameras[0].viewMtx);
     gSPLookAt(gfx++, &gGfxPool->unk_33B28);
 
     gSPTexture(gfx++, D_i4_8007667C, D_i4_8007667C, 0, G_TX_RENDERTILE, G_ON);
@@ -2131,7 +2131,7 @@ void MachineSelect_MachineUpdate(Object* machineObj) {
         var_s0->trueBasis.x.x += var_fv0 * var_s0->trueBasis.z.x;
         var_s0->trueBasis.x.y += var_fv0 * var_s0->trueBasis.z.y;
         var_s0->trueBasis.x.z += var_fv0 * var_s0->trueBasis.z.z;
-        func_806F6D8C(&var_s0->trueBasis);
+        Math_OrthonormalizeAroundForward(&var_s0->trueBasis);
         Matrix_SetLockedLookAt(&gGfxPool->unk_32308[i], NULL, D_8076E568, D_8076E56C, D_8076E570, var_s0->trueBasis.x.x,
                                var_s0->trueBasis.x.y, var_s0->trueBasis.x.z, var_s0->trueBasis.y.x,
                                var_s0->trueBasis.y.y, var_s0->trueBasis.y.z, var_s0->segmentPositionInfo.pos.x,
@@ -2220,7 +2220,7 @@ void MachineSettings_MachineUpdate(Object* machineObj) {
         var_s0->trueBasis.y.x += var_fs0 * var_s0->trueBasis.z.x;
         var_s0->trueBasis.y.y += var_fs0 * var_s0->trueBasis.z.y;
         var_s0->trueBasis.y.z += var_fs0 * var_s0->trueBasis.z.z;
-        func_806F6D8C(&var_s0->trueBasis);
+        Math_OrthonormalizeAroundForward(&var_s0->trueBasis);
         Matrix_SetLockedLookAt(&gGfxPool->unk_32308[i], NULL, var_fs2 * D_8076E568, var_fs2 * D_8076E56C,
                                var_fs2 * D_8076E570, var_s0->trueBasis.x.x, var_s0->trueBasis.x.y,
                                var_s0->trueBasis.x.z, var_s0->trueBasis.y.x, var_s0->trueBasis.y.y,

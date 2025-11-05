@@ -154,7 +154,7 @@ unk_800CF528* D_i2_800C18D8[] = {
     D_i2_800C1878, // TRACK_SHAPE_BORDERLESS_ROAD
 };
 
-f32 D_i2_800C18F8[] = {
+f32 gTrackJoinUpperLength[] = {
     0.0f,    // TRACK_SHAPE_ROAD
     50.0f,   // TRACK_SHAPE_WALLED_ROAD
     1000.0f, // TRACK_SHAPE_PIPE
@@ -394,7 +394,7 @@ void func_i2_800B0FAC(CourseSegment* segment, Mtx3F* basis) {
     basis->y.x = (segment->up.x + sp38) - (temp_ft4 * segment->up.x);
     basis->y.y = (segment->up.y + sp34) - (temp_ft4 * segment->up.y);
     basis->y.z = (segment->up.z + sp30) - (temp_ft4 * segment->up.z);
-    func_806F6D8C(basis);
+    Math_OrthonormalizeAroundForward(basis);
 }
 
 s32 func_i2_800B10A8(RacerSegmentPositionInfo* arg0, f32 arg1, f32 arg2, f32 arg3, Mtx3F* arg4) {
@@ -667,16 +667,16 @@ void func_i2_800B1AF0(CourseSegment*, f32*, f32*);
 #endif
 
 s32 Course_SplineCalculateTensions(CourseInfo* courseInfo) {
-    f32 sp4C;
-    f32 sp48;
+    f32 alpha1;
+    f32 alpha2;
     CourseSegment* segment = courseInfo->courseSegments;
 
     do {
-        func_i2_800B1AF0(segment, &sp4C, &sp48);
-        if ((sp4C < 0.0f) || (sp4C > 2.0f) || (sp48 < 0.0f) || (sp48 > 2.0f)) {
+        func_i2_800B1AF0(segment, &alpha1, &alpha2);
+        if ((alpha1 < 0.0f) || (alpha1 > 2.0f) || (alpha2 < 0.0f) || (alpha2 > 2.0f)) {
             return -1;
         }
-        segment->tension = (sp4C + sp48) * 0.5f;
+        segment->tension = (alpha1 + alpha2) * 0.5f;
         segment = segment->next;
     } while (segment != courseInfo->courseSegments);
 
@@ -1105,7 +1105,7 @@ s32 func_i2_800B3360(CourseInfo* courseInfo) {
         sp30.y.y = var_s0->up.y;
         sp30.y.z = var_s0->up.z;
         Course_SplineGetTangent(var_s0, 0.0f, &sp30.x);
-        if (func_806F6D8C(&sp30) != 0) {
+        if (Math_OrthonormalizeAroundForward(&sp30) != 0) {
             return -1;
         }
         var_s0->up.x = sp30.y.x;
@@ -1141,7 +1141,8 @@ s32 Course_SegmentJoinsInit(CourseInfo* courseInfo) {
             case TRACK_JOIN_PREVIOUS:
             case TRACK_JOIN_NEXT:
                 if (var_v0->length <=
-                    (D_i2_800C18F8[TRACK_SHAPE_INDEX((u32) var_v0->trackSegmentInfo & TRACK_SHAPE_MASK)] + 100.0f)) {
+                    (gTrackJoinUpperLength[TRACK_SHAPE_INDEX((u32) var_v0->trackSegmentInfo & TRACK_SHAPE_MASK)] +
+                     100.0f)) {
                     var_v1 = -1;
                     if (gInCourseEditor) {
                         func_xk2_800F1330(var_v0 - courseInfo->courseSegments, 2);
@@ -1150,7 +1151,8 @@ s32 Course_SegmentJoinsInit(CourseInfo* courseInfo) {
                 break;
             case TRACK_JOIN_BOTH:
                 if (var_v0->length <=
-                    ((2.0f * D_i2_800C18F8[TRACK_SHAPE_INDEX((u32) var_v0->trackSegmentInfo & TRACK_SHAPE_MASK)]) +
+                    ((2.0f *
+                      gTrackJoinUpperLength[TRACK_SHAPE_INDEX((u32) var_v0->trackSegmentInfo & TRACK_SHAPE_MASK)]) +
                      100.0f)) {
                     var_v1 = -1;
                     if (gInCourseEditor) {
@@ -1455,8 +1457,8 @@ void Course_SegmentContinuousFlagInit(CourseInfo* courseInfo) {
     } while (var_v0 != courseInfo->courseSegments);
 }
 
-void func_i2_800B4338(unk_36ED0* arg0, f32 arg1, f32 arg2, Mtx3F* arg3, Vec3f* arg4, Vec3f* arg5, Vec3f* arg6,
-                      Vec3f* arg7, Vec3f* arg8, f32 arg9, f32 argA, f32 argB, f32 argC, f32 argD) {
+void func_i2_800B4338(unk_36ED0* arg0, f32 radiusLeft, f32 radiusRight, Mtx3F* basis, Vec3f* arg4, Vec3f* arg5,
+                      Vec3f* arg6, Vec3f* arg7, Vec3f* arg8, f32 arg9, f32 argA, f32 argB, f32 argC, f32 argD) {
     f32 temp1;
     f32 temp2;
     f32 temp_fs0;
@@ -1467,33 +1469,33 @@ void func_i2_800B4338(unk_36ED0* arg0, f32 arg1, f32 arg2, Mtx3F* arg3, Vec3f* a
     f32 temp_fs5;
     f32 sp6C;
 
-    temp_fs4 = arg1 + 11.5f;
-    temp_fs5 = arg2 + 11.5f;
+    temp_fs4 = radiusLeft + 11.5f;
+    temp_fs5 = radiusRight + 11.5f;
     temp1 = temp_fs4 - temp_fs5;
     temp2 = temp_fs4 + temp_fs5;
     temp_fs1 = temp1 / 2.0f;
 
-    arg0->unk_26[0] = Math_Round(arg8->x = arg0->unk_14.x + (temp_fs1 * arg3->z.x));
-    arg0->unk_26[1] = Math_Round(arg8->y = arg0->unk_14.y + (temp_fs1 * arg3->z.y));
-    arg0->unk_26[2] = Math_Round(arg8->z = arg0->unk_14.z + (temp_fs1 * arg3->z.z));
+    arg0->unk_26[0] = Math_Round(arg8->x = arg0->unk_14.x + (temp_fs1 * basis->z.x));
+    arg0->unk_26[1] = Math_Round(arg8->y = arg0->unk_14.y + (temp_fs1 * basis->z.y));
+    arg0->unk_26[2] = Math_Round(arg8->z = arg0->unk_14.z + (temp_fs1 * basis->z.z));
 
-    arg0->unk_20[0] = Math_Round(arg8->x + ((argB - argC - argD) * arg3->y.x));
-    arg0->unk_20[1] = Math_Round(arg8->y + ((argB - argC - argD) * arg3->y.y));
-    arg0->unk_20[2] = Math_Round(arg8->z + ((argB - argC - argD) * arg3->y.z));
+    arg0->unk_20[0] = Math_Round(arg8->x + ((argB - argC - argD) * basis->y.x));
+    arg0->unk_20[1] = Math_Round(arg8->y + ((argB - argC - argD) * basis->y.y));
+    arg0->unk_20[2] = Math_Round(arg8->z + ((argB - argC - argD) * basis->y.z));
 
     temp_fs1 = temp2 / 2.0f;
 
-    arg6->x = (temp_fs2 = arg3->y.x * temp_fs1) + arg8->x;
-    arg6->y = (temp_fs3 = arg3->y.y * temp_fs1) + arg8->y;
-    arg6->z = (temp_fs0 = arg3->y.z * temp_fs1) + arg8->z;
+    arg6->x = (temp_fs2 = basis->y.x * temp_fs1) + arg8->x;
+    arg6->y = (temp_fs3 = basis->y.y * temp_fs1) + arg8->y;
+    arg6->z = (temp_fs0 = basis->y.z * temp_fs1) + arg8->z;
 
     arg7->x = arg8->x - temp_fs2;
     arg7->y = arg8->y - temp_fs3;
     arg7->z = arg8->z - temp_fs0;
 
-    arg0->unk_38[0] = Math_Round(arg4->x = (temp_fs4 = arg3->z.x * temp_fs1) + arg8->x);
-    arg0->unk_38[1] = Math_Round(arg4->y = (temp_fs5 = arg3->z.y * temp_fs1) + arg8->y);
-    arg0->unk_38[2] = Math_Round(arg4->z = (sp6C = arg3->z.z * temp_fs1) + arg8->z);
+    arg0->unk_38[0] = Math_Round(arg4->x = (temp_fs4 = basis->z.x * temp_fs1) + arg8->x);
+    arg0->unk_38[1] = Math_Round(arg4->y = (temp_fs5 = basis->z.y * temp_fs1) + arg8->y);
+    arg0->unk_38[2] = Math_Round(arg4->z = (sp6C = basis->z.z * temp_fs1) + arg8->z);
 
     arg0->unk_4A[0] = Math_Round(arg5->x = arg8->x - temp_fs4);
     arg0->unk_4A[1] = Math_Round(arg5->y = arg8->y - temp_fs5);
@@ -1501,9 +1503,9 @@ void func_i2_800B4338(unk_36ED0* arg0, f32 arg1, f32 arg2, Mtx3F* arg3, Vec3f* a
 
     temp_fs1 += arg9;
 
-    arg0->unk_32[0] = Math_Round((temp_fs2 = arg8->x + (argB * arg3->y.x)) + (temp_fs4 = arg3->z.x * temp_fs1));
-    arg0->unk_32[1] = Math_Round((temp_fs3 = arg8->y + (argB * arg3->y.y)) + (temp_fs5 = arg3->z.y * temp_fs1));
-    arg0->unk_32[2] = Math_Round((temp_fs0 = arg8->z + (argB * arg3->y.z)) + (sp6C = arg3->z.z * temp_fs1));
+    arg0->unk_32[0] = Math_Round((temp_fs2 = arg8->x + (argB * basis->y.x)) + (temp_fs4 = basis->z.x * temp_fs1));
+    arg0->unk_32[1] = Math_Round((temp_fs3 = arg8->y + (argB * basis->y.y)) + (temp_fs5 = basis->z.y * temp_fs1));
+    arg0->unk_32[2] = Math_Round((temp_fs0 = arg8->z + (argB * basis->y.z)) + (sp6C = basis->z.z * temp_fs1));
 
     arg0->unk_44[0] = Math_Round(temp_fs2 - temp_fs4);
     arg0->unk_44[1] = Math_Round(temp_fs3 - temp_fs5);
@@ -1512,32 +1514,34 @@ void func_i2_800B4338(unk_36ED0* arg0, f32 arg1, f32 arg2, Mtx3F* arg3, Vec3f* a
     temp_fs1 += argA;
 
     arg0->unk_2C[0] =
-        Math_Round((temp_fs2 = arg8->x + ((argB - argC) * arg3->y.x)) + (temp_fs4 = arg3->z.x * temp_fs1));
+        Math_Round((temp_fs2 = arg8->x + ((argB - argC) * basis->y.x)) + (temp_fs4 = basis->z.x * temp_fs1));
     arg0->unk_2C[1] =
-        Math_Round((temp_fs3 = arg8->y + ((argB - argC) * arg3->y.y)) + (temp_fs5 = arg3->z.y * temp_fs1));
-    arg0->unk_2C[2] = Math_Round((temp_fs0 = arg8->z + ((argB - argC) * arg3->y.z)) + (sp6C = arg3->z.z * temp_fs1));
+        Math_Round((temp_fs3 = arg8->y + ((argB - argC) * basis->y.y)) + (temp_fs5 = basis->z.y * temp_fs1));
+    arg0->unk_2C[2] = Math_Round((temp_fs0 = arg8->z + ((argB - argC) * basis->y.z)) + (sp6C = basis->z.z * temp_fs1));
 
     arg0->unk_3E[0] = Math_Round(temp_fs2 - temp_fs4);
     arg0->unk_3E[1] = Math_Round(temp_fs3 - temp_fs5);
     arg0->unk_3E[2] = Math_Round(temp_fs0 - sp6C);
 }
 
-void func_i2_800B4728(unk_36ED0* arg0, f32 arg1, f32 arg2, Mtx3F* arg3, Vec3f* arg4, Vec3f* arg5, Vec3f* arg6,
-                      Vec3f* arg7, Vec3f* arg8) {
-    func_i2_800B4338(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, 30.0f, 10.0f, 10.0f, 50.0f, 50.0f);
+void func_i2_800B4728(unk_36ED0* arg0, f32 radiusLeft, f32 radiusRight, Mtx3F* basis, Vec3f* arg4, Vec3f* arg5,
+                      Vec3f* arg6, Vec3f* arg7, Vec3f* arg8) {
+    func_i2_800B4338(arg0, radiusLeft, radiusRight, basis, arg4, arg5, arg6, arg7, arg8, 30.0f, 10.0f, 10.0f, 50.0f,
+                     50.0f);
 }
 
-void func_i2_800B47A8(unk_36ED0* arg0, f32 arg1, f32 arg2, Mtx3F* arg3, Vec3f* arg4, Vec3f* arg5, Vec3f* arg6,
-                      Vec3f* arg7, Vec3f* arg8) {
-    func_i2_800B4338(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, 30.0f, 20.0f, 120.0f, 155.0f, 50.0f);
+void func_i2_800B47A8(unk_36ED0* arg0, f32 radiusLeft, f32 radiusRight, Mtx3F* basis, Vec3f* arg4, Vec3f* arg5,
+                      Vec3f* arg6, Vec3f* arg7, Vec3f* arg8) {
+    func_i2_800B4338(arg0, radiusLeft, radiusRight, basis, arg4, arg5, arg6, arg7, arg8, 30.0f, 20.0f, 120.0f, 155.0f,
+                     50.0f);
 }
 
-void func_i2_800B4838(unk_36ED0* arg0, f32 arg1, f32 arg2, Mtx3F* arg3, Vec3f* arg4, Vec3f* arg5, Vec3f* arg6,
-                      Vec3f* arg7, Vec3f* arg8) {
-    func_i2_800B489C(arg0, arg1 / gSinTable[0x501], arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+void func_i2_800B4838(unk_36ED0* arg0, f32 radiusLeft, f32 radiusRight, Mtx3F* basis, Vec3f* arg4, Vec3f* arg5,
+                      Vec3f* arg6, Vec3f* arg7, Vec3f* arg8) {
+    func_i2_800B489C(arg0, radiusLeft / gSinTable[0x501], radiusRight, basis, arg4, arg5, arg6, arg7, arg8);
 }
 
-void func_i2_800B489C(unk_36ED0* arg0, f32 arg1, f32 arg2, Mtx3F* arg3, Vec3f* arg4, Vec3f* arg5, Vec3f* arg6,
+void func_i2_800B489C(unk_36ED0* arg0, f32 radius, f32 radiusRight, Mtx3F* basis, Vec3f* arg4, Vec3f* arg5, Vec3f* arg6,
                       Vec3f* arg7, Vec3f* arg8) {
     f32 sp64;
     f32 sp60;
@@ -1550,29 +1554,29 @@ void func_i2_800B489C(unk_36ED0* arg0, f32 arg1, f32 arg2, Mtx3F* arg3, Vec3f* a
     f32 temp_fs3;
     f32 temp_fs4;
 
-    arg0->unk_32[0] = Math_Round(arg4->x = (arg8->x = arg0->unk_14.x) + (sp54 = arg3->z.x * arg1));
-    arg0->unk_32[1] = Math_Round(arg4->y = (arg8->y = arg0->unk_14.y) + (sp50 = arg3->z.y * arg1));
-    arg0->unk_32[2] = Math_Round(arg4->z = (arg8->z = arg0->unk_14.z) + (sp4C = arg3->z.z * arg1));
+    arg0->unk_32[0] = Math_Round(arg4->x = (arg8->x = arg0->unk_14.x) + (sp54 = basis->z.x * radius));
+    arg0->unk_32[1] = Math_Round(arg4->y = (arg8->y = arg0->unk_14.y) + (sp50 = basis->z.y * radius));
+    arg0->unk_32[2] = Math_Round(arg4->z = (arg8->z = arg0->unk_14.z) + (sp4C = basis->z.z * radius));
 
     arg0->unk_44[0] = Math_Round(arg5->x = arg0->unk_14.x - sp54);
     arg0->unk_44[1] = Math_Round(arg5->y = arg0->unk_14.y - sp50);
     arg0->unk_44[2] = Math_Round(arg5->z = arg0->unk_14.z - sp4C);
 
-    arg0->unk_26[0] = Math_Round(arg6->x = (temp_fs2 = arg3->y.x * arg1) + arg0->unk_14.x);
-    arg0->unk_26[1] = Math_Round(arg6->y = (temp_fs3 = arg3->y.y * arg1) + arg0->unk_14.y);
-    arg0->unk_26[2] = Math_Round(arg6->z = (temp_fs4 = arg3->y.z * arg1) + arg0->unk_14.z);
+    arg0->unk_26[0] = Math_Round(arg6->x = (temp_fs2 = basis->y.x * radius) + arg0->unk_14.x);
+    arg0->unk_26[1] = Math_Round(arg6->y = (temp_fs3 = basis->y.y * radius) + arg0->unk_14.y);
+    arg0->unk_26[2] = Math_Round(arg6->z = (temp_fs4 = basis->y.z * radius) + arg0->unk_14.z);
 
     arg0->unk_20[0] = Math_Round(arg7->x = arg0->unk_14.x - temp_fs2);
     arg0->unk_20[1] = Math_Round(arg7->y = arg0->unk_14.y - temp_fs3);
     arg0->unk_20[2] = Math_Round(arg7->z = arg0->unk_14.z - temp_fs4);
 
-    sp64 = gSinTable[0x200] * arg1;
+    sp64 = gSinTable[0x200] * radius;
 
-    arg0->unk_38[0] = Math_Round((sp60 = (sp54 = arg3->z.x * sp64) + arg0->unk_14.x) + (temp_fs2 = arg3->y.x * sp64));
+    arg0->unk_38[0] = Math_Round((sp60 = (sp54 = basis->z.x * sp64) + arg0->unk_14.x) + (temp_fs2 = basis->y.x * sp64));
     arg0->unk_38[1] =
-        Math_Round((temp_fs1 = (sp50 = arg3->z.y * sp64) + arg0->unk_14.y) + (temp_fs3 = arg3->y.y * sp64));
+        Math_Round((temp_fs1 = (sp50 = basis->z.y * sp64) + arg0->unk_14.y) + (temp_fs3 = basis->y.y * sp64));
     arg0->unk_38[2] =
-        Math_Round((temp_fs0 = (sp4C = arg3->z.z * sp64) + arg0->unk_14.z) + (temp_fs4 = arg3->y.z * sp64));
+        Math_Round((temp_fs0 = (sp4C = basis->z.z * sp64) + arg0->unk_14.z) + (temp_fs4 = basis->y.z * sp64));
 
     arg0->unk_2C[0] = Math_Round(sp60 - temp_fs2);
     arg0->unk_2C[1] = Math_Round(temp_fs1 - temp_fs3);
@@ -1587,8 +1591,8 @@ void func_i2_800B489C(unk_36ED0* arg0, f32 arg1, f32 arg2, Mtx3F* arg3, Vec3f* a
     arg0->unk_3E[2] = Math_Round(temp_fs0 - temp_fs4);
 }
 
-void func_i2_800B4BD0(unk_36ED0* arg0, f32 arg1, f32 arg2, Mtx3F* arg3, Vec3f* arg4, Vec3f* arg5, Vec3f* arg6,
-                      Vec3f* arg7, Vec3f* arg8) {
+void func_i2_800B4BD0(unk_36ED0* arg0, f32 radiusLeft, f32 radiusRight, Mtx3F* basis, Vec3f* arg4, Vec3f* arg5,
+                      Vec3f* arg6, Vec3f* arg7, Vec3f* arg8) {
     f32 sp64;
     f32 temp_fs1;
     f32 temp_fs2;
@@ -1599,16 +1603,16 @@ void func_i2_800B4BD0(unk_36ED0* arg0, f32 arg1, f32 arg2, Mtx3F* arg3, Vec3f* a
     f32 temp_fs4;
     f32 temp_fs5;
 
-    sp64 = arg1 / gSinTable[0x4C1];
+    sp64 = radiusLeft / gSinTable[0x4C1];
     temp_fs1 = gSinTable[0xD00] * sp64;
     temp_fs2 = gSinTable[0x900] * sp64;
 
     arg0->unk_44[0] =
-        Math_Round(arg5->x = (sp58 = arg0->unk_14.x + (temp_fs2 * arg3->y.x)) + (temp_fs3 = arg3->z.x * temp_fs1));
+        Math_Round(arg5->x = (sp58 = arg0->unk_14.x + (temp_fs2 * basis->y.x)) + (temp_fs3 = basis->z.x * temp_fs1));
     arg0->unk_44[1] =
-        Math_Round(arg5->y = (sp54 = arg0->unk_14.y + (temp_fs2 * arg3->y.y)) + (temp_fs4 = arg3->z.y * temp_fs1));
-    arg0->unk_44[2] =
-        Math_Round(arg5->z = (temp_fs0 = arg0->unk_14.z + (temp_fs2 * arg3->y.z)) + (temp_fs5 = arg3->z.z * temp_fs1));
+        Math_Round(arg5->y = (sp54 = arg0->unk_14.y + (temp_fs2 * basis->y.y)) + (temp_fs4 = basis->z.y * temp_fs1));
+    arg0->unk_44[2] = Math_Round(arg5->z = (temp_fs0 = arg0->unk_14.z + (temp_fs2 * basis->y.z)) +
+                                           (temp_fs5 = basis->z.z * temp_fs1));
 
     arg0->unk_32[0] = Math_Round(arg4->x = sp58 - temp_fs3);
     arg0->unk_32[1] = Math_Round(arg4->y = sp54 - temp_fs4);
@@ -1617,18 +1621,20 @@ void func_i2_800B4BD0(unk_36ED0* arg0, f32 arg1, f32 arg2, Mtx3F* arg3, Vec3f* a
     temp_fs1 = gSinTable[0xE80] * sp64;
     temp_fs2 = gSinTable[0xA80] * sp64;
 
-    arg0->unk_4A[0] = Math_Round((sp58 = arg0->unk_14.x + (temp_fs2 * arg3->y.x)) + (temp_fs3 = arg3->z.x * temp_fs1));
-    arg0->unk_4A[1] = Math_Round((sp54 = arg0->unk_14.y + (temp_fs2 * arg3->y.y)) + (temp_fs4 = arg3->z.y * temp_fs1));
+    arg0->unk_4A[0] =
+        Math_Round((sp58 = arg0->unk_14.x + (temp_fs2 * basis->y.x)) + (temp_fs3 = basis->z.x * temp_fs1));
+    arg0->unk_4A[1] =
+        Math_Round((sp54 = arg0->unk_14.y + (temp_fs2 * basis->y.y)) + (temp_fs4 = basis->z.y * temp_fs1));
     arg0->unk_4A[2] =
-        Math_Round((temp_fs0 = arg0->unk_14.z + (temp_fs2 * arg3->y.z)) + (temp_fs5 = arg3->z.z * temp_fs1));
+        Math_Round((temp_fs0 = arg0->unk_14.z + (temp_fs2 * basis->y.z)) + (temp_fs5 = basis->z.z * temp_fs1));
 
     arg0->unk_38[0] = Math_Round(sp58 - temp_fs3);
     arg0->unk_38[1] = Math_Round(sp54 - temp_fs4);
     arg0->unk_38[2] = Math_Round(temp_fs0 - temp_fs5);
 
-    arg0->unk_26[0] = Math_Round(arg7->x = arg0->unk_14.x - (sp58 = (sp64 * arg3->y.x)));
-    arg0->unk_26[1] = Math_Round(arg7->y = arg0->unk_14.y - (sp54 = (sp64 * arg3->y.y)));
-    arg0->unk_26[2] = Math_Round(arg7->z = arg0->unk_14.z - (temp_fs0 = (sp64 * arg3->y.z)));
+    arg0->unk_26[0] = Math_Round(arg7->x = arg0->unk_14.x - (sp58 = (sp64 * basis->y.x)));
+    arg0->unk_26[1] = Math_Round(arg7->y = arg0->unk_14.y - (sp54 = (sp64 * basis->y.y)));
+    arg0->unk_26[2] = Math_Round(arg7->z = arg0->unk_14.z - (temp_fs0 = (sp64 * basis->y.z)));
 
     arg6->x = arg0->unk_14.x + sp58;
     arg6->y = arg0->unk_14.y + sp54;
@@ -1638,22 +1644,24 @@ void func_i2_800B4BD0(unk_36ED0* arg0, f32 arg1, f32 arg2, Mtx3F* arg3, Vec3f* a
     temp_fs1 = gSinTable[0xE80] * sp64;
     temp_fs2 = gSinTable[0xA80] * sp64;
 
-    arg0->unk_3E[0] = Math_Round((sp58 = arg0->unk_14.x + (temp_fs2 * arg3->y.x)) + (temp_fs3 = arg3->z.x * temp_fs1));
-    arg0->unk_3E[1] = Math_Round((sp54 = arg0->unk_14.y + (temp_fs2 * arg3->y.y)) + (temp_fs4 = arg3->z.y * temp_fs1));
+    arg0->unk_3E[0] =
+        Math_Round((sp58 = arg0->unk_14.x + (temp_fs2 * basis->y.x)) + (temp_fs3 = basis->z.x * temp_fs1));
+    arg0->unk_3E[1] =
+        Math_Round((sp54 = arg0->unk_14.y + (temp_fs2 * basis->y.y)) + (temp_fs4 = basis->z.y * temp_fs1));
     arg0->unk_3E[2] =
-        Math_Round((temp_fs0 = arg0->unk_14.z + (temp_fs2 * arg3->y.z)) + (temp_fs5 = arg3->z.z * temp_fs1));
+        Math_Round((temp_fs0 = arg0->unk_14.z + (temp_fs2 * basis->y.z)) + (temp_fs5 = basis->z.z * temp_fs1));
 
     arg0->unk_2C[0] = Math_Round(sp58 - temp_fs3);
     arg0->unk_2C[1] = Math_Round(sp54 - temp_fs4);
     arg0->unk_2C[2] = Math_Round(temp_fs0 - temp_fs5);
 
-    arg0->unk_20[0] = Math_Round((arg8->x = arg0->unk_14.x) - (sp64 * arg3->y.x));
-    arg0->unk_20[1] = Math_Round((arg8->y = arg0->unk_14.y) - (sp64 * arg3->y.y));
-    arg0->unk_20[2] = Math_Round((arg8->z = arg0->unk_14.z) - (sp64 * arg3->y.z));
+    arg0->unk_20[0] = Math_Round((arg8->x = arg0->unk_14.x) - (sp64 * basis->y.x));
+    arg0->unk_20[1] = Math_Round((arg8->y = arg0->unk_14.y) - (sp64 * basis->y.y));
+    arg0->unk_20[2] = Math_Round((arg8->z = arg0->unk_14.z) - (sp64 * basis->y.z));
 }
 
-void func_i2_800B4FE0(unk_36ED0* arg0, f32 arg1, f32 arg2, Mtx3F* arg3, Vec3f* arg4, Vec3f* arg5, Vec3f* arg6,
-                      Vec3f* arg7, Vec3f* arg8) {
+void func_i2_800B4FE0(unk_36ED0* arg0, f32 radiusLeft, f32 radiusRight, Mtx3F* basis, Vec3f* arg4, Vec3f* arg5,
+                      Vec3f* arg6, Vec3f* arg7, Vec3f* arg8) {
     f32 temp_fs4;
     f32 temp_fs5;
     f32 temp_fs1;
@@ -1664,35 +1672,35 @@ void func_i2_800B4FE0(unk_36ED0* arg0, f32 arg1, f32 arg2, Mtx3F* arg3, Vec3f* a
     f32 sp60;
     f32 sp5C;
 
-    temp_fs4 = arg1 + 11.5f;
-    temp_fs5 = arg2 + 11.5f;
+    temp_fs4 = radiusLeft + 11.5f;
+    temp_fs5 = radiusRight + 11.5f;
 
     temp_fs1 = (temp_fs4 - temp_fs5) / 2.0f;
 
-    arg0->unk_20[0] = Math_Round(arg8->x = arg0->unk_14.x + (temp_fs1 * arg3->z.x));
-    arg0->unk_20[1] = Math_Round(arg8->y = arg0->unk_14.y + (temp_fs1 * arg3->z.y));
-    arg0->unk_20[2] = Math_Round(arg8->z = arg0->unk_14.z + (temp_fs1 * arg3->z.z));
+    arg0->unk_20[0] = Math_Round(arg8->x = arg0->unk_14.x + (temp_fs1 * basis->z.x));
+    arg0->unk_20[1] = Math_Round(arg8->y = arg0->unk_14.y + (temp_fs1 * basis->z.y));
+    arg0->unk_20[2] = Math_Round(arg8->z = arg0->unk_14.z + (temp_fs1 * basis->z.z));
 
-    arg0->unk_26[0] = Math_Round(arg6->x = (temp_fs2 = arg3->y.x * 185.0f) + arg8->x);
-    arg0->unk_26[1] = Math_Round(arg6->y = (temp_fs3 = arg3->y.y * 185.0f) + arg8->y);
-    arg0->unk_26[2] = Math_Round(arg6->z = (sp68 = arg3->y.z * 185.0f) + arg8->z);
+    arg0->unk_26[0] = Math_Round(arg6->x = (temp_fs2 = basis->y.x * 185.0f) + arg8->x);
+    arg0->unk_26[1] = Math_Round(arg6->y = (temp_fs3 = basis->y.y * 185.0f) + arg8->y);
+    arg0->unk_26[2] = Math_Round(arg6->z = (sp68 = basis->y.z * 185.0f) + arg8->z);
 
     arg7->x = arg8->x - temp_fs2;
     arg7->y = arg8->y - temp_fs3;
     arg7->z = arg8->z - sp68;
     temp_fs1 = (temp_fs4 + temp_fs5) / 2.0f;
 
-    arg0->unk_2C[0] = Math_Round(arg4->x = (sp64 = arg3->z.x * temp_fs1) + arg8->x);
-    arg0->unk_2C[1] = Math_Round(arg4->y = (sp60 = arg3->z.y * temp_fs1) + arg8->y);
-    arg0->unk_2C[2] = Math_Round(arg4->z = (sp5C = arg3->z.z * temp_fs1) + arg8->z);
+    arg0->unk_2C[0] = Math_Round(arg4->x = (sp64 = basis->z.x * temp_fs1) + arg8->x);
+    arg0->unk_2C[1] = Math_Round(arg4->y = (sp60 = basis->z.y * temp_fs1) + arg8->y);
+    arg0->unk_2C[2] = Math_Round(arg4->z = (sp5C = basis->z.z * temp_fs1) + arg8->z);
 
     arg0->unk_3E[0] = Math_Round(arg5->x = arg8->x - sp64);
     arg0->unk_3E[1] = Math_Round(arg5->y = arg8->y - sp60);
     arg0->unk_3E[2] = Math_Round(arg5->z = arg8->z - sp5C);
 
-    arg0->unk_32[0] = Math_Round((temp_fs2 = arg3->y.x * 85.0f) + arg4->x);
-    arg0->unk_32[1] = Math_Round((temp_fs3 = arg3->y.y * 85.0f) + arg4->y);
-    arg0->unk_32[2] = Math_Round((sp68 = arg3->y.z * 85.0f) + arg4->z);
+    arg0->unk_32[0] = Math_Round((temp_fs2 = basis->y.x * 85.0f) + arg4->x);
+    arg0->unk_32[1] = Math_Round((temp_fs3 = basis->y.y * 85.0f) + arg4->y);
+    arg0->unk_32[2] = Math_Round((sp68 = basis->y.z * 85.0f) + arg4->z);
 
     arg0->unk_44[0] = Math_Round(arg5->x + temp_fs2);
     arg0->unk_44[1] = Math_Round(arg5->y + temp_fs3);
@@ -1700,19 +1708,19 @@ void func_i2_800B4FE0(unk_36ED0* arg0, f32 arg1, f32 arg2, Mtx3F* arg3, Vec3f* a
 
     temp_fs1 *= 0.625f;
 
-    arg0->unk_38[0] = Math_Round((temp_fs2 = arg8->x + (160.0f * arg3->y.x)) + (sp64 = arg3->z.x * temp_fs1));
-    arg0->unk_38[1] = Math_Round((temp_fs3 = arg8->y + (160.0f * arg3->y.y)) + (sp60 = arg3->z.y * temp_fs1));
-    arg0->unk_38[2] = Math_Round((sp68 = arg8->z + (160.0f * arg3->y.z)) + (sp5C = arg3->z.z * temp_fs1));
+    arg0->unk_38[0] = Math_Round((temp_fs2 = arg8->x + (160.0f * basis->y.x)) + (sp64 = basis->z.x * temp_fs1));
+    arg0->unk_38[1] = Math_Round((temp_fs3 = arg8->y + (160.0f * basis->y.y)) + (sp60 = basis->z.y * temp_fs1));
+    arg0->unk_38[2] = Math_Round((sp68 = arg8->z + (160.0f * basis->y.z)) + (sp5C = basis->z.z * temp_fs1));
 
     arg0->unk_4A[0] = Math_Round(temp_fs2 - sp64);
     arg0->unk_4A[1] = Math_Round(temp_fs3 - sp60);
     arg0->unk_4A[2] = Math_Round(sp68 - sp5C);
 }
 
-void func_i2_800B53D4(unk_36ED0* arg0, f32 arg1, f32 arg2, Mtx3F* arg3, Vec3f* arg4, Vec3f* arg5, Vec3f* arg6,
-                      Vec3f* arg7, Vec3f* arg8) {
-    func_i2_800B4338(arg0, arg1 - 15.410001f, arg2 - 15.410001f, arg3, arg4, arg5, arg6, arg7, arg8, 10.0f, 0.0f,
-                     -10.0f, 40.0f, 40.0f);
+void func_i2_800B53D4(unk_36ED0* arg0, f32 radiusLeft, f32 radiusRight, Mtx3F* basis, Vec3f* arg4, Vec3f* arg5,
+                      Vec3f* arg6, Vec3f* arg7, Vec3f* arg8) {
+    func_i2_800B4338(arg0, radiusLeft - 15.410001f, radiusRight - 15.410001f, basis, arg4, arg5, arg6, arg7, arg8,
+                     10.0f, 0.0f, -10.0f, 40.0f, 40.0f);
 }
 
 void func_i2_800B5468(s16* arg0, s16* arg1, f32 arg2, s16* arg3) {
@@ -1782,76 +1790,76 @@ void func_i2_800B57E0(unk_36ED0* arg0, unk_36ED0* arg1, f32 arg2) {
     func_i2_800B5468(arg0->unk_4A, arg1->unk_4A, arg2, arg1->unk_4A);
 }
 
-f32 func_i2_800B58B8(CourseSegment* arg0) {
+f32 Course_SegmentGetJoinLengths(CourseSegment* segment) {
     f32 temp_fv1;
-    f32 var_fs3;
-    f32 var_fs1;
+    f32 joinLength;
+    f32 length;
     Vec3f sp58;
 
-    arg0->joinScale = -1.0f;
-    var_fs3 = D_i2_800C18F8[TRACK_SHAPE_INDEX((u32) arg0->trackSegmentInfo & TRACK_SHAPE_MASK)];
+    segment->joinScale = -1.0f;
+    joinLength = gTrackJoinUpperLength[TRACK_SHAPE_INDEX((u32) segment->trackSegmentInfo & TRACK_SHAPE_MASK)];
 
-    switch (arg0->trackSegmentInfo & TRACK_JOIN_MASK) {
+    switch (segment->trackSegmentInfo & TRACK_JOIN_MASK) {
         case TRACK_JOIN_PREVIOUS:
         case TRACK_JOIN_NEXT:
-            if (arg0->length <= (var_fs3 + 100.0f)) {
-                var_fs3 = arg0->length * 0.5f;
+            if (segment->length <= (joinLength + 100.0f)) {
+                joinLength = segment->length * 0.5f;
             }
             break;
         case TRACK_JOIN_BOTH:
-            if (arg0->length <= ((2.0f * var_fs3) + 100.0f)) {
-                var_fs3 = arg0->length * 0.3f;
+            if (segment->length <= ((2.0f * joinLength) + 100.0f)) {
+                joinLength = segment->length * 0.3f;
             }
             break;
     }
 
-    if (arg0->trackSegmentInfo & TRACK_JOIN_PREVIOUS) {
-        arg0->previousJoinEndTValue = 0.0f;
-        var_fs1 = 0.0f;
+    if (segment->trackSegmentInfo & TRACK_JOIN_PREVIOUS) {
+        segment->previousJoinEndTValue = 0.0f;
+        length = 0.0f;
         do {
-            temp_fv1 = 50.0f / Course_SplineGetTangent(arg0, arg0->previousJoinEndTValue, &sp58);
-            arg0->previousJoinEndTValue += temp_fv1;
+            temp_fv1 = 50.0f / Course_SplineGetTangent(segment, segment->previousJoinEndTValue, &sp58);
+            segment->previousJoinEndTValue += temp_fv1;
 
-            if (arg0->previousJoinEndTValue >= 1.0f) {
-                var_fs3 = var_fs1;
-                arg0->previousJoinEndTValue -= temp_fv1;
+            if (segment->previousJoinEndTValue >= 1.0f) {
+                joinLength = length;
+                segment->previousJoinEndTValue -= temp_fv1;
                 break;
             }
-            var_fs1 += 50.0f;
-        } while (var_fs1 < var_fs3);
-        arg0->joinScale = var_fs1 / arg0->length;
+            length += 50.0f;
+        } while (length < joinLength);
+        segment->joinScale = length / segment->length;
     } else {
-        arg0->previousJoinEndTValue = -99.0f;
+        segment->previousJoinEndTValue = -99.0f;
     }
 
-    if (arg0->trackSegmentInfo & TRACK_JOIN_NEXT) {
-        arg0->nextJoinStartTValue = 1.0f;
+    if (segment->trackSegmentInfo & TRACK_JOIN_NEXT) {
+        segment->nextJoinStartTValue = 1.0f;
 
-        var_fs1 = 0.0f;
+        length = 0.0f;
         do {
-            temp_fv1 = 50.0f / Course_SplineGetTangent(arg0, arg0->nextJoinStartTValue, &sp58);
-            arg0->nextJoinStartTValue -= temp_fv1;
-            if (arg0->nextJoinStartTValue <= 0.0f) {
-                var_fs3 = var_fs1;
-                arg0->nextJoinStartTValue += temp_fv1;
+            temp_fv1 = 50.0f / Course_SplineGetTangent(segment, segment->nextJoinStartTValue, &sp58);
+            segment->nextJoinStartTValue -= temp_fv1;
+            if (segment->nextJoinStartTValue <= 0.0f) {
+                joinLength = length;
+                segment->nextJoinStartTValue += temp_fv1;
                 break;
             }
-            var_fs1 += 50.0f;
-        } while (var_fs1 < var_fs3);
-        arg0->joinScale = var_fs1 / arg0->length;
-    } else if (!(arg0->trackSegmentInfo & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK)) &&
-               (arg0->next->trackSegmentInfo & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK))) {
-        arg0->nextJoinStartTValue = 1.0f - (100.0f / Course_SplineGetTangent(arg0, 1.0f, &sp58));
+            length += 50.0f;
+        } while (length < joinLength);
+        segment->joinScale = length / segment->length;
+    } else if (!(segment->trackSegmentInfo & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK)) &&
+               (segment->next->trackSegmentInfo & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK))) {
+        segment->nextJoinStartTValue = 1.0f - (100.0f / Course_SplineGetTangent(segment, 1.0f, &sp58));
     } else {
-        arg0->nextJoinStartTValue = 99.0f;
+        segment->nextJoinStartTValue = 99.0f;
     }
-    if (arg0->nextJoinStartTValue <= arg0->previousJoinEndTValue) {
-        arg0->previousJoinEndTValue = 0.49f;
-        arg0->nextJoinStartTValue = 0.51f;
-        arg0->joinScale = 0.49f;
-        var_fs3 = arg0->length * 0.49f;
+    if (segment->nextJoinStartTValue <= segment->previousJoinEndTValue) {
+        segment->previousJoinEndTValue = 0.49f;
+        segment->nextJoinStartTValue = 0.51f;
+        segment->joinScale = 0.49f;
+        joinLength = segment->length * 0.49f;
     }
-    return var_fs3;
+    return joinLength;
 }
 
 bool func_i2_800B5B9C(Vec3f* arg0, Vec3f* arg1, Vec3f* arg2) {
@@ -1926,7 +1934,7 @@ s32 func_i2_800B5CD8(CourseInfo* courseInfo) {
     Vec3f sp17C;
     Vec3f sp170;
     unk_36ED0 sp110;
-    Mtx3F spEC;
+    Mtx3F segmentBasis;
     f32 spE8;
     f32 spE4;
     f32 spE0;
@@ -1943,55 +1951,56 @@ s32 func_i2_800B5CD8(CourseInfo* courseInfo) {
     f32 temp_fv0_5;
     f32 temp_fv0_8;
     f32 var_fs0;
-    f32 var_fs1;
+    f32 t;
     f32 var_fs3;
     s32 temp_s5;
     unk_36ED0* var_s0;
     unk_36ED0* var_s3;
     unk_36ED0* var_t2;
-    CourseSegment* var_s1;
+    CourseSegment* segment;
     CourseSegment* var_s4;
     unk_800CF528* temp_a3;
     s32 var_v1;
 
-    var_s1 = courseInfo->courseSegments;
+    segment = courseInfo->courseSegments;
     spB4 = 0;
 
-    while (var_s1->trackSegmentInfo & TRACK_FLAG_CONTINUOUS) {
-        var_s1 = var_s1->next;
+    while (segment->trackSegmentInfo & TRACK_FLAG_CONTINUOUS) {
+        segment = segment->next;
     }
 
-    sp294 = var_s1;
-    var_s4 = var_s1->next;
-    D_802BE5C0[0].trackSegmentInfo = (var_s1->trackSegmentInfo & ~TRACK_JOIN_MASK) | TRACK_FLAG_80000000;
-    if (var_s1->trackSegmentInfo & TRACK_JOIN_PREVIOUS) {
+    sp294 = segment;
+    var_s4 = segment->next;
+    D_802BE5C0[0].trackSegmentInfo = (segment->trackSegmentInfo & ~TRACK_JOIN_MASK) | TRACK_FLAG_80000000;
+    if (segment->trackSegmentInfo & TRACK_JOIN_PREVIOUS) {
         D_802BE5C0[0].trackSegmentInfo |= (TRACK_JOIN_PREVIOUS | TRACK_UNK1_800);
-    } else if (var_s1->prev->trackSegmentInfo & TRACK_JOIN_NEXT) {
+    } else if (segment->prev->trackSegmentInfo & TRACK_JOIN_NEXT) {
         D_802BE5C0[0].trackSegmentInfo |= TRACK_JOIN_NEXT;
     }
-    spB8 = func_i2_800B58B8(var_s1);
-    sp280 = Course_SplineGetBasis(var_s1, 0.0f, &spEC, 0.0f);
+    spB8 = Course_SegmentGetJoinLengths(segment);
+    sp280 = Course_SplineGetBasis(segment, 0.0f, &segmentBasis, 0.0f);
     if (gInCourseEditor) {
-        D_80033840[0] = spEC;
+        D_80033840[0] = segmentBasis;
         spB0 = &D_80033840[1];
     }
-    Course_SplineGetPosition(var_s1, 0.0f, &D_802BE5C0[0].unk_14);
-    if (D_802BE5C0[0].trackSegmentInfo & 0x600) {
-        func_i2_800B4728(D_802BE5C0, var_s1->radiusLeft, var_s1->radiusRight, &spEC, &sp254, &sp248, &sp23C, &sp230,
-                         &sp224);
+    Course_SplineGetPosition(segment, 0.0f, &D_802BE5C0[0].unk_14);
+    if (D_802BE5C0[0].trackSegmentInfo & TRACK_JOIN_BOTH) {
+        func_i2_800B4728(&D_802BE5C0[0], segment->radiusLeft, segment->radiusRight, &segmentBasis, &sp254, &sp248,
+                         &sp23C, &sp230, &sp224);
     } else {
-        D_i2_800C1918[(u32) (var_s1->trackSegmentInfo & 0x1C0) >> 6](
-            D_802BE5C0, var_s1->radiusLeft, var_s1->radiusRight, &spEC, &sp254, &sp248, &sp23C, &sp230, &sp224);
+        D_i2_800C1918[TRACK_SHAPE_INDEX((u32) (segment->trackSegmentInfo & TRACK_SHAPE_MASK))](
+            &D_802BE5C0[0], segment->radiusLeft, segment->radiusRight, &segmentBasis, &sp254, &sp248, &sp23C, &sp230,
+            &sp224);
     }
-    sp17C.x = spEC.x.x;
-    sp17C.y = spEC.x.y;
-    sp17C.z = spEC.x.z;
+    sp17C.x = segmentBasis.x.x;
+    sp17C.y = segmentBasis.x.y;
+    sp17C.z = segmentBasis.x.z;
     sp1AC = sp1DC = sp254;
     var_s3 = D_802BE5C0;
     spDC = 0.0f;
     spE0 = 0.0f;
     var_fs3 = 0.0f;
-    var_fs1 = 0.0f;
+    t = 0.0f;
 
     var_s0 = &D_802BE5C0[1];
     sp1A0 = sp1D0 = sp248;
@@ -2000,66 +2009,66 @@ s32 func_i2_800B5CD8(CourseInfo* courseInfo) {
 
     D_802BE5C0[0].unk_5C = D_802BE5C0[0].unk_5E = D_802BE5C0[0].unk_58 = D_802BE5C0[0].unk_5A = -0x8000;
 
-    D_802BE5C0[0].unk_04 = (s32) (var_s1 - courseInfo->courseSegments);
-    var_s1->unk_3C = D_802BE5C0;
-    D_802BE5C0[0].unk_08 = 0.0f;
+    D_802BE5C0[0].segmentIndex = (s32) (segment - courseInfo->courseSegments);
+    segment->unk_3C = D_802BE5C0;
+    D_802BE5C0[0].segmentTValue = 0.0f;
     spE8 = 0.0f;
     spE4 = 0.0f;
     D_800D65C8 = 1;
 
     while (true) {
-        temp_s5 = var_s1->trackSegmentInfo;
+        temp_s5 = segment->trackSegmentInfo;
         sp274 = D_i2_800D6C90 / sp280;
         if (D_i2_800D65D4 != 0) {
             var_fs3 += D_i2_800D6C90;
         }
 
-        if (((var_s1->trackSegmentInfo & TRACK_SHAPE_MASK) == TRACK_SHAPE_AIR) ||
-            (((var_fs1 == var_s1->nextJoinStartTValue)) &&
-             !(var_s1->trackSegmentInfo & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK)))) {
-            var_s1->unk_40 = var_s0;
-            var_s1 = var_s4;
-            var_fs1 = 0.0f;
+        if (((segment->trackSegmentInfo & TRACK_SHAPE_MASK) == TRACK_SHAPE_AIR) ||
+            (((t == segment->nextJoinStartTValue)) &&
+             !(segment->trackSegmentInfo & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK)))) {
+            segment->unk_40 = var_s0;
+            segment = var_s4;
+            t = 0.0f;
             if (var_s4 != sp294) {
                 var_s4 = var_s4->next;
-                var_s1->unk_3C = var_s0;
-                spB8 = func_i2_800B58B8(var_s1);
+                segment->unk_3C = var_s0;
+                spB8 = Course_SegmentGetJoinLengths(segment);
             } else {
                 break;
             }
-        } else if (var_fs1 < var_s1->previousJoinEndTValue) {
-            var_fs1 += sp274;
-            if (var_s1->previousJoinEndTValue <= var_fs1) {
-                var_fs1 = var_s1->previousJoinEndTValue;
+        } else if (t < segment->previousJoinEndTValue) {
+            t += sp274;
+            if (segment->previousJoinEndTValue <= t) {
+                t = segment->previousJoinEndTValue;
             }
-        } else if ((var_fs1 < var_s1->nextJoinStartTValue) && (var_s1->nextJoinStartTValue < 1.0f)) {
-            var_fs1 += sp274;
-            if (var_s1->nextJoinStartTValue <= var_fs1) {
-                var_fs1 = var_s1->nextJoinStartTValue;
+        } else if ((t < segment->nextJoinStartTValue) && (segment->nextJoinStartTValue < 1.0f)) {
+            t += sp274;
+            if (segment->nextJoinStartTValue <= t) {
+                t = segment->nextJoinStartTValue;
             }
         } else {
-            var_fs1 += sp274;
-            if (var_fs1 >= 1.0f) {
+            t += sp274;
+            if (t >= 1.0f) {
                 if (var_s4->trackSegmentInfo & TRACK_FLAG_CONTINUOUS) {
-                    if (var_fs1 < 2.0f) {
-                        var_fs1 -= 1.0f;
-                        var_fs1 *= (sp280 / Course_SplineGetTangent(var_s4, 0.0f, &spEC.x));
+                    if (t < 2.0f) {
+                        t -= 1.0f;
+                        t *= (sp280 / Course_SplineGetTangent(var_s4, 0.0f, &segmentBasis.x));
                     } else {
-                        var_fs1 = 0.0f;
+                        t = 0.0f;
                     }
                 } else {
-                    var_fs1 = 0.0f;
+                    t = 0.0f;
                 }
-                var_s1->unk_40 = var_s0;
-                var_s1 = var_s4;
+                segment->unk_40 = var_s0;
+                segment = var_s4;
                 if (var_s4 != sp294) {
                     var_s4 = var_s4->next;
-                    if (var_fs1 == 0.0f) {
-                        var_s1->unk_3C = var_s0;
+                    if (t == 0.0f) {
+                        segment->unk_3C = var_s0;
                     } else {
-                        var_s1->unk_3C = var_s0 - 1;
+                        segment->unk_3C = var_s0 - 1;
                     }
-                    spB8 = func_i2_800B58B8(var_s1);
+                    spB8 = Course_SegmentGetJoinLengths(segment);
 
                 } else {
                     break;
@@ -2068,13 +2077,13 @@ s32 func_i2_800B5CD8(CourseInfo* courseInfo) {
         }
 
         sp8C = &var_s0->unk_14;
-        sp284 = Course_SplineGetLengthInfo(var_s1, var_fs1, &sp274);
-        sp27C = ((var_s4->radiusLeft - var_s1->radiusLeft) * sp284) + var_s1->radiusLeft;
-        sp278 = ((var_s4->radiusRight - var_s1->radiusRight) * sp284) + var_s1->radiusRight;
-        sp280 = Course_SplineGetBasis(var_s1, var_fs1, &spEC, sp284);
-        Course_SplineGetPosition(var_s1, var_fs1, sp8C);
-        D_i2_800C1918[TRACK_SHAPE_INDEX((u32) var_s1->trackSegmentInfo & TRACK_SHAPE_MASK)](
-            var_s0, sp27C, sp278, &spEC, &sp218, &sp20C, &sp200, &sp1F4, &sp1E8);
+        sp284 = Course_SplineGetLengthInfo(segment, t, &sp274);
+        sp27C = ((var_s4->radiusLeft - segment->radiusLeft) * sp284) + segment->radiusLeft;
+        sp278 = ((var_s4->radiusRight - segment->radiusRight) * sp284) + segment->radiusRight;
+        sp280 = Course_SplineGetBasis(segment, t, &segmentBasis, sp284);
+        Course_SplineGetPosition(segment, t, sp8C);
+        D_i2_800C1918[TRACK_SHAPE_INDEX((u32) segment->trackSegmentInfo & TRACK_SHAPE_MASK)](
+            var_s0, sp27C, sp278, &segmentBasis, &sp218, &sp20C, &sp200, &sp1F4, &sp1E8);
         spE8 += func_i2_800B5C2C(&sp218, &sp1DC);
         spE4 += func_i2_800B5C2C(&sp20C, &sp1D0);
         spE0 += func_i2_800B5C2C(&sp200, &sp1C4);
@@ -2085,8 +2094,8 @@ s32 func_i2_800B5CD8(CourseInfo* courseInfo) {
         sp1B8 = sp1F4;
         if ((D_i2_800D65D4 == 0) || (D_i2_800D6C94 <= var_fs3) || (func_i2_800B5B9C(&sp254, &sp17C, &sp218) != 0) ||
             (func_i2_800B5B9C(&sp248, &sp17C, &sp20C) != 0) || (func_i2_800B5B9C(&sp23C, &sp17C, &sp200) != 0) ||
-            (func_i2_800B5B9C(&sp230, &sp17C, &sp1F4) != 0) || (var_fs1 == 0.0f) ||
-            (var_fs1 == var_s1->previousJoinEndTValue) || (var_fs1 == var_s1->nextJoinStartTValue)) {
+            (func_i2_800B5B9C(&sp230, &sp17C, &sp1F4) != 0) || (t == 0.0f) || (t == segment->previousJoinEndTValue) ||
+            (t == segment->nextJoinStartTValue)) {
             sp17C.x = sp1E8.x - sp224.x;
             sp17C.y = sp1E8.y - sp224.y;
             sp17C.z = sp1E8.z - sp224.z;
@@ -2133,7 +2142,7 @@ s32 func_i2_800B5CD8(CourseInfo* courseInfo) {
 
             if (!(spB4 & 0x10000)) {
                 spB4 |= 0x10000;
-                if (var_fs1 < 0.5f) {
+                if (t < 0.5f) {
                     spB4 |= var_s0 - D_802BE5C0;
                 } else {
                     spB4 |= (var_s0 - D_802BE5C0) + 1;
@@ -2192,67 +2201,69 @@ s32 func_i2_800B5CD8(CourseInfo* courseInfo) {
                 var_s0->unk_52 = (spC8 - var_s3->unk_52) + var_s3->unk_5A;
                 spDC = (f32) (var_s0->unk_52 + 0x8000) / temp_fv0_8;
             }
-            var_s0->trackSegmentInfo = var_s1->trackSegmentInfo & ~0x7E00;
-            var_s0->unk_08 = var_fs1;
-            var_s0->unk_04 = (s32) (var_s1 - courseInfo->courseSegments);
+            var_s0->trackSegmentInfo =
+                segment->trackSegmentInfo & ~(TRACK_JOIN_MASK | TRACK_UNK1_MASK | TRACK_UNK2_MASK);
+            var_s0->segmentTValue = t;
+            var_s0->segmentIndex = segment - courseInfo->courseSegments;
 
-            if ((var_s1->previousJoinEndTValue <= var_fs1) && (var_fs1 <= var_s1->nextJoinStartTValue)) {
-                if (var_fs1 == var_s1->previousJoinEndTValue) {
+            if ((segment->previousJoinEndTValue <= t) && (t <= segment->nextJoinStartTValue)) {
+                if (t == segment->previousJoinEndTValue) {
 
-                    if (var_s0[-1].trackSegmentInfo & 0x20000000) {
-                        var_s0[-1].trackSegmentInfo =
-                            (var_s0[-1].trackSegmentInfo & ~TRACK_FLAG_CONTINUOUS) | TRACK_UNK2_2000;
+                    if ((var_s0 - 1)->trackSegmentInfo & TRACK_FLAG_20000000) {
+                        (var_s0 - 1)->trackSegmentInfo =
+                            ((var_s0 - 1)->trackSegmentInfo & ~TRACK_FLAG_CONTINUOUS) | TRACK_UNK2_2000;
                     } else {
-                        var_s0[-1].trackSegmentInfo |= TRACK_UNK2_2000;
+                        (var_s0 - 1)->trackSegmentInfo |= TRACK_UNK2_2000;
                     }
-                } else if (var_fs1 == var_s1->nextJoinStartTValue) {
+                } else if (t == segment->nextJoinStartTValue) {
                     var_s0->trackSegmentInfo |= TRACK_UNK2_4000;
-                    if (!(var_s0->trackSegmentInfo & 0x1FF)) {
-                        var_s0->trackSegmentInfo = (var_s0->trackSegmentInfo & ~0x3F) | 1;
+                    if (!(var_s0->trackSegmentInfo & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK))) {
+                        var_s0->trackSegmentInfo = (var_s0->trackSegmentInfo & ~TRACK_TYPE_MASK) | 1;
                     }
                 }
             } else {
-                if (var_fs1 < var_s1->previousJoinEndTValue) {
-                    var_s0->trackSegmentInfo |= 0x200;
+                if (t < segment->previousJoinEndTValue) {
+                    var_s0->trackSegmentInfo |= TRACK_JOIN_PREVIOUS;
                     if (spB8 != 0.0f) {
-                        sp274 = (var_s1->length * sp284) / spB8;
+                        sp274 = (segment->length * sp284) / spB8;
                     } else {
                         sp274 = 0.0f;
                     }
                 } else {
-                    var_s0->trackSegmentInfo |= 0x400;
-                    sp274 = (var_s1->length - (var_s1->length * sp284)) / spB8;
+                    var_s0->trackSegmentInfo |= TRACK_JOIN_NEXT;
+                    sp274 = (segment->length - (segment->length * sp284)) / spB8;
                 }
                 sp110.unk_14 = *sp8C;
 
-                func_i2_800B4728(&sp110, sp27C, sp278, &spEC, &sp218, &sp20C, &sp200, &sp1F4, &sp1E8);
-                D_i2_800C1938[(u32) (var_s1->trackSegmentInfo & 0x1C0) >> 6](&sp110, var_s0, sp274);
+                func_i2_800B4728(&sp110, sp27C, sp278, &segmentBasis, &sp218, &sp20C, &sp200, &sp1F4, &sp1E8);
+                D_i2_800C1938[TRACK_SHAPE_INDEX((u32) (segment->trackSegmentInfo & TRACK_SHAPE_MASK))](&sp110, var_s0,
+                                                                                                       sp274);
             }
 
-            if ((var_fs1 != 0.0f) && (var_fs1 != var_s1->previousJoinEndTValue) &&
-                (var_fs1 != var_s1->nextJoinStartTValue) && (var_fs3 < D_i2_800D6C94)) {
+            if ((t != 0.0f) && (t != segment->previousJoinEndTValue) && (t != segment->nextJoinStartTValue) &&
+                (var_fs3 < D_i2_800D6C94)) {
                 var_s0->trackSegmentInfo |= TRACK_FLAG_CONTINUOUS;
                 var_fs3 = 0.0f;
             } else {
                 var_s0->trackSegmentInfo &= ~TRACK_FLAG_CONTINUOUS;
 
                 var_fs3 = 0.0f;
-                if (var_fs1 == 0.0f) {
+                if (t == 0.0f) {
                     spDC = 0.0f;
                     spE0 = 0.0f;
-                    if (var_s1->prev->trackSegmentInfo & 0x400) {
+                    if (segment->prev->trackSegmentInfo & TRACK_JOIN_NEXT) {
 
-                        var_s0->trackSegmentInfo |= 0x400;
-                        if ((var_s0[-1].trackSegmentInfo & 0x1C0) == 0xC0) {
-                            var_s0[-1].trackSegmentInfo =
-                                (s32) ((var_s0[-1].trackSegmentInfo & ~TRACK_FLAG_CONTINUOUS) | 0x1000);
+                        var_s0->trackSegmentInfo |= TRACK_JOIN_NEXT;
+                        if (((var_s0 - 1)->trackSegmentInfo & TRACK_SHAPE_MASK) == TRACK_SHAPE_CYLINDER) {
+                            (var_s0 - 1)->trackSegmentInfo =
+                                (s32) (((var_s0 - 1)->trackSegmentInfo & ~TRACK_FLAG_CONTINUOUS) | TRACK_UNK1_1000);
                         } else {
-                            var_s0[-1].trackSegmentInfo |= 0x1000;
+                            (var_s0 - 1)->trackSegmentInfo |= TRACK_UNK1_1000;
                         }
                     }
 
-                    if (var_s0->trackSegmentInfo & 0x200) {
-                        var_s0->trackSegmentInfo |= 0x800;
+                    if (var_s0->trackSegmentInfo & TRACK_JOIN_PREVIOUS) {
+                        var_s0->trackSegmentInfo |= TRACK_UNK1_800;
                     }
                     var_s0->trackSegmentInfo |= TRACK_FLAG_80000000;
                     var_s0->unk_5C = var_s0->unk_5E = var_s0->unk_58 = var_s0->unk_5A = -0x8000;
@@ -2265,7 +2276,7 @@ s32 func_i2_800B5CD8(CourseInfo* courseInfo) {
                 var_s3 = var_s0;
                 var_s0++;
                 if (gInCourseEditor) {
-                    *spB0++ = spEC;
+                    *spB0++ = segmentBasis;
                 }
                 D_800D65C8++;
             } else {
@@ -2306,7 +2317,7 @@ s32 func_i2_800B5CD8(CourseInfo* courseInfo) {
     }
     if (var_s4->prev->trackSegmentInfo & TRACK_JOIN_NEXT) {
         if ((var_s3->trackSegmentInfo & TRACK_SHAPE_MASK) == TRACK_SHAPE_CYLINDER) {
-            var_s3->trackSegmentInfo = (var_s3->trackSegmentInfo & ~TRACK_FLAG_CONTINUOUS) | 0x1000;
+            var_s3->trackSegmentInfo = (var_s3->trackSegmentInfo & ~TRACK_FLAG_CONTINUOUS) | TRACK_UNK1_1000;
         } else {
             var_s3->trackSegmentInfo |= TRACK_UNK1_1000;
         }
@@ -2431,7 +2442,7 @@ extern s32 gRandMask1;
 extern s32 gRandSeed2;
 extern s32 gRandMask2;
 extern s32 gGameMode;
-extern s8 D_8076C7D8;
+extern s8 gTitleDemoState;
 extern s32 gCourseIndex;
 
 void Course_GenerateRandomCourse(void) {
@@ -2463,7 +2474,8 @@ void Course_GenerateRandomCourse(void) {
     f32 var_fs1;
 
     // Restore random generation seeding if track is re-done
-    if ((gGameMode == GAMEMODE_GP_RACE) && (D_8076C7D8 == 0) && (gCourseIndex == gLastRandomCourseIndex)) {
+    if ((gGameMode == GAMEMODE_GP_RACE) && (gTitleDemoState == TITLE_DEMO_INACTIVE) &&
+        (gCourseIndex == gLastRandomCourseIndex)) {
         Math_Rand1Init(sRandomCourseInitSeed1, sRandomCourseInitMask1);
         Math_Rand2Init(sRandomCourseInitSeed2, sRandomCourseInitMask2);
     }
@@ -4208,9 +4220,9 @@ Gfx* func_i2_800BDAA4(Gfx* gfx) {
     return D_i2_800D6C74;
 }
 
-extern Player gPlayers[];
+extern Camera gCameras[];
 
-Gfx* func_i2_800BDE60(Gfx* gfx, s32 playerIndex) {
+Gfx* func_i2_800BDE60(Gfx* gfx, s32 cameraIndex) {
     MtxF sp60;
     f32 var_fv1;
     f32 temp_fa0;
@@ -4228,11 +4240,11 @@ Gfx* func_i2_800BDE60(Gfx* gfx, s32 playerIndex) {
     s32 var_t0;
     s32 var_a2;
     Racer* racer;
-    Player* player;
+    Camera* camera;
     s32 i;
 
-    player = &gPlayers[playerIndex];
-    racer = &gRacers[player->id];
+    camera = &gCameras[cameraIndex];
+    racer = &gRacers[camera->id];
 
     D_i2_800D6C74 = gfx;
     segment = racer->segmentPositionInfo.courseSegment;
@@ -4250,34 +4262,34 @@ Gfx* func_i2_800BDE60(Gfx* gfx, s32 playerIndex) {
         D_i2_800D6C88 = true;
     }
 
-    temp_fv1 = (player->unk_5C.x.x * D_i2_800C1534) - player->unk_50.x;
-    temp_fa0 = (player->unk_5C.x.y * D_i2_800C1534) - player->unk_50.y;
-    temp_fa1 = (player->unk_5C.x.z * D_i2_800C1534) - player->unk_50.z;
+    temp_fv1 = (camera->basis.x.x * D_i2_800C1534) - camera->eye.x;
+    temp_fa0 = (camera->basis.x.y * D_i2_800C1534) - camera->eye.y;
+    temp_fa1 = (camera->basis.x.z * D_i2_800C1534) - camera->eye.z;
 
-    sp60.m[3][2] = player->unk_11C.m[3][2] -
-                   (player->unk_11C.m[2][2] *
-                    (sp60.m[3][3] = ((-temp_fv1 * player->unk_15C.m[0][2]) - (temp_fa0 * player->unk_15C.m[1][2])) -
-                                    (temp_fa1 * player->unk_15C.m[2][2])));
+    sp60.m[3][2] = camera->projectionMtx.m[3][2] -
+                   (camera->projectionMtx.m[2][2] *
+                    (sp60.m[3][3] = ((-temp_fv1 * camera->viewMtx.m[0][2]) - (temp_fa0 * camera->viewMtx.m[1][2])) -
+                                    (temp_fa1 * camera->viewMtx.m[2][2])));
     sp60.m[3][0] =
-        (player->unk_11C.m[0][0] * ((temp_fv1 * player->unk_15C.m[0][0]) + (temp_fa0 * player->unk_15C.m[1][0]) +
-                                    (temp_fa1 * player->unk_15C.m[2][0]))) -
-        (player->unk_11C.m[2][0] * sp60.m[3][3]);
+        (camera->projectionMtx.m[0][0] * ((temp_fv1 * camera->viewMtx.m[0][0]) + (temp_fa0 * camera->viewMtx.m[1][0]) +
+                                          (temp_fa1 * camera->viewMtx.m[2][0]))) -
+        (camera->projectionMtx.m[2][0] * sp60.m[3][3]);
     sp60.m[3][1] =
-        (player->unk_11C.m[1][1] * ((temp_fv1 * player->unk_15C.m[0][1]) + (temp_fa0 * player->unk_15C.m[1][1]) +
-                                    (temp_fa1 * player->unk_15C.m[2][1]))) -
-        (player->unk_11C.m[2][1] * sp60.m[3][3]);
-    sp60.m[0][0] = player->unk_19C.m[0][0];
-    sp60.m[0][1] = player->unk_19C.m[0][1];
-    sp60.m[0][2] = player->unk_19C.m[0][2];
-    sp60.m[0][3] = player->unk_19C.m[0][3];
-    sp60.m[1][0] = player->unk_19C.m[1][0];
-    sp60.m[1][1] = player->unk_19C.m[1][1];
-    sp60.m[1][2] = player->unk_19C.m[1][2];
-    sp60.m[1][3] = player->unk_19C.m[1][3];
-    sp60.m[2][0] = player->unk_19C.m[2][0];
-    sp60.m[2][1] = player->unk_19C.m[2][1];
-    sp60.m[2][2] = player->unk_19C.m[2][2];
-    sp60.m[2][3] = player->unk_19C.m[2][3];
+        (camera->projectionMtx.m[1][1] * ((temp_fv1 * camera->viewMtx.m[0][1]) + (temp_fa0 * camera->viewMtx.m[1][1]) +
+                                          (temp_fa1 * camera->viewMtx.m[2][1]))) -
+        (camera->projectionMtx.m[2][1] * sp60.m[3][3]);
+    sp60.m[0][0] = camera->projectionViewMtx.m[0][0];
+    sp60.m[0][1] = camera->projectionViewMtx.m[0][1];
+    sp60.m[0][2] = camera->projectionViewMtx.m[0][2];
+    sp60.m[0][3] = camera->projectionViewMtx.m[0][3];
+    sp60.m[1][0] = camera->projectionViewMtx.m[1][0];
+    sp60.m[1][1] = camera->projectionViewMtx.m[1][1];
+    sp60.m[1][2] = camera->projectionViewMtx.m[1][2];
+    sp60.m[1][3] = camera->projectionViewMtx.m[1][3];
+    sp60.m[2][0] = camera->projectionViewMtx.m[2][0];
+    sp60.m[2][1] = camera->projectionViewMtx.m[2][1];
+    sp60.m[2][2] = camera->projectionViewMtx.m[2][2];
+    sp60.m[2][3] = camera->projectionViewMtx.m[2][3];
 
     var_v1 = D_802BE5C0;
 
@@ -4476,15 +4488,15 @@ extern unk_800D6CA0 D_800D6CA0;
 
 s32 func_i2_800BE8BC(CourseInfo* courseInfo) {
     s32 var_s3 = -1;
-    f32 sp58;
-    f32 sp54;
+    f32 alpha1;
+    f32 alpha2;
     CourseSegment* segment = courseInfo->courseSegments;
 
     if (1) {}
     do {
-        func_i2_800B1AF0(segment, &sp58, &sp54);
-        segment->tension = (sp58 + sp54) * 0.5f;
-        if ((sp58 < 0.0f) || (sp58 > 2.0f) || (sp54 < 0.0f) || (sp54 > 2.0f)) {
+        func_i2_800B1AF0(segment, &alpha1, &alpha2);
+        segment->tension = (alpha1 + alpha2) * 0.5f;
+        if ((alpha1 < 0.0f) || (alpha1 > 2.0f) || (alpha2 < 0.0f) || (alpha2 > 2.0f)) {
             var_s3 = segment->segmentIndex;
             segment->tension = 0.1f;
         }

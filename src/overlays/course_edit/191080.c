@@ -145,7 +145,7 @@ Gfx* func_xk2_800DF6FC(Gfx* gfx) {
         gDPPipeSync(gfx++);
         gDPPipelineMode(gfx++, G_PM_1PRIMITIVE);
         gDPSetTextureFilter(gfx++, G_TF_BILERP);
-        gfx = func_i3_8006339C(gfx, 0, 0);
+        gfx = func_i3_8006339C(gfx, 0, SCISSOR_BOX_FULL_SCREEN);
         gfx = func_i2_800BDE60(gfx, 0);
         gfx = Course_GadgetsDraw(gfx, 0);
         gSPLoadUcodeL(gfx++, gspF3DFLX2_Rej_fifo);

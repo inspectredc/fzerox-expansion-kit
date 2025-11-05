@@ -1,5 +1,6 @@
 #include "global.h"
 #include "controller.h"
+#include "fzx_camera.h"
 #include "fzx_assets.h"
 
 f32 gSinTable[0x1000];
@@ -37,75 +38,61 @@ void func_806F62AC(FrameBuffer* fb) {
     }
 }
 
-extern ScissorBox D_8076D7D8;
-extern ScissorBox D_8076D7E8;
-extern ScissorBox D_8076D7F8;
-extern ScissorBox D_8076D808;
-extern ScissorBox D_8076D818;
-extern ScissorBox D_8076D828;
-extern ScissorBox D_8076D838;
-extern ScissorBox D_8076D848;
-extern ScissorBox D_8076D858;
-extern ScissorBox D_8076D868;
-extern ScissorBox D_8076D878;
-extern ScissorBox D_8076D888;
-extern ScissorBox D_8076D898;
-
-Gfx* func_806F6360(Gfx* gfx, s32 arg1) {
+Gfx* func_806F6360(Gfx* gfx, s32 scissorBoxType) {
     ScissorBox* scissorBox;
 
-    switch (arg1) {
-        case 0:
-            gSPViewport(gfx++, &D_80146A8);
-            scissorBox = &D_8076D7D8;
+    switch (scissorBoxType) {
+        case SCISSOR_BOX_FULL_SCREEN:
+            gSPViewport(gfx++, &aVpFullScreen);
+            scissorBox = &gScissorBoxFullScreen;
             break;
-        case 1:
-            gSPViewport(gfx++, &D_80146B8);
-            scissorBox = &D_8076D7E8;
+        case SCISSOR_BOX_TOP_HALF:
+            gSPViewport(gfx++, &aVpTopHalf);
+            scissorBox = &gScissorBoxTopHalf;
             break;
-        case 2:
-            gSPViewport(gfx++, &D_80146C8);
-            scissorBox = &D_8076D7F8;
+        case SCISSOR_BOX_BOTTOM_HALF:
+            gSPViewport(gfx++, &aVpBottomHalf);
+            scissorBox = &gScissorBoxBottomHalf;
             break;
-        case 3:
-            gSPViewport(gfx++, &D_80146D8);
-            scissorBox = &D_8076D808;
+        case SCISSOR_BOX_LEFT_HALF:
+            gSPViewport(gfx++, &aVpLeftHalf);
+            scissorBox = &gScissorBoxLeftHalf;
             break;
-        case 4:
-            gSPViewport(gfx++, &D_80146E8);
-            scissorBox = &D_8076D818;
+        case SCISSOR_BOX_RIGHT_HALF:
+            gSPViewport(gfx++, &aVpRightHalf);
+            scissorBox = &gScissorBoxRightHalf;
             break;
-        case 5:
-            gSPViewport(gfx++, &D_80146F8);
-            scissorBox = &D_8076D828;
+        case SCISSOR_BOX_TOP_LEFT_QUARTER:
+            gSPViewport(gfx++, &aVpTopLeftQuarter);
+            scissorBox = &gScissorBoxTopLeftQuarter;
             break;
-        case 6:
-            gSPViewport(gfx++, &D_8014708);
-            scissorBox = &D_8076D838;
+        case SCISSOR_BOX_TOP_RIGHT_QUARTER:
+            gSPViewport(gfx++, &aVpTopRightQuarter);
+            scissorBox = &gScissorBoxTopRightQuarter;
             break;
-        case 7:
-            gSPViewport(gfx++, &D_8014718);
-            scissorBox = &D_8076D848;
+        case SCISSOR_BOX_BOTTOM_LEFT_QUARTER:
+            gSPViewport(gfx++, &aVpBottomLeftQuarter);
+            scissorBox = &gScissorBoxBottomLeftQuarter;
             break;
-        case 8:
-            gSPViewport(gfx++, &D_8014728);
-            scissorBox = &D_8076D858;
+        case SCISSOR_BOX_BOTTOM_RIGHT_QUARTER:
+            gSPViewport(gfx++, &aVpBottomRightQuarter);
+            scissorBox = &gScissorBoxBottomRightQuarter;
             break;
-        case 9:
-            gSPViewport(gfx++, &D_8014738);
-            scissorBox = &D_8076D868;
+        case SCISSOR_BOX_TOP_CENTER_QUARTER:
+            gSPViewport(gfx++, &aVpTopCenterQuarter);
+            scissorBox = &gScissorBoxTopCenterQuarter;
             break;
-        case 10:
-            gSPViewport(gfx++, &D_8014748);
-            scissorBox = &D_8076D878;
+        case SCISSOR_BOX_BOTTOM_CENTER_QUARTER:
+            gSPViewport(gfx++, &aVpBottomCenterQuarter);
+            scissorBox = &gScissorBoxBottomCenterQuarter;
             break;
-        case 11:
-            gSPViewport(gfx++, &D_8014758);
-            scissorBox = &D_8076D888;
+        case SCISSOR_BOX_LEFT_CENTER_QUARTER:
+            gSPViewport(gfx++, &aVpLeftCenterQuarter);
+            scissorBox = &gScissorBoxLeftCenterQuarter;
             break;
-        case 12:
-            gSPViewport(gfx++, &D_8014768);
-            scissorBox = &D_8076D898;
+        case SCISSOR_BOX_RIGHT_CENTER_QUARTER:
+            gSPViewport(gfx++, &aVpRightCenterQuarter);
+            scissorBox = &gScissorBoxRightCenterQuarter;
             break;
     }
 
@@ -234,11 +221,10 @@ s32 Math_Round(f32 num) {
     return num + 0.5f;
 }
 
-// Orthonormalise vectors, possibly camera/light related?
-s32 func_806F6D8C(Mtx3F* mtx) {
+s32 Math_OrthonormalizeAroundForward(Mtx3F* basis) {
     f32 temp_fs0;
 
-    temp_fs0 = SQ(mtx->x.x) + SQ(mtx->x.y) + SQ(mtx->x.z);
+    temp_fs0 = SQ(basis->x.x) + SQ(basis->x.y) + SQ(basis->x.z);
 
     if (temp_fs0 == 0.0f) {
         return -1;
@@ -246,15 +232,15 @@ s32 func_806F6D8C(Mtx3F* mtx) {
 
     temp_fs0 = 1.0f / sqrtf(temp_fs0);
 
-    mtx->x.x *= temp_fs0;
-    mtx->x.y *= temp_fs0;
-    mtx->x.z *= temp_fs0;
+    basis->x.x *= temp_fs0;
+    basis->x.y *= temp_fs0;
+    basis->x.z *= temp_fs0;
 
-    mtx->z.x = mtx->y.y * mtx->x.z - mtx->y.z * mtx->x.y;
-    mtx->z.y = mtx->y.z * mtx->x.x - mtx->y.x * mtx->x.z;
-    mtx->z.z = mtx->y.x * mtx->x.y - mtx->y.y * mtx->x.x;
+    basis->z.x = basis->y.y * basis->x.z - basis->y.z * basis->x.y;
+    basis->z.y = basis->y.z * basis->x.x - basis->y.x * basis->x.z;
+    basis->z.z = basis->y.x * basis->x.y - basis->y.y * basis->x.x;
 
-    temp_fs0 = SQ(mtx->z.x) + SQ(mtx->z.y) + SQ(mtx->z.z);
+    temp_fs0 = SQ(basis->z.x) + SQ(basis->z.y) + SQ(basis->z.z);
 
     if (temp_fs0 == 0.0f) {
         return -1;
@@ -262,47 +248,46 @@ s32 func_806F6D8C(Mtx3F* mtx) {
 
     temp_fs0 = 1.0f / sqrtf(temp_fs0);
 
-    mtx->z.x *= temp_fs0;
-    mtx->z.y *= temp_fs0;
-    mtx->z.z *= temp_fs0;
+    basis->z.x *= temp_fs0;
+    basis->z.y *= temp_fs0;
+    basis->z.z *= temp_fs0;
 
-    mtx->y.x = mtx->x.y * mtx->z.z - mtx->x.z * mtx->z.y;
-    mtx->y.y = mtx->x.z * mtx->z.x - mtx->x.x * mtx->z.z;
-    mtx->y.z = mtx->x.x * mtx->z.y - mtx->x.y * mtx->z.x;
+    basis->y.x = basis->x.y * basis->z.z - basis->x.z * basis->z.y;
+    basis->y.y = basis->x.z * basis->z.x - basis->x.x * basis->z.z;
+    basis->y.z = basis->x.x * basis->z.y - basis->x.y * basis->z.x;
     return 0;
 }
 
-// Orthonormalise vectors, possibly camera/light related?
-s32 func_806F6F64(Mtx3F* mtx) {
+s32 Math_OrthonormalizeAroundUp(Mtx3F* basis) {
     f32 temp_fs0;
 
-    temp_fs0 = SQ(mtx->y.x) + SQ(mtx->y.y) + SQ(mtx->y.z);
+    temp_fs0 = SQ(basis->y.x) + SQ(basis->y.y) + SQ(basis->y.z);
     if (temp_fs0 == 0.0f) {
         return -1;
     }
     temp_fs0 = 1.0f / sqrtf(temp_fs0);
 
-    mtx->y.x *= temp_fs0;
-    mtx->y.y *= temp_fs0;
-    mtx->y.z *= temp_fs0;
+    basis->y.x *= temp_fs0;
+    basis->y.y *= temp_fs0;
+    basis->y.z *= temp_fs0;
 
-    mtx->z.x = mtx->y.y * mtx->x.z - mtx->y.z * mtx->x.y;
-    mtx->z.y = mtx->y.z * mtx->x.x - mtx->y.x * mtx->x.z;
-    mtx->z.z = mtx->y.x * mtx->x.y - mtx->y.y * mtx->x.x;
+    basis->z.x = basis->y.y * basis->x.z - basis->y.z * basis->x.y;
+    basis->z.y = basis->y.z * basis->x.x - basis->y.x * basis->x.z;
+    basis->z.z = basis->y.x * basis->x.y - basis->y.y * basis->x.x;
 
-    temp_fs0 = SQ(mtx->z.x) + SQ(mtx->z.y) + SQ(mtx->z.z);
+    temp_fs0 = SQ(basis->z.x) + SQ(basis->z.y) + SQ(basis->z.z);
     if (temp_fs0 == 0.0f) {
         return -1;
     }
     temp_fs0 = 1.0f / sqrtf(temp_fs0);
 
-    mtx->z.x *= temp_fs0;
-    mtx->z.y *= temp_fs0;
-    mtx->z.z *= temp_fs0;
+    basis->z.x *= temp_fs0;
+    basis->z.y *= temp_fs0;
+    basis->z.z *= temp_fs0;
 
-    mtx->x.x = mtx->z.y * mtx->y.z - mtx->z.z * mtx->y.y;
-    mtx->x.y = mtx->z.z * mtx->y.x - mtx->z.x * mtx->y.z;
-    mtx->x.z = mtx->z.x * mtx->y.y - mtx->z.y * mtx->y.x;
+    basis->x.x = basis->z.y * basis->y.z - basis->z.z * basis->y.y;
+    basis->x.y = basis->z.z * basis->y.x - basis->z.x * basis->y.z;
+    basis->x.z = basis->z.x * basis->y.y - basis->z.y * basis->y.x;
     return 0;
 }
 

@@ -26,7 +26,7 @@ extern s32 D_8076C77C;
 extern GfxPool D_8024E260[];
 extern s32 D_8079A35C;
 extern s32 gGameMode;
-extern s32 D_8076C7C0;
+extern s32 gPostEadDemoGameMode;
 extern u16 gInputButtonPressed;
 extern GfxPool* gGfxPool;
 
@@ -39,7 +39,7 @@ s32 EADDemo_Update(void) {
     if (gInputButtonPressed & BTN_START) {
         Audio_DDBgmStop();
         D_8076C77C = 1;
-        return D_8076C7C0;
+        return gPostEadDemoGameMode;
     }
 
     return gGameMode;

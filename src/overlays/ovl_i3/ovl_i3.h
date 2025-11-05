@@ -47,7 +47,7 @@ typedef struct unk_80141860 {
     f32 unk_14;
     f32 unk_18;
     f32 unk_1C;
-} unk_80141860; // size = 0x20 (possibly unk_struct_20)
+} unk_80141860; // size = 0x20
 
 typedef struct unk_80141FF0 {
     f32 unk_00;
@@ -212,14 +212,14 @@ Gfx* func_i3_DrawBlankTimeThousandths(Gfx* gfx, s32 left, s32 top);
 
 Gfx* func_i3_80059D90(Gfx* gfx, s32 playerIndex);
 
-void func_i3_80061B34(Player*, unk_80141FF0*, CourseVenue*, f32, f32);
-void func_i3_80062034(Vtx*, unk_80141FF0*, Player*, f32);
-void func_i3_80062694(Vtx*, unk_80141FF0*, Player*, f32, f32, f32, f32, f32, f32, s32, s32);
-void func_i3_80062C84(Vtx*, unk_80141FF0*, Player*, unk_80141860*, f32, f32, f32, f32, f32, f32, s32, s32, bool);
+void func_i3_80061B34(Camera*, unk_80141FF0*, CourseVenue*, f32, f32);
+void func_i3_80062034(Vtx*, unk_80141FF0*, Camera*, f32);
+void func_i3_80062694(Vtx*, unk_80141FF0*, Camera*, f32, f32, f32, f32, f32, f32, s32, s32);
+void func_i3_80062C84(Vtx*, unk_80141FF0*, Camera*, unk_80141860*, f32, f32, f32, f32, f32, f32, s32, s32, bool);
 void func_i3_80063F88(void);
 u16 func_i3_80064280(void);
 Gfx* func_i3_8006436C(Gfx* gfx);
-void func_i3_80064AD4(s32, unk_80141FF0*, Player*);
+void func_i3_80064AD4(s32, unk_80141FF0*, Camera*);
 Gfx* func_i3_80064CB4(Gfx*, s32);
 
 Gfx* func_i3_80066D80(Gfx*, s32, MachineInfo*);

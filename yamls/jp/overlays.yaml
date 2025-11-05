@@ -140,26 +140,26 @@
       - { type: .bss, vram: 0x80085B10, name: options_menu }
       - { type: .bss, vram: 0x8008A7C0, name: save_context }
 
-  - name: ovl_i7
-    exclusive_ram_id: ovl_i7
+  - name: ending
+    exclusive_ram_id: ending
     type: code
-    dir: overlays/ovl_i7
+    dir: overlays/ending
     start: 0xF5080
     vram: 0x800927C0
     bss_size: 0xDD0
     symbol_name_format: i7_$VRAM
     subsegments:
       - [0xF5080, c, ending]
-      - [0xF8970, c]
+      - [0xF8970, c, ending_effects]
       - [0xFB640, .data, ending]
-      - [0xFB810, .data, ovl_i7_data_2]
-      - [0xFC3C0, .data, F8970]
-      - [0xFC760, .data, ovl_i7_data_3]
+      - [0xFB810, .data, ending_racer_focus_scripts]
+      - [0xFC3C0, .data, ending_effects]
+      - [0xFC760, .data, ending_podium_camera_scripts]
       - [0xFCB00, .rodata, ending]
-      - [0xFCBD0, .rodata, F8970]
-      - { type: .bss, vram: 0x8009A3A0, name: ovl_i7_data }
+      - [0xFCBD0, .rodata, ending_effects]
+      - { type: .bss, vram: 0x8009A3A0, name: podium_draw_data }
       - { type: .bss, vram: 0x8009AD00, name: ending }
-      - { type: .bss, vram: 0x8009AEB0, name: F8970 }
+      - { type: .bss, vram: 0x8009AEB0, name: ending_effects }
 
   - name: records
     exclusive_ram_id: records

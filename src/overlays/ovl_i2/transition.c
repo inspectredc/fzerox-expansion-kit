@@ -1,6 +1,7 @@
 #include "global.h"
 #include "transition.h"
 #include "fzx_game.h"
+#include "fzx_camera.h"
 #include "fzx_assets.h"
 
 s16 sWipePos;
@@ -439,7 +440,7 @@ Gfx* Transition_Draw(Gfx* gfx) {
     gDPPipeSync(gfx++);
     gDPSetCycleType(gfx++, G_CYC_1CYCLE);
 
-    gfx = func_806F6360(gfx, 0);
+    gfx = func_806F6360(gfx, SCISSOR_BOX_FULL_SCREEN);
 
     if (transition->flags & TRANSITION_FLAG_FILL_BLACK) {
         gSPDisplayList(gfx++, aSetupFillBlackDL);
