@@ -86,7 +86,7 @@ Gfx* func_xk2_800F1428(Gfx* gfx) {
     MtxF sp88;
 
     if (gInCourseEditTestRun) {
-        return func_80719890(gfx);
+        return Camera_DrawCourseEditTestRun(gfx);
     }
     if (gInCourseEditTestRun) {
         Matrix_SetFrustrum(&D_80128C94->unk_0000, NULL, (gCameras[0].fov * 320.0f) / 240.0f, 32.0f, 4096.0f, 320.0f,

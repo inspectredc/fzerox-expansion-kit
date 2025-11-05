@@ -241,14 +241,14 @@ void Camera_UpdateTitleDemo(Camera*, CameraSettings*, CameraScriptManager*);
 void Camera_UpdateCourseSelect(Camera*, CameraSettings*);
 void Camera_UpdateFallingOffTrack(Camera*, CameraSettings*);
 void Camera_UpdateFinishedSuccess(Camera*, CameraSettings*, CameraScriptManager*);
-void func_80718F58(Vec3f*, CourseSegment*, f32, unk_800CD970*);
+void Camera_SetupFinishedSuccessFollowRacer(Vec3f*, CourseSegment*, f32, FinishedSuccessScript*);
 void Camera_UpdateFinishedLoser(Camera*, CameraSettings*, CameraScriptManager*);
 void Camera_UpdateFinishedSpectate(Camera*, CameraSettings*, CameraScriptManager*);
 void Camera_UpdateRecordsRace(Camera*, CameraSettings*, CameraScriptManager*);
 void Camera_UpdateEnding(Camera*, CameraSettings*, CameraScriptManager*);
-void func_8071985C(s32);
-bool func_80719868(s32);
-Gfx* func_80719890(Gfx*);
+void Camera_SendEndingCameraMessage(s32);
+bool Camera_CheckEndingCameraMessage(s32);
+Gfx* Camera_DrawCourseEditTestRun(Gfx*);
 
 f32 func_8071A2C8(f32);
 void func_8071A358(void);
@@ -507,7 +507,7 @@ Gfx* func_i3_DrawSpeed(Gfx*, s32, s32, f32, bool, bool);
 
 void func_i4_80073EA0(void);
 
-Gfx* func_i7_80098650(Gfx* gfx);
+Gfx* EndingCutsceneEffects_DrawFireworks(Gfx* gfx);
 
 void Records_InitData(void);
 bool Records_CourseHasNoRecords(s32 courseIndex);

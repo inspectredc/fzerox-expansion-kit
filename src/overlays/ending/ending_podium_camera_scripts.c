@@ -1,7 +1,7 @@
 #include "global.h"
 #include "fzx_camera.h"
 
-extern const CameraLocalAnchorData D_807765E8;
+extern const CameraLocalAnchorData kDefaultLocalAnchorData;
 
 f32 D_i7_80099EA0[] = { 0.0f, 0.0f, 0.0f, -25.0f, -25.0f, -25.0f };
 
@@ -24,8 +24,8 @@ CubicBSpline3fData D_i7_80099F48[] = {
     { 6, D_i7_80099EF4, D_i7_80099F0C, D_i7_80099F24, D_i7_80099F3C },
 };
 
-CameraScript D_i7_80099F70[] = {
-    { 0, Camera_ScriptSetLocalAnchorData, &D_807765E8 },
+CameraScript gEndingPodiumPosition1Script[] = {
+    { 0, Camera_ScriptSetLocalAnchorData, &kDefaultLocalAnchorData },
     { 0, Camera_ScriptSetControlPointTimerCount, 4 },
     { 480, Camera_ScriptUpdateLocalAnchorBasisAtEye, D_i7_80099F48 },
     { -2, NULL, 0 },
@@ -59,8 +59,8 @@ CubicBSpline331Data D_i7_8009A05C = {
     { 4, D_i7_8009A048, D_i7_8009A058 },
 };
 
-CameraScript D_i7_8009A090[] = {
-    { 0, Camera_ScriptSetLocalAnchorData, &D_807765E8 },
+CameraScript gEndingPodiumPosition2Script[] = {
+    { 0, Camera_ScriptSetLocalAnchorData, &kDefaultLocalAnchorData },
     { 0, Camera_ScriptSetControlPointTimerCount, 4 },
     { 300, Camera_ScriptUpdateLocalAnchorBasisAtEyeFov, &D_i7_8009A05C },
     { -2, NULL, 0 },
@@ -103,8 +103,8 @@ CubicBSpline3331Data D_i7_8009A1C8 = {
     { 5, D_i7_8009A1AC, D_i7_8009A1C0 },
 };
 
-CameraScript D_i7_8009A210[] = {
-    { 0, Camera_ScriptSetLocalAnchorData, &D_807765E8 },
+CameraScript gEndingPodiumPosition3Script[] = {
+    { 0, Camera_ScriptSetLocalAnchorData, &kDefaultLocalAnchorData },
     { 0, Camera_ScriptSetControlPointTimerCount, 4 },
     { 300, Camera_ScriptUpdateLocalAnchorBasisAtEyeUpFov, &D_i7_8009A1C8 },
     { -2, 0, 0 },

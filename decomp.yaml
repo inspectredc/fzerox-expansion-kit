@@ -99,9 +99,9 @@ tools:
           paths:
             - overlays/ovl_i6
         - id: ovl_i7
-          name: ovl_i7
+          name: ending
           paths:
-            - overlays/ovl_i7
+            - overlays/ending
         - id: ovl_i8
           name: records
           paths:

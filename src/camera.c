@@ -3,19 +3,20 @@
 #include "fzx_racer.h"
 #include "fzx_assets.h"
 #include "fzx_camera.h"
+#include "src/overlays/ending/ending.h"
 
 Camera gCameras[4];
 CameraSettings sCameraSettings[4];
 CameraScriptManager sCameraScriptMgrs[4];
 SplineControlPointTimers sSplineControlPointTimers[4];
 s32 sNumCameras;
-s32 D_807A1594;
+s32 sEndingCameraMessage;
 s16 sCameraEndingFocusRacer;
-s16 D_807A159A;
+s16 sCameraInfoInitialized;
 UNUSED s16 D_807A159C;
-Vec3f D_807A15A0[4];
+Vec3f sFinishedSuccessFollowRacerEye[4];
 
-const CameraAtEyeData D_807763D0 = {
+const CameraAtEyeData kDefaultAtEyeData = {
     { { 0.0f, 0.0f, 0.0f },
       { 0.0f, 0.0f, 0.0f },
       { 0.0f, 1.0f, 0.0f },
@@ -34,127 +35,355 @@ const CameraAtEyeData D_807763D0 = {
 };
 
 const CameraOrbitData D_80776448 = {
-    { 0.0f, 0.0f, 0.0f,  0.0f,  0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-      0.0f, 1.0f, 60.0f, 60.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f },
-    { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
-      0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f },
+    { { 0.0f, 0.0f, 0.0f },
+      { 0.0f, 0.0f, 0.0f },
+      { 0.0f, 1.0f, 0.0f },
+      { 0.0f, 1.0f, 0.0f },
+      1.0f,
+      60.0f,
+      60.0f,
+      1.0f,
+      0.0f,
+      0.0f,
+      0.0f,
+      0.0f,
+      1.0f,
+      1.0f },
+    { { 0.0f, 0.0f, 0.0f },
+      { { 0.0f, 0.0f, 1.0f }, { 0.0f, 1.0f, 0.0f }, { 1.0f, 0.0f, 0.0f } },
+      0.0f,
+      0.0f,
+      1.0f,
+      0.0f,
+      0.0f,
+      1.0f,
+      0.0f,
+      0.0f,
+      1.0f },
 };
 
 UNUSED const CameraFollowSmoothData D_807764F4 = {
-    { 0.0f, 0.0f, 0.0f,  0.0f,  0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-      0.0f, 1.0f, 60.0f, 60.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f },
-    { 0.0f, 0.0f,   0.0f,   0.0f, 0.0f,  0.0f,  0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,   0.0f,
-      0.0f, 0.0f,   0.0f,   0.0f, 0.0f,  0.0f,  0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,   1.0f,
-      0.0f, 120.0f, 120.0f, 1.0f, 35.0f, 35.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 300.0f, 0 },
+    { { 0.0f, 0.0f, 0.0f },
+      { 0.0f, 0.0f, 0.0f },
+      { 0.0f, 1.0f, 0.0f },
+      { 0.0f, 1.0f, 0.0f },
+      1.0f,
+      60.0f,
+      60.0f,
+      1.0f,
+      0.0f,
+      0.0f,
+      0.0f,
+      0.0f,
+      1.0f,
+      1.0f },
+    { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } },
+      { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } },
+      { 0.0f, 0.0f, 0.0f },
+      { 0.0f, 0.0f, 0.0f },
+      { 0.0f, 1.0f, 0.0f },
+      120.0f,
+      120.0f,
+      1.0f,
+      35.0f,
+      35.0f,
+      1.0f,
+      0.0f,
+      0.0f,
+      1.0f,
+      0.0f,
+      300.0f,
+      0 },
 };
 
-const CameraLocalAnchorData D_807765E8 = {
-    { 0.0f, 0.0f, 0.0f,  0.0f,  0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-      0.0f, 1.0f, 60.0f, 60.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f },
-    { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
-      0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f },
+const CameraLocalAnchorData kDefaultLocalAnchorData = {
+    { { 0.0f, 0.0f, 0.0f },
+      { 0.0f, 0.0f, 0.0f },
+      { 0.0f, 1.0f, 0.0f },
+      { 0.0f, 1.0f, 0.0f },
+      1.0f,
+      60.0f,
+      60.0f,
+      1.0f,
+      0.0f,
+      0.0f,
+      0.0f,
+      0.0f,
+      1.0f,
+      1.0f },
+    { { 0.0f, 0.0f, 0.0f },
+      { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } },
+      { 0.0f, 0.0f, 0.0f },
+      { 0.0f, 0.0f, 0.0f },
+      { 0.0f, 0.0f, 0.0f },
+      { 0.0f, 0.0f, 0.0f },
+      1.0f,
+      1.0f },
 };
 
 const CameraOrbitData D_807766A8 = {
-    { 0.0f, 0.0f, 0.0f,  0.0f,  0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-      0.0f, 1.0f, 60.0f, 60.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f },
-    { 0.0f, 0.0f,   0.0f,   0.0f, 0.0f,  1.0f,  0.0f, 1.0f,  0.0f,  1.0f, 0.0f,
-      0.0f, 400.0f, 400.0f, 1.0f, 40.0f, 40.0f, 1.0f, 50.0f, 50.0f, 1.0f },
+    { { 0.0f, 0.0f, 0.0f },
+      { 0.0f, 0.0f, 0.0f },
+      { 0.0f, 1.0f, 0.0f },
+      { 0.0f, 1.0f, 0.0f },
+      1.0f,
+      60.0f,
+      60.0f,
+      1.0f,
+      0.0f,
+      0.0f,
+      0.0f,
+      0.0f,
+      1.0f,
+      1.0f },
+    { { 0.0f, 0.0f, 0.0f },
+      { { 0.0f, 0.0f, 1.0f }, { 0.0f, 1.0f, 0.0f }, { 1.0f, 0.0f, 0.0f } },
+      400.0f,
+      400.0f,
+      1.0f,
+      40.0f,
+      40.0f,
+      1.0f,
+      50.0f,
+      50.0f,
+      1.0f },
 };
 
 const CameraOrbitData D_80776754 = {
-    { 0.0f, 0.0f, 0.0f,  0.0f,  0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-      0.0f, 1.0f, 60.0f, 60.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f },
-    { 0.0f, 0.0f,    0.0f,    0.0f, 0.0f,  1.0f,  0.0f, 1.0f,  0.0f,  1.0f, 0.0f,
-      0.0f, 1500.0f, 1500.0f, 1.0f, 35.0f, 35.0f, 1.0f, 50.0f, 50.0f, 1.0f },
+    { { 0.0f, 0.0f, 0.0f },
+      { 0.0f, 0.0f, 0.0f },
+      { 0.0f, 1.0f, 0.0f },
+      { 0.0f, 1.0f, 0.0f },
+      1.0f,
+      60.0f,
+      60.0f,
+      1.0f,
+      0.0f,
+      0.0f,
+      0.0f,
+      0.0f,
+      1.0f,
+      1.0f },
+    { { 0.0f, 0.0f, 0.0f },
+      { { 0.0f, 0.0f, 1.0f }, { 0.0f, 1.0f, 0.0f }, { 1.0f, 0.0f, 0.0f } },
+      1500.0f,
+      1500.0f,
+      1.0f,
+      35.0f,
+      35.0f,
+      1.0f,
+      50.0f,
+      50.0f,
+      1.0f },
 };
 
 const CameraOrbitData D_80776800 = {
-    { 0.0f, 0.0f, 0.0f,  0.0f,  0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-      0.0f, 1.0f, 60.0f, 60.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f },
-    { 0.0f, 0.0f,     0.0f,     0.0f, 0.0f,  1.0f,  0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
-      0.0f, 10500.0f, 10500.0f, 1.0f, 20.0f, 20.0f, 1.0f, 0.0f, 0.0f, 1.0f },
+    { { 0.0f, 0.0f, 0.0f },
+      { 0.0f, 0.0f, 0.0f },
+      { 0.0f, 1.0f, 0.0f },
+      { 0.0f, 1.0f, 0.0f },
+      1.0f,
+      60.0f,
+      60.0f,
+      1.0f,
+      0.0f,
+      0.0f,
+      0.0f,
+      0.0f,
+      1.0f,
+      1.0f },
+    { { 0.0f, 0.0f, 0.0f },
+      { { 0.0f, 0.0f, 1.0f }, { 0.0f, 1.0f, 0.0f }, { 1.0f, 0.0f, 0.0f } },
+      10500.0f,
+      10500.0f,
+      1.0f,
+      20.0f,
+      20.0f,
+      1.0f,
+      0.0f,
+      0.0f,
+      1.0f },
 };
 
 const CameraAtEyeData D_807768AC = {
-    { 0.0f, 0.0f, 0.0f,  0.0f,  0.0f, 4000.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-      0.0f, 0.0f, 30.0f, 30.0f, 0.0f, 0.0f,    0.0f, 0.0f, 0.0f, 0.0f, 0.0f },
-    { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f },
+    { { 0.0f, 0.0f, 0.0f },
+      { 0.0f, 0.0f, 4000.0f },
+      { 0.0f, 1.0f, 0.0f },
+      { 0.0f, 1.0f, 0.0f },
+      0.0f,
+      30.0f,
+      30.0f,
+      0.0f,
+      0.0f,
+      0.0f,
+      0.0f,
+      0.0f,
+      0.0f,
+      0.0f },
+    { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, 0.0f, 0.0f },
 };
 
 UNUSED const CameraAtEyeData D_80776924 = {
-    { 0.0f, 50.0f, 0.0f,  0.0f,  150.0f, 500.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-      0.0f, 0.0f,  75.0f, 75.0f, 0.0f,   0.0f,   0.0f, 0.0f, 0.0f, 0.0f, 1.0f },
-    { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f },
+    { { 0.0f, 50.0f, 0.0f },
+      { 0.0f, 150.0f, 500.0f },
+      { 0.0f, 1.0f, 0.0f },
+      { 0.0f, 1.0f, 0.0f },
+      0.0f,
+      75.0f,
+      75.0f,
+      0.0f,
+      0.0f,
+      0.0f,
+      0.0f,
+      0.0f,
+      0.0f,
+      1.0f },
+    { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, 0.0f, 0.0f },
 };
 
 const CameraOrbitData D_8077699C = {
-    { 0.0f, 0.0f, 0.0f,  0.0f,  0.0f, 0.0f, 0.0f,  1.0f, 0.0f,  0.0f, 1.0f,
-      0.0f, 1.0f, 75.0f, 75.0f, 1.0f, 0.0f, 77.0f, 0.0f, 77.0f, 1.0f, 1.0f },
-    { 0.0f, 0.0f,    0.0f,    0.0f, 0.0f,  1.0f,  0.0f, 1.0f,   0.0f,   1.0f, 0.0f,
-      0.0f, 1000.0f, 1000.0f, 1.0f, 35.0f, 35.0f, 1.0f, 180.0f, 180.0f, 1.0f },
+    { { 0.0f, 0.0f, 0.0f },
+      { 0.0f, 0.0f, 0.0f },
+      { 0.0f, 1.0f, 0.0f },
+      { 0.0f, 1.0f, 0.0f },
+      1.0f,
+      75.0f,
+      75.0f,
+      1.0f,
+      0.0f,
+      77.0f,
+      0.0f,
+      77.0f,
+      1.0f,
+      1.0f },
+    { { 0.0f, 0.0f, 0.0f },
+      { { 0.0f, 0.0f, 1.0f }, { 0.0f, 1.0f, 0.0f }, { 1.0f, 0.0f, 0.0f } },
+      1000.0f,
+      1000.0f,
+      1.0f,
+      35.0f,
+      35.0f,
+      1.0f,
+      180.0f,
+      180.0f,
+      1.0f },
 };
 
-const CameraRaceSettingInfo D_80776A48[] = {
-    { 80.0f, 400.0f, 50.0f },
-    { 75.0f, 90.0f, 25.0f },
-    { 75.0f, 120.0f, 35.0f },
-    { 100.0f, 120.0f, 50.0f },
+const CameraRaceSettingInfo kRegularCameraRaceSettings[] = {
+    { 80.0f, 400.0f, 50.0f },  // CAMERA_RACE_SETTING_OVERHEAD
+    { 75.0f, 90.0f, 25.0f },   // CAMERA_RACE_SETTING_CLOSE_BEHIND
+    { 75.0f, 120.0f, 35.0f },  // CAMERA_RACE_SETTING_REGULAR
+    { 100.0f, 120.0f, 50.0f }, // CAMERA_RACE_SETTING_WIDE
 };
 
-const CameraRaceSettingInfo D_80776A78[] = {
-    { 100.0f, 400.0f, 50.0f },
-    { 90.0f, 100.0f, 25.0f },
-    { 100.0f, 120.0f, 35.0f },
-    { 110.0f, 125.0f, 40.0f },
+const CameraRaceSettingInfo kWidescreenCameraRaceSettings[] = {
+    { 100.0f, 400.0f, 50.0f }, // CAMERA_RACE_SETTING_OVERHEAD
+    { 90.0f, 100.0f, 25.0f },  // CAMERA_RACE_SETTING_CLOSE_BEHIND
+    { 100.0f, 120.0f, 35.0f }, // CAMERA_RACE_SETTING_REGULAR
+    { 110.0f, 125.0f, 40.0f }, // CAMERA_RACE_SETTING_WIDE
 };
 
 const CameraFollowSmoothData D_80776AA8 = {
-    { 0.0f, 0.0f, 0.0f,  0.0f,  0.0f, 400.0f, 0.0f,  1.0f, 0.0f,  0.0f, 1.0f,
-      0.0f, 1.0f, 80.0f, 80.0f, 0.2f, 0.0f,   77.0f, 0.0f, 77.0f, 0.1f, 0.2f },
-    { 0.0f, 0.0f,   0.0f,   0.0f, 0.0f,  0.0f,  0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,   0.0f,
-      0.0f, 0.0f,   0.0f,   0.0f, 0.0f,  0.0f,  0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,   1.0f,
-      0.0f, 400.0f, 400.0f, 0.2f, 50.0f, 50.0f, 0.2f, 0.0f, 0.0f, 1.0f, 0.0f, 300.0f, 0 },
+    { { 0.0f, 0.0f, 0.0f },
+      { 0.0f, 0.0f, 400.0f },
+      { 0.0f, 1.0f, 0.0f },
+      { 0.0f, 1.0f, 0.0f },
+      1.0f,
+      80.0f,
+      80.0f,
+      0.2f,
+      0.0f,
+      77.0f,
+      0.0f,
+      77.0f,
+      0.1f,
+      0.2f },
+    { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } },
+      { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } },
+      { 0.0f, 0.0f, 0.0f },
+      { 0.0f, 0.0f, 0.0f },
+      { 0.0f, 1.0f, 0.0f },
+      400.0f,
+      400.0f,
+      0.2f,
+      50.0f,
+      50.0f,
+      0.2f,
+      0.0f,
+      0.0f,
+      1.0f,
+      0.0f,
+      300.0f,
+      0 },
 };
 
 const CameraFollowSmoothData D_80776B9C = {
-    { 0.0f, 0.0f, 0.0f,   0.0f,   0.0f, 400.0f, 0.0f,   1.0f, 0.0f,   0.0f, 1.0f,
-      0.0f, 1.0f, 100.0f, 100.0f, 0.2f, 0.0f,   -15.0f, 0.0f, -15.0f, 0.1f, 0.2f },
-    { 0.0f, 0.0f,   0.0f,   0.0f, 0.0f,  0.0f,  0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,   0.0f,
-      0.0f, 0.0f,   0.0f,   0.0f, 0.0f,  0.0f,  0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,   1.0f,
-      0.0f, 400.0f, 400.0f, 0.2f, 50.0f, 50.0f, 0.2f, 0.0f, 0.0f, 1.0f, 0.0f, 300.0f, 0 },
+    { { 0.0f, 0.0f, 0.0f },
+      { 0.0f, 0.0f, 400.0f },
+      { 0.0f, 1.0f, 0.0f },
+      { 0.0f, 1.0f, 0.0f },
+      1.0f,
+      100.0f,
+      100.0f,
+      0.2f,
+      0.0f,
+      -15.0f,
+      0.0f,
+      -15.0f,
+      0.1f,
+      0.2f },
+    { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } },
+      { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } },
+      { 0.0f, 0.0f, 0.0f },
+      { 0.0f, 0.0f, 0.0f },
+      { 0.0f, 1.0f, 0.0f },
+      400.0f,
+      400.0f,
+      0.2f,
+      50.0f,
+      50.0f,
+      0.2f,
+      0.0f,
+      0.0f,
+      1.0f,
+      0.0f,
+      300.0f,
+      0 },
 };
 
 s32 sMultiplayerFocusCameraId = -1;
-s32 D_8076D6C4 = 1;
+bool sAllowCameraLookBack = true;
 
-unk_8076D6C8 D_8076D6C8 = {
+EyeFromRacerInfo sEyeFromRacerInfo0 = {
     2000.0f,
     0.0f,
     25.0f,
 };
 
-unk_8076D6C8 D_8076D6D4 = {
+EyeFromRacerInfo sEyeFromRacerInfo4 = {
     4000.0f,
     -0.9f,
     50.0f,
 };
 
-unk_800CD8B0 D_8076D6E0 = {
+LerpLocalAtEyeInfo sLerpLocalAtEyeInfo1 = {
     { -7.0f, 0.0f, 63.0f }, { -7.0f, 0.0f, 63.0f }, { 26.0f, 20.0f, -65.0f }, { 26.0f, 20.0f, -65.0f }, 0.0f, 0.0f
 };
 
-unk_800CD8B0 D_8076D718 = {
+LerpLocalAtEyeInfo sLerpLocalAtEyeInfo2 = {
     { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { -50.0f, 40.0f, 40.0f }, { -50.0f, 40.0f, -40.0f }, 0.0f, 1.0f
 };
 
-unk_800CD8B0 D_8076D750 = {
+LerpLocalAtEyeInfo sLerpLocalAtEyeInfo3 = {
     { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { -40.0f, 30.0f, 104.0f }, { 40.0f, 30.0f, 104.0f }, 0.0f, 1.0f
 };
 
-unk_800CD970 D_8076D788[] = {
-    { 0, 88, 60.0f, &D_8076D6C8 }, { 1, 23, 60.0f, &D_8076D6E0 },  { 1, 23, 60.0f, &D_8076D718 },
-    { 1, 23, 80.0f, &D_8076D750 }, { 0, 284, 60.0f, &D_8076D6D4 },
+FinishedSuccessScript gFinishedSuccessScript[] = {
+    { FINISHED_SUCCESS_FIXED_FOLLOW_RACER, 88, 60.0f, &sEyeFromRacerInfo0 },
+    { FINISHED_SUCCESS_LERP_LOCAL_AT_EYE, 23, 60.0f, &sLerpLocalAtEyeInfo1 },
+    { FINISHED_SUCCESS_LERP_LOCAL_AT_EYE, 23, 60.0f, &sLerpLocalAtEyeInfo2 },
+    { FINISHED_SUCCESS_LERP_LOCAL_AT_EYE, 23, 80.0f, &sLerpLocalAtEyeInfo3 },
+    { FINISHED_SUCCESS_FIXED_FOLLOW_RACER, 284, 60.0f, &sEyeFromRacerInfo4 },
 };
 
 const s32 kSingleCameraScissorBoxTypes[] = { SCISSOR_BOX_FULL_SCREEN };
@@ -607,36 +836,36 @@ void Camera_ScriptUpdateFollowSmoothTargets(CameraSettings* cameraSettings, Vec3
     }
 }
 
-f32 func_80712E68(CourseSegment** segment, f32 t, f32 arg2) {
-    f32 temp_fs3;
+f32 Camera_AdvanceDistanceAlongSegment(CourseSegment** segment, f32 t, f32 distance) {
+    f32 forwardMagnitude;
     s32 i;
-    s32 sp54;
+    s32 steps;
     s32 pad[4];
     Vec3f tangent;
     Mtx3F basis;
 
-    sp54 = (s32) arg2 / 20;
-    temp_fs3 = Course_SplineGetBasis(*segment, t, &basis, 0.0f);
+    steps = (s32) distance / 20;
+    forwardMagnitude = Course_SplineGetBasis(*segment, t, &basis, 0.0f);
 
-    for (i = 0; i < sp54; i++) {
-        t += 20.0f / temp_fs3;
+    for (i = 0; i < steps; i++) {
+        t += 20.0f / forwardMagnitude;
         if (t >= 1.0f) {
             *segment = (*segment)->next;
             t -= 1.0f;
-            t *= (temp_fs3 / Course_SplineGetTangent(*segment, 0.0f, &tangent));
+            t *= forwardMagnitude / Course_SplineGetTangent(*segment, 0.0f, &tangent);
         }
     }
 
-    t += ((arg2 - ((f32) sp54 * 20.0f)) / temp_fs3);
+    t += (distance - (steps * 20.0f)) / forwardMagnitude;
     if (t >= 1.0f) {
         *segment = (*segment)->next;
         t -= 1.0f;
-        t *= (temp_fs3 / Course_SplineGetTangent(*segment, 0.0f, &tangent));
+        t *= forwardMagnitude / Course_SplineGetTangent(*segment, 0.0f, &tangent);
     }
     return t;
 }
 
-Mtx3F* func_80712FE4(Mtx3F* basis, CourseSegment* segment, f32 t) {
+Mtx3F* Camera_GetSegmentBasis(Mtx3F* basis, CourseSegment* segment, f32 t) {
     s32 pad;
     f32 lengthFromStart;
     Mtx3F segmentBasis;
@@ -647,17 +876,18 @@ Mtx3F* func_80712FE4(Mtx3F* basis, CourseSegment* segment, f32 t) {
     return basis;
 }
 
-void Camera_RaceSettingChanged(Camera* camera, CameraParameters* arg1, CameraTypeFollowSmooth* arg2, s32 numPlayers) {
-    CameraRaceSettingInfo* var_v0;
+void Camera_RaceSettingChanged(Camera* camera, CameraParameters* params, CameraTypeFollowSmooth* followSmooth,
+                               s32 numPlayers) {
+    CameraRaceSettingInfo* raceSettingInfo;
 
     if (numPlayers == 2) {
-        var_v0 = &D_80776A78[camera->raceSetting];
+        raceSettingInfo = &kWidescreenCameraRaceSettings[camera->raceSetting];
     } else {
-        var_v0 = &D_80776A48[camera->raceSetting];
+        raceSettingInfo = &kRegularCameraRaceSettings[camera->raceSetting];
     }
-    arg2->targetDistance = var_v0->distance;
-    arg2->targetPitch = var_v0->pitch;
-    arg1->targetFov = camera->targetFov = var_v0->fov;
+    followSmooth->targetDistance = raceSettingInfo->distance;
+    followSmooth->targetPitch = raceSettingInfo->pitch;
+    params->targetFov = camera->targetFov = raceSettingInfo->fov;
 
     camera->fovFlags = CAMERA_FOV_FLAG_2;
 
@@ -941,12 +1171,12 @@ extern s32 gGameMode;
 extern GfxPool D_1000000;
 extern Camera gCameras[];
 
-Gfx* Camera_Draw(Gfx* gfx, s32 scissorBoxType, s32 playerIndex) {
-    Camera* camera = &gCameras[playerIndex];
+Gfx* Camera_Draw(Gfx* gfx, s32 scissorBoxType, s32 cameraIndex) {
+    Camera* camera = &gCameras[cameraIndex];
 
     switch (camera->vpTransitionState) {
         case CAMERA_VP_TRANSITION_ACTIVE:
-            gSPViewport(gfx++, &D_1000000.unk_362C8[playerIndex]);
+            gSPViewport(gfx++, &D_1000000.unk_362C8[cameraIndex]);
             gDPSetScissor(gfx++, G_SC_NON_INTERLACE, camera->currentScissorLeft, camera->currentScissorTop,
                           camera->currentScissorRight, camera->currentScissorBottom);
             break;
@@ -961,11 +1191,12 @@ Gfx* Camera_Draw(Gfx* gfx, s32 scissorBoxType, s32 playerIndex) {
     return gfx;
 }
 
-void Camera_SettingsFollowSmoothSetDistancePitchYaw(s32 cameraId, f32 distance, f32 pitch, f32 yaw) {
+void Camera_SettingsFollowSmoothSetDistancePitchYaw(s32 cameraIndex, f32 distance, f32 pitch, f32 yaw) {
 
-    sCameraSettings[cameraId].followSmooth.distance = sCameraSettings[cameraId].followSmooth.targetDistance = distance;
-    sCameraSettings[cameraId].followSmooth.pitch = sCameraSettings[cameraId].followSmooth.targetPitch = pitch;
-    sCameraSettings[cameraId].followSmooth.yaw = sCameraSettings[cameraId].followSmooth.targetYaw = yaw;
+    sCameraSettings[cameraIndex].followSmooth.distance = sCameraSettings[cameraIndex].followSmooth.targetDistance =
+        distance;
+    sCameraSettings[cameraIndex].followSmooth.pitch = sCameraSettings[cameraIndex].followSmooth.targetPitch = pitch;
+    sCameraSettings[cameraIndex].followSmooth.yaw = sCameraSettings[cameraIndex].followSmooth.targetYaw = yaw;
 }
 
 void Camera_ScriptSetSettings(CameraScriptManager* scriptMgr, CameraSettings* cameraSettings) {
@@ -976,13 +1207,13 @@ void Camera_ScriptSetControlPointTimers(CameraScriptManager* scriptMgr, SplineCo
     scriptMgr->controlPointTimers = timers;
 }
 
-void func_80713FE4(CameraScriptManager* scriptMgr, Vec3f* focusPos, Mtx3F* basis, Racer* racer) {
+void Camera_ScriptSetRacerInfo(CameraScriptManager* scriptMgr, Vec3f* focusPos, Mtx3F* basis, Racer* racer) {
     scriptMgr->focusPos = focusPos;
-    scriptMgr->basis = basis;
+    scriptMgr->racerBasis = basis;
     scriptMgr->racer = racer;
 }
 
-void func_80713FF4(CameraScriptManager* scriptMgr, Vec3f* eyeAnchorPoint, Mtx3F* eyeBasis) {
+void Camera_ScriptSetEyeInfo(CameraScriptManager* scriptMgr, Vec3f* eyeAnchorPoint, Mtx3F* eyeBasis) {
     scriptMgr->eyeAnchorPoint = eyeAnchorPoint;
     scriptMgr->eyeBasis = eyeBasis;
 }
@@ -1376,7 +1607,7 @@ void Camera_ScriptUpdateLocalAnchorBasisAtEye(CameraScriptManager* scriptMgr, Cu
     anchorPoint.x = scriptMgr->focusPos->x;
     anchorPoint.y = scriptMgr->focusPos->y;
     anchorPoint.z = scriptMgr->focusPos->z;
-    basis = *scriptMgr->basis;
+    basis = *scriptMgr->racerBasis;
     Camera_ScriptUpdateLocalAnchorTargets(scriptMgr->settings, &anchorPoint, &basis, &interpData[0], &interpData[1],
                                           NULL, NULL);
 }
@@ -1391,7 +1622,7 @@ void Camera_ScriptUpdateLocalAnchorBasisAtEyeUp(CameraScriptManager* scriptMgr, 
     anchorPoint.x = scriptMgr->focusPos->x;
     anchorPoint.y = scriptMgr->focusPos->y;
     anchorPoint.z = scriptMgr->focusPos->z;
-    basis = *scriptMgr->basis;
+    basis = *scriptMgr->racerBasis;
     Camera_ScriptUpdateLocalAnchorTargets(scriptMgr->settings, &anchorPoint, &basis, &interpData[0], &interpData[1],
                                           &interpData[2], NULL);
 }
@@ -1406,7 +1637,7 @@ void Camera_ScriptUpdateLocalAnchorBasisAtEyeFov(CameraScriptManager* scriptMgr,
     anchorPoint.x = scriptMgr->focusPos->x;
     anchorPoint.y = scriptMgr->focusPos->y;
     anchorPoint.z = scriptMgr->focusPos->z;
-    basis = *scriptMgr->basis;
+    basis = *scriptMgr->racerBasis;
     Camera_ScriptUpdateLocalAnchorTargets(scriptMgr->settings, &anchorPoint, &basis, &interpData.vecData[0],
                                           &interpData.vecData[1], NULL, &interpData.floatData);
 }
@@ -1421,7 +1652,7 @@ void Camera_ScriptUpdateLocalAnchorBasisAtEyeUpFov(CameraScriptManager* scriptMg
     anchorPoint.x = scriptMgr->focusPos->x;
     anchorPoint.y = scriptMgr->focusPos->y;
     anchorPoint.z = scriptMgr->focusPos->z;
-    basis = *scriptMgr->basis;
+    basis = *scriptMgr->racerBasis;
     Camera_ScriptUpdateLocalAnchorTargets(scriptMgr->settings, &anchorPoint, &basis, &interpData.vecData[0],
                                           &interpData.vecData[1], &interpData.vecData[2], &interpData.floatData);
 }
@@ -1437,7 +1668,7 @@ void Camera_ScriptUpdateFollowSmoothCenterDistanceYawPitch(CameraScriptManager* 
     Camera_UpdateInterpolateBSpline33f(interpData, scriptMgr->controlPointTimers, splineData);
     racer = scriptMgr->racer;
     followSmooth = &scriptMgr->settings->followSmooth;
-    followSmooth->racerBasis = *scriptMgr->basis;
+    followSmooth->racerBasis = *scriptMgr->racerBasis;
     followSmooth->tiltUp = racer->tiltUp;
     followSmooth->speed = racer->speed;
     followSmooth->trackSegmentInfo = racer->segmentPositionInfo.courseSegment->trackSegmentInfo;
@@ -1459,7 +1690,7 @@ void Camera_ScriptUpdateFollowSmoothCenterDistanceYawPitchUp(CameraScriptManager
     Camera_UpdateInterpolateBSpline333f(interpData, scriptMgr->controlPointTimers, splineData);
     racer = scriptMgr->racer;
     followSmooth = &scriptMgr->settings->followSmooth;
-    followSmooth->racerBasis = *scriptMgr->basis;
+    followSmooth->racerBasis = *scriptMgr->racerBasis;
     followSmooth->tiltUp = racer->tiltUp;
     followSmooth->speed = racer->speed;
     followSmooth->trackSegmentInfo = racer->segmentPositionInfo.courseSegment->trackSegmentInfo;
@@ -1481,7 +1712,7 @@ void Camera_ScriptUpdateFollowSmoothCenterDistanceYawPitchFov(CameraScriptManage
     Camera_UpdateInterpolateBSpline331f(&interpData, scriptMgr->controlPointTimers, splineData);
     racer = scriptMgr->racer;
     followSmooth = &scriptMgr->settings->followSmooth;
-    followSmooth->racerBasis = *scriptMgr->basis;
+    followSmooth->racerBasis = *scriptMgr->racerBasis;
     followSmooth->tiltUp = racer->tiltUp;
     followSmooth->speed = racer->speed;
     followSmooth->trackSegmentInfo = racer->segmentPositionInfo.courseSegment->trackSegmentInfo;
@@ -1504,7 +1735,7 @@ void Camera_ScriptUpdateFollowSmoothCenterDistanceYawPitchUpFov(CameraScriptMana
     Camera_UpdateInterpolateBSpline3331f(&interpData, scriptMgr->controlPointTimers, splineData);
     racer = scriptMgr->racer;
     followSmooth = &scriptMgr->settings->followSmooth;
-    followSmooth->racerBasis = *scriptMgr->basis;
+    followSmooth->racerBasis = *scriptMgr->racerBasis;
     followSmooth->tiltUp = racer->tiltUp;
     followSmooth->speed = racer->speed;
     followSmooth->trackSegmentInfo = racer->segmentPositionInfo.courseSegment->trackSegmentInfo;
@@ -1680,14 +1911,14 @@ void Camera_StartInit(void) {
         Camera_ScriptSetSettings(var_s1, cameraSettings);
         Camera_ScriptSetControlPointTimers(var_s1, var_s4);
         racer = &gRacers[camera->id];
-        func_80713FE4(var_s1, &racer->focusPos, &racer->trueBasis, racer);
+        Camera_ScriptSetRacerInfo(var_s1, &racer->focusPos, &racer->trueBasis, racer);
 
         var_s1++;
         cameraSettings++;
         var_s4++;
         camera++;
     }
-    D_807A159A = 1;
+    sCameraInfoInitialized = true;
 }
 
 extern s8 gTitleDemoState;
@@ -1697,11 +1928,11 @@ void Camera_Init(void) {
     Camera* camera;
     Racer* racer;
 
-    D_807A1594 = 0;
+    sEndingCameraMessage = 0;
 
     for (i = 0, camera = gCameras; i < 4; i++, camera++) {
         racer = &gRacers[camera->id];
-        func_80713FE4(&sCameraScriptMgrs[i], &racer->focusPos, &racer->trueBasis, racer);
+        Camera_ScriptSetRacerInfo(&sCameraScriptMgrs[i], &racer->focusPos, &racer->trueBasis, racer);
     }
     switch (gGameMode) {
         case GAMEMODE_FLX_TITLE:
@@ -1799,11 +2030,11 @@ extern s16 gPlayer1OverallPosition;
 
 void Camera_InitMode(Camera* camera, CameraSettings* cameraSettings, CameraScriptManager* scriptMgr) {
     s32 pad;
-    s32 sp48;
+    s32 raceSetting;
     bool initViewport;
     f32 angle;
     s32 pad2;
-    CameraRaceSettingInfo* sp38;
+    CameraRaceSettingInfo* raceSettingInfo;
     Vec3f eye;
     Racer* racer;
 
@@ -1856,9 +2087,9 @@ void Camera_InitMode(Camera* camera, CameraSettings* cameraSettings, CameraScrip
         case CAMERA_MODE_RACE:
         case CAMERA_MODE_TITLE_DEMO:
             if (gTitleDemoState != TITLE_DEMO_INACTIVE) {
-                sp48 = CAMERA_RACE_SETTING_REGULAR;
+                raceSetting = CAMERA_RACE_SETTING_REGULAR;
             } else {
-                sp48 = camera->raceSetting;
+                raceSetting = camera->raceSetting;
             }
             if (gNumPlayers == 2) {
                 camera->near = 16.0f;
@@ -1868,7 +2099,7 @@ void Camera_InitMode(Camera* camera, CameraSettings* cameraSettings, CameraScrip
 
                 Camera_SettingsSetFollowSmoothWithParameters(cameraSettings, &D_80776B9C);
 
-                sp38 = &D_80776A78[sp48];
+                raceSettingInfo = &kWidescreenCameraRaceSettings[raceSetting];
             } else {
                 camera->near = 16.0f;
                 camera->far = 8192.0f;
@@ -1877,27 +2108,31 @@ void Camera_InitMode(Camera* camera, CameraSettings* cameraSettings, CameraScrip
 
                 Camera_SettingsSetFollowSmoothWithParameters(cameraSettings, &D_80776AA8);
 
-                sp38 = &D_80776A48[sp48];
+                raceSettingInfo = &kRegularCameraRaceSettings[raceSetting];
             }
-            cameraSettings->followSmooth.targetDistance = cameraSettings->followSmooth.distance = sp38->distance;
-            cameraSettings->followSmooth.targetPitch = cameraSettings->followSmooth.pitch = sp38->pitch;
-            cameraSettings->parameters.targetFov = cameraSettings->parameters.fov = sp38->fov;
+            cameraSettings->followSmooth.targetDistance = cameraSettings->followSmooth.distance =
+                raceSettingInfo->distance;
+            cameraSettings->followSmooth.targetPitch = cameraSettings->followSmooth.pitch = raceSettingInfo->pitch;
+            cameraSettings->parameters.targetFov = cameraSettings->parameters.fov = raceSettingInfo->fov;
 
             Math_Round(DEG_TO_FZXANG2(cameraSettings->followSmooth.pitch));
             racer = &gRacers[camera->id];
-            cameraSettings->followSmooth.anchorPoint.x = racer->focusPos.x - (sp38->distance * racer->trueBasis.x.x);
-            cameraSettings->followSmooth.anchorPoint.y = racer->focusPos.y - (sp38->distance * racer->trueBasis.x.y);
-            cameraSettings->followSmooth.anchorPoint.z = racer->focusPos.z - (sp38->distance * racer->trueBasis.x.z);
+            cameraSettings->followSmooth.anchorPoint.x =
+                racer->focusPos.x - (raceSettingInfo->distance * racer->trueBasis.x.x);
+            cameraSettings->followSmooth.anchorPoint.y =
+                racer->focusPos.y - (raceSettingInfo->distance * racer->trueBasis.x.y);
+            cameraSettings->followSmooth.anchorPoint.z =
+                racer->focusPos.z - (raceSettingInfo->distance * racer->trueBasis.x.z);
             camera->targetFov = cameraSettings->parameters.targetFov;
             camera->fovFlags = 0;
-            if ((sp48 == CAMERA_RACE_SETTING_CLOSE_BEHIND) || (sp48 == CAMERA_RACE_SETTING_REGULAR)) {
+            if ((raceSetting == CAMERA_RACE_SETTING_CLOSE_BEHIND) || (raceSetting == CAMERA_RACE_SETTING_REGULAR)) {
                 camera->fovFlags |= CAMERA_FOV_FLAG_1;
             }
             initViewport = true;
             break;
         case CAMERA_MODE_FALLING_OFF_TRACK:
             eye = cameraSettings->parameters.eye;
-            Camera_SettingsSetAtEyeWithParameters(cameraSettings, &D_807763D0);
+            Camera_SettingsSetAtEyeWithParameters(cameraSettings, &kDefaultAtEyeData);
             cameraSettings->parameters.fov = cameraSettings->parameters.targetFov = 80.0f;
             cameraSettings->atEye.targetEye = eye;
             if (gNumPlayers == 2) {
@@ -1905,20 +2140,21 @@ void Camera_InitMode(Camera* camera, CameraSettings* cameraSettings, CameraScrip
             }
             break;
         case CAMERA_MODE_FINISHED_SUCCESS:
-            Camera_SettingsSetAtEyeWithParameters(cameraSettings, &D_807763D0);
-            cameraSettings->parameters.targetFov = D_8076D788[0].fov;
+            Camera_SettingsSetAtEyeWithParameters(cameraSettings, &kDefaultAtEyeData);
+            cameraSettings->parameters.targetFov = gFinishedSuccessScript[0].fov;
             if (gNumPlayers == 2) {
                 cameraSettings->parameters.frustrumCenterY = cameraSettings->parameters.targetFrustrumCenterY = -30.0f;
             }
 
             racer = &gRacers[camera->id];
-            func_80718F58(&D_807A15A0[camera->id], racer->segmentPositionInfo.courseSegment,
-                          racer->segmentPositionInfo.segmentTValue, &D_8076D788[0]);
+            Camera_SetupFinishedSuccessFollowRacer(
+                &sFinishedSuccessFollowRacerEye[camera->id], racer->segmentPositionInfo.courseSegment,
+                racer->segmentPositionInfo.segmentTValue, &gFinishedSuccessScript[0]);
             break;
         case CAMERA_MODE_FINISHED_SPECTATE:
             racer = &gRacers[camera->id];
 
-            Camera_SettingsSetOrbitWithParameters(cameraSettings, 2, &D_80776448);
+            Camera_SettingsSetOrbitWithParameters(cameraSettings, CAMERA_TYPE_ORBIT_AT, &D_80776448);
             if (gNumPlayers == 2) {
                 cameraSettings->parameters.frustrumCenterY = cameraSettings->parameters.targetFrustrumCenterY = -30.0f;
             }
@@ -1935,7 +2171,7 @@ void Camera_InitMode(Camera* camera, CameraSettings* cameraSettings, CameraScrip
             break;
         case CAMERA_MODE_FINISHED_LOSER:
             eye = cameraSettings->parameters.eye;
-            Camera_SettingsSetAtEyeWithParameters(cameraSettings, &D_807763D0);
+            Camera_SettingsSetAtEyeWithParameters(cameraSettings, &kDefaultAtEyeData);
             cameraSettings->parameters.fov = cameraSettings->parameters.targetFov = 80.0f;
             cameraSettings->atEye.targetEye = eye;
             break;
@@ -1945,16 +2181,20 @@ void Camera_InitMode(Camera* camera, CameraSettings* cameraSettings, CameraScrip
             camera->fovScaleX = SCREEN_WIDTH;
             camera->fovScaleY = SCREEN_HEIGHT;
             Camera_SettingsSetFollowSmoothWithParameters(cameraSettings, &D_80776AA8);
-            sp38 = &D_80776A48[CAMERA_RACE_SETTING_CLOSE_BEHIND];
-            cameraSettings->followSmooth.targetDistance = cameraSettings->followSmooth.distance = sp38->distance;
+            raceSettingInfo = &kRegularCameraRaceSettings[CAMERA_RACE_SETTING_CLOSE_BEHIND];
+            cameraSettings->followSmooth.targetDistance = cameraSettings->followSmooth.distance =
+                raceSettingInfo->distance;
             cameraSettings->followSmooth.targetPitch = cameraSettings->followSmooth.pitch = 15.0f;
-            cameraSettings->parameters.targetFov = cameraSettings->parameters.fov = sp38->fov;
+            cameraSettings->parameters.targetFov = cameraSettings->parameters.fov = raceSettingInfo->fov;
             angle = 15.0f;
             Math_Round(DEG_TO_FZXANG2(angle));
             racer = &gRacers[0];
-            cameraSettings->followSmooth.anchorPoint.x = racer->focusPos.x - (sp38->distance * racer->trueBasis.x.x);
-            cameraSettings->followSmooth.anchorPoint.y = racer->focusPos.y - (sp38->distance * racer->trueBasis.x.y);
-            cameraSettings->followSmooth.anchorPoint.z = racer->focusPos.z - (sp38->distance * racer->trueBasis.x.z);
+            cameraSettings->followSmooth.anchorPoint.x =
+                racer->focusPos.x - (raceSettingInfo->distance * racer->trueBasis.x.x);
+            cameraSettings->followSmooth.anchorPoint.y =
+                racer->focusPos.y - (raceSettingInfo->distance * racer->trueBasis.x.y);
+            cameraSettings->followSmooth.anchorPoint.z =
+                racer->focusPos.z - (raceSettingInfo->distance * racer->trueBasis.x.z);
             camera->targetFov = cameraSettings->parameters.targetFov;
             camera->fovFlags = 0;
             initViewport = true;
@@ -2196,7 +2436,7 @@ void Camera_UpdateMode(Camera* camera, CameraSettings* cameraSettings, CameraScr
 }
 
 void Camera_SettingsUpdateRaceIntroStart(Camera* camera, CameraSettings* cameraSettings) {
-    CameraRaceSettingInfo* var_s1;
+    CameraRaceSettingInfo* raceSettingInfo;
     s32 angle;
     f32 temp1;
     f32 temp2;
@@ -2209,16 +2449,16 @@ void Camera_SettingsUpdateRaceIntroStart(Camera* camera, CameraSettings* cameraS
 
     if (camera->mode == CAMERA_MODE_RACE_INTRO) {
         if (gNumPlayers == 2) {
-            var_s1 = &D_80776A78[CAMERA_RACE_SETTING_REGULAR];
+            raceSettingInfo = &kWidescreenCameraRaceSettings[CAMERA_RACE_SETTING_REGULAR];
         } else {
-            var_s1 = &D_80776A48[CAMERA_RACE_SETTING_REGULAR];
+            raceSettingInfo = &kRegularCameraRaceSettings[CAMERA_RACE_SETTING_REGULAR];
         }
 
         racer = &gRacers[camera->id];
 
-        basis.x.x = 0.0f - (var_s1->distance * racer->trueBasis.x.x);
-        basis.x.y = 0.0f - (var_s1->distance * racer->trueBasis.x.y);
-        basis.x.z = 0.0f - (var_s1->distance * racer->trueBasis.x.z);
+        basis.x.x = 0.0f - (raceSettingInfo->distance * racer->trueBasis.x.x);
+        basis.x.y = 0.0f - (raceSettingInfo->distance * racer->trueBasis.x.y);
+        basis.x.z = 0.0f - (raceSettingInfo->distance * racer->trueBasis.x.z);
         temp_fv1 = 1.0f / sqrtf(SQ(basis.x.x) + SQ(basis.x.y) + SQ(basis.x.z));
         basis.x.x *= temp_fv1;
         basis.x.y *= temp_fv1;
@@ -2240,12 +2480,12 @@ void Camera_SettingsUpdateRaceIntroStart(Camera* camera, CameraSettings* cameraS
         basis.y.y *= temp_fv1;
         basis.y.z *= temp_fv1;
 
-        angle = Math_Round(DEG_TO_FZXANG2(var_s1->pitch));
+        angle = Math_Round(DEG_TO_FZXANG2(raceSettingInfo->pitch));
 
-        temp_fv0 =
-            (SIN(angle) * var_s1->distance) * ((basis.y.x * racer->trueBasis.y.x) + (basis.y.y * racer->trueBasis.y.y) +
-                                               (basis.y.z * racer->trueBasis.y.z));
-        temp_fv1 = COS(angle) * var_s1->distance;
+        temp_fv0 = (SIN(angle) * raceSettingInfo->distance) *
+                   ((basis.y.x * racer->trueBasis.y.x) + (basis.y.y * racer->trueBasis.y.y) +
+                    (basis.y.z * racer->trueBasis.y.z));
+        temp_fv1 = COS(angle) * raceSettingInfo->distance;
 
         temp1 = (racer->focusPos.x + (temp_fv1 * basis.x.x) + (temp_fv0 * basis.y.x));
         temp2 = (racer->focusPos.y + (temp_fv1 * basis.x.y) + (temp_fv0 * basis.y.y));
@@ -2506,7 +2746,7 @@ void Camera_UpdateViewportTransition(void) {
 }
 
 void Camera_UpdateRaceIntro(Camera* camera, CameraSettings* cameraSettings) {
-    CameraRaceSettingInfo* var_v1;
+    CameraRaceSettingInfo* raceSettingInfo;
     f32 temp_fv0;
     s32 index;
     CameraParameters* params = &cameraSettings->parameters;
@@ -2526,10 +2766,10 @@ void Camera_UpdateRaceIntro(Camera* camera, CameraSettings* cameraSettings) {
     if (camera->timer >= 300) {
         if (gNumPlayers == 2) {
             Camera_SettingsSetFollowSmooth(cameraSettings, &D_80776B9C.data);
-            var_v1 = &D_80776A78[CAMERA_RACE_SETTING_REGULAR];
+            raceSettingInfo = &kWidescreenCameraRaceSettings[CAMERA_RACE_SETTING_REGULAR];
         } else {
             Camera_SettingsSetFollowSmooth(cameraSettings, &D_80776AA8.data);
-            var_v1 = &D_80776A48[CAMERA_RACE_SETTING_REGULAR];
+            raceSettingInfo = &kRegularCameraRaceSettings[CAMERA_RACE_SETTING_REGULAR];
         }
         camera->mode = CAMERA_MODE_SETUP_RACE;
 
@@ -2537,23 +2777,23 @@ void Camera_UpdateRaceIntro(Camera* camera, CameraSettings* cameraSettings) {
         followSmooth->centerPos.y = 0.0f;
         followSmooth->centerPos.z = 0.0f;
 
-        followSmooth->distance = var_v1->distance;
-        followSmooth->pitch = var_v1->pitch;
-        params->fov = var_v1->fov;
+        followSmooth->distance = raceSettingInfo->distance;
+        followSmooth->pitch = raceSettingInfo->pitch;
+        params->fov = raceSettingInfo->fov;
 
         if (gNumPlayers == 2) {
-            var_v1 = &D_80776A78[camera->raceSetting];
+            raceSettingInfo = &kWidescreenCameraRaceSettings[camera->raceSetting];
         } else {
-            var_v1 = &D_80776A48[camera->raceSetting];
+            raceSettingInfo = &kRegularCameraRaceSettings[camera->raceSetting];
         }
-        followSmooth->targetDistance = var_v1->distance;
-        followSmooth->targetPitch = var_v1->pitch;
-        params->targetFov = var_v1->fov;
+        followSmooth->targetDistance = raceSettingInfo->distance;
+        followSmooth->targetPitch = raceSettingInfo->pitch;
+        params->targetFov = raceSettingInfo->fov;
 
         racer = &gRacers[camera->id];
-        followSmooth->anchorPoint.x = racer->focusPos.x - (var_v1->distance * racer->trueBasis.x.x);
-        followSmooth->anchorPoint.y = racer->focusPos.y - (var_v1->distance * racer->trueBasis.x.y);
-        followSmooth->anchorPoint.z = racer->focusPos.z - (var_v1->distance * racer->trueBasis.x.z);
+        followSmooth->anchorPoint.x = racer->focusPos.x - (raceSettingInfo->distance * racer->trueBasis.x.x);
+        followSmooth->anchorPoint.y = racer->focusPos.y - (raceSettingInfo->distance * racer->trueBasis.x.y);
+        followSmooth->anchorPoint.z = racer->focusPos.z - (raceSettingInfo->distance * racer->trueBasis.x.z);
 
         camera->focusPos = racer->focusPos;
         camera->racerBasis = racer->trueBasis;
@@ -2577,7 +2817,7 @@ extern s16 D_807A16CC;
 extern s32 gCurrentGhostType;
 extern s32 gFastestGhostTime;
 
-void Camera_UpdateRace(Camera* camera, CameraSettings* cameraSettings, CameraScriptManager* arg2) {
+void Camera_UpdateRace(Camera* camera, CameraSettings* cameraSettings, CameraScriptManager* scriptMgr) {
     f32 var_fa0;
     f32 var_fv1;
     s32 playerIndex;
@@ -2593,13 +2833,13 @@ void Camera_UpdateRace(Camera* camera, CameraSettings* cameraSettings, CameraScr
     if (!gGamePaused) {
         if (racer->stateFlags & RACER_STATE_FALLING_OFF_TRACK) {
             camera->mode = CAMERA_MODE_FALLING_OFF_TRACK;
-            Camera_InitMode(camera, cameraSettings, arg2);
+            Camera_InitMode(camera, cameraSettings, scriptMgr);
             return;
         }
         if (racer->stateFlags & RACER_STATE_FINISHED) {
             if ((gNumPlayers >= 2) && (D_807A16CC != 0)) {
                 camera->mode = CAMERA_MODE_FINISHED_SPECTATE;
-                Camera_InitMode(camera, cameraSettings, arg2);
+                Camera_InitMode(camera, cameraSettings, scriptMgr);
                 return;
             }
             if (gGameMode == GAMEMODE_TIME_ATTACK) {
@@ -2614,7 +2854,7 @@ void Camera_UpdateRace(Camera* camera, CameraSettings* cameraSettings, CameraScr
             } else {
                 camera->mode = CAMERA_MODE_FINISHED_SUCCESS;
             }
-            Camera_InitMode(camera, cameraSettings, arg2);
+            Camera_InitMode(camera, cameraSettings, scriptMgr);
             return;
         }
     }
@@ -2632,7 +2872,7 @@ void Camera_UpdateRace(Camera* camera, CameraSettings* cameraSettings, CameraScr
         Camera_RaceSettingChanged(camera, &cameraSettings->parameters, followSmooth, gNumPlayers);
     }
     params = &cameraSettings->parameters;
-    if ((D_8076D6C4 != 0) && (!gGamePaused)) {
+    if (sAllowCameraLookBack && !gGamePaused) {
         if ((controller->buttonCurrent & BTN_CUP) && !(racer->stateFlags & RACER_STATE_RETIRED)) {
             if (++camera->lookBackRotate > sMaxCameraLookBackRotate) {
                 camera->lookBackRotate = sMaxCameraLookBackRotate;
@@ -2671,12 +2911,12 @@ void Camera_UpdateRace(Camera* camera, CameraSettings* cameraSettings, CameraScr
     }
 }
 
-void Camera_UpdateTitleDemo(Camera* camera, CameraSettings* cameraSettings, CameraScriptManager* arg2) {
+void Camera_UpdateTitleDemo(Camera* camera, CameraSettings* cameraSettings, CameraScriptManager* scriptMgr) {
     s32 playerIndex = camera->id;
 
     if (gRacers[playerIndex].stateFlags & RACER_STATE_FALLING_OFF_TRACK) {
         camera->mode = CAMERA_MODE_FALLING_OFF_TRACK;
-        Camera_InitMode(camera, cameraSettings, arg2);
+        Camera_InitMode(camera, cameraSettings, scriptMgr);
     }
 }
 
@@ -2721,31 +2961,31 @@ void Camera_UpdateFallingOffTrack(Camera* camera, CameraSettings* cameraSettings
     atEye->targetAt = gRacers[camera->id].focusPos;
 }
 
-void Camera_UpdateFinishedSuccess(Camera* camera, CameraSettings* cameraSettings, CameraScriptManager* arg2) {
+void Camera_UpdateFinishedSuccess(Camera* camera, CameraSettings* cameraSettings, CameraScriptManager* scriptMgr) {
     s32 pad;
-    Vec3f* temp_s1 = &D_807A15A0[camera->id];
-    unk_800CD970* temp_a3 = &D_8076D788[camera->state];
+    Vec3f* eye = &sFinishedSuccessFollowRacerEye[camera->id];
+    FinishedSuccessScript* finishedSuccessScript = &gFinishedSuccessScript[camera->state];
     CameraParameters* params = &cameraSettings->parameters;
-    s16 lastType = temp_a3->type;
+    s16 lastType = finishedSuccessScript->type;
     Racer* racer = &gRacers[camera->id];
     CameraTypeLocalAnchor* localAnchor = &cameraSettings->localAnchor;
     CameraTypeAtEye* atEye = &cameraSettings->atEye;
-    unk_800CD8B0* temp_v0_2;
+    LerpLocalAtEyeInfo* lerpLocalAtEyeInfo;
 
     if (racer->stateFlags & RACER_STATE_FALLING_OFF_TRACK) {
         camera->mode = CAMERA_MODE_FALLING_OFF_TRACK;
-        Camera_InitMode(camera, cameraSettings, arg2);
+        Camera_InitMode(camera, cameraSettings, scriptMgr);
         return;
     }
-    switch (temp_a3->type) {
-        case 0:
+    switch (finishedSuccessScript->type) {
+        case FINISHED_SUCCESS_FIXED_FOLLOW_RACER:
             atEye->targetAt = racer->focusPos;
-            atEye->targetEye.x = temp_s1->x;
-            atEye->targetEye.y = temp_s1->y;
-            atEye->targetEye.z = temp_s1->z;
+            atEye->targetEye.x = eye->x;
+            atEye->targetEye.y = eye->y;
+            atEye->targetEye.z = eye->z;
             break;
-        case 1:
-            temp_v0_2 = (unk_800CD8B0*) temp_a3->unk_08;
+        case FINISHED_SUCCESS_LERP_LOCAL_AT_EYE:
+            lerpLocalAtEyeInfo = (LerpLocalAtEyeInfo*) finishedSuccessScript->data;
 
             localAnchor->basis = racer->trueBasis;
 
@@ -2755,66 +2995,72 @@ void Camera_UpdateFinishedSuccess(Camera* camera, CameraSettings* cameraSettings
             localAnchor->anchorPoint = racer->focusPos;
 
             localAnchor->targetLocalAt.x =
-                temp_v0_2->startAt.x +
-                ((((temp_v0_2->endAt.x - temp_v0_2->startAt.x) * camera->timer) / temp_a3->time) *
-                 temp_v0_2->atTranslationScale);
+                lerpLocalAtEyeInfo->startAt.x +
+                ((((lerpLocalAtEyeInfo->endAt.x - lerpLocalAtEyeInfo->startAt.x) * camera->timer) /
+                  finishedSuccessScript->time) *
+                 lerpLocalAtEyeInfo->atTranslationScale);
             localAnchor->targetLocalAt.y =
-                temp_v0_2->startAt.y +
-                ((((temp_v0_2->endAt.y - temp_v0_2->startAt.y) * camera->timer) / temp_a3->time) *
-                 temp_v0_2->atTranslationScale);
+                lerpLocalAtEyeInfo->startAt.y +
+                ((((lerpLocalAtEyeInfo->endAt.y - lerpLocalAtEyeInfo->startAt.y) * camera->timer) /
+                  finishedSuccessScript->time) *
+                 lerpLocalAtEyeInfo->atTranslationScale);
             localAnchor->targetLocalAt.z =
-                temp_v0_2->startAt.z +
-                ((((temp_v0_2->endAt.z - temp_v0_2->startAt.z) * camera->timer) / temp_a3->time) *
-                 temp_v0_2->atTranslationScale);
+                lerpLocalAtEyeInfo->startAt.z +
+                ((((lerpLocalAtEyeInfo->endAt.z - lerpLocalAtEyeInfo->startAt.z) * camera->timer) /
+                  finishedSuccessScript->time) *
+                 lerpLocalAtEyeInfo->atTranslationScale);
 
             localAnchor->targetLocalEye.x =
-                temp_v0_2->startEye.x +
-                ((((temp_v0_2->endEye.x - temp_v0_2->startEye.x) * camera->timer) / temp_a3->time) *
-                 temp_v0_2->eyeTranslationScale);
+                lerpLocalAtEyeInfo->startEye.x +
+                ((((lerpLocalAtEyeInfo->endEye.x - lerpLocalAtEyeInfo->startEye.x) * camera->timer) /
+                  finishedSuccessScript->time) *
+                 lerpLocalAtEyeInfo->eyeTranslationScale);
             localAnchor->targetLocalEye.y =
-                temp_v0_2->startEye.y +
-                ((((temp_v0_2->endEye.y - temp_v0_2->startEye.y) * camera->timer) / temp_a3->time) *
-                 temp_v0_2->eyeTranslationScale);
+                lerpLocalAtEyeInfo->startEye.y +
+                ((((lerpLocalAtEyeInfo->endEye.y - lerpLocalAtEyeInfo->startEye.y) * camera->timer) /
+                  finishedSuccessScript->time) *
+                 lerpLocalAtEyeInfo->eyeTranslationScale);
             localAnchor->targetLocalEye.z =
-                temp_v0_2->startEye.z +
-                ((((temp_v0_2->endEye.z - temp_v0_2->startEye.z) * camera->timer) / temp_a3->time) *
-                 temp_v0_2->eyeTranslationScale);
+                lerpLocalAtEyeInfo->startEye.z +
+                ((((lerpLocalAtEyeInfo->endEye.z - lerpLocalAtEyeInfo->startEye.z) * camera->timer) /
+                  finishedSuccessScript->time) *
+                 lerpLocalAtEyeInfo->eyeTranslationScale);
         default:
             break;
     }
 
-    if (camera->timer >= temp_a3->time) {
+    if (camera->timer >= finishedSuccessScript->time) {
         camera->timer = 0;
-        if (++camera->state >= 5) {
+        if (++camera->state >= CAMERA_FINISHED_SUCCESS_STATE_COUNT) {
             camera->mode = CAMERA_MODE_FINISHED_SPECTATE;
-            Camera_InitMode(camera, cameraSettings, arg2);
+            Camera_InitMode(camera, cameraSettings, scriptMgr);
             return;
         }
-        temp_a3 = &D_8076D788[camera->state];
-        params->targetFov = temp_a3->fov;
+        finishedSuccessScript = &gFinishedSuccessScript[camera->state];
+        params->targetFov = finishedSuccessScript->fov;
 
-        switch (temp_a3->type) {
-            case 0:
-                if (lastType != temp_a3->type) {
-                    Camera_SettingsSetAtEye(cameraSettings, &D_807763D0.data);
+        switch (finishedSuccessScript->type) {
+            case FINISHED_SUCCESS_FIXED_FOLLOW_RACER:
+                if (lastType != finishedSuccessScript->type) {
+                    Camera_SettingsSetAtEye(cameraSettings, &kDefaultAtEyeData.data);
                 }
                 params->targetUp.x = 0.0f;
                 params->targetUp.y = 1.0f;
                 params->targetUp.z = 0.0f;
-                func_80718F58(temp_s1, racer->segmentPositionInfo.courseSegment,
-                              racer->segmentPositionInfo.segmentTValue, temp_a3);
+                Camera_SetupFinishedSuccessFollowRacer(eye, racer->segmentPositionInfo.courseSegment,
+                                                       racer->segmentPositionInfo.segmentTValue, finishedSuccessScript);
                 atEye->targetAt = racer->focusPos;
-                atEye->targetEye.x = temp_s1->x;
-                atEye->targetEye.y = temp_s1->y;
-                atEye->targetEye.z = temp_s1->z;
+                atEye->targetEye.x = eye->x;
+                atEye->targetEye.y = eye->y;
+                atEye->targetEye.z = eye->z;
                 break;
-            case 1:
-                if (lastType != temp_a3->type) {
-                    Camera_SettingsSetLocalAnchor(cameraSettings, &D_807765E8.data);
+            case FINISHED_SUCCESS_LERP_LOCAL_AT_EYE:
+                if (lastType != finishedSuccessScript->type) {
+                    Camera_SettingsSetLocalAnchor(cameraSettings, &kDefaultLocalAnchorData.data);
                 }
-                temp_v0_2 = (unk_800CD8B0*) temp_a3->unk_08;
-                localAnchor->targetLocalAt = temp_v0_2->startAt;
-                localAnchor->targetLocalEye = temp_v0_2->startEye;
+                lerpLocalAtEyeInfo = (LerpLocalAtEyeInfo*) finishedSuccessScript->data;
+                localAnchor->targetLocalAt = lerpLocalAtEyeInfo->startAt;
+                localAnchor->targetLocalEye = lerpLocalAtEyeInfo->startEye;
                 break;
             default:
                 break;
@@ -2824,59 +3070,60 @@ void Camera_UpdateFinishedSuccess(Camera* camera, CameraSettings* cameraSettings
     }
 }
 
-void func_80718F58(Vec3f* eyePos, CourseSegment* segment, f32 racerTValue, unk_800CD970* arg3) {
+void Camera_SetupFinishedSuccessFollowRacer(Vec3f* eyePos, CourseSegment* segment, f32 racerTValue,
+                                            FinishedSuccessScript* finishedSuccessScript) {
     f32 abs;
     f32 t;
-    f32 temp_fa1;
-    f32 temp_ft4;
-    f32 var_fa0;
-    f32 var_fv0;
+    f32 radiusRScale;
+    f32 radiusLScale;
+    f32 verticalOffset;
+    f32 lateralOffset;
     Mtx3F segmentBasis;
-    unk_8076D6C8* sp28 = (unk_8076D6C8*) arg3->unk_08;
+    EyeFromRacerInfo* eyeFromRacerInfo = (EyeFromRacerInfo*) finishedSuccessScript->data;
 
-    t = func_80712E68(&segment, racerTValue, sp28->unk_00);
+    t = Camera_AdvanceDistanceAlongSegment(&segment, racerTValue, eyeFromRacerInfo->distanceAhead);
 
     Course_SplineGetPosition(segment, t, eyePos);
-    func_80712FE4(&segmentBasis, segment, t);
+    Camera_GetSegmentBasis(&segmentBasis, segment, t);
 
-    temp_ft4 = segment->radiusLeft * (1.0f - t) + segment->next->radiusLeft * t;
-    temp_fa1 = segment->radiusRight * (1.0f - t) + segment->next->radiusRight * t;
+    radiusLScale = segment->radiusLeft * (1.0f - t) + segment->next->radiusLeft * t;
+    radiusRScale = segment->radiusRight * (1.0f - t) + segment->next->radiusRight * t;
 
     switch (segment->trackSegmentInfo & TRACK_SHAPE_MASK) {
         case TRACK_SHAPE_CYLINDER:
-            var_fv0 = sp28->unk_04 * temp_fa1;
-            var_fa0 = sp28->unk_08 + temp_fa1;
+            lateralOffset = eyeFromRacerInfo->lateralOffset * radiusRScale;
+            verticalOffset = eyeFromRacerInfo->verticalOffset + radiusRScale;
             break;
         case TRACK_SHAPE_HALF_PIPE:
-            var_fv0 = sp28->unk_04 * temp_ft4;
-            var_fa0 = sp28->unk_08;
+            lateralOffset = eyeFromRacerInfo->lateralOffset * radiusLScale;
+            verticalOffset = eyeFromRacerInfo->verticalOffset;
             break;
         default:
-            if (sp28->unk_04 >= 0.0f) {
-                var_fv0 = sp28->unk_04 * temp_ft4;
+            if (eyeFromRacerInfo->lateralOffset >= 0.0f) {
+                lateralOffset = eyeFromRacerInfo->lateralOffset * radiusLScale;
             } else {
-                var_fv0 = sp28->unk_04 * temp_fa1;
+                lateralOffset = eyeFromRacerInfo->lateralOffset * radiusRScale;
             }
-            var_fa0 = sp28->unk_08;
+            verticalOffset = eyeFromRacerInfo->verticalOffset;
             break;
     }
 
-    abs = ABS(var_fv0);
+    abs = ABS(lateralOffset);
     if (D_8076D8B0 < abs) {
         abs = D_8076D8B0;
-        if (var_fv0 < 0) {
-            var_fv0 = 0.0f - abs;
+        if (lateralOffset < 0) {
+            lateralOffset = 0.0f - abs;
         } else {
-            var_fv0 = abs;
+            lateralOffset = abs;
         }
     }
 
-    eyePos->x += (segmentBasis.y.x * var_fa0) + (segmentBasis.z.x * var_fv0);
-    eyePos->y += (segmentBasis.y.y * var_fa0) + (segmentBasis.z.y * var_fv0);
-    eyePos->z += (segmentBasis.y.z * var_fa0) + (segmentBasis.z.z * var_fv0);
+    eyePos->x += (segmentBasis.y.x * verticalOffset) + (segmentBasis.z.x * lateralOffset);
+    eyePos->y += (segmentBasis.y.y * verticalOffset) + (segmentBasis.z.y * lateralOffset);
+    eyePos->z += (segmentBasis.y.z * verticalOffset) + (segmentBasis.z.z * lateralOffset);
 }
 
-void Camera_UpdateFinishedLoser(Camera* camera, CameraSettings* cameraSettings, CameraScriptManager* arg2) {
+void Camera_UpdateFinishedLoser(Camera* camera, CameraSettings* cameraSettings, CameraScriptManager* scriptMgr) {
     CameraTypeAtEye* atEye = &cameraSettings->atEye;
 
     if (camera->timer <= 60) {
@@ -2885,21 +3132,21 @@ void Camera_UpdateFinishedLoser(Camera* camera, CameraSettings* cameraSettings, 
     }
 }
 
-void Camera_UpdateFinishedSpectate(Camera* camera, CameraSettings* cameraSettings, CameraScriptManager* arg2) {
+void Camera_UpdateFinishedSpectate(Camera* camera, CameraSettings* cameraSettings, CameraScriptManager* scriptMgr) {
     s32 pad;
     f32 temp;
     CameraTypeOrbit* orbit = &cameraSettings->orbit;
-    Racer* temp_a3 = &gRacers[camera->id];
+    Racer* racer = &gRacers[camera->id];
     CameraParameters* params = &cameraSettings->parameters;
 
-    if (temp_a3->stateFlags & RACER_STATE_FALLING_OFF_TRACK) {
+    if (racer->stateFlags & RACER_STATE_FALLING_OFF_TRACK) {
         camera->mode = CAMERA_MODE_FALLING_OFF_TRACK;
-        Camera_InitMode(camera, cameraSettings, arg2);
+        Camera_InitMode(camera, cameraSettings, scriptMgr);
         return;
     }
-    orbit->basis.y.x += temp_a3->tiltUp.x * 0.3f;
-    orbit->basis.y.y += temp_a3->tiltUp.y * 0.3f;
-    orbit->basis.y.z += temp_a3->tiltUp.z * 0.3f;
+    orbit->basis.y.x += racer->tiltUp.x * 0.3f;
+    orbit->basis.y.y += racer->tiltUp.y * 0.3f;
+    orbit->basis.y.z += racer->tiltUp.z * 0.3f;
 
     Math_OrthonormalizeAroundUp(&orbit->basis);
 
@@ -2907,7 +3154,7 @@ void Camera_UpdateFinishedSpectate(Camera* camera, CameraSettings* cameraSetting
     params->targetUp.y = orbit->basis.y.y;
     params->targetUp.z = orbit->basis.y.z;
 
-    orbit->anchorPos = temp_a3->focusPos;
+    orbit->anchorPos = racer->focusPos;
 
     switch (camera->state) {
         case 0:
@@ -2943,39 +3190,39 @@ void Camera_UpdateFinishedSpectate(Camera* camera, CameraSettings* cameraSetting
     }
 }
 
-void Camera_UpdateRecordsRace(Camera* camera, CameraSettings* cameraSettings, CameraScriptManager* arg2) {
+void Camera_UpdateRecordsRace(Camera* camera, CameraSettings* cameraSettings, CameraScriptManager* scriptMgr) {
     Racer* racer = &gRacers[camera->id];
 
     if (racer->stateFlags & RACER_STATE_FALLING_OFF_TRACK) {
         camera->mode = CAMERA_MODE_FALLING_OFF_TRACK;
-        Camera_InitMode(camera, cameraSettings, arg2);
+        Camera_InitMode(camera, cameraSettings, scriptMgr);
     }
 }
 
-extern CameraScript D_i7_800993D0[];
-extern CameraScript D_i7_800996E0[];
-extern CameraScript D_i7_80099A60[];
-extern CameraScript D_i7_80099F70[];
-extern CameraScript D_i7_8009A090[];
-extern CameraScript D_i7_8009A210[];
-extern u16 D_8009AD16;
+extern CameraScript gEndingPosition1FocusScript[];
+extern CameraScript gEndingPosition3FocusScript[];
+extern CameraScript gEndingPosition2FocusScript[];
+extern CameraScript gEndingPodiumPosition1Script[];
+extern CameraScript gEndingPodiumPosition2Script[];
+extern CameraScript gEndingPodiumPosition3Script[];
+extern u16 gEndingFlags;
 
-void Camera_UpdateEnding(Camera* camera, CameraSettings* cameraSettings, CameraScriptManager* arg2) {
-    s32 var_s3 = true;
+void Camera_UpdateEnding(Camera* camera, CameraSettings* cameraSettings, CameraScriptManager* scriptMgr) {
+    s32 continueProcessing = true;
     Racer* racer;
     CameraTypeLocalAnchor* localAnchor = &cameraSettings->localAnchor;
-    CameraScript* var_a1;
+    CameraScript* script;
 
-    while (var_s3) {
+    while (continueProcessing) {
 
-        var_s3 = false;
+        continueProcessing = false;
         switch (camera->state) {
-            case 0:
-                if (func_80719868(1)) {
-                    if (D_8009AD16 & 0x40) {
-                        var_s3 = true;
-                        camera->state = 2;
-                        Camera_SettingsSetLocalAnchor(cameraSettings, &D_807765E8.data);
+            case CAMERA_ENDING_DRIVE_INTO_CAMERA:
+                if (Camera_CheckEndingCameraMessage(ENDING_CAMERA_1)) {
+                    if (gEndingFlags & ENDING_NOT_ON_PODIUM) {
+                        continueProcessing = true;
+                        camera->state = CAMERA_ENDING_FIXED_FOCUS_RACER;
+                        Camera_SettingsSetLocalAnchor(cameraSettings, &kDefaultLocalAnchorData.data);
                         localAnchor = &cameraSettings->localAnchor;
                         localAnchor->targetLocalAt.x = localAnchor->targetLocalAt.y = localAnchor->targetLocalAt.z =
                             0.0f;
@@ -2983,91 +3230,95 @@ void Camera_UpdateEnding(Camera* camera, CameraSettings* cameraSettings, CameraS
                         localAnchor->targetLocalEye.y = 37.0f;
                         localAnchor->targetLocalEye.z = -132.0f;
                     } else {
-                        camera->state = 1;
+                        camera->state = CAMERA_ENDING_FOLLOW_RACER;
                         camera->timer = 0;
                         if (sCameraEndingFocusRacer == 0) {
-                            var_a1 = D_i7_800993D0;
+                            script = gEndingPosition1FocusScript;
                         } else if (sCameraEndingFocusRacer == 1) {
-                            var_a1 = D_i7_80099A60;
+                            script = gEndingPosition2FocusScript;
                         } else {
-                            var_a1 = D_i7_800996E0;
+                            script = gEndingPosition3FocusScript;
                         }
-                        Camera_ScriptSetScript(arg2, var_a1);
+                        Camera_ScriptSetScript(scriptMgr, script);
                         racer = &gRacers[sCameraEndingFocusRacer];
-                        func_80713FE4(&sCameraScriptMgrs[camera->id], &racer->focusPos, &racer->trueBasis, racer);
+                        Camera_ScriptSetRacerInfo(&sCameraScriptMgrs[camera->id], &racer->focusPos, &racer->trueBasis,
+                                                  racer);
                     }
                 }
                 break;
-            case 1:
-                if (Camera_ScriptUpdate(arg2)) {
-                    camera->state = 2;
+            case CAMERA_ENDING_FOLLOW_RACER:
+                if (Camera_ScriptUpdate(scriptMgr)) {
+                    camera->state = CAMERA_ENDING_FIXED_FOCUS_RACER;
                     localAnchor = &cameraSettings->localAnchor;
                     localAnchor->targetLocalAt.x = 0.0f;
                     localAnchor->targetLocalAt.y = 0.0f;
                     localAnchor->targetLocalAt.z = 0.0f;
                     localAnchor->targetLocalEye.x = 0.0f;
                     localAnchor->targetLocalEye.y = 37.0f;
-                    var_s3 = true;
-                    if (D_8009AD16 & 2) {
+                    continueProcessing = true;
+                    if (gEndingFlags & ENDING_SHOW_PODIUM_SEQUENCE) {
                         localAnchor->targetLocalEye.z = 132.0f;
                     } else {
                         localAnchor->targetLocalEye.z = -132.0f;
                     }
                 }
                 break;
-            case 2:
+            case CAMERA_ENDING_FIXED_FOCUS_RACER:
                 racer = &gRacers[sCameraEndingFocusRacer];
                 localAnchor = &cameraSettings->localAnchor;
                 localAnchor->basis = racer->trueBasis;
                 localAnchor->anchorPoint = racer->focusPos;
-                if (func_80719868(4)) {
-                    camera->state = 3;
+                if (Camera_CheckEndingCameraMessage(ENDING_CAMERA_PODIUM_P3)) {
+                    camera->state = CAMERA_ENDING_PODIUM_P3;
                     camera->timer = 0;
                     racer = &gRacers[2];
-                    func_80713FE4(&sCameraScriptMgrs[camera->id], &racer->focusPos, &racer->trueBasis, racer);
-                    Camera_ScriptSetScript(arg2, D_i7_8009A210);
+                    Camera_ScriptSetRacerInfo(&sCameraScriptMgrs[camera->id], &racer->focusPos, &racer->trueBasis,
+                                              racer);
+                    Camera_ScriptSetScript(scriptMgr, gEndingPodiumPosition3Script);
                 }
                 break;
-            case 3:
-                if (Camera_ScriptUpdate(arg2) && func_80719868(3)) {
-                    camera->state = 4;
+            case CAMERA_ENDING_PODIUM_P3:
+                if (Camera_ScriptUpdate(scriptMgr) && Camera_CheckEndingCameraMessage(ENDING_CAMERA_PODIUM_P2)) {
+                    camera->state = CAMERA_ENDING_PODIUM_P2;
                     camera->timer = 0;
                     racer = &gRacers[1];
-                    func_80713FE4(&sCameraScriptMgrs[camera->id], &racer->focusPos, &racer->trueBasis, racer);
-                    Camera_ScriptSetScript(arg2, D_i7_8009A090);
+                    Camera_ScriptSetRacerInfo(&sCameraScriptMgrs[camera->id], &racer->focusPos, &racer->trueBasis,
+                                              racer);
+                    Camera_ScriptSetScript(scriptMgr, gEndingPodiumPosition2Script);
                 }
                 break;
-            case 4:
-                if (Camera_ScriptUpdate(arg2) && func_80719868(2)) {
-                    camera->state = 5;
+            case CAMERA_ENDING_PODIUM_P2:
+                if (Camera_ScriptUpdate(scriptMgr) && Camera_CheckEndingCameraMessage(ENDING_CAMERA_PODIUM_P1)) {
+                    camera->state = CAMERA_ENDING_PODIUM_P1;
                     camera->timer = 0;
                     racer = &gRacers[0];
-                    func_80713FE4(&sCameraScriptMgrs[camera->id], &racer->focusPos, &racer->trueBasis, racer);
-                    Camera_ScriptSetScript(arg2, D_i7_80099F70);
+                    Camera_ScriptSetRacerInfo(&sCameraScriptMgrs[camera->id], &racer->focusPos, &racer->trueBasis,
+                                              racer);
+                    Camera_ScriptSetScript(scriptMgr, gEndingPodiumPosition1Script);
                 }
                 break;
-            case 5:
-                Camera_ScriptUpdate(arg2);
+            case CAMERA_ENDING_PODIUM_P1:
+                Camera_ScriptUpdate(scriptMgr);
                 break;
         }
     }
 }
 
-void func_8071985C(s32 arg0) {
-    D_807A1594 = arg0;
+void Camera_SendEndingCameraMessage(s32 msg) {
+    sEndingCameraMessage = msg;
 }
 
-bool func_80719868(s32 arg0) {
-    bool var_v1 = false;
+bool Camera_CheckEndingCameraMessage(s32 msg) {
+    bool matchingMsg = false;
 
-    if (arg0 == D_807A1594) {
-        var_v1 = true;
-        D_807A1594 = 0;
+    if (msg == sEndingCameraMessage) {
+        matchingMsg = true;
+        sEndingCameraMessage = 0;
     }
-    return var_v1;
+    return matchingMsg;
 }
 
-Gfx* func_80719890(Gfx* gfx) {
+Gfx* Camera_DrawCourseEditTestRun(Gfx* gfx) {
 
     gSPPerspNormalize(gfx++, gCameras[0].perspectiveScale);
     gSPMatrix(gfx++, &D_1000000.unk_1A208[gCameras[0].id], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);

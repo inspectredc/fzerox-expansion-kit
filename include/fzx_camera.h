@@ -71,6 +71,24 @@ typedef enum CameraCourseSelectState {
     /* 1 */ CAMERA_COURSE_SELECT_DISABLED,
 } CameraCourseSelectState;
 
+#define CAMERA_FINISHED_SUCCESS_STATE_COUNT 5
+
+typedef enum CameraEndingState {
+    /* 0 */ CAMERA_ENDING_DRIVE_INTO_CAMERA,
+    /* 1 */ CAMERA_ENDING_FOLLOW_RACER,
+    /* 2 */ CAMERA_ENDING_FIXED_FOCUS_RACER,
+    /* 3 */ CAMERA_ENDING_PODIUM_P3,
+    /* 4 */ CAMERA_ENDING_PODIUM_P2,
+    /* 5 */ CAMERA_ENDING_PODIUM_P1,
+} CameraEndingState;
+
+typedef enum EndingCameraMessage {
+    /* 1 */ ENDING_CAMERA_1 = 1,
+    /* 2 */ ENDING_CAMERA_PODIUM_P1,
+    /* 3 */ ENDING_CAMERA_PODIUM_P2,
+    /* 3 */ ENDING_CAMERA_PODIUM_P3,
+} EndingCameraMessage;
+
 typedef struct Camera {
     s32 id;
     s32 mode;
@@ -300,7 +318,7 @@ typedef struct SplineControlPointTimers {
 typedef struct CameraScript {
     s32 time;
     void* updateFunc;
-    void* updateData;
+    void* updateData; // can be a pointer or int
 } CameraScript; // size = 0xC
 
 typedef struct CameraScriptManager {
@@ -309,33 +327,38 @@ typedef struct CameraScriptManager {
     s32 timer;
     SplineControlPointTimers* controlPointTimers;
     Vec3f* focusPos;
-    Mtx3F* basis;
+    Mtx3F* racerBasis;
     Racer* racer;
     Vec3f* eyeAnchorPoint;
     Mtx3F* eyeBasis;
 } CameraScriptManager; // size = 0x24
 
-typedef struct unk_8076D6C8 {
-    f32 unk_00;
-    f32 unk_04;
-    f32 unk_08;
-} unk_8076D6C8; // size 0x4
+typedef enum FinishedSuccessScriptType {
+    /* 0 */ FINISHED_SUCCESS_FIXED_FOLLOW_RACER,
+    /* 1 */ FINISHED_SUCCESS_LERP_LOCAL_AT_EYE,
+} FinishedSuccessScriptType;
 
-typedef struct unk_800CD8B0 {
+typedef struct EyeFromRacerInfo {
+    f32 distanceAhead;
+    f32 lateralOffset;
+    f32 verticalOffset;
+} EyeFromRacerInfo; // size 0x4
+
+typedef struct LerpLocalAtEyeInfo {
     Vec3f startAt;
     Vec3f endAt;
     Vec3f startEye;
     Vec3f endEye;
     f32 atTranslationScale;
     f32 eyeTranslationScale;
-} unk_800CD8B0; // size 0x38
+} LerpLocalAtEyeInfo; // size 0x38
 
-typedef struct unk_800CD970 {
+typedef struct FinishedSuccessScript {
     s16 type;
     s16 time;
     f32 fov;
-    void* unk_08;
-} unk_800CD970; // size 0xC
+    void* data;
+} FinishedSuccessScript; // size 0xC
 
 typedef struct unk_800832EC_arg_2 {
     u32 unk_00;

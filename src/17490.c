@@ -805,7 +805,7 @@ void func_8070D858(void) {
 
 extern s32 gCupType;
 extern s32 gDifficulty;
-extern s16 D_8079FC7C;
+extern s16 gForceCredits;
 
 void func_8070D870(void) {
     s32 i;
@@ -859,7 +859,7 @@ void func_8070D870(void) {
             }
 
             if (var_v1) {
-                D_8079FC7C = 1;
+                gForceCredits = true;
             }
         }
     } else {
@@ -874,7 +874,7 @@ void func_8070D870(void) {
             }
 
             if (var_v1) {
-                D_8079FC7C = 1;
+                gForceCredits = true;
             }
         }
         Save_SaveSettingsProfiles();

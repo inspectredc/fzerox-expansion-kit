@@ -789,17 +789,17 @@ void func_i3_80062C84(Vtx* vtx, unk_80141FF0* arg1, Camera* camera, unk_80141860
 extern GfxPool D_1000000;
 extern Mtx D_2000000[];
 
-Gfx* func_i3_8006339C(Gfx* gfx, s32 playerIndex, s32 arg2) {
+Gfx* func_i3_8006339C(Gfx* gfx, s32 cameraIndex, s32 scissorBoxType) {
     CourseSkyboxes* spEC;
-    Camera* camera = &gCameras[playerIndex];
+    Camera* camera = &gCameras[cameraIndex];
 
     spEC = D_i3_8006D960.unk_04;
 
     gSPPerspNormalize(gfx++, camera->perspectiveScale);
 
-    gSPMatrix(gfx++, &D_1000000.unk_1A208[playerIndex], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
+    gSPMatrix(gfx++, &D_1000000.unk_1A208[cameraIndex], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
 
-    gfx = Camera_Draw(gfx, arg2, playerIndex);
+    gfx = Camera_Draw(gfx, scissorBoxType, cameraIndex);
     gSPDisplayList(gfx++, D_303A9E0);
 
     if (D_i3_8006D954 != 0) {
@@ -808,7 +808,7 @@ Gfx* func_i3_8006339C(Gfx* gfx, s32 playerIndex, s32 arg2) {
         gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, 204);
     }
     gSPMatrix(gfx++, D_2000000, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPVertex(gfx++, &D_1000000.unk_33B48[playerIndex * 28], 28, 0);
+    gSPVertex(gfx++, &D_1000000.unk_33B48[cameraIndex * 28], 28, 0);
 
     gDPLoadTextureBlock(gfx++, sSkyboxTexture, G_IM_FMT_RGBA, G_IM_SIZ_16b, 64, 1, 0, G_TX_NOMIRROR | G_TX_CLAMP,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
@@ -817,15 +817,15 @@ Gfx* func_i3_8006339C(Gfx* gfx, s32 playerIndex, s32 arg2) {
 
     if (D_i3_8006D968 & 1) {
         gSPDisplayList(gfx++, D_303AA18);
-        gfx = func_i3_80064CB4(gfx, playerIndex);
+        gfx = func_i3_80064CB4(gfx, cameraIndex);
     }
-    if (playerIndex == 0 && (D_i3_8006D956 != 0)) {
+    if (cameraIndex == 0 && (D_i3_8006D956 != 0)) {
         gfx = func_i3_8006436C(gfx);
         gSPMatrix(gfx++, D_2000000, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPVertex(gfx++, &D_1000000.unk_33B48[playerIndex * 28], 28, 0);
+        gSPVertex(gfx++, &D_1000000.unk_33B48[cameraIndex * 28], 28, 0);
     }
 
-    if (D_i3_8006D7D0[playerIndex].unk_04 < camera->eye.y) {
+    if (D_i3_8006D7D0[cameraIndex].unk_04 < camera->eye.y) {
         gSPDisplayList(gfx++, D_303AA40);
         gDPSetPrimColor(gfx++, 0, 0, spEC->unk_04, spEC->unk_05, spEC->unk_06, 0);
 
@@ -837,7 +837,7 @@ Gfx* func_i3_8006339C(Gfx* gfx, s32 playerIndex, s32 arg2) {
     }
 
     if (gGameMode == GAMEMODE_GP_END_CS) {
-        gfx = func_i7_80098650(gfx);
+        gfx = EndingCutsceneEffects_DrawFireworks(gfx);
         gSPClearGeometryMode(gfx++, 0xFFFFFFFF);
         gSPSetGeometryMode(gfx++, G_SHADE | G_SHADING_SMOOTH | G_CLIPPING);
         gSPTexture(gfx++, 0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON);
@@ -1213,7 +1213,7 @@ void func_i3_80064AD4(s32 arg0, unk_80141FF0* arg1, Camera* camera) {
     }
 }
 
-Gfx* func_i3_80064CB4(Gfx* gfx, s32 arg1) {
+Gfx* func_i3_80064CB4(Gfx* gfx, s32 cameraIndex) {
     unk_80142320* var_v0;
     s32 i;
     s32 xl;
@@ -1226,8 +1226,8 @@ Gfx* func_i3_80064CB4(Gfx* gfx, s32 arg1) {
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
     for (i = 0, var_v0 = D_i3_8006DB00; i < D_i3_8006EF50; i++, var_v0++) {
-        if (var_v0->unk_04[arg1] != 0) {
-            ptr = var_v0->unk_14[arg1];
+        if (var_v0->unk_04[cameraIndex] != 0) {
+            ptr = var_v0->unk_14[cameraIndex];
 
             gDPPipeSync(gfx++);
             gDPSetPrimColor(gfx++, 0, 0, var_v0->red, var_v0->green, var_v0->blue, var_v0->alpha);

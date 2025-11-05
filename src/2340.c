@@ -2,7 +2,7 @@
 #include "fzx_game.h"
 #include "fzx_course.h"
 
-s32 D_8076C7C0 = GAMEMODE_FLX_TITLE;
+s32 gPostEadDemoGameMode = GAMEMODE_FLX_TITLE;
 s32 D_8076C7C4 = 0;
 s32 gNumPlayers = 1;
 s32 gCupType = JACK_CUP;
@@ -137,7 +137,7 @@ void func_806F4BB4(void) {
     switch (gMenuChangeMode) {
         case MENU_CHANGE_RETRY:
             if (D_8076C7C4 != 0) {
-                D_8076C7C0 = GAMEMODE_TIME_ATTACK;
+                gPostEadDemoGameMode = GAMEMODE_TIME_ATTACK;
                 gGameModeChangeState = GAMEMODE_CHANGE_START;
                 gQueuedGameMode = GAMEMODE_EAD_DEMO;
                 D_8076C7C4 = 2;
@@ -147,7 +147,7 @@ void func_806F4BB4(void) {
             break;
         case MENU_CHANGE_QUIT:
             if (D_8076C7C4 != 0) {
-                D_8076C7C0 = GAMEMODE_FLX_TITLE;
+                gPostEadDemoGameMode = GAMEMODE_FLX_TITLE;
                 gGameModeChangeState = GAMEMODE_CHANGE_START;
                 gQueuedGameMode = GAMEMODE_EAD_DEMO;
                 D_8076C7C4 = 2;
@@ -158,7 +158,7 @@ void func_806F4BB4(void) {
             break;
         case MENU_CHANGE_CHANGE_COURSE:
             if (D_8076C7C4 != 0) {
-                D_8076C7C0 = GAMEMODE_FLX_COURSE_SELECT;
+                gPostEadDemoGameMode = GAMEMODE_FLX_COURSE_SELECT;
                 gGameModeChangeState = GAMEMODE_CHANGE_START;
                 gQueuedGameMode = GAMEMODE_EAD_DEMO;
                 D_8076C7C4 = 2;
@@ -169,7 +169,7 @@ void func_806F4BB4(void) {
             break;
         case MENU_CHANGE_CHANGE_MACHINE:
             if (D_8076C7C4 != 0) {
-                D_8076C7C0 = GAMEMODE_FLX_MACHINE_SELECT;
+                gPostEadDemoGameMode = GAMEMODE_FLX_MACHINE_SELECT;
                 gGameModeChangeState = GAMEMODE_CHANGE_START;
                 gQueuedGameMode = GAMEMODE_EAD_DEMO;
                 D_8076C7C4 = 2;
@@ -225,7 +225,7 @@ void func_806F4BB4(void) {
             break;
         case MENU_CHANGE_SETTINGS:
             if (D_8076C7C4 != 0) {
-                D_8076C7C0 = GAMEMODE_LX_MACHINE_SETTINGS;
+                gPostEadDemoGameMode = GAMEMODE_LX_MACHINE_SETTINGS;
                 gGameModeChangeState = GAMEMODE_CHANGE_START;
                 gQueuedGameMode = GAMEMODE_EAD_DEMO;
                 D_8076C7C4 = 2;
