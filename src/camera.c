@@ -3157,14 +3157,14 @@ void Camera_UpdateFinishedSpectate(Camera* camera, CameraSettings* cameraSetting
     orbit->anchorPos = racer->focusPos;
 
     switch (camera->state) {
-        case 0:
+        case CAMERA_FINISHED_SPECTATE_STILL_ON_RACER:
             if (++camera->timer >= 180) {
-                camera->state = 1;
+                camera->state = CAMERA_FINISHED_SPECTATE_ROTATE_AROUND_RACER;
                 camera->timer = 0;
                 orbit->distanceLerpFactor = 0.005f;
             }
             break;
-        case 1:
+        case CAMERA_FINISHED_SPECTATE_ROTATE_AROUND_RACER:
             if (++camera->timer >= 300) {
                 camera->timer = 0;
                 orbit->targetDistance = (Math_Rand1() % 451) + 50.0f;
