@@ -1380,7 +1380,7 @@ extern s32 D_xk2_800F7058;
 extern f32 D_xk2_80119744;
 
 extern CourseFeaturesInfo gCourseFeaturesInfo;
-extern s32 D_800D65C8;
+extern s32 gSegmentChunkCount;
 
 void func_xk1_8002860C(void) {
     func_xk2_800EF78C();
@@ -1402,7 +1402,7 @@ void func_xk1_8002860C(void) {
     }
     D_xk2_80104CA0[3] = 0;
     D_xk2_80104CA0[7] = 0;
-    D_800D65C8 = 0;
+    gSegmentChunkCount = 0;
     D_xk2_800F7058 = 0;
     D_xk2_80119744 = 0.0f;
     gPointOption = POINT_OPTION_SET;

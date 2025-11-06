@@ -95,6 +95,7 @@ typedef enum Courses {
     /* 53 */ COURSE_X_6,
     /* 54 */ COURSE_DEATH_RACE,
     /* 55 */ COURSE_ENDING,
+    /* 56 */ COURSE_MAX,
 } Courses;
 
 #define CREATOR_NINTENDO 4

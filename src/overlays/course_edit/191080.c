@@ -1568,7 +1568,7 @@ void func_xk2_800E5920(void) {
     }
 }
 
-extern s32 D_800D65C8;
+extern s32 gSegmentChunkCount;
 
 void func_xk2_800E5A38(s32 arg0) {
 
@@ -1578,7 +1578,7 @@ void func_xk2_800E5A38(s32 arg0) {
     if (D_xk2_800F7040 != 2) {
         D_xk2_80104CA0[3] = 0;
     }
-    if (D_800D65C8 >= 0x2FF) {
+    if (gSegmentChunkCount >= 0x2FF) {
         D_xk2_80104CA0[10] = 1;
     }
     if (gCurrentCourseInfo->length > 250000.0f) {
@@ -1620,7 +1620,7 @@ void func_xk2_800E5B6C(void) {
     if (gCurrentCourseInfo->segmentCount < 4) {
         D_xk2_800F7068 = -1;
         D_xk2_800F706C = -1;
-        D_800D65C8 = 0;
+        gSegmentChunkCount = 0;
         func_xk2_800E5D90(gCurrentCourseInfo);
         func_xk2_800E5A38(0);
     } else if (D_xk2_800F7040 != 0) {
@@ -1644,7 +1644,7 @@ void func_xk2_800E5B6C(void) {
         if (D_800D6CA0.unk_20 != -1) {
             D_xk2_800F7068 = -1;
             D_xk2_800F706C = -1;
-            D_800D65C8 = 0;
+            gSegmentChunkCount = 0;
             D_xk2_80104CA0[0] = 1;
             func_xk2_800E5D90(gCurrentCourseInfo);
             func_xk2_800E5A38(0);
@@ -1733,7 +1733,7 @@ void func_xk2_800E5D90(CourseInfo* courseInfo) {
 }
 
 extern Mtx3F D_80033840[];
-extern unk_36ED0 D_802BE5C0[];
+extern SegmentChunk D_802BE5C0[];
 
 void func_xk2_800E6270(CourseInfo* courseInfo) {
     s32 i;
@@ -1760,10 +1760,10 @@ void func_xk2_800E6270(CourseInfo* courseInfo) {
 
     while (true) {
         if (1) {}
-        if (var_s2->unk_3C == NULL) {
+        if (var_s2->startChunk == NULL) {
             break;
         }
-        var_s3 = var_s2->unk_3C - D_802BE5C0;
+        var_s3 = var_s2->startChunk - D_802BE5C0;
         D_80128690[var_s2->segmentIndex].unk_00 = D_xk2_800F7058;
         var_s1->pos = var_s2->pos;
         var_s1->unk_00 = var_s2->trackSegmentInfo;
@@ -1782,7 +1782,7 @@ void func_xk2_800E6270(CourseInfo* courseInfo) {
             var_s3++;
         }
         if (var_s2->segmentIndex != D_802BE5C0[var_s3].segmentIndex) {
-            var_s3 = (var_s3 + 1) % D_800D65C8;
+            var_s3 = (var_s3 + 1) % gSegmentChunkCount;
         }
         if ((var_s2->trackSegmentInfo & TRACK_SHAPE_MASK) == TRACK_SHAPE_AIR) {
 
@@ -1829,16 +1829,16 @@ void func_xk2_800E6270(CourseInfo* courseInfo) {
                 } else {
                     var_s1->unk_00 = var_s2->trackSegmentInfo;
                     var_s1->unk_04 = D_802BE5C0[var_s3].segmentTValue;
-                    var_s1->pos.x = D_802BE5C0[var_s3].unk_14.x;
-                    var_s1->pos.y = D_802BE5C0[var_s3].unk_14.y;
-                    var_s1->pos.z = D_802BE5C0[var_s3].unk_14.z;
+                    var_s1->pos.x = D_802BE5C0[var_s3].pos.x;
+                    var_s1->pos.y = D_802BE5C0[var_s3].pos.y;
+                    var_s1->pos.z = D_802BE5C0[var_s3].pos.z;
                     var_s1->basis = D_80033840[var_s3];
                 }
                 var_s1++;
                 var_s3++;
                 D_xk2_800F7058++;
 
-                if (D_800D65C8 < var_s3) {
+                if (gSegmentChunkCount < var_s3) {
                     D_8011C220[D_xk2_800F7058] = D_8011C220[D_xk2_800F7058 - 1];
                     D_80128690[var_s2->segmentIndex].unk_04 = D_xk2_800F7058;
                     break;
@@ -2587,8 +2587,8 @@ s32 func_xk2_800E9134(s32 arg0) {
     for (i = 0; i < D_807B3C20.controlPointCount; i++) {
         var_a0 = &D_807B3C20.unk_0000[i];
 
-        temp_lo = var_a0->unk_3C - D_802BE5C0;
-        temp_lo_2 = var_a0->unk_40 - D_802BE5C0;
+        temp_lo = var_a0->startChunk - D_802BE5C0;
+        temp_lo_2 = var_a0->endChunk - D_802BE5C0;
         if (temp_lo < temp_lo_2) {
             if ((arg0 >= temp_lo) && (arg0 < temp_lo_2)) {
                 var_v1 = i;
@@ -2646,7 +2646,7 @@ void func_xk2_800E93B0(Gfx** gfxP) {
     }
     gfx = *gfxP;
     if (D_xk2_800F7068 != -1) {
-        sp28 = D_802BE5C0[D_xk2_800F7068].unk_14;
+        sp28 = D_802BE5C0[D_xk2_800F7068].pos;
         if (func_xk2_800EF090(sp28, &sp38, &sp34) == 0) {
             func_xk2_800E92E4(&gfx, sp38, sp34);
         }
