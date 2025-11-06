@@ -305,7 +305,7 @@ extern s32 D_xk2_80104364;
 extern s32 D_xk2_80104368;
 extern s32 D_xk2_80104378;
 extern s32 D_xk1_80032C20;
-extern s32 D_800D65C8;
+extern s32 gSegmentChunkCount;
 extern u8 D_xk2_80104CA0[];
 
 void func_xk2_800F27DC(CourseInfo* courseInfo) {
@@ -354,7 +354,7 @@ void func_xk2_800F27DC(CourseInfo* courseInfo) {
                     D_xk2_80104364 = 1;
                     D_800D6CA0.unk_1C = func_xk2_800E9134(temp_v0 & 0xFFFF);
                 }
-                if (D_800D65C8 >= 0x2FF) {
+                if (gSegmentChunkCount >= 0x2FF) {
                     D_xk2_80104CA0[0xA] = 1;
                     D_xk2_80104368 = 1;
                 }
@@ -381,7 +381,7 @@ void func_xk2_800F27DC(CourseInfo* courseInfo) {
                     D_xk2_80104364 = 1;
                     D_800D6CA0.unk_1C = func_xk2_800E9134(temp_v0 & 0xFFFF);
                 }
-                if (D_800D65C8 >= 0x2FF) {
+                if (gSegmentChunkCount >= 0x2FF) {
                     D_xk2_80104CA0[0xA] = 1;
                     D_xk2_80104368 = 1;
                 }

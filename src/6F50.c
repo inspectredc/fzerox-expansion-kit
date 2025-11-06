@@ -191,7 +191,7 @@ extern Mtx D_2000000[];
 extern unk_800D6CA0 D_800D6CA0;
 extern s32 D_xk2_800F7034;
 extern s32 gCreateOption;
-extern unk_36ED0 D_802BE5C0[];
+extern SegmentChunk D_802BE5C0[];
 extern CourseDecoration gCourseDecorations[];
 extern CourseFeature gCourseFeatures[];
 extern EffectDrawData gEffectsDrawData[2][0xC0];
@@ -432,7 +432,7 @@ Gfx* Course_GadgetsDraw(Gfx* gfx, s32 arg1) {
                     for (k = 0; k < 15; k++) {
                         temp_t0 = k << 1;
                         tempVtx = &vtx[temp_t0];
-                        if (D_802BE5C0[D_8079E938[k + var_v1]].unk_10 == 0) {
+                        if (D_802BE5C0[D_8079E938[k + var_v1]].drawState == 0) {
                             continue;
                         }
                         if ((tempVtx[2].v.tc[1] < tempVtx[0].v.tc[1]) || (tempVtx[3].v.tc[1] < tempVtx[1].v.tc[1])) {
@@ -454,7 +454,7 @@ Gfx* Course_GadgetsDraw(Gfx* gfx, s32 arg1) {
                 for (k = 0; k < temp_s3; k++) {
                     temp_t0 = k << 1;
                     tempVtx = &vtx[temp_t0];
-                    if (D_802BE5C0[D_8079E938[k + var_v1]].unk_10 == 0) {
+                    if (D_802BE5C0[D_8079E938[k + var_v1]].drawState == 0) {
                         continue;
                     }
                     if ((tempVtx[2].v.tc[1] < tempVtx[0].v.tc[1]) || (tempVtx[3].v.tc[1] < tempVtx[1].v.tc[1])) {
@@ -550,7 +550,7 @@ Gfx* Course_GadgetsDraw(Gfx* gfx, s32 arg1) {
             if (!Course_FeatureIsDecorational(feature->featureType)) {
                 continue;
             }
-            if ((decoration->unk_34->unk_10 != 0) && (feature->featureType <= COURSE_FEATURE_SIGN_OVERHEAD)) {
+            if ((decoration->unk_34->drawState != 0) && (feature->featureType <= COURSE_FEATURE_SIGN_OVERHEAD)) {
                 gSPMatrix(gfx++, K0_TO_PHYS(decorationMtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                 gfx = sCourseDecorationDrawFuncs[feature->featureType](gfx);
             }
@@ -573,7 +573,7 @@ Gfx* Course_GadgetsDraw(Gfx* gfx, s32 arg1) {
                 continue;
             }
 
-            if ((decoration->unk_34->unk_10 != 0) && COURSE_FEATURE_IS_BUILDING(feature->featureType)) {
+            if ((decoration->unk_34->drawState != 0) && COURSE_FEATURE_IS_BUILDING(feature->featureType)) {
                 gSPMatrix(gfx++, K0_TO_PHYS(decorationMtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                 gfx = sCourseDecorationDrawFuncs[feature->featureType](gfx);
             }
@@ -716,11 +716,11 @@ void Course_JumpsViewInteractDataInit(void) {
     }
 }
 
-extern s32 D_800D65C8;
+extern s32 gSegmentChunkCount;
 
 void Course_DecorationsViewInteractDataInit(void) {
     CourseSegment* segment;
-    unk_36ED0* var_s1;
+    SegmentChunk* var_s1;
     CourseDecoration* decoration;
     s32 i;
     f32 lengthFromStart;
@@ -876,11 +876,11 @@ void Course_DecorationsViewInteractDataInit(void) {
 
         var_fs0 = 1e8f;
         var_s1 = D_802BE5C0;
-        for (j = 0; j < D_800D65C8; j++) {
+        for (j = 0; j < gSegmentChunkCount; j++) {
 
-            temp_fv0 = var_s1->unk_14.x - decoration->pos.x;
-            temp_fv1 = var_s1->unk_14.y - decoration->pos.y;
-            temp_fa0 = var_s1->unk_14.z - decoration->pos.z;
+            temp_fv0 = var_s1->pos.x - decoration->pos.x;
+            temp_fv1 = var_s1->pos.y - decoration->pos.y;
+            temp_fa0 = var_s1->pos.z - decoration->pos.z;
             temp_fa1 = SQ(temp_fv0) + SQ(temp_fv1) + SQ(temp_fa0);
             if (temp_fa1 < var_fs0) {
                 decoration->unk_34 = var_s1;
@@ -1110,7 +1110,7 @@ void func_806FCCE4(s32 arg0, s32 segmentIndex, f32 t) {
 
     //! @bug sp0 may not be initialised
     if (!gInCourseEditor || gInCourseEditTestRun) {
-        sp0 = D_800D65C8;
+        sp0 = gSegmentChunkCount;
     }
 
     while (true) {
@@ -1132,7 +1132,7 @@ f32 func_806FCE04(s32 segmentIndex, f32 t) {
     s32 sp0;
 
     i = 0;
-    sp0 = D_800D65C8;
+    sp0 = gSegmentChunkCount;
 
     do {
         if (segmentIndex == D_802BE5C0[i].segmentIndex) {
@@ -1156,7 +1156,7 @@ next:
 
         i++;
 
-        if (i == D_800D65C8) {
+        if (i == gSegmentChunkCount) {
             return 1.0f;
         }
 

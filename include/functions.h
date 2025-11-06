@@ -447,7 +447,7 @@ void func_i2_800B904C(void);
 void func_i2_800B91AC(s32);
 void Course_Init(void);
 void func_800B94D8(void);
-void func_i2_800B489C(unk_36ED0*, f32, f32, Mtx3F*, Vec3f*, Vec3f*, Vec3f*, Vec3f*, Vec3f*);
+void func_i2_800B489C(SegmentChunk*, f32, f32, Mtx3F*, Vec3f*, Vec3f*, Vec3f*, Vec3f*, Vec3f*);
 Gfx* func_i2_800BD7EC(Gfx*, Vtx*, s32);
 Gfx* func_i2_800BDAA4(Gfx* gfx);
 Gfx* func_i2_800BDE60(Gfx*, s32);
