@@ -287,10 +287,10 @@ u8 D_xk2_8010546C[] = {
 extern GfxPool* gGfxPool;
 extern unk_807B3C20 D_807B3C20;
 extern unk_800D6CA0 D_800D6CA0;
-extern Vtx* D_800D65D0;
+extern Vtx* gCourseVtxPtr;
 
 s32 func_xk2_800F2750(void) {
-    D_800D65D0 = gGfxPool->unk_1A308;
+    gCourseVtxPtr = gGfxPool->courseVtxBuffer;
     gCourseInfos->courseSegments = D_807B3C20.unk_0000;
     gCourseInfos->segmentCount = D_807B3C20.controlPointCount;
     if (D_800D6CA0.unk_20 == -1) {

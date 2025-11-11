@@ -200,7 +200,7 @@ void EndingCutscene_Init(void) {
 
     Course_Init();
     func_i3_80040158();
-    func_8071D48C();
+    Racer_Init();
     Camera_Init();
     func_8070F0B0(COURSE_CONTEXT()->courseData.venue, COURSE_CONTEXT()->courseData.skybox);
     func_i3_800617A0();
@@ -372,10 +372,10 @@ s32 EndingCutscene_Update(void) {
     Controller_SetGlobalInputs(&gSharedController);
     gPodiumDrawDataPtr = &gPodiumDrawData[D_8079A35C];
     Effects_Update();
-    func_80726554();
+    Racer_Update();
     Camera_Update();
     func_i3_80061C2C();
-    func_800B94D8();
+    Course_Update();
     func_8070304C();
     EndingCutsceneEffects_Update();
     if (sDrawThanksForPlaying) {
@@ -571,9 +571,9 @@ extern FrameBuffer* gFrameBuffers[];
 extern s32 D_8079A364;
 extern GfxPool* gGfxPool;
 extern GfxPool D_1000000;
-extern Vtx* D_800D65D0;
-extern Vtx* D_807A15DC;
-extern Vtx* D_807A15E0;
+extern Vtx* gCourseVtxPtr;
+extern Vtx* gEffectsVtxPtr;
+extern Vtx* gEffectsVtxEndPtr;
 
 Gfx* EndingCutscene_Draw(Gfx* gfx) {
 
@@ -596,11 +596,11 @@ Gfx* EndingCutscene_Draw(Gfx* gfx) {
     gDPPipeSync(gfx++);
     gDPSetColorImage(gfx++, G_IM_FMT_RGBA, G_IM_SIZ_16b, SCREEN_WIDTH, OS_PHYSICAL_TO_K0(gFrameBuffers[D_8079A364]));
 
-    D_800D65D0 = gGfxPool->unk_1A308;
-    D_807A15DC = gGfxPool->unk_2A308;
-    D_807A15E0 = &gGfxPool->unk_2A308[0x7FF];
+    gCourseVtxPtr = gGfxPool->courseVtxBuffer;
+    gEffectsVtxPtr = gGfxPool->effectsVtxBuffer;
+    gEffectsVtxEndPtr = &gGfxPool->effectsVtxBuffer[0x7FF];
     gfx = func_i3_8006339C(gfx, 0, SCISSOR_BOX_FULL_SCREEN);
-    gfx = func_i2_800BDE60(gfx, 0);
+    gfx = Course_Draw(gfx, 0);
     gfx = Course_GadgetsDraw(gfx, 0);
     gfx = EndingCutscene_DrawPodiums(gfx);
 
@@ -613,7 +613,7 @@ Gfx* EndingCutscene_Draw(Gfx* gfx) {
     gSPMatrix(gfx++, D_1000000.unk_1A208, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
 
     gfx = Camera_Draw(gfx, SCISSOR_BOX_FULL_SCREEN, 0);
-    gfx = func_80727F54(gfx, 0);
+    gfx = Racer_Draw(gfx, 0);
     gfx = EndingCutsceneEffects_DrawPodiumRacerCharacters(gfx);
     return EndingCutscene_DrawScrollingResults(gfx);
 }

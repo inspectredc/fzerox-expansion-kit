@@ -146,11 +146,11 @@ Gfx* func_xk2_800DF6FC(Gfx* gfx) {
         gDPPipelineMode(gfx++, G_PM_1PRIMITIVE);
         gDPSetTextureFilter(gfx++, G_TF_BILERP);
         gfx = func_i3_8006339C(gfx, 0, SCISSOR_BOX_FULL_SCREEN);
-        gfx = func_i2_800BDE60(gfx, 0);
+        gfx = Course_Draw(gfx, 0);
         gfx = Course_GadgetsDraw(gfx, 0);
         gSPLoadUcodeL(gfx++, gspF3DFLX2_Rej_fifo);
         func_xk2_800E1FC0(&gfx);
-        gfx = func_80727F54(gfx, 0);
+        gfx = Racer_Draw(gfx, 0);
         gSPLoadUcodeL(gfx++, gspF3DEX2_fifo);
         gSPMatrix(gfx++, D_2000000, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         func_xk2_800E1FC0(&gfx);
@@ -1733,7 +1733,7 @@ void func_xk2_800E5D90(CourseInfo* courseInfo) {
 }
 
 extern Mtx3F D_80033840[];
-extern SegmentChunk D_802BE5C0[];
+extern SegmentChunk gSegmentChunks[];
 
 void func_xk2_800E6270(CourseInfo* courseInfo) {
     s32 i;
@@ -1763,7 +1763,7 @@ void func_xk2_800E6270(CourseInfo* courseInfo) {
         if (var_s2->startChunk == NULL) {
             break;
         }
-        var_s3 = var_s2->startChunk - D_802BE5C0;
+        var_s3 = var_s2->startChunk - gSegmentChunks;
         D_80128690[var_s2->segmentIndex].unk_00 = D_xk2_800F7058;
         var_s1->pos = var_s2->pos;
         var_s1->unk_00 = var_s2->trackSegmentInfo;
@@ -1778,10 +1778,10 @@ void func_xk2_800E6270(CourseInfo* courseInfo) {
             break;
         }
 
-        if (D_802BE5C0[var_s3].segmentTValue == 0.0f) {
+        if (gSegmentChunks[var_s3].segmentTValue == 0.0f) {
             var_s3++;
         }
-        if (var_s2->segmentIndex != D_802BE5C0[var_s3].segmentIndex) {
+        if (var_s2->segmentIndex != gSegmentChunks[var_s3].segmentIndex) {
             var_s3 = (var_s3 + 1) % gSegmentChunkCount;
         }
         if ((var_s2->trackSegmentInfo & TRACK_SHAPE_MASK) == TRACK_SHAPE_AIR) {
@@ -1811,16 +1811,16 @@ void func_xk2_800E6270(CourseInfo* courseInfo) {
             }
         } else {
             while (true) {
-                if (var_s2->segmentIndex != D_802BE5C0[var_s3].segmentIndex) {
+                if (var_s2->segmentIndex != gSegmentChunks[var_s3].segmentIndex) {
                     break;
                 }
 
-                if (D_802BE5C0[var_s3].segmentTValue == 1.0f) {
+                if (gSegmentChunks[var_s3].segmentTValue == 1.0f) {
                     break;
                 }
 
                 if ((D_xk2_800F7058 == (D_80128690[var_s2->segmentIndex].unk_00 + 1)) &&
-                    (D_802BE5C0[var_s3].segmentTValue > 0.5f)) {
+                    (gSegmentChunks[var_s3].segmentTValue > 0.5f)) {
                     var_s1->unk_00 = var_s2->trackSegmentInfo;
                     var_s1->unk_04 = 0.5f;
                     Course_SplineGetPosition(var_s2, 0.5f, &var_s1->pos);
@@ -1828,10 +1828,10 @@ void func_xk2_800E6270(CourseInfo* courseInfo) {
                     var_s1->basis = sp78;
                 } else {
                     var_s1->unk_00 = var_s2->trackSegmentInfo;
-                    var_s1->unk_04 = D_802BE5C0[var_s3].segmentTValue;
-                    var_s1->pos.x = D_802BE5C0[var_s3].pos.x;
-                    var_s1->pos.y = D_802BE5C0[var_s3].pos.y;
-                    var_s1->pos.z = D_802BE5C0[var_s3].pos.z;
+                    var_s1->unk_04 = gSegmentChunks[var_s3].segmentTValue;
+                    var_s1->pos.x = gSegmentChunks[var_s3].pos.x;
+                    var_s1->pos.y = gSegmentChunks[var_s3].pos.y;
+                    var_s1->pos.z = gSegmentChunks[var_s3].pos.z;
                     var_s1->basis = D_80033840[var_s3];
                 }
                 var_s1++;
@@ -1904,8 +1904,8 @@ bool func_xk2_800E6B3C(void) {
         temp_a3 = var_s0->prev->trackSegmentInfo & TRACK_SHAPE_MASK;
         temp_a0 = var_s0->next->trackSegmentInfo & TRACK_SHAPE_MASK;
         temp_v0 = var_s0->trackSegmentInfo & TRACK_SHAPE_MASK;
-        temp_t1 = var_s0->prev->trackSegmentInfo & 0x10000000;
-        temp_t3 = var_s0->next->trackSegmentInfo & 0x10000000;
+        temp_t1 = var_s0->prev->trackSegmentInfo & TRACK_FLAG_JOINABLE;
+        temp_t3 = var_s0->next->trackSegmentInfo & TRACK_FLAG_JOINABLE;
 
         switch (var_s0->trackSegmentInfo & TRACK_SHAPE_MASK) {
             case TRACK_SHAPE_ROAD:
@@ -2587,8 +2587,8 @@ s32 func_xk2_800E9134(s32 arg0) {
     for (i = 0; i < D_807B3C20.controlPointCount; i++) {
         var_a0 = &D_807B3C20.unk_0000[i];
 
-        temp_lo = var_a0->startChunk - D_802BE5C0;
-        temp_lo_2 = var_a0->endChunk - D_802BE5C0;
+        temp_lo = var_a0->startChunk - gSegmentChunks;
+        temp_lo_2 = var_a0->endChunk - gSegmentChunks;
         if (temp_lo < temp_lo_2) {
             if ((arg0 >= temp_lo) && (arg0 < temp_lo_2)) {
                 var_v1 = i;
@@ -2646,7 +2646,7 @@ void func_xk2_800E93B0(Gfx** gfxP) {
     }
     gfx = *gfxP;
     if (D_xk2_800F7068 != -1) {
-        sp28 = D_802BE5C0[D_xk2_800F7068].pos;
+        sp28 = gSegmentChunks[D_xk2_800F7068].pos;
         if (func_xk2_800EF090(sp28, &sp38, &sp34) == 0) {
             func_xk2_800E92E4(&gfx, sp38, sp34);
         }

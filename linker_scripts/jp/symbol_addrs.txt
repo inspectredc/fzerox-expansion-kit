@@ -80,6 +80,8 @@ Fault_Init = 0x80710A60;
 Camera_CalculateProjectionViewMtx = 0x80713204;
 Camera_DrawCourseEditTestRun = 0x80719890;
 
+Racer_Draw = 0x80727F54;
+
 Audio_PlayerFinished = 0x80740B98;
 Audio_PlayerLevelSEStart = 0x80740BF8;
 Audio_PlayerLevelSEStop = 0x80740CE8;
@@ -232,6 +234,8 @@ gRaceIntroTimer = 0x807B15A8;
 gTotalRacers = 0x807A15D0;
 sLastRacer = 0x807A15D4;
 sRivalRacer = 0x807A15D8;
+gEffectsVtxPtr = 0x807A15DC;
+gEffectsVtxEndPtr = 0x807A15E0;
 gPlayerLives = 0x807A15E8;
 gPlayerEngine = 0x807A1600;
 D_807A1610 = 0x807A1610; // size:0x10
