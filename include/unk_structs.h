@@ -69,8 +69,8 @@ typedef struct CourseSegment {
     /* 0x30 */ s32 segmentIndex;
     /* 0x34 */ struct CourseSegment* next;
     /* 0x38 */ struct CourseSegment* prev;
-    /* 0x3C */ struct unk_36ED0* unk_3C;
-    /* 0x40 */ struct unk_36ED0* unk_40;
+    /* 0x3C */ struct SegmentChunk* startChunk;
+    /* 0x40 */ struct SegmentChunk* endChunk;
     /* 0x44 */ struct Jump* jumpsStart;
     /* 0x48 */ struct Jump* jumpsEnd;
     /* 0x4C */ struct Landmine* landminesStart;
@@ -107,30 +107,30 @@ typedef struct CourseInfo {
     /* 0xDC */ MachineInfo bestTimeMachine;
 } CourseInfo; // size = 0xF0
 
-typedef struct unk_36ED0 {
+typedef struct SegmentChunk {
     s32 trackSegmentInfo;
     s32 segmentIndex;
     f32 segmentTValue;
-    f32 unk_0C;
-    s32 unk_10;
-    Vec3f unk_14;
-    s16 unk_20[3];
-    s16 unk_26[3];
-    s16 unk_2C[3];
-    s16 unk_32[3];
-    s16 unk_38[3];
-    s16 unk_3E[3];
-    s16 unk_44[3];
-    s16 unk_4A[3];
-    s16 unk_50;
-    s16 unk_52;
-    s16 unk_54;
-    s16 unk_56;
-    s16 unk_58;
-    s16 unk_5A;
-    s16 unk_5C;
-    s16 unk_5E;
-} unk_36ED0; // size = 0x60
+    f32 depth;
+    bool drawState;
+    Vec3f pos;
+    s16 referencePos1[3];
+    s16 referencePos2[3];
+    s16 referencePos3[3];
+    s16 referencePos4[3];
+    s16 referencePos5[3];
+    s16 referencePos6[3];
+    s16 referencePos7[3];
+    s16 referencePos8[3];
+    s16 topTextureCoord;
+    s16 bottomTextureCoord;
+    s16 leftTextureCoord;
+    s16 rightTextureCoord;
+    s16 topTextureCorrection;
+    s16 bottomTextureCorrection;
+    s16 leftTextureCorrection;
+    s16 rightTextureCorrection;
+} SegmentChunk; // size = 0x60
 
 typedef struct Jump {
     Vec3f pos;
@@ -187,7 +187,7 @@ typedef struct CourseDecoration {
     Vec3f pos;
     Mtx3F basis;
     f32 scale;
-    struct unk_36ED0* unk_34;
+    struct SegmentChunk* loadChunk;
 } CourseDecoration; // size = 0x38
 
 typedef struct CourseEffectsInfo {

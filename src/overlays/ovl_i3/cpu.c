@@ -705,7 +705,7 @@ f32 D_i3_8006B218[] = {
     0.0f, 0.0f, 0.0f,  0.0f,  0.0f, 0.0f, 0.01f, 0.005f, 0.0f, 0.0f, 0.0f,  0.0f,
 };
 
-void func_i3_80040180(Racer* arg0) {
+void Cpu_InitRacer(Racer* racer) {
     f32 var_fa0;
     s32 padC0[7];
     s32 characterRacerIds[30];
@@ -716,7 +716,7 @@ void func_i3_80040180(Racer* arg0) {
     sPlayerRacer = gRacers;
     D_8006CFF0 = 0;
 
-    if (arg0->id == 0) {
+    if (racer->id == 0) {
         func_i3_8003FE64();
         if (gCourseIndex < COURSE_EDIT_1) {
             func_i2_800AE100(D_i3_80069DD8[gCourseIndex], 0x200 * sizeof(s16), D_i3_80069E70);
@@ -733,7 +733,7 @@ void func_i3_80040180(Racer* arg0) {
         }
 
         if (gGameMode == GAMEMODE_RECORDS) {
-            arg0->unk_1A8 = 0.5f;
+            racer->unk_1A8 = 0.5f;
         }
 
         if ((gCupType == X_CUP) || (gCupType == EDIT_CUP)) {
@@ -784,66 +784,66 @@ void func_i3_80040180(Racer* arg0) {
         sBloodFalconRacerId = characterRacerIds[BLOOD_FALCON];
     }
 
-    arg0->lastSegmentIndex = 0xFFFF;
-    arg0->unk_330 = 0.01f;
-    arg0->unk_334 = Math_Rand1() % 32768 / 32767.0f * 20.0f + 350.0f;
-    arg0->unk_338 = Math_Rand2() % 32768 / 32767.0f * 0.01f + 0.3f;
-    arg0->unk_354 = Math_Rand1() % 32768 / 32767.0f + 5.0f;
-    arg0->unk_340 = Math_Rand1() % 8 + 15;
-    arg0->unk_3A4 = 0;
-    arg0->unk_39C = 0;
-    arg0->unk_398 = 0;
-    arg0->unk_394 = 0;
-    arg0->driftingCounter = 0;
-    arg0->awarenessFlags = 0;
-    arg0->unk_384 = 0;
-    arg0->unk_1E8 = 0.0f;
-    arg0->unk_364 = 0.0f;
-    arg0->unk_360 = 0.0f;
-    arg0->unk_38C = 0.0f;
-    arg0->unk_3A0 = gTotalRacers;
-    arg0->unk_1EC = 2500.0f / 27.0f;
+    racer->lastSegmentIndex = 0xFFFF;
+    racer->unk_330 = 0.01f;
+    racer->unk_334 = Math_Rand1() % 32768 / 32767.0f * 20.0f + 350.0f;
+    racer->unk_338 = Math_Rand2() % 32768 / 32767.0f * 0.01f + 0.3f;
+    racer->unk_354 = Math_Rand1() % 32768 / 32767.0f + 5.0f;
+    racer->unk_340 = Math_Rand1() % 8 + 15;
+    racer->unk_3A4 = 0;
+    racer->unk_39C = 0;
+    racer->unk_398 = 0;
+    racer->unk_394 = 0;
+    racer->driftingCounter = 0;
+    racer->awarenessFlags = 0;
+    racer->unk_384 = 0;
+    racer->unk_1E8 = 0.0f;
+    racer->unk_364 = 0.0f;
+    racer->unk_360 = 0.0f;
+    racer->unk_38C = 0.0f;
+    racer->unk_3A0 = gTotalRacers;
+    racer->unk_1EC = 2500.0f / 27.0f;
 
     if (gGameMode == GAMEMODE_GP_RACE) {
-        arg0->unk_360 = D_i3_8006B1B8[D_i3_8006AD90[arg0->character].unk_02 * 4 + gDifficulty];
-        arg0->unk_364 = D_i3_8006B218[D_i3_8006AD90[arg0->character].unk_02 * 4 + gDifficulty] + arg0->unk_360;
+        racer->unk_360 = D_i3_8006B1B8[D_i3_8006AD90[racer->character].unk_02 * 4 + gDifficulty];
+        racer->unk_364 = D_i3_8006B218[D_i3_8006AD90[racer->character].unk_02 * 4 + gDifficulty] + racer->unk_360;
     }
 
-    arg0->unk_370 = 0;
-    arg0->unk_33C = ((arg0->segmentBasis.z.x * arg0->segmentPositionInfo.segmentDisplacement.x) +
-                     (arg0->segmentBasis.z.y * arg0->segmentPositionInfo.segmentDisplacement.y) +
-                     (arg0->segmentBasis.z.z * arg0->segmentPositionInfo.segmentDisplacement.z)) *
-                    -1.0f;
-    arg0->unk_340 = Math_Rand2() % 2 + 1;
+    racer->unk_370 = 0;
+    racer->unk_33C = ((racer->segmentBasis.z.x * racer->segmentPositionInfo.segmentDisplacement.x) +
+                      (racer->segmentBasis.z.y * racer->segmentPositionInfo.segmentDisplacement.y) +
+                      (racer->segmentBasis.z.z * racer->segmentPositionInfo.segmentDisplacement.z)) *
+                     -1.0f;
+    racer->unk_340 = Math_Rand2() % 2 + 1;
 
-    arg0->awarenessFlags = D_i3_8006AD90[arg0->character].unk_00;
+    racer->awarenessFlags = D_i3_8006AD90[racer->character].unk_00;
 
-    if (D_i3_8006AD90[arg0->character].unk_02 < 2) {
-        arg0->awarenessFlags |= 0x200;
+    if (D_i3_8006AD90[racer->character].unk_02 < 2) {
+        racer->awarenessFlags |= 0x200;
     }
 
-    arg0->lastButtonsCurrent = 0;
-    arg0->lastButtonsPressed = 0;
-    arg0->lastStickY = 0;
-    arg0->lastStickX = 0;
+    racer->lastButtonsCurrent = 0;
+    racer->lastButtonsPressed = 0;
+    racer->lastStickY = 0;
+    racer->lastStickX = 0;
 
     if (gGameMode == GAMEMODE_GP_END_CS) {
-        arg0->unk_1A8 = func_8071A2C8(0.1f);
-        arg0->unk_1EC = 2500.0f / 27.0f;
-        arg0->unk_1E8 = 0.0f;
-        arg0->unk_330 = 0.01f;
-        arg0->unk_334 = Math_Rand1() % 32768 / 32767.0f * 20.0f + 500.0f;
+        racer->unk_1A8 = func_8071A2C8(0.1f);
+        racer->unk_1EC = 2500.0f / 27.0f;
+        racer->unk_1E8 = 0.0f;
+        racer->unk_330 = 0.01f;
+        racer->unk_334 = Math_Rand1() % 32768 / 32767.0f * 20.0f + 500.0f;
     }
 
     // If CPU racer
-    if (arg0->id >= gNumPlayers) {
+    if (racer->id >= gNumPlayers) {
         if ((gCupType < X_CUP) || (gCupType == DD_1_CUP) || (gCupType == DD_2_CUP)) {
-            if (gTotalRacers >= arg0->unk_368) {
-                arg0->unk_39C = D_i3_8006A850[gCourseIndex * 4 + gDifficulty] +
-                                D_i3_8006AAF0[gCourseIndex * 4 + gDifficulty] * (arg0->unk_368 - 1);
+            if (gTotalRacers >= racer->unk_368) {
+                racer->unk_39C = D_i3_8006A850[gCourseIndex * 4 + gDifficulty] +
+                                 D_i3_8006AAF0[gCourseIndex * 4 + gDifficulty] * (racer->unk_368 - 1);
             }
         }
-        if ((sPlayerRacer->position == arg0->position - 4) || (sPlayerRacer->position == (arg0->position + 4)) ||
+        if ((sPlayerRacer->position == racer->position - 4) || (sPlayerRacer->position == (racer->position + 4)) ||
             (gNumPlayers >= 2)) {
             var_fa0 = sPlayerRacer->unk_1A8;
             if (var_fa0 > 0.95f) {
@@ -852,7 +852,7 @@ void func_i3_80040180(Racer* arg0) {
             if (var_fa0 < 0.0f) {
                 var_fa0 = 0.0f;
             }
-            arg0->unk_1A8 = var_fa0;
+            racer->unk_1A8 = var_fa0;
         } else if ((gDifficulty == MASTER) && (D_i3_8006AF34[gCourseIndex] != 0) || (gCupType == EDIT_CUP)) {
             var_fa0 = (Math_Rand1() % 256 / 255.0f + 10.0f) / 14.0f;
             if (var_fa0 > 0.95f) {
@@ -861,7 +861,7 @@ void func_i3_80040180(Racer* arg0) {
             if (var_fa0 < 0.0f) {
                 var_fa0 = 0.0f;
             }
-            arg0->unk_1A8 = func_8071A2C8(var_fa0);
+            racer->unk_1A8 = func_8071A2C8(var_fa0);
         } else {
             var_fa0 = sPlayerRacer->unk_1A8;
             var_fa0 += Math_Rand2() % 32768 / 32767.0f * 0.2f - 0.1f;
@@ -871,21 +871,21 @@ void func_i3_80040180(Racer* arg0) {
             if (var_fa0 < 0.0f) {
                 var_fa0 = 0.0f;
             }
-            arg0->unk_1A8 = var_fa0;
+            racer->unk_1A8 = var_fa0;
         }
         if (gCourseIndex == COURSE_FIRE_FIELD) {
-            if (arg0->unk_1A8 > 0.8f) {
-                arg0->unk_1A8 = 0.8f;
+            if (racer->unk_1A8 > 0.8f) {
+                racer->unk_1A8 = 0.8f;
             }
-            if (arg0->unk_1A8 < 0.6f) {
-                arg0->unk_1A8 = 0.6f;
+            if (racer->unk_1A8 < 0.6f) {
+                racer->unk_1A8 = 0.6f;
             }
         }
         if (gGameMode == GAMEMODE_DEATH_RACE) {
-            arg0->unk_1A8 = (Math_Rand1() % 256 / 255.0f) * 0.2f;
+            racer->unk_1A8 = (Math_Rand1() % 256 / 255.0f) * 0.2f;
         }
-        arg0->unk_1EC = 2500.0f / 27.0f;
-        arg0->unk_1E8 = 0.0f;
+        racer->unk_1EC = 2500.0f / 27.0f;
+        racer->unk_1E8 = 0.0f;
     }
 }
 

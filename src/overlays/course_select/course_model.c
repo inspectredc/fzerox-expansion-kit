@@ -136,7 +136,7 @@ Gfx* func_i5_800774F0(Gfx* gfx) {
                 continue;
             }
             gSPViewport(gfx++, &D_i5_8007AFB0[D_8079A35C][i]);
-            gfx = func_i2_800BD7EC(gfx, &D_i5_8007C290[i * 0x900], D_8007C270[i]);
+            gfx = Course_DrawModel(gfx, &D_i5_8007C290[i * 0x900], D_8007C270[i]);
         }
     }
     return gfx;

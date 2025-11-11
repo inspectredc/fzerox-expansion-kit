@@ -167,7 +167,7 @@ void Records_Init(void) {
     }
 
     func_i3_80040158();
-    func_8071D48C();
+    Racer_Init();
     Camera_Init();
     func_8070F0B0(COURSE_CONTEXT()->courseData.venue, COURSE_CONTEXT()->courseData.skybox);
     func_i3_800617A0();
@@ -347,10 +347,10 @@ s32 Records_Update(void) {
     Controller_SetGlobalInputs(&gSharedController);
     sGhostMarkerRenderInfo = &sGhostMarkerRenderInfos[D_8079A35C];
     func_8070D220();
-    func_80726554();
+    Racer_Update();
     Camera_Update();
     func_i3_80061C2C();
-    func_800B94D8();
+    Course_Update();
     func_8070304C();
     if (sGhostMarkerState != GHOST_MARKER_NONE) {
         Records_UpdateGhostMarker();
@@ -412,7 +412,7 @@ s32 Records_Update(void) {
             break;
         case 0:
             sRecordsRetireCleanupTimer = -1;
-            func_8071D48C();
+            Racer_Init();
             Camera_Init();
             break;
         default:
@@ -719,9 +719,9 @@ void Records_State3Update(void) {
 
 extern FrameBuffer* gFrameBuffers[];
 extern s32 D_8079A364;
-extern Vtx* D_807A15DC;
-extern Vtx* D_807A15E0;
-extern Vtx* D_800D65D0;
+extern Vtx* gEffectsVtxPtr;
+extern Vtx* gEffectsVtxEndPtr;
+extern Vtx* gCourseVtxPtr;
 extern GfxPool* gGfxPool;
 extern Gfx D_8076CE28[];
 
@@ -746,11 +746,11 @@ Gfx* Records_Draw(Gfx* gfx) {
     gDPPipeSync(gfx++);
     gDPSetColorImage(gfx++, G_IM_FMT_RGBA, G_IM_SIZ_16b, SCREEN_WIDTH, OS_PHYSICAL_TO_K0(gFrameBuffers[D_8079A364]));
 
-    D_800D65D0 = gGfxPool->unk_1A308;
-    D_807A15DC = gGfxPool->unk_2A308;
-    D_807A15E0 = &gGfxPool->unk_2A308[0x7FF];
+    gCourseVtxPtr = gGfxPool->courseVtxBuffer;
+    gEffectsVtxPtr = gGfxPool->effectsVtxBuffer;
+    gEffectsVtxEndPtr = &gGfxPool->effectsVtxBuffer[0x7FF];
     gfx = func_i3_8006339C(gfx, 0, SCISSOR_BOX_FULL_SCREEN);
-    gfx = func_i2_800BDE60(gfx, 0);
+    gfx = Course_Draw(gfx, 0);
     gfx = Course_GadgetsDraw(gfx, 0);
     gfx = func_i3_80065560(gfx, sRecordsCourseIndex);
     if (sGhostMarkerState != GHOST_MARKER_NONE) {

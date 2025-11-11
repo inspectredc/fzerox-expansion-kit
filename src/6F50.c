@@ -191,7 +191,7 @@ extern Mtx D_2000000[];
 extern unk_800D6CA0 D_800D6CA0;
 extern s32 D_xk2_800F7034;
 extern s32 gCreateOption;
-extern unk_36ED0 D_802BE5C0[];
+extern SegmentChunk gSegmentChunks[];
 extern CourseDecoration gCourseDecorations[];
 extern CourseFeature gCourseFeatures[];
 extern EffectDrawData gEffectsDrawData[2][0xC0];
@@ -432,7 +432,7 @@ Gfx* Course_GadgetsDraw(Gfx* gfx, s32 arg1) {
                     for (k = 0; k < 15; k++) {
                         temp_t0 = k << 1;
                         tempVtx = &vtx[temp_t0];
-                        if (D_802BE5C0[D_8079E938[k + var_v1]].unk_10 == 0) {
+                        if (gSegmentChunks[D_8079E938[k + var_v1]].drawState == 0) {
                             continue;
                         }
                         if ((tempVtx[2].v.tc[1] < tempVtx[0].v.tc[1]) || (tempVtx[3].v.tc[1] < tempVtx[1].v.tc[1])) {
@@ -454,7 +454,7 @@ Gfx* Course_GadgetsDraw(Gfx* gfx, s32 arg1) {
                 for (k = 0; k < temp_s3; k++) {
                     temp_t0 = k << 1;
                     tempVtx = &vtx[temp_t0];
-                    if (D_802BE5C0[D_8079E938[k + var_v1]].unk_10 == 0) {
+                    if (gSegmentChunks[D_8079E938[k + var_v1]].drawState == 0) {
                         continue;
                     }
                     if ((tempVtx[2].v.tc[1] < tempVtx[0].v.tc[1]) || (tempVtx[3].v.tc[1] < tempVtx[1].v.tc[1])) {
@@ -550,7 +550,7 @@ Gfx* Course_GadgetsDraw(Gfx* gfx, s32 arg1) {
             if (!Course_FeatureIsDecorational(feature->featureType)) {
                 continue;
             }
-            if ((decoration->unk_34->unk_10 != 0) && (feature->featureType <= COURSE_FEATURE_SIGN_OVERHEAD)) {
+            if ((decoration->loadChunk->drawState != 0) && (feature->featureType <= COURSE_FEATURE_SIGN_OVERHEAD)) {
                 gSPMatrix(gfx++, K0_TO_PHYS(decorationMtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                 gfx = sCourseDecorationDrawFuncs[feature->featureType](gfx);
             }
@@ -573,7 +573,7 @@ Gfx* Course_GadgetsDraw(Gfx* gfx, s32 arg1) {
                 continue;
             }
 
-            if ((decoration->unk_34->unk_10 != 0) && COURSE_FEATURE_IS_BUILDING(feature->featureType)) {
+            if ((decoration->loadChunk->drawState != 0) && COURSE_FEATURE_IS_BUILDING(feature->featureType)) {
                 gSPMatrix(gfx++, K0_TO_PHYS(decorationMtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                 gfx = sCourseDecorationDrawFuncs[feature->featureType](gfx);
             }
@@ -716,22 +716,22 @@ void Course_JumpsViewInteractDataInit(void) {
     }
 }
 
-extern s32 D_800D65C8;
+extern s32 gSegmentChunkCount;
 
 void Course_DecorationsViewInteractDataInit(void) {
     CourseSegment* segment;
-    unk_36ED0* var_s1;
+    SegmentChunk* chunk;
     CourseDecoration* decoration;
     s32 i;
     f32 lengthFromStart;
     s32 j;
-    f32 temp_fv0;
-    f32 temp_fv1;
-    f32 temp_fa0;
-    f32 temp_fa1;
+    f32 xDist;
+    f32 yDist;
+    f32 zDist;
+    f32 sqDist;
     s32 pad[2];
     CourseFeaturesInfo* featuresInfo;
-    f32 var_fs0;
+    f32 closestDist;
     CourseFeature* feature;
     f32 lengthProportionAlongSegment;
     Mtx* mtx;
@@ -874,19 +874,19 @@ void Course_DecorationsViewInteractDataInit(void) {
         }
         mtx++;
 
-        var_fs0 = 1e8f;
-        var_s1 = D_802BE5C0;
-        for (j = 0; j < D_800D65C8; j++) {
+        closestDist = 100000000.0f;
+        chunk = gSegmentChunks;
+        for (j = 0; j < gSegmentChunkCount; j++) {
 
-            temp_fv0 = var_s1->unk_14.x - decoration->pos.x;
-            temp_fv1 = var_s1->unk_14.y - decoration->pos.y;
-            temp_fa0 = var_s1->unk_14.z - decoration->pos.z;
-            temp_fa1 = SQ(temp_fv0) + SQ(temp_fv1) + SQ(temp_fa0);
-            if (temp_fa1 < var_fs0) {
-                decoration->unk_34 = var_s1;
-                var_fs0 = temp_fa1;
+            xDist = chunk->pos.x - decoration->pos.x;
+            yDist = chunk->pos.y - decoration->pos.y;
+            zDist = chunk->pos.z - decoration->pos.z;
+            sqDist = SQ(xDist) + SQ(yDist) + SQ(zDist);
+            if (sqDist < closestDist) {
+                decoration->loadChunk = chunk;
+                closestDist = sqDist;
             }
-            var_s1++;
+            chunk++;
         }
         decoration++;
     }
@@ -1110,16 +1110,16 @@ void func_806FCCE4(s32 arg0, s32 segmentIndex, f32 t) {
 
     //! @bug sp0 may not be initialised
     if (!gInCourseEditor || gInCourseEditTestRun) {
-        sp0 = D_800D65C8;
+        sp0 = gSegmentChunkCount;
     }
 
     while (true) {
         temp_v0 = (i - 1 + sp0) % sp0;
 
-        if ((D_802BE5C0[temp_v0].segmentIndex < segmentIndex ||
-             (segmentIndex == D_802BE5C0[temp_v0].segmentIndex && D_802BE5C0[temp_v0].segmentTValue <= t)) &&
-            (segmentIndex < D_802BE5C0[i].segmentIndex ||
-             (segmentIndex == D_802BE5C0[i].segmentIndex && t < D_802BE5C0[i].segmentTValue))) {
+        if ((gSegmentChunks[temp_v0].segmentIndex < segmentIndex ||
+             (segmentIndex == gSegmentChunks[temp_v0].segmentIndex && gSegmentChunks[temp_v0].segmentTValue <= t)) &&
+            (segmentIndex < gSegmentChunks[i].segmentIndex ||
+             (segmentIndex == gSegmentChunks[i].segmentIndex && t < gSegmentChunks[i].segmentTValue))) {
             break;
         }
         i++;
@@ -1132,10 +1132,10 @@ f32 func_806FCE04(s32 segmentIndex, f32 t) {
     s32 sp0;
 
     i = 0;
-    sp0 = D_800D65C8;
+    sp0 = gSegmentChunkCount;
 
     do {
-        if (segmentIndex == D_802BE5C0[i].segmentIndex) {
+        if (segmentIndex == gSegmentChunks[i].segmentIndex) {
             goto next;
         }
         i++;
@@ -1150,22 +1150,22 @@ f32 func_806FCE04(s32 segmentIndex, f32 t) {
 next:
     while (true) {
 
-        if (segmentIndex == D_802BE5C0[i].segmentIndex && t < D_802BE5C0[i].segmentTValue) {
+        if (segmentIndex == gSegmentChunks[i].segmentIndex && t < gSegmentChunks[i].segmentTValue) {
             break;
         }
 
         i++;
 
-        if (i == D_800D65C8) {
+        if (i == gSegmentChunkCount) {
             return 1.0f;
         }
 
-        if (segmentIndex != D_802BE5C0[i].segmentIndex) {
+        if (segmentIndex != gSegmentChunks[i].segmentIndex) {
             return 1.0f;
         }
     }
 
-    return D_802BE5C0[i].segmentTValue;
+    return gSegmentChunks[i].segmentTValue;
 }
 
 f32 sDashScaleForward = 150.0f;
@@ -1508,7 +1508,8 @@ Vtx* Course_TerrainEffectVerticesInitFromStorage(CourseSegment* segment, CourseE
     f32 rightEdgeDistance;
     f32 leftEdgeDistance;
     s32 textureUnit;
-    Vec3f spFC;
+    s32 pad2[2];
+    f32 spFC;
     f32 radiusLeft;
     f32 radiusRight;
     f32 radius;
