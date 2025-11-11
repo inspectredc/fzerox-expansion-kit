@@ -10,8 +10,8 @@
 s32 gTotalRacers;
 Racer* sLastRacer;
 Racer* sRivalRacer;
-Vtx* D_807A15DC;
-Vtx* D_807A15E0;
+Vtx* gEffectsVtxPtr;
+Vtx* gEffectsVtxEndPtr;
 s16 gPlayerLives[4];
 s16 gPlayerCharacters[4];
 s16 gPlayerMachineSkins[4];
@@ -510,7 +510,7 @@ u8 D_8076F2FC[] = {
     BGM_RAINBOW_ROAD, BGM_DEVILS_FOREST, BGM_RED_CANYON,    BGM_SAND_OCEAN,    BGM_PORT_TOWN,  BGM_WHITE_LAND,
 };
 
-s32 func_80719910(s32 position) {
+s32 Racer_GetRacerIdFromPosition(s32 position) {
     s32 i;
 
     for (i = 0; i < gTotalRacers; i++) {
@@ -525,8 +525,7 @@ extern s32 gNumPlayers;
 extern s32 gGameMode;
 extern s8 gTitleDemoState;
 
-// Set up racer positions before the start line
-void func_80719958(void) {
+void Racer_SetupStartPositions(void) {
     f32 t;
     f32 height;
     f32 var_fs1;
@@ -560,7 +559,7 @@ void func_80719958(void) {
     }
 
     for (j = 1; j <= gTotalRacers; j++) {
-        index = func_80719910(j);
+        index = Racer_GetRacerIdFromPosition(j);
         racer = &gRacers[index];
         racer->segmentPositionInfo.courseSegment = racerStartSegment;
         racer->segmentPositionInfo.segmentTValue = t;
@@ -625,8 +624,7 @@ void func_80719958(void) {
     }
 }
 
-// Set new rival racer
-void func_80719D70(void) {
+void Racer_UpdateRivalRacer(void) {
     s16 temp_a0;
     s16 temp_a1;
     s32 var_a2;
@@ -690,8 +688,7 @@ void func_80719D70(void) {
     sRivalRacer = var_v0;
 }
 
-// Increase life
-void func_80719EDC(s32 playerIndex) {
+void Racer_IncreaseLife(s32 playerIndex) {
 
     gPlayerLives[playerIndex]++;
 
@@ -703,8 +700,7 @@ void func_80719EDC(s32 playerIndex) {
     D_807B37D4 = 0;
 }
 
-// Decrease life
-void func_80719F38(s32 playerIndex) {
+void Racer_DecreaseLife(s32 playerIndex) {
 
     if (--gPlayerLives[playerIndex] >= 0) {
         func_i3_TriggerLivesDecrease();
@@ -715,8 +711,7 @@ void func_80719F38(s32 playerIndex) {
     D_807B37D4 = 0;
 }
 
-// Retire racer
-void func_80719F9C(Racer* racer) {
+void Racer_RetireRacer(Racer* racer) {
 
     if (!(racer->stateFlags & (RACER_STATE_FINISHED | RACER_STATE_RETIRED))) {
         racer->stateFlags |= RACER_STATE_RETIRED;
@@ -742,14 +737,13 @@ void func_80719F9C(Racer* racer) {
                 D_807B37D4 = -1;
             }
             if (racer == sRivalRacer) {
-                func_80719D70();
+                Racer_UpdateRivalRacer();
             }
         }
     }
 }
 
-// Stop racer sfx
-void func_8071A17C(Racer* racer) {
+void Racer_StopRacerSfx(Racer* racer) {
 
     if (gEnableRaceSfx) {
         if (racer->soundEffectFlags & RACER_SE_FLAGS_PIT) {
@@ -1058,7 +1052,7 @@ void func_8071A88C(void) {
     }
 }
 
-void func_8071B634(void) {
+void Racer_UpdateRacePositions(void) {
     Racer* activeRacer;
     Racer* finishedRacer;
     s32 bestRaceTime;
@@ -1130,7 +1124,7 @@ void func_8071B748(void) {
             racer->stateFlags &= ~RACER_STATE_ACTIVE;
             racer->stateFlags |= RACER_STATE_CRASHED;
             D_807A16D0++;
-            func_80719F9C(racer);
+            Racer_RetireRacer(racer);
             racer->raceTime = 0;
         } else {
             racer->stateFlags |= RACER_STATE_FINISHED;
@@ -1171,7 +1165,7 @@ void func_8071B748(void) {
             }
         }
     }
-    func_8071B634();
+    Racer_UpdateRacePositions();
     if ((gGameMode == GAMEMODE_GP_RACE) && (gRacers[0].stateFlags & RACER_STATE_FINISHED)) {
         var_v1 = gTotalRacers - 1;
         while (var_v1 >= 0) {
@@ -1189,7 +1183,7 @@ void func_8071B748(void) {
     }
 }
 
-void func_8071B9F4(void) {
+void Racer_UpdateRacerPairInfo(void) {
     Racer* racer1;
     Racer* racer2;
     f32 closestDistanceBehind;
@@ -1328,7 +1322,7 @@ void func_8071B9F4(void) {
     closestRacerBehind->distanceFromRacerBehind = closestDistanceBehind;
 }
 
-void func_8071BE0C(void) {
+void Racer_UpdateNearestRacer(void) {
     s32 i;
     f32 closestDistance;
 
@@ -1375,7 +1369,7 @@ s32 func_8071BEF8(MachineInfo* arg0, MachineInfo* arg1) {
     return 0;
 }
 
-f32 func_8071BF94(Racer* racer, f32 arg1) {
+f32 Racer_InitMachineStats(Racer* racer, f32 arg1) {
     Machine* temp_a1;
     f32 temp_fs0;
     f32 temp_fv0;
@@ -1506,7 +1500,7 @@ f32 func_8071BF94(Racer* racer, f32 arg1) {
     return temp_ret;
 }
 
-void func_8071CE08(Racer* racer) {
+void Racer_InitRacer(Racer* racer) {
     s32 pad[4];
     f32 temp;
     f32 temp_fv0_4;
@@ -1600,7 +1594,7 @@ void func_8071CE08(Racer* racer) {
     racer->collidingStrength = racer->collidingStrength * (temp = racer->collidingStrength);
 
     for (i = 0; i < 2;) {
-        temp_fv0_4 = func_8071BF94(racer, racer->unk_1A8);
+        temp_fv0_4 = Racer_InitMachineStats(racer, racer->unk_1A8);
         if (temp_fv0_4 == var_fs0) {
             i++;
         } else {
@@ -1634,14 +1628,14 @@ extern GfxPool D_8024E260[];
 extern s16 gRacerPositionsById[];
 extern s16 gPlayer1OverallPosition;
 
-void func_8071D48C(void) {
+void Racer_Init(void) {
     s32 i;
     s32 j;
     s32 var_a3;
     s32 var_t0;
     Racer* racer;
     GhostRacer* ghostRacer;
-    MachineInfo sp6C;
+    MachineInfo machineInfo;
     OSMesg sp68;
 
     sPipeFogColors = &sVenuePipeFogColors[COURSE_CONTEXT()->courseData.venue * PIPE_MAX];
@@ -1735,15 +1729,15 @@ void func_8071D48C(void) {
     } else {
         D_807B37B4 = 5.0f;
     }
-    func_80719958();
+    Racer_SetupStartPositions();
     osRecvMesg(&D_8079A0F0, &sp68, OS_MESG_NOBLOCK);
     osRecvMesg(&D_8079A0F0, &sp68, OS_MESG_BLOCK);
     for (i = 0; i < gTotalRacers; i++) {
         gRacers[i].id = i;
         if (gGameMode != GAMEMODE_COURSE_EDIT) {
-            func_i3_80040180(&gRacers[i]);
+            Cpu_InitRacer(&gRacers[i]);
         }
-        func_8071CE08(&gRacers[i]);
+        Racer_InitRacer(&gRacers[i]);
         if (i < gNumPlayers) {
             gRacers[i].unk_2A4 = 0;
             gControllers[gPlayerControlPorts[i]].unk_72 = gControllers[gPlayerControlPorts[i]].unk_78 = 1;
@@ -1752,9 +1746,9 @@ void func_8071D48C(void) {
         }
     }
 
-    func_8071B9F4();
-    func_8071B634();
-    func_8071BE0C();
+    Racer_UpdateRacerPairInfo();
+    Racer_UpdateRacePositions();
+    Racer_UpdateNearestRacer();
 
     for (i = 0; i < ARRAY_COUNT(sRacerPairInfo); i++) {
         sRacerPairInfo[i].areColliding = false;
@@ -1805,7 +1799,7 @@ void func_8071D48C(void) {
             racer->unk_2A4 = 0;
         }
     }
-    func_80719D70();
+    Racer_UpdateRivalRacer();
 
     for (i = 0; i < 3; i++) {
         gGhostRacers[i].exists = false;
@@ -1818,7 +1812,7 @@ void func_8071D48C(void) {
         sReplayRecordPosY = Math_Round(gRacers[0].segmentPositionInfo.pos.y);
         sReplayRecordPosZ = Math_Round(gRacers[0].segmentPositionInfo.pos.z);
         if (gCurrentGhostType != GHOST_NONE) {
-            func_8071A730(&sp6C);
+            func_8071A730(&machineInfo);
             var_a3 = var_t0 = 0x40000000;
 
             for (i = 0; i < 3; i++) {
@@ -1859,7 +1853,7 @@ void func_8071D48C(void) {
                 racer->id = i + 1;
                 racer->character = ghostRacer->ghost->machineInfo.character;
 
-                if (func_8071BEF8(&ghostRacer->ghost->machineInfo, &sp6C) != 0) {
+                if (func_8071BEF8(&ghostRacer->ghost->machineInfo, &machineInfo) != 0) {
                     racer->machineIndex = i + 7;
                 } else {
                     racer->machineIndex = gRacers[0].machineIndex;
@@ -2146,8 +2140,7 @@ void func_8071ED54(Racer* arg0, s32 arg1) {
     }
 }
 
-// Racer hit
-void func_8071EE74(Racer* racer, f32 arg1) {
+void Racer_ReceiveDamage(Racer* racer, f32 damageStrength) {
     s32 pad[7];
     f32 x;
     f32 y;
@@ -2163,12 +2156,12 @@ void func_8071EE74(Racer* racer, f32 arg1) {
     if (racer->stateFlags & (RACER_STATE_CRASHED | RACER_STATE_FINISHED)) {
         if (((racer->stateFlags & (RACER_STATE_ACTIVE | RACER_STATE_CRASHED)) ==
              (RACER_STATE_ACTIVE | RACER_STATE_CRASHED)) &&
-            (D_8076E590 < arg1)) {
+            (D_8076E590 < damageStrength)) {
             racer->stateFlags &= ~RACER_STATE_ACTIVE;
             racer->trueBasis = racer->segmentBasis;
             D_807A16D0++;
             if (racer->id < gNumPlayers) {
-                func_8071A17C(racer);
+                Racer_StopRacerSfx(racer);
             }
             if (gEnableRaceSfx) {
                 Audio_PlayerTriggerSEStart(racer->id, NA_SE_8);
@@ -2214,16 +2207,16 @@ void func_8071EE74(Racer* racer, f32 arg1) {
         }
     } else {
         if (D_8076E5A0 != 0) {
-            racer->energy -= arg1;
+            racer->energy -= damageStrength;
         }
-        racer->stateFlags |= RACER_STATE_FLAGS_20000;
+        racer->stateFlags |= RACER_STATE_RECEIVED_DAMAGE;
         if (racer->energy < 0.0f) {
             if (racer->machineLod == 0) {
                 racer->energy = 0.1f;
                 return;
             }
             racer->energy = 0.0f;
-            racer->unk_238 = 0.2f * arg1;
+            racer->unk_238 = 0.2f * damageStrength;
             if (racer->unk_238 > 1.0f) {
                 racer->unk_238 = 1.0f;
             }
@@ -2242,8 +2235,7 @@ void func_8071EE74(Racer* racer, f32 arg1) {
     }
 }
 
-// Hit wall
-void func_8071F334(Racer* racer, f32 lateralVelocity, f32 wallDirection, f32 edgeDisplacement) {
+void Racer_HitWall(Racer* racer, f32 lateralVelocity, f32 wallDirection, f32 edgeDisplacement) {
     s32 pad;
     Racer* var;
     f32 var_fv0;
@@ -2283,7 +2275,7 @@ void func_8071F334(Racer* racer, f32 lateralVelocity, f32 wallDirection, f32 edg
         if (gEnableRaceSfx) {
             Audio_PlayerTriggerSEStart(racer->id, NA_SE_3);
         }
-        func_8071EE74(racer, lateralVelocity * wallDirection * 0.7f);
+        Racer_ReceiveDamage(racer, lateralVelocity * wallDirection * 0.7f);
     }
 
     racer->velocity.x = (racer->velocity.x - racer->unk_234 * lateralVelocity * racer->segmentBasis.z.x) * 0.998f;
@@ -2344,7 +2336,7 @@ void func_8071F6F8(Racer* racer, f32 airborneRange) {
                         (racer->segmentBasis.z.z * racer->segmentPositionInfo.segmentDisplacement.z);
         if ((lateralOffset < -racer->currentRadiusRight) || (racer->currentRadiusLeft < lateralOffset)) {
             racer->stateFlags |= RACER_STATE_FLAGS_80000000;
-            func_8071EE74(racer, 2.0f);
+            Racer_ReceiveDamage(racer, 2.0f);
             Effects_SpawnCollisionSparks(racer->segmentPositionInfo.pos.x, racer->segmentPositionInfo.pos.y,
                                          racer->segmentPositionInfo.pos.z, racer->velocity.x, racer->velocity.y,
                                          racer->velocity.z, 40.0f, racer);
@@ -2460,13 +2452,13 @@ void func_8071F6F8(Racer* racer, f32 airborneRange) {
         }
 
         if (lateralOffset < -racer->currentRadiusRight) {
-            func_8071F334(racer,
+            Racer_HitWall(racer,
                           (racer->segmentBasis.z.x * racer->velocity.x) +
                               (racer->segmentBasis.z.y * racer->velocity.y) +
                               (racer->segmentBasis.z.z * racer->velocity.z),
                           -1.0f, racer->currentRadiusRight + lateralOffset);
         } else if (racer->currentRadiusLeft < lateralOffset) {
-            func_8071F334(racer,
+            Racer_HitWall(racer,
                           (racer->segmentBasis.z.x * racer->velocity.x) +
                               (racer->segmentBasis.z.y * racer->velocity.y) +
                               (racer->segmentBasis.z.z * racer->velocity.z),
@@ -3257,13 +3249,13 @@ void func_80721CA8(Racer* racer) {
         } else {
             Audio_PlayerTriggerSEStart(racer->id, NA_SE_53);
         }
-        func_8071A17C(racer);
+        Racer_StopRacerSfx(racer);
     }
 }
 
 extern u32 gGameFrameCount;
 
-void func_80721D78(Racer* racer, Controller* controller) {
+void Racer_UpdateFromControls(Racer* racer, Controller* controller) {
     bool isDrifting;
     s32 i;
     s32 sp13C;
@@ -3562,7 +3554,7 @@ void func_80721D78(Racer* racer, Controller* controller) {
                     racer->acceleration.y += (15.0f * racer->tiltUp.y);
                     racer->acceleration.z += (15.0f * racer->tiltUp.z);
                     racer->stateFlags |= RACER_STATE_TOUCHING_LANDMINE;
-                    func_8071EE74(racer, 12.5f);
+                    Racer_ReceiveDamage(racer, 12.5f);
                     if (gEnableRaceSfx) {
                         Audio_PlayerTriggerSEStart(racer->id, NA_SE_HIT_LANDMINE);
                     }
@@ -3844,7 +3836,7 @@ void func_80721D78(Racer* racer, Controller* controller) {
                 racer->unk_214--;
             }
         }
-        if ((racer->stateFlags & (RACER_STATE_AIRBORNE | RACER_STATE_FLAGS_20000)) || (racer->unk_208 != 0) ||
+        if ((racer->stateFlags & (RACER_STATE_AIRBORNE | RACER_STATE_RECEIVED_DAMAGE)) || (racer->unk_208 != 0) ||
             (buttonCurrent & (BTN_Z | BTN_R))) {
 
             if (racer->unk_208 != 0) {
@@ -4090,10 +4082,10 @@ void func_80721D78(Racer* racer, Controller* controller) {
                 racer->stateFlags |= RACER_STATE_CRASHED;
             }
             D_807A16D0++;
-            func_80719F9C(racer);
+            Racer_RetireRacer(racer);
 
             if (racer->id < gNumPlayers) {
-                func_8071A17C(racer);
+                Racer_StopRacerSfx(racer);
             }
             if ((racer->id < gNumPlayers) || (gRacers[0].stateFlags & RACER_STATE_FALLING_OFF_TRACK)) {
                 Effects_SpawnExplosion1(racer->segmentPositionInfo.pos.x, racer->segmentPositionInfo.pos.y,
@@ -4246,7 +4238,7 @@ void func_80721D78(Racer* racer, Controller* controller) {
                                     Audio_PlayerTriggerSEStart(racer->id, NA_SE_15);
                                     Audio_PlayerFinished(racer->id);
                                 }
-                                func_8071A17C(racer);
+                                Racer_StopRacerSfx(racer);
                                 if (gNumPlayers == 1) {
                                     func_8070DAFC();
                                 } else if (gRacersFinished == 1) {
@@ -4320,7 +4312,7 @@ void func_80721D78(Racer* racer, Controller* controller) {
     if ((racer->id < gNumPlayers) && (controller->unk_74 != 0)) {
 
         if (!(racer->stateFlags & (RACER_STATE_RETIRED | RACER_STATE_SPINNING_OUT))) {
-            if (racer->stateFlags & RACER_STATE_FLAGS_20000) {
+            if (racer->stateFlags & RACER_STATE_RECEIVED_DAMAGE) {
                 if (D_807A1630[racer->id] == 0) {
                     D_807A1630[racer->id] = 1;
                     controller->unk_88 = 4000;
@@ -4577,7 +4569,7 @@ void func_80721D78(Racer* racer, Controller* controller) {
             racer->stateFlags |= RACER_STATE_CRASHED;
             racer->unk_17C = 10.0f;
             sSpunOutRacers++;
-            func_80719F9C(racer);
+            Racer_RetireRacer(racer);
             if (racer->machineLod != 0) {
                 Effects_SpawnExplosion2(racer->segmentPositionInfo.pos.x, racer->segmentPositionInfo.pos.y,
                                         racer->segmentPositionInfo.pos.z, racer->velocity.x, racer->velocity.y,
@@ -4736,7 +4728,7 @@ void func_80721D78(Racer* racer, Controller* controller) {
         racer->shadowR = racer->shadowG = racer->shadowB = 0;
     }
     if (racer->id < gNumPlayers) {
-        if ((racer->segmentPositionInfo.courseSegment->trackSegmentInfo & TRACK_FLAG_20000000) &&
+        if ((racer->segmentPositionInfo.courseSegment->trackSegmentInfo & TRACK_FLAG_INSIDE) &&
             !(racer->stateFlags & RACER_STATE_FLAGS_80000000)) {
             if (!(racer->soundEffectFlags & RACER_SE_FLAGS_ENGINE_ECHO)) {
                 racer->soundEffectFlags |= RACER_SE_FLAGS_ENGINE_ECHO;
@@ -4803,13 +4795,13 @@ void func_807263A4(void) {
     }
 
     if (D_807B37D4 == 1) {
-        func_80719EDC(0);
+        Racer_IncreaseLife(0);
     } else if (D_807B37D4 == -1) {
-        func_80719F38(0);
+        Racer_DecreaseLife(0);
     }
 }
 
-void func_8072643C(Racer* racer) {
+void Racer_UpdateMovement(Racer* racer) {
     Controller dummyController;
     f32 preInputEnergy;
 
@@ -4825,9 +4817,9 @@ void func_8072643C(Racer* racer) {
                 racer->unk_2A4--;
             }
         }
-        func_80721D78(racer, &dummyController);
+        Racer_UpdateFromControls(racer, &dummyController);
     } else {
-        func_80721D78(racer, &gControllers[gPlayerControlPorts[racer->id]]);
+        Racer_UpdateFromControls(racer, &gControllers[gPlayerControlPorts[racer->id]]);
         racer->unk_33C = -racer->segmentPositionInfo.segmentDisplacement.x * racer->segmentBasis.z.x -
                          racer->segmentPositionInfo.segmentDisplacement.y * racer->segmentBasis.z.y -
                          racer->segmentPositionInfo.segmentDisplacement.z * racer->segmentBasis.z.z;
@@ -4839,7 +4831,7 @@ extern s8 gGamePaused;
 extern s32 gFastestGhostTime;
 extern Camera gCameras[];
 
-void func_80726554(void) {
+void Racer_Update(void) {
     f32 xVelocityDiff;
     f32 yVelocityDiff;
     f32 zVelocityDiff;
@@ -4953,7 +4945,7 @@ void func_80726554(void) {
 
     for (racer = sLastRacer; racer >= gRacers; racer--) {
         racer->modelMatrixInit = racer->shadowMatrixInit = racer->attackHighlightMatrixInit = false;
-        racer->stateFlags &= ~RACER_STATE_FLAGS_20000;
+        racer->stateFlags &= ~RACER_STATE_RECEIVED_DAMAGE;
         racer->acceleration.z = 0.0f;
         racer->acceleration.y = 0.0f;
         racer->acceleration.x = 0.0f;
@@ -5061,18 +5053,18 @@ void func_80726554(void) {
                         var_fs0 *= 1.1f;
                         if (racer->attackState == ATTACK_STATE_NONE) {
                             if (racer2->attackState == ATTACK_STATE_NONE) {
-                                func_8071EE74(racer, var_fs1 * var_fs0);
-                                func_8071EE74(racer2, var_fs2 * var_fs0);
+                                Racer_ReceiveDamage(racer, var_fs1 * var_fs0);
+                                Racer_ReceiveDamage(racer2, var_fs2 * var_fs0);
                             } else if ((racer2 == gRacers) && (gNumPlayers == 1)) {
-                                func_8071EE74(racer, var_fs0 * 10.0f);
+                                Racer_ReceiveDamage(racer, var_fs0 * 10.0f);
                             } else {
-                                func_8071EE74(racer, var_fs0);
+                                Racer_ReceiveDamage(racer, var_fs0);
                             }
                         } else if (racer2->attackState == ATTACK_STATE_NONE) {
-                            func_8071EE74(racer2, var_fs0);
+                            Racer_ReceiveDamage(racer2, var_fs0);
                         } else {
-                            func_8071EE74(racer, var_fs1 * var_fs0);
-                            func_8071EE74(racer2, var_fs2 * var_fs0);
+                            Racer_ReceiveDamage(racer, var_fs1 * var_fs0);
+                            Racer_ReceiveDamage(racer2, var_fs2 * var_fs0);
                         }
                         if (gEnableRaceSfx) {
                             Audio_PlayerTriggerSEStart(racer2->id, NA_SE_4);
@@ -5132,7 +5124,7 @@ void func_80726554(void) {
     }
     for (racer = sLastRacer; racer >= gRacers; racer--) {
         if (racer->stateFlags & RACER_STATE_ACTIVE) {
-            func_8072643C(racer);
+            Racer_UpdateMovement(racer);
         }
     }
 
@@ -5276,10 +5268,10 @@ void func_80726554(void) {
         }
     }
     if (gGameFrameCount & 1) {
-        func_8071B9F4();
+        Racer_UpdateRacerPairInfo();
     } else {
         if ((D_807A16CC == 0) || (gNumPlayers == 1)) {
-            func_8071B634();
+            Racer_UpdateRacePositions();
         }
 
         for (i = 0; i < gNumPlayers; i++) {
@@ -5298,7 +5290,7 @@ void func_80726554(void) {
     }
     if (gTotalRacers >= 2) {
         if (gNumPlayers == 1) {
-            func_8071BE0C();
+            Racer_UpdateNearestRacer();
             if (gEnableRaceSfx) {
                 Audio_SetNearestEnemy(gNearestRacer);
             }
@@ -5329,7 +5321,7 @@ void func_80726554(void) {
             if ((i >= (gTotalRacers - 1)) || (gNumPlayers == (gPlayerRacersRetired + gPlayerRacersFinished))) {
                 D_807A16CC = 1;
                 if (gGameFrameCount & 1) {
-                    func_8071B634();
+                    Racer_UpdateRacePositions();
                 }
                 for (racer = &gRacers[gTotalRacers - 1]; racer >= gRacers; racer--) {
                     if (!(racer->stateFlags & (RACER_STATE_CRASHED | RACER_STATE_FINISHED))) {
@@ -5388,7 +5380,7 @@ void func_80726554(void) {
 extern GfxPool D_1000000;
 
 #ifdef NON_MATCHING
-Gfx* func_80727F54(Gfx* gfx, s32 playerIndex) {
+Gfx* Racer_Draw(Gfx* gfx, s32 playerIndex) {
     s32 var_s3; // sp5CC
     s32 var_s4; // sp5C8
     s32 sp5C4;
@@ -5690,7 +5682,7 @@ Gfx* func_80727F54(Gfx* gfx, s32 playerIndex) {
     }
     playerRacer = &gRacers[playerIndex];
 
-    if (playerRacer->segmentPositionInfo.courseSegment->trackSegmentInfo & TRACK_FLAG_20000000) {
+    if (playerRacer->segmentPositionInfo.courseSegment->trackSegmentInfo & TRACK_FLAG_INSIDE) {
         if (playerRacer->segmentPositionInfo.courseSegment->nextJoinStartTValue <
             playerRacer->segmentPositionInfo.segmentTValue) {
             temp_fs0 = (1.0f - playerRacer->segmentPositionInfo.segmentLengthProportion) /
@@ -5730,7 +5722,7 @@ block_115:
     gSPLight(gfx++, &D_1000000.unk_33A88[playerIndex].l[0], 1);
     gSPLight(gfx++, &D_1000000.unk_33A88[playerIndex].a, 2);
 
-    if ((playerRacer->segmentPositionInfo.courseSegment->trackSegmentInfo & TRACK_FLAG_20000000) &&
+    if ((playerRacer->segmentPositionInfo.courseSegment->trackSegmentInfo & TRACK_FLAG_INSIDE) &&
         !(playerRacer->stateFlags & RACER_STATE_FLAGS_80000000)) {
         sp560 = playerRacer->segmentBasis.y.x;
         gGfxPool->unk_33A88[playerIndex].l[0].l.dir[0] = Math_Round(sp560 * 120.0f);
@@ -5927,41 +5919,43 @@ block_115:
             temp_fs0 += sp574;
             temp_fs0 *= sp570;
             temp_fs1 = temp_fs0 * sp56C;
-            D_807A15DC[0].v.ob[0] = Math_Round(temp_fs4 + temp_fs1);
+            gEffectsVtxPtr[0].v.ob[0] = Math_Round(temp_fs4 + temp_fs1);
             temp_fs2 = temp_fs0 * sp568;
-            D_807A15DC[0].v.ob[1] = Math_Round(temp_fs5 + temp_fs2);
+            gEffectsVtxPtr[0].v.ob[1] = Math_Round(temp_fs5 + temp_fs2);
             temp_fs3 = temp_fs0 * sp564;
-            D_807A15DC[0].v.ob[2] = Math_Round(sp54C + temp_fs3);
+            gEffectsVtxPtr[0].v.ob[2] = Math_Round(sp54C + temp_fs3);
 
-            D_807A15DC[2].v.ob[0] = Math_Round(temp_fs4 - temp_fs1);
-            D_807A15DC[2].v.ob[1] = Math_Round(temp_fs5 - temp_fs2);
-            D_807A15DC[2].v.ob[2] = Math_Round(sp54C - temp_fs3);
+            gEffectsVtxPtr[2].v.ob[0] = Math_Round(temp_fs4 - temp_fs1);
+            gEffectsVtxPtr[2].v.ob[1] = Math_Round(temp_fs5 - temp_fs2);
+            gEffectsVtxPtr[2].v.ob[2] = Math_Round(sp54C - temp_fs3);
             temp_fs1 = temp_fs0 * sp560;
-            D_807A15DC[1].v.ob[0] = Math_Round(temp_fs4 + temp_fs1);
+            gEffectsVtxPtr[1].v.ob[0] = Math_Round(temp_fs4 + temp_fs1);
             temp_fs2 = temp_fs0 * sp55C;
-            D_807A15DC[1].v.ob[1] = Math_Round(temp_fs5 + temp_fs2);
+            gEffectsVtxPtr[1].v.ob[1] = Math_Round(temp_fs5 + temp_fs2);
             temp_fs3 = temp_fs0 * sp558;
-            D_807A15DC[1].v.ob[2] = Math_Round(sp54C + temp_fs3);
-            D_807A15DC[3].v.ob[0] = Math_Round(temp_fs4 - temp_fs1);
-            D_807A15DC[3].v.ob[1] = Math_Round(temp_fs5 - temp_fs2);
-            D_807A15DC[3].v.ob[2] = Math_Round(sp54C - temp_fs3);
-            D_807A15DC[0].v.tc[0] = D_807A15DC[1].v.tc[0] = D_807A15DC[1].v.tc[1] = D_807A15DC[2].v.tc[1] = 0;
-            D_807A15DC[0].v.tc[1] = D_807A15DC[2].v.tc[0] = D_807A15DC[3].v.tc[0] = D_807A15DC[3].v.tc[1] = 0x3FF;
+            gEffectsVtxPtr[1].v.ob[2] = Math_Round(sp54C + temp_fs3);
+            gEffectsVtxPtr[3].v.ob[0] = Math_Round(temp_fs4 - temp_fs1);
+            gEffectsVtxPtr[3].v.ob[1] = Math_Round(temp_fs5 - temp_fs2);
+            gEffectsVtxPtr[3].v.ob[2] = Math_Round(sp54C - temp_fs3);
+            gEffectsVtxPtr[0].v.tc[0] = gEffectsVtxPtr[1].v.tc[0] = gEffectsVtxPtr[1].v.tc[1] =
+                gEffectsVtxPtr[2].v.tc[1] = 0;
+            gEffectsVtxPtr[0].v.tc[1] = gEffectsVtxPtr[2].v.tc[0] = gEffectsVtxPtr[3].v.tc[0] =
+                gEffectsVtxPtr[3].v.tc[1] = 0x3FF;
             if (racer->unk_2B3 == 2) {
                 temp_fs0 = racer->speed * 0.9f;
-                D_807A15DC[4].v.ob[0] = Math_Round(temp_fs4 - (racer->modelBasis.x.x * temp_fs0));
-                D_807A15DC[4].v.ob[1] = Math_Round(temp_fs5 - (racer->modelBasis.x.y * temp_fs0));
-                D_807A15DC[4].v.ob[2] = Math_Round(sp54C - (racer->modelBasis.x.z * temp_fs0));
-                D_807A15DC[4].v.tc[0] = 0x3FF;
-                D_807A15DC[4].v.tc[1] = 0;
-                D_807A15DC += 5;
+                gEffectsVtxPtr[4].v.ob[0] = Math_Round(temp_fs4 - (racer->modelBasis.x.x * temp_fs0));
+                gEffectsVtxPtr[4].v.ob[1] = Math_Round(temp_fs5 - (racer->modelBasis.x.y * temp_fs0));
+                gEffectsVtxPtr[4].v.ob[2] = Math_Round(sp54C - (racer->modelBasis.x.z * temp_fs0));
+                gEffectsVtxPtr[4].v.tc[0] = 0x3FF;
+                gEffectsVtxPtr[4].v.tc[1] = 0;
+                gEffectsVtxPtr += 5;
             } else {
-                D_807A15DC += 4;
+                gEffectsVtxPtr += 4;
             }
         }
         if (racer->unk_2B3 == 2) {
             var_s7 = boosterInfo->count * 5;
-            gSPVertex(gfx++, D_807A15DC - var_s7, var_s7, 0);
+            gSPVertex(gfx++, gEffectsVtxPtr - var_s7, var_s7, 0);
 
             switch (boosterInfo->count) {
                 case 4:
@@ -5987,7 +5981,7 @@ block_115:
 
         } else {
             var_s7 = boosterInfo->count * 4;
-            gSPVertex(gfx++, D_807A15DC - var_s7, var_s7, 0);
+            gSPVertex(gfx++, gEffectsVtxPtr - var_s7, var_s7, 0);
 
             switch (boosterInfo->count) {
                 case 4:
@@ -6039,41 +6033,43 @@ block_115:
                 temp_fs0 += sp574;
 
                 temp_fs1 = temp_fs0 * sp56C;
-                D_807A15DC[0].v.ob[0] = Math_Round(temp_fs4 + temp_fs1);
+                gEffectsVtxPtr[0].v.ob[0] = Math_Round(temp_fs4 + temp_fs1);
                 temp_fs2 = temp_fs0 * sp568;
-                D_807A15DC[0].v.ob[1] = Math_Round(temp_fs5 + temp_fs2);
+                gEffectsVtxPtr[0].v.ob[1] = Math_Round(temp_fs5 + temp_fs2);
                 temp_fs3 = temp_fs0 * sp564;
-                D_807A15DC[0].v.ob[2] = Math_Round(sp54C + temp_fs3);
-                D_807A15DC[2].v.ob[0] = Math_Round(temp_fs4 - temp_fs1);
-                D_807A15DC[2].v.ob[1] = Math_Round(temp_fs5 - temp_fs2);
-                D_807A15DC[2].v.ob[2] = Math_Round(sp54C - temp_fs3);
+                gEffectsVtxPtr[0].v.ob[2] = Math_Round(sp54C + temp_fs3);
+                gEffectsVtxPtr[2].v.ob[0] = Math_Round(temp_fs4 - temp_fs1);
+                gEffectsVtxPtr[2].v.ob[1] = Math_Round(temp_fs5 - temp_fs2);
+                gEffectsVtxPtr[2].v.ob[2] = Math_Round(sp54C - temp_fs3);
 
                 temp_fs1 = temp_fs0 * sp560;
-                D_807A15DC[1].v.ob[0] = Math_Round(temp_fs4 + temp_fs1);
+                gEffectsVtxPtr[1].v.ob[0] = Math_Round(temp_fs4 + temp_fs1);
                 temp_fs2 = temp_fs0 * sp55C;
-                D_807A15DC[1].v.ob[1] = Math_Round(temp_fs5 + temp_fs2);
+                gEffectsVtxPtr[1].v.ob[1] = Math_Round(temp_fs5 + temp_fs2);
                 temp_fs3 = temp_fs0 * sp558;
-                D_807A15DC[1].v.ob[2] = Math_Round(sp54C + temp_fs3);
-                D_807A15DC[3].v.ob[0] = Math_Round(temp_fs4 - temp_fs1);
-                D_807A15DC[3].v.ob[1] = Math_Round(temp_fs5 - temp_fs2);
-                D_807A15DC[3].v.ob[2] = Math_Round(sp54C - temp_fs3);
-                D_807A15DC[0].v.tc[0] = D_807A15DC[1].v.tc[0] = D_807A15DC[1].v.tc[1] = D_807A15DC[2].v.tc[1] = 0;
-                D_807A15DC[0].v.tc[1] = D_807A15DC[2].v.tc[0] = D_807A15DC[3].v.tc[0] = D_807A15DC[3].v.tc[1] = 0x3FF;
+                gEffectsVtxPtr[1].v.ob[2] = Math_Round(sp54C + temp_fs3);
+                gEffectsVtxPtr[3].v.ob[0] = Math_Round(temp_fs4 - temp_fs1);
+                gEffectsVtxPtr[3].v.ob[1] = Math_Round(temp_fs5 - temp_fs2);
+                gEffectsVtxPtr[3].v.ob[2] = Math_Round(sp54C - temp_fs3);
+                gEffectsVtxPtr[0].v.tc[0] = gEffectsVtxPtr[1].v.tc[0] = gEffectsVtxPtr[1].v.tc[1] =
+                    gEffectsVtxPtr[2].v.tc[1] = 0;
+                gEffectsVtxPtr[0].v.tc[1] = gEffectsVtxPtr[2].v.tc[0] = gEffectsVtxPtr[3].v.tc[0] =
+                    gEffectsVtxPtr[3].v.tc[1] = 0x3FF;
                 if (racer->unk_2B3 == 2) {
                     temp_fs0 = racer->speed * 0.9f;
-                    D_807A15DC[4].v.ob[0] = Math_Round(temp_fs4 - (racer->modelBasis.x.x * temp_fs0));
-                    D_807A15DC[4].v.ob[1] = Math_Round(temp_fs5 - (racer->modelBasis.x.y * temp_fs0));
-                    D_807A15DC[4].v.ob[2] = Math_Round(sp54C - (racer->modelBasis.x.z * temp_fs0));
-                    D_807A15DC[4].v.tc[0] = 0x3FF;
-                    D_807A15DC[4].v.tc[1] = 0;
-                    D_807A15DC += 5;
+                    gEffectsVtxPtr[4].v.ob[0] = Math_Round(temp_fs4 - (racer->modelBasis.x.x * temp_fs0));
+                    gEffectsVtxPtr[4].v.ob[1] = Math_Round(temp_fs5 - (racer->modelBasis.x.y * temp_fs0));
+                    gEffectsVtxPtr[4].v.ob[2] = Math_Round(sp54C - (racer->modelBasis.x.z * temp_fs0));
+                    gEffectsVtxPtr[4].v.tc[0] = 0x3FF;
+                    gEffectsVtxPtr[4].v.tc[1] = 0;
+                    gEffectsVtxPtr += 5;
                 } else {
-                    D_807A15DC += 4;
+                    gEffectsVtxPtr += 4;
                 }
             }
             if (racer->unk_2B3 == 2) {
                 var_s7 = boosterInfo->count * 5;
-                gSPVertex(gfx++, D_807A15DC - var_s7, var_s7, 0);
+                gSPVertex(gfx++, gEffectsVtxPtr - var_s7, var_s7, 0);
 
                 switch (boosterInfo->count) {
                     case 4:
@@ -6098,7 +6094,7 @@ block_115:
                 }
             } else {
                 var_s7 = boosterInfo->count * 4;
-                gSPVertex(gfx++, D_807A15DC - var_s7, var_s7, 0);
+                gSPVertex(gfx++, gEffectsVtxPtr - var_s7, var_s7, 0);
 
                 switch (boosterInfo->count) {
                     case 4:
@@ -6120,7 +6116,7 @@ block_115:
     gSPDisplayList(gfx++, D_4007FB8);
 
     for (var_s3 = gExplosions1Count, var_s7 = (gExplosions1Index - 1) & 0x1F;
-         (var_s3 != 0) && (D_807A15DC <= (D_807A15E0 - 3)); var_s7 = (var_s7 - 1) & 0x1F, var_s3--) {
+         (var_s3 != 0) && (gEffectsVtxPtr <= (gEffectsVtxEndPtr - 3)); var_s7 = (var_s7 - 1) & 0x1F, var_s3--) {
         temp_s1 = &gExplosions1[var_s7];
 
         temp_fs1 = temp_s1->scale * sp56C;
@@ -6130,23 +6126,25 @@ block_115:
         sp538 = temp_s1->scale * sp55C;
         sp534 = temp_s1->scale * sp558;
 
-        D_807A15DC[0].v.ob[0] = Math_Round(temp_s1->pos.x + temp_fs1);
-        D_807A15DC[0].v.ob[1] = Math_Round(temp_s1->pos.y + temp_fs3);
-        D_807A15DC[0].v.ob[2] = Math_Round(temp_s1->pos.z + temp_fs2);
-        D_807A15DC[2].v.ob[0] = Math_Round(temp_s1->pos.x - temp_fs1);
-        D_807A15DC[2].v.ob[1] = Math_Round(temp_s1->pos.y - temp_fs3);
-        D_807A15DC[2].v.ob[2] = Math_Round(temp_s1->pos.z - temp_fs2);
-        D_807A15DC[1].v.ob[0] = Math_Round(temp_s1->pos.x + sp53C);
-        D_807A15DC[1].v.ob[1] = Math_Round(temp_s1->pos.y + sp538);
-        D_807A15DC[1].v.ob[2] = Math_Round(temp_s1->pos.z + sp534);
-        D_807A15DC[3].v.ob[0] = Math_Round(temp_s1->pos.x - sp53C);
-        D_807A15DC[3].v.ob[1] = Math_Round(temp_s1->pos.y - sp538);
-        D_807A15DC[3].v.ob[2] = Math_Round(temp_s1->pos.z - sp534);
+        gEffectsVtxPtr[0].v.ob[0] = Math_Round(temp_s1->pos.x + temp_fs1);
+        gEffectsVtxPtr[0].v.ob[1] = Math_Round(temp_s1->pos.y + temp_fs3);
+        gEffectsVtxPtr[0].v.ob[2] = Math_Round(temp_s1->pos.z + temp_fs2);
+        gEffectsVtxPtr[2].v.ob[0] = Math_Round(temp_s1->pos.x - temp_fs1);
+        gEffectsVtxPtr[2].v.ob[1] = Math_Round(temp_s1->pos.y - temp_fs3);
+        gEffectsVtxPtr[2].v.ob[2] = Math_Round(temp_s1->pos.z - temp_fs2);
+        gEffectsVtxPtr[1].v.ob[0] = Math_Round(temp_s1->pos.x + sp53C);
+        gEffectsVtxPtr[1].v.ob[1] = Math_Round(temp_s1->pos.y + sp538);
+        gEffectsVtxPtr[1].v.ob[2] = Math_Round(temp_s1->pos.z + sp534);
+        gEffectsVtxPtr[3].v.ob[0] = Math_Round(temp_s1->pos.x - sp53C);
+        gEffectsVtxPtr[3].v.ob[1] = Math_Round(temp_s1->pos.y - sp538);
+        gEffectsVtxPtr[3].v.ob[2] = Math_Round(temp_s1->pos.z - sp534);
 
-        D_807A15DC[0].v.tc[0] = D_807A15DC[1].v.tc[0] = D_807A15DC[1].v.tc[1] = D_807A15DC[2].v.tc[1] = 0;
-        D_807A15DC[0].v.tc[1] = D_807A15DC[2].v.tc[0] = D_807A15DC[3].v.tc[0] = D_807A15DC[3].v.tc[1] = 0x7FF;
+        gEffectsVtxPtr[0].v.tc[0] = gEffectsVtxPtr[1].v.tc[0] = gEffectsVtxPtr[1].v.tc[1] = gEffectsVtxPtr[2].v.tc[1] =
+            0;
+        gEffectsVtxPtr[0].v.tc[1] = gEffectsVtxPtr[2].v.tc[0] = gEffectsVtxPtr[3].v.tc[0] = gEffectsVtxPtr[3].v.tc[1] =
+            0x7FF;
 
-        gSPVertex(gfx++, D_807A15DC, 4, 0);
+        gSPVertex(gfx++, gEffectsVtxPtr, 4, 0);
         gDPPipeSync(gfx++);
 
         if (temp_s1->timer < 8) {
@@ -6162,11 +6160,11 @@ block_115:
 
         gSP2Triangles(gfx++, 0, 1, 3, 0, 1, 2, 3, 0);
 
-        D_807A15DC += 4;
+        gEffectsVtxPtr += 4;
     }
 
     for (var_s3 = gExplosions2Count, var_s7 = (gExplosions2Index - 1) & 7;
-         (var_s3 != 0) && (D_807A15DC <= (D_807A15E0 - 3)); var_s7 = (var_s7 - 1) & 7, var_s3--) {
+         (var_s3 != 0) && (gEffectsVtxPtr <= (gEffectsVtxEndPtr - 3)); var_s7 = (var_s7 - 1) & 7, var_s3--) {
         temp_s1 = &gExplosions2[var_s7];
         temp_fs1 = temp_s1->scale * sp56C;
         temp_fs3 = temp_s1->scale * sp568;
@@ -6175,23 +6173,25 @@ block_115:
         sp538 = temp_s1->scale * sp55C;
         sp534 = temp_s1->scale * sp558;
 
-        D_807A15DC[0].v.ob[0] = Math_Round(temp_s1->pos.x + temp_fs1);
-        D_807A15DC[0].v.ob[1] = Math_Round(temp_s1->pos.y + temp_fs3);
-        D_807A15DC[0].v.ob[2] = Math_Round(temp_s1->pos.z + temp_fs2);
-        D_807A15DC[2].v.ob[0] = Math_Round(temp_s1->pos.x - temp_fs1);
-        D_807A15DC[2].v.ob[1] = Math_Round(temp_s1->pos.y - temp_fs3);
-        D_807A15DC[2].v.ob[2] = Math_Round(temp_s1->pos.z - temp_fs2);
-        D_807A15DC[1].v.ob[0] = Math_Round(temp_s1->pos.x + sp53C);
-        D_807A15DC[1].v.ob[1] = Math_Round(temp_s1->pos.y + sp538);
-        D_807A15DC[1].v.ob[2] = Math_Round(temp_s1->pos.z + sp534);
-        D_807A15DC[3].v.ob[0] = Math_Round(temp_s1->pos.x - sp53C);
-        D_807A15DC[3].v.ob[1] = Math_Round(temp_s1->pos.y - sp538);
-        D_807A15DC[3].v.ob[2] = Math_Round(temp_s1->pos.z - sp534);
+        gEffectsVtxPtr[0].v.ob[0] = Math_Round(temp_s1->pos.x + temp_fs1);
+        gEffectsVtxPtr[0].v.ob[1] = Math_Round(temp_s1->pos.y + temp_fs3);
+        gEffectsVtxPtr[0].v.ob[2] = Math_Round(temp_s1->pos.z + temp_fs2);
+        gEffectsVtxPtr[2].v.ob[0] = Math_Round(temp_s1->pos.x - temp_fs1);
+        gEffectsVtxPtr[2].v.ob[1] = Math_Round(temp_s1->pos.y - temp_fs3);
+        gEffectsVtxPtr[2].v.ob[2] = Math_Round(temp_s1->pos.z - temp_fs2);
+        gEffectsVtxPtr[1].v.ob[0] = Math_Round(temp_s1->pos.x + sp53C);
+        gEffectsVtxPtr[1].v.ob[1] = Math_Round(temp_s1->pos.y + sp538);
+        gEffectsVtxPtr[1].v.ob[2] = Math_Round(temp_s1->pos.z + sp534);
+        gEffectsVtxPtr[3].v.ob[0] = Math_Round(temp_s1->pos.x - sp53C);
+        gEffectsVtxPtr[3].v.ob[1] = Math_Round(temp_s1->pos.y - sp538);
+        gEffectsVtxPtr[3].v.ob[2] = Math_Round(temp_s1->pos.z - sp534);
 
-        D_807A15DC[0].v.tc[0] = D_807A15DC[1].v.tc[0] = D_807A15DC[1].v.tc[1] = D_807A15DC[2].v.tc[1] = 0;
-        D_807A15DC[0].v.tc[1] = D_807A15DC[2].v.tc[0] = D_807A15DC[3].v.tc[0] = D_807A15DC[3].v.tc[1] = 0x7FF;
+        gEffectsVtxPtr[0].v.tc[0] = gEffectsVtxPtr[1].v.tc[0] = gEffectsVtxPtr[1].v.tc[1] = gEffectsVtxPtr[2].v.tc[1] =
+            0;
+        gEffectsVtxPtr[0].v.tc[1] = gEffectsVtxPtr[2].v.tc[0] = gEffectsVtxPtr[3].v.tc[0] = gEffectsVtxPtr[3].v.tc[1] =
+            0x7FF;
 
-        gSPVertex(gfx++, D_807A15DC, 4, 0);
+        gSPVertex(gfx++, gEffectsVtxPtr, 4, 0);
         gDPPipeSync(gfx++);
 
         if (temp_s1->timer < 16) {
@@ -6207,62 +6207,63 @@ block_115:
 
         gSP2Triangles(gfx++, 0, 1, 3, 0, 1, 2, 3, 0);
 
-        D_807A15DC += 4;
+        gEffectsVtxPtr += 4;
     }
 
     gSPDisplayList(gfx++, D_4007FD8);
 
     for (var_s3 = gMachineDebrisCount, var_s7 = (gMachineDebrisIndex - 1) & 0x7F;
-         (var_s3 != 0) && (D_807A15DC <= (D_807A15E0 - 2)); var_s7 = (var_s7 - 1) & 0x7F, var_s3--) {
+         (var_s3 != 0) && (gEffectsVtxPtr <= (gEffectsVtxEndPtr - 2)); var_s7 = (var_s7 - 1) & 0x7F, var_s3--) {
         machineDebris = &gMachineDebris[var_s7];
-        D_807A15DC[0].v.ob[0] = machineDebris->cornerPos1.x;
-        D_807A15DC[0].v.ob[1] = machineDebris->cornerPos1.y;
-        D_807A15DC[0].v.ob[2] = machineDebris->cornerPos1.z;
-        D_807A15DC[1].v.ob[0] = machineDebris->cornerPos2.x;
-        D_807A15DC[1].v.ob[1] = machineDebris->cornerPos2.y;
-        D_807A15DC[1].v.ob[2] = machineDebris->cornerPos2.z;
-        D_807A15DC[2].v.ob[0] = machineDebris->cornerPos3.x;
-        D_807A15DC[2].v.ob[1] = machineDebris->cornerPos3.y;
-        D_807A15DC[2].v.ob[2] = machineDebris->cornerPos3.z;
-        D_807A15DC[0].v.cn[0] = machineDebris->red;
-        D_807A15DC[0].v.cn[1] = machineDebris->green;
-        D_807A15DC[0].v.cn[2] = machineDebris->blue;
-        D_807A15DC[0].v.cn[3] = machineDebris->alpha;
-        gSPVertex(gfx++, D_807A15DC, 3, 0);
+        gEffectsVtxPtr[0].v.ob[0] = machineDebris->cornerPos1.x;
+        gEffectsVtxPtr[0].v.ob[1] = machineDebris->cornerPos1.y;
+        gEffectsVtxPtr[0].v.ob[2] = machineDebris->cornerPos1.z;
+        gEffectsVtxPtr[1].v.ob[0] = machineDebris->cornerPos2.x;
+        gEffectsVtxPtr[1].v.ob[1] = machineDebris->cornerPos2.y;
+        gEffectsVtxPtr[1].v.ob[2] = machineDebris->cornerPos2.z;
+        gEffectsVtxPtr[2].v.ob[0] = machineDebris->cornerPos3.x;
+        gEffectsVtxPtr[2].v.ob[1] = machineDebris->cornerPos3.y;
+        gEffectsVtxPtr[2].v.ob[2] = machineDebris->cornerPos3.z;
+        gEffectsVtxPtr[0].v.cn[0] = machineDebris->red;
+        gEffectsVtxPtr[0].v.cn[1] = machineDebris->green;
+        gEffectsVtxPtr[0].v.cn[2] = machineDebris->blue;
+        gEffectsVtxPtr[0].v.cn[3] = machineDebris->alpha;
+        gSPVertex(gfx++, gEffectsVtxPtr, 3, 0);
         gSP1Triangle(gfx++, 0, 1, 2, 0);
-        D_807A15DC += 3;
+        gEffectsVtxPtr += 3;
     }
 
     gSPDisplayList(gfx++, D_4008000);
 
     for (var_s3 = gFlyingSparksCount, var_s7 = (gFlyingSparksIndex - 1) & 0x1F;
-         (var_s3 != 0) && (D_807A15DC <= (D_807A15E0 - 2)); var_s7 = (var_s7 - 1) & 0x1F, var_s3--) {
+         (var_s3 != 0) && (gEffectsVtxPtr <= (gEffectsVtxEndPtr - 2)); var_s7 = (var_s7 - 1) & 0x1F, var_s3--) {
         flyingSpark = &gFlyingSparks[var_s7];
-        D_807A15DC[0].v.ob[0] = Math_Round(flyingSpark->pos.x - (3.0f * flyingSpark->velocity.x));
-        D_807A15DC[0].v.ob[1] = Math_Round(flyingSpark->pos.y - (3.0f * flyingSpark->velocity.y));
-        D_807A15DC[0].v.ob[2] = Math_Round(flyingSpark->pos.z - (3.0f * flyingSpark->velocity.z));
-        D_807A15DC[1].v.ob[0] = Math_Round(flyingSpark->pos.x + flyingSpark->basis.z.x);
-        D_807A15DC[1].v.ob[1] = Math_Round(flyingSpark->pos.y + flyingSpark->basis.z.y);
-        D_807A15DC[1].v.ob[2] = Math_Round(flyingSpark->pos.z + flyingSpark->basis.z.z);
-        D_807A15DC[2].v.ob[0] = Math_Round(flyingSpark->pos.x - flyingSpark->basis.z.x);
-        D_807A15DC[2].v.ob[1] = Math_Round(flyingSpark->pos.y - flyingSpark->basis.z.y);
-        D_807A15DC[2].v.ob[2] = Math_Round(flyingSpark->pos.z - flyingSpark->basis.z.z);
+        gEffectsVtxPtr[0].v.ob[0] = Math_Round(flyingSpark->pos.x - (3.0f * flyingSpark->velocity.x));
+        gEffectsVtxPtr[0].v.ob[1] = Math_Round(flyingSpark->pos.y - (3.0f * flyingSpark->velocity.y));
+        gEffectsVtxPtr[0].v.ob[2] = Math_Round(flyingSpark->pos.z - (3.0f * flyingSpark->velocity.z));
+        gEffectsVtxPtr[1].v.ob[0] = Math_Round(flyingSpark->pos.x + flyingSpark->basis.z.x);
+        gEffectsVtxPtr[1].v.ob[1] = Math_Round(flyingSpark->pos.y + flyingSpark->basis.z.y);
+        gEffectsVtxPtr[1].v.ob[2] = Math_Round(flyingSpark->pos.z + flyingSpark->basis.z.z);
+        gEffectsVtxPtr[2].v.ob[0] = Math_Round(flyingSpark->pos.x - flyingSpark->basis.z.x);
+        gEffectsVtxPtr[2].v.ob[1] = Math_Round(flyingSpark->pos.y - flyingSpark->basis.z.y);
+        gEffectsVtxPtr[2].v.ob[2] = Math_Round(flyingSpark->pos.z - flyingSpark->basis.z.z);
 
-        D_807A15DC[0].v.cn[0] = 0xFF;
-        D_807A15DC[0].v.cn[1] = D_807A15DC[0].v.cn[2] = 0;
-        D_807A15DC[0].v.cn[3] = 0;
-        D_807A15DC[1].v.cn[0] = D_807A15DC[2].v.cn[0] = D_807A15DC[1].v.cn[1] = D_807A15DC[2].v.cn[1] = 0xFF;
-        D_807A15DC[1].v.cn[2] = D_807A15DC[2].v.cn[2] = 0;
-        D_807A15DC[1].v.cn[3] = D_807A15DC[2].v.cn[3] = 0xFF;
-        gSPVertex(gfx++, D_807A15DC, 3, 0);
+        gEffectsVtxPtr[0].v.cn[0] = 0xFF;
+        gEffectsVtxPtr[0].v.cn[1] = gEffectsVtxPtr[0].v.cn[2] = 0;
+        gEffectsVtxPtr[0].v.cn[3] = 0;
+        gEffectsVtxPtr[1].v.cn[0] = gEffectsVtxPtr[2].v.cn[0] = gEffectsVtxPtr[1].v.cn[1] = gEffectsVtxPtr[2].v.cn[1] =
+            0xFF;
+        gEffectsVtxPtr[1].v.cn[2] = gEffectsVtxPtr[2].v.cn[2] = 0;
+        gEffectsVtxPtr[1].v.cn[3] = gEffectsVtxPtr[2].v.cn[3] = 0xFF;
+        gSPVertex(gfx++, gEffectsVtxPtr, 3, 0);
         gSP1Triangle(gfx++, 0, 1, 2, 0);
-        D_807A15DC += 3;
+        gEffectsVtxPtr += 3;
     }
 
     gSPDisplayList(gfx++, D_4008028);
 
     for (var_s3 = gCollisionSparkCount, var_s7 = (gCollisionSparkIndex - 1) & 0x1F;
-         (var_s3 != 0) && (D_807A15DC <= (D_807A15E0 - 3)); var_s7 = (var_s7 - 1) & 0x1F, var_s3--) {
+         (var_s3 != 0) && (gEffectsVtxPtr <= (gEffectsVtxEndPtr - 3)); var_s7 = (var_s7 - 1) & 0x1F, var_s3--) {
         temp_s1 = &gCollisionSparks[var_s7];
         if (temp_s1->racer->unk_2B3 == 0) {
             continue;
@@ -6281,34 +6282,36 @@ block_115:
         sp538 = temp_s1->scale * sp55C;
         sp534 = temp_s1->scale * sp558;
 
-        D_807A15DC[0].v.ob[0] = Math_Round(temp_fs4 + temp_fs1);
-        D_807A15DC[0].v.ob[1] = Math_Round(temp_fs5 + temp_fs3);
-        D_807A15DC[0].v.ob[2] = Math_Round(sp54C + temp_fs2);
-        D_807A15DC[2].v.ob[0] = Math_Round(temp_fs4 - temp_fs1);
-        D_807A15DC[2].v.ob[1] = Math_Round(temp_fs5 - temp_fs3);
-        D_807A15DC[2].v.ob[2] = Math_Round(sp54C - temp_fs2);
-        D_807A15DC[1].v.ob[0] = Math_Round(temp_fs4 + sp53C);
-        D_807A15DC[1].v.ob[1] = Math_Round(temp_fs5 + sp538);
-        D_807A15DC[1].v.ob[2] = Math_Round(sp54C + sp534);
-        D_807A15DC[3].v.ob[0] = Math_Round(temp_fs4 - sp53C);
-        D_807A15DC[3].v.ob[1] = Math_Round(temp_fs5 - sp538);
-        D_807A15DC[3].v.ob[2] = Math_Round(sp54C - sp534);
-        D_807A15DC[0].v.tc[0] = D_807A15DC[1].v.tc[0] = D_807A15DC[1].v.tc[1] = D_807A15DC[2].v.tc[1] = 0;
-        D_807A15DC[0].v.tc[1] = D_807A15DC[2].v.tc[0] = D_807A15DC[3].v.tc[0] = D_807A15DC[3].v.tc[1] = 0x7FF;
+        gEffectsVtxPtr[0].v.ob[0] = Math_Round(temp_fs4 + temp_fs1);
+        gEffectsVtxPtr[0].v.ob[1] = Math_Round(temp_fs5 + temp_fs3);
+        gEffectsVtxPtr[0].v.ob[2] = Math_Round(sp54C + temp_fs2);
+        gEffectsVtxPtr[2].v.ob[0] = Math_Round(temp_fs4 - temp_fs1);
+        gEffectsVtxPtr[2].v.ob[1] = Math_Round(temp_fs5 - temp_fs3);
+        gEffectsVtxPtr[2].v.ob[2] = Math_Round(sp54C - temp_fs2);
+        gEffectsVtxPtr[1].v.ob[0] = Math_Round(temp_fs4 + sp53C);
+        gEffectsVtxPtr[1].v.ob[1] = Math_Round(temp_fs5 + sp538);
+        gEffectsVtxPtr[1].v.ob[2] = Math_Round(sp54C + sp534);
+        gEffectsVtxPtr[3].v.ob[0] = Math_Round(temp_fs4 - sp53C);
+        gEffectsVtxPtr[3].v.ob[1] = Math_Round(temp_fs5 - sp538);
+        gEffectsVtxPtr[3].v.ob[2] = Math_Round(sp54C - sp534);
+        gEffectsVtxPtr[0].v.tc[0] = gEffectsVtxPtr[1].v.tc[0] = gEffectsVtxPtr[1].v.tc[1] = gEffectsVtxPtr[2].v.tc[1] =
+            0;
+        gEffectsVtxPtr[0].v.tc[1] = gEffectsVtxPtr[2].v.tc[0] = gEffectsVtxPtr[3].v.tc[0] = gEffectsVtxPtr[3].v.tc[1] =
+            0x7FF;
 
         gSPTexture(gfx++, 0x8000, 0x8000, 0, temp_s1->timer >> 1, G_ON);
-        gSPVertex(gfx++, D_807A15DC, 4, 0);
+        gSPVertex(gfx++, gEffectsVtxPtr, 4, 0);
         gDPPipeSync(gfx++);
         gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255 - (temp_s1->timer * 8), 255);
         gDPSetEnvColor(gfx++, 255, 255 - (temp_s1->timer * 16), 0, 255 - (temp_s1->timer * 4));
         gSP2Triangles(gfx++, 0, 1, 3, 0, 1, 2, 3, 0);
-        D_807A15DC += 4;
+        gEffectsVtxPtr += 4;
     }
 
     gSPDisplayList(gfx++, D_4008130);
 
-    for (var_s3 = gSmokesCount, var_s7 = (gSmokesIndex - 1) & 0x1F; (var_s3 != 0) && (D_807A15DC <= (D_807A15E0 - 3));
-         var_s7 = (var_s7 - 1) & 0x1F, var_s3--) {
+    for (var_s3 = gSmokesCount, var_s7 = (gSmokesIndex - 1) & 0x1F;
+         (var_s3 != 0) && (gEffectsVtxPtr <= (gEffectsVtxEndPtr - 3)); var_s7 = (var_s7 - 1) & 0x1F, var_s3--) {
         temp_s1 = &gSmokes[var_s7];
         if (temp_s1->racer->unk_2B3 == 0) {
             continue;
@@ -6320,26 +6323,28 @@ block_115:
         sp53C = temp_s1->scale * sp560;
         sp538 = temp_s1->scale * sp55C;
         sp534 = temp_s1->scale * sp558;
-        D_807A15DC[0].v.ob[0] = Math_Round(temp_s1->pos.x + temp_fs1);
-        D_807A15DC[0].v.ob[1] = Math_Round(temp_s1->pos.y + temp_fs3);
-        D_807A15DC[0].v.ob[2] = Math_Round(temp_s1->pos.z + temp_fs2);
-        D_807A15DC[2].v.ob[0] = Math_Round(temp_s1->pos.x - temp_fs1);
-        D_807A15DC[2].v.ob[1] = Math_Round(temp_s1->pos.y - temp_fs3);
-        D_807A15DC[2].v.ob[2] = Math_Round(temp_s1->pos.z - temp_fs2);
-        D_807A15DC[1].v.ob[0] = Math_Round(temp_s1->pos.x + sp53C);
-        D_807A15DC[1].v.ob[1] = Math_Round(temp_s1->pos.y + sp538);
-        D_807A15DC[1].v.ob[2] = Math_Round(temp_s1->pos.z + sp534);
-        D_807A15DC[3].v.ob[0] = Math_Round(temp_s1->pos.x - sp53C);
-        D_807A15DC[3].v.ob[1] = Math_Round(temp_s1->pos.y - sp538);
-        D_807A15DC[3].v.ob[2] = Math_Round(temp_s1->pos.z - sp534);
-        D_807A15DC[0].v.tc[0] = D_807A15DC[1].v.tc[0] = D_807A15DC[1].v.tc[1] = D_807A15DC[2].v.tc[1] = 0;
-        D_807A15DC[0].v.tc[1] = D_807A15DC[2].v.tc[0] = D_807A15DC[3].v.tc[0] = D_807A15DC[3].v.tc[1] = 0x7FF;
+        gEffectsVtxPtr[0].v.ob[0] = Math_Round(temp_s1->pos.x + temp_fs1);
+        gEffectsVtxPtr[0].v.ob[1] = Math_Round(temp_s1->pos.y + temp_fs3);
+        gEffectsVtxPtr[0].v.ob[2] = Math_Round(temp_s1->pos.z + temp_fs2);
+        gEffectsVtxPtr[2].v.ob[0] = Math_Round(temp_s1->pos.x - temp_fs1);
+        gEffectsVtxPtr[2].v.ob[1] = Math_Round(temp_s1->pos.y - temp_fs3);
+        gEffectsVtxPtr[2].v.ob[2] = Math_Round(temp_s1->pos.z - temp_fs2);
+        gEffectsVtxPtr[1].v.ob[0] = Math_Round(temp_s1->pos.x + sp53C);
+        gEffectsVtxPtr[1].v.ob[1] = Math_Round(temp_s1->pos.y + sp538);
+        gEffectsVtxPtr[1].v.ob[2] = Math_Round(temp_s1->pos.z + sp534);
+        gEffectsVtxPtr[3].v.ob[0] = Math_Round(temp_s1->pos.x - sp53C);
+        gEffectsVtxPtr[3].v.ob[1] = Math_Round(temp_s1->pos.y - sp538);
+        gEffectsVtxPtr[3].v.ob[2] = Math_Round(temp_s1->pos.z - sp534);
+        gEffectsVtxPtr[0].v.tc[0] = gEffectsVtxPtr[1].v.tc[0] = gEffectsVtxPtr[1].v.tc[1] = gEffectsVtxPtr[2].v.tc[1] =
+            0;
+        gEffectsVtxPtr[0].v.tc[1] = gEffectsVtxPtr[2].v.tc[0] = gEffectsVtxPtr[3].v.tc[0] = gEffectsVtxPtr[3].v.tc[1] =
+            0x7FF;
         gSPTexture(gfx++, 0x8000, 0x8000, 0, temp_s1->timer >> 2, G_ON);
-        gSPVertex(gfx++, D_807A15DC, 4, 0);
+        gSPVertex(gfx++, gEffectsVtxPtr, 4, 0);
         gDPPipeSync(gfx++);
         gDPSetEnvColor(gfx++, 180, 150, 100, 230 - (temp_s1->timer * 4));
         gSP2Triangles(gfx++, 0, 1, 3, 0, 1, 2, 3, 0);
-        D_807A15DC += 4;
+        gEffectsVtxPtr += 4;
     }
 
     gSPDisplayList(gfx++, aSetupPitForceFieldDL);
@@ -6350,7 +6355,7 @@ block_115:
         var_s3 = 0;
     }
 
-    for (racer = sLastRacer; (racer >= gRacers) && (D_807A15DC <= (D_807A15E0 - 3)); racer--) {
+    for (racer = sLastRacer; (racer >= gRacers) && (gEffectsVtxPtr <= (gEffectsVtxEndPtr - 3)); racer--) {
         if ((racer->pitForceFieldSize == 0.0f) || (racer->unk_2B3 == 0)) {
             continue;
         }
@@ -6363,33 +6368,35 @@ block_115:
         temp_fs3 = temp_fs0 * sp568;
         temp_fs2 = temp_fs0 * sp564;
         temp_fs0 = racer->pitForceFieldSize * 40.0f;
-        D_807A15DC[0].v.ob[0] = Math_Round(temp_fs4 + temp_fs1);
-        D_807A15DC[0].v.ob[1] = Math_Round(temp_fs5 + temp_fs3);
-        D_807A15DC[0].v.ob[2] = Math_Round(sp54C + temp_fs2);
-        D_807A15DC[2].v.ob[0] = Math_Round(temp_fs4 - temp_fs1);
-        D_807A15DC[2].v.ob[1] = Math_Round(temp_fs5 - temp_fs3);
-        D_807A15DC[2].v.ob[2] = Math_Round(sp54C - temp_fs2);
+        gEffectsVtxPtr[0].v.ob[0] = Math_Round(temp_fs4 + temp_fs1);
+        gEffectsVtxPtr[0].v.ob[1] = Math_Round(temp_fs5 + temp_fs3);
+        gEffectsVtxPtr[0].v.ob[2] = Math_Round(sp54C + temp_fs2);
+        gEffectsVtxPtr[2].v.ob[0] = Math_Round(temp_fs4 - temp_fs1);
+        gEffectsVtxPtr[2].v.ob[1] = Math_Round(temp_fs5 - temp_fs3);
+        gEffectsVtxPtr[2].v.ob[2] = Math_Round(sp54C - temp_fs2);
         temp_fs1 = temp_fs0 * sp560;
-        D_807A15DC[1].v.ob[0] = Math_Round(temp_fs4 + temp_fs1);
+        gEffectsVtxPtr[1].v.ob[0] = Math_Round(temp_fs4 + temp_fs1);
         temp_fs2 = temp_fs0 * sp55C;
-        D_807A15DC[1].v.ob[1] = Math_Round(temp_fs5 + temp_fs2);
+        gEffectsVtxPtr[1].v.ob[1] = Math_Round(temp_fs5 + temp_fs2);
         temp_fs3 = temp_fs0 * sp558;
-        D_807A15DC[1].v.ob[2] = Math_Round(sp54C + temp_fs3);
-        D_807A15DC[3].v.ob[0] = Math_Round(temp_fs4 - temp_fs1);
-        D_807A15DC[3].v.ob[1] = Math_Round(temp_fs5 - temp_fs2);
-        D_807A15DC[3].v.ob[2] = Math_Round(sp54C - temp_fs3);
-        D_807A15DC[2].v.tc[0] = D_807A15DC[3].v.tc[0] = D_807A15DC[3].v.tc[1] = D_807A15DC[0].v.tc[1] = 0x20;
-        D_807A15DC[2].v.tc[1] = D_807A15DC[0].v.tc[0] = D_807A15DC[1].v.tc[0] = D_807A15DC[1].v.tc[1] = 0x7E0;
+        gEffectsVtxPtr[1].v.ob[2] = Math_Round(sp54C + temp_fs3);
+        gEffectsVtxPtr[3].v.ob[0] = Math_Round(temp_fs4 - temp_fs1);
+        gEffectsVtxPtr[3].v.ob[1] = Math_Round(temp_fs5 - temp_fs2);
+        gEffectsVtxPtr[3].v.ob[2] = Math_Round(sp54C - temp_fs3);
+        gEffectsVtxPtr[2].v.tc[0] = gEffectsVtxPtr[3].v.tc[0] = gEffectsVtxPtr[3].v.tc[1] = gEffectsVtxPtr[0].v.tc[1] =
+            0x20;
+        gEffectsVtxPtr[2].v.tc[1] = gEffectsVtxPtr[0].v.tc[0] = gEffectsVtxPtr[1].v.tc[0] = gEffectsVtxPtr[1].v.tc[1] =
+            0x7E0;
         gSPTexture(gfx++, 0x8000, 0x8000, 0, var_s3, G_ON);
-        gSPVertex(gfx++, D_807A15DC, 4, 0);
+        gSPVertex(gfx++, gEffectsVtxPtr, 4, 0);
         gSP2Triangles(gfx++, 0, 1, 3, 0, 1, 2, 3, 0);
-        D_807A15DC += 4;
+        gEffectsVtxPtr += 4;
     }
 
     gSPDisplayList(gfx++, aSetupFallExplosionDL);
 
     for (var_s3 = gFallExplosionsCount, var_s7 = (gFallExplosionsIndex - 1) & 0x1F;
-         (var_s3 != 0) && (D_807A15DC <= (D_807A15E0 - 7)); var_s7 = (var_s7 - 1) & 0x1F, var_s3--) {
+         (var_s3 != 0) && (gEffectsVtxPtr <= (gEffectsVtxEndPtr - 7)); var_s7 = (var_s7 - 1) & 0x1F, var_s3--) {
         fallExplosion = &gFallExplosions[var_s7];
         racer = fallExplosion->racer;
         var_s4 = fallExplosion->timer - 5;
@@ -6398,7 +6405,7 @@ block_115:
         }
 
         if ((var_s4 >= 0) && (var_s4 < 60)) {
-            if (D_807A15DC > (D_807A15E0 - 3)) {
+            if (gEffectsVtxPtr > (gEffectsVtxEndPtr - 3)) {
                 break;
             }
 
@@ -6412,36 +6419,38 @@ block_115:
 
             temp_fs0 *= fallExplosion->scale;
             temp_fs1 = temp_fs0 * sp56C;
-            D_807A15DC[0].v.ob[0] = Math_Round(racer->segmentPositionInfo.pos.x + temp_fs1);
+            gEffectsVtxPtr[0].v.ob[0] = Math_Round(racer->segmentPositionInfo.pos.x + temp_fs1);
             temp_fs2 = temp_fs0 * sp568;
-            D_807A15DC[0].v.ob[1] = Math_Round(racer->segmentPositionInfo.pos.y + temp_fs2);
+            gEffectsVtxPtr[0].v.ob[1] = Math_Round(racer->segmentPositionInfo.pos.y + temp_fs2);
             temp_fs3 = temp_fs0 * sp564;
-            D_807A15DC[0].v.ob[2] = Math_Round(racer->segmentPositionInfo.pos.z + temp_fs3);
-            D_807A15DC[2].v.ob[0] = Math_Round(racer->segmentPositionInfo.pos.x - temp_fs1);
-            D_807A15DC[2].v.ob[1] = Math_Round(racer->segmentPositionInfo.pos.y - temp_fs2);
-            D_807A15DC[2].v.ob[2] = Math_Round(racer->segmentPositionInfo.pos.z - temp_fs3);
+            gEffectsVtxPtr[0].v.ob[2] = Math_Round(racer->segmentPositionInfo.pos.z + temp_fs3);
+            gEffectsVtxPtr[2].v.ob[0] = Math_Round(racer->segmentPositionInfo.pos.x - temp_fs1);
+            gEffectsVtxPtr[2].v.ob[1] = Math_Round(racer->segmentPositionInfo.pos.y - temp_fs2);
+            gEffectsVtxPtr[2].v.ob[2] = Math_Round(racer->segmentPositionInfo.pos.z - temp_fs3);
             temp_fs1 = temp_fs0 * sp560;
-            D_807A15DC[1].v.ob[0] = Math_Round(racer->segmentPositionInfo.pos.x + temp_fs1);
+            gEffectsVtxPtr[1].v.ob[0] = Math_Round(racer->segmentPositionInfo.pos.x + temp_fs1);
             temp_fs2 = temp_fs0 * sp55C;
-            D_807A15DC[1].v.ob[1] = Math_Round(racer->segmentPositionInfo.pos.y + temp_fs2);
+            gEffectsVtxPtr[1].v.ob[1] = Math_Round(racer->segmentPositionInfo.pos.y + temp_fs2);
             temp_fs3 = temp_fs0 * sp558;
-            D_807A15DC[1].v.ob[2] = Math_Round(racer->segmentPositionInfo.pos.z + temp_fs3);
-            D_807A15DC[3].v.ob[0] = Math_Round(racer->segmentPositionInfo.pos.x - temp_fs1);
-            D_807A15DC[3].v.ob[1] = Math_Round(racer->segmentPositionInfo.pos.y - temp_fs2);
-            D_807A15DC[3].v.ob[2] = Math_Round(racer->segmentPositionInfo.pos.z - temp_fs3);
-            D_807A15DC[0].v.tc[0] = D_807A15DC[1].v.tc[0] = D_807A15DC[1].v.tc[1] = D_807A15DC[2].v.tc[1] = 0x40;
-            D_807A15DC[0].v.tc[1] = D_807A15DC[2].v.tc[0] = D_807A15DC[3].v.tc[0] = D_807A15DC[3].v.tc[1] = 0x1FBF;
+            gEffectsVtxPtr[1].v.ob[2] = Math_Round(racer->segmentPositionInfo.pos.z + temp_fs3);
+            gEffectsVtxPtr[3].v.ob[0] = Math_Round(racer->segmentPositionInfo.pos.x - temp_fs1);
+            gEffectsVtxPtr[3].v.ob[1] = Math_Round(racer->segmentPositionInfo.pos.y - temp_fs2);
+            gEffectsVtxPtr[3].v.ob[2] = Math_Round(racer->segmentPositionInfo.pos.z - temp_fs3);
+            gEffectsVtxPtr[0].v.tc[0] = gEffectsVtxPtr[1].v.tc[0] = gEffectsVtxPtr[1].v.tc[1] =
+                gEffectsVtxPtr[2].v.tc[1] = 0x40;
+            gEffectsVtxPtr[0].v.tc[1] = gEffectsVtxPtr[2].v.tc[0] = gEffectsVtxPtr[3].v.tc[0] =
+                gEffectsVtxPtr[3].v.tc[1] = 0x1FBF;
             gSPTexture(gfx++, 0x8000, 0x8000, 0, 0, G_ON);
-            gSPVertex(gfx++, D_807A15DC, 4, 0);
+            gSPVertex(gfx++, gEffectsVtxPtr, 4, 0);
             gDPPipeSync(gfx++);
             gDPSetPrimColor(gfx++, 0, 0, 255, sp5C4, 80, 255);
             gDPSetEnvColor(gfx++, sp5C4, 0, 0, sp5C4);
             gSP2Triangles(gfx++, 0, 1, 3, 0, 1, 2, 3, 0);
-            D_807A15DC += 4;
+            gEffectsVtxPtr += 4;
         }
 
         if (fallExplosion->timer < 26) {
-            if (D_807A15DC > (D_807A15E0 - 3)) {
+            if (gEffectsVtxPtr > (gEffectsVtxEndPtr - 3)) {
                 break;
             }
             temp_fs0 = (fallExplosion->scale * 163.64f * (f32) fallExplosion->timer) / 26.0f;
@@ -6451,30 +6460,32 @@ block_115:
             sp53C = racer->trueBasis.z.x * temp_fs0;
             sp538 = racer->trueBasis.z.y * temp_fs0;
             sp534 = racer->trueBasis.z.z * temp_fs0;
-            D_807A15DC[0].v.ob[0] = Math_Round(racer->segmentPositionInfo.pos.x + temp_fs1);
-            D_807A15DC[0].v.ob[1] = Math_Round(racer->segmentPositionInfo.pos.y + temp_fs3);
-            D_807A15DC[0].v.ob[2] = Math_Round(racer->segmentPositionInfo.pos.z + temp_fs2);
-            D_807A15DC[2].v.ob[0] = Math_Round(racer->segmentPositionInfo.pos.x - temp_fs1);
-            D_807A15DC[2].v.ob[1] = Math_Round(racer->segmentPositionInfo.pos.y - temp_fs3);
-            D_807A15DC[2].v.ob[2] = Math_Round(racer->segmentPositionInfo.pos.z - temp_fs2);
-            D_807A15DC[1].v.ob[0] = Math_Round(racer->segmentPositionInfo.pos.x + sp53C);
-            D_807A15DC[1].v.ob[1] = Math_Round(racer->segmentPositionInfo.pos.y + sp538);
-            D_807A15DC[1].v.ob[2] = Math_Round(racer->segmentPositionInfo.pos.z + sp534);
-            D_807A15DC[3].v.ob[0] = Math_Round(racer->segmentPositionInfo.pos.x - sp53C);
-            D_807A15DC[3].v.ob[1] = Math_Round(racer->segmentPositionInfo.pos.y - sp538);
-            D_807A15DC[3].v.ob[2] = Math_Round(racer->segmentPositionInfo.pos.z - sp534);
-            D_807A15DC[2].v.tc[1] = 0x40;
+            gEffectsVtxPtr[0].v.ob[0] = Math_Round(racer->segmentPositionInfo.pos.x + temp_fs1);
+            gEffectsVtxPtr[0].v.ob[1] = Math_Round(racer->segmentPositionInfo.pos.y + temp_fs3);
+            gEffectsVtxPtr[0].v.ob[2] = Math_Round(racer->segmentPositionInfo.pos.z + temp_fs2);
+            gEffectsVtxPtr[2].v.ob[0] = Math_Round(racer->segmentPositionInfo.pos.x - temp_fs1);
+            gEffectsVtxPtr[2].v.ob[1] = Math_Round(racer->segmentPositionInfo.pos.y - temp_fs3);
+            gEffectsVtxPtr[2].v.ob[2] = Math_Round(racer->segmentPositionInfo.pos.z - temp_fs2);
+            gEffectsVtxPtr[1].v.ob[0] = Math_Round(racer->segmentPositionInfo.pos.x + sp53C);
+            gEffectsVtxPtr[1].v.ob[1] = Math_Round(racer->segmentPositionInfo.pos.y + sp538);
+            gEffectsVtxPtr[1].v.ob[2] = Math_Round(racer->segmentPositionInfo.pos.z + sp534);
+            gEffectsVtxPtr[3].v.ob[0] = Math_Round(racer->segmentPositionInfo.pos.x - sp53C);
+            gEffectsVtxPtr[3].v.ob[1] = Math_Round(racer->segmentPositionInfo.pos.y - sp538);
+            gEffectsVtxPtr[3].v.ob[2] = Math_Round(racer->segmentPositionInfo.pos.z - sp534);
+            gEffectsVtxPtr[2].v.tc[1] = 0x40;
 
-            D_807A15DC[0].v.tc[0] = D_807A15DC[1].v.tc[0] = D_807A15DC[1].v.tc[1] = D_807A15DC[2].v.tc[1];
-            D_807A15DC[3].v.tc[1] = 0x1FBF;
-            D_807A15DC[0].v.tc[1] = D_807A15DC[2].v.tc[0] = D_807A15DC[3].v.tc[0] = D_807A15DC[3].v.tc[1];
+            gEffectsVtxPtr[0].v.tc[0] = gEffectsVtxPtr[1].v.tc[0] = gEffectsVtxPtr[1].v.tc[1] =
+                gEffectsVtxPtr[2].v.tc[1];
+            gEffectsVtxPtr[3].v.tc[1] = 0x1FBF;
+            gEffectsVtxPtr[0].v.tc[1] = gEffectsVtxPtr[2].v.tc[0] = gEffectsVtxPtr[3].v.tc[0] =
+                gEffectsVtxPtr[3].v.tc[1];
             gSPTexture(gfx++, 0x8000, 0x8000, 0, 1, G_ON);
-            gSPVertex(gfx++, D_807A15DC, 4, 0);
+            gSPVertex(gfx++, gEffectsVtxPtr, 4, 0);
             gDPPipeSync(gfx++);
             gDPSetPrimColor(gfx++, 0, 0, 100, 255, 255, 255);
             gDPSetEnvColor(gfx++, 0, 0, 255, (((26 - fallExplosion->timer) * 255) / 26));
             gSP2Triangles(gfx++, 0, 1, 3, 0, 1, 2, 3, 0);
-            D_807A15DC += 4;
+            gEffectsVtxPtr += 4;
         }
     }
 
@@ -6756,7 +6767,7 @@ block_115:
     return gfx;
 }
 #else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/27110/func_80727F54.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/27110/Racer_Draw.s")
 #endif
 
 Gfx* func_8072DE6C(Gfx* gfx, s32 arg1, s32 red, s32 green, s32 blue) {

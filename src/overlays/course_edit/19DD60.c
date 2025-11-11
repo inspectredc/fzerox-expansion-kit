@@ -150,7 +150,7 @@ extern Camera gCameras[];
 extern s16 D_8076C7A8;
 extern s32 D_8076C964;
 extern GfxPool* gGfxPool;
-extern Vtx* D_800D65D0;
+extern Vtx* gCourseVtxPtr;
 
 void CourseEdit_Init(void) {
     gCourseEditWidget.highlightedIndex = -1;
@@ -203,7 +203,7 @@ void CourseEdit_Init(void) {
     func_xk2_800E7028(D_80030608);
     func_xk2_800F5C5C();
     func_xk1_8002AF10(4);
-    D_800D65D0 = gGfxPool->unk_1A308;
+    gCourseVtxPtr = gGfxPool->courseVtxBuffer;
     D_8079E930 = &gCourseEffectsInfo;
     func_xk2_800DC3F8();
     func_xk2_800DD638();
@@ -308,10 +308,10 @@ void func_xk2_800EC9BC(void) {
 s32 func_xk2_800ECBC0(void) {
     if (gGamePaused) {
         Effects_Update();
-        func_80726554();
+        Racer_Update();
         Camera_Update();
         func_i3_80061C2C();
-        func_800B94D8();
+        Course_Update();
         func_xk2_800E5B6C();
         return GAMEMODE_COURSE_EDIT;
     }
@@ -325,10 +325,10 @@ s32 func_xk2_800ECBC0(void) {
         Audio_PauseSet(AUDIO_PAUSE_PAUSED);
     } else {
         Effects_Update();
-        func_80726554();
+        Racer_Update();
         Camera_Update();
         func_i3_80061C2C();
-        func_800B94D8();
+        Course_Update();
         if ((gRacers[0].stateFlags & RACER_STATE_RETIRED) && (D_xk2_80103FF8 == 0)) {
             D_xk2_80103FF8 = 1;
             D_xk2_80103FF4 = 0;
@@ -336,7 +336,7 @@ s32 func_xk2_800ECBC0(void) {
         }
         if ((D_xk2_80103FF0 <= 60) && (D_xk2_80103FF4 == 0)) {
             Audio_TestRunStart();
-            func_8071D48C();
+            Racer_Init();
             Camera_Init();
             Effects_Init();
             D_xk2_80103FF4 = 1;
@@ -380,17 +380,17 @@ extern s32 D_xk1_80032BF8;
 extern s32 D_xk2_80119918;
 extern unk_8003A5D8 D_xk1_8003A598;
 extern s32 D_8079A35C;
-extern Vtx* D_807A15DC;
-extern Vtx* D_807A15E0;
+extern Vtx* gEffectsVtxPtr;
+extern Vtx* gEffectsVtxEndPtr;
 extern volatile u8 D_80794E10;
 extern u8 D_xk2_800F7400;
 extern CourseContext D_xk2_800F7408;
 
 s32 CourseEdit_Update(void) {
 
-    D_800D65D0 = gGfxPool->unk_1A308;
-    D_807A15DC = gGfxPool->unk_2A308;
-    D_807A15E0 = &gGfxPool->unk_2A308[0x7FF];
+    gCourseVtxPtr = gGfxPool->courseVtxBuffer;
+    gEffectsVtxPtr = gGfxPool->effectsVtxBuffer;
+    gEffectsVtxEndPtr = &gGfxPool->effectsVtxBuffer[0x7FF];
     D_80128C94 = &D_80128C90[D_8079A35C];
     if (D_xk2_800F7040 != 0) {
         D_xk2_800F7040 -= 1;

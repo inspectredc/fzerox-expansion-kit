@@ -59,36 +59,36 @@ typedef union unk_Light {
 // ROUGH APPROXIMATIONS OF SIZES, NOT CORRECT!!
 
 typedef struct GfxPool {
-    Gfx gfxBuffer[13313];
-    Mtx unk_1A008[4];
-    Mtx unk_1A108[4];
-    Mtx unk_1A208[4];
-    Vtx unk_1A308[4096];
-    Vtx unk_2A308[2048];
-    Mtx unk_32308[30];
-    Mtx unk_32A88[30];
-    Mtx unk_33208[30];
-    Mtx unk_33988[4];
-    Lights1 unk_33A88[4];
-    unk_Light unk_33AE8[4];
-    LookAt unk_33B28;
-    Vtx unk_33B48[28];
-    Vtx unk_33D08[4];
-    s8 pad_33D48[0x500];
-    Vtx backgroundTileVtx[256];
-    Mtx unk_35248[1];
-    Mtx unk_35288[1];
-    Mtx unk_352C8[64];
-    Vp unk_362C8[4];
-    Vp unk_36308[6];
-    Mtx unk_36368[6];
-    Vtx unk_364E8[4];
-    u16 unk_36528[6][16];
-    Vtx unk_365E8[4];
-    Mtx unk_36628[1];
-    Mtx unk_36668[1];
-    Mtx unk_366A8[1];
-    s8 pad_366E8[0x48];
+    /* 0x00000 */ Gfx gfxBuffer[13313];
+    /* 0x1A008 */ Mtx unk_1A008[4];
+    /* 0x1A108 */ Mtx unk_1A108[4];
+    /* 0x1A208 */ Mtx unk_1A208[4];
+    /* 0x1A308 */ Vtx courseVtxBuffer[4096];
+    /* 0x2A308 */ Vtx effectsVtxBuffer[2048];
+    /* 0x32308 */ Mtx unk_32308[30];
+    /* 0x32A08 */ Mtx unk_32A88[30];
+    /* 0x33208 */ Mtx unk_33208[30];
+    /* 0x33988 */ Mtx unk_33988[4];
+    /* 0x33A88 */ Lights1 unk_33A88[4];
+    /* 0x33AE8 */ unk_Light unk_33AE8[4];
+    /* 0x33B28 */ LookAt unk_33B28;
+    /* 0x33B48 */ Vtx unk_33B48[28];
+    /* 0x33D08 */ Vtx unk_33D08[4];
+    /* 0x33D48 */ s8 pad_33D48[0x500];
+    /* 0x34248 */ Vtx backgroundTileVtxBuffer[256];
+    /* 0x35248 */ Mtx unk_35248[1];
+    /* 0x35288 */ Mtx unk_35288[1];
+    /* 0x352C8 */ Mtx unk_352C8[64];
+    /* 0x362C8 */ Vp unk_362C8[4];
+    /* 0x36308 */ Vp unk_36308[6];
+    /* 0x36368 */ Mtx unk_36368[6];
+    /* 0x364E8 */ Vtx unk_364E8[4];
+    /* 0x36528 */ u16 unk_36528[6][16];
+    /* 0x365E8 */ Vtx unk_365E8[4];
+    /* 0x36628 */ Mtx unk_36628[1];
+    /* 0x36668 */ Mtx unk_36668[1];
+    /* 0x366A8 */ Mtx unk_366A8[1];
+    /* 0x366E8 */ s8 pad_366E8[0x48];
 } GfxPool; // size = 0x36730
 
 typedef struct {

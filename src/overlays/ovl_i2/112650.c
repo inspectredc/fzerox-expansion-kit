@@ -22,7 +22,7 @@ typedef struct unk_800CF528 {
 } unk_800CF528; // size = 0x20
 
 typedef struct unk_800F8958 {
-    SegmentChunk* unk_00;
+    SegmentChunk* chunk;
     Gfx* unk_04;
     Gfx* unk_08;
     Gfx* unk_0C;
@@ -33,24 +33,24 @@ typedef struct unk_800F8958 {
     Gfx* unk_20;
     Gfx* unk_24;
     Gfx* unk_28;
-    s32 unk_2C;
+    s32 loadVtxIndex;
 } unk_800F8958; // size = 0x30
 
-typedef struct unk_800A8B74_arg_0 {
-    SegmentChunk* unk_00;
-    SegmentChunk* unk_04;
-    f32 unk_08;
+typedef struct SegmentChunkGroup {
+    SegmentChunk* startChunk;
+    SegmentChunk* endChunk;
+    f32 averageDepth;
     s32 drawState;
-} unk_800A8B74_arg_0; // size = 0x10
+} SegmentChunkGroup; // size = 0x10
 
 CourseInfo* gCurrentCourseInfo;
 s32 gCourseIndex;
 s32 gSegmentChunkCount;
-SegmentChunk* D_i2_800D65CC;
-Vtx* D_800D65D0;
+SegmentChunk* sLastSegmentChunk;
+Vtx* gCourseVtxPtr;
 s32 D_i2_800D65D4;
-unk_800A8B74_arg_0 D_i2_800D65D8[96];
-s32 D_i2_800D6BD8;
+SegmentChunkGroup sSegmentChunkGroups[96];
+s32 sLastTrackShapeType;
 s32 D_i2_800D6BDC;
 s16 D_i2_800D6BE0[5];
 s32 sRandomCourseInitSeed1;
@@ -63,28 +63,28 @@ unk_800F8958 D_i2_800D6C08[2];
 unk_800F8958* D_i2_800D6C68;
 unk_800F8958* D_i2_800D6C6C;
 s32 D_i2_800D6C70;
-Gfx* D_i2_800D6C74;
+Gfx* sCourseDisp;
 SegmentChunk* D_i2_800D6C78;
-SegmentChunk* D_i2_800D6C7C;
-SegmentChunk* D_i2_800D6C80;
+SegmentChunk* sWorkingSegmentChunk;
+SegmentChunk* sWorkingNextSegmentChunk;
 s32 D_i2_800D6C84;
 bool D_i2_800D6C88;
-s32 D_i2_800D6C8C;
+s32 sWorkingChunkJoinInfo;
 f32 D_i2_800D6C90;
 f32 D_i2_800D6C94;
 f32 D_i2_800D6C98;
 
 s32 D_i2_800C1510 = 0;
 s16 gLastRandomCourseIndex = -1;
-s32 D_i2_800C1518 = 990;
+s32 sCourseFogStartDistance = 990;
 UNUSED s32 D_i2_800C151C = 0;
 
 f32 D_i2_800C1520 = 6000.0f;
 f32 D_i2_800C1524 = 1500.0f;
 f32 D_i2_800C1528 = 3000.0f;
 f32 D_i2_800C152C = 400.0f;
-f32 D_i2_800C1530 = 5500.0f;
-f32 D_i2_800C1534 = 1000.0f;
+f32 sCourseFarRenderDistance = 5500.0f;
+f32 sCourseRenderOriginDistance = 1000.0f;
 
 // TRACK_SHAPE_ROAD
 unk_800CF528 D_i2_800C1538[] = {
@@ -206,38 +206,38 @@ SegmentChunkJoinFunc sSegmentChunkJoinFuncs[] = {
     Course_ChunkJoinEqual,      // TRACK_SHAPE_BORDERLESS_ROAD
 };
 
-void func_i2_800BBC14(void);
-void func_i2_800BC580(void);
-void func_i2_800BA850(void);
-void func_i2_800BCDFC(void);
-void func_i2_800B9DD4(void);
+void Course_DrawBackwardCylinderChunkGroup(void);
+void Course_DrawBackwardHalfPipeChunkGroup(void);
+void Course_DrawBackwardPipeTunnelChunkGroup(void);
+void Course_DrawBackwardAirChunkGroup(void);
+void Course_DrawBackwardRoadChunkGroup(void);
 
-void (*D_i2_800C1958[])(void) = {
-    func_i2_800B9DD4, // TRACK_SHAPE_ROAD
-    func_i2_800B9DD4, // TRACK_SHAPE_WALLED_ROAD
-    func_i2_800BA850, // TRACK_SHAPE_PIPE
-    func_i2_800BBC14, // TRACK_SHAPE_CYLINDER
-    func_i2_800BC580, // TRACK_SHAPE_HALF_PIPE
-    func_i2_800BA850, // TRACK_SHAPE_TUNNEL
-    func_i2_800BCDFC, // TRACK_SHAPE_AIR
-    func_i2_800B9DD4, // TRACK_SHAPE_BORDERLESS_ROAD
+void (*sBackwardChunkGroupDrawFuncs[])(void) = {
+    Course_DrawBackwardRoadChunkGroup,       // TRACK_SHAPE_ROAD
+    Course_DrawBackwardRoadChunkGroup,       // TRACK_SHAPE_WALLED_ROAD
+    Course_DrawBackwardPipeTunnelChunkGroup, // TRACK_SHAPE_PIPE
+    Course_DrawBackwardCylinderChunkGroup,   // TRACK_SHAPE_CYLINDER
+    Course_DrawBackwardHalfPipeChunkGroup,   // TRACK_SHAPE_HALF_PIPE
+    Course_DrawBackwardPipeTunnelChunkGroup, // TRACK_SHAPE_TUNNEL
+    Course_DrawBackwardAirChunkGroup,        // TRACK_SHAPE_AIR
+    Course_DrawBackwardRoadChunkGroup,       // TRACK_SHAPE_BORDERLESS_ROAD
 };
 
-void func_i2_800BC070(void);
-void func_i2_800BC968(void);
-void func_i2_800BB1A4(void);
-void func_i2_800BCF0C(void);
-void func_i2_800BA1A0(void);
+void Course_DrawForwardCylinderChunkGroup(void);
+void Course_DrawForwardHalfPipeChunkGroup(void);
+void Course_DrawForwardPipeTunnelChunkGroup(void);
+void Course_DrawForwardAirChunkGroup(void);
+void Course_DrawForwardRoadChunkGroup(void);
 
-void (*D_i2_800C1978[])(void) = {
-    func_i2_800BA1A0, // TRACK_SHAPE_ROAD
-    func_i2_800BA1A0, // TRACK_SHAPE_WALLED_ROAD
-    func_i2_800BB1A4, // TRACK_SHAPE_PIPE
-    func_i2_800BC070, // TRACK_SHAPE_CYLINDER
-    func_i2_800BC968, // TRACK_SHAPE_HALF_PIPE
-    func_i2_800BB1A4, // TRACK_SHAPE_TUNNEL
-    func_i2_800BCF0C, // TRACK_SHAPE_AIR
-    func_i2_800BA1A0, // TRACK_SHAPE_BORDERLESS_ROAD
+void (*sForwardChunkGroupDrawFuncs[])(void) = {
+    Course_DrawForwardRoadChunkGroup,       // TRACK_SHAPE_ROAD
+    Course_DrawForwardRoadChunkGroup,       // TRACK_SHAPE_WALLED_ROAD
+    Course_DrawForwardPipeTunnelChunkGroup, // TRACK_SHAPE_PIPE
+    Course_DrawForwardCylinderChunkGroup,   // TRACK_SHAPE_CYLINDER
+    Course_DrawForwardHalfPipeChunkGroup,   // TRACK_SHAPE_HALF_PIPE
+    Course_DrawForwardPipeTunnelChunkGroup, // TRACK_SHAPE_TUNNEL
+    Course_DrawForwardAirChunkGroup,        // TRACK_SHAPE_AIR
+    Course_DrawForwardRoadChunkGroup,       // TRACK_SHAPE_BORDERLESS_ROAD
 };
 
 f32 D_i2_800C1998[] = {
@@ -291,10 +291,10 @@ s32 D_i2_800C19F4[] = {
 };
 
 s32 D_i2_800C1A00[] = {
-    TRACK_FLAG_20000000 | TRACK_FLAG_8000000 | TRACK_SHAPE_TUNNEL | TUNNEL_0,
-    TRACK_FLAG_20000000 | TRACK_FLAG_8000000 | TRACK_SHAPE_TUNNEL | TUNNEL_1,
-    TRACK_FLAG_20000000 | TRACK_FLAG_8000000 | TRACK_SHAPE_TUNNEL | TUNNEL_2,
-    TRACK_FLAG_20000000 | TRACK_FLAG_8000000 | TRACK_SHAPE_TUNNEL | TUNNEL_3,
+    TRACK_FLAG_INSIDE | TRACK_FLAG_8000000 | TRACK_SHAPE_TUNNEL | TUNNEL_0,
+    TRACK_FLAG_INSIDE | TRACK_FLAG_8000000 | TRACK_SHAPE_TUNNEL | TUNNEL_1,
+    TRACK_FLAG_INSIDE | TRACK_FLAG_8000000 | TRACK_SHAPE_TUNNEL | TUNNEL_2,
+    TRACK_FLAG_INSIDE | TRACK_FLAG_8000000 | TRACK_SHAPE_TUNNEL | TUNNEL_3,
 };
 
 s32 D_i2_800C1A10[] = {
@@ -305,10 +305,10 @@ s32 D_i2_800C1A10[] = {
 };
 
 s32 D_i2_800C1A20[] = {
-    TRACK_FLAG_20000000 | TRACK_SHAPE_PIPE | PIPE_0,
-    TRACK_FLAG_20000000 | TRACK_SHAPE_PIPE | PIPE_1,
-    TRACK_FLAG_20000000 | TRACK_SHAPE_PIPE | PIPE_2,
-    TRACK_FLAG_20000000 | TRACK_SHAPE_PIPE | PIPE_3,
+    TRACK_FLAG_INSIDE | TRACK_SHAPE_PIPE | PIPE_0,
+    TRACK_FLAG_INSIDE | TRACK_SHAPE_PIPE | PIPE_1,
+    TRACK_FLAG_INSIDE | TRACK_SHAPE_PIPE | PIPE_2,
+    TRACK_FLAG_INSIDE | TRACK_SHAPE_PIPE | PIPE_3,
 };
 
 s32 D_i2_800C1A30[] = {
@@ -1952,7 +1952,7 @@ s32 func_i2_800B5C80(s32 trackSegmentInfo, f32 distance) {
     return -0x8000;
 }
 
-extern SegmentChunk D_802BE5C0[];
+extern SegmentChunk gSegmentChunks[];
 extern Mtx3F D_80033840[];
 
 s32 func_i2_800B5CD8(CourseInfo* courseInfo) {
@@ -2019,11 +2019,11 @@ s32 func_i2_800B5CD8(CourseInfo* courseInfo) {
 
     startSegment = segment;
     nextSegment = segment->next;
-    D_802BE5C0[0].trackSegmentInfo = (segment->trackSegmentInfo & ~TRACK_JOIN_MASK) | TRACK_FLAG_80000000;
+    gSegmentChunks[0].trackSegmentInfo = (segment->trackSegmentInfo & ~TRACK_JOIN_MASK) | TRACK_FLAG_80000000;
     if (segment->trackSegmentInfo & TRACK_JOIN_PREVIOUS) {
-        D_802BE5C0[0].trackSegmentInfo |= (TRACK_JOIN_PREVIOUS | TRACK_UNK1_800);
+        gSegmentChunks[0].trackSegmentInfo |= (TRACK_JOIN_PREVIOUS | TRACK_CHUNK_JOIN_PREVIOUS_START);
     } else if (segment->prev->trackSegmentInfo & TRACK_JOIN_NEXT) {
-        D_802BE5C0[0].trackSegmentInfo |= TRACK_JOIN_NEXT;
+        gSegmentChunks[0].trackSegmentInfo |= TRACK_JOIN_NEXT;
     }
     joinLengths = Course_SegmentGetJoinLengths(segment);
     forwardMagnitude = Course_SplineGetBasis(segment, 0.0f, &segmentBasis, 0.0f);
@@ -2031,15 +2031,15 @@ s32 func_i2_800B5CD8(CourseInfo* courseInfo) {
         D_80033840[0] = segmentBasis;
         spB0 = &D_80033840[1];
     }
-    Course_SplineGetPosition(segment, 0.0f, &D_802BE5C0[0].pos);
-    if (D_802BE5C0[0].trackSegmentInfo & TRACK_JOIN_BOTH) {
-        Course_ChunkCalculateRoadAirReferencePos(&D_802BE5C0[0], segment->radiusLeft, segment->radiusRight,
+    Course_SplineGetPosition(segment, 0.0f, &gSegmentChunks[0].pos);
+    if (gSegmentChunks[0].trackSegmentInfo & TRACK_JOIN_BOTH) {
+        Course_ChunkCalculateRoadAirReferencePos(&gSegmentChunks[0], segment->radiusLeft, segment->radiusRight,
                                                  &segmentBasis, &segmentStartLeftPos, &segmentStartRightPos,
                                                  &segmentStartTopPos, &segmentStartBottomPos, &segmentStartCenterPos);
     } else {
         sSegmentChunkCalculateReferencePosFuncs[TRACK_SHAPE_INDEX(
             (u32) (segment->trackSegmentInfo & TRACK_SHAPE_MASK))](
-            &D_802BE5C0[0], segment->radiusLeft, segment->radiusRight, &segmentBasis, &segmentStartLeftPos,
+            &gSegmentChunks[0], segment->radiusLeft, segment->radiusRight, &segmentBasis, &segmentStartLeftPos,
             &segmentStartRightPos, &segmentStartTopPos, &segmentStartBottomPos, &segmentStartCenterPos);
     }
     forward.x = segmentBasis.x.x;
@@ -2059,17 +2059,17 @@ s32 func_i2_800B5CD8(CourseInfo* courseInfo) {
     previousChunkBottomPos = spA4;
     courseStartBottomPos = spA4;
 
-    D_802BE5C0[0].leftTextureCorrection = D_802BE5C0[0].rightTextureCorrection = D_802BE5C0[0].topTextureCorrection =
-        D_802BE5C0[0].bottomTextureCorrection = -0x8000;
-    D_802BE5C0[0].segmentIndex = (s32) (segment - courseInfo->courseSegments);
+    gSegmentChunks[0].leftTextureCorrection = gSegmentChunks[0].rightTextureCorrection =
+        gSegmentChunks[0].topTextureCorrection = gSegmentChunks[0].bottomTextureCorrection = -0x8000;
+    gSegmentChunks[0].segmentIndex = (s32) (segment - courseInfo->courseSegments);
 
     leftFaceDistance = rightFaceDistance = topFaceDistance = bottomFaceDistance = 0.0f;
     var_fs3 = 0.0f;
     t = 0.0f;
-    segmentChunk = D_802BE5C0;
+    segmentChunk = gSegmentChunks;
     nextSegmentChunk = segmentChunk + 1;
-    D_802BE5C0[0].segmentTValue = 0.0f;
-    segment->startChunk = D_802BE5C0;
+    gSegmentChunks[0].segmentTValue = 0.0f;
+    segment->startChunk = gSegmentChunks;
     gSegmentChunkCount = 1;
 
     while (true) {
@@ -2210,9 +2210,9 @@ s32 func_i2_800B5CD8(CourseInfo* courseInfo) {
             if (!(spB4 & 0x10000)) {
                 spB4 |= 0x10000;
                 if (t < 0.5f) {
-                    spB4 |= nextSegmentChunk - D_802BE5C0;
+                    spB4 |= nextSegmentChunk - gSegmentChunks;
                 } else {
-                    spB4 |= (nextSegmentChunk - D_802BE5C0) + 1;
+                    spB4 |= (nextSegmentChunk - gSegmentChunks) + 1;
                 }
             }
 
@@ -2275,21 +2275,23 @@ s32 func_i2_800B5CD8(CourseInfo* courseInfo) {
                 bottomFaceDistance = (f32) (nextSegmentChunk->bottomTextureCoord + 0x8000) / temp_fv0_5;
             }
             nextSegmentChunk->trackSegmentInfo =
-                segment->trackSegmentInfo & ~(TRACK_JOIN_MASK | TRACK_UNK1_MASK | TRACK_UNK2_MASK);
+                segment->trackSegmentInfo &
+                ~(TRACK_JOIN_MASK | TRACK_CHUNK_JOIN_TRANSITION_END_MASK | TRACK_CHUNK_JOIN_TRANSITION_START_MASK);
             nextSegmentChunk->segmentIndex = segment - courseInfo->courseSegments;
             nextSegmentChunk->segmentTValue = t;
 
             if ((segment->previousJoinEndTValue <= t) && (t <= segment->nextJoinStartTValue)) {
                 if (t == segment->previousJoinEndTValue) {
 
-                    if ((nextSegmentChunk - 1)->trackSegmentInfo & TRACK_FLAG_20000000) {
+                    if ((nextSegmentChunk - 1)->trackSegmentInfo & TRACK_FLAG_INSIDE) {
                         (nextSegmentChunk - 1)->trackSegmentInfo =
-                            ((nextSegmentChunk - 1)->trackSegmentInfo & ~TRACK_FLAG_CONTINUOUS) | TRACK_UNK2_2000;
+                            ((nextSegmentChunk - 1)->trackSegmentInfo & ~TRACK_FLAG_CONTINUOUS) |
+                            TRACK_CHUNK_JOIN_PREVIOUS_END;
                     } else {
-                        (nextSegmentChunk - 1)->trackSegmentInfo |= TRACK_UNK2_2000;
+                        (nextSegmentChunk - 1)->trackSegmentInfo |= TRACK_CHUNK_JOIN_PREVIOUS_END;
                     }
                 } else if (t == segment->nextJoinStartTValue) {
-                    nextSegmentChunk->trackSegmentInfo |= TRACK_UNK2_4000;
+                    nextSegmentChunk->trackSegmentInfo |= TRACK_CHUNK_JOIN_NEXT_START;
                     if (!(nextSegmentChunk->trackSegmentInfo & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK))) {
                         nextSegmentChunk->trackSegmentInfo =
                             (nextSegmentChunk->trackSegmentInfo & ~TRACK_TYPE_MASK) | 1;
@@ -2329,14 +2331,14 @@ s32 func_i2_800B5CD8(CourseInfo* courseInfo) {
                         if (((nextSegmentChunk - 1)->trackSegmentInfo & TRACK_SHAPE_MASK) == TRACK_SHAPE_CYLINDER) {
                             (nextSegmentChunk - 1)->trackSegmentInfo =
                                 (s32) (((nextSegmentChunk - 1)->trackSegmentInfo & ~TRACK_FLAG_CONTINUOUS) |
-                                       TRACK_UNK1_1000);
+                                       TRACK_CHUNK_JOIN_NEXT_FINISH);
                         } else {
-                            (nextSegmentChunk - 1)->trackSegmentInfo |= TRACK_UNK1_1000;
+                            (nextSegmentChunk - 1)->trackSegmentInfo |= TRACK_CHUNK_JOIN_NEXT_FINISH;
                         }
                     }
 
                     if (nextSegmentChunk->trackSegmentInfo & TRACK_JOIN_PREVIOUS) {
-                        nextSegmentChunk->trackSegmentInfo |= TRACK_UNK1_800;
+                        nextSegmentChunk->trackSegmentInfo |= TRACK_CHUNK_JOIN_PREVIOUS_START;
                     }
                     nextSegmentChunk->trackSegmentInfo |= TRACK_FLAG_80000000;
                     nextSegmentChunk->leftTextureCorrection = nextSegmentChunk->rightTextureCorrection =
@@ -2368,10 +2370,10 @@ s32 func_i2_800B5CD8(CourseInfo* courseInfo) {
     bottomTextureCoord = func_i2_800B5C80(trackSegmentInfo, bottomFaceDistance);
     if ((leftTextureCoord < 0x8000) && (rightTextureCoord < 0x8000) && (topTextureCoord < 0x8000) &&
         (bottomTextureCoord < 0x8000)) {
-        D_802BE5C0[0].leftTextureCoord = leftTextureCoord;
-        D_802BE5C0[0].rightTextureCoord = rightTextureCoord;
-        D_802BE5C0[0].topTextureCoord = topTextureCoord;
-        D_802BE5C0[0].bottomTextureCoord = bottomTextureCoord;
+        gSegmentChunks[0].leftTextureCoord = leftTextureCoord;
+        gSegmentChunks[0].rightTextureCoord = rightTextureCoord;
+        gSegmentChunks[0].topTextureCoord = topTextureCoord;
+        gSegmentChunks[0].bottomTextureCoord = bottomTextureCoord;
     } else {
         segmentChunk->trackSegmentInfo =
             (segmentChunk->trackSegmentInfo & ~TRACK_FLAG_CONTINUOUS) | TRACK_FLAG_80000000;
@@ -2380,36 +2382,36 @@ s32 func_i2_800B5CD8(CourseInfo* courseInfo) {
         var_v1 = temp_a3->textureCoordinateMask;
 
         segmentChunk->leftTextureCorrection = (segmentChunk->leftTextureCoord & var_v1) - 0x8000;
-        D_802BE5C0[0].leftTextureCoord =
+        gSegmentChunks[0].leftTextureCoord =
             (leftTextureCoord - segmentChunk->leftTextureCoord) + segmentChunk->leftTextureCorrection;
 
         segmentChunk->rightTextureCorrection = (segmentChunk->rightTextureCoord & var_v1) - 0x8000;
-        D_802BE5C0[0].rightTextureCoord =
+        gSegmentChunks[0].rightTextureCoord =
             (rightTextureCoord - segmentChunk->rightTextureCoord) + segmentChunk->rightTextureCorrection;
 
         segmentChunk->topTextureCorrection = (segmentChunk->topTextureCoord & var_v1) - 0x8000;
-        D_802BE5C0[0].topTextureCoord =
+        gSegmentChunks[0].topTextureCoord =
             (topTextureCoord - segmentChunk->topTextureCoord) + segmentChunk->topTextureCorrection;
 
         segmentChunk->bottomTextureCorrection = (segmentChunk->bottomTextureCoord & var_v1) - 0x8000;
-        D_802BE5C0[0].bottomTextureCoord =
+        gSegmentChunks[0].bottomTextureCoord =
             (bottomTextureCoord - segmentChunk->bottomTextureCoord) + segmentChunk->bottomTextureCorrection;
     }
     if (nextSegment->prev->trackSegmentInfo & TRACK_JOIN_NEXT) {
         if ((segmentChunk->trackSegmentInfo & TRACK_SHAPE_MASK) == TRACK_SHAPE_CYLINDER) {
             segmentChunk->trackSegmentInfo =
-                (segmentChunk->trackSegmentInfo & ~TRACK_FLAG_CONTINUOUS) | TRACK_UNK1_1000;
+                (segmentChunk->trackSegmentInfo & ~TRACK_FLAG_CONTINUOUS) | TRACK_CHUNK_JOIN_NEXT_FINISH;
         } else {
-            segmentChunk->trackSegmentInfo |= TRACK_UNK1_1000;
+            segmentChunk->trackSegmentInfo |= TRACK_CHUNK_JOIN_NEXT_FINISH;
         }
     }
 
-    D_i2_800D65CC = &D_802BE5C0[gSegmentChunkCount];
-    D_802BE5C0[gSegmentChunkCount] = D_802BE5C0[0];
+    sLastSegmentChunk = &gSegmentChunks[gSegmentChunkCount];
+    gSegmentChunks[gSegmentChunkCount] = gSegmentChunks[0];
     return spB4;
 }
 
-Vtx* func_i2_800B7060(Vtx* arg0, Vec3f* arg1, Mtx3F* arg2) {
+Vtx* func_i2_800B7060(Vtx* vtx, Vec3f* arg1, Mtx3F* arg2) {
     f32 temp_fs0;
     f32 temp_fs1;
     f32 temp_fs2;
@@ -2424,20 +2426,20 @@ Vtx* func_i2_800B7060(Vtx* arg0, Vec3f* arg1, Mtx3F* arg2) {
     sp3C = arg2->z.y * 200.0f;
     sp38 = arg2->z.z * 200.0f;
 
-    arg0->v.ob[0] = Math_Round(arg1->x + temp_fs0 + temp_fs0);
-    arg0->v.ob[1] = Math_Round(arg1->y + temp_fs1 + temp_fs1);
-    arg0->v.ob[2] = Math_Round(arg1->z + temp_fs2 + temp_fs2);
-    arg0++;
-    arg0->v.ob[0] = Math_Round((temp_fs0 = arg1->x - temp_fs0) + sp40);
-    arg0->v.ob[1] = Math_Round((temp_fs1 = arg1->y - temp_fs1) + sp3C);
-    arg0->v.ob[2] = Math_Round((temp_fs2 = arg1->z - temp_fs2) + sp38);
-    arg0++;
-    arg0->v.ob[0] = Math_Round(temp_fs0 - sp40);
-    arg0->v.ob[1] = Math_Round(temp_fs1 - sp3C);
-    arg0->v.ob[2] = Math_Round(temp_fs2 - sp38);
-    arg0++;
+    vtx->v.ob[0] = Math_Round(arg1->x + temp_fs0 + temp_fs0);
+    vtx->v.ob[1] = Math_Round(arg1->y + temp_fs1 + temp_fs1);
+    vtx->v.ob[2] = Math_Round(arg1->z + temp_fs2 + temp_fs2);
+    vtx++;
+    vtx->v.ob[0] = Math_Round((temp_fs0 = arg1->x - temp_fs0) + sp40);
+    vtx->v.ob[1] = Math_Round((temp_fs1 = arg1->y - temp_fs1) + sp3C);
+    vtx->v.ob[2] = Math_Round((temp_fs2 = arg1->z - temp_fs2) + sp38);
+    vtx++;
+    vtx->v.ob[0] = Math_Round(temp_fs0 - sp40);
+    vtx->v.ob[1] = Math_Round(temp_fs1 - sp3C);
+    vtx->v.ob[2] = Math_Round(temp_fs2 - sp38);
+    vtx++;
 
-    return arg0;
+    return vtx;
 }
 
 s32 func_i2_800B71B0(CourseInfo* arg0, Vtx* arg1) {
@@ -2971,8 +2973,9 @@ void Course_GenerateRandomCourse(void) {
                 var_s1_2 = &COURSE_CONTEXT()->courseData.controlPoint[gCurrentCourseInfo->segmentCount - 4];
                 do {
                     var_s0_4 = var_s1_2 + 1;
-                    if (((Math_Rand1() & 0x1FFFF) < 0x1112) && ((var_s1_2 - 1)->trackSegmentInfo & 0x10000000)) {
-                        if ((var_s0_4 + 1)->trackSegmentInfo & 0x10000000) {
+                    if (((Math_Rand1() & 0x1FFFF) < 0x1112) &&
+                        ((var_s1_2 - 1)->trackSegmentInfo & TRACK_FLAG_JOINABLE)) {
+                        if ((var_s0_4 + 1)->trackSegmentInfo & TRACK_FLAG_JOINABLE) {
                             var_s1_2->trackSegmentInfo = var_s0_4->trackSegmentInfo =
                                 D_i2_800C19E8[(Math_Rand1() & 0x1FFFF) % 3];
                         }
@@ -2983,8 +2986,9 @@ void Course_GenerateRandomCourse(void) {
                 var_s1_2 = &COURSE_CONTEXT()->courseData.controlPoint[gCurrentCourseInfo->segmentCount - 3];
                 do {
                     var_s0_4 = var_s1_2 + 1;
-                    if (((Math_Rand1() & 0x1FFFF) < 0x1112) && ((var_s1_2 - 1)->trackSegmentInfo & 0x10000000)) {
-                        if ((var_s0_4 + 1)->trackSegmentInfo & 0x10000000) {
+                    if (((Math_Rand1() & 0x1FFFF) < 0x1112) &&
+                        ((var_s1_2 - 1)->trackSegmentInfo & TRACK_FLAG_JOINABLE)) {
+                        if ((var_s0_4 + 1)->trackSegmentInfo & TRACK_FLAG_JOINABLE) {
                             var_s1_2->trackSegmentInfo = var_s0_4->trackSegmentInfo =
                                 D_i2_800C19F4[(Math_Rand1() & 0x1FFFF) % 3];
                         }
@@ -3001,8 +3005,8 @@ void Course_GenerateRandomCourse(void) {
                         &COURSE_CONTEXT()
                              ->courseData
                              .controlPoint[((Math_Rand2() & 0x1FFFF) % (gCurrentCourseInfo->segmentCount - 1)) + 1];
-                    if ((var_s1_2 < var_s0_4) && ((var_s1_2 - 1)->trackSegmentInfo & 0x10000000) &&
-                        ((var_s0_4 + 1)->trackSegmentInfo & 0x10000000)) {
+                    if ((var_s1_2 < var_s0_4) && ((var_s1_2 - 1)->trackSegmentInfo & TRACK_FLAG_JOINABLE) &&
+                        ((var_s0_4 + 1)->trackSegmentInfo & TRACK_FLAG_JOINABLE)) {
                         var_s6 = Math_Rand1() & 3;
                         temp_s2 = D_i2_800C1A00[var_s6];
                         temp_a0 = D_i2_800C1A00[(((Math_Rand2() & 0x1FFFF) % 3) + var_s6 + 1) & 3];
@@ -3078,7 +3082,7 @@ void Course_GenerateRandomCourse(void) {
             while (temp_s3 != 0) {
                 do {
                     var_s4 = ((Math_Rand2() & 0x1FFFF) % (gCurrentCourseInfo->segmentCount - 6)) + 2;
-                    if (COURSE_CONTEXT()->courseData.controlPoint[var_s4].trackSegmentInfo & 0x08000000) {
+                    if (COURSE_CONTEXT()->courseData.controlPoint[var_s4].trackSegmentInfo & TRACK_FLAG_8000000) {
                         break;
                     }
                 } while (COURSE_CONTEXT()
@@ -3153,7 +3157,7 @@ void func_i2_800B904C(void) {
     D_i2_800D6C08[0].unk_20 = D_8014430;
     D_i2_800D6C08[0].unk_24 = D_8014520;
     D_i2_800D6C08[0].unk_28 = D_80145E0;
-    D_i2_800D6C08[0].unk_2C = 0;
+    D_i2_800D6C08[0].loadVtxIndex = 0;
     D_i2_800D6C08[1].unk_04 = D_8014138;
     D_i2_800D6C08[1].unk_08 = D_80141C8;
     D_i2_800D6C08[1].unk_0C = D_8014138;
@@ -3164,10 +3168,10 @@ void func_i2_800B904C(void) {
     D_i2_800D6C08[1].unk_20 = D_80144D0;
     D_i2_800D6C08[1].unk_24 = D_8014580;
     D_i2_800D6C08[1].unk_28 = D_8014640;
-    D_i2_800D6C08[1].unk_2C = 8;
+    D_i2_800D6C08[1].loadVtxIndex = 8;
 
-    var_a0 = &D_8024E260[0].unk_1A308[0xFFF];
-    var_v1 = &D_8024E260[1].unk_1A308[0xFFF];
+    var_a0 = &D_8024E260[0].courseVtxBuffer[0xFFF];
+    var_v1 = &D_8024E260[1].courseVtxBuffer[0xFFF];
     // FAKE
     goto dummy;
 dummy:;
@@ -3177,7 +3181,7 @@ dummy:;
 
         var_a0--;
         var_v1--;
-    } while ((u32) var_v1 >= (u32) D_8024E260[1].unk_1A308);
+    } while ((u32) var_v1 >= (u32) D_8024E260[1].courseVtxBuffer);
 
     func_i2_800B8FF4();
 }
@@ -3245,929 +3249,932 @@ void Course_Init(void) {
     Course_SegmentContinuousFlagInit(gCurrentCourseInfo);
     Course_SegmentFormsInit(gCurrentCourseInfo);
     func_i2_800B5CD8(gCurrentCourseInfo);
-    D_i2_800C1534 = 900.0f;
+    sCourseRenderOriginDistance = 900.0f;
     segment = gCurrentCourseInfo->courseSegments;
     do {
 
-        if (D_i2_800C1534 < segment->radiusLeft) {
-            D_i2_800C1534 = segment->radiusLeft;
+        if (sCourseRenderOriginDistance < segment->radiusLeft) {
+            sCourseRenderOriginDistance = segment->radiusLeft;
         }
 
-        if (D_i2_800C1534 < segment->radiusRight) {
-            D_i2_800C1534 = segment->radiusRight;
+        if (sCourseRenderOriginDistance < segment->radiusRight) {
+            sCourseRenderOriginDistance = segment->radiusRight;
         }
         segment = segment->next;
     } while (segment != gCurrentCourseInfo->courseSegments);
-    D_i2_800C1534 += 100.0f;
-    D_i2_800C1530 = D_i2_800C1534 + 4500.0f;
-    D_i2_800D6BFC += D_i2_800C1534 - 1000.0f;
-    D_i2_800D6C00 += D_i2_800C1534 - 1000.0f;
+    sCourseRenderOriginDistance += 100.0f;
+    sCourseFarRenderDistance = sCourseRenderOriginDistance + 4500.0f;
+    D_i2_800D6BFC += sCourseRenderOriginDistance - 1000.0f;
+    D_i2_800D6C00 += sCourseRenderOriginDistance - 1000.0f;
 }
 
-void func_800B94D8(void) {
+void Course_Update(void) {
 }
 
-void func_i2_800B94E0(SegmentChunk* arg0) {
-    D_800D65D0[0].v.ob[0] = arg0->referencePos1[0];
-    D_800D65D0[0].v.ob[1] = arg0->referencePos1[1];
-    D_800D65D0[0].v.ob[2] = arg0->referencePos1[2];
-    D_800D65D0[1].v.ob[0] = arg0->referencePos6[0];
-    D_800D65D0[1].v.ob[1] = arg0->referencePos6[1];
-    D_800D65D0[1].v.ob[2] = arg0->referencePos6[2];
-    D_800D65D0[2].v.ob[0] = arg0->referencePos7[0];
-    D_800D65D0[2].v.ob[1] = arg0->referencePos7[1];
-    D_800D65D0[2].v.ob[2] = arg0->referencePos7[2];
-    D_800D65D0[3].v.ob[0] = arg0->referencePos8[0];
-    D_800D65D0[3].v.ob[1] = arg0->referencePos8[1];
-    D_800D65D0[3].v.ob[2] = arg0->referencePos8[2];
-    D_800D65D0[4].v.ob[0] = arg0->referencePos2[0];
-    D_800D65D0[4].v.ob[1] = arg0->referencePos2[1];
-    D_800D65D0[4].v.ob[2] = arg0->referencePos2[2];
-    D_800D65D0[5].v.ob[0] = arg0->referencePos5[0];
-    D_800D65D0[5].v.ob[1] = arg0->referencePos5[1];
-    D_800D65D0[5].v.ob[2] = arg0->referencePos5[2];
-    D_800D65D0[6].v.ob[0] = arg0->referencePos4[0];
-    D_800D65D0[6].v.ob[1] = arg0->referencePos4[1];
-    D_800D65D0[6].v.ob[2] = arg0->referencePos4[2];
-    D_800D65D0[7].v.ob[0] = arg0->referencePos3[0];
-    D_800D65D0[7].v.ob[1] = arg0->referencePos3[1];
-    D_800D65D0[7].v.ob[2] = arg0->referencePos3[2];
-    D_800D65D0 += 8;
+void Course_SetupChunkPipeTunnelVtxPos(SegmentChunk* chunk) {
+    gCourseVtxPtr[0].v.ob[0] = chunk->referencePos1[0];
+    gCourseVtxPtr[0].v.ob[1] = chunk->referencePos1[1];
+    gCourseVtxPtr[0].v.ob[2] = chunk->referencePos1[2];
+    gCourseVtxPtr[1].v.ob[0] = chunk->referencePos6[0];
+    gCourseVtxPtr[1].v.ob[1] = chunk->referencePos6[1];
+    gCourseVtxPtr[1].v.ob[2] = chunk->referencePos6[2];
+    gCourseVtxPtr[2].v.ob[0] = chunk->referencePos7[0];
+    gCourseVtxPtr[2].v.ob[1] = chunk->referencePos7[1];
+    gCourseVtxPtr[2].v.ob[2] = chunk->referencePos7[2];
+    gCourseVtxPtr[3].v.ob[0] = chunk->referencePos8[0];
+    gCourseVtxPtr[3].v.ob[1] = chunk->referencePos8[1];
+    gCourseVtxPtr[3].v.ob[2] = chunk->referencePos8[2];
+    gCourseVtxPtr[4].v.ob[0] = chunk->referencePos2[0];
+    gCourseVtxPtr[4].v.ob[1] = chunk->referencePos2[1];
+    gCourseVtxPtr[4].v.ob[2] = chunk->referencePos2[2];
+    gCourseVtxPtr[5].v.ob[0] = chunk->referencePos5[0];
+    gCourseVtxPtr[5].v.ob[1] = chunk->referencePos5[1];
+    gCourseVtxPtr[5].v.ob[2] = chunk->referencePos5[2];
+    gCourseVtxPtr[6].v.ob[0] = chunk->referencePos4[0];
+    gCourseVtxPtr[6].v.ob[1] = chunk->referencePos4[1];
+    gCourseVtxPtr[6].v.ob[2] = chunk->referencePos4[2];
+    gCourseVtxPtr[7].v.ob[0] = chunk->referencePos3[0];
+    gCourseVtxPtr[7].v.ob[1] = chunk->referencePos3[1];
+    gCourseVtxPtr[7].v.ob[2] = chunk->referencePos3[2];
+    gCourseVtxPtr += 8;
 }
 
-void func_i2_800B9618(SegmentChunk* arg0) {
-    D_800D65D0[0].v.tc[0] = D_i2_800D6BE0[4];
-    D_800D65D0[1].v.tc[0] = D_800D65D0[7].v.tc[0] = D_i2_800D6BE0[3];
-    D_800D65D0[2].v.tc[0] = D_800D65D0[6].v.tc[0] = D_i2_800D6BE0[2];
-    D_800D65D0[3].v.tc[0] = D_800D65D0[5].v.tc[0] = D_i2_800D6BE0[1];
-    D_800D65D0[4].v.tc[0] = D_i2_800D6BE0[0];
-    D_800D65D0[0].v.ob[0] = arg0->referencePos1[0];
-    D_800D65D0[0].v.ob[1] = arg0->referencePos1[1];
-    D_800D65D0[0].v.ob[2] = arg0->referencePos1[2];
-    D_800D65D0[1].v.ob[0] = arg0->referencePos6[0];
-    D_800D65D0[1].v.ob[1] = arg0->referencePos6[1];
-    D_800D65D0[1].v.ob[2] = arg0->referencePos6[2];
-    D_800D65D0[2].v.ob[0] = arg0->referencePos7[0];
-    D_800D65D0[2].v.ob[1] = arg0->referencePos7[1];
-    D_800D65D0[2].v.ob[2] = arg0->referencePos7[2];
-    D_800D65D0[3].v.ob[0] = arg0->referencePos8[0];
-    D_800D65D0[3].v.ob[1] = arg0->referencePos8[1];
-    D_800D65D0[3].v.ob[2] = arg0->referencePos8[2];
-    D_800D65D0[4].v.ob[0] = arg0->referencePos2[0];
-    D_800D65D0[4].v.ob[1] = arg0->referencePos2[1];
-    D_800D65D0[4].v.ob[2] = arg0->referencePos2[2];
-    D_800D65D0[5].v.ob[0] = arg0->referencePos5[0];
-    D_800D65D0[5].v.ob[1] = arg0->referencePos5[1];
-    D_800D65D0[5].v.ob[2] = arg0->referencePos5[2];
-    D_800D65D0[6].v.ob[0] = arg0->referencePos4[0];
-    D_800D65D0[6].v.ob[1] = arg0->referencePos4[1];
-    D_800D65D0[6].v.ob[2] = arg0->referencePos4[2];
-    D_800D65D0[7].v.ob[0] = arg0->referencePos3[0];
-    D_800D65D0[7].v.ob[1] = arg0->referencePos3[1];
-    D_800D65D0[7].v.ob[2] = arg0->referencePos3[2];
-    D_800D65D0 += 8;
+void Course_SetupChunkDefaultVtxPos(SegmentChunk* chunk) {
+    gCourseVtxPtr[0].v.tc[0] = D_i2_800D6BE0[4];
+    gCourseVtxPtr[1].v.tc[0] = gCourseVtxPtr[7].v.tc[0] = D_i2_800D6BE0[3];
+    gCourseVtxPtr[2].v.tc[0] = gCourseVtxPtr[6].v.tc[0] = D_i2_800D6BE0[2];
+    gCourseVtxPtr[3].v.tc[0] = gCourseVtxPtr[5].v.tc[0] = D_i2_800D6BE0[1];
+    gCourseVtxPtr[4].v.tc[0] = D_i2_800D6BE0[0];
+    gCourseVtxPtr[0].v.ob[0] = chunk->referencePos1[0];
+    gCourseVtxPtr[0].v.ob[1] = chunk->referencePos1[1];
+    gCourseVtxPtr[0].v.ob[2] = chunk->referencePos1[2];
+    gCourseVtxPtr[1].v.ob[0] = chunk->referencePos6[0];
+    gCourseVtxPtr[1].v.ob[1] = chunk->referencePos6[1];
+    gCourseVtxPtr[1].v.ob[2] = chunk->referencePos6[2];
+    gCourseVtxPtr[2].v.ob[0] = chunk->referencePos7[0];
+    gCourseVtxPtr[2].v.ob[1] = chunk->referencePos7[1];
+    gCourseVtxPtr[2].v.ob[2] = chunk->referencePos7[2];
+    gCourseVtxPtr[3].v.ob[0] = chunk->referencePos8[0];
+    gCourseVtxPtr[3].v.ob[1] = chunk->referencePos8[1];
+    gCourseVtxPtr[3].v.ob[2] = chunk->referencePos8[2];
+    gCourseVtxPtr[4].v.ob[0] = chunk->referencePos2[0];
+    gCourseVtxPtr[4].v.ob[1] = chunk->referencePos2[1];
+    gCourseVtxPtr[4].v.ob[2] = chunk->referencePos2[2];
+    gCourseVtxPtr[5].v.ob[0] = chunk->referencePos5[0];
+    gCourseVtxPtr[5].v.ob[1] = chunk->referencePos5[1];
+    gCourseVtxPtr[5].v.ob[2] = chunk->referencePos5[2];
+    gCourseVtxPtr[6].v.ob[0] = chunk->referencePos4[0];
+    gCourseVtxPtr[6].v.ob[1] = chunk->referencePos4[1];
+    gCourseVtxPtr[6].v.ob[2] = chunk->referencePos4[2];
+    gCourseVtxPtr[7].v.ob[0] = chunk->referencePos3[0];
+    gCourseVtxPtr[7].v.ob[1] = chunk->referencePos3[1];
+    gCourseVtxPtr[7].v.ob[2] = chunk->referencePos3[2];
+    gCourseVtxPtr += 8;
 }
 
-void func_i2_800B97AC(SegmentChunk* arg0, s32 arg1) {
-    s32 var_a1;
-    s32 var_v1;
+void Course_SetupChunkRoadAirVtx(SegmentChunk* chunk, s32 arg1) {
+    s32 tcLeft;
+    s32 tcRight;
 
     if (arg1 != 0) {
-        var_v1 = arg0->rightTextureCorrection;
-        var_a1 = arg0->leftTextureCorrection;
+        tcRight = chunk->rightTextureCorrection;
+        tcLeft = chunk->leftTextureCorrection;
     } else {
-        var_v1 = arg0->rightTextureCoord;
-        var_a1 = arg0->leftTextureCoord;
+        tcRight = chunk->rightTextureCoord;
+        tcLeft = chunk->leftTextureCoord;
     }
 
-    D_800D65D0[1].v.tc[1] = D_800D65D0[2].v.tc[1] = D_800D65D0[3].v.tc[1] = var_v1;
-    D_800D65D0[5].v.tc[1] = D_800D65D0[6].v.tc[1] = D_800D65D0[7].v.tc[1] = var_a1;
-    D_800D65D0[0].v.tc[1] = D_800D65D0[4].v.tc[1] = (var_v1 + var_a1) >> 1;
-    func_i2_800B9618(arg0);
+    gCourseVtxPtr[1].v.tc[1] = gCourseVtxPtr[2].v.tc[1] = gCourseVtxPtr[3].v.tc[1] = tcRight;
+    gCourseVtxPtr[5].v.tc[1] = gCourseVtxPtr[6].v.tc[1] = gCourseVtxPtr[7].v.tc[1] = tcLeft;
+    gCourseVtxPtr[0].v.tc[1] = gCourseVtxPtr[4].v.tc[1] = (tcRight + tcLeft) >> 1;
+    Course_SetupChunkDefaultVtxPos(chunk);
 }
 
-void func_i2_800B9830(SegmentChunk* arg0, s32 arg1) {
-    s32 var_a0;
-    s32 var_a2;
-    s32 var_a3;
-    s32 var_t0;
+void Course_SetupChunkPipeTunnelVtx(SegmentChunk* chunk, s32 arg1) {
+    s32 tcBottom;
+    s32 tcRight;
+    s32 tcLeft;
+    s32 tcTop;
 
     if (arg1 != 0) {
-        var_a2 = arg0->rightTextureCorrection;
-        var_a3 = arg0->leftTextureCorrection;
-        var_t0 = arg0->topTextureCorrection;
-        var_a0 = arg0->bottomTextureCorrection;
+        tcRight = chunk->rightTextureCorrection;
+        tcLeft = chunk->leftTextureCorrection;
+        tcTop = chunk->topTextureCorrection;
+        tcBottom = chunk->bottomTextureCorrection;
     } else {
-        var_a2 = arg0->rightTextureCoord;
-        var_a3 = arg0->leftTextureCoord;
-        var_t0 = arg0->topTextureCoord;
-        var_a0 = arg0->bottomTextureCoord;
+        tcRight = chunk->rightTextureCoord;
+        tcLeft = chunk->leftTextureCoord;
+        tcTop = chunk->topTextureCoord;
+        tcBottom = chunk->bottomTextureCoord;
     }
-    if (arg0->trackSegmentInfo & 0x600) {
-        D_800D65D0[0].v.tc[1] = D_800D65D0[4].v.tc[1] = var_a0;
-        D_800D65D0[1].v.tc[1] = D_800D65D0[3].v.tc[1] = (var_a0 + var_a2) >> 1;
-        D_800D65D0[2].v.tc[1] = var_a2;
-        D_800D65D0[6].v.tc[1] = var_a3;
-        D_800D65D0[7].v.tc[1] = D_800D65D0[5].v.tc[1] = (var_a3 + var_a0) >> 1;
-        D_800D65D0[0].v.tc[0] = D_i2_800D6BE0[4];
-        D_800D65D0[1].v.tc[0] = D_800D65D0[7].v.tc[0] = D_i2_800D6BE0[3];
-        D_800D65D0[2].v.tc[0] = D_800D65D0[6].v.tc[0] = D_i2_800D6BE0[2];
-        D_800D65D0[3].v.tc[0] = D_800D65D0[5].v.tc[0] = D_i2_800D6BE0[3];
-        D_800D65D0[4].v.tc[0] = D_i2_800D6BE0[4];
+    if (chunk->trackSegmentInfo & TRACK_JOIN_MASK) {
+        gCourseVtxPtr[0].v.tc[1] = gCourseVtxPtr[4].v.tc[1] = tcBottom;
+        gCourseVtxPtr[1].v.tc[1] = gCourseVtxPtr[3].v.tc[1] = (tcBottom + tcRight) >> 1;
+        gCourseVtxPtr[2].v.tc[1] = tcRight;
+        gCourseVtxPtr[6].v.tc[1] = tcLeft;
+        gCourseVtxPtr[7].v.tc[1] = gCourseVtxPtr[5].v.tc[1] = (tcLeft + tcBottom) >> 1;
+        gCourseVtxPtr[0].v.tc[0] = D_i2_800D6BE0[4];
+        gCourseVtxPtr[1].v.tc[0] = gCourseVtxPtr[7].v.tc[0] = D_i2_800D6BE0[3];
+        gCourseVtxPtr[2].v.tc[0] = gCourseVtxPtr[6].v.tc[0] = D_i2_800D6BE0[2];
+        gCourseVtxPtr[3].v.tc[0] = gCourseVtxPtr[5].v.tc[0] = D_i2_800D6BE0[3];
+        gCourseVtxPtr[4].v.tc[0] = D_i2_800D6BE0[4];
     } else {
-        D_800D65D0[0].v.tc[1] = var_a0;
-        D_800D65D0[1].v.tc[1] = (var_a0 + var_a2) >> 1;
-        D_800D65D0[2].v.tc[1] = var_a2;
-        D_800D65D0[3].v.tc[1] = (var_a2 + var_t0) >> 1;
-        D_800D65D0[4].v.tc[1] = var_t0;
-        D_800D65D0[5].v.tc[1] = (var_t0 + var_a3) >> 1;
-        D_800D65D0[6].v.tc[1] = var_a3;
-        D_800D65D0[7].v.tc[1] = (var_a3 + var_a0) >> 1;
-        D_800D65D0[0].v.tc[0] = D_i2_800D6BE0[4];
-        D_800D65D0[1].v.tc[0] = D_800D65D0[7].v.tc[0] = D_i2_800D6BE0[3];
-        D_800D65D0[2].v.tc[0] = D_800D65D0[6].v.tc[0] = D_i2_800D6BE0[2];
-        D_800D65D0[3].v.tc[0] = D_800D65D0[5].v.tc[0] = D_i2_800D6BE0[1];
-        D_800D65D0[4].v.tc[0] = D_i2_800D6BE0[0];
+        gCourseVtxPtr[0].v.tc[1] = tcBottom;
+        gCourseVtxPtr[1].v.tc[1] = (tcBottom + tcRight) >> 1;
+        gCourseVtxPtr[2].v.tc[1] = tcRight;
+        gCourseVtxPtr[3].v.tc[1] = (tcRight + tcTop) >> 1;
+        gCourseVtxPtr[4].v.tc[1] = tcTop;
+        gCourseVtxPtr[5].v.tc[1] = (tcTop + tcLeft) >> 1;
+        gCourseVtxPtr[6].v.tc[1] = tcLeft;
+        gCourseVtxPtr[7].v.tc[1] = (tcLeft + tcBottom) >> 1;
+        gCourseVtxPtr[0].v.tc[0] = D_i2_800D6BE0[4];
+        gCourseVtxPtr[1].v.tc[0] = gCourseVtxPtr[7].v.tc[0] = D_i2_800D6BE0[3];
+        gCourseVtxPtr[2].v.tc[0] = gCourseVtxPtr[6].v.tc[0] = D_i2_800D6BE0[2];
+        gCourseVtxPtr[3].v.tc[0] = gCourseVtxPtr[5].v.tc[0] = D_i2_800D6BE0[1];
+        gCourseVtxPtr[4].v.tc[0] = D_i2_800D6BE0[0];
     }
-    func_i2_800B94E0(arg0);
+    Course_SetupChunkPipeTunnelVtxPos(chunk);
 }
 
-void func_i2_800B9A10(SegmentChunk* arg0) {
+void Course_SetupChunkPipeTunnelJoinVtx(SegmentChunk* chunk) {
     Gfx* gfx;
 
-    D_800D65D0[0].v.ob[0] = ((arg0->referencePos7[0] - arg0->referencePos4[0]) >> 5) + arg0->referencePos7[0];
-    D_800D65D0[0].v.ob[1] = ((arg0->referencePos7[1] - arg0->referencePos4[1]) >> 5) + arg0->referencePos7[1];
-    D_800D65D0[0].v.ob[2] = ((arg0->referencePos7[2] - arg0->referencePos4[2]) >> 5) + arg0->referencePos7[2];
+    gCourseVtxPtr[0].v.ob[0] = ((chunk->referencePos7[0] - chunk->referencePos4[0]) >> 5) + chunk->referencePos7[0];
+    gCourseVtxPtr[0].v.ob[1] = ((chunk->referencePos7[1] - chunk->referencePos4[1]) >> 5) + chunk->referencePos7[1];
+    gCourseVtxPtr[0].v.ob[2] = ((chunk->referencePos7[2] - chunk->referencePos4[2]) >> 5) + chunk->referencePos7[2];
 
-    D_800D65D0[1].v.ob[0] = ((arg0->referencePos8[0] - arg0->referencePos3[0]) >> 5) + arg0->referencePos8[0];
-    D_800D65D0[1].v.ob[1] = ((arg0->referencePos8[1] - arg0->referencePos3[1]) >> 5) + arg0->referencePos8[1];
-    D_800D65D0[1].v.ob[2] = ((arg0->referencePos8[2] - arg0->referencePos3[2]) >> 5) + arg0->referencePos8[2];
+    gCourseVtxPtr[1].v.ob[0] = ((chunk->referencePos8[0] - chunk->referencePos3[0]) >> 5) + chunk->referencePos8[0];
+    gCourseVtxPtr[1].v.ob[1] = ((chunk->referencePos8[1] - chunk->referencePos3[1]) >> 5) + chunk->referencePos8[1];
+    gCourseVtxPtr[1].v.ob[2] = ((chunk->referencePos8[2] - chunk->referencePos3[2]) >> 5) + chunk->referencePos8[2];
 
-    D_800D65D0[2].v.ob[0] = ((arg0->referencePos2[0] - arg0->referencePos1[0]) >> 5) + arg0->referencePos2[0];
-    D_800D65D0[2].v.ob[1] = ((arg0->referencePos2[1] - arg0->referencePos1[1]) >> 5) + arg0->referencePos2[1];
-    D_800D65D0[2].v.ob[2] = ((arg0->referencePos2[2] - arg0->referencePos1[2]) >> 5) + arg0->referencePos2[2];
+    gCourseVtxPtr[2].v.ob[0] = ((chunk->referencePos2[0] - chunk->referencePos1[0]) >> 5) + chunk->referencePos2[0];
+    gCourseVtxPtr[2].v.ob[1] = ((chunk->referencePos2[1] - chunk->referencePos1[1]) >> 5) + chunk->referencePos2[1];
+    gCourseVtxPtr[2].v.ob[2] = ((chunk->referencePos2[2] - chunk->referencePos1[2]) >> 5) + chunk->referencePos2[2];
 
-    D_800D65D0[3].v.ob[0] = ((arg0->referencePos5[0] - arg0->referencePos6[0]) >> 5) + arg0->referencePos5[0];
-    D_800D65D0[3].v.ob[1] = ((arg0->referencePos5[1] - arg0->referencePos6[1]) >> 5) + arg0->referencePos5[1];
-    D_800D65D0[3].v.ob[2] = ((arg0->referencePos5[2] - arg0->referencePos6[2]) >> 5) + arg0->referencePos5[2];
+    gCourseVtxPtr[3].v.ob[0] = ((chunk->referencePos5[0] - chunk->referencePos6[0]) >> 5) + chunk->referencePos5[0];
+    gCourseVtxPtr[3].v.ob[1] = ((chunk->referencePos5[1] - chunk->referencePos6[1]) >> 5) + chunk->referencePos5[1];
+    gCourseVtxPtr[3].v.ob[2] = ((chunk->referencePos5[2] - chunk->referencePos6[2]) >> 5) + chunk->referencePos5[2];
 
-    D_800D65D0[4].v.ob[0] = ((arg0->referencePos4[0] - arg0->referencePos7[0]) >> 5) + arg0->referencePos4[0];
-    D_800D65D0[4].v.ob[1] = ((arg0->referencePos4[1] - arg0->referencePos7[1]) >> 5) + arg0->referencePos4[1];
-    D_800D65D0[4].v.ob[2] = ((arg0->referencePos4[2] - arg0->referencePos7[2]) >> 5) + arg0->referencePos4[2];
+    gCourseVtxPtr[4].v.ob[0] = ((chunk->referencePos4[0] - chunk->referencePos7[0]) >> 5) + chunk->referencePos4[0];
+    gCourseVtxPtr[4].v.ob[1] = ((chunk->referencePos4[1] - chunk->referencePos7[1]) >> 5) + chunk->referencePos4[1];
+    gCourseVtxPtr[4].v.ob[2] = ((chunk->referencePos4[2] - chunk->referencePos7[2]) >> 5) + chunk->referencePos4[2];
 
-    gSPVertex(D_i2_800D6C74 - 1, D_800D65D0, 5, 16);
+    gSPVertex(sCourseDisp - 1, gCourseVtxPtr, 5, 16);
 
-    D_800D65D0 += 5;
+    gCourseVtxPtr += 5;
 }
 
-void func_i2_800B9BEC(SegmentChunk* arg0, s32 arg1) {
-    s16 var_a1;
-    s16 var_a2;
-    s16 var_a3;
-    s16 var_v1;
+void Course_SetupChunkCylinderVtx(SegmentChunk* chunk, s32 arg1) {
+    s16 tcLeft;
+    s16 tcTop;
+    s16 tcBottom;
+    s16 tcRight;
 
     if (arg1 != 0) {
-        var_v1 = arg0->rightTextureCorrection;
-        var_a1 = arg0->leftTextureCorrection;
-        var_a2 = arg0->topTextureCorrection;
-        var_a3 = arg0->bottomTextureCorrection;
+        tcRight = chunk->rightTextureCorrection;
+        tcLeft = chunk->leftTextureCorrection;
+        tcTop = chunk->topTextureCorrection;
+        tcBottom = chunk->bottomTextureCorrection;
     } else {
-        var_v1 = arg0->rightTextureCoord;
-        var_a1 = arg0->leftTextureCoord;
-        var_a2 = arg0->topTextureCoord;
-        var_a3 = arg0->bottomTextureCoord;
+        tcRight = chunk->rightTextureCoord;
+        tcLeft = chunk->leftTextureCoord;
+        tcTop = chunk->topTextureCoord;
+        tcBottom = chunk->bottomTextureCoord;
     }
-    D_800D65D0[0].v.tc[1] = var_a3;
-    D_800D65D0[1].v.tc[1] = (var_a3 + var_v1) >> 1;
-    D_800D65D0[2].v.tc[1] = var_v1;
-    D_800D65D0[3].v.tc[1] = (var_v1 + var_a2) >> 1;
-    D_800D65D0[4].v.tc[1] = var_a2;
-    D_800D65D0[5].v.tc[1] = (var_a2 + var_a1) >> 1;
-    D_800D65D0[6].v.tc[1] = var_a1;
-    D_800D65D0[7].v.tc[1] = (var_a1 + var_a3) >> 1;
-    func_i2_800B9618(arg0);
+    gCourseVtxPtr[0].v.tc[1] = tcBottom;
+    gCourseVtxPtr[1].v.tc[1] = (tcBottom + tcRight) >> 1;
+    gCourseVtxPtr[2].v.tc[1] = tcRight;
+    gCourseVtxPtr[3].v.tc[1] = (tcRight + tcTop) >> 1;
+    gCourseVtxPtr[4].v.tc[1] = tcTop;
+    gCourseVtxPtr[5].v.tc[1] = (tcTop + tcLeft) >> 1;
+    gCourseVtxPtr[6].v.tc[1] = tcLeft;
+    gCourseVtxPtr[7].v.tc[1] = (tcLeft + tcBottom) >> 1;
+    Course_SetupChunkDefaultVtxPos(chunk);
 }
 
-void func_i2_800B9C98(SegmentChunk* arg0, s32 arg1) {
-    s32 var_a3;
-    s32 var_t0;
-    s32 var_v1;
+void Course_SetupChunkHalfPipeVtx(SegmentChunk* chunk, s32 arg1) {
+    s32 tcRight;
+    s32 tcLeft;
+    s32 tcBottom;
 
     if (arg1 != 0) {
-        var_a3 = arg0->rightTextureCorrection;
-        var_t0 = arg0->leftTextureCorrection;
-        var_v1 = arg0->bottomTextureCorrection;
+        tcRight = chunk->rightTextureCorrection;
+        tcLeft = chunk->leftTextureCorrection;
+        tcBottom = chunk->bottomTextureCorrection;
     } else {
-        var_a3 = arg0->rightTextureCoord;
-        var_t0 = arg0->leftTextureCoord;
-        var_v1 = arg0->bottomTextureCoord;
+        tcRight = chunk->rightTextureCoord;
+        tcLeft = chunk->leftTextureCoord;
+        tcBottom = chunk->bottomTextureCoord;
     }
 
-    D_800D65D0[1].v.tc[1] = var_a3;
-    D_800D65D0[2].v.tc[1] = D_800D65D0[3].v.tc[1] = (var_a3 + var_v1) >> 1;
-    D_800D65D0[0].v.tc[1] = var_v1;
-    D_800D65D0[4].v.tc[1] = var_v1;
-    D_800D65D0[5].v.tc[1] = D_800D65D0[6].v.tc[1] = (var_t0 + var_v1) >> 1;
-    D_800D65D0[7].v.tc[1] = var_t0;
-    func_i2_800B9618(arg0);
+    gCourseVtxPtr[1].v.tc[1] = tcRight;
+    gCourseVtxPtr[2].v.tc[1] = gCourseVtxPtr[3].v.tc[1] = (tcRight + tcBottom) >> 1;
+    gCourseVtxPtr[0].v.tc[1] = tcBottom;
+    gCourseVtxPtr[4].v.tc[1] = tcBottom;
+    gCourseVtxPtr[5].v.tc[1] = gCourseVtxPtr[6].v.tc[1] = (tcLeft + tcBottom) >> 1;
+    gCourseVtxPtr[7].v.tc[1] = tcLeft;
+    Course_SetupChunkDefaultVtxPos(chunk);
 }
 
-void func_i2_800B9D2C(void) {
+void Course_SetupRoadChunkGroupPairVtx(void) {
 
-    gSPVertex(D_i2_800D6C74++, D_800D65D0, 16, 0);
-    gSPDisplayList(D_i2_800D6C74++, D_80140F0);
+    gSPVertex(sCourseDisp++, gCourseVtxPtr, 16, 0);
+    gSPDisplayList(sCourseDisp++, D_80140F0);
 
-    func_i2_800B97AC(D_i2_800D6C7C, D_i2_800D6C7C->trackSegmentInfo & TRACK_FLAG_80000000);
-    D_i2_800D6C08[0].unk_00 = D_i2_800D6C7C;
-    func_i2_800B97AC(D_i2_800D6C80, 0);
-    D_i2_800D6C08[1].unk_00 = D_i2_800D6C80;
+    Course_SetupChunkRoadAirVtx(sWorkingSegmentChunk, sWorkingSegmentChunk->trackSegmentInfo & TRACK_FLAG_80000000);
+    D_i2_800D6C08[0].chunk = sWorkingSegmentChunk;
+    Course_SetupChunkRoadAirVtx(sWorkingNextSegmentChunk, 0);
+    D_i2_800D6C08[1].chunk = sWorkingNextSegmentChunk;
 }
 
-void func_i2_800B9DD4(void) {
+void Course_DrawBackwardRoadChunkGroup(void) {
 
     D_i2_800D6C68 = &D_i2_800D6C08[D_i2_800D6C70];
 
-    if (D_i2_800D6C7C == D_i2_800D6C68->unk_00) {
-        if (D_i2_800D6C7C->trackSegmentInfo & TRACK_FLAG_80000000) {
-            gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 0, G_MWO_POINT_ST,
-                            VERTEX_MODIFIED_ST(
-                                D_i2_800D6BE0[4],
-                                (D_i2_800D6C7C->leftTextureCorrection + D_i2_800D6C7C->rightTextureCorrection) >> 1));
-            gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 1, G_MWO_POINT_ST,
-                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[3], D_i2_800D6C7C->rightTextureCorrection));
-            gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 2, G_MWO_POINT_ST,
-                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[2], D_i2_800D6C7C->rightTextureCorrection));
-            gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 3, G_MWO_POINT_ST,
-                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[1], D_i2_800D6C7C->rightTextureCorrection));
-            gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 4, G_MWO_POINT_ST,
-                            VERTEX_MODIFIED_ST(
-                                D_i2_800D6BE0[0],
-                                (D_i2_800D6C7C->leftTextureCorrection + D_i2_800D6C7C->rightTextureCorrection) >> 1));
-            gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 5, G_MWO_POINT_ST,
-                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[1], D_i2_800D6C7C->leftTextureCorrection));
-            gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 6, G_MWO_POINT_ST,
-                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[2], D_i2_800D6C7C->leftTextureCorrection));
-            gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 7, G_MWO_POINT_ST,
-                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[3], D_i2_800D6C7C->leftTextureCorrection));
+    if (sWorkingSegmentChunk == D_i2_800D6C68->chunk) {
+        if (sWorkingSegmentChunk->trackSegmentInfo & TRACK_FLAG_80000000) {
+            gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 0, G_MWO_POINT_ST,
+                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[4], (sWorkingSegmentChunk->leftTextureCorrection +
+                                                                  sWorkingSegmentChunk->rightTextureCorrection) >>
+                                                                     1));
+            gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 1, G_MWO_POINT_ST,
+                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[3], sWorkingSegmentChunk->rightTextureCorrection));
+            gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 2, G_MWO_POINT_ST,
+                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[2], sWorkingSegmentChunk->rightTextureCorrection));
+            gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 3, G_MWO_POINT_ST,
+                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[1], sWorkingSegmentChunk->rightTextureCorrection));
+            gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 4, G_MWO_POINT_ST,
+                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[0], (sWorkingSegmentChunk->leftTextureCorrection +
+                                                                  sWorkingSegmentChunk->rightTextureCorrection) >>
+                                                                     1));
+            gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 5, G_MWO_POINT_ST,
+                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[1], sWorkingSegmentChunk->leftTextureCorrection));
+            gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 6, G_MWO_POINT_ST,
+                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[2], sWorkingSegmentChunk->leftTextureCorrection));
+            gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 7, G_MWO_POINT_ST,
+                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[3], sWorkingSegmentChunk->leftTextureCorrection));
         }
 
         D_i2_800D6C6C = &D_i2_800D6C08[D_i2_800D6C70 ^= 1];
 
-        gSPVertex(D_i2_800D6C74++, D_800D65D0, 8, D_i2_800D6C6C->unk_2C);
+        gSPVertex(sCourseDisp++, gCourseVtxPtr, 8, D_i2_800D6C6C->loadVtxIndex);
 
-        gSPDisplayList(D_i2_800D6C74++, D_i2_800D6C68->unk_04);
+        gSPDisplayList(sCourseDisp++, D_i2_800D6C68->unk_04);
 
-        func_i2_800B97AC(D_i2_800D6C80, 0);
-        D_i2_800D6C6C->unk_00 = D_i2_800D6C80;
+        Course_SetupChunkRoadAirVtx(sWorkingNextSegmentChunk, 0);
+        D_i2_800D6C6C->chunk = sWorkingNextSegmentChunk;
     } else {
         D_i2_800D6C70 = 1;
-        func_i2_800B9D2C();
+        Course_SetupRoadChunkGroupPairVtx();
     }
 }
 
-void func_i2_800BA1A0(void) {
+void Course_DrawForwardRoadChunkGroup(void) {
     D_i2_800D6C68 = &D_i2_800D6C08[D_i2_800D6C70];
 
-    if (D_i2_800D6C80 == D_i2_800D6C68->unk_00) {
-        if (D_i2_800D6C80->trackSegmentInfo & TRACK_FLAG_80000000) {
-            gSPModifyVertex(
-                D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 0, G_MWO_POINT_ST,
-                VERTEX_MODIFIED_ST(D_i2_800D6BE0[4],
-                                   (D_i2_800D6C80->leftTextureCoord + D_i2_800D6C80->rightTextureCoord) >> 1));
-            gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 1, G_MWO_POINT_ST,
-                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[3], D_i2_800D6C80->rightTextureCoord));
-            gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 2, G_MWO_POINT_ST,
-                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[2], D_i2_800D6C80->rightTextureCoord));
-            gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 3, G_MWO_POINT_ST,
-                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[1], D_i2_800D6C80->rightTextureCoord));
-            gSPModifyVertex(
-                D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 4, G_MWO_POINT_ST,
-                VERTEX_MODIFIED_ST(D_i2_800D6BE0[0],
-                                   (D_i2_800D6C80->leftTextureCoord + D_i2_800D6C80->rightTextureCoord) >> 1));
-            gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 5, G_MWO_POINT_ST,
-                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[1], D_i2_800D6C80->leftTextureCoord));
-            gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 6, G_MWO_POINT_ST,
-                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[2], D_i2_800D6C80->leftTextureCoord));
-            gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 7, G_MWO_POINT_ST,
-                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[3], D_i2_800D6C80->leftTextureCoord));
+    if (sWorkingNextSegmentChunk == D_i2_800D6C68->chunk) {
+        if (sWorkingNextSegmentChunk->trackSegmentInfo & TRACK_FLAG_80000000) {
+            gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 0, G_MWO_POINT_ST,
+                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[4], (sWorkingNextSegmentChunk->leftTextureCoord +
+                                                                  sWorkingNextSegmentChunk->rightTextureCoord) >>
+                                                                     1));
+            gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 1, G_MWO_POINT_ST,
+                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[3], sWorkingNextSegmentChunk->rightTextureCoord));
+            gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 2, G_MWO_POINT_ST,
+                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[2], sWorkingNextSegmentChunk->rightTextureCoord));
+            gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 3, G_MWO_POINT_ST,
+                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[1], sWorkingNextSegmentChunk->rightTextureCoord));
+            gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 4, G_MWO_POINT_ST,
+                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[0], (sWorkingNextSegmentChunk->leftTextureCoord +
+                                                                  sWorkingNextSegmentChunk->rightTextureCoord) >>
+                                                                     1));
+            gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 5, G_MWO_POINT_ST,
+                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[1], sWorkingNextSegmentChunk->leftTextureCoord));
+            gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 6, G_MWO_POINT_ST,
+                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[2], sWorkingNextSegmentChunk->leftTextureCoord));
+            gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 7, G_MWO_POINT_ST,
+                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[3], sWorkingNextSegmentChunk->leftTextureCoord));
         }
 
         D_i2_800D6C6C = &D_i2_800D6C08[D_i2_800D6C70 ^= 1];
-        gSPVertex(D_i2_800D6C74++, D_800D65D0, 8, D_i2_800D6C6C->unk_2C);
-        gSPDisplayList(D_i2_800D6C74++, D_i2_800D6C6C->unk_04);
-        func_i2_800B97AC(D_i2_800D6C7C, D_i2_800D6C7C->trackSegmentInfo & TRACK_FLAG_80000000);
-        D_i2_800D6C6C->unk_00 = D_i2_800D6C7C;
+        gSPVertex(sCourseDisp++, gCourseVtxPtr, 8, D_i2_800D6C6C->loadVtxIndex);
+        gSPDisplayList(sCourseDisp++, D_i2_800D6C6C->unk_04);
+        Course_SetupChunkRoadAirVtx(sWorkingSegmentChunk, sWorkingSegmentChunk->trackSegmentInfo & TRACK_FLAG_80000000);
+        D_i2_800D6C6C->chunk = sWorkingSegmentChunk;
     } else {
         D_i2_800D6C70 = 0;
-        func_i2_800B9D2C();
+        Course_SetupRoadChunkGroupPairVtx();
     }
 }
 
-void func_i2_800BA57C(void) {
+void Course_SetupPipeTunnelChunkGroupPairVtx(void) {
 
-    gSPVertex(D_i2_800D6C74++, D_800D65D0, 16, 0);
-    if (D_i2_800D6C8C != 0) {
+    gSPVertex(sCourseDisp++, gCourseVtxPtr, 16, 0);
+    if (sWorkingChunkJoinInfo != 0) {
         if (D_i2_800D6BDC != D_i2_800D6C84) {
-            gSPTexture(D_i2_800D6C74++, 0, 0, 0, D_i2_800D6BDC, G_OFF);
-            gSPTexture(D_i2_800D6C74++, 0x8000, 0xFFFF, 0, D_i2_800D6C84, G_ON);
+            gSPTexture(sCourseDisp++, 0, 0, 0, D_i2_800D6BDC, G_OFF);
+            gSPTexture(sCourseDisp++, 0x8000, 0xFFFF, 0, D_i2_800D6C84, G_ON);
             D_i2_800D6BDC = D_i2_800D6C84;
         }
 
-        switch (D_i2_800D6C7C->trackSegmentInfo & TRACK_UNK2_MASK) {
-            case TRACK_UNK2_0:
-                gSPDisplayList(D_i2_800D6C74++, D_80140F0);
+        switch (sWorkingSegmentChunk->trackSegmentInfo & TRACK_CHUNK_JOIN_TRANSITION_START_MASK) {
+            case TRACK_CHUNK_JOIN_TRANSITION_START_NONE:
+                gSPDisplayList(sCourseDisp++, D_80140F0);
                 break;
-            case TRACK_UNK2_2000:
-                gSPDisplayList(D_i2_800D6C74++, D_80142C0);
+            case TRACK_CHUNK_JOIN_PREVIOUS_END:
+                gSPDisplayList(sCourseDisp++, D_80142C0);
                 break;
             default:
-                gSPDisplayList(D_i2_800D6C74++, D_8014308);
+                gSPDisplayList(sCourseDisp++, D_8014308);
                 if (1) {}
                 break;
         }
     } else {
         if (D_i2_800D6BDC != D_i2_800D6C84) {
-            gSPTexture(D_i2_800D6C74++, 0, 0, 0, D_i2_800D6BDC, G_OFF);
-            gSPTexture(D_i2_800D6C74++, 0x8000, 0xFFFF, 0, D_i2_800D6C84, G_ON);
+            gSPTexture(sCourseDisp++, 0, 0, 0, D_i2_800D6BDC, G_OFF);
+            gSPTexture(sCourseDisp++, 0x8000, 0xFFFF, 0, D_i2_800D6C84, G_ON);
             D_i2_800D6BDC = D_i2_800D6C84;
         }
 
-        gSPDisplayList(D_i2_800D6C74++, D_8014180);
+        gSPDisplayList(sCourseDisp++, D_8014180);
         if (D_i2_800D6C88) {
             if (D_i2_800D6BDC != (D_i2_800D6C84 + 1)) {
-                gSPTexture(D_i2_800D6C74++, 0, 0, 0, D_i2_800D6BDC, G_OFF);
-                gSPTexture(D_i2_800D6C74++, 0x8000, 0xFFFF, 0, D_i2_800D6C84 + 1, G_ON);
+                gSPTexture(sCourseDisp++, 0, 0, 0, D_i2_800D6BDC, G_OFF);
+                gSPTexture(sCourseDisp++, 0x8000, 0xFFFF, 0, D_i2_800D6C84 + 1, G_ON);
                 D_i2_800D6BDC = D_i2_800D6C84 + 1;
             }
-            gSPDisplayList(D_i2_800D6C74++, D_80140F0);
+            gSPDisplayList(sCourseDisp++, D_80140F0);
         }
     }
-    func_i2_800B9830(D_i2_800D6C7C, D_i2_800D6C7C->trackSegmentInfo & TRACK_FLAG_80000000);
-    D_i2_800D6C08[0].unk_00 = D_i2_800D6C7C;
-    func_i2_800B9830(D_i2_800D6C80, 0);
-    D_i2_800D6C08[1].unk_00 = D_i2_800D6C80;
+    Course_SetupChunkPipeTunnelVtx(sWorkingSegmentChunk, sWorkingSegmentChunk->trackSegmentInfo & TRACK_FLAG_80000000);
+    D_i2_800D6C08[0].chunk = sWorkingSegmentChunk;
+    Course_SetupChunkPipeTunnelVtx(sWorkingNextSegmentChunk, 0);
+    D_i2_800D6C08[1].chunk = sWorkingNextSegmentChunk;
 }
 
-void func_i2_800BA850(void) {
+void Course_DrawBackwardPipeTunnelChunkGroup(void) {
 
     D_i2_800D6C68 = &D_i2_800D6C08[D_i2_800D6C70];
 
-    if (D_i2_800D6C7C == D_i2_800D6C68->unk_00) {
-        if (D_i2_800D6C7C->trackSegmentInfo & TRACK_FLAG_80000000) {
-            if (D_i2_800D6C7C->trackSegmentInfo & TRACK_JOIN_BOTH) {
-                gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 0, G_MWO_POINT_ST,
-                                VERTEX_MODIFIED_ST(D_i2_800D6BE0[4], D_i2_800D6C7C->bottomTextureCorrection));
-                gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 1, G_MWO_POINT_ST,
-                                VERTEX_MODIFIED_ST(D_i2_800D6BE0[3], (D_i2_800D6C7C->bottomTextureCorrection +
-                                                                      D_i2_800D6C7C->rightTextureCorrection) >>
+    if (sWorkingSegmentChunk == D_i2_800D6C68->chunk) {
+        if (sWorkingSegmentChunk->trackSegmentInfo & TRACK_FLAG_80000000) {
+            if (sWorkingSegmentChunk->trackSegmentInfo & TRACK_JOIN_BOTH) {
+                gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 0, G_MWO_POINT_ST,
+                                VERTEX_MODIFIED_ST(D_i2_800D6BE0[4], sWorkingSegmentChunk->bottomTextureCorrection));
+                gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 1, G_MWO_POINT_ST,
+                                VERTEX_MODIFIED_ST(D_i2_800D6BE0[3], (sWorkingSegmentChunk->bottomTextureCorrection +
+                                                                      sWorkingSegmentChunk->rightTextureCorrection) >>
                                                                          1));
-                gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 2, G_MWO_POINT_ST,
-                                VERTEX_MODIFIED_ST(D_i2_800D6BE0[2], D_i2_800D6C7C->rightTextureCorrection));
-                gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 3, G_MWO_POINT_ST,
-                                VERTEX_MODIFIED_ST(D_i2_800D6BE0[3], (D_i2_800D6C7C->bottomTextureCorrection +
-                                                                      D_i2_800D6C7C->rightTextureCorrection) >>
+                gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 2, G_MWO_POINT_ST,
+                                VERTEX_MODIFIED_ST(D_i2_800D6BE0[2], sWorkingSegmentChunk->rightTextureCorrection));
+                gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 3, G_MWO_POINT_ST,
+                                VERTEX_MODIFIED_ST(D_i2_800D6BE0[3], (sWorkingSegmentChunk->bottomTextureCorrection +
+                                                                      sWorkingSegmentChunk->rightTextureCorrection) >>
                                                                          1));
-                gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 4, G_MWO_POINT_ST,
-                                VERTEX_MODIFIED_ST(D_i2_800D6BE0[4], D_i2_800D6C7C->bottomTextureCorrection));
-                gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 5, G_MWO_POINT_ST,
-                                VERTEX_MODIFIED_ST(D_i2_800D6BE0[3], (D_i2_800D6C7C->bottomTextureCorrection +
-                                                                      D_i2_800D6C7C->leftTextureCorrection) >>
+                gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 4, G_MWO_POINT_ST,
+                                VERTEX_MODIFIED_ST(D_i2_800D6BE0[4], sWorkingSegmentChunk->bottomTextureCorrection));
+                gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 5, G_MWO_POINT_ST,
+                                VERTEX_MODIFIED_ST(D_i2_800D6BE0[3], (sWorkingSegmentChunk->bottomTextureCorrection +
+                                                                      sWorkingSegmentChunk->leftTextureCorrection) >>
                                                                          1));
-                gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 6, G_MWO_POINT_ST,
-                                VERTEX_MODIFIED_ST(D_i2_800D6BE0[2], D_i2_800D6C7C->leftTextureCorrection));
-                gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 7, G_MWO_POINT_ST,
-                                VERTEX_MODIFIED_ST(D_i2_800D6BE0[3], (D_i2_800D6C7C->bottomTextureCorrection +
-                                                                      D_i2_800D6C7C->leftTextureCorrection) >>
+                gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 6, G_MWO_POINT_ST,
+                                VERTEX_MODIFIED_ST(D_i2_800D6BE0[2], sWorkingSegmentChunk->leftTextureCorrection));
+                gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 7, G_MWO_POINT_ST,
+                                VERTEX_MODIFIED_ST(D_i2_800D6BE0[3], (sWorkingSegmentChunk->bottomTextureCorrection +
+                                                                      sWorkingSegmentChunk->leftTextureCorrection) >>
                                                                          1));
             } else {
-                gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 0, G_MWO_POINT_ST,
-                                VERTEX_MODIFIED_ST(D_i2_800D6BE0[4], D_i2_800D6C7C->bottomTextureCorrection));
-                gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 1, G_MWO_POINT_ST,
-                                VERTEX_MODIFIED_ST(D_i2_800D6BE0[3], (D_i2_800D6C7C->bottomTextureCorrection +
-                                                                      D_i2_800D6C7C->rightTextureCorrection) >>
+                gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 0, G_MWO_POINT_ST,
+                                VERTEX_MODIFIED_ST(D_i2_800D6BE0[4], sWorkingSegmentChunk->bottomTextureCorrection));
+                gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 1, G_MWO_POINT_ST,
+                                VERTEX_MODIFIED_ST(D_i2_800D6BE0[3], (sWorkingSegmentChunk->bottomTextureCorrection +
+                                                                      sWorkingSegmentChunk->rightTextureCorrection) >>
                                                                          1));
-                gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 2, G_MWO_POINT_ST,
-                                VERTEX_MODIFIED_ST(D_i2_800D6BE0[2], D_i2_800D6C7C->rightTextureCorrection));
-                gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 3, G_MWO_POINT_ST,
-                                VERTEX_MODIFIED_ST(D_i2_800D6BE0[1], (D_i2_800D6C7C->rightTextureCorrection +
-                                                                      D_i2_800D6C7C->topTextureCorrection) >>
+                gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 2, G_MWO_POINT_ST,
+                                VERTEX_MODIFIED_ST(D_i2_800D6BE0[2], sWorkingSegmentChunk->rightTextureCorrection));
+                gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 3, G_MWO_POINT_ST,
+                                VERTEX_MODIFIED_ST(D_i2_800D6BE0[1], (sWorkingSegmentChunk->rightTextureCorrection +
+                                                                      sWorkingSegmentChunk->topTextureCorrection) >>
                                                                          1));
-                gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 4, G_MWO_POINT_ST,
-                                VERTEX_MODIFIED_ST(D_i2_800D6BE0[0], D_i2_800D6C7C->topTextureCorrection));
-                gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 5, G_MWO_POINT_ST,
-                                VERTEX_MODIFIED_ST(
-                                    D_i2_800D6BE0[1],
-                                    (D_i2_800D6C7C->topTextureCorrection + D_i2_800D6C7C->leftTextureCorrection) >> 1));
-                gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 6, G_MWO_POINT_ST,
-                                VERTEX_MODIFIED_ST(D_i2_800D6BE0[2], D_i2_800D6C7C->leftTextureCorrection));
-                gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 7, G_MWO_POINT_ST,
-                                VERTEX_MODIFIED_ST(D_i2_800D6BE0[3], (D_i2_800D6C7C->leftTextureCorrection +
-                                                                      D_i2_800D6C7C->bottomTextureCorrection) >>
+                gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 4, G_MWO_POINT_ST,
+                                VERTEX_MODIFIED_ST(D_i2_800D6BE0[0], sWorkingSegmentChunk->topTextureCorrection));
+                gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 5, G_MWO_POINT_ST,
+                                VERTEX_MODIFIED_ST(D_i2_800D6BE0[1], (sWorkingSegmentChunk->topTextureCorrection +
+                                                                      sWorkingSegmentChunk->leftTextureCorrection) >>
+                                                                         1));
+                gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 6, G_MWO_POINT_ST,
+                                VERTEX_MODIFIED_ST(D_i2_800D6BE0[2], sWorkingSegmentChunk->leftTextureCorrection));
+                gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 7, G_MWO_POINT_ST,
+                                VERTEX_MODIFIED_ST(D_i2_800D6BE0[3], (sWorkingSegmentChunk->leftTextureCorrection +
+                                                                      sWorkingSegmentChunk->bottomTextureCorrection) >>
                                                                          1));
             }
         }
 
         D_i2_800D6C6C = &D_i2_800D6C08[D_i2_800D6C70 ^= 1];
 
-        gSPVertex(D_i2_800D6C74++, D_800D65D0, 8, D_i2_800D6C6C->unk_2C);
+        gSPVertex(sCourseDisp++, gCourseVtxPtr, 8, D_i2_800D6C6C->loadVtxIndex);
 
-        if (D_i2_800D6C8C != 0) {
+        if (sWorkingChunkJoinInfo != 0) {
             if (D_i2_800D6BDC != D_i2_800D6C84) {
-                gSPTexture(D_i2_800D6C74++, 0, 0, 0, D_i2_800D6BDC, G_OFF);
-                gSPTexture(D_i2_800D6C74++, 0x8000, 0xFFFF, 0, D_i2_800D6C84, G_ON);
+                gSPTexture(sCourseDisp++, 0, 0, 0, D_i2_800D6BDC, G_OFF);
+                gSPTexture(sCourseDisp++, 0x8000, 0xFFFF, 0, D_i2_800D6C84, G_ON);
                 D_i2_800D6BDC = D_i2_800D6C84;
             }
 
-            switch (D_i2_800D6C7C->trackSegmentInfo & TRACK_UNK2_MASK) {
-                case TRACK_UNK2_0:
-                    gSPDisplayList(D_i2_800D6C74++, D_i2_800D6C68->unk_04);
+            switch (sWorkingSegmentChunk->trackSegmentInfo & TRACK_CHUNK_JOIN_TRANSITION_START_MASK) {
+                case TRACK_CHUNK_JOIN_TRANSITION_START_NONE:
+                    gSPDisplayList(sCourseDisp++, D_i2_800D6C68->unk_04);
                     break;
-                case TRACK_UNK2_2000:
-                    gSPDisplayList(D_i2_800D6C74++, D_i2_800D6C68->unk_14);
+                case TRACK_CHUNK_JOIN_PREVIOUS_END:
+                    gSPDisplayList(sCourseDisp++, D_i2_800D6C68->unk_14);
                     break;
                 default:
-                    func_i2_800B9A10(D_i2_800D6C7C);
-                    gSPDisplayList(D_i2_800D6C74++, D_i2_800D6C68->unk_20);
-                    gSPVertex(D_i2_800D6C74++, D_800D65D0, 8, D_i2_800D6C6C->unk_2C);
-                    gSPDisplayList(D_i2_800D6C74++, D_i2_800D6C68->unk_18);
+                    Course_SetupChunkPipeTunnelJoinVtx(sWorkingSegmentChunk);
+                    gSPDisplayList(sCourseDisp++, D_i2_800D6C68->unk_20);
+                    gSPVertex(sCourseDisp++, gCourseVtxPtr, 8, D_i2_800D6C6C->loadVtxIndex);
+                    gSPDisplayList(sCourseDisp++, D_i2_800D6C68->unk_18);
                     break;
             }
         } else {
             if (D_i2_800D6BDC != D_i2_800D6C84) {
-                gSPTexture(D_i2_800D6C74++, 0, 0, 0, D_i2_800D6BDC, G_OFF);
-                gSPTexture(D_i2_800D6C74++, 0x8000, 0xFFFF, 0, D_i2_800D6C84, G_ON);
+                gSPTexture(sCourseDisp++, 0, 0, 0, D_i2_800D6BDC, G_OFF);
+                gSPTexture(sCourseDisp++, 0x8000, 0xFFFF, 0, D_i2_800D6C84, G_ON);
                 D_i2_800D6BDC = D_i2_800D6C84;
             }
 
-            gSPDisplayList(D_i2_800D6C74++, D_i2_800D6C68->unk_08);
+            gSPDisplayList(sCourseDisp++, D_i2_800D6C68->unk_08);
 
             if (D_i2_800D6C88) {
                 if (D_i2_800D6BDC != (D_i2_800D6C84 + 1)) {
-                    gSPTexture(D_i2_800D6C74++, 0, 0, 0, D_i2_800D6BDC, G_OFF);
-                    gSPTexture(D_i2_800D6C74++, 0x8000, 0xFFFF, 0, D_i2_800D6C84 + 1, G_ON);
+                    gSPTexture(sCourseDisp++, 0, 0, 0, D_i2_800D6BDC, G_OFF);
+                    gSPTexture(sCourseDisp++, 0x8000, 0xFFFF, 0, D_i2_800D6C84 + 1, G_ON);
                     D_i2_800D6BDC = D_i2_800D6C84 + 1;
                 }
 
-                gSPDisplayList(D_i2_800D6C74++, D_i2_800D6C68->unk_04);
+                gSPDisplayList(sCourseDisp++, D_i2_800D6C68->unk_04);
             }
         }
-        func_i2_800B9830(D_i2_800D6C80, 0);
-        D_i2_800D6C6C->unk_00 = D_i2_800D6C80;
+        Course_SetupChunkPipeTunnelVtx(sWorkingNextSegmentChunk, 0);
+        D_i2_800D6C6C->chunk = sWorkingNextSegmentChunk;
     } else {
         D_i2_800D6C70 = 1;
-        func_i2_800BA57C();
+        Course_SetupPipeTunnelChunkGroupPairVtx();
     }
 }
 
-void func_i2_800BB1A4(void) {
+void Course_DrawForwardPipeTunnelChunkGroup(void) {
 
     D_i2_800D6C68 = &D_i2_800D6C08[D_i2_800D6C70];
 
-    if (D_i2_800D6C80 == D_i2_800D6C68->unk_00) {
-        if (D_i2_800D6C80->trackSegmentInfo & TRACK_FLAG_80000000) {
-            if (D_i2_800D6C80->trackSegmentInfo & TRACK_JOIN_BOTH) {
-                gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 0, G_MWO_POINT_ST,
-                                VERTEX_MODIFIED_ST(D_i2_800D6BE0[4], D_i2_800D6C80->bottomTextureCoord));
-                gSPModifyVertex(
-                    D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 1, G_MWO_POINT_ST,
-                    VERTEX_MODIFIED_ST(D_i2_800D6BE0[3],
-                                       (D_i2_800D6C80->bottomTextureCoord + D_i2_800D6C80->rightTextureCoord) >> 1));
-                gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 2, G_MWO_POINT_ST,
-                                VERTEX_MODIFIED_ST(D_i2_800D6BE0[2], D_i2_800D6C80->rightTextureCoord));
-                gSPModifyVertex(
-                    D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 3, G_MWO_POINT_ST,
-                    VERTEX_MODIFIED_ST(D_i2_800D6BE0[3],
-                                       (D_i2_800D6C80->bottomTextureCoord + D_i2_800D6C80->rightTextureCoord) >> 1));
-                gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 4, G_MWO_POINT_ST,
-                                VERTEX_MODIFIED_ST(D_i2_800D6BE0[4], D_i2_800D6C80->bottomTextureCoord));
-                gSPModifyVertex(
-                    D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 5, G_MWO_POINT_ST,
-                    VERTEX_MODIFIED_ST(D_i2_800D6BE0[3],
-                                       (D_i2_800D6C80->bottomTextureCoord + D_i2_800D6C80->leftTextureCoord) >> 1));
-                gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 6, G_MWO_POINT_ST,
-                                VERTEX_MODIFIED_ST(D_i2_800D6BE0[2], D_i2_800D6C80->leftTextureCoord));
-                gSPModifyVertex(
-                    D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 7, G_MWO_POINT_ST,
-                    VERTEX_MODIFIED_ST(D_i2_800D6BE0[3],
-                                       (D_i2_800D6C80->bottomTextureCoord + D_i2_800D6C80->leftTextureCoord) >> 1));
+    if (sWorkingNextSegmentChunk == D_i2_800D6C68->chunk) {
+        if (sWorkingNextSegmentChunk->trackSegmentInfo & TRACK_FLAG_80000000) {
+            if (sWorkingNextSegmentChunk->trackSegmentInfo & TRACK_JOIN_BOTH) {
+                gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 0, G_MWO_POINT_ST,
+                                VERTEX_MODIFIED_ST(D_i2_800D6BE0[4], sWorkingNextSegmentChunk->bottomTextureCoord));
+                gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 1, G_MWO_POINT_ST,
+                                VERTEX_MODIFIED_ST(D_i2_800D6BE0[3], (sWorkingNextSegmentChunk->bottomTextureCoord +
+                                                                      sWorkingNextSegmentChunk->rightTextureCoord) >>
+                                                                         1));
+                gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 2, G_MWO_POINT_ST,
+                                VERTEX_MODIFIED_ST(D_i2_800D6BE0[2], sWorkingNextSegmentChunk->rightTextureCoord));
+                gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 3, G_MWO_POINT_ST,
+                                VERTEX_MODIFIED_ST(D_i2_800D6BE0[3], (sWorkingNextSegmentChunk->bottomTextureCoord +
+                                                                      sWorkingNextSegmentChunk->rightTextureCoord) >>
+                                                                         1));
+                gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 4, G_MWO_POINT_ST,
+                                VERTEX_MODIFIED_ST(D_i2_800D6BE0[4], sWorkingNextSegmentChunk->bottomTextureCoord));
+                gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 5, G_MWO_POINT_ST,
+                                VERTEX_MODIFIED_ST(D_i2_800D6BE0[3], (sWorkingNextSegmentChunk->bottomTextureCoord +
+                                                                      sWorkingNextSegmentChunk->leftTextureCoord) >>
+                                                                         1));
+                gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 6, G_MWO_POINT_ST,
+                                VERTEX_MODIFIED_ST(D_i2_800D6BE0[2], sWorkingNextSegmentChunk->leftTextureCoord));
+                gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 7, G_MWO_POINT_ST,
+                                VERTEX_MODIFIED_ST(D_i2_800D6BE0[3], (sWorkingNextSegmentChunk->bottomTextureCoord +
+                                                                      sWorkingNextSegmentChunk->leftTextureCoord) >>
+                                                                         1));
             } else {
-                gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 0, G_MWO_POINT_ST,
-                                VERTEX_MODIFIED_ST(D_i2_800D6BE0[4], D_i2_800D6C80->bottomTextureCoord));
-                gSPModifyVertex(
-                    D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 1, G_MWO_POINT_ST,
-                    VERTEX_MODIFIED_ST(D_i2_800D6BE0[3],
-                                       (D_i2_800D6C80->bottomTextureCoord + D_i2_800D6C80->rightTextureCoord) >> 1));
-                gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 2, G_MWO_POINT_ST,
-                                VERTEX_MODIFIED_ST(D_i2_800D6BE0[2], D_i2_800D6C80->rightTextureCoord));
-                gSPModifyVertex(
-                    D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 3, G_MWO_POINT_ST,
-                    VERTEX_MODIFIED_ST(D_i2_800D6BE0[1],
-                                       (D_i2_800D6C80->rightTextureCoord + D_i2_800D6C80->topTextureCoord) >> 1));
-                gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 4, G_MWO_POINT_ST,
-                                VERTEX_MODIFIED_ST(D_i2_800D6BE0[0], D_i2_800D6C80->topTextureCoord));
-                gSPModifyVertex(
-                    D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 5, G_MWO_POINT_ST,
-                    VERTEX_MODIFIED_ST(D_i2_800D6BE0[1],
-                                       (D_i2_800D6C80->topTextureCoord + D_i2_800D6C80->leftTextureCoord) >> 1));
-                gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 6, G_MWO_POINT_ST,
-                                VERTEX_MODIFIED_ST(D_i2_800D6BE0[2], D_i2_800D6C80->leftTextureCoord));
-                gSPModifyVertex(
-                    D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 7, G_MWO_POINT_ST,
-                    VERTEX_MODIFIED_ST(D_i2_800D6BE0[3],
-                                       (D_i2_800D6C80->leftTextureCoord + D_i2_800D6C80->bottomTextureCoord) >> 1));
+                gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 0, G_MWO_POINT_ST,
+                                VERTEX_MODIFIED_ST(D_i2_800D6BE0[4], sWorkingNextSegmentChunk->bottomTextureCoord));
+                gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 1, G_MWO_POINT_ST,
+                                VERTEX_MODIFIED_ST(D_i2_800D6BE0[3], (sWorkingNextSegmentChunk->bottomTextureCoord +
+                                                                      sWorkingNextSegmentChunk->rightTextureCoord) >>
+                                                                         1));
+                gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 2, G_MWO_POINT_ST,
+                                VERTEX_MODIFIED_ST(D_i2_800D6BE0[2], sWorkingNextSegmentChunk->rightTextureCoord));
+                gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 3, G_MWO_POINT_ST,
+                                VERTEX_MODIFIED_ST(D_i2_800D6BE0[1], (sWorkingNextSegmentChunk->rightTextureCoord +
+                                                                      sWorkingNextSegmentChunk->topTextureCoord) >>
+                                                                         1));
+                gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 4, G_MWO_POINT_ST,
+                                VERTEX_MODIFIED_ST(D_i2_800D6BE0[0], sWorkingNextSegmentChunk->topTextureCoord));
+                gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 5, G_MWO_POINT_ST,
+                                VERTEX_MODIFIED_ST(D_i2_800D6BE0[1], (sWorkingNextSegmentChunk->topTextureCoord +
+                                                                      sWorkingNextSegmentChunk->leftTextureCoord) >>
+                                                                         1));
+                gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 6, G_MWO_POINT_ST,
+                                VERTEX_MODIFIED_ST(D_i2_800D6BE0[2], sWorkingNextSegmentChunk->leftTextureCoord));
+                gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 7, G_MWO_POINT_ST,
+                                VERTEX_MODIFIED_ST(D_i2_800D6BE0[3], (sWorkingNextSegmentChunk->leftTextureCoord +
+                                                                      sWorkingNextSegmentChunk->bottomTextureCoord) >>
+                                                                         1));
             }
         }
 
         D_i2_800D6C6C = &D_i2_800D6C08[D_i2_800D6C70 ^= 1];
-        gSPVertex(D_i2_800D6C74++, D_800D65D0, 8, D_i2_800D6C6C->unk_2C);
+        gSPVertex(sCourseDisp++, gCourseVtxPtr, 8, D_i2_800D6C6C->loadVtxIndex);
 
-        if (D_i2_800D6C8C != 0) {
+        if (sWorkingChunkJoinInfo != 0) {
             if (D_i2_800D6BDC != D_i2_800D6C84) {
-                gSPTexture(D_i2_800D6C74++, 0, 0, 0, D_i2_800D6BDC, G_OFF);
-                gSPTexture(D_i2_800D6C74++, 0x8000, 0xFFFF, 0, D_i2_800D6C84, G_ON);
+                gSPTexture(sCourseDisp++, 0, 0, 0, D_i2_800D6BDC, G_OFF);
+                gSPTexture(sCourseDisp++, 0x8000, 0xFFFF, 0, D_i2_800D6C84, G_ON);
                 D_i2_800D6BDC = D_i2_800D6C84;
             }
 
-            switch (D_i2_800D6C7C->trackSegmentInfo & TRACK_UNK2_MASK) {
-                case TRACK_UNK2_0:
-                    gSPDisplayList(D_i2_800D6C74++, D_i2_800D6C6C->unk_04);
+            switch (sWorkingSegmentChunk->trackSegmentInfo & TRACK_CHUNK_JOIN_TRANSITION_START_MASK) {
+                case TRACK_CHUNK_JOIN_TRANSITION_START_NONE:
+                    gSPDisplayList(sCourseDisp++, D_i2_800D6C6C->unk_04);
                     break;
-                case TRACK_UNK2_2000:
-                    func_i2_800B9A10(D_i2_800D6C80);
-                    gSPDisplayList(D_i2_800D6C74++, D_i2_800D6C68->unk_1C);
-                    gSPVertex(D_i2_800D6C74++, D_800D65D0, 8, D_i2_800D6C6C->unk_2C);
-                    gSPDisplayList(D_i2_800D6C74++, D_i2_800D6C6C->unk_14);
+                case TRACK_CHUNK_JOIN_PREVIOUS_END:
+                    Course_SetupChunkPipeTunnelJoinVtx(sWorkingNextSegmentChunk);
+                    gSPDisplayList(sCourseDisp++, D_i2_800D6C68->unk_1C);
+                    gSPVertex(sCourseDisp++, gCourseVtxPtr, 8, D_i2_800D6C6C->loadVtxIndex);
+                    gSPDisplayList(sCourseDisp++, D_i2_800D6C6C->unk_14);
                     break;
                 default:
-                    gSPDisplayList(D_i2_800D6C74++, D_i2_800D6C6C->unk_18);
+                    gSPDisplayList(sCourseDisp++, D_i2_800D6C6C->unk_18);
                     if (1) {}
                     break;
             }
         } else {
             if (D_i2_800D6BDC != D_i2_800D6C84) {
-                gSPTexture(D_i2_800D6C74++, 0, 0, 0, D_i2_800D6BDC, G_OFF);
-                gSPTexture(D_i2_800D6C74++, 0x8000, 0xFFFF, 0, D_i2_800D6C84, G_ON);
+                gSPTexture(sCourseDisp++, 0, 0, 0, D_i2_800D6BDC, G_OFF);
+                gSPTexture(sCourseDisp++, 0x8000, 0xFFFF, 0, D_i2_800D6C84, G_ON);
                 D_i2_800D6BDC = D_i2_800D6C84;
             }
-            gSPDisplayList(D_i2_800D6C74++, D_i2_800D6C6C->unk_08);
+            gSPDisplayList(sCourseDisp++, D_i2_800D6C6C->unk_08);
 
             if (D_i2_800D6C88) {
                 if (D_i2_800D6BDC != (D_i2_800D6C84 + 1)) {
-                    gSPTexture(D_i2_800D6C74++, 0, 0, 0, D_i2_800D6BDC, G_OFF);
-                    gSPTexture(D_i2_800D6C74++, 0x8000, 0xFFFF, 0, D_i2_800D6C84 + 1, G_ON);
+                    gSPTexture(sCourseDisp++, 0, 0, 0, D_i2_800D6BDC, G_OFF);
+                    gSPTexture(sCourseDisp++, 0x8000, 0xFFFF, 0, D_i2_800D6C84 + 1, G_ON);
                     D_i2_800D6BDC = D_i2_800D6C84 + 1;
                 }
-                gSPDisplayList(D_i2_800D6C74++, D_i2_800D6C6C->unk_04);
+                gSPDisplayList(sCourseDisp++, D_i2_800D6C6C->unk_04);
             }
         }
-        func_i2_800B9830(D_i2_800D6C7C, D_i2_800D6C7C->trackSegmentInfo & TRACK_FLAG_80000000);
-        D_i2_800D6C6C->unk_00 = D_i2_800D6C7C;
+        Course_SetupChunkPipeTunnelVtx(sWorkingSegmentChunk,
+                                       sWorkingSegmentChunk->trackSegmentInfo & TRACK_FLAG_80000000);
+        D_i2_800D6C6C->chunk = sWorkingSegmentChunk;
     } else {
         D_i2_800D6C70 = 0;
-        func_i2_800BA57C();
+        Course_SetupPipeTunnelChunkGroupPairVtx();
     }
 }
 
-void func_i2_800BBB00(void) {
+void Course_SetupCylinderChunkGroupPairVtx(void) {
 
-    gSPVertex(D_i2_800D6C74++, D_800D65D0, 16, 0);
+    gSPVertex(sCourseDisp++, gCourseVtxPtr, 16, 0);
 
-    switch (D_i2_800D6C7C->trackSegmentInfo & TRACK_UNK1_MASK) {
-        case TRACK_UNK1_0:
-            gSPDisplayList(D_i2_800D6C74++, D_80140F0);
+    switch (sWorkingSegmentChunk->trackSegmentInfo & TRACK_CHUNK_JOIN_TRANSITION_END_MASK) {
+        case TRACK_CHUNK_JOIN_TRANSITION_END_NONE:
+            gSPDisplayList(sCourseDisp++, D_80140F0);
             break;
-        case TRACK_UNK1_800:
-            gSPDisplayList(D_i2_800D6C74++, D_8014520);
+        case TRACK_CHUNK_JOIN_PREVIOUS_START:
+            gSPDisplayList(sCourseDisp++, D_8014520);
             break;
         default:
-            gSPDisplayList(D_i2_800D6C74++, D_80145E0);
+            gSPDisplayList(sCourseDisp++, D_80145E0);
             if (1) {}
             break;
     }
-    func_i2_800B9BEC(D_i2_800D6C7C, D_i2_800D6C7C->trackSegmentInfo & TRACK_FLAG_80000000);
-    D_i2_800D6C08[0].unk_00 = D_i2_800D6C7C;
-    func_i2_800B9BEC(D_i2_800D6C80, 0);
-    D_i2_800D6C08[1].unk_00 = D_i2_800D6C80;
+    Course_SetupChunkCylinderVtx(sWorkingSegmentChunk, sWorkingSegmentChunk->trackSegmentInfo & TRACK_FLAG_80000000);
+    D_i2_800D6C08[0].chunk = sWorkingSegmentChunk;
+    Course_SetupChunkCylinderVtx(sWorkingNextSegmentChunk, 0);
+    D_i2_800D6C08[1].chunk = sWorkingNextSegmentChunk;
 }
 
-void func_i2_800BBC14(void) {
+void Course_DrawBackwardCylinderChunkGroup(void) {
 
     D_i2_800D6C68 = &D_i2_800D6C08[D_i2_800D6C70];
 
-    if (D_i2_800D6C7C == D_i2_800D6C68->unk_00) {
-        if (D_i2_800D6C7C->trackSegmentInfo & TRACK_FLAG_80000000) {
-            gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 0, G_MWO_POINT_ST,
-                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[4], D_i2_800D6C7C->bottomTextureCorrection));
-            gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 1, G_MWO_POINT_ST,
-                            VERTEX_MODIFIED_ST(
-                                D_i2_800D6BE0[3],
-                                (D_i2_800D6C7C->bottomTextureCorrection + D_i2_800D6C7C->rightTextureCorrection) >> 1));
-            gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 2, G_MWO_POINT_ST,
-                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[2], D_i2_800D6C7C->rightTextureCorrection));
-            gSPModifyVertex(
-                D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 3, G_MWO_POINT_ST,
-                VERTEX_MODIFIED_ST(D_i2_800D6BE0[1],
-                                   (D_i2_800D6C7C->rightTextureCorrection + D_i2_800D6C7C->topTextureCorrection) >> 1));
-            gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 4, G_MWO_POINT_ST,
-                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[0], D_i2_800D6C7C->topTextureCorrection));
-            gSPModifyVertex(
-                D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 5, G_MWO_POINT_ST,
-                VERTEX_MODIFIED_ST(D_i2_800D6BE0[1],
-                                   (D_i2_800D6C7C->topTextureCorrection + D_i2_800D6C7C->leftTextureCorrection) >> 1));
-            gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 6, G_MWO_POINT_ST,
-                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[2], D_i2_800D6C7C->leftTextureCorrection));
-            gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 7, G_MWO_POINT_ST,
-                            VERTEX_MODIFIED_ST(
-                                D_i2_800D6BE0[3],
-                                (D_i2_800D6C7C->leftTextureCorrection + D_i2_800D6C7C->bottomTextureCorrection) >> 1));
+    if (sWorkingSegmentChunk == D_i2_800D6C68->chunk) {
+        if (sWorkingSegmentChunk->trackSegmentInfo & TRACK_FLAG_80000000) {
+            gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 0, G_MWO_POINT_ST,
+                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[4], sWorkingSegmentChunk->bottomTextureCorrection));
+            gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 1, G_MWO_POINT_ST,
+                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[3], (sWorkingSegmentChunk->bottomTextureCorrection +
+                                                                  sWorkingSegmentChunk->rightTextureCorrection) >>
+                                                                     1));
+            gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 2, G_MWO_POINT_ST,
+                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[2], sWorkingSegmentChunk->rightTextureCorrection));
+            gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 3, G_MWO_POINT_ST,
+                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[1], (sWorkingSegmentChunk->rightTextureCorrection +
+                                                                  sWorkingSegmentChunk->topTextureCorrection) >>
+                                                                     1));
+            gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 4, G_MWO_POINT_ST,
+                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[0], sWorkingSegmentChunk->topTextureCorrection));
+            gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 5, G_MWO_POINT_ST,
+                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[1], (sWorkingSegmentChunk->topTextureCorrection +
+                                                                  sWorkingSegmentChunk->leftTextureCorrection) >>
+                                                                     1));
+            gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 6, G_MWO_POINT_ST,
+                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[2], sWorkingSegmentChunk->leftTextureCorrection));
+            gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 7, G_MWO_POINT_ST,
+                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[3], (sWorkingSegmentChunk->leftTextureCorrection +
+                                                                  sWorkingSegmentChunk->bottomTextureCorrection) >>
+                                                                     1));
         }
 
         D_i2_800D6C6C = &D_i2_800D6C08[D_i2_800D6C70 ^= 1];
 
-        gSPVertex(D_i2_800D6C74++, D_800D65D0, 8, D_i2_800D6C6C->unk_2C);
+        gSPVertex(sCourseDisp++, gCourseVtxPtr, 8, D_i2_800D6C6C->loadVtxIndex);
 
-        switch (D_i2_800D6C7C->trackSegmentInfo & TRACK_UNK1_MASK) {
-            case TRACK_UNK1_0:
-                gSPDisplayList(D_i2_800D6C74++, D_i2_800D6C68->unk_04);
+        switch (sWorkingSegmentChunk->trackSegmentInfo & TRACK_CHUNK_JOIN_TRANSITION_END_MASK) {
+            case TRACK_CHUNK_JOIN_TRANSITION_END_NONE:
+                gSPDisplayList(sCourseDisp++, D_i2_800D6C68->unk_04);
                 break;
-            case TRACK_UNK1_800:
-                gSPDisplayList(D_i2_800D6C74++, D_i2_800D6C68->unk_24);
+            case TRACK_CHUNK_JOIN_PREVIOUS_START:
+                gSPDisplayList(sCourseDisp++, D_i2_800D6C68->unk_24);
                 break;
             default:
-                gSPDisplayList(D_i2_800D6C74++, D_i2_800D6C68->unk_28);
+                gSPDisplayList(sCourseDisp++, D_i2_800D6C68->unk_28);
                 if (1) {}
                 break;
         }
 
-        func_i2_800B9BEC(D_i2_800D6C80, 0);
-        D_i2_800D6C6C->unk_00 = D_i2_800D6C80;
+        Course_SetupChunkCylinderVtx(sWorkingNextSegmentChunk, 0);
+        D_i2_800D6C6C->chunk = sWorkingNextSegmentChunk;
     } else {
         D_i2_800D6C70 = 1;
-        func_i2_800BBB00();
+        Course_SetupCylinderChunkGroupPairVtx();
     }
 }
 
-void func_i2_800BC070(void) {
+void Course_DrawForwardCylinderChunkGroup(void) {
 
     D_i2_800D6C68 = &D_i2_800D6C08[D_i2_800D6C70];
-    if (D_i2_800D6C80 == D_i2_800D6C68->unk_00) {
-        if (D_i2_800D6C80->trackSegmentInfo & TRACK_FLAG_80000000) {
-            gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 0, G_MWO_POINT_ST,
-                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[4], D_i2_800D6C80->bottomTextureCoord));
-            gSPModifyVertex(
-                D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 1, G_MWO_POINT_ST,
-                VERTEX_MODIFIED_ST(D_i2_800D6BE0[3],
-                                   (D_i2_800D6C80->bottomTextureCoord + D_i2_800D6C80->rightTextureCoord) >> 1));
-            gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 2, G_MWO_POINT_ST,
-                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[2], D_i2_800D6C80->rightTextureCoord));
-            gSPModifyVertex(
-                D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 3, G_MWO_POINT_ST,
-                VERTEX_MODIFIED_ST(D_i2_800D6BE0[1],
-                                   (D_i2_800D6C80->rightTextureCoord + D_i2_800D6C80->topTextureCoord) >> 1));
-            gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 4, G_MWO_POINT_ST,
-                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[0], D_i2_800D6C80->topTextureCoord));
-            gSPModifyVertex(
-                D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 5, G_MWO_POINT_ST,
-                VERTEX_MODIFIED_ST(D_i2_800D6BE0[1],
-                                   (D_i2_800D6C80->topTextureCoord + D_i2_800D6C80->leftTextureCoord) >> 1));
-            gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 6, G_MWO_POINT_ST,
-                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[2], D_i2_800D6C80->leftTextureCoord));
-            gSPModifyVertex(
-                D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 7, G_MWO_POINT_ST,
-                VERTEX_MODIFIED_ST(D_i2_800D6BE0[3],
-                                   (D_i2_800D6C80->leftTextureCoord + D_i2_800D6C80->bottomTextureCoord) >> 1));
+    if (sWorkingNextSegmentChunk == D_i2_800D6C68->chunk) {
+        if (sWorkingNextSegmentChunk->trackSegmentInfo & TRACK_FLAG_80000000) {
+            gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 0, G_MWO_POINT_ST,
+                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[4], sWorkingNextSegmentChunk->bottomTextureCoord));
+            gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 1, G_MWO_POINT_ST,
+                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[3], (sWorkingNextSegmentChunk->bottomTextureCoord +
+                                                                  sWorkingNextSegmentChunk->rightTextureCoord) >>
+                                                                     1));
+            gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 2, G_MWO_POINT_ST,
+                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[2], sWorkingNextSegmentChunk->rightTextureCoord));
+            gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 3, G_MWO_POINT_ST,
+                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[1], (sWorkingNextSegmentChunk->rightTextureCoord +
+                                                                  sWorkingNextSegmentChunk->topTextureCoord) >>
+                                                                     1));
+            gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 4, G_MWO_POINT_ST,
+                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[0], sWorkingNextSegmentChunk->topTextureCoord));
+            gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 5, G_MWO_POINT_ST,
+                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[1], (sWorkingNextSegmentChunk->topTextureCoord +
+                                                                  sWorkingNextSegmentChunk->leftTextureCoord) >>
+                                                                     1));
+            gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 6, G_MWO_POINT_ST,
+                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[2], sWorkingNextSegmentChunk->leftTextureCoord));
+            gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 7, G_MWO_POINT_ST,
+                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[3], (sWorkingNextSegmentChunk->leftTextureCoord +
+                                                                  sWorkingNextSegmentChunk->bottomTextureCoord) >>
+                                                                     1));
         }
 
         D_i2_800D6C6C = &D_i2_800D6C08[D_i2_800D6C70 ^= 1];
 
-        gSPVertex(D_i2_800D6C74++, D_800D65D0, 8, D_i2_800D6C6C->unk_2C);
+        gSPVertex(sCourseDisp++, gCourseVtxPtr, 8, D_i2_800D6C6C->loadVtxIndex);
 
-        switch (D_i2_800D6C7C->trackSegmentInfo & TRACK_UNK1_MASK) {
-            case TRACK_UNK1_0:
-                gSPDisplayList(D_i2_800D6C74++, D_i2_800D6C6C->unk_04);
+        switch (sWorkingSegmentChunk->trackSegmentInfo & TRACK_CHUNK_JOIN_TRANSITION_END_MASK) {
+            case TRACK_CHUNK_JOIN_TRANSITION_END_NONE:
+                gSPDisplayList(sCourseDisp++, D_i2_800D6C6C->unk_04);
                 break;
-            case TRACK_UNK1_800:
-                gSPDisplayList(D_i2_800D6C74++, D_i2_800D6C6C->unk_24);
+            case TRACK_CHUNK_JOIN_PREVIOUS_START:
+                gSPDisplayList(sCourseDisp++, D_i2_800D6C6C->unk_24);
                 break;
             default:
-                gSPDisplayList(D_i2_800D6C74++, D_i2_800D6C6C->unk_28);
+                gSPDisplayList(sCourseDisp++, D_i2_800D6C6C->unk_28);
                 if (1) {}
                 break;
         }
 
-        func_i2_800B9BEC(D_i2_800D6C7C, D_i2_800D6C7C->trackSegmentInfo & TRACK_FLAG_80000000);
-        D_i2_800D6C6C->unk_00 = D_i2_800D6C7C;
+        Course_SetupChunkCylinderVtx(sWorkingSegmentChunk,
+                                     sWorkingSegmentChunk->trackSegmentInfo & TRACK_FLAG_80000000);
+        D_i2_800D6C6C->chunk = sWorkingSegmentChunk;
     } else {
         D_i2_800D6C70 = 0;
-        func_i2_800BBB00();
+        Course_SetupCylinderChunkGroupPairVtx();
     }
 }
 
-void func_i2_800BC4D8(void) {
+void Course_SetupHalfPipeChunkGroupPairVtx(void) {
 
-    gSPVertex(D_i2_800D6C74++, D_800D65D0, 16, 0);
-    gSPDisplayList(D_i2_800D6C74++, D_80140F0);
+    gSPVertex(sCourseDisp++, gCourseVtxPtr, 16, 0);
+    gSPDisplayList(sCourseDisp++, D_80140F0);
 
-    func_i2_800B9C98(D_i2_800D6C7C, D_i2_800D6C7C->trackSegmentInfo & TRACK_FLAG_80000000);
-    D_i2_800D6C08[0].unk_00 = D_i2_800D6C7C;
-    func_i2_800B9C98(D_i2_800D6C80, 0);
-    D_i2_800D6C08[1].unk_00 = D_i2_800D6C80;
+    Course_SetupChunkHalfPipeVtx(sWorkingSegmentChunk, sWorkingSegmentChunk->trackSegmentInfo & TRACK_FLAG_80000000);
+    D_i2_800D6C08[0].chunk = sWorkingSegmentChunk;
+    Course_SetupChunkHalfPipeVtx(sWorkingNextSegmentChunk, 0);
+    D_i2_800D6C08[1].chunk = sWorkingNextSegmentChunk;
 }
 
-void func_i2_800BC580(void) {
+void Course_DrawBackwardHalfPipeChunkGroup(void) {
 
     D_i2_800D6C68 = &D_i2_800D6C08[D_i2_800D6C70];
 
-    if (D_i2_800D6C7C == D_i2_800D6C68->unk_00) {
-        if (D_i2_800D6C7C->trackSegmentInfo & TRACK_FLAG_80000000) {
-            gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 0, G_MWO_POINT_ST,
-                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[4], D_i2_800D6C7C->bottomTextureCorrection));
-            gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 1, G_MWO_POINT_ST,
-                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[3], D_i2_800D6C7C->rightTextureCorrection));
-            gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 2, G_MWO_POINT_ST,
-                            VERTEX_MODIFIED_ST(
-                                D_i2_800D6BE0[2],
-                                (D_i2_800D6C7C->rightTextureCorrection + D_i2_800D6C7C->bottomTextureCorrection) >> 1));
-            gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 3, G_MWO_POINT_ST,
-                            VERTEX_MODIFIED_ST(
-                                D_i2_800D6BE0[1],
-                                (D_i2_800D6C7C->rightTextureCorrection + D_i2_800D6C7C->bottomTextureCorrection) >> 1));
-            gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 4, G_MWO_POINT_ST,
-                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[0], D_i2_800D6C7C->bottomTextureCorrection));
-            gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 5, G_MWO_POINT_ST,
-                            VERTEX_MODIFIED_ST(
-                                D_i2_800D6BE0[1],
-                                (D_i2_800D6C7C->leftTextureCorrection + D_i2_800D6C7C->bottomTextureCorrection) >> 1));
-            gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 6, G_MWO_POINT_ST,
-                            VERTEX_MODIFIED_ST(
-                                D_i2_800D6BE0[2],
-                                (D_i2_800D6C7C->leftTextureCorrection + D_i2_800D6C7C->bottomTextureCorrection) >> 1));
-            gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 7, G_MWO_POINT_ST,
-                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[3], D_i2_800D6C7C->leftTextureCorrection));
+    if (sWorkingSegmentChunk == D_i2_800D6C68->chunk) {
+        if (sWorkingSegmentChunk->trackSegmentInfo & TRACK_FLAG_80000000) {
+            gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 0, G_MWO_POINT_ST,
+                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[4], sWorkingSegmentChunk->bottomTextureCorrection));
+            gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 1, G_MWO_POINT_ST,
+                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[3], sWorkingSegmentChunk->rightTextureCorrection));
+            gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 2, G_MWO_POINT_ST,
+                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[2], (sWorkingSegmentChunk->rightTextureCorrection +
+                                                                  sWorkingSegmentChunk->bottomTextureCorrection) >>
+                                                                     1));
+            gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 3, G_MWO_POINT_ST,
+                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[1], (sWorkingSegmentChunk->rightTextureCorrection +
+                                                                  sWorkingSegmentChunk->bottomTextureCorrection) >>
+                                                                     1));
+            gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 4, G_MWO_POINT_ST,
+                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[0], sWorkingSegmentChunk->bottomTextureCorrection));
+            gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 5, G_MWO_POINT_ST,
+                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[1], (sWorkingSegmentChunk->leftTextureCorrection +
+                                                                  sWorkingSegmentChunk->bottomTextureCorrection) >>
+                                                                     1));
+            gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 6, G_MWO_POINT_ST,
+                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[2], (sWorkingSegmentChunk->leftTextureCorrection +
+                                                                  sWorkingSegmentChunk->bottomTextureCorrection) >>
+                                                                     1));
+            gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 7, G_MWO_POINT_ST,
+                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[3], sWorkingSegmentChunk->leftTextureCorrection));
         }
 
         D_i2_800D6C6C = &D_i2_800D6C08[D_i2_800D6C70 ^= 1];
-        gSPVertex(D_i2_800D6C74++, D_800D65D0, 8, D_i2_800D6C6C->unk_2C);
-        gSPDisplayList(D_i2_800D6C74++, D_i2_800D6C68->unk_0C);
-        func_i2_800B9C98(D_i2_800D6C80, 0);
-        D_i2_800D6C6C->unk_00 = D_i2_800D6C80;
+        gSPVertex(sCourseDisp++, gCourseVtxPtr, 8, D_i2_800D6C6C->loadVtxIndex);
+        gSPDisplayList(sCourseDisp++, D_i2_800D6C68->unk_0C);
+        Course_SetupChunkHalfPipeVtx(sWorkingNextSegmentChunk, 0);
+        D_i2_800D6C6C->chunk = sWorkingNextSegmentChunk;
     } else {
         D_i2_800D6C70 = 1;
-        func_i2_800BC4D8();
+        Course_SetupHalfPipeChunkGroupPairVtx();
     }
 }
 
-void func_i2_800BC968(void) {
+void Course_DrawForwardHalfPipeChunkGroup(void) {
 
     D_i2_800D6C68 = &D_i2_800D6C08[D_i2_800D6C70];
 
-    if (D_i2_800D6C80 == D_i2_800D6C68->unk_00) {
-        if (D_i2_800D6C80->trackSegmentInfo & TRACK_FLAG_80000000) {
-            gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 0, G_MWO_POINT_ST,
-                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[4], D_i2_800D6C80->bottomTextureCoord));
-            gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 1, G_MWO_POINT_ST,
-                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[3], D_i2_800D6C80->rightTextureCoord));
-            gSPModifyVertex(
-                D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 2, G_MWO_POINT_ST,
-                VERTEX_MODIFIED_ST(D_i2_800D6BE0[2],
-                                   (D_i2_800D6C80->rightTextureCoord + D_i2_800D6C80->bottomTextureCoord) >> 1));
-            gSPModifyVertex(
-                D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 3, G_MWO_POINT_ST,
-                VERTEX_MODIFIED_ST(D_i2_800D6BE0[1],
-                                   (D_i2_800D6C80->rightTextureCoord + D_i2_800D6C80->bottomTextureCoord) >> 1));
-            gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 4, G_MWO_POINT_ST,
-                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[0], D_i2_800D6C80->bottomTextureCoord));
-            gSPModifyVertex(
-                D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 5, G_MWO_POINT_ST,
-                VERTEX_MODIFIED_ST(D_i2_800D6BE0[1],
-                                   (D_i2_800D6C80->leftTextureCoord + D_i2_800D6C80->bottomTextureCoord) >> 1));
-            gSPModifyVertex(
-                D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 6, G_MWO_POINT_ST,
-                VERTEX_MODIFIED_ST(D_i2_800D6BE0[2],
-                                   (D_i2_800D6C80->leftTextureCoord + D_i2_800D6C80->bottomTextureCoord) >> 1));
-            gSPModifyVertex(D_i2_800D6C74++, D_i2_800D6C68->unk_2C + 7, G_MWO_POINT_ST,
-                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[3], D_i2_800D6C80->leftTextureCoord));
+    if (sWorkingNextSegmentChunk == D_i2_800D6C68->chunk) {
+        if (sWorkingNextSegmentChunk->trackSegmentInfo & TRACK_FLAG_80000000) {
+            gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 0, G_MWO_POINT_ST,
+                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[4], sWorkingNextSegmentChunk->bottomTextureCoord));
+            gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 1, G_MWO_POINT_ST,
+                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[3], sWorkingNextSegmentChunk->rightTextureCoord));
+            gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 2, G_MWO_POINT_ST,
+                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[2], (sWorkingNextSegmentChunk->rightTextureCoord +
+                                                                  sWorkingNextSegmentChunk->bottomTextureCoord) >>
+                                                                     1));
+            gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 3, G_MWO_POINT_ST,
+                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[1], (sWorkingNextSegmentChunk->rightTextureCoord +
+                                                                  sWorkingNextSegmentChunk->bottomTextureCoord) >>
+                                                                     1));
+            gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 4, G_MWO_POINT_ST,
+                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[0], sWorkingNextSegmentChunk->bottomTextureCoord));
+            gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 5, G_MWO_POINT_ST,
+                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[1], (sWorkingNextSegmentChunk->leftTextureCoord +
+                                                                  sWorkingNextSegmentChunk->bottomTextureCoord) >>
+                                                                     1));
+            gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 6, G_MWO_POINT_ST,
+                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[2], (sWorkingNextSegmentChunk->leftTextureCoord +
+                                                                  sWorkingNextSegmentChunk->bottomTextureCoord) >>
+                                                                     1));
+            gSPModifyVertex(sCourseDisp++, D_i2_800D6C68->loadVtxIndex + 7, G_MWO_POINT_ST,
+                            VERTEX_MODIFIED_ST(D_i2_800D6BE0[3], sWorkingNextSegmentChunk->leftTextureCoord));
         }
 
         D_i2_800D6C6C = &D_i2_800D6C08[D_i2_800D6C70 ^= 1];
-        gSPVertex(D_i2_800D6C74++, D_800D65D0, 8, D_i2_800D6C6C->unk_2C);
-        gSPDisplayList(D_i2_800D6C74++, D_i2_800D6C6C->unk_0C);
-        func_i2_800B9C98(D_i2_800D6C7C, D_i2_800D6C7C->trackSegmentInfo & TRACK_FLAG_80000000);
-        D_i2_800D6C6C->unk_00 = D_i2_800D6C7C;
+        gSPVertex(sCourseDisp++, gCourseVtxPtr, 8, D_i2_800D6C6C->loadVtxIndex);
+        gSPDisplayList(sCourseDisp++, D_i2_800D6C6C->unk_0C);
+        Course_SetupChunkHalfPipeVtx(sWorkingSegmentChunk,
+                                     sWorkingSegmentChunk->trackSegmentInfo & TRACK_FLAG_80000000);
+        D_i2_800D6C6C->chunk = sWorkingSegmentChunk;
     } else {
         D_i2_800D6C70 = 0;
-        func_i2_800BC4D8();
+        Course_SetupHalfPipeChunkGroupPairVtx();
     }
 }
 
-void func_i2_800BCD5C(void) {
+void Course_SetupAirChunkGroupPairVtx(void) {
 
-    gSPVertex(D_i2_800D6C74++, D_800D65D0, 16, 0);
-    gSPDisplayList(D_i2_800D6C74++, D_8014210);
-    func_i2_800B97AC(D_i2_800D6C7C, 0);
-    D_i2_800D6C08[0].unk_00 = D_i2_800D6C7C;
-    func_i2_800B97AC(D_i2_800D6C80, 0);
-    D_i2_800D6C08[1].unk_00 = D_i2_800D6C80;
+    gSPVertex(sCourseDisp++, gCourseVtxPtr, 16, 0);
+    gSPDisplayList(sCourseDisp++, D_8014210);
+    Course_SetupChunkRoadAirVtx(sWorkingSegmentChunk, 0);
+    D_i2_800D6C08[0].chunk = sWorkingSegmentChunk;
+    Course_SetupChunkRoadAirVtx(sWorkingNextSegmentChunk, 0);
+    D_i2_800D6C08[1].chunk = sWorkingNextSegmentChunk;
 }
 
-void func_i2_800BCDFC(void) {
+void Course_DrawBackwardAirChunkGroup(void) {
 
     D_i2_800D6C68 = &D_i2_800D6C08[D_i2_800D6C70];
-    if (D_i2_800D6C7C == D_i2_800D6C68->unk_00) {
+    if (sWorkingSegmentChunk == D_i2_800D6C68->chunk) {
         D_i2_800D6C6C = &D_i2_800D6C08[D_i2_800D6C70 ^= 1];
 
-        gSPVertex(D_i2_800D6C74++, D_800D65D0, 8, D_i2_800D6C6C->unk_2C);
-        gSPDisplayList(D_i2_800D6C74++, D_i2_800D6C68->unk_10);
-        func_i2_800B97AC(D_i2_800D6C80, 0);
-        D_i2_800D6C6C->unk_00 = D_i2_800D6C80;
+        gSPVertex(sCourseDisp++, gCourseVtxPtr, 8, D_i2_800D6C6C->loadVtxIndex);
+        gSPDisplayList(sCourseDisp++, D_i2_800D6C68->unk_10);
+        Course_SetupChunkRoadAirVtx(sWorkingNextSegmentChunk, 0);
+        D_i2_800D6C6C->chunk = sWorkingNextSegmentChunk;
     } else {
         D_i2_800D6C70 = 1;
-        func_i2_800BCD5C();
+        Course_SetupAirChunkGroupPairVtx();
     }
 }
 
-void func_i2_800BCF0C(void) {
+void Course_DrawForwardAirChunkGroup(void) {
 
     D_i2_800D6C68 = &D_i2_800D6C08[D_i2_800D6C70];
-    if (D_i2_800D6C80 == D_i2_800D6C68->unk_00) {
+    if (sWorkingNextSegmentChunk == D_i2_800D6C68->chunk) {
         D_i2_800D6C6C = &D_i2_800D6C08[D_i2_800D6C70 ^= 1];
 
-        gSPVertex(D_i2_800D6C74++, D_800D65D0, 8, D_i2_800D6C6C->unk_2C);
-        gSPDisplayList(D_i2_800D6C74++, D_i2_800D6C6C->unk_10);
-        func_i2_800B97AC(D_i2_800D6C7C, D_i2_800D6C7C->trackSegmentInfo & TRACK_FLAG_80000000);
-        D_i2_800D6C6C->unk_00 = D_i2_800D6C7C;
+        gSPVertex(sCourseDisp++, gCourseVtxPtr, 8, D_i2_800D6C6C->loadVtxIndex);
+        gSPDisplayList(sCourseDisp++, D_i2_800D6C6C->unk_10);
+        Course_SetupChunkRoadAirVtx(sWorkingSegmentChunk, sWorkingSegmentChunk->trackSegmentInfo & TRACK_FLAG_80000000);
+        D_i2_800D6C6C->chunk = sWorkingSegmentChunk;
     } else {
         D_i2_800D6C70 = 0;
-        func_i2_800BCD5C();
+        Course_SetupAirChunkGroupPairVtx();
     }
 }
 
 extern GfxPool* gGfxPool;
 
-void func_i2_800BD024(unk_800A8B74_arg_0* arg0) {
+void Course_DrawBackwardChunkGroup(SegmentChunkGroup* chunkGroup) {
     f32 var_fv0;
     s32 trackType;
     u32 trackShape;
     unk_800CF528* temp_a1;
 
-    D_i2_800D6C7C = arg0->unk_00;
-    D_i2_800D6C80 = arg0->unk_00 + 1;
+    sWorkingSegmentChunk = chunkGroup->startChunk;
+    sWorkingNextSegmentChunk = chunkGroup->startChunk + 1;
 
-    if (D_i2_800D6C80 == D_i2_800D65CC) {
-        D_i2_800D6C80 = D_802BE5C0;
+    if (sWorkingNextSegmentChunk == sLastSegmentChunk) {
+        sWorkingNextSegmentChunk = gSegmentChunks;
     }
 
     do {
-        if (D_i2_800D6C80->trackSegmentInfo & TRACK_FLAG_CONTINUOUS) {
-            if (D_i2_800D6C80 != arg0->unk_04) {
+        if (sWorkingNextSegmentChunk->trackSegmentInfo & TRACK_FLAG_CONTINUOUS) {
+            if (sWorkingNextSegmentChunk != chunkGroup->endChunk) {
 
-                D_i2_800D6C78 = D_i2_800D6C80 + 1;
-                if (D_i2_800D6C78 == D_i2_800D65CC) {
-                    D_i2_800D6C78 = D_802BE5C0;
+                D_i2_800D6C78 = sWorkingNextSegmentChunk + 1;
+                if (D_i2_800D6C78 == sLastSegmentChunk) {
+                    D_i2_800D6C78 = gSegmentChunks;
                 }
                 var_fv0 = D_i2_800D6BFC;
 
                 do {
                     var_fv0 += D_i2_800D6C00;
-                    if (D_i2_800D6C78->unk_0C < var_fv0) {
+                    if (D_i2_800D6C78->depth < var_fv0) {
                         break;
                     }
 
-                    if ((D_i2_800D6C80 = D_i2_800D6C78) == arg0->unk_04) {
+                    if ((sWorkingNextSegmentChunk = D_i2_800D6C78) == chunkGroup->endChunk) {
                         break;
                     }
 
                     D_i2_800D6C78++;
-                    if (D_i2_800D6C78 == D_i2_800D65CC) {
-                        D_i2_800D6C78 = D_802BE5C0;
+                    if (D_i2_800D6C78 == sLastSegmentChunk) {
+                        D_i2_800D6C78 = gSegmentChunks;
                     }
-                } while (D_i2_800D6C80->trackSegmentInfo & TRACK_FLAG_CONTINUOUS);
+                } while (sWorkingNextSegmentChunk->trackSegmentInfo & TRACK_FLAG_CONTINUOUS);
             }
         }
 
-        if (D_800D65D0 >= &gGfxPool->unk_1A308[0xFF0]) {
+        if (gCourseVtxPtr >= &gGfxPool->courseVtxBuffer[0xFF0]) {
             break;
         }
 
-        trackShape = TRACK_SHAPE_INDEX((u32) D_i2_800D6C7C->trackSegmentInfo & TRACK_SHAPE_MASK);
-        trackType = D_i2_800D6C7C->trackSegmentInfo & TRACK_TYPE_MASK;
+        trackShape = TRACK_SHAPE_INDEX((u32) sWorkingSegmentChunk->trackSegmentInfo & TRACK_SHAPE_MASK);
+        trackType = sWorkingSegmentChunk->trackSegmentInfo & TRACK_TYPE_MASK;
         if (trackType != TRACK_TYPE_NONE) {
             temp_a1 = &D_i2_800C18D8[trackShape][trackType];
             D_i2_800D6C84 = temp_a1->unk_10;
 
             if (D_i2_800D6BDC != D_i2_800D6C84) {
-                gSPTexture(D_i2_800D6C74++, 0, 0, 0, D_i2_800D6BDC, G_OFF);
-                gSPTexture(D_i2_800D6C74++, 0x8000, 0xFFFF, 0, D_i2_800D6C84, G_ON);
+                gSPTexture(sCourseDisp++, 0, 0, 0, D_i2_800D6BDC, G_OFF);
+                gSPTexture(sCourseDisp++, 0x8000, 0xFFFF, 0, D_i2_800D6C84, G_ON);
                 D_i2_800D6BDC = D_i2_800D6C84;
             }
 
-            trackType = D_i2_800D6C7C->trackSegmentInfo & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK);
-            if (trackType != D_i2_800D6BD8) {
-                gDPLoadSync(D_i2_800D6C74++);
-                gDPSetTextureImage(D_i2_800D6C74++, G_IM_FMT_RGBA, G_IM_SIZ_16b, temp_a1->width, temp_a1->texture);
-                gDPLoadBlock(D_i2_800D6C74++, temp_a1->tile, 0, 0, 2047, CALC_DXT(temp_a1->width, G_IM_SIZ_16b));
+            trackType = sWorkingSegmentChunk->trackSegmentInfo & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK);
+            if (trackType != sLastTrackShapeType) {
+                gDPLoadSync(sCourseDisp++);
+                gDPSetTextureImage(sCourseDisp++, G_IM_FMT_RGBA, G_IM_SIZ_16b, temp_a1->width, temp_a1->texture);
+                gDPLoadBlock(sCourseDisp++, temp_a1->tile, 0, 0, 2047, CALC_DXT(temp_a1->width, G_IM_SIZ_16b));
 
-                D_i2_800D6BD8 = trackType;
+                sLastTrackShapeType = trackType;
                 D_i2_800D6BE0[0] = temp_a1->unk_16;
                 D_i2_800D6BE0[1] = temp_a1->unk_18;
                 D_i2_800D6BE0[2] = temp_a1->unk_1A;
@@ -4175,78 +4182,80 @@ void func_i2_800BD024(unk_800A8B74_arg_0* arg0) {
                 D_i2_800D6BE0[4] = temp_a1->unk_1E;
             }
         }
-        D_i2_800D6C8C = D_i2_800D6C7C->trackSegmentInfo & (TRACK_JOIN_MASK | TRACK_UNK1_MASK | TRACK_UNK2_MASK);
-        D_i2_800C1958[trackShape]();
+        sWorkingChunkJoinInfo =
+            sWorkingSegmentChunk->trackSegmentInfo &
+            (TRACK_JOIN_MASK | TRACK_CHUNK_JOIN_TRANSITION_END_MASK | TRACK_CHUNK_JOIN_TRANSITION_START_MASK);
+        sBackwardChunkGroupDrawFuncs[trackShape]();
 
-        D_i2_800D6C7C = D_i2_800D6C80++;
-        if (D_i2_800D6C80 == D_i2_800D65CC) {
-            D_i2_800D6C80 = D_802BE5C0;
+        sWorkingSegmentChunk = sWorkingNextSegmentChunk++;
+        if (sWorkingNextSegmentChunk == sLastSegmentChunk) {
+            sWorkingNextSegmentChunk = gSegmentChunks;
         }
-    } while (D_i2_800D6C7C != arg0->unk_04);
+    } while (sWorkingSegmentChunk != chunkGroup->endChunk);
 }
 
-void func_i2_800BD3F0(unk_800A8B74_arg_0* arg0) {
+void Course_DrawForwardChunkGroup(SegmentChunkGroup* chunkGroup) {
     f32 var_fv0;
     s32 trackType;
     u32 trackShape;
     unk_800CF528* temp_a2;
-    SegmentChunk* tempLimit = D_802BE5C0;
+    SegmentChunk* firstChunk = gSegmentChunks;
 
-    D_i2_800D6C7C = arg0->unk_04 - 1;
-    if (D_i2_800D6C7C < tempLimit) {
-        D_i2_800D6C7C = D_i2_800D65CC - 1;
+    sWorkingSegmentChunk = chunkGroup->endChunk - 1;
+    if (sWorkingSegmentChunk < firstChunk) {
+        sWorkingSegmentChunk = sLastSegmentChunk - 1;
     }
-    D_i2_800D6C80 = arg0->unk_04;
+    sWorkingNextSegmentChunk = chunkGroup->endChunk;
 
     do {
-        if (D_i2_800D6C7C->trackSegmentInfo & TRACK_FLAG_CONTINUOUS) {
-            if (D_i2_800D6C7C != arg0->unk_00) {
-                D_i2_800D6C78 = D_i2_800D6C7C - 1;
-                if (D_i2_800D6C78 < tempLimit) {
-                    D_i2_800D6C78 = D_i2_800D65CC - 1;
+        if (sWorkingSegmentChunk->trackSegmentInfo & TRACK_FLAG_CONTINUOUS) {
+            if (sWorkingSegmentChunk != chunkGroup->startChunk) {
+                D_i2_800D6C78 = sWorkingSegmentChunk - 1;
+                if (D_i2_800D6C78 < firstChunk) {
+                    D_i2_800D6C78 = sLastSegmentChunk - 1;
                 }
                 var_fv0 = D_i2_800D6BFC;
 
                 do {
                     var_fv0 += D_i2_800D6C00;
-                    if (D_i2_800D6C78->unk_0C < var_fv0) {
+                    if (D_i2_800D6C78->depth < var_fv0) {
                         break;
                     }
 
-                    if ((D_i2_800D6C7C = D_i2_800D6C78) == arg0->unk_00) {
+                    if ((sWorkingSegmentChunk = D_i2_800D6C78) == chunkGroup->startChunk) {
                         break;
                     }
 
                     D_i2_800D6C78--;
-                    if (D_i2_800D6C78 < tempLimit) {
-                        D_i2_800D6C78 = D_i2_800D65CC - 1;
+                    if (D_i2_800D6C78 < firstChunk) {
+                        D_i2_800D6C78 = sLastSegmentChunk - 1;
                     }
-                } while (D_i2_800D6C7C->trackSegmentInfo & TRACK_FLAG_CONTINUOUS);
+                } while (sWorkingSegmentChunk->trackSegmentInfo & TRACK_FLAG_CONTINUOUS);
             }
         }
 
-        if (D_800D65D0 >= &gGfxPool->unk_1A308[0xFF0]) {
+        if (gCourseVtxPtr >= &gGfxPool->courseVtxBuffer[0xFF0]) {
             break;
         }
 
-        trackShape = TRACK_SHAPE_INDEX((u32) D_i2_800D6C7C->trackSegmentInfo & TRACK_SHAPE_MASK);
-        trackType = D_i2_800D6C7C->trackSegmentInfo & TRACK_TYPE_MASK;
+        trackShape = TRACK_SHAPE_INDEX((u32) sWorkingSegmentChunk->trackSegmentInfo & TRACK_SHAPE_MASK);
+        trackType = sWorkingSegmentChunk->trackSegmentInfo & TRACK_TYPE_MASK;
         if (trackType != TRACK_TYPE_NONE) {
             temp_a2 = &D_i2_800C18D8[trackShape][trackType];
             D_i2_800D6C84 = temp_a2->unk_10;
 
             if (D_i2_800D6BDC != D_i2_800D6C84) {
-                gSPTexture(D_i2_800D6C74++, 0, 0, 0, D_i2_800D6BDC, G_OFF);
-                gSPTexture(D_i2_800D6C74++, 0x8000, 0xFFFF, 0, D_i2_800D6C84, G_ON);
+                gSPTexture(sCourseDisp++, 0, 0, 0, D_i2_800D6BDC, G_OFF);
+                gSPTexture(sCourseDisp++, 0x8000, 0xFFFF, 0, D_i2_800D6C84, G_ON);
                 D_i2_800D6BDC = D_i2_800D6C84;
             }
 
-            trackType = D_i2_800D6C7C->trackSegmentInfo & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK);
-            if (trackType != D_i2_800D6BD8) {
-                gDPLoadSync(D_i2_800D6C74++);
-                gDPSetTextureImage(D_i2_800D6C74++, G_IM_FMT_RGBA, G_IM_SIZ_16b, temp_a2->width, temp_a2->texture);
-                gDPLoadBlock(D_i2_800D6C74++, temp_a2->tile, 0, 0, 2047, CALC_DXT(temp_a2->width, G_IM_SIZ_16b));
-                D_i2_800D6BD8 = trackType;
+            trackType = sWorkingSegmentChunk->trackSegmentInfo & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK);
+            if (trackType != sLastTrackShapeType) {
+                gDPLoadSync(sCourseDisp++);
+                gDPSetTextureImage(sCourseDisp++, G_IM_FMT_RGBA, G_IM_SIZ_16b, temp_a2->width, temp_a2->texture);
+                gDPLoadBlock(sCourseDisp++, temp_a2->tile, 0, 0, 2047, CALC_DXT(temp_a2->width, G_IM_SIZ_16b));
+                sLastTrackShapeType = trackType;
                 D_i2_800D6BE0[0] = temp_a2->unk_16;
                 D_i2_800D6BE0[1] = temp_a2->unk_18;
                 D_i2_800D6BE0[2] = temp_a2->unk_1A;
@@ -4254,32 +4263,34 @@ void func_i2_800BD3F0(unk_800A8B74_arg_0* arg0) {
                 D_i2_800D6BE0[4] = temp_a2->unk_1E;
             }
         }
-        D_i2_800D6C8C = D_i2_800D6C7C->trackSegmentInfo & (TRACK_JOIN_MASK | TRACK_UNK1_MASK | TRACK_UNK2_MASK);
-        D_i2_800C1978[trackShape]();
+        sWorkingChunkJoinInfo =
+            sWorkingSegmentChunk->trackSegmentInfo &
+            (TRACK_JOIN_MASK | TRACK_CHUNK_JOIN_TRANSITION_END_MASK | TRACK_CHUNK_JOIN_TRANSITION_START_MASK);
+        sForwardChunkGroupDrawFuncs[trackShape]();
 
-        D_i2_800D6C80 = D_i2_800D6C7C--;
-        if (D_i2_800D6C7C < tempLimit) {
-            D_i2_800D6C7C = D_i2_800D65CC - 1;
+        sWorkingNextSegmentChunk = sWorkingSegmentChunk--;
+        if (sWorkingSegmentChunk < firstChunk) {
+            sWorkingSegmentChunk = sLastSegmentChunk - 1;
         }
-    } while (D_i2_800D6C80 != arg0->unk_00);
+    } while (sWorkingNextSegmentChunk != chunkGroup->startChunk);
 }
 
-Gfx* func_i2_800BD7EC(Gfx* gfx, Vtx* arg1, s32 arg2) {
+Gfx* Course_DrawModel(Gfx* gfx, Vtx* vtx, s32 vtxCount) {
     s32 i;
 
-    while (arg2 > 30) {
-        gSPVertex(gfx++, arg1, 30, 0);
+    while (vtxCount > 30) {
+        gSPVertex(gfx++, vtx, 30, 0);
 
         for (i = 0; i < 27; i += 3) {
             gSP2Triangles(gfx++, i + 1, i + 0, i + 4, 0, i + 4, i + 0, i + 3, 0);
             gSP2Triangles(gfx++, i + 0, i + 2, i + 3, 0, i + 3, i + 2, i + 5, 0);
             gSP2Triangles(gfx++, i + 2, i + 1, i + 5, 0, i + 5, i + 1, i + 4, 0);
         }
-        arg2 -= 27;
-        arg1 += 27;
+        vtxCount -= 27;
+        vtx += 27;
     }
 
-    gSPVertex(gfx++, arg1, arg2, 0);
+    gSPVertex(gfx++, vtx, vtxCount, 0);
 
     i = 0;
     do {
@@ -4287,8 +4298,8 @@ Gfx* func_i2_800BD7EC(Gfx* gfx, Vtx* arg1, s32 arg2) {
         gSP2Triangles(gfx++, i + 0, i + 2, i + 3, 0, i + 3, i + 2, i + 5, 0);
         gSP2Triangles(gfx++, i + 2, i + 1, i + 5, 0, i + 5, i + 1, i + 4, 0);
         i += 3;
-        arg2 -= 3;
-    } while (arg2 > 3);
+        vtxCount -= 3;
+    } while (vtxCount > 3);
 
     return gfx;
 }
@@ -4304,39 +4315,40 @@ Gfx* func_i2_800BDAA4(Gfx* gfx) {
         return gfx;
     }
     D_i2_800D6C88 = true;
-    D_i2_800D6C74 = gfx;
-    gSPDisplayList(D_i2_800D6C74++, D_8014040);
-    gSPDisplayList(D_i2_800D6C74++, D_8014078);
-    gDPSetPrimColor(D_i2_800D6C74++, 0, 0, (255 - (u8) (gGameFrameCount * 8)), 0, 0, 255);
+    sCourseDisp = gfx;
+    gSPDisplayList(sCourseDisp++, D_8014040);
+    gSPDisplayList(sCourseDisp++, D_8014078);
+    gDPSetPrimColor(sCourseDisp++, 0, 0, (255 - (u8) (gGameFrameCount * 8)), 0, 0, 255);
 
-    D_i2_800D6BD8 = D_i2_800D6BDC = -1;
-    D_i2_800D6C08[0].unk_00 = D_i2_800D6C08[1].unk_00 = 0;
+    sLastTrackShapeType = D_i2_800D6BDC = -1;
+    D_i2_800D6C08[0].chunk = D_i2_800D6C08[1].chunk = 0;
     D_i2_800D6C70 = 0;
-    D_i2_800D6C7C = D_802BE5C0;
-    D_i2_800D6C80 = &D_802BE5C0[1];
+    sWorkingSegmentChunk = gSegmentChunks;
+    sWorkingNextSegmentChunk = &gSegmentChunks[1];
     do {
-        if (D_800D65D0 >= &gGfxPool->unk_2A308[0x7E5]) {
-            return D_i2_800D6C74;
+        // Unsure why this check is like this
+        if (gCourseVtxPtr >= &gGfxPool->effectsVtxBuffer[0x7E5]) {
+            return sCourseDisp;
         }
 
-        trackShape = TRACK_SHAPE_INDEX((u32) D_i2_800D6C7C->trackSegmentInfo & TRACK_SHAPE_MASK);
-        trackType = D_i2_800D6C7C->trackSegmentInfo & TRACK_TYPE_MASK;
+        trackShape = TRACK_SHAPE_INDEX((u32) sWorkingSegmentChunk->trackSegmentInfo & TRACK_SHAPE_MASK);
+        trackType = sWorkingSegmentChunk->trackSegmentInfo & TRACK_TYPE_MASK;
         if (trackType != TRACK_TYPE_NONE) {
             temp_a1 = &D_i2_800C18D8[trackShape][trackType];
             D_i2_800D6C84 = temp_a1->unk_10;
             if (D_i2_800D6BDC != D_i2_800D6C84) {
-                gSPTexture(D_i2_800D6C74++, 0, 0, 0, D_i2_800D6BDC, G_OFF);
-                gSPTexture(D_i2_800D6C74++, 0x8000, 0xFFFF, 0, D_i2_800D6C84, G_ON);
+                gSPTexture(sCourseDisp++, 0, 0, 0, D_i2_800D6BDC, G_OFF);
+                gSPTexture(sCourseDisp++, 0x8000, 0xFFFF, 0, D_i2_800D6C84, G_ON);
                 D_i2_800D6BDC = D_i2_800D6C84;
             }
 
-            trackType = D_i2_800D6C7C->trackSegmentInfo & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK);
-            if (trackType != D_i2_800D6BD8) {
-                gDPLoadSync(D_i2_800D6C74++);
-                gDPSetTextureImage(D_i2_800D6C74++, G_IM_FMT_RGBA, G_IM_SIZ_16b, temp_a1->width, temp_a1->texture);
-                gDPLoadBlock(D_i2_800D6C74++, temp_a1->tile, 0, 0, 2047, CALC_DXT(temp_a1->width, G_IM_SIZ_16b));
+            trackType = sWorkingSegmentChunk->trackSegmentInfo & (TRACK_SHAPE_MASK | TRACK_TYPE_MASK);
+            if (trackType != sLastTrackShapeType) {
+                gDPLoadSync(sCourseDisp++);
+                gDPSetTextureImage(sCourseDisp++, G_IM_FMT_RGBA, G_IM_SIZ_16b, temp_a1->width, temp_a1->texture);
+                gDPLoadBlock(sCourseDisp++, temp_a1->tile, 0, 0, 2047, CALC_DXT(temp_a1->width, G_IM_SIZ_16b));
 
-                D_i2_800D6BD8 = trackType;
+                sLastTrackShapeType = trackType;
                 D_i2_800D6BE0[0] = temp_a1->unk_16;
                 D_i2_800D6BE0[1] = temp_a1->unk_18;
                 D_i2_800D6BE0[2] = temp_a1->unk_1A;
@@ -4344,32 +4356,34 @@ Gfx* func_i2_800BDAA4(Gfx* gfx) {
                 D_i2_800D6BE0[4] = temp_a1->unk_1E;
             }
         }
-        D_i2_800D6C8C = D_i2_800D6C7C->trackSegmentInfo & (TRACK_JOIN_MASK | TRACK_UNK1_MASK | TRACK_UNK2_MASK);
-        D_i2_800C1958[trackShape]();
+        sWorkingChunkJoinInfo =
+            sWorkingSegmentChunk->trackSegmentInfo &
+            (TRACK_JOIN_MASK | TRACK_CHUNK_JOIN_TRANSITION_END_MASK | TRACK_CHUNK_JOIN_TRANSITION_START_MASK);
+        sBackwardChunkGroupDrawFuncs[trackShape]();
 
-        D_i2_800D6C7C = D_i2_800D6C80++;
+        sWorkingSegmentChunk = sWorkingNextSegmentChunk++;
 
-    } while (D_i2_800D6C7C != D_i2_800D65CC);
+    } while (sWorkingSegmentChunk != sLastSegmentChunk);
 
-    return D_i2_800D6C74;
+    return sCourseDisp;
 }
 
 extern Camera gCameras[];
 
-Gfx* func_i2_800BDE60(Gfx* gfx, s32 cameraIndex) {
+Gfx* Course_Draw(Gfx* gfx, s32 cameraIndex) {
     MtxF sp60;
     f32 var_fv1;
     f32 temp_fa0;
     f32 temp_fa1;
     f32 temp_fv1;
-    s32 lastDrawState;
-    SegmentChunk* temp_a2_2;
-    SegmentChunk* var_v0;
-    SegmentChunk* var_v1;
-    unk_800A8B74_arg_0* var_s0;
+    s32 lastChunkDrawState;
+    SegmentChunk* parseStartChunk;
+    SegmentChunk* nextChunk;
+    SegmentChunk* chunk;
+    SegmentChunkGroup* furthestChunkGroup;
     CourseSegment* segment;
-    unk_800A8B74_arg_0* var_v1_3;
-    unk_800A8B74_arg_0* temp;
+    SegmentChunkGroup* segmentChunkGroupEnd;
+    SegmentChunkGroup* segmentChunkGroup;
     s32 var_a0;
     s32 var_t0;
     s32 var_a2;
@@ -4380,10 +4394,10 @@ Gfx* func_i2_800BDE60(Gfx* gfx, s32 cameraIndex) {
     camera = &gCameras[cameraIndex];
     racer = &gRacers[camera->id];
 
-    D_i2_800D6C74 = gfx;
+    sCourseDisp = gfx;
     segment = racer->segmentPositionInfo.courseSegment;
 
-    if (segment->trackSegmentInfo & TRACK_FLAG_20000000) {
+    if (segment->trackSegmentInfo & TRACK_FLAG_INSIDE) {
         if (((segment->trackSegmentInfo & TRACK_JOIN_PREVIOUS) &&
              (racer->segmentPositionInfo.segmentTValue < segment->previousJoinEndTValue)) ||
             ((segment->trackSegmentInfo & TRACK_JOIN_NEXT) &&
@@ -4396,9 +4410,9 @@ Gfx* func_i2_800BDE60(Gfx* gfx, s32 cameraIndex) {
         D_i2_800D6C88 = true;
     }
 
-    temp_fv1 = (camera->basis.x.x * D_i2_800C1534) - camera->eye.x;
-    temp_fa0 = (camera->basis.x.y * D_i2_800C1534) - camera->eye.y;
-    temp_fa1 = (camera->basis.x.z * D_i2_800C1534) - camera->eye.z;
+    temp_fv1 = (camera->basis.x.x * sCourseRenderOriginDistance) - camera->eye.x;
+    temp_fa0 = (camera->basis.x.y * sCourseRenderOriginDistance) - camera->eye.y;
+    temp_fa1 = (camera->basis.x.z * sCourseRenderOriginDistance) - camera->eye.z;
 
     sp60.m[3][2] = camera->projectionMtx.m[3][2] -
                    (camera->projectionMtx.m[2][2] *
@@ -4425,138 +4439,138 @@ Gfx* func_i2_800BDE60(Gfx* gfx, s32 cameraIndex) {
     sp60.m[2][2] = camera->projectionViewMtx.m[2][2];
     sp60.m[2][3] = camera->projectionViewMtx.m[2][3];
 
-    var_v1 = D_802BE5C0;
+    chunk = gSegmentChunks;
 
     do {
-        var_v1->unk_0C =
-            ((sp60.m[0][2] * var_v1->pos.x) + (sp60.m[1][2] * var_v1->pos.y) + (sp60.m[2][2] * var_v1->pos.z)) +
-            sp60.m[3][2];
+        chunk->depth = ((sp60.m[0][2] * chunk->pos.x) + (sp60.m[1][2] * chunk->pos.y) + (sp60.m[2][2] * chunk->pos.z)) +
+                       sp60.m[3][2];
 
-        if ((var_v1->unk_0C < 0.0f) || (D_i2_800C1530 < var_v1->unk_0C)) {
-            var_v1->drawState = 0;
+        if ((chunk->depth < 0.0f) || (sCourseFarRenderDistance < chunk->depth)) {
+            chunk->drawState = 0;
         } else {
             temp_fa0 =
                 1.0f /
-                (((sp60.m[0][3] * var_v1->pos.x) + (sp60.m[1][3] * var_v1->pos.y) + (sp60.m[2][3] * var_v1->pos.z)) +
+                (((sp60.m[0][3] * chunk->pos.x) + (sp60.m[1][3] * chunk->pos.y) + (sp60.m[2][3] * chunk->pos.z)) +
                  sp60.m[3][3]);
-            var_fv1 =
-                temp_fa0 *
-                (((sp60.m[0][0] * var_v1->pos.x) + (sp60.m[1][0] * var_v1->pos.y) + (sp60.m[2][0] * var_v1->pos.z)) +
-                 sp60.m[3][0]);
+            var_fv1 = temp_fa0 *
+                      (((sp60.m[0][0] * chunk->pos.x) + (sp60.m[1][0] * chunk->pos.y) + (sp60.m[2][0] * chunk->pos.z)) +
+                       sp60.m[3][0]);
             if ((var_fv1 < -1.0f) || (var_fv1 > 1.0f)) {
-                var_v1->drawState = 0;
+                chunk->drawState = 0;
             } else {
-                temp_fa0 = 1.0f / (((sp60.m[0][3] * var_v1->pos.x) + (sp60.m[1][3] * var_v1->pos.y) +
-                                    (sp60.m[2][3] * var_v1->pos.z)) +
-                                   sp60.m[3][3]);
-                var_fv1 = temp_fa0 * (((sp60.m[0][1] * var_v1->pos.x) + (sp60.m[1][1] * var_v1->pos.y) +
-                                       (sp60.m[2][1] * var_v1->pos.z)) +
-                                      sp60.m[3][1]);
+                temp_fa0 =
+                    1.0f /
+                    (((sp60.m[0][3] * chunk->pos.x) + (sp60.m[1][3] * chunk->pos.y) + (sp60.m[2][3] * chunk->pos.z)) +
+                     sp60.m[3][3]);
+                var_fv1 =
+                    temp_fa0 *
+                    (((sp60.m[0][1] * chunk->pos.x) + (sp60.m[1][1] * chunk->pos.y) + (sp60.m[2][1] * chunk->pos.z)) +
+                     sp60.m[3][1]);
                 if ((var_fv1 < -1.0f) || (var_fv1 > 1.0f)) {
-                    var_v1->drawState = 0;
+                    chunk->drawState = 0;
                 } else {
-                    var_v1->drawState = 1;
+                    chunk->drawState = 1;
                 }
             }
         }
-        var_v1++;
-    } while (var_v1 != D_i2_800D65CC);
-    D_i2_800D65CC->unk_0C = D_802BE5C0->unk_0C;
-    D_i2_800D65CC->drawState = D_802BE5C0->drawState;
-    lastDrawState = 1;
+        chunk++;
+    } while (chunk != sLastSegmentChunk);
+    sLastSegmentChunk->depth = gSegmentChunks->depth;
+    sLastSegmentChunk->drawState = gSegmentChunks->drawState;
+    lastChunkDrawState = 1;
     D_i2_800C1510 = 0;
-    var_v0 = &D_802BE5C0[1];
-    var_v1 = D_802BE5C0;
+    nextChunk = &gSegmentChunks[1];
+    chunk = gSegmentChunks;
     do {
-        if ((var_v1->drawState != 0) || (var_v0->drawState != 0)) {
-            var_fv1 = var_v0->unk_0C - var_v1->unk_0C;
+        if ((chunk->drawState != 0) || (nextChunk->drawState != 0)) {
+            var_fv1 = nextChunk->depth - chunk->depth;
             if (var_fv1 < -30.0f) {
-                var_v1->drawState = lastDrawState = -1;
+                chunk->drawState = lastChunkDrawState = -1;
             } else if (var_fv1 > 30.0f) {
-                var_v1->drawState = lastDrawState = 1;
+                chunk->drawState = lastChunkDrawState = 1;
             } else {
-                var_v1->drawState = lastDrawState;
+                chunk->drawState = lastChunkDrawState;
             }
             D_i2_800C1510++;
         } else {
-            var_v1->drawState = 0;
+            chunk->drawState = 0;
         }
-        var_v1 = var_v0;
-        var_v0++;
-    } while (D_i2_800D65CC >= var_v0);
-    D_i2_800D65CC->drawState = D_802BE5C0->drawState;
+        chunk = nextChunk;
+        nextChunk++;
+    } while (sLastSegmentChunk >= nextChunk);
+    sLastSegmentChunk->drawState = gSegmentChunks->drawState;
     if (D_i2_800C1510 == 0) {
-        return D_i2_800D6C74;
+        return sCourseDisp;
     }
     if (D_i2_800C1510 == gSegmentChunkCount) {
-        temp = D_i2_800D65D8;
-        temp->unk_00 = temp->unk_04 = D_802BE5C0;
-        temp->drawState = 1;
-        temp->unk_08 = 0.0f;
-        var_v1_3 = temp + 1;
+        segmentChunkGroup = sSegmentChunkGroups;
+        segmentChunkGroup->startChunk = segmentChunkGroup->endChunk = gSegmentChunks;
+        segmentChunkGroup->drawState = 1;
+        segmentChunkGroup->averageDepth = 0.0f;
+        segmentChunkGroupEnd = segmentChunkGroup + 1;
     } else {
-        var_v1 = D_i2_800D65CC - 1;
-        if (var_v1->drawState == 0) {
-            var_v1 = D_802BE5C0;
-            while (var_v1->drawState == 0) {
-                var_v1++;
+        chunk = sLastSegmentChunk - 1;
+        if (chunk->drawState == 0) {
+            chunk = gSegmentChunks;
+            while (chunk->drawState == 0) {
+                chunk++;
             }
         } else {
-            var_v1--;
-            while (var_v1->drawState != 0) {
-                var_v1--;
+            chunk--;
+            while (chunk->drawState != 0) {
+                chunk--;
             }
-            var_v1++;
+            chunk++;
         }
-        temp_a2_2 = var_v1;
+        parseStartChunk = chunk;
 
         i = 0;
-        temp = D_i2_800D65D8;
+        segmentChunkGroup = sSegmentChunkGroups;
         do {
-            temp->unk_00 = var_v1;
-            temp->unk_08 = temp_fa0 = var_v1->unk_0C;
-            temp->drawState = lastDrawState = var_v1->drawState;
+            segmentChunkGroup->startChunk = chunk;
+            segmentChunkGroup->averageDepth = temp_fa0 = chunk->depth;
+            segmentChunkGroup->drawState = lastChunkDrawState = chunk->drawState;
             var_a0 = 1;
 
             while (true) {
-                var_v1++;
-                if (var_v1 == D_i2_800D65CC) {
-                    var_v1 = D_802BE5C0;
+                chunk++;
+                if (chunk == sLastSegmentChunk) {
+                    chunk = gSegmentChunks;
                 }
                 var_a0++;
-                temp->unk_08 += var_v1->unk_0C;
-                var_fv1 = temp_fa0 - var_v1->unk_0C;
-                if ((var_fv1 < -D_i2_800C152C) || (D_i2_800C152C < var_fv1) || (var_v1 == temp_a2_2) ||
-                    (lastDrawState != var_v1->drawState)) {
+                segmentChunkGroup->averageDepth += chunk->depth;
+                var_fv1 = temp_fa0 - chunk->depth;
+                if ((var_fv1 < -D_i2_800C152C) || (D_i2_800C152C < var_fv1) || (chunk == parseStartChunk) ||
+                    (lastChunkDrawState != chunk->drawState)) {
                     break;
                 }
             }
 
-            temp->unk_04 = var_v1;
-            temp->unk_08 /= var_a0;
+            segmentChunkGroup->endChunk = chunk;
+            segmentChunkGroup->averageDepth /= var_a0;
 
-            if (++temp == &D_i2_800D65D8[0x60]) {
-                return D_i2_800D6C74;
+            if (++segmentChunkGroup == sSegmentChunkGroups + ARRAY_COUNT(sSegmentChunkGroups)) {
+                return sCourseDisp;
             }
-            while (var_v1->drawState == 0) {
-                var_v1++;
-                if (var_v1 == D_i2_800D65CC) {
-                    var_v1 = D_802BE5C0;
+            while (chunk->drawState == 0) {
+                chunk++;
+                if (chunk == sLastSegmentChunk) {
+                    chunk = gSegmentChunks;
                 }
             }
-        } while (var_v1 != temp_a2_2);
-        var_v1_3 = temp;
+        } while (chunk != parseStartChunk);
+        segmentChunkGroupEnd = segmentChunkGroup;
     }
 
-    gSPDisplayList(D_i2_800D6C74++, D_8014008);
-    gSPDisplayList(D_i2_800D6C74++, D_8014078);
-    gSPFogPosition(D_i2_800D6C74++, D_i2_800C1518, 1000);
-    gDPSetPrimColor(D_i2_800D6C74++, 0, 0, 255 - ((gGameFrameCount * 8) % 256), 0, 0, 255);
+    gSPDisplayList(sCourseDisp++, D_8014008);
+    gSPDisplayList(sCourseDisp++, D_8014078);
+    gSPFogPosition(sCourseDisp++, sCourseFogStartDistance, 1000);
+    gDPSetPrimColor(sCourseDisp++, 0, 0, 255 - ((gGameFrameCount * 8) % 256), 0, 0, 255);
 
     if (1) {}
     segment = racer->segmentPositionInfo.courseSegment;
 
-    if (segment->trackSegmentInfo & TRACK_FLAG_20000000) {
+    if (segment->trackSegmentInfo & TRACK_FLAG_INSIDE) {
         if (segment->nextJoinStartTValue < racer->segmentPositionInfo.segmentTValue) {
             var_fv1 = (1.0f - racer->segmentPositionInfo.segmentLengthProportion) / segment->joinScale;
         } else if (racer->segmentPositionInfo.segmentTValue < segment->previousJoinEndTValue) {
@@ -4580,42 +4594,42 @@ Gfx* func_i2_800BDE60(Gfx* gfx, s32 cameraIndex) {
     }
 block_68:
 
-    gDPSetFogColor(D_i2_800D6C74++, var_a0, var_t0, var_a2, 255);
+    gDPSetFogColor(sCourseDisp++, var_a0, var_t0, var_a2, 255);
 
-    D_i2_800D6BD8 = D_i2_800D6BDC = -1;
-    D_i2_800D6C08[0].unk_00 = D_i2_800D6C08[1].unk_00 = NULL;
+    sLastTrackShapeType = D_i2_800D6BDC = -1;
+    D_i2_800D6C08[0].chunk = D_i2_800D6C08[1].chunk = NULL;
     D_i2_800D6C70 = 0;
 
     while (true) {
         var_fv1 = -10000.0f;
 
-        temp = D_i2_800D65D8;
+        segmentChunkGroup = sSegmentChunkGroups;
         do {
-            if (var_fv1 < temp->unk_08) {
-                var_fv1 = temp->unk_08;
-                var_s0 = temp;
+            if (var_fv1 < segmentChunkGroup->averageDepth) {
+                var_fv1 = segmentChunkGroup->averageDepth;
+                furthestChunkGroup = segmentChunkGroup;
             }
-            temp++;
-        } while (temp != var_v1_3);
+            segmentChunkGroup++;
+        } while (segmentChunkGroup != segmentChunkGroupEnd);
 
         if (var_fv1 == -10000.0f) {
             break;
         }
 
-        if (var_s0->drawState == 1) {
-            func_i2_800BD3F0(var_s0);
-        } else {
-            func_i2_800BD024(var_s0);
+        if (furthestChunkGroup->drawState == 1) {
+            Course_DrawForwardChunkGroup(furthestChunkGroup);
+        } else { // drawState == -1
+            Course_DrawBackwardChunkGroup(furthestChunkGroup);
         }
-        var_s0->unk_08 = -20000.0f;
+        furthestChunkGroup->averageDepth = -20000.0f;
     }
 
     if (D_i2_800D6BDC == 1) {
-        gSPTexture(D_i2_800D6C74++, 0, 0, 0, 1, G_OFF);
+        gSPTexture(sCourseDisp++, 0, 0, 0, 1, G_OFF);
     } else {
-        gSPTexture(D_i2_800D6C74++, 0, 0, 0, 5, G_OFF);
+        gSPTexture(sCourseDisp++, 0, 0, 0, 5, G_OFF);
     }
-    return D_i2_800D6C74;
+    return sCourseDisp;
 }
 
 extern unk_800D6CA0 D_800D6CA0;
@@ -4655,7 +4669,7 @@ bool func_i2_800BE9D4(f32* regValue) {
 
 s32 Course_CalculateChecksum(void) {
     s32 i;
-    u32 var_v1 = COURSE_CONTEXT()->courseData.controlPointCount;
+    u32 checksum = COURSE_CONTEXT()->courseData.controlPointCount;
 
     for (i = 0; i < COURSE_CONTEXT()->courseData.controlPointCount; i++) {
         ControlPoint* controlPoint = &COURSE_CONTEXT()->courseData.controlPoint[i];
@@ -4697,24 +4711,24 @@ s32 Course_CalculateChecksum(void) {
             return -1;
         }
 
-        var_v1 += (s32) ((controlPoint->pos.x + ((1.1f + (0.7f * i)) * controlPoint->pos.y)) +
-                         ((2.2f + (1.2f * i)) * controlPoint->pos.z * (4.4f + (0.9f * i))) + controlPoint->radiusLeft +
-                         ((5.5f + (0.8f * i)) * controlPoint->radiusRight * 4.8f)) +
-                  controlPoint->trackSegmentInfo * (0xFE - i) +
-                  COURSE_CONTEXT()->courseData.bankAngle[i] * (0x93DE - i * 2);
+        checksum += (s32) ((controlPoint->pos.x + ((1.1f + (0.7f * i)) * controlPoint->pos.y)) +
+                           ((2.2f + (1.2f * i)) * controlPoint->pos.z * (4.4f + (0.9f * i))) +
+                           controlPoint->radiusLeft + ((5.5f + (0.8f * i)) * controlPoint->radiusRight * 4.8f)) +
+                    controlPoint->trackSegmentInfo * (0xFE - i) +
+                    COURSE_CONTEXT()->courseData.bankAngle[i] * (0x93DE - i * 2);
     }
 
     for (i = 0; i < COURSE_CONTEXT()->courseData.controlPointCount; i++) {
-        var_v1 += (COURSE_CONTEXT()->courseData.pit[i] * i);
-        var_v1 += (COURSE_CONTEXT()->courseData.dash[i] * (i + 0x10));
-        var_v1 += (COURSE_CONTEXT()->courseData.dirt[i] * (i + 0x80));
-        var_v1 += (COURSE_CONTEXT()->courseData.ice[i] * (i + 0x100));
-        var_v1 += (COURSE_CONTEXT()->courseData.jump[i] * (i + 0x800));
-        var_v1 += (COURSE_CONTEXT()->courseData.landmine[i] * (i + 0x1000));
-        var_v1 += (COURSE_CONTEXT()->courseData.gate[i] * (i + 0x8000));
-        var_v1 += (COURSE_CONTEXT()->courseData.building[i] * (i + 0x10000));
-        var_v1 += (COURSE_CONTEXT()->courseData.sign[i] * (i + 0x80000));
+        checksum += (COURSE_CONTEXT()->courseData.pit[i] * i);
+        checksum += (COURSE_CONTEXT()->courseData.dash[i] * (i + 0x10));
+        checksum += (COURSE_CONTEXT()->courseData.dirt[i] * (i + 0x80));
+        checksum += (COURSE_CONTEXT()->courseData.ice[i] * (i + 0x100));
+        checksum += (COURSE_CONTEXT()->courseData.jump[i] * (i + 0x800));
+        checksum += (COURSE_CONTEXT()->courseData.landmine[i] * (i + 0x1000));
+        checksum += (COURSE_CONTEXT()->courseData.gate[i] * (i + 0x8000));
+        checksum += (COURSE_CONTEXT()->courseData.building[i] * (i + 0x10000));
+        checksum += (COURSE_CONTEXT()->courseData.sign[i] * (i + 0x80000));
     }
 
-    return var_v1;
+    return checksum;
 }

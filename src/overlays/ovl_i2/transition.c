@@ -879,7 +879,7 @@ void Transition_TiledWhirlInit(Transition* transition) {
     tiledWhirlInfo->work0 = -1;
 
     for (i = 0; i < 2; i++) {
-        vtx = D_8024E260[i].backgroundTileVtx;
+        vtx = D_8024E260[i].backgroundTileVtxBuffer;
         sp104[0] = sp104[2] = -33.3f;
         sp104[1] = sp104[3] = sp104[0] + 66.6f + 1.0f;
         spF4[0] = spF4[1] = 25.199999f;
@@ -1082,7 +1082,7 @@ Gfx* Transition_TiledDraw(Gfx* gfx, Transition* transition) {
             }
 
             gSPMatrix(gfx++, &D_1000000.unk_352C8[tileIndex], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPVertex(gfx++, &D_1000000.backgroundTileVtx[tileIndex * 4], 4, 0);
+            gSPVertex(gfx++, &D_1000000.backgroundTileVtxBuffer[tileIndex * 4], 4, 0);
 
             gDPLoadTextureTile(gfx++, transition->backgroundBuffer, G_IM_FMT_RGBA, G_IM_SIZ_16b,
                                TRANSITION_BACKGROUND_WIDTH, TRANSITION_BACKGROUND_HEIGHT, (column * TILED_WIDTH),
@@ -1120,7 +1120,7 @@ void Transition_TiledSpiralInit(Transition* transition) {
     SPIRAL_TILE_DIRECTION(tiledSpiralInfo) = 0;
 
     for (i = 0; i < 2; i++) {
-        vtx = D_8024E260[i].backgroundTileVtx;
+        vtx = D_8024E260[i].backgroundTileVtxBuffer;
         spC4[0] = spC4[2] = -33.3f;
         spC4[1] = spC4[3] = spC4[0] + 66.6f + 1;
         spB4[0] = spB4[1] = 25.199999f;

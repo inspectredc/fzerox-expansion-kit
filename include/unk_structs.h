@@ -111,7 +111,7 @@ typedef struct SegmentChunk {
     s32 trackSegmentInfo;
     s32 segmentIndex;
     f32 segmentTValue;
-    f32 unk_0C;
+    f32 depth;
     bool drawState;
     Vec3f pos;
     s16 referencePos1[3];
@@ -187,7 +187,7 @@ typedef struct CourseDecoration {
     Vec3f pos;
     Mtx3F basis;
     f32 scale;
-    struct SegmentChunk* unk_34;
+    struct SegmentChunk* loadChunk;
 } CourseDecoration; // size = 0x38
 
 typedef struct CourseEffectsInfo {
