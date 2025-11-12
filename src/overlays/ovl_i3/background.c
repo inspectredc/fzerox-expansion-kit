@@ -96,7 +96,9 @@ CourseSkyboxes sSkyboxBlue = { aSkyboxBlueTex, 151, 194, 218, 210, 255, 230, 151
 
 // NIGHT
 // SILENCE / MUTE CITY 2
-CourseSkyboxes sSkyboxNight = { aSkyboxNightTex, 2, 2, 23, 245, 162, 99, 125, 155, 185, SKYBOX_STARRY | SKYBOX_NIGHTTIME };
+CourseSkyboxes sSkyboxNight = {
+    aSkyboxNightTex, 2, 2, 23, 245, 162, 99, 125, 155, 185, SKYBOX_STARRY | SKYBOX_NIGHTTIME
+};
 
 // ORANGE DAY
 // DEVILS FOREST / SECTOR ALPHA
@@ -185,8 +187,13 @@ TexturePtr sBackgroundSpritePalettePairs[][2] = {
 };
 
 BackgroundSpriteInitData sBackgroundSpriteInitMuteCity[] = {
-    { BG_SPRITE_CITY_SKYLINE_1, 0.0f },   { BG_SPRITE_CITY_SKYLINE_2, 60.0f },  { BG_SPRITE_CITY_SKYLINE_3, 120.0f }, { BG_SPRITE_CITY_SKYLINE_4, 150.0f },
-    { BG_SPRITE_CITY_SKYLINE_1, 240.0f }, { BG_SPRITE_CITY_SKYLINE_2, 300.0f }, { BG_SPRITE_END, 0.0f },
+    { BG_SPRITE_CITY_SKYLINE_1, 0.0f },
+    { BG_SPRITE_CITY_SKYLINE_2, 60.0f },
+    { BG_SPRITE_CITY_SKYLINE_3, 120.0f },
+    { BG_SPRITE_CITY_SKYLINE_4, 150.0f },
+    { BG_SPRITE_CITY_SKYLINE_1, 240.0f },
+    { BG_SPRITE_CITY_SKYLINE_2, 300.0f },
+    { BG_SPRITE_END, 0.0f },
 };
 
 BackgroundSpriteInitData sBackgroundSpriteInitSilence[] = {
@@ -196,18 +203,26 @@ BackgroundSpriteInitData sBackgroundSpriteInitSilence[] = {
 };
 
 BackgroundSpriteInitData sBackgroundSpriteInitSandOcean[] = {
-    { BG_SPRITE_MOUNTAINS_1, 0.0f },   { BG_SPRITE_MOUNTAINS_2, 60.0f },  { BG_SPRITE_MOUNTAINS_1, 120.0f }, { BG_SPRITE_MOUNTAINS_2, 180.0f },
-    { BG_SPRITE_MOUNTAINS_1, 240.0f }, { BG_SPRITE_MOUNTAINS_2, 300.0f }, { BG_SPRITE_END, 0.0f },
+    { BG_SPRITE_MOUNTAINS_1, 0.0f },   { BG_SPRITE_MOUNTAINS_2, 60.0f },  { BG_SPRITE_MOUNTAINS_1, 120.0f },
+    { BG_SPRITE_MOUNTAINS_2, 180.0f }, { BG_SPRITE_MOUNTAINS_1, 240.0f }, { BG_SPRITE_MOUNTAINS_2, 300.0f },
+    { BG_SPRITE_END, 0.0f },
 };
 
 BackgroundSpriteInitData sBackgroundSpriteInitDevilsForest[] = {
-    { BG_SPRITE_MOUNTAINS_1, 0.0f },   { BG_SPRITE_SKULL_MOUNTAIN, 60.0f },  { BG_SPRITE_GIANT_TREE, 120.0f }, { BG_SPRITE_MOUNTAIN_CITY, 180.0f },
-    { BG_SPRITE_MOUNTAINS_1, 240.0f }, { BG_SPRITE_SKULL_MOUNTAIN, 300.0f }, { BG_SPRITE_END, 0.0f },
+    { BG_SPRITE_MOUNTAINS_1, 0.0f },   { BG_SPRITE_SKULL_MOUNTAIN, 60.0f },
+    { BG_SPRITE_GIANT_TREE, 120.0f },  { BG_SPRITE_MOUNTAIN_CITY, 180.0f },
+    { BG_SPRITE_MOUNTAINS_1, 240.0f }, { BG_SPRITE_SKULL_MOUNTAIN, 300.0f },
+    { BG_SPRITE_END, 0.0f },
 };
 
 BackgroundSpriteInitData sBackgroundSpriteInitBigBlue[] = {
-    { BG_SPRITE_RAISED_CITY_1, 0.0f },   { BG_SPRITE_RAISED_GLASS_DOME, 60.0f },  { BG_SPRITE_RAISED_CITY_2, 120.0f }, { BG_SPRITE_CONNECTED_MOUNTAINS, 180.0f },
-    { BG_SPRITE_RAISED_CITY_1, 240.0f }, { BG_SPRITE_RAISED_GLASS_DOME, 300.0f }, { BG_SPRITE_END, 0.0f },
+    { BG_SPRITE_RAISED_CITY_1, 0.0f },
+    { BG_SPRITE_RAISED_GLASS_DOME, 60.0f },
+    { BG_SPRITE_RAISED_CITY_2, 120.0f },
+    { BG_SPRITE_CONNECTED_MOUNTAINS, 180.0f },
+    { BG_SPRITE_RAISED_CITY_1, 240.0f },
+    { BG_SPRITE_RAISED_GLASS_DOME, 300.0f },
+    { BG_SPRITE_END, 0.0f },
 };
 
 BackgroundSpriteInitData sBackgroundSpriteInitPortTown[] = {
@@ -225,18 +240,30 @@ BackgroundSpriteInitData sBackgroundSpriteInitSectorAlpha[] = {
 };
 
 BackgroundSpriteInitData sBackgroundSpriteInitRedCanyon[] = {
-    { BG_SPRITE_MOUNTAINS_2, 0.0f },   { BG_SPRITE_MOUNTAINS_3, 60.0f },  { BG_SPRITE_MOUNTAINS_TOWERS_1, 120.0f }, { BG_SPRITE_MOUNTAINS_TOWERS_2, 180.0f },
-    { BG_SPRITE_MOUNTAINS_2, 240.0f }, { BG_SPRITE_MOUNTAINS_3, 300.0f }, { BG_SPRITE_END, 0.0f },
+    { BG_SPRITE_MOUNTAINS_2, 0.0f },
+    { BG_SPRITE_MOUNTAINS_3, 60.0f },
+    { BG_SPRITE_MOUNTAINS_TOWERS_1, 120.0f },
+    { BG_SPRITE_MOUNTAINS_TOWERS_2, 180.0f },
+    { BG_SPRITE_MOUNTAINS_2, 240.0f },
+    { BG_SPRITE_MOUNTAINS_3, 300.0f },
+    { BG_SPRITE_END, 0.0f },
 };
 
 BackgroundSpriteInitData sBackgroundSpriteInitDevilsForest2[] = {
-    { BG_SPRITE_MOUNTAINS_1, 0.0f },   { BG_SPRITE_GIANT_TREE, 60.0f },  { BG_SPRITE_GIANT_TREE, 120.0f }, { BG_SPRITE_MOUNTAIN_CITY, 180.0f },
-    { BG_SPRITE_MOUNTAINS_1, 240.0f }, { BG_SPRITE_SKULL_MOUNTAIN, 300.0f }, { BG_SPRITE_END, 0.0f },
+    { BG_SPRITE_MOUNTAINS_1, 0.0f },   { BG_SPRITE_GIANT_TREE, 60.0f },
+    { BG_SPRITE_GIANT_TREE, 120.0f },  { BG_SPRITE_MOUNTAIN_CITY, 180.0f },
+    { BG_SPRITE_MOUNTAINS_1, 240.0f }, { BG_SPRITE_SKULL_MOUNTAIN, 300.0f },
+    { BG_SPRITE_END, 0.0f },
 };
 
 BackgroundSpriteInitData sBackgroundSpriteInitMuteCity2[] = {
-    { BG_SPRITE_NIGHT_CITY_SKYLINE_1, 0.0f },   { BG_SPRITE_NIGHT_CITY_SKYLINE_2, 60.0f },  { BG_SPRITE_NIGHT_CITY_SKYLINE_3, 120.0f }, { BG_SPRITE_NIGHT_CITY_SKYLINE_4, 180.0f },
-    { BG_SPRITE_NIGHT_CITY_SKYLINE_1, 240.0f }, { BG_SPRITE_NIGHT_CITY_SKYLINE_2, 300.0f }, { BG_SPRITE_END, 0.0f },
+    { BG_SPRITE_NIGHT_CITY_SKYLINE_1, 0.0f },
+    { BG_SPRITE_NIGHT_CITY_SKYLINE_2, 60.0f },
+    { BG_SPRITE_NIGHT_CITY_SKYLINE_3, 120.0f },
+    { BG_SPRITE_NIGHT_CITY_SKYLINE_4, 180.0f },
+    { BG_SPRITE_NIGHT_CITY_SKYLINE_1, 240.0f },
+    { BG_SPRITE_NIGHT_CITY_SKYLINE_2, 300.0f },
+    { BG_SPRITE_END, 0.0f },
 };
 
 BackgroundSpriteInitData sBackgroundSpriteInitBigBlue2[] = {
@@ -277,8 +304,13 @@ BackgroundSpriteInitData sBackgroundSpriteInitWhiteLand2[] = {
 };
 
 BackgroundSpriteInitData sBackgroundSpriteInitMuteCity3[] = {
-    { BG_SPRITE_CITY_SKYLINE_1, 0.0f },   { BG_SPRITE_CITY_SKYLINE_2, 60.0f },  { BG_SPRITE_CITY_SKYLINE_3, 120.0f }, { BG_SPRITE_CITY_SKYLINE_4, 150.0f },
-    { BG_SPRITE_CITY_SKYLINE_1, 240.0f }, { BG_SPRITE_CITY_SKYLINE_2, 300.0f }, { BG_SPRITE_END, 0.0f },
+    { BG_SPRITE_CITY_SKYLINE_1, 0.0f },
+    { BG_SPRITE_CITY_SKYLINE_2, 60.0f },
+    { BG_SPRITE_CITY_SKYLINE_3, 120.0f },
+    { BG_SPRITE_CITY_SKYLINE_4, 150.0f },
+    { BG_SPRITE_CITY_SKYLINE_1, 240.0f },
+    { BG_SPRITE_CITY_SKYLINE_2, 300.0f },
+    { BG_SPRITE_END, 0.0f },
 };
 
 BackgroundSpriteInitData sBackgroundSpriteInitRainbowRoad[] = {
@@ -308,13 +340,22 @@ BackgroundSpriteInitData sBackgroundSpriteInitPortTown2[] = {
 };
 
 BackgroundSpriteInitData sBackgroundSpriteInitBigHand[] = {
-    { BG_SPRITE_STATUE_1, 0.0f },   { BG_SPRITE_MOUNTAINS_TOWERS_3, 60.0f },  { BG_SPRITE_CASTLE, 120.0f },
-    { BG_SPRITE_MOUNTAINS_TOWERS_4, 180.0f }, { BG_SPRITE_MOUNTAINS_TOWERS_3, 300.0f }, { BG_SPRITE_END, 0.0f },
+    { BG_SPRITE_STATUE_1, 0.0f },
+    { BG_SPRITE_MOUNTAINS_TOWERS_3, 60.0f },
+    { BG_SPRITE_CASTLE, 120.0f },
+    { BG_SPRITE_MOUNTAINS_TOWERS_4, 180.0f },
+    { BG_SPRITE_MOUNTAINS_TOWERS_3, 300.0f },
+    { BG_SPRITE_END, 0.0f },
 };
 
 BackgroundSpriteInitData sBackgroundSpriteInitEnding[] = {
-    { BG_SPRITE_JACK_CUP_BUILDING, 0.0f },   { BG_SPRITE_NINTENDO_N_BUILDING, 60.0f },  { BG_SPRITE_FZERO_X_BUILDING, 120.0f }, { BG_SPRITE_DOUBLE_SPHEROID_BUILDING, 180.0f },
-    { BG_SPRITE_JACK_CUP_BUILDING, 240.0f }, { BG_SPRITE_NINTENDO_N_BUILDING, 300.0f }, { BG_SPRITE_END, 0.0f },
+    { BG_SPRITE_JACK_CUP_BUILDING, 0.0f },
+    { BG_SPRITE_NINTENDO_N_BUILDING, 60.0f },
+    { BG_SPRITE_FZERO_X_BUILDING, 120.0f },
+    { BG_SPRITE_DOUBLE_SPHEROID_BUILDING, 180.0f },
+    { BG_SPRITE_JACK_CUP_BUILDING, 240.0f },
+    { BG_SPRITE_NINTENDO_N_BUILDING, 300.0f },
+    { BG_SPRITE_END, 0.0f },
 };
 
 BackgroundSpriteInitData* sBackgroundSpriteCourseInitData[] = {
@@ -344,21 +385,66 @@ BackgroundSpriteInitData* sBackgroundSpriteCourseInitData[] = {
     sBackgroundSpriteInitBigHand,       // COURSE_BIG_HAND
 };
 
-s16 sDaytimeBackgroundSprites[] = { BG_SPRITE_CITY_SKYLINE_1,  BG_SPRITE_CITY_SKYLINE_2,  BG_SPRITE_CITY_SKYLINE_3,  BG_SPRITE_CITY_SKYLINE_4,  BG_SPRITE_MOUNTAINS_1,  BG_SPRITE_SKULL_MOUNTAIN,
-                        BG_SPRITE_GIANT_TREE,  BG_SPRITE_MOUNTAIN_CITY,  BG_SPRITE_CITY_SKYLINE_5,  BG_SPRITE_CITY_SKYLINE_6, BG_SPRITE_CITY_SKYLINE_7, BG_SPRITE_CITY_SKYLINE_8,
-                        BG_SPRITE_MOUNTAINS_2, BG_SPRITE_MOUNTAINS_3, BG_SPRITE_MOUNTAINS_TOWERS_1, BG_SPRITE_MOUNTAINS_TOWERS_2, BG_SPRITE_TOWERS_1, BG_SPRITE_PYRAMID,
-                        BG_SPRITE_TOWERS_2, BG_SPRITE_MOON_1, BG_SPRITE_STATUE_1, BG_SPRITE_MOUNTAINS_TOWERS_3, BG_SPRITE_CASTLE, BG_SPRITE_MOUNTAINS_TOWERS_4,
-                        BG_SPRITE_ROCKET_LAUNCH_1, BG_SPRITE_ROCKET_LAUNCH_2, BG_SPRITE_ROCKET_LAUNCH_3, BG_SPRITE_RADAR_DISH, BG_SPRITE_RAISED_CITY_1, BG_SPRITE_RAISED_GLASS_DOME,
-                        BG_SPRITE_RAISED_CITY_2, BG_SPRITE_CONNECTED_MOUNTAINS, BG_SPRITE_MOON_2, BG_SPRITE_FLYING_CITY };
+s16 sDaytimeBackgroundSprites[] = {
+    BG_SPRITE_CITY_SKYLINE_1,
+    BG_SPRITE_CITY_SKYLINE_2,
+    BG_SPRITE_CITY_SKYLINE_3,
+    BG_SPRITE_CITY_SKYLINE_4,
+    BG_SPRITE_MOUNTAINS_1,
+    BG_SPRITE_SKULL_MOUNTAIN,
+    BG_SPRITE_GIANT_TREE,
+    BG_SPRITE_MOUNTAIN_CITY,
+    BG_SPRITE_CITY_SKYLINE_5,
+    BG_SPRITE_CITY_SKYLINE_6,
+    BG_SPRITE_CITY_SKYLINE_7,
+    BG_SPRITE_CITY_SKYLINE_8,
+    BG_SPRITE_MOUNTAINS_2,
+    BG_SPRITE_MOUNTAINS_3,
+    BG_SPRITE_MOUNTAINS_TOWERS_1,
+    BG_SPRITE_MOUNTAINS_TOWERS_2,
+    BG_SPRITE_TOWERS_1,
+    BG_SPRITE_PYRAMID,
+    BG_SPRITE_TOWERS_2,
+    BG_SPRITE_MOON_1,
+    BG_SPRITE_STATUE_1,
+    BG_SPRITE_MOUNTAINS_TOWERS_3,
+    BG_SPRITE_CASTLE,
+    BG_SPRITE_MOUNTAINS_TOWERS_4,
+    BG_SPRITE_ROCKET_LAUNCH_1,
+    BG_SPRITE_ROCKET_LAUNCH_2,
+    BG_SPRITE_ROCKET_LAUNCH_3,
+    BG_SPRITE_RADAR_DISH,
+    BG_SPRITE_RAISED_CITY_1,
+    BG_SPRITE_RAISED_GLASS_DOME,
+    BG_SPRITE_RAISED_CITY_2,
+    BG_SPRITE_CONNECTED_MOUNTAINS,
+    BG_SPRITE_MOON_2,
+    BG_SPRITE_FLYING_CITY,
+};
 
-s16 sNighttimeBackgroundSprites[] = { BG_SPRITE_NIGHT_CITY_SKYLINE_5, BG_SPRITE_NIGHT_CITY_SKYLINE_6, BG_SPRITE_NIGHT_CITY_SKYLINE_7, BG_SPRITE_NIGHT_CITY_SKYLINE_8, BG_SPRITE_NIGHT_CITY_SKYLINE_1,
-                        BG_SPRITE_NIGHT_CITY_SKYLINE_2, BG_SPRITE_NIGHT_CITY_SKYLINE_3, BG_SPRITE_NIGHT_CITY_SKYLINE_4, BG_SPRITE_NINTENDO_N_BUILDING, BG_SPRITE_FZERO_X_BUILDING,
-                        BG_SPRITE_DOUBLE_SPHEROID_BUILDING, BG_SPRITE_X_CUP_BUILDING, BG_SPRITE_MOON_3, BG_SPRITE_SINGLE_SPHEROID_BUILDING };
+s16 sNighttimeBackgroundSprites[] = {
+    BG_SPRITE_NIGHT_CITY_SKYLINE_5,
+    BG_SPRITE_NIGHT_CITY_SKYLINE_6,
+    BG_SPRITE_NIGHT_CITY_SKYLINE_7,
+    BG_SPRITE_NIGHT_CITY_SKYLINE_8,
+    BG_SPRITE_NIGHT_CITY_SKYLINE_1,
+    BG_SPRITE_NIGHT_CITY_SKYLINE_2,
+    BG_SPRITE_NIGHT_CITY_SKYLINE_3,
+    BG_SPRITE_NIGHT_CITY_SKYLINE_4,
+    BG_SPRITE_NINTENDO_N_BUILDING,
+    BG_SPRITE_FZERO_X_BUILDING,
+    BG_SPRITE_DOUBLE_SPHEROID_BUILDING,
+    BG_SPRITE_X_CUP_BUILDING,
+    BG_SPRITE_MOON_3,
+    BG_SPRITE_SINGLE_SPHEROID_BUILDING,
+};
 
 UNUSED s32 D_i3_8006C538[10] = { 0 };
 
 s8 sBackgroundFlashingColors[][3] = {
-    { 31, 10, 0 }, { 0, 15, 31 }, { 31, 31, 10 },
+    { 31, 10, 0 },
+    { 0, 15, 31 },
+    { 31, 31, 10 },
 };
 
 extern s32 gSkyboxType;
@@ -395,7 +481,8 @@ void Background_Init(void) {
     }
 
     for (background = sBackgrounds, camera = gCameras, i = 0; i < sBackgroundCount; background++, camera++, i++) {
-        Background_InitBackgroundInfo(camera, background, sBackgroundCtx.venueFloor, cloudXScrollSpeed, cloudZScrollSpeed);
+        Background_InitBackgroundInfo(camera, background, sBackgroundCtx.venueFloor, cloudXScrollSpeed,
+                                      cloudZScrollSpeed);
     }
 
     courseInfo = &gCourseInfos[gCourseIndex];
@@ -451,7 +538,8 @@ void Background_Init(void) {
 
 const ScrollingBackground kDefaultCloudInfo = { 400.0f, 1700.0f, 0.006f, 0.006f, 0.0f, 0.0f, 0.0f, 0.0f };
 
-void Background_InitBackgroundInfo(Camera* camera, Background* background, CourseVenueFloor* venueFloor, f32 cloudXScrollSpeed, f32 cloudZScrollSpeed) {
+void Background_InitBackgroundInfo(Camera* camera, Background* background, CourseVenueFloor* venueFloor,
+                                   f32 cloudXScrollSpeed, f32 cloudZScrollSpeed) {
     background->pos.x = 0.0f;
     background->pos.z = 0.0f;
     background->pos.y = -750.0f;
@@ -517,15 +605,15 @@ void Background_Update(void) {
         Background_UpdateSkyboxVtx(vtx, background, camera, depthFovRatio);
 
         vtx = &gGfxPool->unk_33B48[i * 28 + 0 * 4];
-        Background_UpdateVenueFloorVtx(vtx, background, camera, xOffset, zOffset, 0.0f, 0.0f, xRange, zRange, 255,
-                                       0);
+        Background_UpdateVenueFloorVtx(vtx, background, camera, xOffset, zOffset, 0.0f, 0.0f, xRange, zRange, 255, 0);
 
         vtx = &gGfxPool->unk_33B48[i * 28 + 1 * 4];
         Background_UpdateVenueFloorVtx(vtx, background, camera, 0.0f, 0.0f, 0.0f - xOffset, 0.0f - zOffset, xRange,
                                        zRange, 0, 255);
 
         if (sCloudCount > 0) {
-            cloudHeightAboveEye = (background->pos.y + background->cloudScroll.relativeBackgroundHeight) - camera->eye.y;
+            cloudHeightAboveEye =
+                (background->pos.y + background->cloudScroll.relativeBackgroundHeight) - camera->eye.y;
             if (cloudHeightAboveEye == 0.0f) {
                 continue;
             }
@@ -541,12 +629,14 @@ void Background_Update(void) {
             }
 
             vtx = &gGfxPool->unk_33B48[i * 28 + 3 * 4];
-            Background_UpdateCloudVtx(vtx, background, camera, &background->cloudScroll, xOffset, zOffset, 0.0f, 0.0f, xRange,
-                             zRange, 255, ((1.0f - cloudTransparencyStrength) * 255.0f), usingHeightRelativeToEye);
+            Background_UpdateCloudVtx(vtx, background, camera, &background->cloudScroll, xOffset, zOffset, 0.0f, 0.0f,
+                                      xRange, zRange, 255, ((1.0f - cloudTransparencyStrength) * 255.0f),
+                                      usingHeightRelativeToEye);
 
             vtx = &gGfxPool->unk_33B48[i * 28 + 4 * 4];
-            Background_UpdateCloudVtx(vtx, background, camera, &background->cloudScroll, 0.0f, 0.0f, 0.0f - xOffset, 0.0f - zOffset,
-                             xRange, zRange, ((1.0f - cloudTransparencyStrength) * 255.0f), 255, usingHeightRelativeToEye);
+            Background_UpdateCloudVtx(vtx, background, camera, &background->cloudScroll, 0.0f, 0.0f, 0.0f - xOffset,
+                                      0.0f - zOffset, xRange, zRange, ((1.0f - cloudTransparencyStrength) * 255.0f),
+                                      255, usingHeightRelativeToEye);
         }
         if (sSkyboxFlags & SKYBOX_STARRY) {
             Background_UpdateStars(i, background, camera);
@@ -673,8 +763,9 @@ void Background_UpdateSkyboxVtx(Vtx* vtx, Background* background, Camera* camera
 
 extern s8 gGamePaused;
 
-void Background_UpdateVenueFloorVtx(Vtx* vtx, Background* background, Camera* camera, f32 xOffset1, f32 zOffset1, f32 xOffset2,
-                                    f32 zOffset2, f32 xRange, f32 zRange, s32 brightness1, s32 brightness2) {
+void Background_UpdateVenueFloorVtx(Vtx* vtx, Background* background, Camera* camera, f32 xOffset1, f32 zOffset1,
+                                    f32 xOffset2, f32 zOffset2, f32 xRange, f32 zRange, s32 brightness1,
+                                    s32 brightness2) {
     ScrollingBackground* floorScroll;
     f32 perspectiveRatio;
     f32 baseSReference;
@@ -691,7 +782,7 @@ void Background_UpdateVenueFloorVtx(Vtx* vtx, Background* background, Camera* ca
     f32 sTextureCoordinates[4];
     f32 tTextureCoordinates[4];
     s32 pad;
-    
+
     floorScroll = &background->floorScroll;
     xPositions[0] = background->pos.x + xOffset1 + xRange;
     zPositions[0] = background->pos.z + zOffset1 + zRange;
@@ -722,14 +813,30 @@ void Background_UpdateVenueFloorVtx(Vtx* vtx, Background* background, Camera* ca
         }
     }
 
-    sTextureCoordinates[0] = ((((xPositions[0] - camera->eye.x) * perspectiveRatio) + camera->eye.x) * floorScroll->xScale) + floorScroll->xScroll;
-    tTextureCoordinates[0] = ((((zPositions[0] - camera->eye.z) * perspectiveRatio) + camera->eye.z) * floorScroll->zScale) + floorScroll->zScroll;
-    sTextureCoordinates[1] = ((((xPositions[1] - camera->eye.x) * perspectiveRatio) + camera->eye.x) * floorScroll->xScale) + floorScroll->xScroll;
-    tTextureCoordinates[1] = ((((zPositions[1] - camera->eye.z) * perspectiveRatio) + camera->eye.z) * floorScroll->zScale) + floorScroll->zScroll;
-    sTextureCoordinates[2] = ((((xPositions[2] - camera->eye.x) * perspectiveRatio) + camera->eye.x) * floorScroll->xScale) + floorScroll->xScroll;
-    tTextureCoordinates[2] = ((((zPositions[2] - camera->eye.z) * perspectiveRatio) + camera->eye.z) * floorScroll->zScale) + floorScroll->zScroll;
-    sTextureCoordinates[3] = ((((xPositions[3] - camera->eye.x) * perspectiveRatio) + camera->eye.x) * floorScroll->xScale) + floorScroll->xScroll;
-    tTextureCoordinates[3] = ((((zPositions[3] - camera->eye.z) * perspectiveRatio) + camera->eye.z) * floorScroll->zScale) + floorScroll->zScroll;
+    sTextureCoordinates[0] =
+        ((((xPositions[0] - camera->eye.x) * perspectiveRatio) + camera->eye.x) * floorScroll->xScale) +
+        floorScroll->xScroll;
+    tTextureCoordinates[0] =
+        ((((zPositions[0] - camera->eye.z) * perspectiveRatio) + camera->eye.z) * floorScroll->zScale) +
+        floorScroll->zScroll;
+    sTextureCoordinates[1] =
+        ((((xPositions[1] - camera->eye.x) * perspectiveRatio) + camera->eye.x) * floorScroll->xScale) +
+        floorScroll->xScroll;
+    tTextureCoordinates[1] =
+        ((((zPositions[1] - camera->eye.z) * perspectiveRatio) + camera->eye.z) * floorScroll->zScale) +
+        floorScroll->zScroll;
+    sTextureCoordinates[2] =
+        ((((xPositions[2] - camera->eye.x) * perspectiveRatio) + camera->eye.x) * floorScroll->xScale) +
+        floorScroll->xScroll;
+    tTextureCoordinates[2] =
+        ((((zPositions[2] - camera->eye.z) * perspectiveRatio) + camera->eye.z) * floorScroll->zScale) +
+        floorScroll->zScroll;
+    sTextureCoordinates[3] =
+        ((((xPositions[3] - camera->eye.x) * perspectiveRatio) + camera->eye.x) * floorScroll->xScale) +
+        floorScroll->xScroll;
+    tTextureCoordinates[3] =
+        ((((zPositions[3] - camera->eye.z) * perspectiveRatio) + camera->eye.z) * floorScroll->zScale) +
+        floorScroll->zScroll;
 
     baseSReference = sTextureCoordinates[0];
     baseTReference = tTextureCoordinates[0];
@@ -773,8 +880,9 @@ void Background_UpdateVenueFloorVtx(Vtx* vtx, Background* background, Camera* ca
     }
 }
 
-void Background_UpdateCloudVtx(Vtx* vtx, Background* background, Camera* camera, ScrollingBackground* cloudScroll, f32 xOffset1, f32 zOffset1,
-                      f32 xOffset2, f32 zOffset2, f32 xRange, f32 zRange, s32 alpha1, s32 alpha2, bool usingHeightRelativeToEye) {
+void Background_UpdateCloudVtx(Vtx* vtx, Background* background, Camera* camera, ScrollingBackground* cloudScroll,
+                               f32 xOffset1, f32 zOffset1, f32 xOffset2, f32 zOffset2, f32 xRange, f32 zRange,
+                               s32 alpha1, s32 alpha2, bool usingHeightRelativeToEye) {
     s32 x;
     s32 z;
     s32 s;
@@ -824,15 +932,32 @@ void Background_UpdateCloudVtx(Vtx* vtx, Background* background, Camera* camera,
     }
 
     if (usingHeightRelativeToEye) {
-        perspectiveRatio = ((background->pos.y + cloudScroll->relativeBackgroundHeight) - camera->eye.y) / (y - camera->eye.y);
-        sTextureCoordinates[0] = ((((xPositions[0] - camera->eye.x) * perspectiveRatio) + camera->eye.x) * cloudScroll->xScale) + cloudScroll->xScroll;
-        tTextureCoordinates[0] = ((((zPositions[0] - camera->eye.z) * perspectiveRatio) + camera->eye.z) * cloudScroll->zScale) + cloudScroll->zScroll;
-        sTextureCoordinates[1] = ((((xPositions[1] - camera->eye.x) * perspectiveRatio) + camera->eye.x) * cloudScroll->xScale) + cloudScroll->xScroll;
-        tTextureCoordinates[1] = ((((zPositions[1] - camera->eye.z) * perspectiveRatio) + camera->eye.z) * cloudScroll->zScale) + cloudScroll->zScroll;
-        sTextureCoordinates[2] = ((((xPositions[2] - camera->eye.x) * perspectiveRatio) + camera->eye.x) * cloudScroll->xScale) + cloudScroll->xScroll;
-        tTextureCoordinates[2] = ((((zPositions[2] - camera->eye.z) * perspectiveRatio) + camera->eye.z) * cloudScroll->zScale) + cloudScroll->zScroll;
-        sTextureCoordinates[3] = ((((xPositions[3] - camera->eye.x) * perspectiveRatio) + camera->eye.x) * cloudScroll->xScale) + cloudScroll->xScroll;
-        tTextureCoordinates[3] = ((((zPositions[3] - camera->eye.z) * perspectiveRatio) + camera->eye.z) * cloudScroll->zScale) + cloudScroll->zScroll;
+        perspectiveRatio =
+            ((background->pos.y + cloudScroll->relativeBackgroundHeight) - camera->eye.y) / (y - camera->eye.y);
+        sTextureCoordinates[0] =
+            ((((xPositions[0] - camera->eye.x) * perspectiveRatio) + camera->eye.x) * cloudScroll->xScale) +
+            cloudScroll->xScroll;
+        tTextureCoordinates[0] =
+            ((((zPositions[0] - camera->eye.z) * perspectiveRatio) + camera->eye.z) * cloudScroll->zScale) +
+            cloudScroll->zScroll;
+        sTextureCoordinates[1] =
+            ((((xPositions[1] - camera->eye.x) * perspectiveRatio) + camera->eye.x) * cloudScroll->xScale) +
+            cloudScroll->xScroll;
+        tTextureCoordinates[1] =
+            ((((zPositions[1] - camera->eye.z) * perspectiveRatio) + camera->eye.z) * cloudScroll->zScale) +
+            cloudScroll->zScroll;
+        sTextureCoordinates[2] =
+            ((((xPositions[2] - camera->eye.x) * perspectiveRatio) + camera->eye.x) * cloudScroll->xScale) +
+            cloudScroll->xScroll;
+        tTextureCoordinates[2] =
+            ((((zPositions[2] - camera->eye.z) * perspectiveRatio) + camera->eye.z) * cloudScroll->zScale) +
+            cloudScroll->zScroll;
+        sTextureCoordinates[3] =
+            ((((xPositions[3] - camera->eye.x) * perspectiveRatio) + camera->eye.x) * cloudScroll->xScale) +
+            cloudScroll->xScroll;
+        tTextureCoordinates[3] =
+            ((((zPositions[3] - camera->eye.z) * perspectiveRatio) + camera->eye.z) * cloudScroll->zScale) +
+            cloudScroll->zScroll;
     } else {
         sTextureCoordinates[0] = (xPositions[0] * cloudScroll->xScale) + cloudScroll->xScroll;
         tTextureCoordinates[0] = (zPositions[0] * cloudScroll->zScale) + cloudScroll->zScroll;
@@ -931,8 +1056,8 @@ Gfx* Background_Draw(Gfx* gfx, s32 cameraIndex, s32 scissorBoxType) {
         gSPDisplayList(gfx++, D_303AA40);
         gDPSetPrimColor(gfx++, 0, 0, skybox->courseFogR, skybox->courseFogG, skybox->courseFogB, 0);
 
-        gDPLoadTextureBlock(gfx++, sVenueFloorTexture, G_IM_FMT_RGBA, G_IM_SIZ_16b, 64, 32, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                            G_TX_NOMIRROR | G_TX_WRAP, 6, 5, G_TX_NOLOD, G_TX_NOLOD);
+        gDPLoadTextureBlock(gfx++, sVenueFloorTexture, G_IM_FMT_RGBA, G_IM_SIZ_16b, 64, 32, 0,
+                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 6, 5, G_TX_NOLOD, G_TX_NOLOD);
 
         gSP2Triangles(gfx++, 0, 3, 1, 0, 0, 2, 3, 0);
         gSP2Triangles(gfx++, 4, 7, 5, 0, 4, 6, 7, 0);
@@ -1088,7 +1213,8 @@ void Background_InitBackgroundSprites(void) {
 
         for (i = 0, backgroundSprite = sBackgroundSprites; i < sBackgroundSpriteCount; i++, backgroundSprite++) {
             replacementIndex = -1;
-            for (j = 0, spritePaletteReplacement = sBackgroundSpritePaletteReplacements; j < 6; j++, spritePaletteReplacement++) {
+            for (j = 0, spritePaletteReplacement = sBackgroundSpritePaletteReplacements; j < 6;
+                 j++, spritePaletteReplacement++) {
                 if (spritePaletteReplacement->spriteId == backgroundSprite->spriteId) {
                     backgroundSprite->replacementIndex = j;
                     break;
@@ -1147,8 +1273,8 @@ void Background_UpdateBackgroundSprites(void) {
 
         if ((vec.x <= 23000.0f) && (vec.x >= -23000.0f) && (vec.z <= 23000.0f) && (vec.z >= -23000.0f)) {
             backgroundSprite->isVisible = true;
-            Matrix_SetLockedLookAtFromVectors(&gGfxPool->unk_36368[i], NULL, sBackgroundSpriteScale, sBackgroundSpriteScale,
-                                              sBackgroundSpriteScale, &lookAt, &up, &vec);
+            Matrix_SetLockedLookAtFromVectors(&gGfxPool->unk_36368[i], NULL, sBackgroundSpriteScale,
+                                              sBackgroundSpriteScale, sBackgroundSpriteScale, &lookAt, &up, &vec);
         } else {
             backgroundSprite->isVisible = false;
         }
@@ -1183,9 +1309,17 @@ u16 Background_GetWhitePaletteFlashingReplacementColor(void) {
     endColorIndex = (startColorIndex + 1) % ARRAY_COUNT(sBackgroundFlashingColors);
     blendTimer = gGameFrameCount % 16;
 
-    red = sBackgroundFlashingColors[startColorIndex][0] + ((sBackgroundFlashingColors[endColorIndex][0] - sBackgroundFlashingColors[startColorIndex][0]) * blendTimer) / 15;
-    green = sBackgroundFlashingColors[startColorIndex][1] + ((sBackgroundFlashingColors[endColorIndex][1] - sBackgroundFlashingColors[startColorIndex][1]) * blendTimer) / 15;
-    blue = sBackgroundFlashingColors[startColorIndex][2] + ((sBackgroundFlashingColors[endColorIndex][2] - sBackgroundFlashingColors[startColorIndex][2]) * blendTimer) / 15;
+    red = sBackgroundFlashingColors[startColorIndex][0] +
+          ((sBackgroundFlashingColors[endColorIndex][0] - sBackgroundFlashingColors[startColorIndex][0]) * blendTimer) /
+              15;
+    green =
+        sBackgroundFlashingColors[startColorIndex][1] +
+        ((sBackgroundFlashingColors[endColorIndex][1] - sBackgroundFlashingColors[startColorIndex][1]) * blendTimer) /
+            15;
+    blue =
+        sBackgroundFlashingColors[startColorIndex][2] +
+        ((sBackgroundFlashingColors[endColorIndex][2] - sBackgroundFlashingColors[startColorIndex][2]) * blendTimer) /
+            15;
 
     return PACK_5551(red, green, blue, 1);
 }
