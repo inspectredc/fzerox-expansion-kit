@@ -188,8 +188,6 @@ Gfx* func_8070A3F4(Gfx* gfx) {
     return gfx;
 }
 
-#define PACK_5551(r, g, b, a) (((((r) << 11) | ((g) << 6)) | ((b) << 1)) | (a))
-
 Gfx* func_8070A498(Gfx* gfx, u16 red, u16 green, u16 blue) {
 
     if ((red < 0) || (red > 255) || (green < 0) || (green > 255) || (blue < 0) || (blue > 255)) {

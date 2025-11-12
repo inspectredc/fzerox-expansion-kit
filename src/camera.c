@@ -928,8 +928,8 @@ void func_8071315C(Camera* camera) {
     z = camera->basis.x.z;
     normalizingFactor = sqrtf(SQ(x) + SQ(z));
     if (normalizingFactor != 0.0f) {
-        camera->unk_80 = camera->basis.x.x / normalizingFactor;
-        camera->unk_84 = camera->basis.x.z / normalizingFactor;
+        camera->xzNormalizedX = camera->basis.x.x / normalizingFactor;
+        camera->xzNormalizedZ = camera->basis.x.z / normalizingFactor;
     }
 }
 

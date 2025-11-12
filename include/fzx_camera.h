@@ -107,8 +107,8 @@ typedef struct Camera {
     Mtx3F racerBasis;
     Vec3f eye;
     Mtx3F basis;
-    f32 unk_80;
-    f32 unk_84;
+    f32 xzNormalizedX;
+    f32 xzNormalizedZ;
     Vec3f at;
     f32 fov;
     f32 frustrumCenterX;

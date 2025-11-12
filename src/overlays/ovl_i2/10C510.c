@@ -45,7 +45,7 @@ void Race_Init(void) {
     Racer_Init();
     Camera_Init();
     func_8070F0B0(COURSE_CONTEXT()->courseData.venue, COURSE_CONTEXT()->courseData.skybox);
-    func_i3_800617A0();
+    Background_Init();
     Effects_Init();
     Course_LandminesViewInteractDataInit();
     Course_JumpsViewInteractDataInit();
@@ -62,7 +62,7 @@ s32 Race_Update(void) {
     Effects_Update();
     Racer_Update();
     Camera_Update();
-    func_i3_80061C2C();
+    Background_Update();
     Course_Update();
     func_8070304C();
     return gGameMode;
@@ -125,40 +125,40 @@ Gfx* Race_Draw(Gfx* gfx) {
     gEffectsVtxEndPtr = &gGfxPool->effectsVtxBuffer[0x7FF];
     switch (gNumPlayers) {
         case 1:
-            gfx = func_i3_8006339C(gfx, 0, SCISSOR_BOX_FULL_SCREEN);
+            gfx = Background_Draw(gfx, 0, SCISSOR_BOX_FULL_SCREEN);
             gfx = Course_Draw(gfx, 0);
             gfx = Course_GadgetsDraw(gfx, 0);
             break;
         case 2:
-            gfx = func_i3_8006339C(gfx, 0, SCISSOR_BOX_TOP_HALF);
+            gfx = Background_Draw(gfx, 0, SCISSOR_BOX_TOP_HALF);
             gfx = Course_Draw(gfx, 0);
             gfx = Course_GadgetsDraw(gfx, 0);
-            gfx = func_i3_8006339C(gfx, 1, SCISSOR_BOX_BOTTOM_HALF);
+            gfx = Background_Draw(gfx, 1, SCISSOR_BOX_BOTTOM_HALF);
             gfx = Course_Draw(gfx, 1);
             gfx = Course_GadgetsDraw(gfx, 1);
             break;
         case 3:
-            gfx = func_i3_8006339C(gfx, 0, SCISSOR_BOX_TOP_LEFT_QUARTER);
+            gfx = Background_Draw(gfx, 0, SCISSOR_BOX_TOP_LEFT_QUARTER);
             gfx = Course_Draw(gfx, 0);
             gfx = Course_GadgetsDraw(gfx, 0);
-            gfx = func_i3_8006339C(gfx, 1, SCISSOR_BOX_BOTTOM_LEFT_QUARTER);
+            gfx = Background_Draw(gfx, 1, SCISSOR_BOX_BOTTOM_LEFT_QUARTER);
             gfx = Course_Draw(gfx, 1);
             gfx = Course_GadgetsDraw(gfx, 1);
-            gfx = func_i3_8006339C(gfx, 2, SCISSOR_BOX_TOP_RIGHT_QUARTER);
+            gfx = Background_Draw(gfx, 2, SCISSOR_BOX_TOP_RIGHT_QUARTER);
             gfx = Course_Draw(gfx, 2);
             gfx = Course_GadgetsDraw(gfx, 2);
             break;
         case 4:
-            gfx = func_i3_8006339C(gfx, 0, SCISSOR_BOX_TOP_LEFT_QUARTER);
+            gfx = Background_Draw(gfx, 0, SCISSOR_BOX_TOP_LEFT_QUARTER);
             gfx = Course_Draw(gfx, 0);
             gfx = Course_GadgetsDraw(gfx, 0);
-            gfx = func_i3_8006339C(gfx, 1, SCISSOR_BOX_BOTTOM_LEFT_QUARTER);
+            gfx = Background_Draw(gfx, 1, SCISSOR_BOX_BOTTOM_LEFT_QUARTER);
             gfx = Course_Draw(gfx, 1);
             gfx = Course_GadgetsDraw(gfx, 1);
-            gfx = func_i3_8006339C(gfx, 2, SCISSOR_BOX_TOP_RIGHT_QUARTER);
+            gfx = Background_Draw(gfx, 2, SCISSOR_BOX_TOP_RIGHT_QUARTER);
             gfx = Course_Draw(gfx, 2);
             gfx = Course_GadgetsDraw(gfx, 2);
-            gfx = func_i3_8006339C(gfx, 3, SCISSOR_BOX_BOTTOM_RIGHT_QUARTER);
+            gfx = Background_Draw(gfx, 3, SCISSOR_BOX_BOTTOM_RIGHT_QUARTER);
             gfx = Course_Draw(gfx, 3);
             gfx = Course_GadgetsDraw(gfx, 3);
             break;

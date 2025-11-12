@@ -203,7 +203,7 @@ void EndingCutscene_Init(void) {
     Racer_Init();
     Camera_Init();
     func_8070F0B0(COURSE_CONTEXT()->courseData.venue, COURSE_CONTEXT()->courseData.skybox);
-    func_i3_800617A0();
+    Background_Init();
     Effects_Init();
     Course_LandminesViewInteractDataInit();
     Course_JumpsViewInteractDataInit();
@@ -374,7 +374,7 @@ s32 EndingCutscene_Update(void) {
     Effects_Update();
     Racer_Update();
     Camera_Update();
-    func_i3_80061C2C();
+    Background_Update();
     Course_Update();
     func_8070304C();
     EndingCutsceneEffects_Update();
@@ -599,7 +599,7 @@ Gfx* EndingCutscene_Draw(Gfx* gfx) {
     gCourseVtxPtr = gGfxPool->courseVtxBuffer;
     gEffectsVtxPtr = gGfxPool->effectsVtxBuffer;
     gEffectsVtxEndPtr = &gGfxPool->effectsVtxBuffer[0x7FF];
-    gfx = func_i3_8006339C(gfx, 0, SCISSOR_BOX_FULL_SCREEN);
+    gfx = Background_Draw(gfx, 0, SCISSOR_BOX_FULL_SCREEN);
     gfx = Course_Draw(gfx, 0);
     gfx = Course_GadgetsDraw(gfx, 0);
     gfx = EndingCutscene_DrawPodiums(gfx);

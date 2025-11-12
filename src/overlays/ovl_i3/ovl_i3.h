@@ -10,93 +10,6 @@ typedef struct unk_8013E7A8 {
     s8 unk_06[8];
 } unk_8013E7A8; // size = 0xE
 
-typedef struct CourseVenue {
-    void* unk_00;
-    f32 unk_04;
-    f32 unk_08;
-    f32 unk_0C;
-    f32 unk_10;
-} CourseVenue; // size = 0x14
-
-typedef struct CourseSkyboxes {
-    void* unk_00;
-    u8 unk_04;
-    u8 unk_05;
-    u8 unk_06;
-    u8 unk_07;
-    u8 unk_08;
-    u8 unk_09;
-    u8 unk_0A;
-    u8 unk_0B;
-    u8 unk_0C;
-    u8 unk_0D[0x1];
-    u16 unk_0E;
-} CourseSkyboxes; // size = 0x10
-
-typedef struct unk_80142180 {
-    CourseVenue* unk_00;
-    CourseSkyboxes* unk_04;
-} unk_80142180; // size = 0x8
-
-typedef struct unk_80141860 {
-    f32 unk_00;
-    f32 unk_04;
-    f32 unk_08;
-    f32 unk_0C;
-    f32 unk_10;
-    f32 unk_14;
-    f32 unk_18;
-    f32 unk_1C;
-} unk_80141860; // size = 0x20
-
-typedef struct unk_80141FF0 {
-    f32 unk_00;
-    f32 unk_04;
-    f32 unk_08;
-    f32 unk_0C;
-    f32 unk_10;
-    f32 unk_14;
-    f32 unk_18;
-    unk_80141860 unk_1C;
-    unk_80141860 unk_3C;
-    f32 unk_5C;
-} unk_80141FF0; // size = 0x60
-
-typedef struct unk_80140E58 {
-    s16 unk_00;
-    f32 unk_04;
-} unk_80140E58; // size = 0x8
-
-typedef struct unk_801421A0 {
-    s16 unk_00;
-    s16 unk_02;
-    s16 unk_04;
-    s8 unk_06[0x2];
-    f32 unk_08;
-    f32 unk_0C;
-    f32 unk_10;
-    TexturePtr unk_14;
-    u16* unk_18;
-} unk_801421A0; // size = 0x1C
-
-typedef struct unk_80142248 {
-    s16 unk_00;
-    s16 unk_02;
-    u16 unk_04[16];
-} unk_80142248; // size = 0x24
-
-typedef struct unk_80142320 {
-    u8 red;
-    u8 green;
-    u8 blue;
-    u8 alpha;
-    s8 unk_04[4];
-    f32 unk_08;
-    f32 unk_0C;
-    f32 unk_10;
-    f32 unk_14[4][2];
-} unk_80142320; // size = 0x34
-
 typedef struct unk_801437C0 {
     s8 unk_00;
     s8 unk_01;
@@ -195,12 +108,6 @@ typedef enum PauseGpOptions {
 #define MENU_STATE_GP_NEXT_COURSE (1 << 9)
 #define MENU_STATE_400 (1 << 10)
 
-extern s32 D_80141900;
-
-extern bool D_i3_801419BC;
-
-extern unk_80141EA8 D_i3_80141EA8[];
-
 extern s32 gPlayerLapNumbers[];
 extern TexturePtr gCharacterPortraitTextures[];
 
@@ -211,16 +118,6 @@ Gfx* func_i3_DrawBlankTimeHundredths(Gfx* gfx, s32 left, s32 top);
 Gfx* func_i3_DrawBlankTimeThousandths(Gfx* gfx, s32 left, s32 top);
 
 Gfx* func_i3_80059D90(Gfx* gfx, s32 playerIndex);
-
-void func_i3_80061B34(Camera*, unk_80141FF0*, CourseVenue*, f32, f32);
-void func_i3_80062034(Vtx*, unk_80141FF0*, Camera*, f32);
-void func_i3_80062694(Vtx*, unk_80141FF0*, Camera*, f32, f32, f32, f32, f32, f32, s32, s32);
-void func_i3_80062C84(Vtx*, unk_80141FF0*, Camera*, unk_80141860*, f32, f32, f32, f32, f32, f32, s32, s32, bool);
-void func_i3_80063F88(void);
-u16 func_i3_80064280(void);
-Gfx* func_i3_8006436C(Gfx* gfx);
-void func_i3_80064AD4(s32, unk_80141FF0*, Camera*);
-Gfx* func_i3_80064CB4(Gfx*, s32);
 
 Gfx* func_i3_80066D80(Gfx*, s32, MachineInfo*);
 Gfx* func_i3_80066DF8(Gfx*, s32, s32, f32);

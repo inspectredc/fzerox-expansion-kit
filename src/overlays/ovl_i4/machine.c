@@ -1437,8 +1437,6 @@ void MachineSettings_OkInit(Object* okObj) {
     OBJECT_LEFT(okObj) = 50;
 }
 
-#define PACK_5551(r, g, b, a) (((((r) << 11) | ((g) << 6)) | ((b) << 1)) | (a))
-
 Gfx* MachineSelect_BackgroundDraw(Gfx* gfx) {
     s32 color;
     s32 i;
