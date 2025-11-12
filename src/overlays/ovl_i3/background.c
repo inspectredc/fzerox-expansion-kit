@@ -1,69 +1,78 @@
 #include "global.h"
-#include "ovl_i3.h"
+#include "background.h"
 #include "fzx_game.h"
 #include "fzx_assets.h"
 
-unk_80141FF0 D_i3_8006D7D0[4];
-s32 D_i3_8006D950;
-s16 D_i3_8006D954;
-s16 D_i3_8006D956;
-s16 D_i3_8006D958;
-s16 D_i3_8006D95A;
-s16 D_i3_8006D95C;
-s16 D_i3_8006D95E;
-unk_80142180 D_i3_8006D960;
-u16 D_i3_8006D968;
-s32 D_i3_8006D96C;
+Background sBackgrounds[4];
+s32 sBackgroundCount;
+s16 sIsEndingCutscene;
+s16 sBackgroundSpriteCount;
+s16 sSpritePaletteReplacementCount;
+s16 sBackgroundSpriteR;
+s16 sBackgroundSpriteG;
+s16 sBackgroundSpriteB;
+BackgroundContext sBackgroundCtx;
+u16 sSkyboxFlags;
+s32 sCloudCount;
 TexturePtr sSkyboxTexture;
-TexturePtr sVenueTexture;
+TexturePtr sVenueFloorTexture;
 TexturePtr sCloudTexture;
-TexturePtr D_i3_8006D97C;
-unk_801421A0 D_i3_8006D980[6];
-unk_80142248 D_i3_8006DA28[6];
-unk_80142320 D_i3_8006DB00[100];
-s32 D_i3_8006EF50;
+TexturePtr sStarTexture;
+BackgroundSprite sBackgroundSprites[6];
+BackgroundSpritePaletteReplacement sBackgroundSpritePaletteReplacements[6];
+Star sStars[100];
+s32 sStarCount;
 
-f32 D_i3_8006BDC0 = 50.0f;
-f32 D_i3_8006BDC4 = 400.0f;
-f32 D_i3_8006BDC8 = 100.0f;
+f32 sBackgroundSpriteScale = 50.0f;
+f32 sBackgroundSpriteHeight = 400.0f;
+f32 sBackgroundScale = 100.0f;
 
 /*
-    VENUE TEXTURES
+    VENUE FLOOR TEXTURES
  */
 
 // MUTE CITY
-CourseVenue sVenueMuteCity = { aVenueMuteCityTex, 0.03f, 0.03f, 0.0f, 0.0f };
+CourseVenueFloor sVenueFloorMuteCity = { aVenueMuteCityTex, 0.03f, 0.03f, 0.0f, 0.0f };
 
 // PORT TOWN
-CourseVenue sVenuePortTown = { aVenuePortTownTex, 0.03f, 0.03f, 0.0f, 0.0f };
+CourseVenueFloor sVenueFloorPortTown = { aVenuePortTownTex, 0.03f, 0.03f, 0.0f, 0.0f };
 
 // BIG BLUE / RAINBOW ROAD
-CourseVenue sVenueBigBlue = { aVenueBigBlueTex, 0.03f, 0.03f, 0.01f, 0.01f };
+CourseVenueFloor sVenueFloorBigBlue = { aVenueBigBlueTex, 0.03f, 0.03f, 0.01f, 0.01f };
 
 // SAND OCEAN
-CourseVenue sVenueSandOcean = { aVenueSandOceanTex, 0.03f, 0.03f, 0.0f, 0.0f };
+CourseVenueFloor sVenueFloorSandOcean = { aVenueSandOceanTex, 0.03f, 0.03f, 0.0f, 0.0f };
 
 // DEVILS FOREST / BIG HAND
-CourseVenue sVenueDevilsForest = { aVenueDevilsForestTex, 0.03f, 0.03f, 0.0f, 0.0f };
+CourseVenueFloor sVenueFloorDevilsForest = { aVenueDevilsForestTex, 0.03f, 0.03f, 0.0f, 0.0f };
 
 // WHITE LAND
-CourseVenue sVenueWhiteLand = { aVenueWhiteLandTex, 0.03f, 0.03f, 0.0f, 0.0f };
+CourseVenueFloor sVenueFloorWhiteLand = { aVenueWhiteLandTex, 0.03f, 0.03f, 0.0f, 0.0f };
 
 // SECTORS / SPACE PLANT
-CourseVenue sVenueSector = { aVenueSectorTex, 0.03f, 0.03f, 0.0f, 0.0f };
+CourseVenueFloor sVenueFloorSector = { aVenueSectorTex, 0.03f, 0.03f, 0.0f, 0.0f };
 
 // RED CANYON
-CourseVenue sVenueRedCanyon = { aVenueRedCanyonTex, 0.03f, 0.03f, 0.0f, 0.0f };
+CourseVenueFloor sVenueFloorRedCanyon = { aVenueRedCanyonTex, 0.03f, 0.03f, 0.0f, 0.0f };
 
 // FIRE FIELD
-CourseVenue sVenueFireField = { aVenueFireFieldTex, 0.03f, 0.03f, 0.005f, 0.005f };
+CourseVenueFloor sVenueFloorFireField = { aVenueFireFieldTex, 0.03f, 0.03f, 0.005f, 0.005f };
 
 // SILENCE
-CourseVenue sVenueSilence = { aVenueSilenceTex, 0.03f, 0.03f, 0.0f, 0.0f };
+CourseVenueFloor sVenueFloorSilence = { aVenueSilenceTex, 0.03f, 0.03f, 0.0f, 0.0f };
 
-CourseVenue* D_i3_8006BE94[] = {
-    &sVenueMuteCity, &sVenuePortTown,  &sVenueBigBlue,   &sVenueSandOcean, &sVenueDevilsForest, &sVenueWhiteLand,
-    &sVenueSector,   &sVenueRedCanyon, &sVenueFireField, &sVenueSilence,   &sVenueMuteCity,
+CourseVenueFloor* sCourseVenueFloors[] = {
+    &sVenueFloorMuteCity,     // VENUE_MUTE_CITY
+    &sVenueFloorPortTown,     // VENUE_PORT_TOWN
+    &sVenueFloorBigBlue,      // VENUE_BIG_BLUE
+    &sVenueFloorSandOcean,    // VENUE_SAND_OCEAN
+    &sVenueFloorDevilsForest, // VENUE_DEVILS_FOREST
+    &sVenueFloorWhiteLand,    // VENUE_WHITE_LAND
+    &sVenueFloorSector,       // VENUE_SECTOR
+    &sVenueFloorRedCanyon,    // VENUE_RED_CANYON
+    &sVenueFloorFireField,    // VENUE_FIRE_FIELD
+    &sVenueFloorSilence,      // VENUE_SILENCE
+    &sVenueFloorMuteCity,     // VENUE_ENDING
 };
 
 /*
@@ -72,200 +81,284 @@ CourseVenue* D_i3_8006BE94[] = {
 
 // PURPLE SKIES
 // MUTE CITY / WHITE LAND
-CourseSkyboxes sSkyboxPurple = { aSkyboxPurpleTex, 252, 192, 253, 0, 0, 0, 200, 130, 240, 0, 2 };
+CourseSkyboxes sSkyboxPurple = { aSkyboxPurpleTex, 252, 192, 253, 0, 0, 0, 200, 130, 240, SKYBOX_CLOUDY };
 
 // TURQUOISE SKIES
 // SILENCE 2
-CourseSkyboxes sSkyboxTurquoise = { aSkyboxTurquoiseTex, 155, 247, 245, 210, 255, 230, 155, 247, 245, 0, 2 };
+CourseSkyboxes sSkyboxTurquoise = { aSkyboxTurquoiseTex, 155, 247, 245, 210, 255, 230, 155, 247, 245, SKYBOX_CLOUDY };
 
 // DESERT YELLOW
 // SAND OCEAN
-CourseSkyboxes sSkyboxDesert = { aSkyboxDesertTex, 224, 234, 210, 0, 0, 0, 225, 190, 160, 0, 2 };
+CourseSkyboxes sSkyboxDesert = { aSkyboxDesertTex, 224, 234, 210, 0, 0, 0, 225, 190, 160, SKYBOX_CLOUDY };
 
 // BLUE
-CourseSkyboxes sSkyboxBlue = { aSkyboxBlueTex, 151, 194, 218, 210, 255, 230, 151, 194, 218, 0, 2 };
+CourseSkyboxes sSkyboxBlue = { aSkyboxBlueTex, 151, 194, 218, 210, 255, 230, 151, 194, 218, SKYBOX_CLOUDY };
 
 // NIGHT
 // SILENCE / MUTE CITY 2
-CourseSkyboxes sSkyboxNight = { aSkyboxNightTex, 2, 2, 23, 245, 162, 99, 125, 155, 185, 0, 5 };
+CourseSkyboxes sSkyboxNight = { aSkyboxNightTex, 2, 2, 23, 245, 162, 99, 125, 155, 185, SKYBOX_STARRY | SKYBOX_NIGHTTIME };
 
 // ORANGE DAY
 // DEVILS FOREST / SECTOR ALPHA
-CourseSkyboxes sSkyboxOrange = { aSkyboxOrangeTex, 255, 224, 144, 0, 0, 0, 255, 224, 204, 0, 2 };
+CourseSkyboxes sSkyboxOrange = { aSkyboxOrangeTex, 255, 224, 144, 0, 0, 0, 255, 224, 204, SKYBOX_CLOUDY };
 
 // SUNSET
 // PORT TOWN / DEVILS FOREST 2 / FIRE FIELD
-CourseSkyboxes sSkyboxSunset = { aSkyboxSunsetTex, 245, 162, 99, 0, 0, 0, 245, 162, 99, 0, 2 };
+CourseSkyboxes sSkyboxSunset = { aSkyboxSunsetTex, 245, 162, 99, 0, 0, 0, 245, 162, 99, SKYBOX_CLOUDY };
 
 // SKY BLUE
 // BIG BLUE 1 & 2 / RED CANYON
-CourseSkyboxes sSkyboxSkyBlue = { aSkyboxSkyBlueTex, 250, 255, 255, 0, 0, 0, 180, 200, 180, 0, 2 };
+CourseSkyboxes sSkyboxSkyBlue = { aSkyboxSkyBlueTex, 250, 255, 255, 0, 0, 0, 180, 200, 180, SKYBOX_CLOUDY };
 
-CourseSkyboxes* D_i3_8006BF40[] = {
-    &sSkyboxPurple, &sSkyboxTurquoise, &sSkyboxDesert, &sSkyboxBlue,
-    &sSkyboxNight,  &sSkyboxOrange,    &sSkyboxSunset, &sSkyboxSkyBlue,
+CourseSkyboxes* sCourseSkyboxes[] = {
+    &sSkyboxPurple,    // SKYBOX_PURPLE
+    &sSkyboxTurquoise, // SKYBOX_TURQUOISE
+    &sSkyboxDesert,    // SKYBOX_DESERT
+    &sSkyboxBlue,      // SKYBOX_BLUE
+    &sSkyboxNight,     // SKYBOX_NIGHT
+    &sSkyboxOrange,    // SKYBOX_ORANGE
+    &sSkyboxSunset,    // SKYBOX_SUNSET
+    &sSkyboxSkyBlue,   // SKYBOX_SKY_BLUE
 };
 
 /*
     BACKGROUND SPRITES AND PALETTES
  */
 
-TexturePtr D_i3_8006BF60[][2] = {
-    { NULL, NULL },           { D_F220810, D_F221010 }, { D_F221210, D_F221A10 }, { D_F221C10, D_F222410 },
-    { D_F222610, D_F222E10 }, { D_F223010, D_F223810 }, { D_F223A10, D_F224210 }, { D_F224410, D_F224C10 },
-    { D_F224E10, D_F225610 }, { D_F225810, D_F226010 }, { D_F226210, D_F226A10 }, { D_F226C10, D_F227410 },
-    { D_F227610, D_F227E10 }, { D_F228010, D_F228810 }, { D_F228A10, D_F229210 }, { D_F229410, D_F229C10 },
-    { D_F229E10, D_F22A610 }, { D_F22A810, D_F22B010 }, { D_F22B210, D_F22BA10 }, { D_F22BC10, D_F22C410 },
-    { D_F22C610, D_F22CE10 }, { D_F22D010, D_F22D810 }, { D_F22DA10, D_F22E210 }, { D_F22E410, D_F22EC10 },
-    { D_F22EE10, D_F22F610 }, { D_F22F810, D_F230010 }, { D_F230210, D_F230A10 }, { D_F230C10, D_F231410 },
-    { D_F231610, D_F231E10 }, { D_F232010, D_F232810 }, { D_F232A10, D_F233210 }, { D_F233410, D_F233C10 },
-    { D_F233E10, D_F234610 }, { D_F234810, D_F235010 }, { D_F235210, D_F235A10 }, { D_F235C10, D_F236410 },
-    { D_F236610, D_F236E10 }, { D_F237010, D_F237810 }, { D_F237A10, D_F238210 }, { D_F238410, D_F238C10 },
-    { D_F238E10, D_F239610 }, { D_F239810, D_F23A010 }, { D_F23A210, D_F23AA10 }, { D_F23AC10, D_F23B410 },
-    { D_F23B610, D_F23BE10 }, { D_F23C010, D_F23C810 }, { D_F23CA10, D_F23D210 }, { D_F23D410, D_F23DC10 },
-    { D_F23DE10, D_F23E610 }, { D_F23E810, D_F23F010 }, { D_F23F210, D_F23FA10 }, { D_F23FC10, D_F240410 },
-    { D_F240610, D_F240E10 }, { D_F241010, D_F241810 }, { D_F241A10, D_F242210 }, { D_F242410, D_F242C10 },
+TexturePtr sBackgroundSpritePalettePairs[][2] = {
+    { NULL, NULL },           // BG_SPRITE_END
+    { D_F220810, D_F221010 }, // BG_SPRITE_CITY_SKYLINE_1
+    { D_F221210, D_F221A10 }, // BG_SPRITE_CITY_SKYLINE_2
+    { D_F221C10, D_F222410 }, // BG_SPRITE_CITY_SKYLINE_3
+    { D_F222610, D_F222E10 }, // BG_SPRITE_CITY_SKYLINE_4
+    { D_F223010, D_F223810 }, // BG_SPRITE_MOUNTAINS_1
+    { D_F223A10, D_F224210 }, // BG_SPRITE_SKULL_MOUNTAIN
+    { D_F224410, D_F224C10 }, // BG_SPRITE_GIANT_TREE
+    { D_F224E10, D_F225610 }, // BG_SPRITE_MOUNTAIN_CITY
+    { D_F225810, D_F226010 }, // BG_SPRITE_CITY_SKYLINE_5
+    { D_F226210, D_F226A10 }, // BG_SPRITE_CITY_SKYLINE_6
+    { D_F226C10, D_F227410 }, // BG_SPRITE_CITY_SKYLINE_7
+    { D_F227610, D_F227E10 }, // BG_SPRITE_CITY_SKYLINE_8
+    { D_F228010, D_F228810 }, // BG_SPRITE_NIGHT_CITY_SKYLINE_5
+    { D_F228A10, D_F229210 }, // BG_SPRITE_NIGHT_CITY_SKYLINE_6
+    { D_F229410, D_F229C10 }, // BG_SPRITE_NIGHT_CITY_SKYLINE_7
+    { D_F229E10, D_F22A610 }, // BG_SPRITE_NIGHT_CITY_SKYLINE_8
+    { D_F22A810, D_F22B010 }, // BG_SPRITE_MOUNTAINS_2
+    { D_F22B210, D_F22BA10 }, // BG_SPRITE_MOUNTAINS_3
+    { D_F22BC10, D_F22C410 }, // BG_SPRITE_MOUNTAINS_TOWERS_1
+    { D_F22C610, D_F22CE10 }, // BG_SPRITE_MOUNTAINS_TOWERS_2
+    { D_F22D010, D_F22D810 }, // BG_SPRITE_TOWERS_1
+    { D_F22DA10, D_F22E210 }, // BG_SPRITE_PYRAMID
+    { D_F22E410, D_F22EC10 }, // BG_SPRITE_TOWERS_2
+    { D_F22EE10, D_F22F610 }, // BG_SPRITE_MOON_1
+    { D_F22F810, D_F230010 }, // BG_SPRITE_STATUE_1
+    { D_F230210, D_F230A10 }, // BG_SPRITE_MOUNTAINS_TOWERS_3
+    { D_F230C10, D_F231410 }, // BG_SPRITE_CASTLE
+    { D_F231610, D_F231E10 }, // BG_SPRITE_MOUNTAINS_TOWERS_4
+    { D_F232010, D_F232810 }, // BG_SPRITE_ROCKET_LAUNCH_1
+    { D_F232A10, D_F233210 }, // BG_SPRITE_ROCKET_LAUNCH_2
+    { D_F233410, D_F233C10 }, // BG_SPRITE_ROCKET_LAUNCH_3
+    { D_F233E10, D_F234610 }, // BG_SPRITE_RADAR_DISH
+    { D_F234810, D_F235010 }, // BG_SPRITE_RAISED_CITY_1
+    { D_F235210, D_F235A10 }, // BG_SPRITE_RAISED_GLASS_DOME
+    { D_F235C10, D_F236410 }, // BG_SPRITE_RAISED_CITY_2
+    { D_F236610, D_F236E10 }, // BG_SPRITE_CONNECTED_MOUNTAINS
+    { D_F237010, D_F237810 }, // BG_SPRITE_MOON_2
+    { D_F237A10, D_F238210 }, // BG_SPRITE_FLYING_CITY
+    { D_F238410, D_F238C10 }, // BG_SPRITE_NIGHT_CITY_SKYLINE_1
+    { D_F238E10, D_F239610 }, // BG_SPRITE_NIGHT_CITY_SKYLINE_2
+    { D_F239810, D_F23A010 }, // BG_SPRITE_NIGHT_CITY_SKYLINE_3
+    { D_F23A210, D_F23AA10 }, // BG_SPRITE_NIGHT_CITY_SKYLINE_4
+    { D_F23AC10, D_F23B410 }, // BG_SPRITE_NINTENDO_BUILDING
+    { D_F23B610, D_F23BE10 }, // BG_SPRITE_JACK_CUP_BUILDING
+    { D_F23C010, D_F23C810 }, // BG_SPRITE_NINTENDO_N_BUILDING
+    { D_F23CA10, D_F23D210 }, // BG_SPRITE_FZERO_X_BUILDING
+    { D_F23D410, D_F23DC10 }, // BG_SPRITE_DOUBLE_SPHEROID_BUILDING
+    { D_F23DE10, D_F23E610 }, // BG_SPRITE_QUEEN_CUP_BUILDING
+    { D_F23E810, D_F23F010 }, // BG_SPRITE_KING_CUP_BUILDING
+    { D_F23F210, D_F23FA10 }, // BG_SPRITE_JOKER_CUP_BUILDING
+    { D_F23FC10, D_F240410 }, // BG_SPRITE_X_CUP_BUILDING
+    { D_F240610, D_F240E10 }, // BG_SPRITE_EDIT_CUP_BUILDING
+    { D_F241010, D_F241810 }, // BG_SPRITE_MAN_STATUE_2
+    { D_F241A10, D_F242210 }, // BG_SPRITE_MOON_3
+    { D_F242410, D_F242C10 }, // BG_SPRITE_SINGLE_SPHEROID_BUILDING
 };
 
-unk_80140E58 D_i3_8006C120[] = {
-    { 1, 0.0f }, { 2, 60.0f }, { 3, 120.0f }, { 4, 150.0f }, { 1, 240.0f }, { 2, 300.0f }, { 0, 0.0f },
+BackgroundSpriteInitData sBackgroundSpriteInitMuteCity[] = {
+    { BG_SPRITE_CITY_SKYLINE_1, 0.0f },   { BG_SPRITE_CITY_SKYLINE_2, 60.0f },  { BG_SPRITE_CITY_SKYLINE_3, 120.0f }, { BG_SPRITE_CITY_SKYLINE_4, 150.0f },
+    { BG_SPRITE_CITY_SKYLINE_1, 240.0f }, { BG_SPRITE_CITY_SKYLINE_2, 300.0f }, { BG_SPRITE_END, 0.0f },
 };
 
-unk_80140E58 D_i3_8006C158[] = {
-    { 54, 0.0f },
-    { 55, 180.0f },
-    { 0, 0.0f },
+BackgroundSpriteInitData sBackgroundSpriteInitSilence[] = {
+    { BG_SPRITE_MOON_3, 0.0f },
+    { BG_SPRITE_SINGLE_SPHEROID_BUILDING, 180.0f },
+    { BG_SPRITE_END, 0.0f },
 };
 
-unk_80140E58 D_i3_8006C170[] = {
-    { 5, 0.0f }, { 17, 60.0f }, { 5, 120.0f }, { 17, 180.0f }, { 5, 240.0f }, { 17, 300.0f }, { 0, 0.0f },
+BackgroundSpriteInitData sBackgroundSpriteInitSandOcean[] = {
+    { BG_SPRITE_MOUNTAINS_1, 0.0f },   { BG_SPRITE_MOUNTAINS_2, 60.0f },  { BG_SPRITE_MOUNTAINS_1, 120.0f }, { BG_SPRITE_MOUNTAINS_2, 180.0f },
+    { BG_SPRITE_MOUNTAINS_1, 240.0f }, { BG_SPRITE_MOUNTAINS_2, 300.0f }, { BG_SPRITE_END, 0.0f },
 };
 
-unk_80140E58 D_i3_8006C1A8[] = {
-    { 5, 0.0f }, { 6, 60.0f }, { 7, 120.0f }, { 8, 180.0f }, { 5, 240.0f }, { 6, 300.0f }, { 0, 0.0f },
+BackgroundSpriteInitData sBackgroundSpriteInitDevilsForest[] = {
+    { BG_SPRITE_MOUNTAINS_1, 0.0f },   { BG_SPRITE_SKULL_MOUNTAIN, 60.0f },  { BG_SPRITE_GIANT_TREE, 120.0f }, { BG_SPRITE_MOUNTAIN_CITY, 180.0f },
+    { BG_SPRITE_MOUNTAINS_1, 240.0f }, { BG_SPRITE_SKULL_MOUNTAIN, 300.0f }, { BG_SPRITE_END, 0.0f },
 };
 
-unk_80140E58 D_i3_8006C1E0[] = {
-    { 33, 0.0f }, { 34, 60.0f }, { 35, 120.0f }, { 36, 180.0f }, { 33, 240.0f }, { 34, 300.0f }, { 0, 0.0f },
+BackgroundSpriteInitData sBackgroundSpriteInitBigBlue[] = {
+    { BG_SPRITE_RAISED_CITY_1, 0.0f },   { BG_SPRITE_RAISED_GLASS_DOME, 60.0f },  { BG_SPRITE_RAISED_CITY_2, 120.0f }, { BG_SPRITE_CONNECTED_MOUNTAINS, 180.0f },
+    { BG_SPRITE_RAISED_CITY_1, 240.0f }, { BG_SPRITE_RAISED_GLASS_DOME, 300.0f }, { BG_SPRITE_END, 0.0f },
 };
 
-unk_80140E58 D_i3_8006C218[] = {
-    { 9, 0.0f },
-    { 10, 120.0f },
-    { 11, 240.0f },
-    { 0, 0.0f },
+BackgroundSpriteInitData sBackgroundSpriteInitPortTown[] = {
+    { BG_SPRITE_CITY_SKYLINE_5, 0.0f },
+    { BG_SPRITE_CITY_SKYLINE_6, 120.0f },
+    { BG_SPRITE_CITY_SKYLINE_7, 240.0f },
+    { BG_SPRITE_END, 0.0f },
 };
 
-unk_80140E58 D_i3_8006C238[] = {
-    { 21, 0.0f },
-    { 22, 120.0f },
-    { 23, 240.0f },
-    { 0, 0.0f },
+BackgroundSpriteInitData sBackgroundSpriteInitSectorAlpha[] = {
+    { BG_SPRITE_TOWERS_1, 0.0f },
+    { BG_SPRITE_PYRAMID, 120.0f },
+    { BG_SPRITE_TOWERS_2, 240.0f },
+    { BG_SPRITE_END, 0.0f },
 };
 
-unk_80140E58 D_i3_8006C258[] = {
-    { 17, 0.0f }, { 18, 60.0f }, { 19, 120.0f }, { 20, 180.0f }, { 17, 240.0f }, { 18, 300.0f }, { 0, 0.0f },
+BackgroundSpriteInitData sBackgroundSpriteInitRedCanyon[] = {
+    { BG_SPRITE_MOUNTAINS_2, 0.0f },   { BG_SPRITE_MOUNTAINS_3, 60.0f },  { BG_SPRITE_MOUNTAINS_TOWERS_1, 120.0f }, { BG_SPRITE_MOUNTAINS_TOWERS_2, 180.0f },
+    { BG_SPRITE_MOUNTAINS_2, 240.0f }, { BG_SPRITE_MOUNTAINS_3, 300.0f }, { BG_SPRITE_END, 0.0f },
 };
 
-unk_80140E58 D_i3_8006C290[] = {
-    { 5, 0.0f }, { 7, 60.0f }, { 7, 120.0f }, { 8, 180.0f }, { 5, 240.0f }, { 6, 300.0f }, { 0, 0.0f },
+BackgroundSpriteInitData sBackgroundSpriteInitDevilsForest2[] = {
+    { BG_SPRITE_MOUNTAINS_1, 0.0f },   { BG_SPRITE_GIANT_TREE, 60.0f },  { BG_SPRITE_GIANT_TREE, 120.0f }, { BG_SPRITE_MOUNTAIN_CITY, 180.0f },
+    { BG_SPRITE_MOUNTAINS_1, 240.0f }, { BG_SPRITE_SKULL_MOUNTAIN, 300.0f }, { BG_SPRITE_END, 0.0f },
 };
 
-unk_80140E58 D_i3_8006C2C8[] = {
-    { 39, 0.0f }, { 40, 60.0f }, { 41, 120.0f }, { 42, 180.0f }, { 39, 240.0f }, { 40, 300.0f }, { 0, 0.0f },
+BackgroundSpriteInitData sBackgroundSpriteInitMuteCity2[] = {
+    { BG_SPRITE_NIGHT_CITY_SKYLINE_1, 0.0f },   { BG_SPRITE_NIGHT_CITY_SKYLINE_2, 60.0f },  { BG_SPRITE_NIGHT_CITY_SKYLINE_3, 120.0f }, { BG_SPRITE_NIGHT_CITY_SKYLINE_4, 180.0f },
+    { BG_SPRITE_NIGHT_CITY_SKYLINE_1, 240.0f }, { BG_SPRITE_NIGHT_CITY_SKYLINE_2, 300.0f }, { BG_SPRITE_END, 0.0f },
 };
 
-unk_80140E58 D_i3_8006C300[] = {
-    { 33, 0.0f },
-    { 34, 120.0f },
-    { 35, 240.0f },
-    { 0, 0.0f },
+BackgroundSpriteInitData sBackgroundSpriteInitBigBlue2[] = {
+    { BG_SPRITE_RAISED_CITY_1, 0.0f },
+    { BG_SPRITE_RAISED_GLASS_DOME, 120.0f },
+    { BG_SPRITE_RAISED_CITY_2, 240.0f },
+    { BG_SPRITE_END, 0.0f },
 };
 
-unk_80140E58 D_i3_8006C320[] = {
-    { 29, 0.0f },
-    { 30, 120.0f },
-    { 31, 240.0f },
-    { 0, 0.0f },
+BackgroundSpriteInitData sBackgroundSpriteInitWhiteLand[] = {
+    { BG_SPRITE_ROCKET_LAUNCH_1, 0.0f },
+    { BG_SPRITE_ROCKET_LAUNCH_2, 120.0f },
+    { BG_SPRITE_ROCKET_LAUNCH_3, 240.0f },
+    { BG_SPRITE_END, 0.0f },
 };
 
-unk_80140E58 D_i3_8006C340[] = {
-    { 0, 0.0f },
+BackgroundSpriteInitData sBackgroundSpriteInitFireField[] = {
+    { BG_SPRITE_END, 0.0f },
 };
 
-unk_80140E58 D_i3_8006C348[] = {
-    { 0, 0.0f },
+BackgroundSpriteInitData sBackgroundSpriteInitSilence2[] = {
+    { BG_SPRITE_END, 0.0f },
 };
 
-unk_80140E58 D_i3_8006C350[] = {
-    { 21, 0.0f },
-    { 22, 120.0f },
-    { 23, 240.0f },
-    { 0, 0.0f },
+BackgroundSpriteInitData sBackgroundSpriteInitSectorBeta[] = {
+    { BG_SPRITE_TOWERS_1, 0.0f },
+    { BG_SPRITE_PYRAMID, 120.0f },
+    { BG_SPRITE_TOWERS_2, 240.0f },
+    { BG_SPRITE_END, 0.0f },
 };
 
-unk_80140E58 D_i3_8006C370[] = {
-    { 0, 0.0f },
+BackgroundSpriteInitData sBackgroundSpriteInitRedCanyon2[] = {
+    { BG_SPRITE_END, 0.0f },
 };
 
-unk_80140E58 D_i3_8006C378[] = {
-    { 0, 0.0f },
+BackgroundSpriteInitData sBackgroundSpriteInitWhiteLand2[] = {
+    { BG_SPRITE_END, 0.0f },
 };
 
-unk_80140E58 D_i3_8006C380[] = {
-    { 1, 0.0f }, { 2, 60.0f }, { 3, 120.0f }, { 4, 150.0f }, { 1, 240.0f }, { 2, 300.0f }, { 0, 0.0f },
+BackgroundSpriteInitData sBackgroundSpriteInitMuteCity3[] = {
+    { BG_SPRITE_CITY_SKYLINE_1, 0.0f },   { BG_SPRITE_CITY_SKYLINE_2, 60.0f },  { BG_SPRITE_CITY_SKYLINE_3, 120.0f }, { BG_SPRITE_CITY_SKYLINE_4, 150.0f },
+    { BG_SPRITE_CITY_SKYLINE_1, 240.0f }, { BG_SPRITE_CITY_SKYLINE_2, 300.0f }, { BG_SPRITE_END, 0.0f },
 };
 
-unk_80140E58 D_i3_8006C3B8[] = {
-    { 0, 0.0f },
+BackgroundSpriteInitData sBackgroundSpriteInitRainbowRoad[] = {
+    { BG_SPRITE_END, 0.0f },
 };
 
-unk_80140E58 D_i3_8006C3C0[] = {
-    { 0, 0.0f },
+BackgroundSpriteInitData sBackgroundSpriteInitDevilsForest3[] = {
+    { BG_SPRITE_END, 0.0f },
 };
 
-unk_80140E58 D_i3_8006C3C8[] = {
-    { 21, 0.0f },
-    { 22, 120.0f },
-    { 23, 240.0f },
-    { 0, 0.0f },
+BackgroundSpriteInitData sBackgroundSpriteInitSpacePlant[] = {
+    { BG_SPRITE_TOWERS_1, 0.0f },
+    { BG_SPRITE_PYRAMID, 120.0f },
+    { BG_SPRITE_TOWERS_2, 240.0f },
+    { BG_SPRITE_END, 0.0f },
 };
 
-unk_80140E58 D_i3_8006C3E8[] = {
-    { 0, 0.0f },
+BackgroundSpriteInitData sBackgroundSpriteInitSandOcean2[] = {
+    { BG_SPRITE_END, 0.0f },
 };
 
-unk_80140E58 D_i3_8006C3F0[] = {
-    { 13, 0.0f },
-    { 14, 120.0f },
-    { 15, 240.0f },
-    { 0, 0.0f },
+BackgroundSpriteInitData sBackgroundSpriteInitPortTown2[] = {
+    { BG_SPRITE_NIGHT_CITY_SKYLINE_5, 0.0f },
+    { BG_SPRITE_NIGHT_CITY_SKYLINE_6, 120.0f },
+    { BG_SPRITE_NIGHT_CITY_SKYLINE_7, 240.0f },
+    { BG_SPRITE_END, 0.0f },
 };
 
-unk_80140E58 D_i3_8006C410[] = {
-    { 25, 0.0f }, { 26, 60.0f }, { 27, 120.0f }, { 28, 180.0f }, { 26, 300.0f }, { 0, 0.0f },
+BackgroundSpriteInitData sBackgroundSpriteInitBigHand[] = {
+    { BG_SPRITE_STATUE_1, 0.0f },   { BG_SPRITE_MOUNTAINS_TOWERS_3, 60.0f },  { BG_SPRITE_CASTLE, 120.0f },
+    { BG_SPRITE_MOUNTAINS_TOWERS_4, 180.0f }, { BG_SPRITE_MOUNTAINS_TOWERS_3, 300.0f }, { BG_SPRITE_END, 0.0f },
 };
 
-unk_80140E58 D_i3_8006C440[] = {
-    { 44, 0.0f }, { 45, 60.0f }, { 46, 120.0f }, { 47, 180.0f }, { 44, 240.0f }, { 45, 300.0f }, { 0, 0.0f },
+BackgroundSpriteInitData sBackgroundSpriteInitEnding[] = {
+    { BG_SPRITE_JACK_CUP_BUILDING, 0.0f },   { BG_SPRITE_NINTENDO_N_BUILDING, 60.0f },  { BG_SPRITE_FZERO_X_BUILDING, 120.0f }, { BG_SPRITE_DOUBLE_SPHEROID_BUILDING, 180.0f },
+    { BG_SPRITE_JACK_CUP_BUILDING, 240.0f }, { BG_SPRITE_NINTENDO_N_BUILDING, 300.0f }, { BG_SPRITE_END, 0.0f },
 };
 
-unk_80140E58* D_i3_8006C478[] = {
-    D_i3_8006C120, D_i3_8006C158, D_i3_8006C170, D_i3_8006C1A8, D_i3_8006C1E0, D_i3_8006C218,
-    D_i3_8006C238, D_i3_8006C258, D_i3_8006C290, D_i3_8006C2C8, D_i3_8006C300, D_i3_8006C320,
-    D_i3_8006C340, D_i3_8006C348, D_i3_8006C350, D_i3_8006C370, D_i3_8006C378, D_i3_8006C380,
-    D_i3_8006C3B8, D_i3_8006C3C0, D_i3_8006C3C8, D_i3_8006C3E8, D_i3_8006C3F0, D_i3_8006C410,
+BackgroundSpriteInitData* sBackgroundSpriteCourseInitData[] = {
+    sBackgroundSpriteInitMuteCity,      // COURSE_MUTE_CITY
+    sBackgroundSpriteInitSilence,       // COURSE_SILENCE
+    sBackgroundSpriteInitSandOcean,     // COURSE_SAND_OCEAN
+    sBackgroundSpriteInitDevilsForest,  // COURSE_DEVILS_FOREST
+    sBackgroundSpriteInitBigBlue,       // COURSE_BIG_BLUE
+    sBackgroundSpriteInitPortTown,      // COURSE_PORT_TOWN
+    sBackgroundSpriteInitSectorAlpha,   // COURSE_SECTOR_ALPHA
+    sBackgroundSpriteInitRedCanyon,     // COURSE_RED_CANYON
+    sBackgroundSpriteInitDevilsForest2, // COURSE_DEVILS_FOREST_2
+    sBackgroundSpriteInitMuteCity2,     // COURSE_MUTE_CITY_2
+    sBackgroundSpriteInitBigBlue2,      // COURSE_BIG_BLUE_2
+    sBackgroundSpriteInitWhiteLand,     // COURSE_WHITE_LAND
+    sBackgroundSpriteInitFireField,     // COURSE_FIRE_FIELD
+    sBackgroundSpriteInitSilence2,      // COURSE_SILENCE_2
+    sBackgroundSpriteInitSectorBeta,    // COURSE_SECTOR_BETA
+    sBackgroundSpriteInitRedCanyon2,    // COURSE_RED_CANYON_2
+    sBackgroundSpriteInitWhiteLand2,    // COURSE_WHITE_LAND_2
+    sBackgroundSpriteInitMuteCity3,     // COURSE_MUTE_CITY_3
+    sBackgroundSpriteInitRainbowRoad,   // COURSE_RAINBOW_ROAD
+    sBackgroundSpriteInitDevilsForest3, // COURSE_DEVILS_FOREST_3
+    sBackgroundSpriteInitSpacePlant,    // COURSE_SPACE_PLANT
+    sBackgroundSpriteInitSandOcean2,    // COURSE_SAND_OCEAN_2
+    sBackgroundSpriteInitPortTown2,     // COURSE_PORT_TOWN_2
+    sBackgroundSpriteInitBigHand,       // COURSE_BIG_HAND
 };
 
-s16 D_i3_8006C4D8[] = { 1,  2,  3,  4,  5,  6,  7,  8,  9,  10, 11, 12, 17, 18, 19, 20, 21,
-                        22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38 };
+s16 sDaytimeBackgroundSprites[] = { BG_SPRITE_CITY_SKYLINE_1,  BG_SPRITE_CITY_SKYLINE_2,  BG_SPRITE_CITY_SKYLINE_3,  BG_SPRITE_CITY_SKYLINE_4,  BG_SPRITE_MOUNTAINS_1,  BG_SPRITE_SKULL_MOUNTAIN,
+                        BG_SPRITE_GIANT_TREE,  BG_SPRITE_MOUNTAIN_CITY,  BG_SPRITE_CITY_SKYLINE_5,  BG_SPRITE_CITY_SKYLINE_6, BG_SPRITE_CITY_SKYLINE_7, BG_SPRITE_CITY_SKYLINE_8,
+                        BG_SPRITE_MOUNTAINS_2, BG_SPRITE_MOUNTAINS_3, BG_SPRITE_MOUNTAINS_TOWERS_1, BG_SPRITE_MOUNTAINS_TOWERS_2, BG_SPRITE_TOWERS_1, BG_SPRITE_PYRAMID,
+                        BG_SPRITE_TOWERS_2, BG_SPRITE_MOON_1, BG_SPRITE_STATUE_1, BG_SPRITE_MOUNTAINS_TOWERS_3, BG_SPRITE_CASTLE, BG_SPRITE_MOUNTAINS_TOWERS_4,
+                        BG_SPRITE_ROCKET_LAUNCH_1, BG_SPRITE_ROCKET_LAUNCH_2, BG_SPRITE_ROCKET_LAUNCH_3, BG_SPRITE_RADAR_DISH, BG_SPRITE_RAISED_CITY_1, BG_SPRITE_RAISED_GLASS_DOME,
+                        BG_SPRITE_RAISED_CITY_2, BG_SPRITE_CONNECTED_MOUNTAINS, BG_SPRITE_MOON_2, BG_SPRITE_FLYING_CITY };
 
-s16 D_i3_8006C51C[] = { 13, 14, 15, 16, 39, 40, 41, 42, 45, 46, 47, 51, 54, 55 };
+s16 sNighttimeBackgroundSprites[] = { BG_SPRITE_NIGHT_CITY_SKYLINE_5, BG_SPRITE_NIGHT_CITY_SKYLINE_6, BG_SPRITE_NIGHT_CITY_SKYLINE_7, BG_SPRITE_NIGHT_CITY_SKYLINE_8, BG_SPRITE_NIGHT_CITY_SKYLINE_1,
+                        BG_SPRITE_NIGHT_CITY_SKYLINE_2, BG_SPRITE_NIGHT_CITY_SKYLINE_3, BG_SPRITE_NIGHT_CITY_SKYLINE_4, BG_SPRITE_NINTENDO_N_BUILDING, BG_SPRITE_FZERO_X_BUILDING,
+                        BG_SPRITE_DOUBLE_SPHEROID_BUILDING, BG_SPRITE_X_CUP_BUILDING, BG_SPRITE_MOON_3, BG_SPRITE_SINGLE_SPHEROID_BUILDING };
 
 UNUSED s32 D_i3_8006C538[10] = { 0 };
 
-s8 D_i3_8006C560[][3] = {
-    { 31, 10, 0 }, { 0, 15, 31 }, { 31, 31, 10 }, { 0, 0, 0 }, { 0, 0, 0 },
+s8 sBackgroundFlashingColors[][3] = {
+    { 31, 10, 0 }, { 0, 15, 31 }, { 31, 31, 10 },
 };
 
 extern s32 gSkyboxType;
@@ -276,512 +369,521 @@ extern s32 gCourseIndex;
 extern s32 gGameMode;
 extern Camera gCameras[];
 
-void func_i3_800617A0(void) {
+void Background_Init(void) {
     s32 pad;
     s32 i;
-    f32 var_fs0;
-    f32 var_fs1;
-    CourseInfo* temp_v0;
-    unk_80141FF0* var_s0;
+    f32 cloudXScrollSpeed;
+    f32 cloudZScrollSpeed;
+    CourseInfo* courseInfo;
+    Background* background;
     Camera* camera;
 
-    D_i3_8006D950 = gNumPlayers;
+    sBackgroundCount = gNumPlayers;
     D_8076CE20 = false;
-    D_i3_8006D960.unk_00 = D_i3_8006BE94[gVenueType];
-    D_i3_8006D960.unk_04 = D_i3_8006BF40[gSkyboxType];
-    D_i3_8006D968 = D_i3_8006D960.unk_04->unk_0E;
+    sBackgroundCtx.venueFloor = sCourseVenueFloors[gVenueType];
+    sBackgroundCtx.skybox = sCourseSkyboxes[gSkyboxType];
+    sSkyboxFlags = sBackgroundCtx.skybox->flags;
 
     i = Math_Rand1() % 11;
-    var_fs1 = i * 0.0005f;
+    cloudXScrollSpeed = i * 0.0005f;
     if (Math_Rand1() % 2) {
-        var_fs1 = 0.0f - var_fs1;
+        cloudXScrollSpeed = 0.0f - cloudXScrollSpeed;
     }
-    var_fs0 = i * 0.0005f;
+    cloudZScrollSpeed = i * 0.0005f;
     if (Math_Rand1() % 2) {
-        var_fs0 = 0.0f - var_fs0;
+        cloudZScrollSpeed = 0.0f - cloudZScrollSpeed;
     }
 
-    for (var_s0 = D_i3_8006D7D0, camera = gCameras, i = 0; i < D_i3_8006D950; var_s0++, camera++, i++) {
-        func_i3_80061B34(camera, var_s0, D_i3_8006D960.unk_00, var_fs1, var_fs0);
+    for (background = sBackgrounds, camera = gCameras, i = 0; i < sBackgroundCount; background++, camera++, i++) {
+        Background_InitBackgroundInfo(camera, background, sBackgroundCtx.venueFloor, cloudXScrollSpeed, cloudZScrollSpeed);
     }
 
-    temp_v0 = &gCourseInfos[gCourseIndex];
-    temp_v0->unk_14[0] = D_i3_8006D960.unk_04->unk_04;
-    temp_v0->unk_14[1] = D_i3_8006D960.unk_04->unk_05;
-    temp_v0->unk_14[2] = D_i3_8006D960.unk_04->unk_06;
+    courseInfo = &gCourseInfos[gCourseIndex];
+    courseInfo->courseFogColors[0] = sBackgroundCtx.skybox->courseFogR;
+    courseInfo->courseFogColors[1] = sBackgroundCtx.skybox->courseFogG;
+    courseInfo->courseFogColors[2] = sBackgroundCtx.skybox->courseFogB;
 
-    if ((D_i3_8006D960.unk_04->unk_07 == 0) && (D_i3_8006D960.unk_04->unk_08 == 0) &&
-        (D_i3_8006D960.unk_04->unk_09 == 0)) {
-        temp_v0->unk_14[3] = D_i3_8006D960.unk_04->unk_04;
-        temp_v0->unk_14[4] = D_i3_8006D960.unk_04->unk_05;
-        temp_v0->unk_14[5] = D_i3_8006D960.unk_04->unk_06;
+    if ((sBackgroundCtx.skybox->racerFogR == 0) && (sBackgroundCtx.skybox->racerFogG == 0) &&
+        (sBackgroundCtx.skybox->racerFogB == 0)) {
+        courseInfo->racerFogColors[0] = sBackgroundCtx.skybox->courseFogR;
+        courseInfo->racerFogColors[1] = sBackgroundCtx.skybox->courseFogG;
+        courseInfo->racerFogColors[2] = sBackgroundCtx.skybox->courseFogB;
     } else {
-        temp_v0->unk_14[3] = D_i3_8006D960.unk_04->unk_07;
-        temp_v0->unk_14[4] = D_i3_8006D960.unk_04->unk_08;
-        temp_v0->unk_14[5] = D_i3_8006D960.unk_04->unk_09;
+        courseInfo->racerFogColors[0] = sBackgroundCtx.skybox->racerFogR;
+        courseInfo->racerFogColors[1] = sBackgroundCtx.skybox->racerFogG;
+        courseInfo->racerFogColors[2] = sBackgroundCtx.skybox->racerFogB;
     }
 
-    D_i3_8006D95A = D_i3_8006D960.unk_04->unk_0A;
-    D_i3_8006D95C = D_i3_8006D960.unk_04->unk_0B;
-    D_i3_8006D95E = D_i3_8006D960.unk_04->unk_0C;
+    sBackgroundSpriteR = sBackgroundCtx.skybox->backgroundSpriteR;
+    sBackgroundSpriteG = sBackgroundCtx.skybox->backgroundSpriteG;
+    sBackgroundSpriteB = sBackgroundCtx.skybox->backgroundSpriteB;
 
-    if (D_i3_8006D968 & 2) {
+    if (sSkyboxFlags & SKYBOX_CLOUDY) {
         if (gNumPlayers >= 3) {
-            D_i3_8006D96C = 0;
-            D_i3_8006D968 &= ~2;
+            sCloudCount = 0;
+            sSkyboxFlags &= ~SKYBOX_CLOUDY;
         } else {
-            D_i3_8006D96C = 1;
+            sCloudCount = 1;
         }
     } else {
-        D_i3_8006D96C = 0;
+        sCloudCount = 0;
     }
-    if (D_i3_8006D968 & 1) {
-        func_i3_80064754();
+    if (sSkyboxFlags & SKYBOX_STARRY) {
+        Background_InitStars();
     }
-    func_i3_800639E0();
+    Background_InitBackgroundSprites();
 
-    sSkyboxTexture = func_i2_800AE7C4(D_i3_8006D960.unk_04->unk_00, 64 * 1 * sizeof(u16), 0, 0, 0);
-    sVenueTexture = func_i2_800AE7C4(D_i3_8006D960.unk_00->unk_00, 64 * 32 * sizeof(u16), 0, 0, 0);
+    sSkyboxTexture = func_i2_800AE7C4(sBackgroundCtx.skybox->texture, 64 * 1 * sizeof(u16), 0, 0, 0);
+    sVenueFloorTexture = func_i2_800AE7C4(sBackgroundCtx.venueFloor->texture, 64 * 32 * sizeof(u16), 0, 0, 0);
 
-    if (D_i3_8006D968 & 2) {
+    if (sSkyboxFlags & SKYBOX_CLOUDY) {
         sCloudTexture = func_i2_800AE7C4(aCloudTex, TEX_SIZE(aCloudTex, sizeof(u8)), 0, 0, 0);
     }
-    if (D_i3_8006D968 & 1) {
-        D_i3_8006D97C = func_i2_800AE7C4(D_F2207C8, TEX_SIZE(D_F2207C8, sizeof(u8)), 0, 0, 0);
+    if (sSkyboxFlags & SKYBOX_STARRY) {
+        sStarTexture = func_i2_800AE7C4(D_F2207C8, TEX_SIZE(D_F2207C8, sizeof(u8)), 0, 0, 0);
     }
     if (gGameMode == GAMEMODE_GP_END_CS) {
-        D_i3_8006D954 = 1;
+        sIsEndingCutscene = true;
     } else {
-        D_i3_8006D954 = 0;
+        sIsEndingCutscene = false;
     }
 }
 
-const unk_80141860 D_i3_8006CF50 = { 400.0f, 1700.0f, 0.006f, 0.006f, 0.0f, 0.0f, 0.0f, 0.0f };
+const ScrollingBackground kDefaultCloudInfo = { 400.0f, 1700.0f, 0.006f, 0.006f, 0.0f, 0.0f, 0.0f, 0.0f };
 
-void func_i3_80061B34(Camera* camera, unk_80141FF0* arg1, CourseVenue* arg2, f32 arg3, f32 arg4) {
-    arg1->unk_00 = 0.0f;
-    arg1->unk_08 = 0.0f;
-    arg1->unk_04 = -750.0f;
+void Background_InitBackgroundInfo(Camera* camera, Background* background, CourseVenueFloor* venueFloor, f32 cloudXScrollSpeed, f32 cloudZScrollSpeed) {
+    background->pos.x = 0.0f;
+    background->pos.z = 0.0f;
+    background->pos.y = -750.0f;
     if (gNumPlayers == 2) {
-        arg1->unk_10 = 4300.0f;
-        arg1->unk_18 = 5300.0f;
+        background->scrollDepth = 4300.0f;
+        background->skyboxDepth = 5300.0f;
     } else {
-        arg1->unk_10 = 6000.0f;
-        arg1->unk_18 = 7000.0f;
+        background->scrollDepth = 6000.0f;
+        background->skyboxDepth = 7000.0f;
     }
-    arg1->unk_1C.unk_00 = -750.0f;
-    arg1->unk_1C.unk_04 = -750.0f;
-    arg1->unk_1C.unk_08 = arg2->unk_04;
-    arg1->unk_1C.unk_0C = arg2->unk_08;
-    arg1->unk_1C.unk_10 = 0.0f;
-    arg1->unk_1C.unk_14 = 0.0f;
-    arg1->unk_1C.unk_18 = arg2->unk_0C;
-    arg1->unk_1C.unk_1C = arg2->unk_10;
-    arg1->unk_3C = D_i3_8006CF50;
-    arg1->unk_3C.unk_18 = arg3;
-    arg1->unk_3C.unk_1C = arg4;
-    arg1->unk_5C = camera->fovScaleY / camera->fovScaleX;
+    background->floorScroll.relativeEyeHeight = -750.0f;
+    background->floorScroll.relativeBackgroundHeight = -750.0f;
+    background->floorScroll.xScale = venueFloor->xScale;
+    background->floorScroll.zScale = venueFloor->zScale;
+    background->floorScroll.xScroll = 0.0f;
+    background->floorScroll.zScroll = 0.0f;
+    background->floorScroll.xScrollSpeed = venueFloor->xScrollSpeed;
+    background->floorScroll.zScrollSpeed = venueFloor->zScrollSpeed;
+    background->cloudScroll = kDefaultCloudInfo;
+    background->cloudScroll.xScrollSpeed = cloudXScrollSpeed;
+    background->cloudScroll.zScrollSpeed = cloudZScrollSpeed;
+    background->aspectRatio = camera->fovScaleY / camera->fovScaleX;
 }
 
 extern GfxPool* gGfxPool;
 
-void func_i3_80061C2C(void) {
-    s32 pad[3];
+void Background_Update(void) {
+    s32 pad[4];
     Camera* camera;
-    unk_80141FF0* var_s1;
+    Background* background;
     Vtx* vtx;
     s32 i;
-    f32 temp;
-    f32 temp2;
-    f32 temp_fa0;
-    f32 temp_fs1;
-    f32 temp_fs2;
-    f32 temp_fs3;
-    f32 temp_fs4;
-    f32 temp_fs5;
-    f32 temp_fv1;
-    s32 temp_v0;
-    f32 var_fv0;
-    bool var_s3;
+    f32 xScale;
+    f32 zScale;
+    f32 depthFovRatio;
+    f32 xRange;
+    f32 zRange;
+    f32 xOffset;
+    f32 zOffset;
+    f32 cloudHeightAboveEye;
+    s32 angle;
+    f32 cloudTransparencyStrength;
+    bool usingHeightRelativeToEye;
 
-    for (i = 0, var_s1 = D_i3_8006D7D0, camera = gCameras; i < D_i3_8006D950; i++, var_s1++, camera++) {
+    for (i = 0, background = sBackgrounds, camera = gCameras; i < sBackgroundCount; i++, background++, camera++) {
 
-        var_s1->unk_00 = camera->eye.x + (camera->unk_80 * D_i3_8006BDC8);
-        var_s1->unk_08 = camera->eye.z + (camera->unk_84 * D_i3_8006BDC8);
-        temp_v0 = Math_Round(camera->fov * 5.688889f);
-        temp_fa0 = TAN(temp_v0);
+        background->pos.x = camera->eye.x + (camera->xzNormalizedX * sBackgroundScale);
+        background->pos.z = camera->eye.z + (camera->xzNormalizedZ * sBackgroundScale);
+        angle = Math_Round(DEG_TO_FZXANG3(0.5f * camera->fov));
+        depthFovRatio = TAN(angle);
 
-        var_s1->unk_0C = (var_s1->unk_10 + D_i3_8006BDC8) * temp_fa0 * 1.5f;
-        var_s1->unk_14 = var_s1->unk_0C * var_s1->unk_5C;
+        background->horizontalRange = (background->scrollDepth + sBackgroundScale) * depthFovRatio * 1.5f;
+        background->verticalRange = background->horizontalRange * background->aspectRatio;
 
-        temp2 = camera->unk_80;
-        temp = camera->unk_84;
-        temp_fs3 = var_s1->unk_10 * temp2;
-        temp_fs4 = var_s1->unk_10 * temp;
-        temp_fs1 = var_s1->unk_0C * temp;
-        temp_fs2 = var_s1->unk_0C * (0.0f - temp2);
+        xScale = camera->xzNormalizedX;
+        zScale = camera->xzNormalizedZ;
+        xOffset = background->scrollDepth * xScale;
+        zOffset = background->scrollDepth * zScale;
+        xRange = background->horizontalRange * zScale;
+        zRange = background->horizontalRange * (0.0f - xScale);
 
         vtx = &gGfxPool->unk_33B48[i * 28 + 2 * 4];
-        func_i3_80062034(vtx, var_s1, camera, temp_fa0);
+        Background_UpdateSkyboxVtx(vtx, background, camera, depthFovRatio);
 
         vtx = &gGfxPool->unk_33B48[i * 28 + 0 * 4];
-        func_i3_80062694(vtx, var_s1, camera, temp_fs3, temp_fs4, 0.0f, 0.0f, temp_fs1, temp_fs2, 255, 0);
+        Background_UpdateVenueFloorVtx(vtx, background, camera, xOffset, zOffset, 0.0f, 0.0f, xRange, zRange, 255,
+                                       0);
 
         vtx = &gGfxPool->unk_33B48[i * 28 + 1 * 4];
-        func_i3_80062694(vtx, var_s1, camera, 0.0f, 0.0f, 0.0f - temp_fs3, 0.0f - temp_fs4, temp_fs1, temp_fs2, 0, 255);
+        Background_UpdateVenueFloorVtx(vtx, background, camera, 0.0f, 0.0f, 0.0f - xOffset, 0.0f - zOffset, xRange,
+                                       zRange, 0, 255);
 
-        if (D_i3_8006D96C > 0) {
-            temp_fv1 = (var_s1->unk_04 + var_s1->unk_3C.unk_04) - camera->eye.y;
-            if (temp_fv1 == 0.0f) {
+        if (sCloudCount > 0) {
+            cloudHeightAboveEye = (background->pos.y + background->cloudScroll.relativeBackgroundHeight) - camera->eye.y;
+            if (cloudHeightAboveEye == 0.0f) {
                 continue;
             }
-            if (temp_fv1 >= 0.f) {
-                var_fv0 = temp_fv1;
-            } else {
-                var_fv0 = -temp_fv1;
+            cloudTransparencyStrength = ABS(cloudHeightAboveEye);
+            cloudTransparencyStrength /= 100.0f;
+            if (cloudTransparencyStrength > 1.0f) {
+                cloudTransparencyStrength = 1.0f;
             }
-            var_fv0 /= 100.0f;
-            if (var_fv0 > 1.0f) {
-                var_fv0 = 1.0f;
-            }
-            if (temp_fv1 > 0.0f) {
-                var_s3 = true;
+            if (cloudHeightAboveEye > 0.0f) {
+                usingHeightRelativeToEye = true;
             } else {
-                var_s3 = false;
+                usingHeightRelativeToEye = false;
             }
 
             vtx = &gGfxPool->unk_33B48[i * 28 + 3 * 4];
-            func_i3_80062C84(vtx, var_s1, camera, &var_s1->unk_3C, temp_fs3, temp_fs4, 0.0f, 0.0f, temp_fs1, temp_fs2,
-                             255, ((1.0f - var_fv0) * 255.0f), var_s3);
+            Background_UpdateCloudVtx(vtx, background, camera, &background->cloudScroll, xOffset, zOffset, 0.0f, 0.0f, xRange,
+                             zRange, 255, ((1.0f - cloudTransparencyStrength) * 255.0f), usingHeightRelativeToEye);
 
             vtx = &gGfxPool->unk_33B48[i * 28 + 4 * 4];
-            func_i3_80062C84(vtx, var_s1, camera, &var_s1->unk_3C, 0.0f, 0.0f, 0.0f - temp_fs3, 0.0f - temp_fs4,
-                             temp_fs1, temp_fs2, ((1.0f - var_fv0) * 255.0f), 255, var_s3);
+            Background_UpdateCloudVtx(vtx, background, camera, &background->cloudScroll, 0.0f, 0.0f, 0.0f - xOffset, 0.0f - zOffset,
+                             xRange, zRange, ((1.0f - cloudTransparencyStrength) * 255.0f), 255, usingHeightRelativeToEye);
         }
-        if (D_i3_8006D968 & 1) {
-            func_i3_80064AD4(i, var_s1, camera);
+        if (sSkyboxFlags & SKYBOX_STARRY) {
+            Background_UpdateStars(i, background, camera);
         }
     }
-    if (D_i3_8006D956 != 0) {
-        func_i3_80063F88();
+    if (sBackgroundSpriteCount != 0) {
+        Background_UpdateBackgroundSprites();
     }
 }
 
-void func_i3_80062034(Vtx* vtx, unk_80141FF0* arg1, Camera* camera, f32 arg3) {
+void Background_UpdateSkyboxVtx(Vtx* vtx, Background* background, Camera* camera, f32 depthFovRatio) {
     s32 i;
-    s32 temp1;
-    s32 temp2;
-    s32 temp3;
-    s32 temp4;
-    s32 temp5;
-    f32 temp_fv0 = (arg1->unk_18 * arg3);
+    s32 x;
+    s32 y;
+    s32 z;
+    s32 s;
+    s32 t;
+    f32 fovRadius = (background->skyboxDepth * depthFovRatio);
     f32 temp;
-    f32 temp_ft5;
-    f32 temp_fa1;
-    f32 sp98[4];
-    f32 sp88[4];
-    f32 sp78[4];
-    f32 sp68[4];
-    f32 sp58[4];
+    f32 horizontalCenterOffset;
+    f32 verticalCenterOffset;
+    f32 xPositions[4];
+    f32 yPositions[4];
+    f32 zPositions[4];
+    f32 sTextureCoordinates[4];
+    f32 tTextureCoordinates[4];
 
-    temp_fa1 = (2.0f * (camera->frustrumCenterX * temp_fv0)) / camera->fovScaleX;
-    temp_fv0 *= arg1->unk_5C;
-    temp_ft5 = (2.0f * (camera->frustrumCenterY * temp_fv0)) / camera->fovScaleY;
+    horizontalCenterOffset = (2.0f * (camera->frustrumCenterX * fovRadius)) / camera->fovScaleX;
+    fovRadius *= background->aspectRatio;
+    verticalCenterOffset = (2.0f * (camera->frustrumCenterY * fovRadius)) / camera->fovScaleY;
 
-    sp98[0] = camera->eye.x + (camera->basis.x.x * arg1->unk_18) + (camera->basis.y.x * (arg1->unk_14 + temp_ft5)) +
-              (camera->basis.z.x * (arg1->unk_0C - temp_fa1));
-    sp88[0] = camera->eye.y + (camera->basis.x.y * arg1->unk_18) + (camera->basis.y.y * (arg1->unk_14 + temp_ft5)) +
-              (camera->basis.z.y * (arg1->unk_0C - temp_fa1));
-    sp78[0] = camera->eye.z + (camera->basis.x.z * arg1->unk_18) + (camera->basis.y.z * (arg1->unk_14 + temp_ft5)) +
-              (camera->basis.z.z * (arg1->unk_0C - temp_fa1));
-    sp98[1] = (camera->eye.x + (camera->basis.x.x * arg1->unk_18) + (camera->basis.y.x * (arg1->unk_14 + temp_ft5))) -
-              (camera->basis.z.x * (arg1->unk_0C + temp_fa1));
-    sp88[1] = (camera->eye.y + (camera->basis.x.y * arg1->unk_18) + (camera->basis.y.y * (arg1->unk_14 + temp_ft5))) -
-              (camera->basis.z.y * (arg1->unk_0C + temp_fa1));
-    sp78[1] = (camera->eye.z + (camera->basis.x.z * arg1->unk_18) + (camera->basis.y.z * (arg1->unk_14 + temp_ft5))) -
-              (camera->basis.z.z * (arg1->unk_0C + temp_fa1));
-    sp98[2] = ((camera->eye.x + (camera->basis.x.x * arg1->unk_18)) - (camera->basis.y.x * (arg1->unk_14 - temp_ft5))) +
-              (camera->basis.z.x * (arg1->unk_0C - temp_fa1));
-    sp88[2] = ((camera->eye.y + (camera->basis.x.y * arg1->unk_18)) - (camera->basis.y.y * (arg1->unk_14 - temp_ft5))) +
-              (camera->basis.z.y * (arg1->unk_0C - temp_fa1));
-    sp78[2] = ((camera->eye.z + (camera->basis.x.z * arg1->unk_18)) - (camera->basis.y.z * (arg1->unk_14 - temp_ft5))) +
-              (camera->basis.z.z * (arg1->unk_0C - temp_fa1));
-    sp98[3] = ((camera->eye.x + (camera->basis.x.x * arg1->unk_18)) - (camera->basis.y.x * (arg1->unk_14 - temp_ft5))) -
-              (camera->basis.z.x * (arg1->unk_0C + temp_fa1));
-    sp88[3] = ((camera->eye.y + (camera->basis.x.y * arg1->unk_18)) - (camera->basis.y.y * (arg1->unk_14 - temp_ft5))) -
-              (camera->basis.z.y * (arg1->unk_0C + temp_fa1));
-    sp78[3] = ((camera->eye.z + (camera->basis.x.z * arg1->unk_18)) - (camera->basis.y.z * (arg1->unk_14 - temp_ft5))) -
-              (camera->basis.z.z * (arg1->unk_0C + temp_fa1));
+    xPositions[0] = camera->eye.x + (camera->basis.x.x * background->skyboxDepth) +
+                    (camera->basis.y.x * (background->verticalRange + verticalCenterOffset)) +
+                    (camera->basis.z.x * (background->horizontalRange - horizontalCenterOffset));
+    yPositions[0] = camera->eye.y + (camera->basis.x.y * background->skyboxDepth) +
+                    (camera->basis.y.y * (background->verticalRange + verticalCenterOffset)) +
+                    (camera->basis.z.y * (background->horizontalRange - horizontalCenterOffset));
+    zPositions[0] = camera->eye.z + (camera->basis.x.z * background->skyboxDepth) +
+                    (camera->basis.y.z * (background->verticalRange + verticalCenterOffset)) +
+                    (camera->basis.z.z * (background->horizontalRange - horizontalCenterOffset));
+    xPositions[1] = (camera->eye.x + (camera->basis.x.x * background->skyboxDepth) +
+                     (camera->basis.y.x * (background->verticalRange + verticalCenterOffset))) -
+                    (camera->basis.z.x * (background->horizontalRange + horizontalCenterOffset));
+    yPositions[1] = (camera->eye.y + (camera->basis.x.y * background->skyboxDepth) +
+                     (camera->basis.y.y * (background->verticalRange + verticalCenterOffset))) -
+                    (camera->basis.z.y * (background->horizontalRange + horizontalCenterOffset));
+    zPositions[1] = (camera->eye.z + (camera->basis.x.z * background->skyboxDepth) +
+                     (camera->basis.y.z * (background->verticalRange + verticalCenterOffset))) -
+                    (camera->basis.z.z * (background->horizontalRange + horizontalCenterOffset));
+    xPositions[2] = ((camera->eye.x + (camera->basis.x.x * background->skyboxDepth)) -
+                     (camera->basis.y.x * (background->verticalRange - verticalCenterOffset))) +
+                    (camera->basis.z.x * (background->horizontalRange - horizontalCenterOffset));
+    yPositions[2] = ((camera->eye.y + (camera->basis.x.y * background->skyboxDepth)) -
+                     (camera->basis.y.y * (background->verticalRange - verticalCenterOffset))) +
+                    (camera->basis.z.y * (background->horizontalRange - horizontalCenterOffset));
+    zPositions[2] = ((camera->eye.z + (camera->basis.x.z * background->skyboxDepth)) -
+                     (camera->basis.y.z * (background->verticalRange - verticalCenterOffset))) +
+                    (camera->basis.z.z * (background->horizontalRange - horizontalCenterOffset));
+    xPositions[3] = ((camera->eye.x + (camera->basis.x.x * background->skyboxDepth)) -
+                     (camera->basis.y.x * (background->verticalRange - verticalCenterOffset))) -
+                    (camera->basis.z.x * (background->horizontalRange + horizontalCenterOffset));
+    yPositions[3] = ((camera->eye.y + (camera->basis.x.y * background->skyboxDepth)) -
+                     (camera->basis.y.y * (background->verticalRange - verticalCenterOffset))) -
+                    (camera->basis.z.y * (background->horizontalRange + horizontalCenterOffset));
+    zPositions[3] = ((camera->eye.z + (camera->basis.x.z * background->skyboxDepth)) -
+                     (camera->basis.y.z * (background->verticalRange - verticalCenterOffset))) -
+                    (camera->basis.z.z * (background->horizontalRange + horizontalCenterOffset));
 
     for (i = 0; i < 4; i++) {
-        if (sp98[i] < -32000.0f) {
-            sp98[i] = -32000.0f;
-        } else if (sp98[i] > 32000.0f) {
-            sp98[i] = 32000.0f;
+        if (xPositions[i] < -32000.0f) {
+            xPositions[i] = -32000.0f;
+        } else if (xPositions[i] > 32000.0f) {
+            xPositions[i] = 32000.0f;
         }
 
-        if (sp88[i] < -32000.0f) {
-            sp88[i] = -32000.0f;
-        } else if (sp88[i] > 32000.0f) {
-            sp88[i] = 32000.0f;
+        if (yPositions[i] < -32000.0f) {
+            yPositions[i] = -32000.0f;
+        } else if (yPositions[i] > 32000.0f) {
+            yPositions[i] = 32000.0f;
         }
 
-        if (sp78[i] < -32000.0f) {
-            sp78[i] = -32000.0f;
-        } else if (sp78[i] > 32000.0f) {
-            sp78[i] = 32000.0f;
+        if (zPositions[i] < -32000.0f) {
+            zPositions[i] = -32000.0f;
+        } else if (zPositions[i] > 32000.0f) {
+            zPositions[i] = 32000.0f;
         }
 
-        temp = ((sp98[i] - sp98[0]) / (arg1->unk_0C * 2.0f));
+        temp = ((xPositions[i] - xPositions[0]) / (background->horizontalRange * 2.0f));
 
-        if (sp98[i] < -32000.0f) {
-            sp98[i] = -32000.0f;
-        } else if (sp98[i] > 32000.0f) {
-            sp98[i] = 32000.0f;
+        if (xPositions[i] < -32000.0f) {
+            xPositions[i] = -32000.0f;
+        } else if (xPositions[i] > 32000.0f) {
+            xPositions[i] = 32000.0f;
         }
 
-        if (sp88[i] < -32000.0f) {
-            sp88[i] = -32000.0f;
-        } else if (sp88[i] > 32000.0f) {
-            sp88[i] = 32000.0f;
+        if (yPositions[i] < -32000.0f) {
+            yPositions[i] = -32000.0f;
+        } else if (yPositions[i] > 32000.0f) {
+            yPositions[i] = 32000.0f;
         }
 
-        if (sp78[i] < -32000.0f) {
-            sp78[i] = -32000.0f;
-        } else if (sp78[i] > 32000.0f) {
-            sp78[i] = 32000.0f;
+        if (zPositions[i] < -32000.0f) {
+            zPositions[i] = -32000.0f;
+        } else if (zPositions[i] > 32000.0f) {
+            zPositions[i] = 32000.0f;
         }
 
-        sp58[i] = ((temp * 256.0f) * 2.0f) - 0.5f;
-        temp = 1.0f - ((sp88[i] - arg1->unk_04) / (arg1->unk_14 * 2.0f));
-        sp68[i] = ((temp) *64.0f) - 0.5f;
+        tTextureCoordinates[i] = ((temp * 256.0f) * 2.0f) - 0.5f;
+        temp = 1.0f - ((yPositions[i] - background->pos.y) / (background->verticalRange * 2.0f));
+        sTextureCoordinates[i] = (temp * 64.0f) - 0.5f;
     }
 
     for (i = 0; i < 4; i++) {
-        temp1 = sp98[i];
-        temp2 = sp88[i];
-        temp3 = sp78[i];
-        temp4 = sp68[i] * 32.0f;
-        temp5 = sp58[i] * 32.0f;
+        x = xPositions[i];
+        y = yPositions[i];
+        z = zPositions[i];
+        s = sTextureCoordinates[i] * 32.0f;
+        t = tTextureCoordinates[i] * 32.0f;
 
-        SET_VTX(vtx, temp1, temp2, temp3, temp4, temp5, 0, 0, 0, 255);
+        SET_VTX(vtx, x, y, z, s, t, 0, 0, 0, 255);
         vtx++;
     }
 }
 
 extern s8 gGamePaused;
 
-void func_i3_80062694(Vtx* vtx, unk_80141FF0* arg1, Camera* camera, f32 arg3, f32 arg4, f32 arg5, f32 arg6, f32 arg7,
-                      f32 arg8, s32 arg9, s32 argA) {
-    unk_80141860* temp_v0;
-    f32 temp_fv0;
-    f32 var_fv0;
-    f32 var_ft4;
-    s32 var_t3;
-    s32 temp1;
-    s32 temp2;
-    s32 temp3;
-    s32 temp4;
-    s32 temp5;
-    f32 sp68[4];
+void Background_UpdateVenueFloorVtx(Vtx* vtx, Background* background, Camera* camera, f32 xOffset1, f32 zOffset1, f32 xOffset2,
+                                    f32 zOffset2, f32 xRange, f32 zRange, s32 brightness1, s32 brightness2) {
+    ScrollingBackground* floorScroll;
+    f32 perspectiveRatio;
+    f32 baseSReference;
+    f32 baseTReference;
+    s32 brightness;
+    s32 x;
+    s32 z;
+    s32 s;
+    s32 t;
     s32 i;
-    f32 sp54[4];
-    f32 sp44[4];
-    f32 sp34[4];
-    f32 temp_fa1 = arg1->unk_04;
+    f32 xPositions[4];
+    f32 y = background->pos.y;
+    f32 zPositions[4];
+    f32 sTextureCoordinates[4];
+    f32 tTextureCoordinates[4];
+    s32 pad;
+    
+    floorScroll = &background->floorScroll;
+    xPositions[0] = background->pos.x + xOffset1 + xRange;
+    zPositions[0] = background->pos.z + zOffset1 + zRange;
+    xPositions[1] = background->pos.x + xOffset1 - xRange;
+    zPositions[1] = background->pos.z + zOffset1 - zRange;
+    xPositions[2] = background->pos.x + xOffset2 + xRange;
+    zPositions[2] = background->pos.z + zOffset2 + zRange;
+    xPositions[3] = background->pos.x + xOffset2 - xRange;
+    zPositions[3] = background->pos.z + zOffset2 - zRange;
 
-    temp_v0 = &arg1->unk_1C;
-    sp68[0] = arg1->unk_00 + arg3 + arg7;
-    sp54[0] = arg1->unk_08 + arg4 + arg8;
-    sp68[1] = arg1->unk_00 + arg3 - arg7;
-    sp54[1] = arg1->unk_08 + arg4 - arg8;
-    sp68[2] = arg1->unk_00 + arg5 + arg7;
-    sp54[2] = arg1->unk_08 + arg6 + arg8;
-    sp68[3] = arg1->unk_00 + arg5 - arg7;
-    sp54[3] = arg1->unk_08 + arg6 - arg8;
-
-    temp_fv0 = (temp_v0->unk_04 - camera->eye.y) / (temp_fa1 - camera->eye.y);
+    perspectiveRatio = (floorScroll->relativeBackgroundHeight - camera->eye.y) / (y - camera->eye.y);
 
     if (!gGamePaused) {
-        temp_v0->unk_10 += temp_v0->unk_18;
-        if (temp_v0->unk_10 >= 1024.0f) {
-            temp_v0->unk_10 -= 1024.0f;
-        } else if (temp_v0->unk_10 < -1024.0f) {
-            temp_v0->unk_10 += 1024.0f;
+        floorScroll->xScroll += floorScroll->xScrollSpeed;
+        if (floorScroll->xScroll >= 1024.0f) {
+            floorScroll->xScroll -= 1024.0f;
+        } else if (floorScroll->xScroll < -1024.0f) {
+            floorScroll->xScroll += 1024.0f;
         }
     }
     if (!gGamePaused) {
-        temp_v0->unk_14 += temp_v0->unk_1C;
+        floorScroll->zScroll += floorScroll->zScrollSpeed;
 
-        if (temp_v0->unk_14 >= 1024.0f) {
-            temp_v0->unk_14 -= 1024.0f;
-        } else if (temp_v0->unk_14 < -1024.0f) {
-            temp_v0->unk_14 += 1024.0f;
+        if (floorScroll->zScroll >= 1024.0f) {
+            floorScroll->zScroll -= 1024.0f;
+        } else if (floorScroll->zScroll < -1024.0f) {
+            floorScroll->zScroll += 1024.0f;
         }
     }
 
-    sp44[0] = ((((sp68[0] - camera->eye.x) * temp_fv0) + camera->eye.x) * temp_v0->unk_08) + temp_v0->unk_10;
-    sp34[0] = ((((sp54[0] - camera->eye.z) * temp_fv0) + camera->eye.z) * temp_v0->unk_0C) + temp_v0->unk_14;
-    sp44[1] = ((((sp68[1] - camera->eye.x) * temp_fv0) + camera->eye.x) * temp_v0->unk_08) + temp_v0->unk_10;
-    sp34[1] = ((((sp54[1] - camera->eye.z) * temp_fv0) + camera->eye.z) * temp_v0->unk_0C) + temp_v0->unk_14;
-    sp44[2] = ((((sp68[2] - camera->eye.x) * temp_fv0) + camera->eye.x) * temp_v0->unk_08) + temp_v0->unk_10;
-    sp34[2] = ((((sp54[2] - camera->eye.z) * temp_fv0) + camera->eye.z) * temp_v0->unk_0C) + temp_v0->unk_14;
-    sp44[3] = ((((sp68[3] - camera->eye.x) * temp_fv0) + camera->eye.x) * temp_v0->unk_08) + temp_v0->unk_10;
-    sp34[3] = ((((sp54[3] - camera->eye.z) * temp_fv0) + camera->eye.z) * temp_v0->unk_0C) + temp_v0->unk_14;
+    sTextureCoordinates[0] = ((((xPositions[0] - camera->eye.x) * perspectiveRatio) + camera->eye.x) * floorScroll->xScale) + floorScroll->xScroll;
+    tTextureCoordinates[0] = ((((zPositions[0] - camera->eye.z) * perspectiveRatio) + camera->eye.z) * floorScroll->zScale) + floorScroll->zScroll;
+    sTextureCoordinates[1] = ((((xPositions[1] - camera->eye.x) * perspectiveRatio) + camera->eye.x) * floorScroll->xScale) + floorScroll->xScroll;
+    tTextureCoordinates[1] = ((((zPositions[1] - camera->eye.z) * perspectiveRatio) + camera->eye.z) * floorScroll->zScale) + floorScroll->zScroll;
+    sTextureCoordinates[2] = ((((xPositions[2] - camera->eye.x) * perspectiveRatio) + camera->eye.x) * floorScroll->xScale) + floorScroll->xScroll;
+    tTextureCoordinates[2] = ((((zPositions[2] - camera->eye.z) * perspectiveRatio) + camera->eye.z) * floorScroll->zScale) + floorScroll->zScroll;
+    sTextureCoordinates[3] = ((((xPositions[3] - camera->eye.x) * perspectiveRatio) + camera->eye.x) * floorScroll->xScale) + floorScroll->xScroll;
+    tTextureCoordinates[3] = ((((zPositions[3] - camera->eye.z) * perspectiveRatio) + camera->eye.z) * floorScroll->zScale) + floorScroll->zScroll;
 
-    var_fv0 = sp44[0];
-    var_ft4 = sp34[0];
+    baseSReference = sTextureCoordinates[0];
+    baseTReference = tTextureCoordinates[0];
 
     for (i = 1; i < 4; i++) {
-        if (sp44[i] < var_fv0) {
-            var_fv0 = sp44[i];
+        if (sTextureCoordinates[i] < baseSReference) {
+            baseSReference = sTextureCoordinates[i];
         }
 
-        if (sp34[i] < var_ft4) {
-            var_ft4 = sp34[i];
+        if (tTextureCoordinates[i] < baseTReference) {
+            baseTReference = tTextureCoordinates[i];
         }
     }
 
-    if (var_fv0 > 0.0f) {
-        var_fv0 = (s32) (var_fv0 + 1024.0f) / 1024 * -1024.0f;
+    if (baseSReference > 0.0f) {
+        baseSReference = (s32) (baseSReference + 1024.0f) / 1024 * -1024.0f;
     } else {
-        var_fv0 = (s32) var_fv0 / 1024 * -1024.0f;
+        baseSReference = (s32) baseSReference / 1024 * -1024.0f;
     }
-    if (var_ft4 > 0.0f) {
-        var_ft4 = (s32) (var_ft4 + 1024.0f) / 1024 * -1024.0f;
+    if (baseTReference > 0.0f) {
+        baseTReference = (s32) (baseTReference + 1024.0f) / 1024 * -1024.0f;
     } else {
-        var_ft4 = (s32) var_ft4 / 1024 * -1024.0f;
+        baseTReference = (s32) baseTReference / 1024 * -1024.0f;
     }
 
     for (i = 0; i < 4; i++) {
-        sp44[i] += var_fv0;
-        sp34[i] += var_ft4;
+        sTextureCoordinates[i] += baseSReference;
+        tTextureCoordinates[i] += baseTReference;
     }
 
     for (i = 0; i < 4; i++) {
-        temp1 = sp68[i];
-        temp3 = sp54[i];
-        temp4 = sp44[i] * 32.0f;
-        temp5 = sp34[i] * 32.0f;
+        x = xPositions[i];
+        z = zPositions[i];
+        s = sTextureCoordinates[i] * 32.0f;
+        t = tTextureCoordinates[i] * 32.0f;
 
-        var_t3 = (i < 2) ? arg9 : argA;
+        brightness = (i < 2) ? brightness1 : brightness2;
 
-        SET_VTX(vtx, temp1, (s32) (temp_fa1), temp3, temp4, temp5, var_t3, var_t3, var_t3, 255);
+        SET_VTX(vtx, x, (s32) (y), z, s, t, brightness, brightness, brightness, 255);
         vtx++;
     }
 }
 
-void func_i3_80062C84(Vtx* vtx, unk_80141FF0* arg1, Camera* camera, unk_80141860* arg3, f32 arg4, f32 arg5, f32 arg6,
-                      f32 arg7, f32 arg8, f32 arg9, s32 argA, s32 argB, bool argC) {
-    s32 temp1;
-    s32 temp2;
-    s32 temp3;
-    s32 temp4;
-    s32 var_t3;
-    f32 temp_ft5;
-    f32 var_fa0;
-    f32 var_fa1;
-    f32 var_ft4;
+void Background_UpdateCloudVtx(Vtx* vtx, Background* background, Camera* camera, ScrollingBackground* cloudScroll, f32 xOffset1, f32 zOffset1,
+                      f32 xOffset2, f32 zOffset2, f32 xRange, f32 zRange, s32 alpha1, s32 alpha2, bool usingHeightRelativeToEye) {
+    s32 x;
+    s32 z;
+    s32 s;
+    s32 t;
+    s32 alpha;
+    f32 perspectiveRatio;
     s32 pad;
-    f32 sp58[4];
+    f32 baseSReference;
+    f32 baseTReference;
     s32 i;
-    f32 sp44[4];
-    f32 sp34[4];
-    f32 sp24[4];
+    f32 xPositions[4];
+    f32 y;
+    f32 zPositions[4];
+    f32 sTextureCoordinates[4];
+    f32 tTextureCoordinates[4];
 
-    if (argC) {
-        var_fa0 = camera->eye.y + arg3->unk_00;
+    if (usingHeightRelativeToEye) {
+        y = camera->eye.y + cloudScroll->relativeEyeHeight;
     } else {
-        var_fa0 = arg1->unk_04 + arg3->unk_04;
+        y = background->pos.y + cloudScroll->relativeBackgroundHeight;
     }
 
-    sp58[0] = arg1->unk_00 + arg4 + arg8;
-    sp44[0] = arg1->unk_08 + arg5 + arg9;
-    sp58[1] = arg1->unk_00 + arg4 - arg8;
-    sp44[1] = arg1->unk_08 + arg5 - arg9;
-    sp58[2] = arg1->unk_00 + arg6 + arg8;
-    sp44[2] = arg1->unk_08 + arg7 + arg9;
-    sp58[3] = arg1->unk_00 + arg6 - arg8;
-    sp44[3] = arg1->unk_08 + arg7 - arg9;
+    xPositions[0] = background->pos.x + xOffset1 + xRange;
+    zPositions[0] = background->pos.z + zOffset1 + zRange;
+    xPositions[1] = background->pos.x + xOffset1 - xRange;
+    zPositions[1] = background->pos.z + zOffset1 - zRange;
+    xPositions[2] = background->pos.x + xOffset2 + xRange;
+    zPositions[2] = background->pos.z + zOffset2 + zRange;
+    xPositions[3] = background->pos.x + xOffset2 - xRange;
+    zPositions[3] = background->pos.z + zOffset2 - zRange;
 
     if (!gGamePaused) {
-        arg3->unk_10 += arg3->unk_18;
-        if (arg3->unk_10 >= 1024.0f) {
-            arg3->unk_10 -= 1024.0f;
-        } else if (arg3->unk_10 < -1024.0f) {
-            arg3->unk_10 += 1024.0f;
+        cloudScroll->xScroll += cloudScroll->xScrollSpeed;
+        if (cloudScroll->xScroll >= 1024.0f) {
+            cloudScroll->xScroll -= 1024.0f;
+        } else if (cloudScroll->xScroll < -1024.0f) {
+            cloudScroll->xScroll += 1024.0f;
         }
     }
     if (!gGamePaused) {
-        arg3->unk_14 += arg3->unk_1C;
-        if (arg3->unk_14 >= 1024.0f) {
-            arg3->unk_14 -= 1024.0f;
-        } else if (arg3->unk_14 < -1024.0f) {
-            arg3->unk_14 += 1024.0f;
+        cloudScroll->zScroll += cloudScroll->zScrollSpeed;
+        if (cloudScroll->zScroll >= 1024.0f) {
+            cloudScroll->zScroll -= 1024.0f;
+        } else if (cloudScroll->zScroll < -1024.0f) {
+            cloudScroll->zScroll += 1024.0f;
         }
     }
 
-    if (argC) {
-        temp_ft5 = ((arg1->unk_04 + arg3->unk_04) - camera->eye.y) / (var_fa0 - camera->eye.y);
-        sp34[0] = ((((sp58[0] - camera->eye.x) * temp_ft5) + camera->eye.x) * arg3->unk_08) + arg3->unk_10;
-        sp24[0] = ((((sp44[0] - camera->eye.z) * temp_ft5) + camera->eye.z) * arg3->unk_0C) + arg3->unk_14;
-        sp34[1] = ((((sp58[1] - camera->eye.x) * temp_ft5) + camera->eye.x) * arg3->unk_08) + arg3->unk_10;
-        sp24[1] = ((((sp44[1] - camera->eye.z) * temp_ft5) + camera->eye.z) * arg3->unk_0C) + arg3->unk_14;
-        sp34[2] = ((((sp58[2] - camera->eye.x) * temp_ft5) + camera->eye.x) * arg3->unk_08) + arg3->unk_10;
-        sp24[2] = ((((sp44[2] - camera->eye.z) * temp_ft5) + camera->eye.z) * arg3->unk_0C) + arg3->unk_14;
-        sp34[3] = ((((sp58[3] - camera->eye.x) * temp_ft5) + camera->eye.x) * arg3->unk_08) + arg3->unk_10;
-        sp24[3] = ((((sp44[3] - camera->eye.z) * temp_ft5) + camera->eye.z) * arg3->unk_0C) + arg3->unk_14;
+    if (usingHeightRelativeToEye) {
+        perspectiveRatio = ((background->pos.y + cloudScroll->relativeBackgroundHeight) - camera->eye.y) / (y - camera->eye.y);
+        sTextureCoordinates[0] = ((((xPositions[0] - camera->eye.x) * perspectiveRatio) + camera->eye.x) * cloudScroll->xScale) + cloudScroll->xScroll;
+        tTextureCoordinates[0] = ((((zPositions[0] - camera->eye.z) * perspectiveRatio) + camera->eye.z) * cloudScroll->zScale) + cloudScroll->zScroll;
+        sTextureCoordinates[1] = ((((xPositions[1] - camera->eye.x) * perspectiveRatio) + camera->eye.x) * cloudScroll->xScale) + cloudScroll->xScroll;
+        tTextureCoordinates[1] = ((((zPositions[1] - camera->eye.z) * perspectiveRatio) + camera->eye.z) * cloudScroll->zScale) + cloudScroll->zScroll;
+        sTextureCoordinates[2] = ((((xPositions[2] - camera->eye.x) * perspectiveRatio) + camera->eye.x) * cloudScroll->xScale) + cloudScroll->xScroll;
+        tTextureCoordinates[2] = ((((zPositions[2] - camera->eye.z) * perspectiveRatio) + camera->eye.z) * cloudScroll->zScale) + cloudScroll->zScroll;
+        sTextureCoordinates[3] = ((((xPositions[3] - camera->eye.x) * perspectiveRatio) + camera->eye.x) * cloudScroll->xScale) + cloudScroll->xScroll;
+        tTextureCoordinates[3] = ((((zPositions[3] - camera->eye.z) * perspectiveRatio) + camera->eye.z) * cloudScroll->zScale) + cloudScroll->zScroll;
     } else {
-        sp34[0] = (sp58[0] * arg3->unk_08) + arg3->unk_10;
-        sp24[0] = (sp44[0] * arg3->unk_0C) + arg3->unk_14;
-        sp34[1] = (sp58[1] * arg3->unk_08) + arg3->unk_10;
-        sp24[1] = (sp44[1] * arg3->unk_0C) + arg3->unk_14;
-        sp34[2] = (sp58[2] * arg3->unk_08) + arg3->unk_10;
-        sp24[2] = (sp44[2] * arg3->unk_0C) + arg3->unk_14;
-        sp34[3] = (sp58[3] * arg3->unk_08) + arg3->unk_10;
-        sp24[3] = (sp44[3] * arg3->unk_0C) + arg3->unk_14;
+        sTextureCoordinates[0] = (xPositions[0] * cloudScroll->xScale) + cloudScroll->xScroll;
+        tTextureCoordinates[0] = (zPositions[0] * cloudScroll->zScale) + cloudScroll->zScroll;
+        sTextureCoordinates[1] = (xPositions[1] * cloudScroll->xScale) + cloudScroll->xScroll;
+        tTextureCoordinates[1] = (zPositions[1] * cloudScroll->zScale) + cloudScroll->zScroll;
+        sTextureCoordinates[2] = (xPositions[2] * cloudScroll->xScale) + cloudScroll->xScroll;
+        tTextureCoordinates[2] = (zPositions[2] * cloudScroll->zScale) + cloudScroll->zScroll;
+        sTextureCoordinates[3] = (xPositions[3] * cloudScroll->xScale) + cloudScroll->xScroll;
+        tTextureCoordinates[3] = (zPositions[3] * cloudScroll->zScale) + cloudScroll->zScroll;
     }
-    var_fa1 = sp34[0];
-    var_ft4 = sp24[0];
+    baseSReference = sTextureCoordinates[0];
+    baseTReference = tTextureCoordinates[0];
 
     for (i = 1; i < 4; i++) {
-        if (sp34[i] < var_fa1) {
-            var_fa1 = sp34[i];
+        if (sTextureCoordinates[i] < baseSReference) {
+            baseSReference = sTextureCoordinates[i];
         }
-        if (sp24[i] < var_ft4) {
-            var_ft4 = sp24[i];
+        if (tTextureCoordinates[i] < baseTReference) {
+            baseTReference = tTextureCoordinates[i];
         }
     }
 
-    if (var_fa1 > 0.0f) {
-        var_fa1 = (f32) ((s32) (var_fa1 + 1024.0f) / 1024) * -1024.0f;
+    if (baseSReference > 0.0f) {
+        baseSReference = (f32) ((s32) (baseSReference + 1024.0f) / 1024) * -1024.0f;
     } else {
-        var_fa1 = (f32) ((s32) var_fa1 / 1024) * -1024.0f;
+        baseSReference = (f32) ((s32) baseSReference / 1024) * -1024.0f;
     }
-    if (var_ft4 > 0.0f) {
-        var_ft4 = (f32) ((s32) (var_ft4 + 1024.0f) / 1024) * -1024.0f;
+    if (baseTReference > 0.0f) {
+        baseTReference = (f32) ((s32) (baseTReference + 1024.0f) / 1024) * -1024.0f;
     } else {
-        var_ft4 = (f32) ((s32) var_ft4 / 1024) * -1024.0f;
+        baseTReference = (f32) ((s32) baseTReference / 1024) * -1024.0f;
     }
 
     for (i = 0; i < 4; i++) {
-        sp34[i] += var_fa1;
-        sp24[i] += var_ft4;
+        sTextureCoordinates[i] += baseSReference;
+        tTextureCoordinates[i] += baseTReference;
     }
 
     for (i = 0; i < 4; i++) {
-        temp1 = sp58[i];
-        temp2 = sp44[i];
-        temp3 = sp34[i] * 32.0f;
-        temp4 = sp24[i] * 32.0f;
+        x = xPositions[i];
+        z = zPositions[i];
+        s = sTextureCoordinates[i] * 32.0f;
+        t = tTextureCoordinates[i] * 32.0f;
 
         if (i < 2) {
-            var_t3 = argA;
+            alpha = alpha1;
         } else {
-            var_t3 = argB;
+            alpha = alpha2;
         }
 
-        SET_VTX(vtx, temp1, (s32) (var_fa0), temp2, temp3, temp4, 255, 255, 255, var_t3);
+        SET_VTX(vtx, x, (s32) (y), z, s, t, 255, 255, 255, alpha);
         vtx++;
     }
 }
@@ -789,11 +891,11 @@ void func_i3_80062C84(Vtx* vtx, unk_80141FF0* arg1, Camera* camera, unk_80141860
 extern GfxPool D_1000000;
 extern Mtx D_2000000[];
 
-Gfx* func_i3_8006339C(Gfx* gfx, s32 cameraIndex, s32 scissorBoxType) {
-    CourseSkyboxes* spEC;
+Gfx* Background_Draw(Gfx* gfx, s32 cameraIndex, s32 scissorBoxType) {
+    CourseSkyboxes* skybox;
     Camera* camera = &gCameras[cameraIndex];
 
-    spEC = D_i3_8006D960.unk_04;
+    skybox = sBackgroundCtx.skybox;
 
     gSPPerspNormalize(gfx++, camera->perspectiveScale);
 
@@ -802,7 +904,7 @@ Gfx* func_i3_8006339C(Gfx* gfx, s32 cameraIndex, s32 scissorBoxType) {
     gfx = Camera_Draw(gfx, scissorBoxType, cameraIndex);
     gSPDisplayList(gfx++, D_303A9E0);
 
-    if (D_i3_8006D954 != 0) {
+    if (sIsEndingCutscene) {
         gDPSetRenderMode(gfx++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
         gDPSetCombineLERP(gfx++, 0, 0, 0, TEXEL0, 0, 0, 0, PRIMITIVE, 0, 0, 0, TEXEL0, 0, 0, 0, PRIMITIVE);
         gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, 204);
@@ -815,21 +917,21 @@ Gfx* func_i3_8006339C(Gfx* gfx, s32 cameraIndex, s32 scissorBoxType) {
 
     gSP2Triangles(gfx++, 8, 11, 9, 0, 8, 10, 11, 0);
 
-    if (D_i3_8006D968 & 1) {
+    if (sSkyboxFlags & SKYBOX_STARRY) {
         gSPDisplayList(gfx++, D_303AA18);
-        gfx = func_i3_80064CB4(gfx, cameraIndex);
+        gfx = Background_DrawStars(gfx, cameraIndex);
     }
-    if (cameraIndex == 0 && (D_i3_8006D956 != 0)) {
-        gfx = func_i3_8006436C(gfx);
+    if (cameraIndex == 0 && (sBackgroundSpriteCount != 0)) {
+        gfx = Background_DrawBackgroundSprites(gfx);
         gSPMatrix(gfx++, D_2000000, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPVertex(gfx++, &D_1000000.unk_33B48[cameraIndex * 28], 28, 0);
     }
 
-    if (D_i3_8006D7D0[cameraIndex].unk_04 < camera->eye.y) {
+    if (sBackgrounds[cameraIndex].pos.y < camera->eye.y) {
         gSPDisplayList(gfx++, D_303AA40);
-        gDPSetPrimColor(gfx++, 0, 0, spEC->unk_04, spEC->unk_05, spEC->unk_06, 0);
+        gDPSetPrimColor(gfx++, 0, 0, skybox->courseFogR, skybox->courseFogG, skybox->courseFogB, 0);
 
-        gDPLoadTextureBlock(gfx++, sVenueTexture, G_IM_FMT_RGBA, G_IM_SIZ_16b, 64, 32, 0, G_TX_NOMIRROR | G_TX_WRAP,
+        gDPLoadTextureBlock(gfx++, sVenueFloorTexture, G_IM_FMT_RGBA, G_IM_SIZ_16b, 64, 32, 0, G_TX_NOMIRROR | G_TX_WRAP,
                             G_TX_NOMIRROR | G_TX_WRAP, 6, 5, G_TX_NOLOD, G_TX_NOLOD);
 
         gSP2Triangles(gfx++, 0, 3, 1, 0, 0, 2, 3, 0);
@@ -843,7 +945,7 @@ Gfx* func_i3_8006339C(Gfx* gfx, s32 cameraIndex, s32 scissorBoxType) {
         gSPTexture(gfx++, 0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON);
     }
 
-    if (D_i3_8006D96C > 0) {
+    if (sCloudCount > 0) {
         gDPPipeSync(gfx++);
         gDPSetRenderMode(gfx++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
         gDPSetCombineLERP(gfx++, PRIMITIVE, 0, TEXEL0, 0, 0, TEXEL0, SHADE, TEXEL0, PRIMITIVE, 0, TEXEL0, 0, 0, TEXEL0,
@@ -865,22 +967,21 @@ extern bool gInCourseEditTestRun;
 extern s16 gPlayer1OverallPosition;
 extern s32 gCupType;
 
-void func_i3_800639E0(void) {
-    s32 pad[2];
-    s32 temp;
+void Background_InitBackgroundSprites(void) {
+    s32 pad[3];
     GfxPool* gfxPool;
     s32 i;
     s32 j;
-    unk_80140E58* var_s3;
-    unk_801421A0* var_s1;
-    unk_80142248* temp_a0;
+    BackgroundSpriteInitData* bgSpriteInitData;
+    BackgroundSprite* backgroundSprite;
+    BackgroundSpritePaletteReplacement* spritePaletteReplacement;
     s32 index;
-    f32 sp9C;
-    s32 var_a3;
-    void** temp1;
-    unk_80140E58 sp54[8];
+    f32 rotationIncrement;
+    s32 replacementIndex;
+    void** texturePalettePair;
+    BackgroundSpriteInitData spriteInitDataBuffer[8];
 
-    D_i3_8006D956 = 0;
+    sBackgroundSpriteCount = 0;
     if (gNumPlayers != 1) {
         return;
     }
@@ -890,84 +991,84 @@ void func_i3_800639E0(void) {
     }
 
     if (gCourseIndex < COURSE_EDIT_1) {
-        var_s3 = D_i3_8006C478[gCourseIndex];
+        bgSpriteInitData = sBackgroundSpriteCourseInitData[gCourseIndex];
     } else if ((gCourseIndex >= COURSE_X_1) && (gCourseIndex <= COURSE_X_6)) {
         j = Math_Rand1() % 7;
-        var_s3 = sp54;
+        bgSpriteInitData = spriteInitDataBuffer;
         if (j > 0) {
-            sp9C = 360.0f / j;
+            rotationIncrement = 360.0f / j;
         }
 
         for (i = 0; i < j; i++) {
-            if (D_i3_8006D968 & 4) {
-                var_s3->unk_00 = D_i3_8006C51C[Math_Rand1() % 12];
+            if (sSkyboxFlags & SKYBOX_NIGHTTIME) {
+                bgSpriteInitData->spriteId = sNighttimeBackgroundSprites[Math_Rand1() % 12];
             } else {
-                var_s3->unk_00 = D_i3_8006C4D8[Math_Rand1() % 34];
+                bgSpriteInitData->spriteId = sDaytimeBackgroundSprites[Math_Rand1() % 34];
                 if ((Math_Rand1() % 3) == 0) {
-                    var_s3->unk_00 = 0x35;
+                    bgSpriteInitData->spriteId = BG_SPRITE_MAN_STATUE_2;
                 }
             }
-            var_s3->unk_04 = i * sp9C;
-            var_s3++;
+            bgSpriteInitData->angle = i * rotationIncrement;
+            bgSpriteInitData++;
         }
-        var_s3->unk_00 = 0;
-        var_s3->unk_04 = 0.0f;
-        var_s3 = sp54;
+        bgSpriteInitData->spriteId = BG_SPRITE_END;
+        bgSpriteInitData->angle = 0.0f;
+        bgSpriteInitData = spriteInitDataBuffer;
     } else if (gCourseIndex != COURSE_ENDING) {
         return;
-    } else {
+    } else { // COURSE_ENDING
         // FAKE
         if (1) {
-            var_s3 = D_i3_8006C440;
+            bgSpriteInitData = sBackgroundSpriteInitEnding;
         }
         if (gPlayer1OverallPosition >= 4) {
             return;
         }
     }
 
-    var_s1 = D_i3_8006D980;
-    while (var_s3->unk_00 != 0) {
-        var_s1->unk_00 = var_s3->unk_00;
-        if (var_s1->unk_00 == 0x2C) {
+    backgroundSprite = sBackgroundSprites;
+    while (bgSpriteInitData->spriteId != BG_SPRITE_END) {
+        backgroundSprite->spriteId = bgSpriteInitData->spriteId;
+        if (backgroundSprite->spriteId == BG_SPRITE_JACK_CUP_BUILDING) {
             switch (gCupType) {
                 case QUEEN_CUP:
-                    var_s1->unk_00 = 0x30;
+                    backgroundSprite->spriteId = BG_SPRITE_QUEEN_CUP_BUILDING;
                     break;
                 case KING_CUP:
-                    var_s1->unk_00 = 0x31;
+                    backgroundSprite->spriteId = BG_SPRITE_KING_CUP_BUILDING;
                     break;
                 case JOKER_CUP:
-                    var_s1->unk_00 = 0x32;
+                    backgroundSprite->spriteId = BG_SPRITE_JOKER_CUP_BUILDING;
                     break;
                 case X_CUP:
-                    var_s1->unk_00 = 0x33;
+                    backgroundSprite->spriteId = BG_SPRITE_X_CUP_BUILDING;
                     break;
                 case EDIT_CUP:
-                    var_s1->unk_00 = 0x34;
+                    backgroundSprite->spriteId = BG_SPRITE_EDIT_CUP_BUILDING;
                     break;
                 case JACK_CUP:
-                    var_s1->unk_00 = 0x2C;
+                    backgroundSprite->spriteId = BG_SPRITE_JACK_CUP_BUILDING;
                     break;
                 default:
-                    var_s1->unk_00 = 0x2E;
+                    backgroundSprite->spriteId = BG_SPRITE_FZERO_X_BUILDING;
                     break;
             }
         }
-        var_s1->unk_02 = 0;
-        var_s1->unk_04 = 0;
-        i = Math_Round(DEG_TO_FZXANG2(var_s3->unk_04));
+        backgroundSprite->isVisible = false;
+        backgroundSprite->replacementIndex = 0;
+        i = Math_Round(DEG_TO_FZXANG2(bgSpriteInitData->angle));
 
-        var_s1->unk_08 = 0.0f - (SIN(i) * 8000.0f);
-        var_s1->unk_0C = D_i3_8006BDC4;
-        var_s1->unk_10 = 0.0f - (COS(i) * 8000.0f);
+        backgroundSprite->pos.x = 0.0f - (SIN(i) * 8000.0f);
+        backgroundSprite->pos.y = sBackgroundSpriteHeight;
+        backgroundSprite->pos.z = 0.0f - (COS(i) * 8000.0f);
 
-        temp1 = D_i3_8006BF60[var_s1->unk_00];
+        texturePalettePair = sBackgroundSpritePalettePairs[backgroundSprite->spriteId];
 
-        var_s1->unk_14 = func_i2_800AE7C4(temp1[0], 64 * 64 / 2, 0, 0, 0);
-        var_s1->unk_18 = func_i2_800AE7C4(temp1[1], 16 * 1 * sizeof(u16), 0, 0, 0);
-        D_i3_8006D956++;
-        var_s1++;
-        var_s3++;
+        backgroundSprite->texture = func_i2_800AE7C4(texturePalettePair[0], 64 * 64 / 2, 0, 0, 0);
+        backgroundSprite->palette = func_i2_800AE7C4(texturePalettePair[1], 16 * 1 * sizeof(u16), 0, 0, 0);
+        sBackgroundSpriteCount++;
+        backgroundSprite++;
+        bgSpriteInitData++;
     }
 
     for (i = 0, gfxPool = D_8024E260; i < 2; i++, gfxPool++) {
@@ -976,156 +1077,150 @@ void func_i3_800639E0(void) {
         SET_VTX(&gfxPool->unk_364E8[2], -32, -32, 0, 0, 0x800, 255, 255, 255, 0);
         SET_VTX(&gfxPool->unk_364E8[3], 32, -32, 0, 0x800, 0x800, 255, 255, 255, 0);
     }
-    D_i3_8006D958 = 0;
+    sSpritePaletteReplacementCount = 0;
 
-    if (D_i3_8006D968 & 4) {
+    if (sSkyboxFlags & SKYBOX_NIGHTTIME) {
         // clang-format off
-        for (i = 0, temp_a0 = D_i3_8006DA28; i < 6; i++, temp_a0++) { \
-            temp_a0->unk_00 = 0;
+        for (i = 0, spritePaletteReplacement = sBackgroundSpritePaletteReplacements; i < 6; i++, spritePaletteReplacement++) { \
+            spritePaletteReplacement->spriteId = BG_SPRITE_END;
         }
         // clang-format on
 
-        for (i = 0, var_s1 = D_i3_8006D980; i < D_i3_8006D956; i++, var_s1++) {
-            var_a3 = -1;
-            for (j = 0, temp_a0 = D_i3_8006DA28; j < 6; j++, temp_a0++) {
-                if (temp_a0->unk_00 == var_s1->unk_00) {
-                    var_s1->unk_04 = j;
+        for (i = 0, backgroundSprite = sBackgroundSprites; i < sBackgroundSpriteCount; i++, backgroundSprite++) {
+            replacementIndex = -1;
+            for (j = 0, spritePaletteReplacement = sBackgroundSpritePaletteReplacements; j < 6; j++, spritePaletteReplacement++) {
+                if (spritePaletteReplacement->spriteId == backgroundSprite->spriteId) {
+                    backgroundSprite->replacementIndex = j;
                     break;
                 }
 
-                if (temp_a0->unk_00 == 0) {
-                    var_a3 = j;
-                    var_s1->unk_04 = j;
+                if (spritePaletteReplacement->spriteId == BG_SPRITE_END) {
+                    replacementIndex = j;
+                    backgroundSprite->replacementIndex = j;
                     break;
                 }
             }
 
-            if (var_a3 != -1) {
-                temp_a0 = &D_i3_8006DA28[var_a3];
-                temp_a0->unk_00 = var_s1->unk_00;
-                temp_a0->unk_02 = -1;
+            if (replacementIndex != -1) {
+                spritePaletteReplacement = &sBackgroundSpritePaletteReplacements[replacementIndex];
+                spritePaletteReplacement->spriteId = backgroundSprite->spriteId;
+                spritePaletteReplacement->whiteIndex = -1;
                 for (j = 0; j < 16; j++) {
-                    temp_a0->unk_04[j] = var_s1->unk_18[j];
-                    if (temp_a0->unk_04[j] == 0xFFFF) {
-                        temp_a0->unk_02 = j;
+                    spritePaletteReplacement->palette[j] = backgroundSprite->palette[j];
+                    if (spritePaletteReplacement->palette[j] == GPACK_RGBA5551(255, 255, 255, 1)) {
+                        spritePaletteReplacement->whiteIndex = j;
                     }
                 }
-                D_i3_8006D958++;
+                sSpritePaletteReplacementCount++;
             }
         }
     }
 }
 
-void func_i3_80063F88(void) {
+void Background_UpdateBackgroundSprites(void) {
     s32 i;
     s32 j;
-    s32 temp_v0;
-    Vec3f spA0;
-    Vec3f sp94;
-    Vec3f sp88;
-    unk_801421A0* var_s2;
-    unk_80142248* temp_a0;
+    s32 flashingPaletteColor;
+    Vec3f lookAt;
+    Vec3f vec;
+    Vec3f up;
+    BackgroundSprite* backgroundSprite;
+    BackgroundSpritePaletteReplacement* spritePaletteReplacement;
     s32 playerIndex = 0;
 
-    for (i = 0, var_s2 = D_i3_8006D980; i < D_i3_8006D956; i++, var_s2++) {
+    for (i = 0, backgroundSprite = sBackgroundSprites; i < sBackgroundSpriteCount; i++, backgroundSprite++) {
 
-        spA0.x = 0.0f - gCameras[playerIndex].basis.x.x;
-        spA0.y = 0.0f - gCameras[playerIndex].basis.x.y;
-        spA0.z = 0.0f - gCameras[playerIndex].basis.x.z;
+        lookAt.x = 0.0f - gCameras[playerIndex].basis.x.x;
+        lookAt.y = 0.0f - gCameras[playerIndex].basis.x.y;
+        lookAt.z = 0.0f - gCameras[playerIndex].basis.x.z;
 
-        sp94.x = 0.0f - spA0.z;
-        sp94.z = spA0.x;
+        vec.x = 0.0f - lookAt.z;
+        vec.z = lookAt.x;
 
-        sp88.x = 0.0f - (sp94.z * spA0.y);
-        sp88.y = (sp94.z * spA0.x) - (sp94.x * spA0.z);
-        sp88.z = (sp94.x * spA0.y) - 0.0f;
+        up.x = 0.0f - (vec.z * lookAt.y);
+        up.y = (vec.z * lookAt.x) - (vec.x * lookAt.z);
+        up.z = (vec.x * lookAt.y) - 0.0f;
 
-        sp94.x = gCameras[playerIndex].eye.x + var_s2->unk_08;
-        sp94.y = 400.0f;
-        sp94.z = gCameras[playerIndex].eye.z + var_s2->unk_10;
+        vec.x = gCameras[playerIndex].eye.x + backgroundSprite->pos.x;
+        vec.y = 400.0f;
+        vec.z = gCameras[playerIndex].eye.z + backgroundSprite->pos.z;
 
-        if ((sp94.x <= 23000.0f) && (sp94.x >= -23000.0f) && (sp94.z <= 23000.0f) && (sp94.z >= -23000.0f)) {
-            var_s2->unk_02 = 1;
-            Matrix_SetLockedLookAtFromVectors(&gGfxPool->unk_36368[i], NULL, D_i3_8006BDC0, D_i3_8006BDC0,
-                                              D_i3_8006BDC0, &spA0, &sp88, &sp94);
+        if ((vec.x <= 23000.0f) && (vec.x >= -23000.0f) && (vec.z <= 23000.0f) && (vec.z >= -23000.0f)) {
+            backgroundSprite->isVisible = true;
+            Matrix_SetLockedLookAtFromVectors(&gGfxPool->unk_36368[i], NULL, sBackgroundSpriteScale, sBackgroundSpriteScale,
+                                              sBackgroundSpriteScale, &lookAt, &up, &vec);
         } else {
-            var_s2->unk_02 = 0;
+            backgroundSprite->isVisible = false;
         }
     }
-    if (D_i3_8006D958 > 0) {
-        temp_v0 = func_i3_80064280();
+    if (sSpritePaletteReplacementCount > 0) {
+        flashingPaletteColor = Background_GetWhitePaletteFlashingReplacementColor();
 
-        for (i = 0; i < D_i3_8006D958; i++) {
-            temp_a0 = &D_i3_8006DA28[i];
-            if (temp_a0->unk_02 != -1) {
-                temp_a0->unk_04[temp_a0->unk_02] = temp_v0;
+        for (i = 0; i < sSpritePaletteReplacementCount; i++) {
+            spritePaletteReplacement = &sBackgroundSpritePaletteReplacements[i];
+            if (spritePaletteReplacement->whiteIndex != -1) {
+                spritePaletteReplacement->palette[spritePaletteReplacement->whiteIndex] = flashingPaletteColor;
             }
 
             for (j = 0; j < 16; j++) {
-                gGfxPool->unk_36528[i][j] = temp_a0->unk_04[j];
+                gGfxPool->unk_36528[i][j] = spritePaletteReplacement->palette[j];
             }
         }
     }
 }
 
-#define PACK_5551(r, g, b, a) (((((r) << 11) | ((g) << 6)) | ((b) << 1)) | (a))
-
 extern u32 gGameFrameCount;
 
-u16 func_i3_80064280(void) {
-    s32 temp_a1;
-    s32 temp_hi;
-    s32 temp;
+u16 Background_GetWhitePaletteFlashingReplacementColor(void) {
+    s32 blendTimer;
+    s32 startColorIndex;
+    s32 endColorIndex;
     s32 red;
     s32 green;
     s32 blue;
 
-    temp_hi = (gGameFrameCount >> 4) % 3;
-    temp = (temp_hi + 1) % 3;
-    temp_a1 = gGameFrameCount % 16;
+    startColorIndex = (gGameFrameCount >> 4) % ARRAY_COUNT(sBackgroundFlashingColors);
+    endColorIndex = (startColorIndex + 1) % ARRAY_COUNT(sBackgroundFlashingColors);
+    blendTimer = gGameFrameCount % 16;
 
-    red = D_i3_8006C560[temp_hi][0];
-    green = D_i3_8006C560[temp_hi][1];
-    blue = D_i3_8006C560[temp_hi][2];
-
-    red = ((D_i3_8006C560[temp][0] - D_i3_8006C560[temp_hi][0]) * temp_a1) / 15 + red;
-    green = ((D_i3_8006C560[temp][1] - D_i3_8006C560[temp_hi][1]) * temp_a1) / 15 + green;
-    blue = ((D_i3_8006C560[temp][2] - D_i3_8006C560[temp_hi][2]) * temp_a1) / 15 + blue;
+    red = sBackgroundFlashingColors[startColorIndex][0] + ((sBackgroundFlashingColors[endColorIndex][0] - sBackgroundFlashingColors[startColorIndex][0]) * blendTimer) / 15;
+    green = sBackgroundFlashingColors[startColorIndex][1] + ((sBackgroundFlashingColors[endColorIndex][1] - sBackgroundFlashingColors[startColorIndex][1]) * blendTimer) / 15;
+    blue = sBackgroundFlashingColors[startColorIndex][2] + ((sBackgroundFlashingColors[endColorIndex][2] - sBackgroundFlashingColors[startColorIndex][2]) * blendTimer) / 15;
 
     return PACK_5551(red, green, blue, 1);
 }
 
-Gfx* func_i3_8006436C(Gfx* gfx) {
-    unk_801421A0* var_a3;
+Gfx* Background_DrawBackgroundSprites(Gfx* gfx) {
+    BackgroundSprite* backgroundSprite;
     s32 i;
 
     gDPPipeSync(gfx++);
     gDPSetRenderMode(gfx++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
 
-    if (D_i3_8006D968 & 4) {
+    if (sSkyboxFlags & SKYBOX_NIGHTTIME) {
         gDPSetCombineLERP(gfx++, 0, 0, 0, TEXEL0, TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0, TEXEL0, 0, SHADE, 0);
     } else {
         gDPSetCombineLERP(gfx++, TEXEL0, 0, PRIMITIVE, 0, TEXEL0, 0, SHADE, 0, TEXEL0, 0, PRIMITIVE, 0, TEXEL0, 0,
                           SHADE, 0);
     }
 
-    gDPSetPrimColor(gfx++, 0, 0, D_i3_8006D95A, D_i3_8006D95C, D_i3_8006D95E, 255);
+    gDPSetPrimColor(gfx++, 0, 0, sBackgroundSpriteR, sBackgroundSpriteG, sBackgroundSpriteB, 255);
     gDPSetTextureLUT(gfx++, G_TT_RGBA16);
 
-    for (i = 0, var_a3 = D_i3_8006D980; i < D_i3_8006D956; i++, var_a3++) {
-        if (var_a3->unk_02 == 0) {
+    for (i = 0, backgroundSprite = sBackgroundSprites; i < sBackgroundSpriteCount; i++, backgroundSprite++) {
+        if (!backgroundSprite->isVisible) {
             continue;
         }
         gSPMatrix(gfx++, &D_1000000.unk_36368[i], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPVertex(gfx++, D_1000000.unk_364E8, 4, 0);
         gDPPipeSync(gfx++);
 
-        if (D_i3_8006D968 & 4) {
-            gDPLoadTLUT_pal256(gfx++, D_1000000.unk_36528[var_a3->unk_04]);
+        if (sSkyboxFlags & SKYBOX_NIGHTTIME) {
+            gDPLoadTLUT_pal256(gfx++, D_1000000.unk_36528[backgroundSprite->replacementIndex]);
         } else {
-            gDPLoadTLUT_pal256(gfx++, var_a3->unk_18);
+            gDPLoadTLUT_pal256(gfx++, backgroundSprite->palette);
         }
-        gDPLoadTextureBlock_4b(gfx++, var_a3->unk_14, G_IM_FMT_CI, 64, 64, 0, G_TX_NOMIRROR | G_TX_CLAMP,
+        gDPLoadTextureBlock_4b(gfx++, backgroundSprite->texture, G_IM_FMT_CI, 64, 64, 0, G_TX_NOMIRROR | G_TX_CLAMP,
                                G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
         gSP2Triangles(gfx++, 0, 3, 1, 0, 0, 2, 3, 0);
@@ -1135,110 +1230,113 @@ Gfx* func_i3_8006436C(Gfx* gfx) {
     return gfx;
 }
 
-void func_i3_80064754(void) {
-    unk_80142320* var_s0;
+void Background_InitStars(void) {
+    Star* star;
     s32 i;
     s32 j;
-    f32 temp_fv0;
-    s32 temp_s1;
+    f32 scale;
+    s32 angle;
 
     if ((gNumPlayers > 0) && (gNumPlayers < 5)) {
-        D_i3_8006EF50 = 100 / gNumPlayers;
+        sStarCount = 100 / gNumPlayers;
     }
 
-    for (i = 0, var_s0 = D_i3_8006DB00; i < D_i3_8006EF50; i++, var_s0++) {
+    for (i = 0, star = sStars; i < sStarCount; i++, star++) {
         for (j = 0; j < 4; j++) {
-            var_s0->unk_04[j] = 0;
-            var_s0->unk_14[j][0] = var_s0->unk_14[j][1] = 0.0f;
+            star->isVisible[j] = false;
+            star->screenPosition[j].left = star->screenPosition[j].top = 0.0f;
         }
 
-        var_s0->unk_0C = (Math_Rand1() % 100000) + 100000.0f;
-        temp_s1 = Math_Rand1() % 0x1000;
-        temp_fv0 = Math_Rand1() % 800000;
-        var_s0->unk_08 = COS(temp_s1) * temp_fv0;
-        var_s0->unk_10 = SIN(temp_s1) * temp_fv0;
+        star->pos.y = (Math_Rand1() % 100000) + 100000.0f;
+        angle = Math_Rand1() % 0x1000;
+        scale = Math_Rand1() % 800000;
+        star->pos.x = COS(angle) * scale;
+        star->pos.z = SIN(angle) * scale;
 
-        temp_fv0 = ((Math_Rand1() % 10) + 1) * 0.1f;
-        var_s0->red = var_s0->green = 255.0f * temp_fv0;
-        var_s0->blue = 64.0f * temp_fv0;
-        var_s0->alpha = 255;
+        scale = ((Math_Rand1() % 10) + 1) * 0.1f;
+        star->red = star->green = 255.0f * scale;
+        star->blue = 64.0f * scale;
+        star->alpha = 255;
     }
 }
 
-void func_i3_80064AD4(s32 arg0, unk_80141FF0* arg1, Camera* camera) {
-    unk_80142320* var_v1;
+void Background_UpdateStars(s32 cameraIndex, Background* background, Camera* camera) {
+    Star* star;
     s32 i;
-    f32 temp_fs0;
+    f32 distanceInFrontOfCamera;
     f32 temp_fa1;
     f32 temp_ft4;
     f32 temp_ft5;
-    f32 temp_fa0;
-    f32 temp_fv0;
-    f32 temp_fv1;
-    f32* ptr;
+    f32 xPos;
+    f32 yPos;
+    f32 zPos;
+    StarPosition* screenPosition;
 
-    for (i = 0, var_v1 = D_i3_8006DB00; i < D_i3_8006EF50; i++, var_v1++) {
-        temp_fv0 = var_v1->unk_08;
-        temp_fv1 = var_v1->unk_0C;
-        temp_fa0 = var_v1->unk_10;
-        temp_fa1 = temp_fv0 - camera->eye.x;
-        temp_ft4 = temp_fv1 - camera->eye.y;
-        temp_ft5 = temp_fa0 - camera->eye.z;
-        temp_fs0 = ((temp_fa1 * camera->basis.x.x) + (temp_ft4 * camera->basis.x.y) + (temp_ft5 * camera->basis.x.z));
-        if (temp_fs0 <= 0.0f) {
-            var_v1->unk_04[arg0] = 0;
+    for (i = 0, star = sStars; i < sStarCount; i++, star++) {
+        xPos = star->pos.x;
+        yPos = star->pos.y;
+        zPos = star->pos.z;
+        temp_fa1 = xPos - camera->eye.x;
+        temp_ft4 = yPos - camera->eye.y;
+        temp_ft5 = zPos - camera->eye.z;
+        distanceInFrontOfCamera =
+            ((temp_fa1 * camera->basis.x.x) + (temp_ft4 * camera->basis.x.y) + (temp_ft5 * camera->basis.x.z));
+        if (distanceInFrontOfCamera <= 0.0f) {
+            star->isVisible[cameraIndex] = false;
         } else {
-            temp_fa1 =
-                ((camera->projectionViewMtx.m[0][0] * temp_fv0) + (camera->projectionViewMtx.m[1][0] * temp_fv1) +
-                 (camera->projectionViewMtx.m[2][0] * temp_fa0)) +
-                camera->projectionViewMtx.m[3][0];
-            temp_ft4 =
-                ((camera->projectionViewMtx.m[0][1] * temp_fv0) + (camera->projectionViewMtx.m[1][1] * temp_fv1) +
-                 (camera->projectionViewMtx.m[2][1] * temp_fa0)) +
-                camera->projectionViewMtx.m[3][1];
-            temp_ft5 =
-                ((camera->projectionViewMtx.m[0][3] * temp_fv0) + (camera->projectionViewMtx.m[1][3] * temp_fv1) +
-                 (camera->projectionViewMtx.m[2][3] * temp_fa0)) +
-                camera->projectionViewMtx.m[3][3];
-            var_v1->unk_14[arg0][0] = camera->currentVpTransX + ((temp_fa1 * camera->currentVpScaleX) / temp_ft5);
-            var_v1->unk_14[arg0][1] = camera->currentVpTransY - ((temp_ft4 * camera->currentVpScaleY) / temp_ft5);
-            ptr = var_v1->unk_14[arg0];
-            if ((ptr[0] < camera->currentScissorLeft) || (camera->currentScissorRight < ptr[0]) ||
-                ((ptr[1] < camera->currentScissorTop)) || (camera->currentScissorBottom < ptr[1])) {
-                var_v1->unk_04[arg0] = 0;
+            temp_fa1 = ((camera->projectionViewMtx.m[0][0] * xPos) + (camera->projectionViewMtx.m[1][0] * yPos) +
+                        (camera->projectionViewMtx.m[2][0] * zPos)) +
+                       camera->projectionViewMtx.m[3][0];
+            temp_ft4 = ((camera->projectionViewMtx.m[0][1] * xPos) + (camera->projectionViewMtx.m[1][1] * yPos) +
+                        (camera->projectionViewMtx.m[2][1] * zPos)) +
+                       camera->projectionViewMtx.m[3][1];
+            temp_ft5 = ((camera->projectionViewMtx.m[0][3] * xPos) + (camera->projectionViewMtx.m[1][3] * yPos) +
+                        (camera->projectionViewMtx.m[2][3] * zPos)) +
+                       camera->projectionViewMtx.m[3][3];
+            star->screenPosition[cameraIndex].left =
+                camera->currentVpTransX + ((temp_fa1 * camera->currentVpScaleX) / temp_ft5);
+            star->screenPosition[cameraIndex].top =
+                camera->currentVpTransY - ((temp_ft4 * camera->currentVpScaleY) / temp_ft5);
+            screenPosition = &star->screenPosition[cameraIndex];
+            if ((screenPosition->left < camera->currentScissorLeft) ||
+                (camera->currentScissorRight < screenPosition->left) ||
+                ((screenPosition->top < camera->currentScissorTop)) ||
+                (camera->currentScissorBottom < screenPosition->top)) {
+                star->isVisible[cameraIndex] = false;
             } else {
-                var_v1->unk_04[arg0] = 1;
+                star->isVisible[cameraIndex] = true;
             }
         }
     }
 }
 
-Gfx* func_i3_80064CB4(Gfx* gfx, s32 cameraIndex) {
-    unk_80142320* var_v0;
+Gfx* Background_DrawStars(Gfx* gfx, s32 cameraIndex) {
+    Star* star;
     s32 i;
     s32 xl;
     s32 yl;
     s32 xh;
     s32 yh;
-    f32* ptr;
+    StarPosition* screenPosition;
 
-    gDPLoadTextureBlock(gfx++, D_i3_8006D97C, G_IM_FMT_IA, G_IM_SIZ_8b, 8, 8, 0, G_TX_NOMIRROR | G_TX_CLAMP,
+    gDPLoadTextureBlock(gfx++, sStarTexture, G_IM_FMT_IA, G_IM_SIZ_8b, 8, 8, 0, G_TX_NOMIRROR | G_TX_CLAMP,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
-    for (i = 0, var_v0 = D_i3_8006DB00; i < D_i3_8006EF50; i++, var_v0++) {
-        if (var_v0->unk_04[cameraIndex] != 0) {
-            ptr = var_v0->unk_14[cameraIndex];
-
-            gDPPipeSync(gfx++);
-            gDPSetPrimColor(gfx++, 0, 0, var_v0->red, var_v0->green, var_v0->blue, var_v0->alpha);
-
-            xl = (ptr[0]) * 4.0f;
-            yl = (ptr[1]) * 4.0f;
-            xh = (ptr[0] + 8.0f) * 4.0f;
-            yh = (ptr[1] + 8.0f) * 4.0f;
-
-            gSPTextureRectangle(gfx++, xl, yl, xh, yh, 0, 0, 0, 1 << 10, 1 << 10);
+    for (i = 0, star = sStars; i < sStarCount; i++, star++) {
+        if (!star->isVisible[cameraIndex]) {
+            continue;
         }
+        screenPosition = &star->screenPosition[cameraIndex];
+
+        gDPPipeSync(gfx++);
+        gDPSetPrimColor(gfx++, 0, 0, star->red, star->green, star->blue, star->alpha);
+
+        xl = (screenPosition->left) * 4.0f;
+        yl = (screenPosition->top) * 4.0f;
+        xh = (screenPosition->left + 8.0f) * 4.0f;
+        yh = (screenPosition->top + 8.0f) * 4.0f;
+
+        gSPTextureRectangle(gfx++, xl, yl, xh, yh, 0, 0, 0, 1 << 10, 1 << 10);
     }
     gDPPipeSync(gfx++);
     gDPSetTexturePersp(gfx++, G_TP_PERSP);
