@@ -10,6 +10,8 @@ typedef union {
     u16 array[SCREEN_HEIGHT][SCREEN_WIDTH];
 } FrameBuffer; // size = 0x25800
 
+#define PACK_5551(r, g, b, a) (((((r) << 11) | ((g) << 6)) | ((b) << 1)) | (a))
+
 /**
  * `x` vertex x
  * `y` vertex y
