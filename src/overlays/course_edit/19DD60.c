@@ -310,7 +310,7 @@ s32 func_xk2_800ECBC0(void) {
         Effects_Update();
         Racer_Update();
         Camera_Update();
-        func_i3_80061C2C();
+        Background_Update();
         Course_Update();
         func_xk2_800E5B6C();
         return GAMEMODE_COURSE_EDIT;
@@ -327,7 +327,7 @@ s32 func_xk2_800ECBC0(void) {
         Effects_Update();
         Racer_Update();
         Camera_Update();
-        func_i3_80061C2C();
+        Background_Update();
         Course_Update();
         if ((gRacers[0].stateFlags & RACER_STATE_RETIRED) && (D_xk2_80103FF8 == 0)) {
             D_xk2_80103FF8 = 1;

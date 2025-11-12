@@ -5746,9 +5746,9 @@ block_115:
         sp560 = 0.57735f;
         sp55C = 0.57735f;
         sp558 = 0.57735f;
-        var_s3 = gCurrentCourseInfo->unk_14[3];
-        sp5C4 = gCurrentCourseInfo->unk_14[4];
-        var_s4 = gCurrentCourseInfo->unk_14[5];
+        var_s3 = gCurrentCourseInfo->racerFogColors[0];
+        sp5C4 = gCurrentCourseInfo->racerFogColors[1];
+        var_s4 = gCurrentCourseInfo->racerFogColors[2];
     }
     if (gGameMode != GAMEMODE_GP_END_CS) {
         gGfxPool->unk_33AE8[playerIndex].l.unk_08[0] = Math_Round((sp560 - camera->basis.x.x) * 16383.0f);
