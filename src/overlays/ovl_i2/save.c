@@ -12,7 +12,7 @@ OSPiHandle sSramPiHandle;
 OSPiHandle* gSramPiHandlePtr;
 s16 gSettingSoundMode;
 u8 D_800D1308[30];
-u16 D_i2_800D1326;
+u16 sDDStaffGhostCompletion;
 
 uintptr_t D_i2_800BEE60[][3] = {
     { 0x0, 0x40, 0x60 },           { 0x1B30, 0x1B70, 0x1B90 },    { 0x37B0, 0x37F0, 0x3810 },
@@ -396,13 +396,13 @@ s32 Save_UpdateCharacterSave(s32 courseIndex) {
     return 0;
 }
 
-s32 Save_UpdateCupSave(u8* arg0) {
+s32 Save_UpdateCupSave(u8* cupCompletion) {
     CupSave* cupSave = &gSaveContext.cupSave;
 
     Save_ReadCupSave(cupSave);
-    Save_LoadCupSave(cupSave, arg0);
+    Save_LoadCupSave(cupSave, cupCompletion);
     Save_ReadProfileSaves(gSaveContext.profileSaves);
-    Save_LoadEditCup2(gSaveContext.profileSaves, arg0, NULL);
+    Save_LoadDDCups(gSaveContext.profileSaves, cupCompletion, NULL);
     return 0;
 }
 
@@ -477,7 +477,7 @@ void Save_WriteSaveCourseRecord(ProfileSave* profileSaves, s32 profileIndex, s32
 void Save_WriteSaveEditCup(void) {
 }
 
-void Save_WriteSaveEditCup2(ProfileSave* profileSaves, s32 profileIndex, u16 checksum) {
+void Save_WriteSaveDDCups(ProfileSave* profileSaves, s32 profileIndex, u16 checksum) {
     ProfileSave* profileSave = &profileSaves[profileIndex];
 
     profileSave->editCup.checksum = checksum;
@@ -550,11 +550,11 @@ s32 Save_UpdateCupCompletion(s32 difficulty, s32 cupType, s32 character) {
     ProfileSave* profileSaves = gSaveContext.profileSaves;
     CupSave* cupSave = &gSaveContext.cupSave;
 
-    if (cupType == 5) {
+    if (cupType == EDIT_CUP) {
         return 2;
-    } else if (cupType == 6) {
+    } else if (cupType == DD_1_CUP) {
         i = 0;
-    } else if (cupType == 7) {
+    } else if (cupType == DD_2_CUP) {
         i = 1;
     } else {
         i = -1;
@@ -564,17 +564,17 @@ s32 Save_UpdateCupCompletion(s32 difficulty, s32 cupType, s32 character) {
         s8 completion;
 
         Save_ReadProfileSaves(profileSaves);
-        Save_LoadEditCup2(profileSaves, NULL, NULL);
-        completion = profileSaves[0].editCup2.unk_04[character * 2 + i];
+        Save_LoadDDCups(profileSaves, NULL, NULL);
+        completion = profileSaves[0].ddCups.cupCompletion[character * 2 + i];
         completion |= 1 << (difficulty * 2);
-        profileSaves[0].editCup2.unk_04[character * 2 + i] = completion;
-        profileSaves[0].editCup2.unk_02 = D_i2_800D1326;
-        profileSaves[1].editCup2 = profileSaves[0].editCup2;
+        profileSaves[0].ddCups.cupCompletion[character * 2 + i] = completion;
+        profileSaves[0].ddCups.staffGhostCompletion = sDDStaffGhostCompletion;
+        profileSaves[1].ddCups = profileSaves[0].ddCups;
         i = 1;
-        checksum = Save_CalculateSaveEditCup2Checksum(profileSaves);
+        checksum = Save_CalculateSaveDDCupsChecksum(profileSaves);
 
         for (i = 0; i < 2; i++) {
-            Save_WriteSaveEditCup2(profileSaves, i, checksum);
+            Save_WriteSaveDDCups(profileSaves, i, checksum);
         }
     } else {
         u16 cupCompletion;
@@ -812,17 +812,17 @@ void Save_InitEditCup(SaveEditCup* editCup, bool shouldClear) {
     }
 }
 
-void Save_InitEditCup2(SaveEditCup2* editCup2, bool shouldClear) {
+void Save_InitDDCups(SaveDDCups* ddCups, bool shouldClear) {
     s32 i;
 
     if (shouldClear) {
-        Save_ClearData(editCup2, sizeof(SaveEditCup2));
+        Save_ClearData(ddCups, sizeof(SaveDDCups));
     }
 
     for (i = 0; i < 60; i++) {
-        editCup2->unk_04[i] = 0;
+        ddCups->cupCompletion[i] = 0;
     }
-    editCup2->unk_02 = 0;
+    ddCups->staffGhostCompletion = 0;
 }
 
 void func_i2_800A7A8C(unk_80141C88_unk_1D* arg0) {
@@ -1210,7 +1210,7 @@ void Save_Load(SaveContext* saveContext) {
     D_800D1308[SAMURAI_GOROH] = 1;
     D_800D1308[JODY_SUMMER] = 1;
 
-    Save_LoadEditCup2(saveContext->profileSaves, 0, &D_i2_800D1326);
+    Save_LoadDDCups(saveContext->profileSaves, 0, &sDDStaffGhostCompletion);
     Save_LoadGhostData(&saveContext->ghostSave.record, &saveContext->ghostSave.data, gGhosts, true);
 
     for (i = 0, ghost = gGhosts; i < 3; i++, ghost++) {
@@ -1509,7 +1509,7 @@ void Save_LoadCharacterSave(CharacterSave* characterSave, s32 courseIndex) {
     }
 }
 
-void Save_LoadCupSave(CupSave* cupSave, u8* arg1) {
+void Save_LoadCupSave(CupSave* cupSave, u8* cupCompletion) {
     s32 i;
     s32 j;
     s32 k;
@@ -1523,11 +1523,11 @@ void Save_LoadCupSave(CupSave* cupSave, u8* arg1) {
         Save_WriteCupSave(cupSave);
     }
 
-    if (arg1 == NULL) {
+    if (cupCompletion == NULL) {
         return;
     }
 
-    var_a0 = (s8*) arg1;
+    var_a0 = (s8*) cupCompletion;
 
     for (i = 0; i < 4; i++) {
         for (j = 0; j < 10; j++) {
@@ -1549,7 +1549,7 @@ void Save_LoadCupSave(CupSave* cupSave, u8* arg1) {
     }
 }
 
-void Save_LoadEditCup2(ProfileSave* profileSaves, u8* arg1, u16* arg2) {
+void Save_LoadDDCups(ProfileSave* profileSaves, u8* cupCompletion, u16* staffGhostCompletion) {
     s32 i;
     s32 j;
     s32 k;
@@ -1557,14 +1557,14 @@ void Save_LoadEditCup2(ProfileSave* profileSaves, u8* arg1, u16* arg2) {
     s32 invalidSaveIndex;
     s32 invalidSaveCount;
     s32 backupSaveIndex;
-    SaveEditCup2* editCup2;
+    SaveDDCups* ddCups;
     ProfileSave* profileSave;
     s8 temp_v0;
 
     invalidSaveCount = 0;
 
     for (i = 0, profileSave = profileSaves; i < 2; i++) {
-        if (profileSave->editCup2.checksum != Save_CalculateSaveEditCup2Checksum(profileSave)) {
+        if (profileSave->ddCups.checksum != Save_CalculateSaveDDCupsChecksum(profileSave)) {
             invalidSaveCount++;
             invalidSaveIndex = i;
         }
@@ -1572,36 +1572,36 @@ void Save_LoadEditCup2(ProfileSave* profileSaves, u8* arg1, u16* arg2) {
     }
 
     if (invalidSaveCount == 2) {
-        Save_InitEditCup2(&profileSaves[0].editCup2, true);
-        profileSaves[1].editCup2 = profileSaves[0].editCup2;
+        Save_InitDDCups(&profileSaves[0].ddCups, true);
+        profileSaves[1].ddCups = profileSaves[0].ddCups;
 
-        checksum = Save_CalculateSaveEditCup2Checksum(profileSaves);
+        checksum = Save_CalculateSaveDDCupsChecksum(profileSaves);
         for (i = 0; i < 2; i++) {
-            Save_WriteSaveEditCup2(profileSaves, i, checksum);
+            Save_WriteSaveDDCups(profileSaves, i, checksum);
         }
     } else if (invalidSaveCount == 1) {
         backupSaveIndex = (invalidSaveIndex == 0) ? 1 : 0;
 
-        (profileSaves + invalidSaveIndex)->editCup2 = (profileSaves + backupSaveIndex)->editCup2;
+        (profileSaves + invalidSaveIndex)->ddCups = (profileSaves + backupSaveIndex)->ddCups;
 
-        Save_WriteSaveEditCup2(profileSaves, invalidSaveIndex, Save_CalculateSaveEditCup2Checksum(profileSaves));
+        Save_WriteSaveDDCups(profileSaves, invalidSaveIndex, Save_CalculateSaveDDCupsChecksum(profileSaves));
     }
 
-    if (NULL != arg1) {
-        editCup2 = &profileSaves[0].editCup2;
+    if (NULL != cupCompletion) {
+        ddCups = &profileSaves[0].ddCups;
 
         for (k = 0; k < 4; k++) {
             for (i = 0; i < 30; i++) {
                 for (j = 0; j < 2; j++) {
-                    temp_v0 = (editCup2->unk_04[i * 2 + j] >> k * 2) & 3;
-                    arg1[k * 30 * 7 + i * 7 + j + 5] = temp_v0;
+                    temp_v0 = (ddCups->cupCompletion[i * 2 + j] >> k * 2) & 3;
+                    cupCompletion[k * 30 * 7 + i * 7 + j + 5] = temp_v0;
                 }
             }
         }
     }
 
-    if (arg2 != NULL) {
-        *arg2 = editCup2->unk_02;
+    if (staffGhostCompletion != NULL) {
+        *staffGhostCompletion = ddCups->staffGhostCompletion;
     }
 }
 
@@ -1637,8 +1637,8 @@ u16 Save_CalculateSaveEditCupChecksum(ProfileSave* profileSave) {
     return Save_CalculateChecksum(&profileSave->editCup.unk_02, sizeof(SaveEditCup) - sizeof(u16));
 }
 
-u16 Save_CalculateSaveEditCup2Checksum(ProfileSave* profileSave) {
-    return Save_CalculateChecksum(&profileSave->editCup2.unk_02, sizeof(SaveEditCup) - sizeof(u16));
+u16 Save_CalculateSaveDDCupsChecksum(ProfileSave* profileSave) {
+    return Save_CalculateChecksum(&profileSave->ddCups.staffGhostCompletion, sizeof(SaveEditCup) - sizeof(u16));
 }
 
 u16 Save_CalculateGhostRecordChecksum(GhostRecord* ghostRecord) {
@@ -1701,17 +1701,17 @@ s32 Save_LoadStaffGhostRecord(GhostInfo* ghostInfo, s32 courseIndex) {
     return 0;
 }
 
-s32 D_i2_800BEF80[] = {
-    -1, -1, -1,      -1,      -1,      -1,      -1,      -1,      -1,      -1,      -1,      -1,      -1,      -1,
-    -1, -1, -1,      -1,      -1,      -1,      -1,      -1,      -1,      -1,      -1,      -1,      -1,      -1,
-    -1, -1, 0x18559, 0x1C017, 0x1BA96, 0x1A8BC, 0x1B4B5, 0x1D70E, 0x163C7, 0x1634C, 0x180F9, 0x18440, 0x180BF, 0x17BAA,
+s32 sDDStaffGhostRecordTimes[] = {
+    -1, -1, -1,    -1,     -1,     -1,     -1,     -1,     -1,    -1,    -1,    -1,    -1,    -1,
+    -1, -1, -1,    -1,     -1,     -1,     -1,     -1,     -1,    -1,    -1,    -1,    -1,    -1,
+    -1, -1, 99673, 114711, 113302, 108732, 111797, 120590, 91079, 90956, 98553, 99392, 98495, 97194,
 };
 
-s32 func_i2_800A9788(s32 courseIndex) {
+s32 Save_GetDDStaffGhostRecordTime(s32 courseIndex) {
     if (!(courseIndex >= COURSE_MUTE_CITY && courseIndex <= COURSE_BIG_FOOT)) {
         return -1;
     }
-    return D_i2_800BEF80[courseIndex];
+    return sDDStaffGhostRecordTimes[courseIndex];
 }
 
 s32 func_i2_800A97B4(GhostInfo* ghostInfo, s32 courseIndex) {
@@ -1813,12 +1813,12 @@ void func_i2_800A9AE0(s32 arg0) {
     }
 }
 
-u16 func_i2_800A9B88(void) {
-    D_i2_800D1326 &= 0xFFF;
-    return D_i2_800D1326;
+u16 Save_GetDDStaffGhostCompletion(void) {
+    sDDStaffGhostCompletion &= 0xFFF;
+    return sDDStaffGhostCompletion;
 }
 
-s32 func_i2_800A9BA4(s32 courseIndex) {
+s32 Save_SetDDStaffGhostComplete(s32 courseIndex) {
     ProfileSave* profileSaves = gSaveContext.profileSaves;
     u16 checksum;
     s32 i;
@@ -1826,15 +1826,15 @@ s32 func_i2_800A9BA4(s32 courseIndex) {
     if (!(courseIndex >= COURSE_SILENCE_3 && courseIndex <= COURSE_BIG_FOOT)) {
         return 2;
     }
-    D_i2_800D1326 |= (u16) (1 << (courseIndex + 2));
+    sDDStaffGhostCompletion |= (u16) (1 << (courseIndex - COURSE_SILENCE_3));
     Save_ReadProfileSaves(profileSaves);
-    Save_LoadEditCup2(profileSaves, NULL, NULL);
-    profileSaves[0].editCup2.unk_02 = D_i2_800D1326;
-    profileSaves[1].editCup2 = profileSaves[0].editCup2;
-    checksum = Save_CalculateSaveEditCup2Checksum(profileSaves);
+    Save_LoadDDCups(profileSaves, NULL, NULL);
+    profileSaves[0].ddCups.staffGhostCompletion = sDDStaffGhostCompletion;
+    profileSaves[1].ddCups = profileSaves[0].ddCups;
+    checksum = Save_CalculateSaveDDCupsChecksum(profileSaves);
 
     for (i = 0; i < 2; i++) {
-        Save_WriteSaveEditCup2(profileSaves, i, checksum);
+        Save_WriteSaveDDCups(profileSaves, i, checksum);
     }
     return 0;
 }

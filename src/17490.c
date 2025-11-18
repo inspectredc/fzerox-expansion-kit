@@ -8,7 +8,7 @@ f32 gCharacterLastEngine[30];
 UNUSED s32 D_8079FB18;
 u16 gInputPressed;
 u16 gInputButtonPressed;
-u16 gStickPressed;
+u16 gRetriggeredButtonCurrentPressed;
 s8 gCupNumDifficultiesCleared[4];
 s8 D_8079FB28[2];
 char* gCurrentTrackName;
@@ -751,12 +751,12 @@ void func_8070D358(void) {
 
 void Controller_SetGlobalInputs(Controller* controller) {
     gInputButtonPressed = controller->buttonPressed | STICK_TO_BUTTON(controller->stickPressed);
-    if (controller->unk_82 != 0) {
-        gStickPressed = controller->buttonCurrent | STICK_TO_BUTTON(controller->stickCurrent);
+    if (controller->retriggerCurrentButtonPress) {
+        gRetriggeredButtonCurrentPressed = controller->buttonCurrent | STICK_TO_BUTTON(controller->stickCurrent);
     } else {
-        gStickPressed = 0;
+        gRetriggeredButtonCurrentPressed = 0;
     }
-    gInputPressed = gInputButtonPressed | gStickPressed;
+    gInputPressed = gInputButtonPressed | gRetriggeredButtonCurrentPressed;
 }
 
 extern u32 gGameFrameCount;

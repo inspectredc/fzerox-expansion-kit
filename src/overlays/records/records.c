@@ -1017,11 +1017,12 @@ Gfx* Records_DrawGhostCopyMenu(Gfx* gfx, s32 left, s32 top) {
         }
         if (!timeTexturesLoaded) {
             timeTexturesLoaded = true;
-            gDPLoadTextureBlock(gfx++, D_303C3F0, G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 224, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                                G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+            gDPLoadTextureBlock(gfx++, aTimerSymbolsTex, G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 224, 0,
+                                G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
+                                G_TX_NOLOD, G_TX_NOLOD);
         }
-        gfx = func_i3_DrawTimerScisThousandths(gfx, sGhostCourseRecordTimes[ghostIndex], left + 84, top + 30 + (i * 20),
-                                               1.0f);
+        gfx = Hud_DrawTimerScisThousandths(gfx, sGhostCourseRecordTimes[ghostIndex], left + 84, top + 30 + (i * 20),
+                                           1.0f);
     }
     return gfx;
 }
@@ -1221,11 +1222,12 @@ Gfx* Records_DrawCopyToDiskMenu(Gfx* gfx, s32 left, s32 top) {
         }
         if (!timeTexturesLoaded) {
             timeTexturesLoaded = true;
-            gDPLoadTextureBlock(gfx++, D_303C3F0, G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 224, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                                G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+            gDPLoadTextureBlock(gfx++, aTimerSymbolsTex, G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 224, 0,
+                                G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
+                                G_TX_NOLOD, G_TX_NOLOD);
         }
-        gfx = func_i3_DrawTimerScisThousandths(gfx, sDiskGhostCourseRecordTimes[ghostIndex], left + 84,
-                                               top - 10 + i * 20, 1.0f);
+        gfx = Hud_DrawTimerScisThousandths(gfx, sDiskGhostCourseRecordTimes[ghostIndex], left + 84, top - 10 + i * 20,
+                                           1.0f);
     }
     return gfx;
 }

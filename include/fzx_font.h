@@ -36,6 +36,23 @@ typedef enum FontChar {
     /* 48 ->, a-z/katakana */
 } FontChar;
 
+// FONT_SET_5 special strings
+#define FONT_STR_ST "Ｓ"
+#define FONT_STR_ND "Ｎ"
+#define FONT_STR_RD "Ｒ"
+#define FONT_STR_TH "Ｔ"
+#define FONT_STR_PLAYER "Ｐ"
+#define FONT_STR_COMPUTER "Ａ"
+#define FONT_STR_SELECT_COURSE "Ｃ"
+#define FONT_STR_QUIT "Ｅ"
+#define FONT_STR_UP_ARROW "Ｕ"
+#define FONT_STR_DOWN_ARROW "Ｄ"
+#define FONT_STR_SIDE_ARROW "Ｍ"
+
+// FONT_SET_6 special strings
+#define FONT_STR_ALPHA "Ａ"
+#define FONT_STR_BETA "Ｂ"
+
 void Font_IntToString(s32 num, s8* str);
 s32 Font_GetCharIndex(s8* str, s32 fontSetLowercase);
 s32 Font_GetCharacterWidth(s8* str, s32 fontSet);

@@ -58,8 +58,8 @@ typedef struct Controller {
     u16 buttonPressed;
     u16 buttonReleased;
     u16 buttonPrev;
-    u16 unk_82;
-    s32 unk_84;
+    u16 retriggerCurrentButtonPress;
+    s32 sameInputsHeldCounter;
     s32 unk_88;
     s32 unk_8C;
     s32 unk_90;

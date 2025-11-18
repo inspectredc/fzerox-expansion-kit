@@ -3981,37 +3981,37 @@ void func_8070304C(void) {
     static s32 D_8076CAEC = 0;
     static s32 D_8076CAF0 = 0;
     f32 temp;
-    MtxF sp3C;
+    MtxF mtxF;
 
     if (!gGamePaused) {
         D_8076CAEC = (D_8076CAEC + 0xFE9) & 0xFFF;
         D_8076CAF0 = (D_8076CAF0 + 0xFDE) & 0xFFF;
     }
 
-    sp3C.m[2][1] = sp3C.m[0][1] = sp3C.m[1][0] = sp3C.m[1][2] = sp3C.m[3][0] = sp3C.m[3][1] = sp3C.m[3][2] =
-        sp3C.m[0][3] = sp3C.m[1][3] = sp3C.m[2][3] = 0.0f;
+    mtxF.m[2][1] = mtxF.m[0][1] = mtxF.m[1][0] = mtxF.m[1][2] = mtxF.m[3][0] = mtxF.m[3][1] = mtxF.m[3][2] =
+        mtxF.m[0][3] = mtxF.m[1][3] = mtxF.m[2][3] = 0.0f;
 
-    sp3C.m[3][3] = sp3C.m[1][1] = 1.0f;
+    mtxF.m[3][3] = mtxF.m[1][1] = 1.0f;
 
-    sp3C.m[2][0] = temp = SIN(0x1000 - D_8076CAEC);
-    sp3C.m[0][2] = -temp;
+    mtxF.m[2][0] = temp = SIN(0x1000 - D_8076CAEC);
+    mtxF.m[0][2] = -temp;
 
-    sp3C.m[0][0] = sp3C.m[2][2] = temp = COS(0x1000 - D_8076CAEC);
+    mtxF.m[0][0] = mtxF.m[2][2] = temp = COS(0x1000 - D_8076CAEC);
 
-    Matrix_ToMtx(&sp3C, gGfxPool->unk_36628);
+    Matrix_ToMtx(&mtxF, gGfxPool->unk_36628);
 
-    sp3C.m[2][0] = temp = SIN(D_8076CAEC);
-    sp3C.m[0][2] = -temp;
-    sp3C.m[0][0] = sp3C.m[2][2] = temp = COS(D_8076CAEC);
+    mtxF.m[2][0] = temp = SIN(D_8076CAEC);
+    mtxF.m[0][2] = -temp;
+    mtxF.m[0][0] = mtxF.m[2][2] = temp = COS(D_8076CAEC);
 
-    Matrix_ToMtx(&sp3C, gGfxPool->unk_36668);
-    sp3C.m[1][2] = temp = SIN(D_8076CAF0);
-    sp3C.m[2][1] = -temp;
-    sp3C.m[2][2] = sp3C.m[1][1] = temp = COS(D_8076CAF0);
+    Matrix_ToMtx(&mtxF, gGfxPool->unk_36668);
+    mtxF.m[1][2] = temp = SIN(D_8076CAF0);
+    mtxF.m[2][1] = -temp;
+    mtxF.m[2][2] = mtxF.m[1][1] = temp = COS(D_8076CAF0);
 
-    sp3C.m[2][0] = sp3C.m[0][2] = 0.0f;
-    sp3C.m[0][0] = 1.0f;
-    Matrix_ToMtx(&sp3C, gGfxPool->unk_366A8);
+    mtxF.m[2][0] = mtxF.m[0][2] = 0.0f;
+    mtxF.m[0][0] = 1.0f;
+    Matrix_ToMtx(&mtxF, gGfxPool->unk_366A8);
 }
 
 Gfx D_8076CAF8[] = {

@@ -15,14 +15,14 @@ u8 D_i2_800BF044[] = {
 
 void func_i2_800AABD0(void) {
     func_i3_8005A464();
-    func_806F5A50();
+    Controller_Reset();
     Racer_Init();
     Camera_Init();
     Effects_Init();
     gGamePaused = false;
-    func_i3_80044DD0();
-    func_i3_ResetLivesChangeCounter();
-    func_i3_InitRacePortraits();
+    Menus_Init();
+    Hud_ResetLivesChangeCounter();
+    Hud_InitRacePortraits();
 }
 
 extern s16 D_8076C7A8;
@@ -52,13 +52,13 @@ void Race_Init(void) {
     Course_DecorationsViewInteractDataInit();
     Course_EffectsViewInteractDataInit(false);
     func_i3_8005A464();
-    func_i3_InitCourseMinimap();
-    func_i3_80044DD0();
-    func_i3_InitRacePortraits();
+    Minimap_InitCourseMinimap();
+    Menus_Init();
+    Hud_InitRacePortraits();
 }
 
 s32 Race_Update(void) {
-    func_i3_80044750();
+    Menus_Update();
     Effects_Update();
     Racer_Update();
     Camera_Update();
@@ -183,7 +183,7 @@ Gfx* Race_Draw(Gfx* gfx) {
             gSPMatrix(gfx++, &D_1000000.unk_1A208[0], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
             gfx = Camera_Draw(gfx, SCISSOR_BOX_FULL_SCREEN, 0);
             gfx = Racer_Draw(gfx, 0);
-            gfx = func_i3_80057D90(gfx, 0);
+            gfx = Menus_Player1SpecialDraw(gfx, 0);
             break;
         case 2:
             gSPPerspNormalize(gfx++, gCameras[0].perspectiveScale);
@@ -229,5 +229,5 @@ Gfx* Race_Draw(Gfx* gfx) {
             break;
     }
 
-    return func_i3_8005823C(gfx);
+    return Menus_Draw(gfx);
 }
