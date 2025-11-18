@@ -3130,7 +3130,7 @@ void func_xk2_800DEE20(void) {
         Course_JumpsViewInteractDataInit();
         Course_DecorationsViewInteractDataInit();
         Course_EffectsViewInteractDataInit(false);
-        func_i3_InitCourseMinimap();
+        Minimap_InitCourseMinimap();
     }
 }
 

@@ -1503,7 +1503,7 @@ void Font_LoadString(s8* str, s32 fontSet) {
             break;
     }
     while (*str != 0) {
-        if (fontSet == 4) {
+        if (fontSet == FONT_SET_4) {
             fontChar = Font_GetCharIndex(str, FONT_SET_HAS_LOWERCASE);
         } else {
             fontChar = Font_GetCharIndex(str, FONT_SET_UPPERCASE_ONLY);

@@ -28,7 +28,7 @@ typedef struct unk_8012F450 {
 
 typedef struct unk_80141EA8 {
     s32 unk_00;
-    s32 unk_04;
+    s32 lapFlashTimer;
     s32 lapIntervalCounter;
     unk_8012F450 unk_0C;
     s8 unk_18[0x30];
@@ -72,6 +72,43 @@ typedef enum TimeAttackFinishOptions {
     /* 5 */ TIME_ATTACK_QUIT,
 } TimeAttackFinishOptions;
 
+typedef enum GpResultsEndMenuOptions {
+    /* 0 */ GP_RESULTS_END_RETRY,
+    /* 1 */ GP_RESULTS_END_SETTINGS,
+    /* 2 */ GP_RESULTS_END_CHANGE_MACHINE,
+    /* 3 */ GP_RESULTS_END_CHANGE_COURSE,
+    /* 4 */ GP_RESULTS_END_QUIT,
+} GpResultsEndMenuOptions;
+
+typedef enum VsResultsOptions {
+    /* 0 */ VS_RESULTS_COURSE_SELECT,
+    /* 1 */ VS_RESULTS_QUIT,
+} VsResultsOptions;
+
+typedef enum GhostSaveMenuState {
+    /* 0 */ GHOST_SAVE_MENU_CLOSED,
+    /* 1 */ GHOST_SAVE_MENU_SAVE_TO_PAK,
+    /* 2 */ GHOST_SAVE_MENU_DISK_OPTIONS,
+} GhostSaveMenuState;
+
+typedef enum GhostSaveMenuOptionState {
+    /* 0 */ GHOST_SAVE_MENU_SHOW_OPTIONS,
+    /* 1 */ GHOST_SAVE_MENU_SAVE_TO_DISK,
+} GhostSaveMenuOptionState;
+
+typedef enum GhostSaveMenuOption {
+    /* 0 */ GHOST_SAVE_MENU_OPTION_SAVE_TO_PAK,
+    /* 1 */ GHOST_SAVE_MENU_OPTION_SAVE_TO_DISK,
+} GhostSaveMenuOption;
+
+typedef enum NoYesMenuOption {
+    /* 0 */ MENU_OPTION_NO,
+    /* 1 */ MENU_OPTION_YES,
+} NoYesMenuOption;
+
+#define GHOST_SAVE_CANNOT_SAVE_TO_PAK 1
+#define GHOST_SAVE_CANNOT_SAVE_TO_DISK 2
+
 typedef enum PauseGeneralOptions {
     /* 0 */ PAUSE_GENERAL_CONTINUE,
     /* 1 */ PAUSE_GENERAL_RETRY,
@@ -96,6 +133,49 @@ typedef enum PauseGpOptions {
     /* 3 */ PAUSE_GP_QUIT,
 } PauseGpOptions;
 
+typedef enum VsSlotNumber {
+    /* 0 */ VS_SLOT_0,
+    /* 1 */ VS_SLOT_1,
+    /* 2 */ VS_SLOT_2,
+} VsSlotNumber;
+
+typedef enum VsSlotState {
+    /* 0 */ VS_SLOT_STATE_CURRENT_SLOT_0,
+    /* 1 */ VS_SLOT_STATE_CURRENT_SLOT_1,
+    /* 2 */ VS_SLOT_STATE_CURRENT_SLOT_2,
+    /* 3 */ VS_SLOT_STATE_CHECK_RESULT,
+    /* 4 */ VS_SLOT_STATE_APPLY_RESULT,
+    /* 5 */ VS_SLOT_STATE_WAIT_FOR_RESPIN,
+} VsSlotState;
+
+typedef enum VsSlotPortrait {
+    /* 30 */ VS_SLOT_PORTRAIT_X = 30,
+    /* 31 */ VS_SLOT_PORTRAIT_SKULL,
+    /* 32 */ VS_SLOT_PORTRAIT_MR_ZERO,
+} VsSlotPortrait;
+
+typedef enum GpResultsState {
+    /*   0 */ GP_RESULTS_TOP_6_TIMING,
+    /*   1 */ GP_RESULTS_RACE_RESULT,
+    /*   2 */ GP_RESULTS_TOTAL_RANKING,
+    /*   3 */ GP_RESULTS_END_MENU,
+    /*   4 */ GP_RESULTS_QUIT,
+    /*   5 */ GP_RESULTS_TO_NEXT_COURSE,
+    /* 255 */ GP_RESULTS_COMPLETE = 255,
+} GpResultsState;
+
+typedef enum PlayerFinishState {
+    /* 0 */ PLAYER_FINISH_NONE,
+    /* 1 */ PLAYER_FINISH_CAMERA_SUCCESS,
+    /* 2 */ PLAYER_FINISH_SUCCESS_COMPLETE,
+} PlayerFinishState;
+
+typedef enum PlayerGameoverState {
+    /* 0 */ PLAYER_GAMEOVER_NONE,
+    /* 1 */ PLAYER_GAMEOVER_CRASHED,
+    /* 2 */ PLAYER_GAMEOVER_DISPLAY,
+} PlayerGameoverState;
+
 #define MENU_STATE_PAUSE_GAME (1 << 0)
 #define MENU_STATE_UNPAUSE_GAME (1 << 1)
 #define MENU_STATE_RACE_FINISH_SAVE (1 << 2)
@@ -106,16 +186,16 @@ typedef enum PauseGpOptions {
 #define MENU_STATE_SETTINGS (1 << 7)
 #define MENU_STATE_100 (1 << 8)
 #define MENU_STATE_GP_NEXT_COURSE (1 << 9)
-#define MENU_STATE_400 (1 << 10)
+#define MENU_STATE_RETIRE_RESTART (1 << 10)
 
 extern s32 gPlayerLapNumbers[];
 extern TexturePtr gCharacterPortraitTextures[];
 
 extern s32 gPlayerMinimapLapCounterToggle[];
 
-Gfx* func_i3_DrawRaceTimeInterval(Gfx* gfx, s32 time, s32 left, s32 top, f32 scale);
-Gfx* func_i3_DrawBlankTimeHundredths(Gfx* gfx, s32 left, s32 top);
-Gfx* func_i3_DrawBlankTimeThousandths(Gfx* gfx, s32 left, s32 top);
+Gfx* Hud_DrawRaceTimeInterval(Gfx* gfx, s32 time, s32 left, s32 top, f32 scale);
+Gfx* Hud_DrawBlankTimeHundredths(Gfx* gfx, s32 left, s32 top);
+Gfx* Hud_DrawBlankTimeThousandths(Gfx* gfx, s32 left, s32 top);
 
 Gfx* func_i3_80059D90(Gfx* gfx, s32 playerIndex);
 

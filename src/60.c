@@ -345,7 +345,7 @@ void Reset_ThreadEntry(void* arg0) {
     if (gRamDDCompatible && D_8079A32C) {
         LeoReset();
     }
-    func_806F5A50();
+    Controller_Reset();
 
     while (true) {}
 }
