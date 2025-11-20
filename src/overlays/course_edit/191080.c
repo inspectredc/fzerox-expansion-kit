@@ -154,9 +154,9 @@ Gfx* func_xk2_800DF6FC(Gfx* gfx) {
         gSPLoadUcodeL(gfx++, gspF3DEX2_fifo);
         gSPMatrix(gfx++, D_2000000, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         func_xk2_800E1FC0(&gfx);
-        gfx = func_i3_DrawCourseMinimap(gfx, 0, 0);
-        gfx = func_i3_DrawPlayerSpeed(gfx, 0, 0);
-        return func_i3_DrawReverse(gfx, 0, 0);
+        gfx = Minimap_DrawCourseMinimap(gfx, 0, 0);
+        gfx = Hud_DrawPlayerSpeed(gfx, 0, 0);
+        return Hud_DrawReverse(gfx, 0, 0);
     }
     if (func_xk2_800E6B3C()) {
         D_xk2_80104CA0[2] = 1;

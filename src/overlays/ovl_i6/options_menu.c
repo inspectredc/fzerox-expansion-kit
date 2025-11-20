@@ -389,8 +389,8 @@ bool func_i6_80082DB4(void) {
     return false;
 }
 
-extern s32 D_807A1610[];
-extern s32 D_807A1620[];
+extern s32 gVsRacePlayerVictoryCount[];
+extern s32 gVsRacePlayerPoints[];
 
 void func_i6_800831E8(void) {
     s32 lastSelectionState;
@@ -421,7 +421,7 @@ void func_i6_800831E8(void) {
                 func_i6_80083390();
                 func_i6_80082A24();
                 for (i = 0; i < 4; i++) {
-                    D_807A1610[i] = D_807A1620[i] = 0;
+                    gVsRacePlayerVictoryCount[i] = gVsRacePlayerPoints[i] = 0;
                 }
                 func_8070DE6C();
                 Audio_TriggerSystemSE(NA_SE_5);

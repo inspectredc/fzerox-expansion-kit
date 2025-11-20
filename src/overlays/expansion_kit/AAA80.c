@@ -7,18 +7,18 @@ s32 D_xk1_80032C84 = 9;
 s32 D_xk1_80032C88 = 2;
 s32 D_xk1_80032C8C = 0;
 
-extern u16 gStickPressed;
+extern u16 gRetriggeredButtonCurrentPressed;
 extern u16 gInputButtonPressed;
 extern u16 gInputPressed;
 
 void func_xk1_8002D810(Controller* controller) {
     gInputButtonPressed = STICK_TO_BUTTON(controller->stickPressed);
-    if (controller->unk_82 != 0) {
-        gStickPressed = STICK_TO_BUTTON(controller->stickCurrent);
+    if (controller->retriggerCurrentButtonPress) {
+        gRetriggeredButtonCurrentPressed = STICK_TO_BUTTON(controller->stickCurrent);
     } else {
-        gStickPressed = 0;
+        gRetriggeredButtonCurrentPressed = 0;
     }
-    gInputPressed = gInputButtonPressed | gStickPressed;
+    gInputPressed = gInputButtonPressed | gRetriggeredButtonCurrentPressed;
 }
 
 void func_xk1_8002D86C(s32 arg0, s32 arg1) {

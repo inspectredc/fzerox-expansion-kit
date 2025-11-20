@@ -32,11 +32,11 @@ typedef struct SaveEditCup {
     u8 editCupTrackNames[6][9];
 } SaveEditCup; // size = 0x40
 
-typedef struct SaveEditCup2 {
+typedef struct SaveDDCups {
     u16 checksum;
-    u16 unk_02;
-    u8 unk_04[30 * 2];
-} SaveEditCup2; // size = 0x40
+    u16 staffGhostCompletion;
+    u8 cupCompletion[30 * 2];
+} SaveDDCups; // size = 0x40
 
 typedef struct SaveSettings {
     u8 fileName[8];
@@ -59,7 +59,7 @@ typedef struct ProfileSave {
     SaveCourseRecords courses[24];
     union {
         SaveEditCup editCup;
-        SaveEditCup2 editCup2;
+        SaveDDCups ddCups;
     };
 } ProfileSave; // size = 0x19E0
 
@@ -150,15 +150,15 @@ s32 Save_LoadGhostInfo(GhostInfo* ghostInfo);
 void Save_LoadGhostRecord(GhostRecord* ghostRecord, GhostData* ghostData, Ghost* ghost, bool arg3);
 void Save_LoadGhostData(GhostRecord* ghostRecord, GhostData* ghostData, Ghost* ghost, bool arg3);
 void Save_LoadCharacterSave(CharacterSave* characterSave, s32 courseIndex);
-void Save_LoadCupSave(CupSave* cupSave, u8* arg1);
-void Save_LoadEditCup2(ProfileSave* profileSaves, u8* arg1, u16* arg2);
+void Save_LoadCupSave(CupSave* cupSave, u8* cupCompletion);
+void Save_LoadDDCups(ProfileSave* profileSaves, u8* cupCompletion, u16* staffGhostCompletion);
 
 u16 Save_CalculateSaveSettingsChecksum(ProfileSave* profileSave);
 u16 Save_CalculateSaveDeathRaceChecksum(ProfileSave* profileSave);
 u16 Save_CalculateProfileSaveCourseRecordChecksum(ProfileSave* profileSave, s32 courseIndex);
 u16 Save_CalculateSaveCourseRecordChecksum(SaveCourseRecords* courseRecords);
 u16 Save_CalculateSaveEditCupChecksum(ProfileSave* profileSave);
-u16 Save_CalculateSaveEditCup2Checksum(ProfileSave* profileSave);
+u16 Save_CalculateSaveDDCupsChecksum(ProfileSave* profileSave);
 u16 Save_CalculateGhostRecordChecksum(GhostRecord* ghostRecord);
 u16 Save_CalculateGhostDataChecksum(GhostData* ghostData);
 u16 Save_CalculateCharacterSaveChecksum(CharacterSave* characterSave);

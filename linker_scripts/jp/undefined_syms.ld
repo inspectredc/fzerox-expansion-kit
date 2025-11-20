@@ -1321,6 +1321,12 @@ aVpBottomCenterQuarter = 0x8014748;
 aVpLeftCenterQuarter = 0x8014758;
 aVpRightCenterQuarter = 0x8014768;
 
+aLapTex = 0x303D1F0;
+aTimerSymbolsTex = 0x303C3F0;
+aMaxSpeedTex = 0x303AA70;
+aKmhTex = 0x303C170;
+aSpeedDigitsTex = 0x303B270;
+
 // temp segment addrs
 
 framebuffer_unused_VRAM = 0x803DBC00;

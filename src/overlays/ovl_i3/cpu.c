@@ -621,7 +621,7 @@ void func_i3_8003FE64(void) {
     s32 staffTime;
 
     if ((gCupType < X_CUP) || (gCupType == DD_1_CUP) || (gCupType == DD_2_CUP)) {
-        staffTime = func_i2_800A9788(gCourseIndex);
+        staffTime = Save_GetDDStaffGhostRecordTime(gCourseIndex);
         if (staffTime != -1) {
             sp1C.raceTime = staffTime;
             D_i3_8006D080 = D_i3_8006A5B0[gCourseIndex * 4 + gDifficulty];
@@ -1033,7 +1033,7 @@ void Cpu_BehaviorMrEad(Racer* racer, Controller* controller) {
 
 extern f32 D_i3_8006B304[];
 extern f32 D_i3_8006B2F8[];
-extern s32 D_807B37B8[];
+extern s32 gPlayerReverseTimer[];
 extern u32 gGameFrameCount;
 
 void (*sCharacterBehaviorFuncs[])(Racer*, Controller*) = {
@@ -1335,7 +1335,7 @@ void Cpu_GenerateInputs(Racer* racer, Controller* controller) {
     if (D_i3_80069E70[var_a3] < racer->unk_1EC) {
         racer->unk_1EC = D_i3_80069E70[var_a3];
     }
-    if (((D_8006CFF0 > 20) || (D_807B37B8[0] > 30)) && (gNumPlayers == 1) && (racer->id != 0) &&
+    if (((D_8006CFF0 > 20) || (gPlayerReverseTimer[0] > 30)) && (gNumPlayers == 1) && (racer->id != 0) &&
         (racer->raceTime > 10000) && !(sPlayerRacer->stateFlags & RACER_STATE_CRASHED) &&
         (func_i3_fabsf(sPlayerRacer->unk_33C - sp94) < 138.0f)) {
 

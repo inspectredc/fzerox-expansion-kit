@@ -6,5 +6,5 @@ s16 gPlayer1OverallPosition = 0;
 
 s16 D_800D5810[30];
 s16 gRacerPositionsById[30];
-s32 D_800D5890[4];
+s32 gVsPreviousRacePosition[4];
 s16 gRacersRemaining;
