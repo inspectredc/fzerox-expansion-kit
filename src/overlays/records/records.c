@@ -254,7 +254,7 @@ void Records_InitData(void) {
     func_i2_800AE7C4(aHasGhostMarkerTex, TEX_SIZE_4B(aHasGhostMarkerTex), 0, 0, false);
     func_i2_800AE7C4(aMenuToGamePakTex, TEX_SIZE(aMenuToGamePakTex, sizeof(u8)), 0, 1, false);
     func_i2_800AE7C4(aMenuToDiskTex, TEX_SIZE(aMenuToDiskTex, sizeof(u8)), 0, 1, false);
-    func_i3_80064F20();
+    RecordsEntry_Init();
     BorderedBox_CleanWidget(&sRecordsMenuBox);
     BorderedBox_CleanWidget(&sRecordsClearConfirmBox);
     BorderedBox_CleanWidget(&sRecordsGhostCopyBox);
@@ -355,7 +355,7 @@ s32 Records_Update(void) {
     if (sGhostMarkerState != GHOST_MARKER_NONE) {
         Records_UpdateGhostMarker();
     }
-    func_i3_80065204();
+    RecordsEntry_Update();
     BorderedBox_Update();
     gameMode = GAMEMODE_RECORDS;
     reloadRecords = false;
@@ -512,7 +512,7 @@ s32 Records_ViewRecordsUpdate(void) {
                 sRecordsState = RECORDS_STATE_RECORDS_MENU;
                 sRecordsHighlightedMenuIndex = 0;
                 Audio_TriggerSystemSE(NA_SE_33);
-                func_i3_80067118(false);
+                RecordsEntry_SetDrawArrows(false);
             }
         } else if (gInputButtonPressed & BTN_B) {
             sp30 = 2;
@@ -648,7 +648,7 @@ s32 Records_MenuUpdate(void) {
         }
     } else if (gInputButtonPressed & BTN_B) {
         sRecordsState = RECORDS_STATE_VIEW_RECORDS;
-        func_i3_80067118(true);
+        RecordsEntry_SetDrawArrows(true);
         BorderedBox_StartClose(sRecordsMenuBox);
         Audio_TriggerSystemSE(NA_SE_16);
     }
@@ -711,7 +711,7 @@ void Records_ClearConfirmUpdate(void) {
 void Records_State3Update(void) {
     if (BorderedBox_GetInfo(sRecordsState3Box, IS_BORDERED_BOX_OPENED) && (gInputButtonPressed & BTN_B)) {
         sRecordsState = RECORDS_STATE_VIEW_RECORDS;
-        func_i3_80067118(true);
+        RecordsEntry_SetDrawArrows(true);
         BorderedBox_StartClose(sRecordsState3Box);
         Audio_TriggerSystemSE(NA_SE_16);
     }
@@ -752,7 +752,7 @@ Gfx* Records_Draw(Gfx* gfx) {
     gfx = Background_Draw(gfx, 0, SCISSOR_BOX_FULL_SCREEN);
     gfx = Course_Draw(gfx, 0);
     gfx = Course_GadgetsDraw(gfx, 0);
-    gfx = func_i3_80065560(gfx, sRecordsCourseIndex);
+    gfx = RecordsEntry_DrawRecords(gfx, sRecordsCourseIndex);
     if (sGhostMarkerState != GHOST_MARKER_NONE) {
         gfx = Records_DrawGhostMarker(gfx);
     }
@@ -1017,11 +1017,12 @@ Gfx* Records_DrawGhostCopyMenu(Gfx* gfx, s32 left, s32 top) {
         }
         if (!timeTexturesLoaded) {
             timeTexturesLoaded = true;
-            gDPLoadTextureBlock(gfx++, D_303C3F0, G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 224, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                                G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+            gDPLoadTextureBlock(gfx++, aTimerSymbolsTex, G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 224, 0,
+                                G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
+                                G_TX_NOLOD, G_TX_NOLOD);
         }
-        gfx = func_i3_DrawTimerScisThousandths(gfx, sGhostCourseRecordTimes[ghostIndex], left + 84, top + 30 + (i * 20),
-                                               1.0f);
+        gfx = Hud_DrawTimerScisThousandths(gfx, sGhostCourseRecordTimes[ghostIndex], left + 84, top + 30 + (i * 20),
+                                           1.0f);
     }
     return gfx;
 }
@@ -1221,11 +1222,12 @@ Gfx* Records_DrawCopyToDiskMenu(Gfx* gfx, s32 left, s32 top) {
         }
         if (!timeTexturesLoaded) {
             timeTexturesLoaded = true;
-            gDPLoadTextureBlock(gfx++, D_303C3F0, G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 224, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                                G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+            gDPLoadTextureBlock(gfx++, aTimerSymbolsTex, G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 224, 0,
+                                G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
+                                G_TX_NOLOD, G_TX_NOLOD);
         }
-        gfx = func_i3_DrawTimerScisThousandths(gfx, sDiskGhostCourseRecordTimes[ghostIndex], left + 84,
-                                               top - 10 + i * 20, 1.0f);
+        gfx = Hud_DrawTimerScisThousandths(gfx, sDiskGhostCourseRecordTimes[ghostIndex], left + 84, top - 10 + i * 20,
+                                           1.0f);
     }
     return gfx;
 }

@@ -2512,7 +2512,7 @@ void Camera_SettingsUpdateRaceIntroStart(Camera* camera, CameraSettings* cameraS
     }
 }
 
-extern s32 D_8006D544;
+extern bool D_8006D544;
 extern bool D_8006D548;
 extern s32 D_i2_800BF040;
 extern s32 sNumCameras;
@@ -2526,7 +2526,7 @@ void Camera_UpdateViewportTransition(void) {
     Vp* vp;
 
     if (sMultiplayerFocusCameraId == -1) {
-        if ((D_807A16CC != 0) && (D_8006D544 != 0)) {
+        if ((D_807A16CC != 0) && D_8006D544) {
             D_i2_800BF040 = 30;
 
             for (i = 0, camera = gCameras; i < sNumCameras; i++, camera++) {

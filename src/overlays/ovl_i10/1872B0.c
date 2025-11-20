@@ -13,7 +13,7 @@ s32 func_i10_8012B520(void) {
     return 0;
 }
 
-extern s32 D_i2_800BEF80[];
+extern s32 sDDStaffGhostRecordTimes[];
 
 void func_i10_8012B580(void) {
     s32 pad;
@@ -22,7 +22,7 @@ void func_i10_8012B580(void) {
 
     for (courseIndex = 0; courseIndex < 24; courseIndex++) {
         Save_LoadStaffGhostRecord(&sp30, courseIndex);
-        D_i2_800BEF80[courseIndex] = sp30.raceTime;
+        sDDStaffGhostRecordTimes[courseIndex] = sp30.raceTime;
     }
 }
 

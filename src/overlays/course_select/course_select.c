@@ -205,7 +205,7 @@ void CourseSelect_UpdateUnlockedGhosts(void) {
         sLastCourseIndex++;
     } else if (sLastCourseIndex != gCourseIndex) {
         sStaffGhostTimeBeaten = false;
-        staffTime = func_i2_800A9788(gCourseIndex);
+        staffTime = Save_GetDDStaffGhostRecordTime(gCourseIndex);
         if (staffTime == -1) {
             sUnlockedGhosts = 1;
         } else {
@@ -302,7 +302,7 @@ void CourseSelect_Init(void) {
     s32 i;
     s32 j;
     s32 k;
-    s8* sp20;
+    s8* cupCompletion;
     bool var_a1;
 
     D_8076C7A8 = 3;
@@ -314,14 +314,14 @@ void CourseSelect_Init(void) {
         D_i5_8007B9EC[i] = 0;
     }
 
-    sp20 = Arena_Allocate(ALLOC_FRONT, 4 * 30 * 7);
-    Save_UpdateCupSave(sp20);
+    cupCompletion = Arena_Allocate(ALLOC_FRONT, 4 * 30 * 7);
+    Save_UpdateCupSave(cupCompletion);
 
     for (i = 0; i < 2; i++) {
         var_a1 = false;
         for (j = 3; j >= 0; j--) {
             for (k = 0; k < 30; k++) {
-                if (((s8*) sp20)[(j * 30 * 7) + (k * 7) + i + 5] != 0) {
+                if (((s8*) cupCompletion)[(j * 30 * 7) + (k * 7) + i + 5] != 0) {
                     var_a1 = true;
                     break;
                 }

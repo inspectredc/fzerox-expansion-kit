@@ -38,15 +38,15 @@ Gfx* func_xk2_800F634C(Gfx* gfx) {
     gDPSetScissor(gfx++, G_SC_NON_INTERLACE, D_xk2_8013A7E4 + 100, D_xk2_8013A7E4 + 41, 0xE6 - D_xk2_8013A7E4,
                   0x85 - D_xk2_8013A7E4);
 
-    gfx = func_i3_DrawBeveledBox(gfx, 0x78, 0x3D, 0xD2, 0x71, 0, 0, 0, 0xDC);
+    gfx = Menus_DrawBeveledBox(gfx, 0x78, 0x3D, 0xD2, 0x71, 0, 0, 0, 0xDC);
     gSPDisplayList(gfx++, D_4011D78);
 
     gDPLoadTLUT_pal256(gfx++, func_i2_800AEA90(aMenuTextTLUT));
 
-    gfx = func_i3_SetOptionColor(gfx, D_xk2_8013A7E0);
-    gfx = func_i3_DrawRaceMenuTexture(gfx, 0xF, 0x8C, 0x50);
-    gfx = func_i3_SetOptionColor(gfx, D_xk2_8013A7E0 - 1);
-    gfx = func_i3_DrawRaceMenuTexture(gfx, 2, 0x8C, 0x5F);
+    gfx = Menus_SetOptionColor(gfx, D_xk2_8013A7E0);
+    gfx = Menus_DrawRaceMenuTexture(gfx, 0xF, 0x8C, 0x50);
+    gfx = Menus_SetOptionColor(gfx, D_xk2_8013A7E0 - 1);
+    gfx = Menus_DrawRaceMenuTexture(gfx, 2, 0x8C, 0x5F);
     gDPPipeSync(gfx++);
     gDPSetTextureLUT(gfx++, G_TT_NONE);
     gfx = func_8070D4A8(gfx, 0);
@@ -59,7 +59,7 @@ Gfx* func_xk2_800F634C(Gfx* gfx) {
 
     gfx = Font_DrawString(gfx, 0xA5 - (Font_GetStringWidth("PAUSE", 6, 1) / 2), 0x4D, "PAUSE", 1, 6, 0);
     if ((D_xk2_8013A7E4 == 0) && (sMenuIsBusy == 0)) {
-        D_xk2_8013A7E0 = func_i3_8004C260(0, D_xk2_8013A7E0, 1);
+        D_xk2_8013A7E0 = Menus_UpdateHighlightedOptionVertical(0, D_xk2_8013A7E0, 1);
         if (gControllers[gPlayerControlPorts[0]].buttonPressed & BTN_A) {
             switch (D_xk2_8013A7E0) {
                 case 0:

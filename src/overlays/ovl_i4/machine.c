@@ -1991,7 +1991,7 @@ Gfx* MachineSelect_DifficultyCupsDraw(Gfx* gfx, Object* difficultyCupsObj) {
         }
     }
 
-    var_t1 = OBJECT_BUFFER(difficultyCupsObj) + difficulty * 210 + character * 7;
+    var_t1 = OBJECT_BUFFER(difficultyCupsObj) + difficulty * (30 * 7) + character * 7;
 
     for (i = 0; i < cupsUnlocked; i++) {
 

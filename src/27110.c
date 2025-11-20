@@ -16,8 +16,8 @@ s16 gPlayerLives[4];
 s16 gPlayerCharacters[4];
 s16 gPlayerMachineSkins[4];
 f32 gPlayerEngine[4];
-s32 D_807A1610[4];
-s32 D_807A1620[4];
+s32 gVsRacePlayerVictoryCount[4];
+s32 gVsRacePlayerPoints[4];
 s32 D_807A1630[4];
 s32 D_807A1640[4];
 Racer* gRacersByPosition[30];
@@ -39,9 +39,9 @@ s16 D_807A16E6;
 s32 sRaceFrameCount;
 s32 gPracticeBestLap;
 s16 gStartNewBestLap;
-s16 D_807A16F2;
-s16 D_807A16F4;
-s16 D_807A16F6;
+s16 gCurrentTimeAttackRecordPosition;
+s16 gCurrentTimeAttackHasMaxSpeed;
+s16 gBestTimedLap;
 Vec3s* sPipeFogColors;
 Vec3s* sTunnelFogColors;
 s32 D_807A1700;
@@ -56,7 +56,7 @@ s32 sReplayRecordPosX;
 s32 sReplayRecordPosY;
 s32 sReplayRecordPosZ;
 s16 D_807B14F4;
-s16 D_807B14F6;
+s16 gUnableToRecordGhost;
 s16 D_807B14F8;
 s16 D_807B14FA;
 GhostRacer gGhostRacers[3];
@@ -68,14 +68,14 @@ RacerPairInfo sRacerPairInfo[TOTAL_RACER_COUNT * (TOTAL_RACER_COUNT - 1) / 2];
 f32 D_807B37AC;
 f32 D_807B37B0;
 f32 D_807B37B4;
-s32 D_807B37B8[4];
+s32 gPlayerReverseTimer[4];
 s32 D_807B37C8;
 f32 sCourseHalfLength;
 f32 sCourseNegativeHalfLength;
 s16 D_807B37D4;
 Machine gMachines[30];
 CustomMachineInfo sCustomMachineInfo[30];
-u8 D_807B3C14[7];
+u8 sRecordsMachineIndices[7];
 
 TexturePtr sPosition1PMarkerTexs[] = {
     aFirstPlaceMarker1PTex,
@@ -361,7 +361,7 @@ s32 gRacePositionPoints[] = {
     35,  33, 31, 29, 27, 25, 23, 22, 21, 20, 19, 18, 17, 16, 15,
 };
 
-s32 D_8076E558[] = { 5, 3, 1, 0 };
+s32 sVsRacePositionPoints[] = { 5, 3, 1, 0 };
 
 f32 D_8076E568 = 0.1f;
 f32 D_8076E56C = 0.1f;
@@ -693,7 +693,7 @@ void Racer_IncreaseLife(s32 playerIndex) {
     gPlayerLives[playerIndex]++;
 
     func_i3_80053BE0();
-    func_i3_TriggerLivesIncrease();
+    Hud_TriggerLivesIncrease();
     if (gEnableRaceSfx) {
         Audio_TriggerSystemSE(NA_SE_NONE);
     }
@@ -703,7 +703,7 @@ void Racer_IncreaseLife(s32 playerIndex) {
 void Racer_DecreaseLife(s32 playerIndex) {
 
     if (--gPlayerLives[playerIndex] >= 0) {
-        func_i3_TriggerLivesDecrease();
+        Hud_TriggerLivesDecrease();
     }
     if (gEnableRaceSfx) {
         Audio_TriggerSystemSE(NA_SE_44);
@@ -911,10 +911,10 @@ void func_8071A88C(void) {
     s32* var_v1_10;
     Ghost* ghost;
 
-    if (D_807B14F8 != 0) {
+    if (D_807B14F8) {
         for (i = 0; i < 5; i++) {
             if (gRacers[0].raceTime < gCurrentCourseInfo->timeRecord[i]) {
-                D_807A16F2 = i + 1;
+                gCurrentTimeAttackRecordPosition = i + 1;
 
                 for (j = 3; j >= i; j--) {
 
@@ -923,7 +923,7 @@ void func_8071A88C(void) {
                     gCurrentCourseInfo->recordEngines[j + 1] = gCurrentCourseInfo->recordEngines[j];
                     *(s32*) gCurrentCourseInfo->recordNames[j + 1] = *(s32*) gCurrentCourseInfo->recordNames[j];
 
-                    D_807B3C14[j + 1] = D_807B3C14[j];
+                    sRecordsMachineIndices[j + 1] = sRecordsMachineIndices[j];
                 }
 
                 gCurrentCourseInfo->timeRecord[i] = gRacers[0].raceTime;
@@ -931,17 +931,17 @@ void func_8071A88C(void) {
                 func_8071A730(&gCurrentCourseInfo->recordMachineInfos[i]);
 
                 gCurrentCourseInfo->recordEngines[i] = gPlayerEngine[0];
-                D_807B3C14[i] = gRacers[0].machineIndex;
+                sRecordsMachineIndices[i] = gRacers[0].machineIndex;
                 break;
             }
         }
 
         if (gCurrentCourseInfo->maxSpeed < gRacers[0].maxSpeed) {
-            D_807A16F4 = 1;
+            gCurrentTimeAttackHasMaxSpeed = true;
             gCurrentCourseInfo->maxSpeed = gRacers[0].maxSpeed;
 
             func_8071A730(&gCurrentCourseInfo->maxSpeedMachine);
-            D_807B3C14[5] = gRacers[0].machineIndex;
+            sRecordsMachineIndices[5] = gRacers[0].machineIndex;
         }
 
         var_a1_3 = gCurrentCourseInfo->bestTime;
@@ -953,14 +953,14 @@ void func_8071A88C(void) {
         }
 
         if (var_a1_3 < gCurrentCourseInfo->bestTime) {
-            D_807A16F6 = j + 1;
+            gBestTimedLap = j + 1;
             gCurrentCourseInfo->bestTime = var_a1_3;
             func_8071A730(&gCurrentCourseInfo->bestTimeMachine);
-            D_807B3C14[6] = gRacers[0].machineIndex;
+            sRecordsMachineIndices[6] = gRacers[0].machineIndex;
         }
     }
 
-    if (D_807B14FA != 0) {
+    if (D_807B14FA) {
         for (j = 0; j < 3; j++) {
             if (gGhosts[j].encodedCourseIndex == 0) {
                 break;
@@ -1698,7 +1698,7 @@ void Racer_Init(void) {
             sLastMultiplayerTotalRacerCount = gTotalRacers;
             sLastMultiplayerPlayerCount = gNumPlayers;
             for (i = 0; i < 4; i++) {
-                D_807A1610[i] = D_807A1620[i] = 0;
+                gVsRacePlayerVictoryCount[i] = gVsRacePlayerPoints[i] = 0;
             }
         }
     }
@@ -1761,7 +1761,7 @@ void Racer_Init(void) {
     }
 
     for (i = 0; i < 4; i++) {
-        D_807B37B8[i] = 0;
+        gPlayerReverseTimer[i] = 0;
     }
 
     if (gGameMode == GAMEMODE_DEATH_RACE) {
@@ -1804,7 +1804,8 @@ void Racer_Init(void) {
     for (i = 0; i < 3; i++) {
         gGhostRacers[i].exists = false;
     }
-    D_807A16F2 = D_807A16F4 = D_807A16F6 = D_807B14F4 = D_807B14FA = D_807B14F8 = 0;
+    gCurrentTimeAttackRecordPosition = gCurrentTimeAttackHasMaxSpeed = gBestTimedLap = D_807B14F4 = D_807B14FA =
+        D_807B14F8 = 0;
     gFastestGhostRacer = NULL;
     gFastestGhost = NULL;
     if (gGameMode == GAMEMODE_TIME_ATTACK) {
@@ -1874,7 +1875,7 @@ void Racer_Init(void) {
             }
         }
         sGhostReplayRecordingPtr = sGhostReplayRecordingBuffer;
-        D_807B14F6 = sReplayRecordFrameCount = sGhostReplayRecordingSize = 0;
+        gUnableToRecordGhost = sReplayRecordFrameCount = sGhostReplayRecordingSize = 0;
     }
 }
 
@@ -2044,16 +2045,16 @@ void func_8071E9C4(void) {
     sp2C = &gCourseInfos[gCourseIndex];
 
     for (i = 4; i >= 0; i--) {
-        D_807B3C14[i] = i + 1;
-        func_8071E794(&sp2C->recordMachineInfos[i], D_807B3C14[i]);
+        sRecordsMachineIndices[i] = i + 1;
+        func_8071E794(&sp2C->recordMachineInfos[i], sRecordsMachineIndices[i]);
     }
 
     var = 5;
-    D_807B3C14[var] = var + 1;
-    func_8071E794(&sp2C->maxSpeedMachine, D_807B3C14[var]);
+    sRecordsMachineIndices[var] = var + 1;
+    func_8071E794(&sp2C->maxSpeedMachine, sRecordsMachineIndices[var]);
     var = 6;
-    D_807B3C14[var] = var + 1;
-    func_8071E794(&sp2C->bestTimeMachine, D_807B3C14[var]);
+    sRecordsMachineIndices[var] = var + 1;
+    func_8071E794(&sp2C->bestTimeMachine, sRecordsMachineIndices[var]);
 }
 
 void func_8071EA88(void) {
@@ -2129,7 +2130,7 @@ void func_8071ED54(Racer* arg0, s32 arg1) {
     if ((gGameMode == GAMEMODE_GP_RACE) && (gRacersKOd == 5)) {
         gPlayerLives[0]++;
         func_i3_80053BE0();
-        func_i3_TriggerLivesIncrease();
+        Hud_TriggerLivesIncrease();
         if (gEnableRaceSfx) {
             Audio_TriggerSystemSE(NA_SE_NONE);
         }
@@ -4231,7 +4232,7 @@ void Racer_UpdateFromControls(Racer* racer, Controller* controller) {
                                 gPlayerRacersFinished++;
                             }
                             gRacersFinished++;
-                            D_807B14F8 = 1;
+                            D_807B14F8 = true;
 
                             if (racer->id < gNumPlayers) {
                                 if (gEnableRaceSfx) {
@@ -4757,7 +4758,7 @@ void func_80726254(s32 position) {
             *sGhostReplayRecordingPtr++ = position & 0xFF;
         } else {
             sGhostReplayRecordingSize -= 3;
-            D_807B14F6 = 1;
+            gUnableToRecordGhost = true;
             D_807B14F4 = 0;
         }
     } else {
@@ -4766,7 +4767,7 @@ void func_80726254(s32 position) {
             *sGhostReplayRecordingPtr++ = position;
         } else {
             sGhostReplayRecordingSize--;
-            D_807B14F6 = 1;
+            gUnableToRecordGhost = true;
             D_807B14F4 = 0;
         }
     }
@@ -4939,7 +4940,7 @@ void Racer_Update(void) {
         for (racer = sLastRacer; racer >= gRacers; racer--) {
             racer->modelMatrixInit = racer->shadowMatrixInit = racer->attackHighlightMatrixInit = false;
         }
-        gControllers[(gGameFrameCount & 3)].unk_78 = 1;
+        gControllers[gGameFrameCount % 4].unk_78 = 1;
         return;
     }
 
@@ -5133,7 +5134,7 @@ void Racer_Update(void) {
         if ((racer2->maxSpeed < racer2->speed) &&
             !(racer2->stateFlags &
               (RACER_STATE_CRASHED | RACER_STATE_AIRBORNE | RACER_STATE_FINISHED | RACER_STATE_FALLING_OFF_TRACK)) &&
-            (D_807B37B8[i] == 0)) {
+            (gPlayerReverseTimer[i] == 0)) {
             racer2->maxSpeed = racer2->speed;
         }
     }
@@ -5153,8 +5154,8 @@ void Racer_Update(void) {
             i = Math_Round(var_fs0);
             func_80726254(i - sReplayRecordPosZ);
             sReplayRecordPosZ = i;
-            if ((D_807B14F8 != 0) && (D_807B14F6 == 0) && (D_807B14FA == 0)) {
-                D_807B14FA = 1;
+            if (D_807B14F8 && !gUnableToRecordGhost && !D_807B14FA) {
+                D_807B14FA = true;
                 sGhostReplayRecordingEnd = sGhostReplayRecordingSize;
             }
         }
@@ -5279,12 +5280,12 @@ void Racer_Update(void) {
             if ((((racer2->segmentBasis.x.x * racer2->velocity.x) + (racer2->segmentBasis.x.y * racer2->velocity.y) +
                   (racer2->segmentBasis.x.z * racer2->velocity.z)) < -0.3f) &&
                 !(racer2->stateFlags & (RACER_STATE_CRASHED | RACER_STATE_FALLING_OFF_TRACK))) {
-                D_807B37B8[i]++;
-                if (D_807B37B8[i] == 100) {
+                gPlayerReverseTimer[i]++;
+                if (gPlayerReverseTimer[i] == 100) {
                     Audio_TriggerSystemSE(NA_SE_60);
                 }
             } else {
-                D_807B37B8[i] = 0;
+                gPlayerReverseTimer[i] = 0;
             }
         }
     }
@@ -5342,9 +5343,9 @@ void Racer_Update(void) {
                 }
 
                 for (i = gTotalRacers - 2; i >= 0; i--) {
-                    D_807A1620[gRacersByPosition[i]->id] += D_8076E558[i];
+                    gVsRacePlayerPoints[gRacersByPosition[i]->id] += sVsRacePositionPoints[i];
                 }
-                D_807A1610[gRacersByPosition[0]->id]++;
+                gVsRacePlayerVictoryCount[gRacersByPosition[0]->id]++;
             }
         }
     } else {
@@ -6774,11 +6775,11 @@ Gfx* func_8072DE6C(Gfx* gfx, s32 arg1, s32 red, s32 green, s32 blue) {
     u8 character;
 
     if (arg1 < 6) {
-        character = D_807B3C14[arg1 - 1];
+        character = sRecordsMachineIndices[arg1 - 1];
     } else if (arg1 == 6) {
-        character = D_807B3C14[5];
+        character = sRecordsMachineIndices[5];
     } else {
-        character = D_807B3C14[6];
+        character = sRecordsMachineIndices[6];
     }
 
     gSPDisplayList(gfx++, D_8076DB58[character]);

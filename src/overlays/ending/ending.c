@@ -141,17 +141,17 @@ s32 EndingCutscene_GetEndScreenIndex(s32 difficulty, s16 character, s8 customTyp
 }
 
 bool EndingCutscene_HasBeatenEveryMasterCup(void) {
-    s8* cupDataPtr;
+    s8* cupCompletion;
     s32 i;
     bool beatenEveryMasterCup;
 
-    cupDataPtr = Arena_Allocate(ALLOC_FRONT, 4 * 30 * 7);
-    Save_UpdateCupSave(cupDataPtr);
+    cupCompletion = Arena_Allocate(ALLOC_FRONT, 4 * 30 * 7);
+    Save_UpdateCupSave(cupCompletion);
 
     beatenEveryMasterCup = false;
-    cupDataPtr += 3 * 30 * 7;
-    for (i = 0; i < 30 * 7; i++, cupDataPtr++) {
-        if (*cupDataPtr == 0) {
+    cupCompletion += 3 * 30 * 7;
+    for (i = 0; i < 30 * 7; i++, cupCompletion++) {
+        if (*cupCompletion == 0) {
             break;
         }
     }
@@ -720,12 +720,12 @@ Gfx* EndingCutscene_DrawFinalResultsRaceResult(Gfx* gfx, EndingCutsceneResults* 
     if (0) {}
     gDPSetCombineMode(gfx++, G_CC_DECALRGBA, G_CC_DECALRGBA);
     if (0) {}
-    gDPLoadTextureBlock(gfx++, D_303C3F0, G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 224, 0, G_TX_NOMIRROR | G_TX_WRAP,
+    gDPLoadTextureBlock(gfx++, aTimerSymbolsTex, G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 224, 0, G_TX_NOMIRROR | G_TX_WRAP,
                         G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
-    gfx = func_i3_DrawTimerScisThousandths(gfx, raceStats->raceTime, 110, (baseYPos + 28.0f), 1.0f);
+    gfx = Hud_DrawTimerScisThousandths(gfx, raceStats->raceTime, 110, (baseYPos + 28.0f), 1.0f);
     gDPPipeSync(gfx++);
-    gfx = func_i3_DrawSpeed(gfx, 194, (baseYPos + 28.0f), raceStats->maxSpeed, false, false);
+    gfx = RecordsEntry_DrawSpeed(gfx, 194, (baseYPos + 28.0f), raceStats->maxSpeed, false, false);
     gDPPipeSync(gfx++);
     return EndingCutscene_DrawResultsRacersKOd(gfx, 110, (baseYPos + 48.0f), raceStats->racersKOd);
 }
