@@ -39,8 +39,8 @@ s16 D_807A16E6;
 s32 sRaceFrameCount;
 s32 gPracticeBestLap;
 s16 gStartNewBestLap;
-s16 D_807A16F2;
-s16 D_807A16F4;
+s16 gCurrentTimeAttackRecordPosition;
+s16 gCurrentTimeAttackHasMaxSpeed;
 s16 gBestTimedLap;
 Vec3s* sPipeFogColors;
 Vec3s* sTunnelFogColors;
@@ -75,7 +75,7 @@ f32 sCourseNegativeHalfLength;
 s16 D_807B37D4;
 Machine gMachines[30];
 CustomMachineInfo sCustomMachineInfo[30];
-u8 D_807B3C14[7];
+u8 sRecordsMachineIndices[7];
 
 TexturePtr sPosition1PMarkerTexs[] = {
     aFirstPlaceMarker1PTex,
@@ -911,10 +911,10 @@ void func_8071A88C(void) {
     s32* var_v1_10;
     Ghost* ghost;
 
-    if (D_807B14F8 != 0) {
+    if (D_807B14F8) {
         for (i = 0; i < 5; i++) {
             if (gRacers[0].raceTime < gCurrentCourseInfo->timeRecord[i]) {
-                D_807A16F2 = i + 1;
+                gCurrentTimeAttackRecordPosition = i + 1;
 
                 for (j = 3; j >= i; j--) {
 
@@ -923,7 +923,7 @@ void func_8071A88C(void) {
                     gCurrentCourseInfo->recordEngines[j + 1] = gCurrentCourseInfo->recordEngines[j];
                     *(s32*) gCurrentCourseInfo->recordNames[j + 1] = *(s32*) gCurrentCourseInfo->recordNames[j];
 
-                    D_807B3C14[j + 1] = D_807B3C14[j];
+                    sRecordsMachineIndices[j + 1] = sRecordsMachineIndices[j];
                 }
 
                 gCurrentCourseInfo->timeRecord[i] = gRacers[0].raceTime;
@@ -931,17 +931,17 @@ void func_8071A88C(void) {
                 func_8071A730(&gCurrentCourseInfo->recordMachineInfos[i]);
 
                 gCurrentCourseInfo->recordEngines[i] = gPlayerEngine[0];
-                D_807B3C14[i] = gRacers[0].machineIndex;
+                sRecordsMachineIndices[i] = gRacers[0].machineIndex;
                 break;
             }
         }
 
         if (gCurrentCourseInfo->maxSpeed < gRacers[0].maxSpeed) {
-            D_807A16F4 = 1;
+            gCurrentTimeAttackHasMaxSpeed = true;
             gCurrentCourseInfo->maxSpeed = gRacers[0].maxSpeed;
 
             func_8071A730(&gCurrentCourseInfo->maxSpeedMachine);
-            D_807B3C14[5] = gRacers[0].machineIndex;
+            sRecordsMachineIndices[5] = gRacers[0].machineIndex;
         }
 
         var_a1_3 = gCurrentCourseInfo->bestTime;
@@ -956,11 +956,11 @@ void func_8071A88C(void) {
             gBestTimedLap = j + 1;
             gCurrentCourseInfo->bestTime = var_a1_3;
             func_8071A730(&gCurrentCourseInfo->bestTimeMachine);
-            D_807B3C14[6] = gRacers[0].machineIndex;
+            sRecordsMachineIndices[6] = gRacers[0].machineIndex;
         }
     }
 
-    if (D_807B14FA != 0) {
+    if (D_807B14FA) {
         for (j = 0; j < 3; j++) {
             if (gGhosts[j].encodedCourseIndex == 0) {
                 break;
@@ -1804,7 +1804,8 @@ void Racer_Init(void) {
     for (i = 0; i < 3; i++) {
         gGhostRacers[i].exists = false;
     }
-    D_807A16F2 = D_807A16F4 = gBestTimedLap = D_807B14F4 = D_807B14FA = D_807B14F8 = 0;
+    gCurrentTimeAttackRecordPosition = gCurrentTimeAttackHasMaxSpeed = gBestTimedLap = D_807B14F4 = D_807B14FA =
+        D_807B14F8 = 0;
     gFastestGhostRacer = NULL;
     gFastestGhost = NULL;
     if (gGameMode == GAMEMODE_TIME_ATTACK) {
@@ -2044,16 +2045,16 @@ void func_8071E9C4(void) {
     sp2C = &gCourseInfos[gCourseIndex];
 
     for (i = 4; i >= 0; i--) {
-        D_807B3C14[i] = i + 1;
-        func_8071E794(&sp2C->recordMachineInfos[i], D_807B3C14[i]);
+        sRecordsMachineIndices[i] = i + 1;
+        func_8071E794(&sp2C->recordMachineInfos[i], sRecordsMachineIndices[i]);
     }
 
     var = 5;
-    D_807B3C14[var] = var + 1;
-    func_8071E794(&sp2C->maxSpeedMachine, D_807B3C14[var]);
+    sRecordsMachineIndices[var] = var + 1;
+    func_8071E794(&sp2C->maxSpeedMachine, sRecordsMachineIndices[var]);
     var = 6;
-    D_807B3C14[var] = var + 1;
-    func_8071E794(&sp2C->bestTimeMachine, D_807B3C14[var]);
+    sRecordsMachineIndices[var] = var + 1;
+    func_8071E794(&sp2C->bestTimeMachine, sRecordsMachineIndices[var]);
 }
 
 void func_8071EA88(void) {
@@ -4231,7 +4232,7 @@ void Racer_UpdateFromControls(Racer* racer, Controller* controller) {
                                 gPlayerRacersFinished++;
                             }
                             gRacersFinished++;
-                            D_807B14F8 = 1;
+                            D_807B14F8 = true;
 
                             if (racer->id < gNumPlayers) {
                                 if (gEnableRaceSfx) {
@@ -5153,8 +5154,8 @@ void Racer_Update(void) {
             i = Math_Round(var_fs0);
             func_80726254(i - sReplayRecordPosZ);
             sReplayRecordPosZ = i;
-            if ((D_807B14F8 != 0) && !gUnableToRecordGhost && (D_807B14FA == 0)) {
-                D_807B14FA = 1;
+            if (D_807B14F8 && !gUnableToRecordGhost && !D_807B14FA) {
+                D_807B14FA = true;
                 sGhostReplayRecordingEnd = sGhostReplayRecordingSize;
             }
         }
@@ -6774,11 +6775,11 @@ Gfx* func_8072DE6C(Gfx* gfx, s32 arg1, s32 red, s32 green, s32 blue) {
     u8 character;
 
     if (arg1 < 6) {
-        character = D_807B3C14[arg1 - 1];
+        character = sRecordsMachineIndices[arg1 - 1];
     } else if (arg1 == 6) {
-        character = D_807B3C14[5];
+        character = sRecordsMachineIndices[5];
     } else {
-        character = D_807B3C14[6];
+        character = sRecordsMachineIndices[6];
     }
 
     gSPDisplayList(gfx++, D_8076DB58[character]);

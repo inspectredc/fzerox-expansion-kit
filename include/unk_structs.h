@@ -101,7 +101,7 @@ typedef struct CourseInfo {
     /* 0x20 */ s32 timeRecord[5];
     /* 0x34 */ MachineInfo recordMachineInfos[5];
     /* 0x98 */ f32 recordEngines[5];
-    /* 0xAC */ u8 recordNames[5][4];
+    /* 0xAC */ char recordNames[5][4];
     /* 0xC0 */ f32 maxSpeed;
     /* 0xC4 */ MachineInfo maxSpeedMachine;
     /* 0xD8 */ s32 bestTime;

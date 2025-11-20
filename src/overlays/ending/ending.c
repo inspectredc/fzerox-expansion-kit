@@ -725,7 +725,7 @@ Gfx* EndingCutscene_DrawFinalResultsRaceResult(Gfx* gfx, EndingCutsceneResults* 
 
     gfx = Hud_DrawTimerScisThousandths(gfx, raceStats->raceTime, 110, (baseYPos + 28.0f), 1.0f);
     gDPPipeSync(gfx++);
-    gfx = func_i3_DrawSpeed(gfx, 194, (baseYPos + 28.0f), raceStats->maxSpeed, false, false);
+    gfx = RecordsEntry_DrawSpeed(gfx, 194, (baseYPos + 28.0f), raceStats->maxSpeed, false, false);
     gDPPipeSync(gfx++);
     return EndingCutscene_DrawResultsRacersKOd(gfx, 110, (baseYPos + 48.0f), raceStats->racersKOd);
 }
