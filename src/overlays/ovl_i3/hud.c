@@ -543,7 +543,7 @@ Gfx* Hud_UpdatePlayerHudInfo(Gfx* gfx, s32 numPlayersIndex, s32 playerIndex) {
         }
     }
 
-    if (D_i3_8006B5EC == D_i3_8006D678[playerIndex].lapFlashTimer) {
+    if (D_i3_8006D678[playerIndex].lapFlashTimer == D_i3_8006B5EC) {
         sPreviousLapTimes[playerIndex] = gRacers[playerIndex].lapTimes[(lap + 1) % 3];
     }
 
@@ -1344,7 +1344,7 @@ Gfx* Hud_DrawRacePortraits(Gfx* gfx) {
                             (sPortraitPositionYPos[i] + 6) << 2, 0, 0, 0, Math_Round(1024.0f), Math_Round(1024.0f));
 
         // Flash effect around border of players character portrait
-        if ((gRacers[0].position - 1 == i) && ((gGameFrameCount % 20U) >= 5)) {
+        if ((gRacers[0].position - 1 == i) && ((gGameFrameCount % 20) >= 5)) {
             gDPPipeSync(gfx++);
             gDPLoadTextureBlock(gfx++, aCharacterPortraitHighlightBorderTex, G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32, 0,
                                 G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
@@ -1606,7 +1606,7 @@ Gfx* Hud_DrawReverse(Gfx* gfx, s32 numPlayersIndex, s32 playerIndex) {
         Audio_PlayerLevelSEStart(playerIndex, NA_LEVEL_SE_3);
         D_i3_8006B664[playerIndex] = true;
     }
-    if ((gGameFrameCount % 20U) >= 5) {
+    if ((gGameFrameCount % 20) >= 5) {
         return gfx;
     }
 
