@@ -661,8 +661,8 @@ void Background_UpdateSkyboxVtx(Vtx* vtx, Background* background, Camera* camera
     f32 xPositions[4];
     f32 yPositions[4];
     f32 zPositions[4];
-    f32 sTextureCoordinates[4];
-    f32 tTextureCoordinates[4];
+    f32 textureSCoordinates[4];
+    f32 textureTCoordinates[4];
 
     horizontalCenterOffset = (2.0f * (camera->frustrumCenterX * fovRadius)) / camera->fovScaleX;
     fovRadius *= background->aspectRatio;
@@ -744,17 +744,17 @@ void Background_UpdateSkyboxVtx(Vtx* vtx, Background* background, Camera* camera
             zPositions[i] = 32000.0f;
         }
 
-        tTextureCoordinates[i] = ((temp * 256.0f) * 2.0f) - 0.5f;
+        textureTCoordinates[i] = ((temp * 256.0f) * 2.0f) - 0.5f;
         temp = 1.0f - ((yPositions[i] - background->pos.y) / (background->verticalRange * 2.0f));
-        sTextureCoordinates[i] = (temp * 64.0f) - 0.5f;
+        textureSCoordinates[i] = (temp * 64.0f) - 0.5f;
     }
 
     for (i = 0; i < 4; i++) {
         x = xPositions[i];
         y = yPositions[i];
         z = zPositions[i];
-        s = sTextureCoordinates[i] * 32.0f;
-        t = tTextureCoordinates[i] * 32.0f;
+        s = textureSCoordinates[i] * 32.0f;
+        t = textureTCoordinates[i] * 32.0f;
 
         SET_VTX(vtx, x, y, z, s, t, 0, 0, 0, 255);
         vtx++;
@@ -779,8 +779,8 @@ void Background_UpdateVenueFloorVtx(Vtx* vtx, Background* background, Camera* ca
     f32 xPositions[4];
     f32 y = background->pos.y;
     f32 zPositions[4];
-    f32 sTextureCoordinates[4];
-    f32 tTextureCoordinates[4];
+    f32 textureSCoordinates[4];
+    f32 textureTCoordinates[4];
     s32 pad;
 
     floorScroll = &background->floorScroll;
@@ -813,41 +813,41 @@ void Background_UpdateVenueFloorVtx(Vtx* vtx, Background* background, Camera* ca
         }
     }
 
-    sTextureCoordinates[0] =
+    textureSCoordinates[0] =
         ((((xPositions[0] - camera->eye.x) * perspectiveRatio) + camera->eye.x) * floorScroll->xScale) +
         floorScroll->xScroll;
-    tTextureCoordinates[0] =
+    textureTCoordinates[0] =
         ((((zPositions[0] - camera->eye.z) * perspectiveRatio) + camera->eye.z) * floorScroll->zScale) +
         floorScroll->zScroll;
-    sTextureCoordinates[1] =
+    textureSCoordinates[1] =
         ((((xPositions[1] - camera->eye.x) * perspectiveRatio) + camera->eye.x) * floorScroll->xScale) +
         floorScroll->xScroll;
-    tTextureCoordinates[1] =
+    textureTCoordinates[1] =
         ((((zPositions[1] - camera->eye.z) * perspectiveRatio) + camera->eye.z) * floorScroll->zScale) +
         floorScroll->zScroll;
-    sTextureCoordinates[2] =
+    textureSCoordinates[2] =
         ((((xPositions[2] - camera->eye.x) * perspectiveRatio) + camera->eye.x) * floorScroll->xScale) +
         floorScroll->xScroll;
-    tTextureCoordinates[2] =
+    textureTCoordinates[2] =
         ((((zPositions[2] - camera->eye.z) * perspectiveRatio) + camera->eye.z) * floorScroll->zScale) +
         floorScroll->zScroll;
-    sTextureCoordinates[3] =
+    textureSCoordinates[3] =
         ((((xPositions[3] - camera->eye.x) * perspectiveRatio) + camera->eye.x) * floorScroll->xScale) +
         floorScroll->xScroll;
-    tTextureCoordinates[3] =
+    textureTCoordinates[3] =
         ((((zPositions[3] - camera->eye.z) * perspectiveRatio) + camera->eye.z) * floorScroll->zScale) +
         floorScroll->zScroll;
 
-    baseSReference = sTextureCoordinates[0];
-    baseTReference = tTextureCoordinates[0];
+    baseSReference = textureSCoordinates[0];
+    baseTReference = textureTCoordinates[0];
 
     for (i = 1; i < 4; i++) {
-        if (sTextureCoordinates[i] < baseSReference) {
-            baseSReference = sTextureCoordinates[i];
+        if (textureSCoordinates[i] < baseSReference) {
+            baseSReference = textureSCoordinates[i];
         }
 
-        if (tTextureCoordinates[i] < baseTReference) {
-            baseTReference = tTextureCoordinates[i];
+        if (textureTCoordinates[i] < baseTReference) {
+            baseTReference = textureTCoordinates[i];
         }
     }
 
@@ -863,15 +863,15 @@ void Background_UpdateVenueFloorVtx(Vtx* vtx, Background* background, Camera* ca
     }
 
     for (i = 0; i < 4; i++) {
-        sTextureCoordinates[i] += baseSReference;
-        tTextureCoordinates[i] += baseTReference;
+        textureSCoordinates[i] += baseSReference;
+        textureTCoordinates[i] += baseTReference;
     }
 
     for (i = 0; i < 4; i++) {
         x = xPositions[i];
         z = zPositions[i];
-        s = sTextureCoordinates[i] * 32.0f;
-        t = tTextureCoordinates[i] * 32.0f;
+        s = textureSCoordinates[i] * 32.0f;
+        t = textureTCoordinates[i] * 32.0f;
 
         brightness = (i < 2) ? brightness1 : brightness2;
 
@@ -896,8 +896,8 @@ void Background_UpdateCloudVtx(Vtx* vtx, Background* background, Camera* camera,
     f32 xPositions[4];
     f32 y;
     f32 zPositions[4];
-    f32 sTextureCoordinates[4];
-    f32 tTextureCoordinates[4];
+    f32 textureSCoordinates[4];
+    f32 textureTCoordinates[4];
 
     if (usingHeightRelativeToEye) {
         y = camera->eye.y + cloudScroll->relativeEyeHeight;
@@ -934,49 +934,49 @@ void Background_UpdateCloudVtx(Vtx* vtx, Background* background, Camera* camera,
     if (usingHeightRelativeToEye) {
         perspectiveRatio =
             ((background->pos.y + cloudScroll->relativeBackgroundHeight) - camera->eye.y) / (y - camera->eye.y);
-        sTextureCoordinates[0] =
+        textureSCoordinates[0] =
             ((((xPositions[0] - camera->eye.x) * perspectiveRatio) + camera->eye.x) * cloudScroll->xScale) +
             cloudScroll->xScroll;
-        tTextureCoordinates[0] =
+        textureTCoordinates[0] =
             ((((zPositions[0] - camera->eye.z) * perspectiveRatio) + camera->eye.z) * cloudScroll->zScale) +
             cloudScroll->zScroll;
-        sTextureCoordinates[1] =
+        textureSCoordinates[1] =
             ((((xPositions[1] - camera->eye.x) * perspectiveRatio) + camera->eye.x) * cloudScroll->xScale) +
             cloudScroll->xScroll;
-        tTextureCoordinates[1] =
+        textureTCoordinates[1] =
             ((((zPositions[1] - camera->eye.z) * perspectiveRatio) + camera->eye.z) * cloudScroll->zScale) +
             cloudScroll->zScroll;
-        sTextureCoordinates[2] =
+        textureSCoordinates[2] =
             ((((xPositions[2] - camera->eye.x) * perspectiveRatio) + camera->eye.x) * cloudScroll->xScale) +
             cloudScroll->xScroll;
-        tTextureCoordinates[2] =
+        textureTCoordinates[2] =
             ((((zPositions[2] - camera->eye.z) * perspectiveRatio) + camera->eye.z) * cloudScroll->zScale) +
             cloudScroll->zScroll;
-        sTextureCoordinates[3] =
+        textureSCoordinates[3] =
             ((((xPositions[3] - camera->eye.x) * perspectiveRatio) + camera->eye.x) * cloudScroll->xScale) +
             cloudScroll->xScroll;
-        tTextureCoordinates[3] =
+        textureTCoordinates[3] =
             ((((zPositions[3] - camera->eye.z) * perspectiveRatio) + camera->eye.z) * cloudScroll->zScale) +
             cloudScroll->zScroll;
     } else {
-        sTextureCoordinates[0] = (xPositions[0] * cloudScroll->xScale) + cloudScroll->xScroll;
-        tTextureCoordinates[0] = (zPositions[0] * cloudScroll->zScale) + cloudScroll->zScroll;
-        sTextureCoordinates[1] = (xPositions[1] * cloudScroll->xScale) + cloudScroll->xScroll;
-        tTextureCoordinates[1] = (zPositions[1] * cloudScroll->zScale) + cloudScroll->zScroll;
-        sTextureCoordinates[2] = (xPositions[2] * cloudScroll->xScale) + cloudScroll->xScroll;
-        tTextureCoordinates[2] = (zPositions[2] * cloudScroll->zScale) + cloudScroll->zScroll;
-        sTextureCoordinates[3] = (xPositions[3] * cloudScroll->xScale) + cloudScroll->xScroll;
-        tTextureCoordinates[3] = (zPositions[3] * cloudScroll->zScale) + cloudScroll->zScroll;
+        textureSCoordinates[0] = (xPositions[0] * cloudScroll->xScale) + cloudScroll->xScroll;
+        textureTCoordinates[0] = (zPositions[0] * cloudScroll->zScale) + cloudScroll->zScroll;
+        textureSCoordinates[1] = (xPositions[1] * cloudScroll->xScale) + cloudScroll->xScroll;
+        textureTCoordinates[1] = (zPositions[1] * cloudScroll->zScale) + cloudScroll->zScroll;
+        textureSCoordinates[2] = (xPositions[2] * cloudScroll->xScale) + cloudScroll->xScroll;
+        textureTCoordinates[2] = (zPositions[2] * cloudScroll->zScale) + cloudScroll->zScroll;
+        textureSCoordinates[3] = (xPositions[3] * cloudScroll->xScale) + cloudScroll->xScroll;
+        textureTCoordinates[3] = (zPositions[3] * cloudScroll->zScale) + cloudScroll->zScroll;
     }
-    baseSReference = sTextureCoordinates[0];
-    baseTReference = tTextureCoordinates[0];
+    baseSReference = textureSCoordinates[0];
+    baseTReference = textureTCoordinates[0];
 
     for (i = 1; i < 4; i++) {
-        if (sTextureCoordinates[i] < baseSReference) {
-            baseSReference = sTextureCoordinates[i];
+        if (textureSCoordinates[i] < baseSReference) {
+            baseSReference = textureSCoordinates[i];
         }
-        if (tTextureCoordinates[i] < baseTReference) {
-            baseTReference = tTextureCoordinates[i];
+        if (textureTCoordinates[i] < baseTReference) {
+            baseTReference = textureTCoordinates[i];
         }
     }
 
@@ -992,15 +992,15 @@ void Background_UpdateCloudVtx(Vtx* vtx, Background* background, Camera* camera,
     }
 
     for (i = 0; i < 4; i++) {
-        sTextureCoordinates[i] += baseSReference;
-        tTextureCoordinates[i] += baseTReference;
+        textureSCoordinates[i] += baseSReference;
+        textureTCoordinates[i] += baseTReference;
     }
 
     for (i = 0; i < 4; i++) {
         x = xPositions[i];
         z = zPositions[i];
-        s = sTextureCoordinates[i] * 32.0f;
-        t = tTextureCoordinates[i] * 32.0f;
+        s = textureSCoordinates[i] * 32.0f;
+        t = textureTCoordinates[i] * 32.0f;
 
         if (i < 2) {
             alpha = alpha1;

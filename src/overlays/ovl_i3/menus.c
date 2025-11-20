@@ -1,5 +1,8 @@
 #include "global.h"
 #include "ovl_i3.h"
+#include "menus.h"
+#include "hud.h"
+#include "records_entry.h"
 #include "fzx_game.h"
 #include "fzx_racer.h"
 #include "fzx_camera.h"
@@ -16,7 +19,7 @@ s32 D_i3_8006D0A0;
 s32 sMenuStateFlags;
 s32 D_i3_8006D0A8;
 s32 sPlayer1Lives;
-bool D_i3_8006D0B0;
+bool gShowNameEntryMenu;
 s32 D_i3_8006D0B4;
 UNUSED s32 D_i3_8006D0B8[4];
 s32 gRacerIdsByPosition[30];
@@ -219,13 +222,13 @@ void Menus_Update(void) {
             if (gGameMode == GAMEMODE_TIME_ATTACK) {
                 if (gCourseIndex < COURSE_X_1) {
                     func_8071A88C();
-                    func_i3_80067208();
+                    RecordsEntry_ClearCurrentRecordName();
                 }
                 if (gCourseIndex < COURSE_EDIT_1) {
                     Save_SaveCourseRecordProfiles(gCourseIndex);
                 }
             } else if (gGameMode == GAMEMODE_GP_RACE) {
-                func_i3_80067150(gCourseIndex);
+                RecordsEntry_UpdateRaceStats(gCourseIndex);
             } else if (gGameMode == GAMEMODE_DEATH_RACE) {
                 func_8071A88C();
                 Save_SaveDeathRaceProfiles();
@@ -367,8 +370,8 @@ void Menus_Init(void) {
     sGhostSaveTimer = sOverwriteGhostOptionIndex = sSaveGhostMenuOpen = sSaveGhostMenuOptionIndex =
         sSaveGhostMenuOptionState = sGpRaceResultsState = sTimeAttackResultsTimer = D_8006D544 = D_i3_8006D560 =
             sMenuRaceIntroTimer = sRaceMenuOptionIndex = sGpResultsEndMenuOptionIndex = sMenuIsBusy =
-                sRaceFinishSaveTriggered = sSaveGhostMenuState = sMenuOptionTriggered = D_i3_8006D096 = D_i3_8006D0B0 =
-                    D_8006CFF0 = sMenuHighlightedOptionMoveTimer = 0;
+                sRaceFinishSaveTriggered = sSaveGhostMenuState = sMenuOptionTriggered = D_i3_8006D096 =
+                    gShowNameEntryMenu = D_8006CFF0 = sMenuHighlightedOptionMoveTimer = 0;
 
     sGpResultsRankingScrollPosition = sTotalRankingsManualScrollPosition = 0.0f;
     sSaveGhostMenuOptionsScissorBoxTimer = sGhostSaveMenuScissorBoxTimer = 90;
@@ -482,8 +485,8 @@ void Menus_Init(void) {
         }
     }
     func_i3_80044720();
-    func_i3_80064F20();
-    func_i3_80067280();
+    RecordsEntry_Init();
+    RecordsEntry_InitNameEntry();
     Font_LoadString("Ｍ", FONT_SET_5);
     Font_LoadString("ABCDEFGHIJKLMNOPQRSTUVWXYZＡＢ23", FONT_SET_6);
     Font_LoadString("ABCDEFGHIJKLMNOPQRSTUVWXYZ", FONT_SET_3);
@@ -803,7 +806,7 @@ Gfx* Menus_DrawRaceTimeInterval(Gfx* gfx, s32 time, s32 left, s32 top) {
 }
 
 extern s32 gTotalLapCount;
-extern s16 D_807A16F2;
+extern s16 gCurrentTimeAttackRecordPosition;
 extern s16 gBestTimedLap;
 
 Gfx* Menus_DrawRaceResultsTimes(Gfx* gfx, s32 playerIndex) {
@@ -903,12 +906,12 @@ Gfx* Menus_DrawRaceResultsTimes(Gfx* gfx, s32 playerIndex) {
     if ((gGameMode == GAMEMODE_TIME_ATTACK) &&
         ((((sResultsTimesStartLapSpacing * (gTotalLapCount + 1)) + sResultsTimesStartTopOffset) -
           sPlayerResultsTimer[playerIndex]) == 1) &&
-        (D_807A16F2 == 1) && (gTitleDemoState == TITLE_DEMO_INACTIVE)) {
+        (gCurrentTimeAttackRecordPosition == 1) && (gTitleDemoState == TITLE_DEMO_INACTIVE)) {
         Audio_TriggerSystemSE(NA_SE_42);
     }
     if (top < SCREEN_HEIGHT) {
         gDPPipeSync(gfx++);
-        if (D_807A16F2 != 0) {
+        if (gCurrentTimeAttackRecordPosition != 0) {
             gfx = func_8070EC64(gfx, 255, 0, 0);
             gDPSetCombineMode(gfx++, G_CC_MODULATEIDECALA_PRIM, G_CC_MODULATEIDECALA_PRIM);
         } else {
@@ -3427,7 +3430,7 @@ Gfx* Menus_DrawGpRacePause(Gfx* gfx) {
     return gfx;
 }
 
-extern s16 D_807A16F4;
+extern s16 gCurrentTimeAttackHasMaxSpeed;
 
 Gfx* Menus_DrawMaxSpeed(Gfx* gfx, s32 playerIndex) {
     s32 i;
@@ -3503,7 +3506,7 @@ Gfx* Menus_DrawMaxSpeed(Gfx* gfx, s32 playerIndex) {
     gSPDisplayList(gfx++, D_8014940);
     gDPPipeSync(gfx++);
 
-    if (D_807A16F4 != 0) {
+    if (gCurrentTimeAttackHasMaxSpeed) {
         gfx = func_8070EC64(gfx, 255, 0, 0);
         gDPSetCombineMode(gfx++, G_CC_MODULATEIDECALA_PRIM, G_CC_MODULATEIDECALA_PRIM);
     }
@@ -3542,8 +3545,8 @@ Gfx* Menu_DrawTimeAttackResultsTimes(Gfx* gfx) {
     sResultsTimesStartLapSpacing = 10;
     sResultsTimesSpeed = 10;
     gfx = Menus_DrawRaceResultsTimes(gfx, 0);
-    if (D_807A16F2 != 0) {
-        D_i3_8006D0B0 = true;
+    if (gCurrentTimeAttackRecordPosition != 0) {
+        gShowNameEntryMenu = true;
     }
     return gfx;
 }
@@ -4204,7 +4207,7 @@ Gfx* Menus_DrawDeathRaceResults(Gfx* gfx) {
     gSPTextureRectangle(gfx++, left << 2, top << 2, (left + 16) << 2, (top + 12) << 2, 0, 0, 0, 1 << 10, 1 << 10);
     gSPDisplayList(gfx++, D_8014940);
 
-    if (D_807A16F2 == 1) {
+    if (gCurrentTimeAttackRecordPosition == 1) {
         gfx = func_8070EC64(gfx, 255, 0, 0);
         gDPSetCombineMode(gfx++, G_CC_MODULATEIDECALA_PRIM, G_CC_MODULATEIDECALA_PRIM);
     } else {
@@ -5061,7 +5064,6 @@ Gfx* Menus_Player1SpecialDraw(Gfx* gfx, s32 playerIndex) {
 
 extern s32 gSettingVsSlot;
 extern s32 gRaceTimeIntervalToggle;
-extern s32 gPlayerLapNumbers[];
 extern s32 sEADDemoQueueState;
 extern unk_80141EA8 D_i3_8006D678[4];
 extern s32 gRaceIntroTimer;
@@ -5365,15 +5367,15 @@ Gfx* Menus_Draw(Gfx* gfx) {
                     sTimeAttackResultsTimer += 8;
                 }
                 if ((sTimeAttackResultsTimer >= 392) && (sTimeAttackResultsTimer < 400)) {
-                    if (D_807A16F2 == 0) {
-                        func_i3_800651F4();
+                    if (gCurrentTimeAttackRecordPosition == 0) {
+                        RecordsEntry_ToRecordsState();
                     }
                 }
                 if (sTimeAttackResultsTimer >= 400) {
                     sTimeAttackResultsTimer = 400;
-                    if (D_i3_8006D0B0) {
-                        func_i3_8006735C();
-                        gfx = func_i3_800684CC(gfx);
+                    if (gShowNameEntryMenu) {
+                        RecordsEntry_UpdateNameEntry();
+                        gfx = RecordsEntry_DrawNameEntry(gfx);
                     } else {
                         if (D_i3_8006D0B4 == 0) {
                             s32 courseIndex;
@@ -5393,8 +5395,8 @@ Gfx* Menus_Draw(Gfx* gfx) {
                                 sEADDemoQueueState = 1;
                             }
                         }
-                        i = func_i3_80065204();
-                        gfx = func_i3_80065560(gfx, gCourseIndex);
+                        i = RecordsEntry_Update();
+                        gfx = RecordsEntry_DrawRecords(gfx, gCourseIndex);
                         if (i) {
                             gfx = Menus_DrawTimeAttackFinishMenu(gfx);
                         }

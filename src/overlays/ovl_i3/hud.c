@@ -1,5 +1,6 @@
 #include "global.h"
-#include "ovl_i3.h"
+#include "hud.h"
+#include "minimap.h"
 #include "fzx_game.h"
 #include "fzx_racer.h"
 #include "fzx_hud.h"

@@ -22,4 +22,6 @@ typedef enum MinimapPaletteIndex {
 #define MINIMAP_LEADER_COLOR GPACK_RGBA5551(0, 0, 255, 1)
 #define MINIMAP_GHOST_COLOR GPACK_RGBA5551(0, 0, 0, 1)
 
+extern s32 gPlayerMinimapLapCounterToggle[];
+
 #endif // MINIMAP_H

@@ -496,12 +496,7 @@ Gfx* Minimap_DrawCourseMinimap(Gfx* gfx, s32 numPlayersIndex, s32 playerIndex);
 void Background_Init(void);
 void Background_Update(void);
 Gfx* Background_Draw(Gfx* gfx, s32 cameraIndex, s32 scissorBoxType);
-void func_i3_80064F20(void);
-void func_i3_800651F4(void);
-bool func_i3_80065204(void);
-Gfx* func_i3_80065560(Gfx* gfx, s32 courseIndex);
-void func_i3_80067118(bool);
-Gfx* func_i3_DrawSpeed(Gfx*, s32, s32, f32, bool, bool);
+Gfx* RecordsEntry_DrawSpeed(Gfx* gfx, s32 left, s32 top, f32 speed, bool shouldHighlight, bool drawMaxSpeedTexture);
 
 void func_i4_80073EA0(void);
 
