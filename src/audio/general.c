@@ -2105,24 +2105,26 @@ void func_807447CC(u8 playerId) {
         } else {
             volumeScale = 0.75f;
         }
-    } else if (D_80771B74[playerId] == 1) {
-        Vec3f vec;
-        f32 temp;
-
-        vec.x = gRacers[playerId].segmentPositionInfo.pos.x - gCameras[playerId].eye.x;
-        vec.y = gRacers[playerId].segmentPositionInfo.pos.y - gCameras[playerId].eye.y;
-        vec.z = gRacers[playerId].segmentPositionInfo.pos.z - gCameras[playerId].eye.z;
-        temp = sqrtf(SQ_SUM(&vec));
-        volumeScale = -0.002f * temp + 1.2f;
-
-        if (volumeScale > 0.73f) {
-            volumeScale = 0.73f;
-        }
-        if (volumeScale < 0.01f) {
-            volumeScale = 0.01f;
-        }
     } else {
-        volumeScale = 1.0f;
+        if (D_80771B74[playerId] == 1) {
+            Vec3f vec;
+            f32 temp;
+
+            vec.x = gRacers[playerId].segmentPositionInfo.pos.x - gCameras[playerId].eye.x;
+            vec.y = gRacers[playerId].segmentPositionInfo.pos.y - gCameras[playerId].eye.y;
+            vec.z = gRacers[playerId].segmentPositionInfo.pos.z - gCameras[playerId].eye.z;
+            temp = sqrtf(SQ_SUM(&vec));
+            volumeScale = -0.002f * temp + 1.2f;
+
+            if (volumeScale > 0.73f) {
+                volumeScale = 0.73f;
+            }
+            if (volumeScale < 0.01f) {
+                volumeScale = 0.01f;
+            }
+        } else {
+            volumeScale = 1.0f;
+        }
     }
 
     AUDIOCMD_CHANNEL_SET_VOL_SCALE(0, playerId + 2, volumeScale);
