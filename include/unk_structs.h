@@ -269,7 +269,7 @@ typedef struct Racer {
     /* 0x1E4 */ f32 unk_1E4;
     /* 0x1E8 */ f32 unk_1E8;
     /* 0x1EC */ f32 unk_1EC;
-    /* 0x1F0 */ f32 unk_1F0;
+    /* 0x1F0 */ f32 weight;
     /* 0x1F4 */ f32 collidingStrength;
     /* 0x1F8 */ f32 unk_1F8;
     /* 0x1FC */ f32 unk_1FC;

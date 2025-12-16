@@ -404,7 +404,7 @@ void func_i2_800B0FAC(CourseSegment* segment, Mtx3F* basis) {
     Math_OrthonormalizeAroundForward(basis);
 }
 
-s32 func_i2_800B10A8(RacerSegmentPositionInfo* arg0, f32 arg1, f32 arg2, f32 arg3, Mtx3F* arg4) {
+s32 func_i2_800B10A8(RacerSegmentPositionInfo* arg0, f32 xPos, f32 yPos, f32 zPos, Mtx3F* arg4) {
     s32 i;
     Vec3f sp130;
     CourseSegment* var_s1_2;
@@ -433,9 +433,9 @@ s32 func_i2_800B10A8(RacerSegmentPositionInfo* arg0, f32 arg1, f32 arg2, f32 arg
 
     i = 3;
 
-    sp130.x = arg1 - arg0->lastGroundedPos.x;
-    sp130.y = arg2 - arg0->lastGroundedPos.y;
-    sp130.z = arg3 - arg0->lastGroundedPos.z;
+    sp130.x = xPos - arg0->lastGroundedPos.x;
+    sp130.y = yPos - arg0->lastGroundedPos.y;
+    sp130.z = zPos - arg0->lastGroundedPos.z;
 
     var_s0 = arg0->courseSegment;
     var_s1 = var_s0->next;
@@ -521,9 +521,9 @@ s32 func_i2_800B10A8(RacerSegmentPositionInfo* arg0, f32 arg1, f32 arg2, f32 arg
 
         sp88.segmentForwardMagnitude = sqrtf(SQ_SUM(&sp88.segmentForward));
 
-        sp88.segmentDisplacement.x = arg1 - sp88.segmentPos.x;
-        sp88.segmentDisplacement.y = arg2 - sp88.segmentPos.y;
-        sp88.segmentDisplacement.z = arg3 - sp88.segmentPos.z;
+        sp88.segmentDisplacement.x = xPos - sp88.segmentPos.x;
+        sp88.segmentDisplacement.y = yPos - sp88.segmentPos.y;
+        sp88.segmentDisplacement.z = zPos - sp88.segmentPos.z;
 
         sp88.distanceFromSegment = sqrtf(SQ_SUM(&sp88.segmentDisplacement));
 
@@ -539,9 +539,9 @@ s32 func_i2_800B10A8(RacerSegmentPositionInfo* arg0, f32 arg1, f32 arg2, f32 arg
         sp88.segmentDisplacement.z = CROSS_Z(&sp88.segmentForward, &sp88.pos);
 
         temp_fv1 = sp88.distanceFromSegment / sqrtf(SQ_SUM(&sp88.segmentDisplacement));
-        sp130.x = arg1 - ((sp88.segmentDisplacement.x * temp_fv1) + sp88.segmentPos.x);
-        sp130.y = arg2 - ((sp88.segmentDisplacement.y * temp_fv1) + sp88.segmentPos.y);
-        sp130.z = arg3 - ((sp88.segmentDisplacement.z * temp_fv1) + sp88.segmentPos.z);
+        sp130.x = xPos - ((sp88.segmentDisplacement.x * temp_fv1) + sp88.segmentPos.x);
+        sp130.y = yPos - ((sp88.segmentDisplacement.y * temp_fv1) + sp88.segmentPos.y);
+        sp130.z = zPos - ((sp88.segmentDisplacement.z * temp_fv1) + sp88.segmentPos.z);
     }
 
     var_s1_2 = sp88.courseSegment;

@@ -178,14 +178,45 @@ s16 D_i3_80069CD0[] = {
 };
 
 s16* D_i3_80069DD8[] = {
-    D_F264110, D_F264340, D_F264450, D_F2641D8, D_F264690, D_F264540, D_F264920, D_F264860,
-    D_F264740, D_F264C80, D_F264B40, D_F2652B0, D_F264DE0, D_F264F08, D_F2650B0, D_F2651C8,
-    D_F264A58, D_F2656C8, D_F265530, D_F2659E0, D_F2658D0, D_F265B70, D_F2653E8, D_F265D08,
+    D_F264110, // COURSE_MUTE_CITY
+    D_F264340, // COURSE_SILENCE
+    D_F264450, // COURSE_SAND_OCEAN
+    D_F2641D8, // COURSE_DEVILS_FOREST
+    D_F264690, // COURSE_BIG_BLUE
+    D_F264540, // COURSE_PORT_TOWN
+    D_F264920, // COURSE_SECTOR_ALPHA
+    D_F264860, // COURSE_RED_CANYON
+    D_F264740, // COURSE_DEVILS_FOREST_2
+    D_F264C80, // COURSE_MUTE_CITY_2
+    D_F264B40, // COURSE_BIG_BLUE_2
+    D_F2652B0, // COURSE_WHITE_LAND
+    D_F264DE0, // COURSE_FIRE_FIELD
+    D_F264F08, // COURSE_SILENCE_2
+    D_F2650B0, // COURSE_SECTOR_BETA
+    D_F2651C8, // COURSE_RED_CANYON_2
+    D_F264A58, // COURSE_WHITE_LAND_2
+    D_F2656C8, // COURSE_MUTE_CITY_3
+    D_F265530, // COURSE_RAINBOW_ROAD
+    D_F2659E0, // COURSE_DEVILS_FOREST_3
+    D_F2658D0, // COURSE_SPACE_PLANT
+    D_F265B70, // COURSE_SAND_OCEAN_2
+    D_F2653E8, // COURSE_PORT_TOWN_2
+    D_F265D08, // COURSE_BIG_HAND
 };
 
 s16* D_i3_80069E38[] = {
-    D_i3_80068D90, D_i3_80068E68, D_i3_80068F88, D_i3_80069110, D_i3_80069308, D_i3_80069470,
-    D_i3_80069650, D_i3_80069750, D_i3_80069888, D_i3_800699E8, D_i3_80069B48, D_i3_80069CD0,
+    D_i3_80068D90, // COURSE_SILENCE_3
+    D_i3_80068E68, // COURSE_SAND_OCEAN_3
+    D_i3_80068F88, // COURSE_DEVILS_FOREST_4
+    D_i3_80069110, // COURSE_PORT_TOWN_3
+    D_i3_80069308, // COURSE_DEVILS_FOREST_5
+    D_i3_80069470, // COURSE_BIG_BLUE_3
+    D_i3_80069650, // COURSE_MUTE_CITY_4
+    D_i3_80069750, // COURSE_SPACE_PLANT_2
+    D_i3_80069888, // COURSE_PORT_TOWN_4
+    D_i3_800699E8, // COURSE_FIRE_FIELD_2
+    D_i3_80069B48, // COURSE_WHITE_LAND_3
+    D_i3_80069CD0, // COURSE_BIG_FOOT
 };
 
 UNUSED Gfx D_i3_80069E68[] = { gsSPEndDisplayList() };
@@ -802,7 +833,7 @@ void Cpu_InitRacer(Racer* racer) {
     racer->unk_360 = 0.0f;
     racer->unk_38C = 0.0f;
     racer->unk_3A0 = gTotalRacers;
-    racer->unk_1EC = 2500.0f / 27.0f;
+    racer->unk_1EC = 2000.0f / 21.6f;
 
     if (gGameMode == GAMEMODE_GP_RACE) {
         racer->unk_360 = D_i3_8006B1B8[D_i3_8006AD90[racer->character].unk_02 * 4 + gDifficulty];
@@ -829,7 +860,7 @@ void Cpu_InitRacer(Racer* racer) {
 
     if (gGameMode == GAMEMODE_GP_END_CS) {
         racer->unk_1A8 = func_8071A2C8(0.1f);
-        racer->unk_1EC = 2500.0f / 27.0f;
+        racer->unk_1EC = 2000.0f / 21.6f;
         racer->unk_1E8 = 0.0f;
         racer->unk_330 = 0.01f;
         racer->unk_334 = Math_Rand1() % 32768 / 32767.0f * 20.0f + 500.0f;
@@ -884,7 +915,7 @@ void Cpu_InitRacer(Racer* racer) {
         if (gGameMode == GAMEMODE_DEATH_RACE) {
             racer->unk_1A8 = (Math_Rand1() % 256 / 255.0f) * 0.2f;
         }
-        racer->unk_1EC = 2500.0f / 27.0f;
+        racer->unk_1EC = 2000.0f / 21.6f;
         racer->unk_1E8 = 0.0f;
     }
 }
@@ -978,7 +1009,7 @@ void func_i3_80040C38(void) {
 }
 
 f32 func_i3_80041070(Racer* arg0) {
-    return D_i3_80069EA0[gCourseIndex * 4 + gDifficulty] * (2500.0f / 27.0f);
+    return D_i3_80069EA0[gCourseIndex * 4 + gDifficulty] * (2000.0f / 21.6f);
 }
 
 f32 func_i3_800410B0(Racer* arg0) {
@@ -1149,7 +1180,7 @@ void Cpu_GenerateInputs(Racer* racer, Controller* controller) {
 
             temp_fv1 = (gRacers[var_a3].raceDistance + racer->unk_38C) - racer->raceDistance;
             if (temp_fv1 > 0) {
-                racer->unk_1EC = 69.44444f;
+                racer->unk_1EC = 1500.0f / 21.6f;
                 racer->unk_1E8 = temp_fv1 * 0.0003f;
                 if (racer->unk_1E8 > 1.0f) {
                     racer->unk_1E8 = 1.0f;
@@ -1177,7 +1208,7 @@ void Cpu_GenerateInputs(Racer* racer, Controller* controller) {
     } else if (((gNumPlayers == 1) && (sPlayerRacer->stateFlags & RACER_STATE_FINISHED)) ||
                (racer->stateFlags & RACER_STATE_FINISHED) || (racer->id < gNumPlayers)) {
         racer->unk_1E8 = 0.0f;
-        racer->unk_1EC = (2500.0f / 27.0f);
+        racer->unk_1EC = 2000.0f / 21.6f;
         racer->unk_1B4 = 1.00894f;
         racer->unk_1B0 = 1.156336f;
         racer->unk_1B8 = 0.119168f;
@@ -1187,7 +1218,7 @@ void Cpu_GenerateInputs(Racer* racer, Controller* controller) {
         if ((gNumPlayers == 1) && (gTotalRacers != 1) && (racer->id != 0) &&
             (sPlayerRacer->stateFlags & RACER_STATE_FINISHED)) {
             if ((sp44->id == 0) && (racer->distanceToRacerAhead < 2000.0f)) {
-                racer->unk_1EC = (625.0f / 27.0f);
+                racer->unk_1EC = 500.0f / 21.6f;
             } else if ((sp40->id == 0) && (racer->distanceFromRacerBehind < 2000.0f)) {
                 racer->unk_1E8 = 1.0f;
                 controller->buttonPressed |= BTN_B;
@@ -1195,7 +1226,7 @@ void Cpu_GenerateInputs(Racer* racer, Controller* controller) {
         }
     } else if ((racer->currentRadiusRight + racer->currentRadiusLeft) < 184.0f) {
         racer->unk_1E8 = 0.0f;
-        racer->unk_1EC = (2500.0f / 27.0f);
+        racer->unk_1EC = 2000.0f / 21.6f;
     } else if (gNumPlayers == 1) {
         if (racer->unk_352 != 0xFF) {
             spBC = (gRacers[racer->unk_352].raceDistance + racer->unk_38C) - racer->raceDistance;
@@ -1223,7 +1254,7 @@ void Cpu_GenerateInputs(Racer* racer, Controller* controller) {
             if (spBC < 2000.0f) {
                 racer->unk_1EC = gRacers[racer->unk_352].speed + (spBC * 0.01f);
             } else {
-                racer->unk_1EC = (625.0f / 9.0f);
+                racer->unk_1EC = 1500.0f / 21.6f;
             }
             racer->unk_1E8 = 1.2f;
             if (sp70 && (racer->raceTime > 1000) && ((racer->currentRadiusRight + racer->currentRadiusLeft) > 138.0f) &&
@@ -1299,7 +1330,7 @@ void Cpu_GenerateInputs(Racer* racer, Controller* controller) {
                     racer->unk_1E8 = 0.0f;
                     controller->buttonPressed |= BTN_B;
                     if (spBC > 1000.0f) {
-                        racer->unk_1EC = (2500.0f / 27.0f);
+                        racer->unk_1EC = 2000.0f / 21.6f;
                     }
                 }
             } else if ((var_fv0 < 2000.0f) && (gTotalLapCount == racer->lap) &&
@@ -1318,7 +1349,7 @@ void Cpu_GenerateInputs(Racer* racer, Controller* controller) {
                     racer->unk_1EC = (spBC * 0.05f) + (spBC - spB4);
                     racer->unk_1E8 = 1.0f;
                 } else {
-                    racer->unk_1EC = (2500.0f / 27.0f);
+                    racer->unk_1EC = 2000.0f / 21.6f;
                     racer->unk_1E8 = 0.0f;
                 }
             } else {
@@ -1361,8 +1392,8 @@ void Cpu_GenerateInputs(Racer* racer, Controller* controller) {
     }
     if (gCourseIndex == COURSE_FIRE_FIELD) {
         i = racer->segmentPositionInfo.courseSegment->segmentIndex;
-        if ((i >= 4) && (i < 0x10)) {
-            racer->unk_1EC = (2500.0f / 27.0f);
+        if ((i >= 4) && (i < 16)) {
+            racer->unk_1EC = 2000.0f / 21.6f;
             racer->unk_1E8 = 1.0f;
         }
     }
@@ -1480,7 +1511,7 @@ void Cpu_GenerateInputs(Racer* racer, Controller* controller) {
             } else {
                 racer->unk_33C += racer->unk_354;
             }
-            racer->unk_1EC = (2500.0f / 27.0f);
+            racer->unk_1EC = 2000.0f / 21.6f;
             if (racer->unk_1E8 >= 1.0f) {
                 racer->unk_1E8 = 1.0f;
             }
@@ -1489,7 +1520,7 @@ void Cpu_GenerateInputs(Racer* racer, Controller* controller) {
             if (((racer->segmentPositionInfo.courseSegment->next->trackSegmentInfo & TRACK_SHAPE_MASK) ==
                  TRACK_SHAPE_AIR) &&
                 (racer->segmentPositionInfo.segmentLengthProportion > 0.5f)) {
-                racer->unk_1EC = 69.44444f;
+                racer->unk_1EC = 1500.0f / 21.6f;
             }
         }
         if (var_a3 < -70) {
@@ -2053,8 +2084,8 @@ void Cpu_GenerateInputs(Racer* racer, Controller* controller) {
                 }
             }
         }
-        if (racer->unk_1EC < (625.0f / 27.0f)) {
-            racer->unk_1EC = (625.0f / 27.0f);
+        if (racer->unk_1EC < 500.0f / 21.6f) {
+            racer->unk_1EC = 500.0f / 21.6f;
         }
 
         if ((racer->stateFlags & RACER_STATE_FINISHED) || (gGameMode == GAMEMODE_GP_END_CS)) {

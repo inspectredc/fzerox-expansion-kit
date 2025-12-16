@@ -5087,13 +5087,13 @@ Gfx* Menus_Draw(Gfx* gfx) {
     }
     if (gNumPlayers == 1) {
         if (gGameMode == GAMEMODE_DEATH_RACE) {
-            if (gRacers[playerIndex].speed < (500.0f / 27.0f)) {
+            if (gRacers[playerIndex].speed < 400.0f / 21.6f) {
                 D_8006CFF0++;
             } else {
                 D_8006CFF0 = 0;
             }
         } else {
-            if (gRacers[playerIndex].speed < (250.0f / 27.0f)) {
+            if (gRacers[playerIndex].speed < 200.0f / 21.6f) {
                 D_8006CFF0++;
             } else {
                 D_8006CFF0 = 0;
