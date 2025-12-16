@@ -1378,7 +1378,7 @@ f32 Racer_InitMachineStats(Racer* racer, f32 arg1) {
     f32 temp_ret;
     f32 temp_fa1;
 
-    temp_fs0 = (racer->unk_1F0 - 780.0f) / 1560.0f;
+    temp_fs0 = (racer->weight - 780.0f) / 1560.0f;
 
     while (IO_READ(PI_STATUS_REG) & (PI_STATUS_IO_BUSY | PI_STATUS_DMA_BUSY)) {}
 
@@ -1580,12 +1580,12 @@ void Racer_InitRacer(Racer* racer) {
                             racer->velocity.x = racer->velocity.y = racer->velocity.z = var_fs0 = 0.0f;
     racer->podiumHeight = racer->energyRegain = 0.0f;
     racer->shadowColorStrength = 1.0f;
-    racer->unk_1EC = 2500.0f / 27.0f;
+    racer->unk_1EC = 2000.0f / 21.6f;
     racer->unk_17C = D_807B37B4;
 
     racer->unk_1E0 = (((machine->weight - 780.0f) * -0.0050000027f) / 1560.0f) + 0.054f;
     racer->unk_1E4 = (((machine->weight - 780.0f) * -0.004999999f) / 1560.0f) + 0.03f;
-    racer->unk_1F0 = machine->weight;
+    racer->weight = machine->weight;
     racer->collidingStrength =
         ((4 - machine->machineStats[BODY_STAT]) * 312.0f) + 780.0f + ((312.0f * (machine->weight - 780.0f)) / 1560.0f);
 
@@ -3443,7 +3443,7 @@ void Racer_UpdateFromControls(Racer* racer, Controller* controller) {
     if (racer->spinOutTimer != 0) {
         var_fs1 = var_ft4 = 0.997f;
     } else if (racer->stateFlags & RACER_STATE_CRASHED) {
-        var_fs1 = var_ft4 = 0.98305196f;
+        var_fs1 = var_ft4 = 0.996f * 0.987f;
     } else {
         var_ft4 = 0.997f;
         var_fs1 = 0.996f;
