@@ -10,7 +10,7 @@ void func_xk1_8002DEE0(s32 arg0) {
     while (true) {}
 }
 
-extern s16 gWorkingDirectory;
+extern u16 gWorkingDirectory;
 extern s32 D_80794D30;
 extern LEODiskID D_8076CB50;
 extern LEODiskID D_80794CE8;

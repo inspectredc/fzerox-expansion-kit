@@ -1,10 +1,48 @@
 #include "global.h"
 #include "fzx_game.h"
 #include "fzx_course.h"
+#include "fzx_assets.h"
 
 uintptr_t gSegments[16];
 uintptr_t gArenaStartPtrs[4];
 uintptr_t gArenaEndPtrs[4];
+
+u16 D_8076CBD0 = 0;
+s8 D_8076CBD4 = false;
+s8 D_8076CBD8 = false;
+s8 D_8076CBDC = false;
+s8 D_8076CBE0 = -1;
+s8 D_8076CBE4 = false;
+
+u8* D_8076CBE8[] = {
+    SEGMENT_VRAM_START(segment_235130), // VENUE_MUTE_CITY
+    SEGMENT_VRAM_START(segment_239A80), // VENUE_PORT_TOWN
+    SEGMENT_VRAM_START(segment_23EC50), // VENUE_BIG_BLUE
+    SEGMENT_VRAM_START(segment_243D90), // VENUE_SAND_OCEAN
+    SEGMENT_VRAM_START(segment_24A270), // VENUE_DEVILS_FOREST
+    SEGMENT_VRAM_START(segment_2507F0), // VENUE_WHITE_LAND
+    SEGMENT_VRAM_START(segment_255100), // VENUE_SECTOR
+    SEGMENT_VRAM_START(segment_259600), // VENUE_RED_CANYON
+    SEGMENT_VRAM_START(segment_25F360), // VENUE_FIRE_FIELD
+    SEGMENT_VRAM_START(segment_266C20), // VENUE_SILENCE
+    SEGMENT_VRAM_START(segment_26D780), // VENUE_ENDING
+};
+
+u8* D_8076CC14[] = {
+    SEGMENT_VRAM_END(segment_235130), // VENUE_MUTE_CITY
+    SEGMENT_VRAM_END(segment_239A80), // VENUE_PORT_TOWN
+    SEGMENT_VRAM_END(segment_23EC50), // VENUE_BIG_BLUE
+    SEGMENT_VRAM_END(segment_243D90), // VENUE_SAND_OCEAN
+    SEGMENT_VRAM_END(segment_24A270), // VENUE_DEVILS_FOREST
+    SEGMENT_VRAM_END(segment_2507F0), // VENUE_WHITE_LAND
+    SEGMENT_VRAM_END(segment_255100), // VENUE_SECTOR
+    SEGMENT_VRAM_END(segment_259600), // VENUE_RED_CANYON
+    SEGMENT_VRAM_END(segment_25F360), // VENUE_FIRE_FIELD
+    SEGMENT_VRAM_END(segment_266C20), // VENUE_SILENCE
+    SEGMENT_VRAM_END(segment_26D780), // VENUE_ENDING
+};
+
+s32 D_8076CC40 = 0;
 
 extern u8 D_800D6D90[];
 extern u8 D_8012CAC0[];
@@ -175,7 +213,6 @@ Gfx* Segment_SetTableAddresses(Gfx* gfx) {
 }
 
 extern unk_80128C94* D_80128C90;
-extern u16 D_8076CBD0;
 extern s32 gSegment1B8550VramStart;
 extern s32 gSegment1B8550VramEnd;
 
@@ -219,14 +256,13 @@ void func_807088A8(void) {
     Segment_SetAddress(4, gSegment1B8550VramStart);
 }
 
-extern s8 D_8076CBD4;
 extern s32 gSegment1E23F0VramStart;
 extern s32 gSegment1E23F0VramEnd;
 
 void func_80708A44(void) {
     size_t ramSize;
 
-    D_8076CBD4 = 1;
+    D_8076CBD4 = true;
     switch (gGameMode) {
         case GAMEMODE_GP_RACE:
         case GAMEMODE_PRACTICE:
@@ -242,7 +278,7 @@ void func_80708A44(void) {
             ramSize = SEGMENT_VRAM_SIZE(segment_1FB850);
             break;
         default:
-            D_8076CBD4 = 0;
+            D_8076CBD4 = false;
             Segment_SetAddress(7, gSegment1E23F0VramStart);
             return;
     }
@@ -252,14 +288,13 @@ void func_80708A44(void) {
     Segment_SetAddress(7, gSegment1E23F0VramStart);
 }
 
-extern s8 D_8076CBD8;
 extern s32 gSegment22B0A0VramStart;
 extern s32 gSegment22B0A0VramEnd;
 
 void func_80708B34(void) {
     size_t segmentSize;
 
-    D_8076CBD8 = 1;
+    D_8076CBD8 = true;
     switch (gGameMode) {
         case GAMEMODE_CREATE_MACHINE:
         case GAMEMODE_GP_END_CS:
@@ -271,7 +306,7 @@ void func_80708B34(void) {
             segmentSize = SEGMENT_VRAM_SIZE(segment_21C170);
             break;
         default:
-            D_8076CBD8 = 0;
+            D_8076CBD8 = false;
             Segment_SetAddress(9, gSegment22B0A0VramStart);
             return;
     }
@@ -280,14 +315,13 @@ void func_80708B34(void) {
     Segment_SetAddress(9, gSegment22B0A0VramStart);
 }
 
-extern s8 D_8076CBDC;
 extern s32 D_8079A44C;
 extern s32 D_8079A450;
 
 void func_80708C1C(void) {
     size_t segmentSize;
 
-    D_8076CBDC = 1;
+    D_8076CBDC = true;
     switch (gGameMode) {
         case GAMEMODE_GP_RACE:
         case GAMEMODE_PRACTICE:
@@ -302,7 +336,7 @@ void func_80708C1C(void) {
             segmentSize = SEGMENT_DATA_SIZE_CONST(segment_235130);
             break;
         default:
-            D_8076CBDC = 0;
+            D_8076CBDC = false;
             Segment_SetAddress(10, D_8079A44C);
             return;
     }
@@ -311,16 +345,15 @@ void func_80708C1C(void) {
     Segment_SetAddress(10, D_8079A44C);
 }
 
-extern s8 D_8076CBE4;
 extern s32 D_8079A454;
 extern s32 D_8079A458;
 
 void func_80708CE0(void) {
     size_t segmentSize;
 
-    D_8076CBE4 = 1;
+    D_8076CBE4 = true;
     if (gGameMode != GAMEMODE_GP_END_CS) {
-        D_8076CBE4 = 0;
+        D_8076CBE4 = false;
         Segment_SetAddress(5, D_8079A454);
         return;
     }
@@ -329,8 +362,6 @@ void func_80708CE0(void) {
     D_8079A458 = ALIGN16(D_8079A454 + segmentSize);
     Segment_SetAddress(5, D_8079A454);
 }
-
-extern s32 D_8076CC40;
 
 bool func_80708D88(void) {
     bool sp54;
@@ -510,9 +541,7 @@ void func_80708F4C(void) {
 
 extern s32 gSegment17B960VramStart;
 
-extern s32 D_807C70E0;
-extern s32 D_807C70F0;
-extern s32 D_807C7180;
+extern RomOffset gRomSegmentPairs[][2];
 
 void func_807093F4(void) {
     s32 pad[2];
@@ -531,25 +560,29 @@ void func_807093F4(void) {
         case GAMEMODE_TIME_ATTACK:
         case GAMEMODE_GP_END_CS:
         case GAMEMODE_DEATH_RACE:
-            func_80701D7C(D_807C70F0, osPhysicalToVirtual(gSegment17B960VramStart), SEGMENT_VRAM_SIZE(segment_17B960));
-            romOffset = D_807C70E0;
+            Dma_LoadAssetsAsync(gRomSegmentPairs[10][0], osPhysicalToVirtual(gSegment17B960VramStart),
+                          SEGMENT_VRAM_SIZE(segment_17B960));
+            romOffset = gRomSegmentPairs[8][0];
             ramSize = SEGMENT_VRAM_SIZE(segment_1B8550);
             break;
         case GAMEMODE_CREATE_MACHINE:
-            func_80701D7C(D_807C70F0, osPhysicalToVirtual(gSegment17B960VramStart), SEGMENT_VRAM_SIZE(segment_17B960));
-            romOffset = D_807C7180;
+            Dma_LoadAssetsAsync(gRomSegmentPairs[10][0], osPhysicalToVirtual(gSegment17B960VramStart),
+                          SEGMENT_VRAM_SIZE(segment_17B960));
+            romOffset = gRomSegmentPairs[28][0];
             ramSize = SEGMENT_VRAM_SIZE(create_machine_textures);
             break;
         case GAMEMODE_COURSE_EDIT:
-            func_80701D7C(D_807C70F0, osPhysicalToVirtual(gSegment17B960VramStart), SEGMENT_VRAM_SIZE(segment_17B960));
-            romOffset = D_807C70E0;
+            Dma_LoadAssetsAsync(gRomSegmentPairs[10][0], osPhysicalToVirtual(gSegment17B960VramStart),
+                          SEGMENT_VRAM_SIZE(segment_17B960));
+            romOffset = gRomSegmentPairs[8][0];
             ramSize = SEGMENT_VRAM_SIZE(segment_1B8550);
             break;
         case GAMEMODE_RECORDS:
         case GAMEMODE_LX_MACHINE_SETTINGS:
         case GAMEMODE_LX_GP_RACE_NEXT_MACHINE_SETTINGS:
         case GAMEMODE_FLX_MACHINE_SELECT:
-            func_80701D7C(D_807C70F0, osPhysicalToVirtual(gSegment17B960VramStart), SEGMENT_VRAM_SIZE(segment_17B960));
+            Dma_LoadAssetsAsync(gRomSegmentPairs[10][0], osPhysicalToVirtual(gSegment17B960VramStart),
+                          SEGMENT_VRAM_SIZE(segment_17B960));
         default:
             D_8076CBD0 = 0;
             return;
@@ -560,15 +593,13 @@ void func_807093F4(void) {
     D_8076CBD0 = 0;
 }
 
-extern s32 D_807C70E8;
-
 void func_80709620(void) {
     bool loadFromDisk = false;
     u32 diskOffset;
     RomOffset romOffset;
     size_t ramSize;
 
-    if (D_8076CBD4 == 0) {
+    if (!D_8076CBD4) {
         return;
     }
     switch (gGameMode) {
@@ -579,7 +610,7 @@ void func_80709620(void) {
         case GAMEMODE_VS_4P:
         case GAMEMODE_TIME_ATTACK:
         case GAMEMODE_DEATH_RACE:
-            romOffset = D_807C70E8;
+            romOffset = gRomSegmentPairs[9][0];
             ramSize = SEGMENT_VRAM_SIZE(segment_1E23F0);
             break;
         case GAMEMODE_COURSE_EDIT:
@@ -589,7 +620,7 @@ void func_80709620(void) {
             ramSize = SEGMENT_VRAM_SIZE(segment_1FB850);
             break;
         default:
-            D_8076CBD4 = 0;
+            D_8076CBD4 = false;
             return;
     }
     CLEAR_DATA_CACHE(osPhysicalToVirtual(gSegment1E23F0VramStart), ramSize);
@@ -598,10 +629,8 @@ void func_80709620(void) {
     } else {
         func_8070818C(romOffset, osPhysicalToVirtual(gSegment1E23F0VramStart), ramSize);
     }
-    D_8076CBD4 = 0;
+    D_8076CBD4 = false;
 }
-
-extern s32 D_807C7110;
 
 void func_80709760(void) {
     bool loadFromDisk = false;
@@ -610,7 +639,7 @@ void func_80709760(void) {
     size_t ramSize;
     u8* sp1C;
 
-    if (D_8076CBD8 == 0) {
+    if (!D_8076CBD8) {
         return;
     }
 
@@ -619,7 +648,7 @@ void func_80709760(void) {
         case GAMEMODE_GP_END_CS:
         case GAMEMODE_LX_MACHINE_SETTINGS:
         case GAMEMODE_LX_GP_RACE_NEXT_MACHINE_SETTINGS:
-            romOffset = D_807C7110;
+            romOffset = gRomSegmentPairs[14][0];
             ramSize = SEGMENT_VRAM_SIZE(segment_22B0A0);
             break;
         case GAMEMODE_COURSE_EDIT:
@@ -628,7 +657,7 @@ void func_80709760(void) {
             ramSize = SEGMENT_VRAM_SIZE(segment_21C170);
             break;
         default:
-            D_8076CBD8 = 0;
+            D_8076CBD8 = false;
             return;
     }
 
@@ -651,13 +680,10 @@ void func_80709760(void) {
             mio0Decode(sp1C, osPhysicalToVirtual(gSegment22B0A0VramStart));
         }
     }
-    D_8076CBD8 = 0;
+    D_8076CBD8 = false;
 }
 
-extern u8* D_8076CBE8[];
-extern u8* D_8076CC14[];
 extern s32 D_8079A44C;
-extern RomOffset D_807C7120[][2];
 
 void func_80709914(void) {
     s32 pad;
@@ -667,7 +693,7 @@ void func_80709914(void) {
     size_t ramSize;
     u8* sp20;
 
-    if (D_8076CBDC == 0) {
+    if (!D_8076CBDC) {
         return;
     }
 
@@ -683,11 +709,11 @@ void func_80709914(void) {
         case GAMEMODE_GP_END_CS:
         case GAMEMODE_DEATH_RACE:
             venue = COURSE_CONTEXT()->courseData.venue;
-            romOffset = D_807C7120[venue][0];
+            romOffset = gRomSegmentPairs[16 + venue][0];
             ramSize = D_8076CC14[venue] - D_8076CBE8[venue];
             break;
         default:
-            D_8076CBDC = 0;
+            D_8076CBDC = false;
             return;
     }
     sp20 = Arena_Allocate(ALLOC_PEEK, ramSize);
@@ -697,11 +723,9 @@ void func_80709914(void) {
     if (*(s32*) sp20 == (s32) 'MIO0') {
         mio0Decode(sp20, osPhysicalToVirtual(D_8079A44C));
     }
-    D_8076CBDC = 0;
+    D_8076CBDC = false;
     func_i2_800B0D10(venue);
 }
-
-extern s8 D_8076CBE0;
 
 void func_80709A38(s32 venue) {
     if ((venue >= VENUE_MUTE_CITY) && (venue <= VENUE_SILENCE) && (D_8076CBE0 < 0)) {
@@ -724,7 +748,7 @@ void func_80709A64(void) {
 
     switch (gGameMode) {
         case GAMEMODE_COURSE_EDIT:
-            romOffset = D_807C7120[venue][0];
+            romOffset = gRomSegmentPairs[16 + venue][0];
             ramSize = D_8076CC14[venue] - D_8076CBE8[venue];
             break;
         default:
@@ -742,25 +766,23 @@ void func_80709A64(void) {
     func_i2_800B0D10(venue);
 }
 
-extern s32 D_807C7178;
-
 void func_80709B5C(void) {
     s32 pad[2];
     RomOffset romOffset;
     size_t ramSize;
     u8* sp24;
 
-    if (D_8076CBE4 == 0) {
+    if (!D_8076CBE4) {
         return;
     }
 
     switch (gGameMode) {
         case GAMEMODE_GP_END_CS:
-            romOffset = D_807C7178;
+            romOffset = gRomSegmentPairs[27][0];
             ramSize = SEGMENT_VRAM_SIZE(segment_2738A0);
             break;
         default:
-            D_8076CBE4 = 0;
+            D_8076CBE4 = false;
             return;
     }
 
@@ -771,7 +793,7 @@ void func_80709B5C(void) {
     if (*(s32*) sp24 == (s32) 'MIO0') {
         mio0Decode(sp24, osPhysicalToVirtual(D_8079A454));
     }
-    D_8076CBE4 = 0;
+    D_8076CBE4 = false;
 }
 
 void func_80709C3C(void) {

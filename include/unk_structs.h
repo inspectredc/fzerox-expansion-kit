@@ -7,16 +7,16 @@
 #include "other_types.h"
 
 typedef struct unk_807C6F10 {
-    s32 unk_00;
-    s32 lba;
-    void* vAddr;
-    s32 nLBAs;
-    OSPiHandle* piHandle;
-    OSIoMesg* ioMesg;
-    s32 direction;
-    LEOCmd* cmdBlock;
-    OSMesgQueue* mq;
-} unk_807C6F10;
+    /* 0x00 */ s32 unk_00;
+    /* 0x04 */ s32 lba;
+    /* 0x08 */ void* vAddr;
+    /* 0x0C */ s32 nLBAs;
+    /* 0x10 */ OSPiHandle* piHandle;
+    /* 0x14 */ OSIoMesg* ioMesg;
+    /* 0x18 */ s32 direction;
+    /* 0x1C */ LEOCmd* cmdBlock;
+    /* 0x20 */ OSMesgQueue* mq;
+} unk_807C6F10; // size = 0x24
 
 typedef struct unk_807C6EA8 {
     /* 0x00 */ s32 unk_00;

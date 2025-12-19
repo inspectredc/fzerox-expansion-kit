@@ -80,7 +80,7 @@ void func_xk2_800EC3AC(void) {
 
     D_8076C958 = 0;
     func_80705E18();
-    func_80704810(1);
+    func_80704810(true);
     func_xk1_8002FBB0();
     Audio_EditorExit();
     D_8076C77C = 1;
@@ -120,7 +120,7 @@ void func_xk2_800EC508(void) {
     }
 }
 
-extern s32 D_80030608;
+extern s32 D_xk1_80030608;
 extern s32 D_8076C77C;
 extern CourseEffectsInfo* D_8079E930;
 extern s32 D_xk1_80032BF8;
@@ -157,7 +157,7 @@ void CourseEdit_Init(void) {
     gNumPlayers = 1;
     gCourseIndex = 0;
     func_xk2_800F6290();
-    func_80704810(0);
+    func_80704810(false);
     gNumPlayers = 1;
     func_xk1_80025F98();
     D_xk2_800F7060 = Math_Rand2() % 30;
@@ -176,7 +176,7 @@ void CourseEdit_Init(void) {
     func_i2_800B91AC(0);
     gInCourseEditor = true;
     gPointOption = 0;
-    D_80030608 = 0x1F4;
+    D_xk1_80030608 = 0x1F4;
     D_xk2_800F704C = -1;
     D_xk2_80119800 = -1;
     D_xk1_80032BF8 = 0;
@@ -200,7 +200,7 @@ void CourseEdit_Init(void) {
     gSkyboxOption = COURSE_CONTEXT()->courseData.skybox;
     gBGMOption = gBGMOptionToCourseBGM[COURSE_CONTEXT()->courseData.bgm];
     func_80702FF4(gVenueOption);
-    func_xk2_800E7028(D_80030608);
+    func_xk2_800E7028(D_xk1_80030608);
     func_xk2_800F5C5C();
     func_xk1_8002AF10(4);
     gCourseVtxPtr = gGfxPool->courseVtxBuffer;
@@ -562,7 +562,7 @@ s32 CourseEdit_Update(void) {
             if (D_80794E14) {
                 break;
             }
-            func_8070405C(1);
+            func_8070405C(true);
             D_800D6CA0.unk_08 = 0;
             break;
         case 0x11:
@@ -575,7 +575,7 @@ s32 CourseEdit_Update(void) {
             if (D_80794E14 == 0) {
                 gCourseEditEntryOption = -1;
                 Audio_TriggerSystemSE(NA_SE_5);
-                func_8070405C(1);
+                func_8070405C(true);
                 D_800D6CA0.unk_08 = 0;
             }
             break;

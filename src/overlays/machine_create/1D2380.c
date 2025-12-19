@@ -49,7 +49,7 @@ void func_xk3_8013277C(void) {
     func_xk3_80135F90();
 }
 
-extern volatile s8 D_80794E1C;
+extern volatile u8 D_80794E1C;
 
 void func_xk3_801327A4(void) {
     if (func_xk3_8013618C(1) != 0) {

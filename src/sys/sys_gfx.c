@@ -219,19 +219,12 @@ void func_806F3924(void) {
     Gfx_SetTask(sGfxTask);
 }
 
-extern u8 D_800D6D90[];
-extern u8 D_8013A7F0[];
-extern u8 D_8012B520[];
-extern u8 D_801414E0[];
-
 extern s32 D_8076CB40;
 extern s32 D_8076C770;
 
-extern s32 D_807C70D8;
-extern s32 D_807C70F0;
-extern s32 D_807C7118;
-extern s32 gRamDDCompatible;
-extern s32 D_8079A32C;
+extern RomOffset gRomSegmentPairs[][2];
+extern bool gRamDDCompatible;
+extern s32 gLeoDriveConnectionState;
 
 extern unk_80225800 D_80225800;
 extern s16 gSettingSoundMode;
@@ -281,8 +274,8 @@ void Game_ThreadEntry(void* entry) {
     gBuffersVramEnd = osVirtualToPhysical(SEGMENT_VRAM_END(buffers));
     gUnkGfxVramStart = osVirtualToPhysical(SEGMENT_VRAM_START(unk_gfx_segment));
     gUnkGfxVramEnd = osVirtualToPhysical(SEGMENT_VRAM_END(unk_gfx_segment));
-    gUnkContextVramStart = osVirtualToPhysical(SEGMENT_VRAM_START(unk_context));
-    gUnkContextVramEnd = osVirtualToPhysical(SEGMENT_VRAM_END(unk_context));
+    gUnkContextVramStart = osVirtualToPhysical(SEGMENT_VRAM_START(game_context));
+    gUnkContextVramEnd = osVirtualToPhysical(SEGMENT_VRAM_END(game_context));
     gAudioContextVramStart = osVirtualToPhysical(SEGMENT_VRAM_START(audio_context));
     gAudioContextVramEnd = osVirtualToPhysical(SEGMENT_VRAM_END(audio_context) + 0x10);
     gGfxPoolVramStart = osVirtualToPhysical(SEGMENT_VRAM_START(gfxpool));
@@ -318,14 +311,14 @@ void Game_ThreadEntry(void* entry) {
     gCreateMachineTexturesVramEnd =
         gCreateMachineTexturesVramStart + (size_t) SEGMENT_VRAM_SIZE(create_machine_textures);
 
-    D_8079A3D4 = osVirtualToPhysical(D_800D6D90);
-    D_8079A3D8 = osVirtualToPhysical(D_8013A7F0);
+    D_8079A3D4 = osVirtualToPhysical(SEGMENT_VRAM_START(course_edit));
+    D_8079A3D8 = osVirtualToPhysical(SEGMENT_VRAM_END(course_edit));
 
     D_8079A42C = D_8079A3D8;
     D_8079A430 = D_8079A42C + (size_t) SEGMENT_VRAM_SIZE(segment_1FB850);
 
-    D_8079A3DC = osVirtualToPhysical(D_8012B520);
-    D_8079A3E0 = osVirtualToPhysical(D_801414E0);
+    D_8079A3DC = osVirtualToPhysical(SEGMENT_VRAM_START(machine_create));
+    D_8079A3E0 = osVirtualToPhysical(SEGMENT_VRAM_END(machine_create));
 
     // Setup memory
     Segment_SetAddress(0, 0);
@@ -410,7 +403,7 @@ void Game_ThreadEntry(void* entry) {
 
     CLEAR_DATA_CACHE(osPhysicalToVirtual(gSegment16C8A0VramStart), SEGMENT_DATA_SIZE_CONST(segment_16C8A0));
 
-    func_8070818C(D_807C7118,
+    func_8070818C(gRomSegmentPairs[15][0],
                   (uintptr_t) osPhysicalToVirtual(gSegment16C8A0VramStart) +
                       (size_t) SEGMENT_DATA_SIZE_CONST(segment_16C8A0),
                   SEGMENT_VRAM_SIZE(segment_16C8A0));
@@ -419,13 +412,13 @@ void Game_ThreadEntry(void* entry) {
                    (size_t) SEGMENT_DATA_SIZE_CONST(segment_16C8A0),
                osPhysicalToVirtual(gSegment16C8A0VramStart));
 
-    func_8070818C(D_807C70D8, (uintptr_t) osPhysicalToVirtual(gSegment17B1E0VramStart),
+    func_8070818C(gRomSegmentPairs[7][0], (uintptr_t) osPhysicalToVirtual(gSegment17B1E0VramStart),
                   SEGMENT_VRAM_SIZE(segment_17B1E0));
 
-    func_8070818C(D_807C70F0, (uintptr_t) osPhysicalToVirtual(gSegment17B960VramStart),
+    func_8070818C(gRomSegmentPairs[10][0], (uintptr_t) osPhysicalToVirtual(gSegment17B960VramStart),
                   SEGMENT_VRAM_SIZE(segment_17B960));
 
-    if ((D_8079A32C != 0) && gRamDDCompatible) {
+    if ((gLeoDriveConnectionState != 0) && gRamDDCompatible) {
         if (osAppNMIBuffer[13] != 0x20DE1529) {
             osAppNMIBuffer[13] = 0x20DE1529;
             func_xk1_8002FFA0();

@@ -453,14 +453,14 @@ void Audio_TriggerVoiceSEStart(u8 sfxId, u16 time) {
     }
 }
 
-extern s32 D_800D11D4;
+extern s32 D_800D11C8[];
 
 void Audio_TriggerSystemSE(u8 sfxId) {
     u8 i;
 
     PRINTF("==BANDO== System SE = %02x\n", sfxId);
 
-    if ((D_80771C94 == 1) && (D_800D11D4 == 0)) {
+    if ((D_80771C94 == 1) && (D_800D11C8[3] == 0)) {
         return;
     }
 
@@ -1401,8 +1401,6 @@ void Audio_EditorInit(void) {
     D_80771C8C = 1;
     Audio_SetPlayerMode(0);
 }
-
-extern s32 D_800D11C8[];
 
 void Audio_EditorBgmDelaySet(void) {
 

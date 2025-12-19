@@ -19,22 +19,27 @@ s32 D_8079F9CC;
 OSMesg D_8079F9D0[16];
 LEODiskID D_8079FA10;
 
-extern bool D_8076CBB0;
-extern s32 D_8076CBBC;
-extern s32 D_8076CBC8;
-extern s32 D_8076CBCC;
+LEODiskID D_8076CB50 = { 0 };
+LEODiskID D_8076CB70 = { 0 };
+LEODiskID D_8076CB90 = { 0 };
+bool D_8076CBB0 = true;
+bool D_8076CBB4 = true;
+bool D_8076CBB8 = false;
+bool D_8076CBBC = false;
+OSThread* D_8076CBC0 = NULL;
+s32 D_8076CBC4 = 0;
+bool D_8076CBC8 = true;
+bool D_8076CBCC = false;
+
 extern s32 gMfsError;
 
-void func_80704050(s32 arg0) {
+void func_80704050(bool arg0) {
     D_8076CBCC = arg0;
 }
 
-void func_8070405C(s32 arg0) {
+void func_8070405C(bool arg0) {
     D_8076CBC8 = arg0;
 }
-
-extern OSThread* D_8076CBC0;
-extern s32 D_8076CBC4;
 
 void func_80704068(void) {
     if ((D_8076CBC0 != NULL) && (D_8076CBC4 == 0) && (D_8076CBCC == 0)) {
@@ -287,12 +292,7 @@ void func_807047AC(void) {
     PRINTF("===============================================\n");
 }
 
-extern s32 D_8076CBB4;
-extern LEODiskID D_8076CB50;
-extern LEODiskID D_8076CB70;
-extern LEODiskID D_8076CB90;
-
-void func_80704810(s32 arg0) {
+void func_80704810(bool arg0) {
     D_8076CBB4 = arg0;
 }
 
@@ -302,7 +302,7 @@ void func_8070481C(void) {
 }
 
 void func_80704870(void) {
-    func_80704050(1);
+    func_80704050(true);
     SLLeoReadDiskID(&D_8079FA10);
 
     if (func_807041C0(D_8079FA10) == 2) {
@@ -316,11 +316,11 @@ void func_80704870(void) {
         D_8076CB50 = D_8079FA10;
         SLMFSNewDisk();
     }
-    func_80704050(0);
+    func_80704050(false);
 }
 
 void func_80704AA8(void) {
-    func_80704050(1);
+    func_80704050(true);
     SLLeoReadDiskID(&D_8079FA10);
 
     if (func_807041C0(D_8079FA10) == 2) {
@@ -334,7 +334,7 @@ void func_80704AA8(void) {
         D_8076CB50 = D_8079FA10;
         SLMFSNewDisk();
     }
-    func_80704050(0);
+    func_80704050(false);
 }
 
 void func_80704CE0(void) {
@@ -435,7 +435,7 @@ s32 SLLeoReadDiskID(LEODiskID* diskId) {
 
         switch (sSLLeoError) {
             case LEO_ERROR_GOOD:
-                D_8076CBBC = 1;
+                D_8076CBBC = true;
                 return sSLLeoError;
             case LEO_ERROR_DIAGNOSTIC_FAILURE:
                 func_8070F8A4(sSLLeoError, 2);
@@ -468,7 +468,7 @@ s32 SLLeoReadDiskID_for_start(void) {
 
     switch (sSLLeoError) {
         case LEO_ERROR_GOOD:
-            D_8076CBBC = 1;
+            D_8076CBBC = true;
             return sSLLeoError;
         case LEO_ERROR_POWERONRESET_DEVICERESET_OCCURED:
             return LEO_ERROR_POWERONRESET_DEVICERESET_OCCURED;
@@ -660,12 +660,10 @@ s32 SLLeoReadWrite(LEOCmd* cmdBlock, s32 direction, s32 lba, u8* vAddr, u32 nLba
     }
 }
 
-extern s32 D_8076CBB8;
-
 s32 func_8070595C(void) {
     static s32 D_8079FA30;
 
-    if (D_8076CBB8 == 0) {
+    if (!D_8076CBB8) {
         return 0;
     }
 
@@ -708,7 +706,7 @@ s32 SLLeoCreateManager(s32 arg0) {
         func_8070F8A4(sSLLeoError, 0);
         while (true) {}
     }
-    D_8076CBB8 = 1;
+    D_8076CBB8 = true;
     return 0;
 }
 
@@ -787,7 +785,7 @@ void SLLeoModeSelectAsync(u32 standby, u32 sleep) {
 extern FrameBuffer* gFrameBuffers[];
 
 void func_80705E18(void) {
-    func_80704050(1);
+    func_80704050(true);
     if (SLCheckDiskChange()) {
         SLMFSNewDisk();
         D_8076CB50 = D_80794CE8;
@@ -806,7 +804,7 @@ void func_80705E18(void) {
         while (func_80707780() != 0) {}
         while (SLCheckDiskInsert() != 0) {}
     }
-    func_80704050(0);
+    func_80704050(false);
 }
 
 void SLMFSRecoverManageArea(void) {
@@ -1299,7 +1297,7 @@ s32 SLMFSCreateManager(s32 region) {
         while (true) {}
     }
     PRINTF("MFS Create Manager Success\n");
-    D_8076CBB8 = 1;
+    D_8076CBB8 = true;
     return 0;
 }
 
@@ -1517,7 +1515,7 @@ s32 func_80707868(LEODiskID* diskId) {
 
     switch (sSLLeoError) {
         case LEO_ERROR_GOOD:
-            D_8076CBBC = 1;
+            D_8076CBBC = true;
             return sSLLeoError;
         case LEO_ERROR_MEDIUM_NOT_PRESENT:
             break;
@@ -1544,7 +1542,7 @@ s32 SLCheckDiskInsert(void) {
     switch (sSLLeoError) {
         case LEO_ERROR_GOOD:
             PRINTF("Test Unit Ready In check_insert -> GOOD\n");
-            if (D_8076CBBC == 0) {
+            if (!D_8076CBBC) {
                 if (func_80707868(&D_8076CB50) == 0) {
                     D_8076CBB0 = true;
                     return 0;
@@ -1605,7 +1603,7 @@ void func_80707B08(void) {
         SLLeoReadDiskID(&D_8076CB50);
         D_8076CBB0 = true;
     }
-    if (D_8076CBB4 == 0) {
+    if (!D_8076CBB4) {
         func_80704068();
         while (func_807041C0(D_8076CB50) != 2) {
             func_8070F8A4(sSLLeoError, 3);

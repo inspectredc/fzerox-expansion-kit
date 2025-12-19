@@ -174,7 +174,7 @@ void func_xk2_800EC04C(void) {
 }
 
 void func_xk2_800EC110(void) {
-    func_8070405C(0);
+    func_8070405C(false);
     func_80768434(MFS_ENTRY_WORKING_DIR, "CRS_ENTRY", "CENT", gEditCupTrackNames, sizeof(gEditCupTrackNames), 0, 0xFF,
                   1);
     gCourseEditEntryOption = -1;
@@ -183,14 +183,14 @@ void func_xk2_800EC110(void) {
 void func_xk2_800EC174(void) {
     PRINTF("ENTRY SAVE AFTER DELETE OR RENAME\n");
 
-    func_8070405C(0);
+    func_8070405C(false);
     func_807682C0(MFS_ENTRY_WORKING_DIR, "CRS_ENTRY", "CENT", gEditCupTrackNames, sizeof(gEditCupTrackNames), 0, 0xFF,
                   1);
     gCourseEditEntryOption = -1;
 }
 
 void func_xk2_800EC1D8(void) {
-    func_8070405C(0);
+    func_8070405C(false);
     func_8076833C(MFS_ENTRY_WORKING_DIR, "CRS_ENTRY", "CENT", gEditCupTrackNames, sizeof(gEditCupTrackNames), 0, 0xFF,
                   1);
 }

@@ -1,5 +1,5 @@
 #include "global.h"
-#include "leo/unk_leo.h"
+#include "leo/mfs.h"
 
 extern LEODiskID D_8076CB50;
 

@@ -1,6 +1,6 @@
 #include "leo/leo_functions.h"
 #include "leo/leo_internal.h"
-#include "leo/unk_leo.h"
+#include "leo/mfs.h"
 
 extern MfsRamDirectoryEntry gCurrentDirectoryEntry;
 extern s32 gMfsError;

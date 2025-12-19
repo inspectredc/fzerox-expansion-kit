@@ -89,8 +89,8 @@ u16 D_xk1_80033508 = 0;
 
 extern u8* D_xk3_801372B8[];
 extern u8* sLeoErrorMessages[];
-extern u8 D_80794E1C;
-extern u8 D_80794E24;
+extern volatile u8 D_80794E1C;
+extern volatile u8 D_80794E24;
 extern OSMesgQueue D_807C6E90;
 extern u8* D_xk1_800337D0[];
 
@@ -329,17 +329,17 @@ Gfx* func_xk1_8002F9DC(Gfx* gfx) {
     return gfx;
 }
 
-extern u8* D_8003BBC0;
+extern u8* gExpansionKitFontPtr;
 extern u8 D_xk1_80033808[];
 
 void func_xk1_8002FA50(void) {
     u16 i;
 
-    D_8003BBC0 = Arena_Allocate(ALLOC_FRONT, 20 * 0x80);
+    gExpansionKitFontPtr = Arena_Allocate(ALLOC_FRONT, 20 * 0x80);
     D_8003BBB0 = Arena_Allocate(ALLOC_FRONT, 20 * sizeof(s32));
 
     for (i = 0; i < 20; i++) {
         D_8003BBB0[i] = (D_xk1_80033808[i * 2] << 8) + D_xk1_80033808[i * 2 + 1];
-        LeoFault_CopyFontToRam(D_8003BBB0[i], D_8003BBC0 + i * 0x80);
+        LeoFault_CopyFontToRam(D_8003BBB0[i], gExpansionKitFontPtr + i * 0x80);
     };
 }

@@ -5,32 +5,32 @@ void func_80708050(void) {
 }
 
 extern OSMesgQueue gDmaMesgQueue;
-extern OSIoMesg D_8079A308;
+extern OSIoMesg gDmaIOMsg;
 extern OSPiHandle* gCartRomHandle;
 
 void func_80708058(u8* romAddr, u8* ramAddr, size_t size) {
     OSMesg msgBuf[7];
 
-    D_8079A308.hdr.pri = 0;
-    D_8079A308.hdr.retQueue = &gDmaMesgQueue;
-    D_8079A308.dramAddr = osPhysicalToVirtual(ramAddr);
-    D_8079A308.devAddr = romAddr;
-    D_8079A308.size = size;
+    gDmaIOMsg.hdr.pri = 0;
+    gDmaIOMsg.hdr.retQueue = &gDmaMesgQueue;
+    gDmaIOMsg.dramAddr = osPhysicalToVirtual(ramAddr);
+    gDmaIOMsg.devAddr = romAddr;
+    gDmaIOMsg.size = size;
     gCartRomHandle->transferInfo.cmdType = LEO_CMD_TYPE_2;
-    func_80768B88(gCartRomHandle, &D_8079A308, OS_READ);
+    func_80768B88(gCartRomHandle, &gDmaIOMsg, OS_READ);
     osRecvMesg(&gDmaMesgQueue, msgBuf, OS_MESG_BLOCK);
 }
 
 void func_807080E8(u8* romAddr, u8* ramAddr, size_t size, u8* bssAddr, size_t bssSize) {
     OSMesg msgBuf[7];
 
-    D_8079A308.hdr.pri = 0;
-    D_8079A308.hdr.retQueue = &gDmaMesgQueue;
-    D_8079A308.dramAddr = osPhysicalToVirtual(ramAddr);
-    D_8079A308.devAddr = romAddr;
-    D_8079A308.size = size;
+    gDmaIOMsg.hdr.pri = 0;
+    gDmaIOMsg.hdr.retQueue = &gDmaMesgQueue;
+    gDmaIOMsg.dramAddr = osPhysicalToVirtual(ramAddr);
+    gDmaIOMsg.devAddr = romAddr;
+    gDmaIOMsg.size = size;
     gCartRomHandle->transferInfo.cmdType = LEO_CMD_TYPE_2;
-    func_80768B88(gCartRomHandle, &D_8079A308, OS_READ);
+    func_80768B88(gCartRomHandle, &gDmaIOMsg, OS_READ);
     bzero(bssAddr, bssSize);
     osRecvMesg(&gDmaMesgQueue, msgBuf, OS_MESG_BLOCK);
 }

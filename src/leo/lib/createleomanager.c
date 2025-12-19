@@ -3,6 +3,7 @@
 #include "libc/stdbool.h"
 #include "PR/os_internal_exception.h"
 
+bool __leoActive = false;
 LEOVersion __leoVersion;
 
 s32 LeoCreateLeoManager(OSPri comPri, OSPri intPri, OSMesg* cmdBuf, s32 cmdMsgCnt) {
@@ -25,7 +26,7 @@ s32 LeoCreateLeoManager(OSPri comPri, OSPri intPri, OSMesg* cmdBuf, s32 cmdMsgCn
 
     leoDiskHandle = osLeoDiskInit();
     driveRomHandle = osDriveRomInit();
-    __leoActive = 1;
+    __leoActive = true;
 
     __osSetHWIntrRoutine(1, __osLeoInterrupt, leoDiskStack + sizeof(leoDiskStack) - 16);
     leoInitialize(comPri, intPri, cmdBuf, cmdMsgCnt);
