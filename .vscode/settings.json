@@ -87,7 +87,8 @@
       "ead_demo_assets.h": "c",
       "transition.h": "c",
       "records_assets.h": "c",
-      "fzx_camera.h": "c"
+      "fzx_camera.h": "c",
+      "mfs.h": "c"
     },
     "C_Cpp_Runner.msvcBatchPath": "",
     "C_Cpp.errorSquiggles": "enabled"

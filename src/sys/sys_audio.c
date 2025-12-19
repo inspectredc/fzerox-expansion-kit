@@ -5,13 +5,13 @@
 extern OSMesgQueue gAudioTaskMesgQueue;
 extern OSMesgQueue gMainThreadMesgQueue;
 extern OSTask* gCurAudioOSTask;
-extern RomOffset D_807C70A0[];
+extern RomOffset gRomSegmentPairs[][2];
 
 OSMesg sAudioTaskMsg;
 
 void Audio_ThreadEntry(void* arg0) {
     static AudioTask* sCurAudioTask = NULL;
-    Audio_Init(D_807C70A0[4], D_807C70A0[0], D_807C70A0[2]);
+    Audio_Init(gRomSegmentPairs[2][0], gRomSegmentPairs[0][0], gRomSegmentPairs[1][0]);
 
     while (true) {
         osRecvMesg(&gAudioTaskMesgQueue, &sAudioTaskMsg, OS_MESG_NOBLOCK);

@@ -956,7 +956,7 @@ void Records_CopyGhostMenuUpdate(void) {
             }
             if (gInputButtonPressed & BTN_B) {
                 sRecordsState = RECORDS_STATE_RECORDS_MENU;
-                func_80704810(1);
+                func_80704810(true);
                 BorderedBox_StartClose(sRecordsGhostCopyBox);
                 Audio_TriggerSystemSE(NA_SE_16);
             }
@@ -1162,7 +1162,7 @@ void Records_CopyToDiskMenuUpdate(void) {
             return;
         }
         if (gInputButtonPressed & BTN_B) {
-            func_80704810(1);
+            func_80704810(true);
             sRecordsState = RECORDS_STATE_RECORDS_MENU;
             BorderedBox_StartClose(sRecordsCopyToDiskBox);
             BorderedBox_StartClose(sRecordsCopyWhereBox);
@@ -1256,7 +1256,7 @@ void Records_CopyingStateUpdate(void) {
                     Records_ReadWriteGhost(OS_WRITE);
                 }
                 if (sGhostCopiedTimer >= 60) {
-                    func_80704810(1);
+                    func_80704810(true);
                     sRecordsState = RECORDS_STATE_RECORDS_MENU;
                     BorderedBox_StartClose(sRecordsCopyingInfoBox);
                     if (sRecordsCopyToGhostTypeIndex != RECORDS_GHOST_CASSETTE) {
@@ -1268,7 +1268,7 @@ void Records_CopyingStateUpdate(void) {
                 break;
             case RECORDS_INSERT_DISK:
                 if (gInputButtonPressed & (BTN_A | BTN_START)) {
-                    func_80704810(0);
+                    func_80704810(false);
                     func_80704AA8();
                     Records_LoadGhostRaceTimes(sDiskGhostCourseRecordTimes, false);
 

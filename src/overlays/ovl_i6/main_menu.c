@@ -312,13 +312,13 @@ s32 MainMenu_Update(void) {
                     case MODE_COURSE_EDIT:
                         D_8076CC54 = 5;
                         Audio_EditorInit();
-                        func_80704810(0);
+                        func_80704810(false);
                         func_8070481C();
                         return GAMEMODE_COURSE_EDIT;
                     case MODE_CREATE_MACHINE:
                         D_8076CC54 = 5;
                         Audio_Editor2Init();
-                        func_80704810(0);
+                        func_80704810(false);
                         func_8070481C();
                         return GAMEMODE_CREATE_MACHINE;
                     default:

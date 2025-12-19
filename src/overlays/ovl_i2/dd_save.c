@@ -1,5 +1,5 @@
 #include "global.h"
-#include "leo/unk_leo.h"
+#include "leo/mfs.h"
 #include "fzx_course.h"
 #include "fzx_save.h"
 #include "segment_symbols.h"
@@ -286,8 +286,8 @@ void DDSave_EraseCourseGhostFile(s32 courseIndex) {
     Save_ClearGhostRecord(&ghostSave->record);
     ghostSave++;
     Save_ClearGhostRecord(&ghostSave->record);
-    func_80704050(1);
+    func_80704050(true);
     PRINTF("ERASE DISK GHOST %d\n");
     SLMFSDeleteFile(MFS_ENTRY_WORKING_DIR, sDDSaveGhostFileName, "GOST", false);
-    func_80704050(0);
+    func_80704050(false);
 }

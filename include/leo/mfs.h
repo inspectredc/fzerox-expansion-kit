@@ -1,5 +1,5 @@
-#ifndef UNK_LEO_H
-#define UNK_LEO_H
+#ifndef MFS_H
+#define MFS_H
 
 #include "libultra/ultra64.h"
 #include "PR/leo.h"
@@ -107,4 +107,4 @@ typedef struct MfsRamArea {
 #define MFS_FAT_PROHIBITED 0xFFFE
 #define MFS_FAT_LAST_BLOCK 0xFFFF
 
-#endif // UNK_LEO_H
+#endif // MFS_H

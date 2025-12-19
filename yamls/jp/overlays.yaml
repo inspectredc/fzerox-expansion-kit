@@ -47,6 +47,21 @@
       - { type: .bss, vram: 0x8003BB60, name: AB150 }
       - { type: .bss, vram: 0x8003BBA0, name: ABC40 }
 
+
+  - name: expansion_kit_font
+    type: code
+    vram: 0x8003BBC0
+    bss_size: 0x10
+    subsegments:
+      - { type: .bss, vram: 0x8003BBC0, name: expansion_kit_font }
+
+  - name: leo_font
+    type: code
+    vram: 0x8003BBD0
+    bss_size: 0x3710
+    subsegments:
+      - { type: .bss, vram: 0x8003BBD0, name: leo_font }
+
   - name: ovl_i3
     exclusive_ram_id: ovl_i3
     type: code

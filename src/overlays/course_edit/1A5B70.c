@@ -1,5 +1,5 @@
 #include "global.h"
-#include "leo/unk_leo.h"
+#include "leo/mfs.h"
 #include "assets/segment_1FB850.h"
 #include "assets/segment_21C170.h"
 
@@ -280,7 +280,6 @@ void func_xk2_800F4AF8(Gfx** gfxP) {
     *gfxP = gfx;
 }
 
-extern s32 D_800D11C8[];
 extern s32 D_xk2_801195E0;
 
 void func_xk2_800F4EB8(Gfx** gfxP) {

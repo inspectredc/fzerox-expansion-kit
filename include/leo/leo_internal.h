@@ -4,6 +4,7 @@
 #include "libultra/ultra64.h"
 #include "PR/leo.h"
 #include "macros.h"
+#include "libc/stdbool.h"
 
 typedef struct {
   /* 0x0 */ u16 lba;
@@ -213,9 +214,9 @@ extern const u16 LEOZONE_OUTERCYL_TBL[8];
 extern const u16 LEORAM_START_LBA[7];
 extern const s32 LEORAM_BYTE[7];
 
-extern s32 __leoActive;
-extern s32 __leoResetCalled;
-extern s32 __leoQueuesCreated;
+extern bool __leoActive;
+extern bool __leoResetCalled;
+extern bool __leoQueuesCreated;
 
 extern s32 (*gLeoReadWriteFunc)(LEOCmd*, s32, u32, void*, u32, OSMesgQueue*);
 extern s32 (*gLeoSeekFunc)(LEOCmd*, u32, OSMesgQueue*);
