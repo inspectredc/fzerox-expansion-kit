@@ -3,7 +3,7 @@
 #include "fzx_game.h"
 #include "fzx_racer.h"
 #include "fzx_course.h"
-#include "assets/segment_21C170.h"
+#include "assets/course_edit_textures.h"
 
 unk_80128C94* D_80128C90;
 unk_80128C94* D_80128C94;

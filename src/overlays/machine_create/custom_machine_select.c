@@ -5,7 +5,7 @@
 #include "fzx_font.h"
 #include "fzx_machine.h"
 #include "fzx_assets.h"
-#include "assets/segment_1FB850.h"
+#include "assets/expansion_kit_textures.h"
 #include "assets/overlays/machine_create/machine_create_assets.h"
 
 static s32 sMachineSelectIndex;

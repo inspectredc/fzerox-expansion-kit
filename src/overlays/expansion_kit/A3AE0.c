@@ -1,8 +1,8 @@
 #include "global.h"
 #include "fzx_expansion_kit.h"
 #include "fzx_segmentA.h"
-#include "assets/segment_1FB850.h"
-#include "assets/segment_21C170.h"
+#include "assets/expansion_kit_textures.h"
+#include "assets/course_edit_textures.h"
 #include "assets/overlays/expansion_kit/aA3AE0.h"
 #include "assets/overlays/machine_create/machine_create_assets.h"
 

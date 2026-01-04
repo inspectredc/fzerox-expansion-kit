@@ -268,7 +268,7 @@ void DDSave_LoadDDCourseGhosts(s32 courseIndex) {
     if (courseIndex < 0) {
         courseIndex = 0;
     }
-    func_80703B40(SEGMENT_DISK_START(silence_3_staff_ghost) + courseIndex, COURSE_CONTEXT()->ghostSave,
+    DiskDrive_LoadData(SEGMENT_DISK_START(silence_3_staff_ghost) + courseIndex, COURSE_CONTEXT()->ghostSave,
                   3 * sizeof(GhostSave), 0);
 }
 

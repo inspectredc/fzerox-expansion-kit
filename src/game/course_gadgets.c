@@ -5,7 +5,7 @@
 #include "fzx_course.h"
 #include "fzx_assets.h"
 #include "fzx_expansion_kit.h"
-#include "assets/segment_21C170.h"
+#include "assets/course_edit_textures.h"
 #include "segment_symbols.h"
 #include "leo/mfs.h"
 #include "leo/leo_internal.h"
@@ -3582,7 +3582,7 @@ void Course_Load(s32 courseIndex) {
             }
             PRINTF("DEF LOAD OK\n");
             func_i2_800A8CE4(DDSave_GetCachedCourseRecord(), courseIndex);
-            func_80703B40(SEGMENT_DISK_START(silence_3) + diskCourseIndex, &COURSE_CONTEXT()->courseData,
+            DiskDrive_LoadData(SEGMENT_DISK_START(silence_3) + diskCourseIndex, &COURSE_CONTEXT()->courseData,
                           sizeof(CourseData), 0);
             if ((Course_CalculateChecksum() != COURSE_CONTEXT()->courseData.checksum) ||
                 (COURSE_CONTEXT()->courseData.creatorId != CREATOR_NINTENDO) ||
@@ -3614,7 +3614,7 @@ void Course_Load(s32 courseIndex) {
                         }
                         PRINTF("DEF LOAD OK\n");
                         func_i2_800A8CE4(DDSave_GetCachedCourseRecord(), courseIndex);
-                        func_80703B40(SEGMENT_DISK_START(silence_3) + diskCourseIndex, &COURSE_CONTEXT()->courseData,
+                        DiskDrive_LoadData(SEGMENT_DISK_START(silence_3) + diskCourseIndex, &COURSE_CONTEXT()->courseData,
                                       sizeof(CourseData), 0);
                         if ((Course_CalculateChecksum() != COURSE_CONTEXT()->courseData.checksum) ||
                             (COURSE_CONTEXT()->courseData.creatorId != CREATOR_NINTENDO) ||
@@ -3706,7 +3706,7 @@ void func_80702448(s32 courseIndex) {
             PRINTF("course index is %d\n", courseIndex);
             PRINTF("DEF LOAD OK\n");
             func_i2_800A8CE4(DDSave_GetCachedCourseRecord(), courseIndex);
-            func_80703B40(SEGMENT_DISK_START(silence_3) + diskCourseIndex, &COURSE_CONTEXT()->courseData,
+            DiskDrive_LoadData(SEGMENT_DISK_START(silence_3) + diskCourseIndex, &COURSE_CONTEXT()->courseData,
                           sizeof(CourseData), 0);
             if ((Course_CalculateChecksum() != COURSE_CONTEXT()->courseData.checksum) ||
                 (COURSE_CONTEXT()->courseData.creatorId != CREATOR_NINTENDO) ||
@@ -3740,7 +3740,7 @@ void func_80702448(s32 courseIndex) {
                         PRINTF("course index is %d\n", courseIndex);
                         PRINTF("DEF LOAD OK\n");
                         func_i2_800A8CE4(DDSave_GetCachedCourseRecord(), courseIndex);
-                        func_80703B40(SEGMENT_DISK_START(silence_3) + diskCourseIndex, &COURSE_CONTEXT()->courseData,
+                        DiskDrive_LoadData(SEGMENT_DISK_START(silence_3) + diskCourseIndex, &COURSE_CONTEXT()->courseData,
                                       sizeof(CourseData), 0);
                         if ((Course_CalculateChecksum() != COURSE_CONTEXT()->courseData.checksum) ||
                             (COURSE_CONTEXT()->courseData.creatorId != CREATOR_NINTENDO) ||

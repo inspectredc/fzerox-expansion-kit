@@ -1,7 +1,7 @@
 #include "global.h"
 #include "leo/mfs.h"
-#include "assets/segment_1FB850.h"
-#include "assets/segment_21C170.h"
+#include "assets/expansion_kit_textures.h"
+#include "assets/course_edit_textures.h"
 
 u16 D_xk2_80105540[228 * 180] = { 0 };
 
