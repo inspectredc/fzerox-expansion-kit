@@ -8,7 +8,7 @@ extern OSMesgQueue gDmaMesgQueue;
 extern OSIoMesg gDmaIOMsg;
 extern OSPiHandle* gCartRomHandle;
 
-void func_80708058(u8* romAddr, u8* ramAddr, size_t size) {
+void Dma_RomCopy(u8* romAddr, u8* ramAddr, size_t size) {
     OSMesg msgBuf[7];
 
     gDmaIOMsg.hdr.pri = 0;
@@ -21,7 +21,7 @@ void func_80708058(u8* romAddr, u8* ramAddr, size_t size) {
     osRecvMesg(&gDmaMesgQueue, msgBuf, OS_MESG_BLOCK);
 }
 
-void func_807080E8(u8* romAddr, u8* ramAddr, size_t size, u8* bssAddr, size_t bssSize) {
+void Dma_RomCopyWithBssInit(u8* romAddr, u8* ramAddr, size_t size, u8* bssAddr, size_t bssSize) {
     OSMesg msgBuf[7];
 
     gDmaIOMsg.hdr.pri = 0;
@@ -35,23 +35,23 @@ void func_807080E8(u8* romAddr, u8* ramAddr, size_t size, u8* bssAddr, size_t bs
     osRecvMesg(&gDmaMesgQueue, msgBuf, OS_MESG_BLOCK);
 }
 
-void func_8070818C(u8* romAddr, u8* ramAddr, size_t size) {
+void Dma_LoadAssets(u8* romAddr, u8* ramAddr, size_t size) {
     s32 remainder;
     s32 i;
     s32 numBlocks = size / 1024;
 
     for (i = 0; i < numBlocks; i++) {
-        func_80708058(romAddr, ramAddr, 0x400);
+        Dma_RomCopy(romAddr, ramAddr, 0x400);
         romAddr += 0x400;
         ramAddr += 0x400;
     }
     remainder = size % 1024;
     if (remainder != 0) {
-        func_80708058(romAddr, ramAddr, remainder);
+        Dma_RomCopy(romAddr, ramAddr, remainder);
     }
 }
 
-void func_80708218(u8* romAddr, u8* ramAddr, size_t size, void* bssAddr, size_t bssSize) {
+void Dma_LoadOverlay(u8* romAddr, u8* ramAddr, size_t size, void* bssAddr, size_t bssSize) {
     s32 remainder;
     s32 i;
     s32 numBlocks;
@@ -59,13 +59,13 @@ void func_80708218(u8* romAddr, u8* ramAddr, size_t size, void* bssAddr, size_t 
     numBlocks = size / 1024;
 
     for (i = 0; i < numBlocks; i++) {
-        func_80708058(romAddr, ramAddr, 0x400);
+        Dma_RomCopy(romAddr, ramAddr, 0x400);
 
         romAddr += 0x400;
         ramAddr += 0x400;
     }
     remainder = size % 1024;
     if (remainder != 0) {
-        func_807080E8(romAddr, ramAddr, remainder, bssAddr, bssSize);
+        Dma_RomCopyWithBssInit(romAddr, ramAddr, remainder, bssAddr, bssSize);
     }
 }

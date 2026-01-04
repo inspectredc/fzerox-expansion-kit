@@ -88,9 +88,9 @@ DECLARE_SEGMENT(framebuffer_unused);
 DECLARE_SEGMENT(audio_context);
 DECLARE_SEGMENT(game_context);
 
-DECLARE_SEGMENT(segment_21C170);
+DECLARE_SEGMENT(course_edit_textures);
 DECLARE_SEGMENT(create_machine_textures);
-DECLARE_SEGMENT(segment_1FB850);
+DECLARE_SEGMENT(expansion_kit_textures);
 DECLARE_SEGMENT(segment_16C8A0);
 DECLARE_SEGMENT(segment_17B1E0);
 DECLARE_SEGMENT(segment_17B960);

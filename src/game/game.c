@@ -532,14 +532,14 @@ void func_806F5310(void) {
                 }
             }
 
-            func_80708F4C();
+            Segment_LoadOverlays();
             func_i2_800B079C();
             sp20 = GAMEMODE_UPDATE;
             sGamemodeInitFuncs[GET_MODE(gGameMode)]();
             if (sp24 == 1) {
                 func_8071EA88();
             }
-            func_80709C3C();
+            Segment_LoadAssets();
             switch (gGameMode) {
                 case GAMEMODE_GP_RACE:
                 case GAMEMODE_PRACTICE:

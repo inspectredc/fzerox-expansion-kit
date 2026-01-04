@@ -47,7 +47,7 @@ s32 func_807039D4(s32 startLba, void* vram, s32 diskSize, s32 bssSize) {
     s32 sp58;
     s32 lbaCount;
     s32 nBytes;
-    LEOCmd sp34;
+    LEOCmd cmdBlock;
 
     nBytes = 0;
     LeoByteToLBA(startLba, diskSize, &lbaCount);
@@ -63,11 +63,11 @@ s32 func_807039D4(s32 startLba, void* vram, s32 diskSize, s32 bssSize) {
 
     if (lbaCount - 1) {
         LeoLBAToByte(startLba, lbaCount - 1, &nBytes);
-        SLLeoReadWrite(&sp34, OS_READ, startLba, osPhysicalToVirtual((uintptr_t) vram), lbaCount - 1, &gDmaMesgQueue);
+        SLLeoReadWrite(&cmdBlock, OS_READ, startLba, osPhysicalToVirtual((uintptr_t) vram), lbaCount - 1, &gDmaMesgQueue);
         osRecvMesg(&gDmaMesgQueue, NULL, OS_MESG_BLOCK);
     }
     diskSize -= nBytes;
-    SLLeoReadWrite(&sp34, OS_READ, (startLba + lbaCount) - 1, osPhysicalToVirtual((uintptr_t) D_8077B4D0), 1,
+    SLLeoReadWrite(&cmdBlock, OS_READ, (startLba + lbaCount) - 1, osPhysicalToVirtual((uintptr_t) D_8077B4D0), 1,
                    &gDmaMesgQueue);
     osRecvMesg(&gDmaMesgQueue, NULL, OS_MESG_BLOCK);
     bcopy(D_8077B4D0, osPhysicalToVirtual((uintptr_t) vram + nBytes), diskSize);
@@ -76,12 +76,12 @@ s32 func_807039D4(s32 startLba, void* vram, s32 diskSize, s32 bssSize) {
     return sp58;
 }
 
-s32 func_80703B40(s32 startLba, void* vram, s32 diskSize, s32 bssSize) {
+s32 DiskDrive_LoadData(s32 startLba, void* vram, s32 diskSize, s32 bssSize) {
     void* bssStart;
     s32 sp58;
     s32 lbaCount;
     s32 nBytes;
-    LEOCmd sp34;
+    LEOCmd cmdBlock;
 
     nBytes = 0;
     LeoByteToLBA(startLba, diskSize, &lbaCount);
@@ -97,11 +97,11 @@ s32 func_80703B40(s32 startLba, void* vram, s32 diskSize, s32 bssSize) {
 
     if (lbaCount - 1) {
         LeoLBAToByte(startLba, lbaCount - 1, &nBytes);
-        func_80768AF0(&sp34, OS_READ, startLba, osPhysicalToVirtual((uintptr_t) vram), lbaCount - 1, &gDmaMesgQueue);
+        func_80768AF0(&cmdBlock, OS_READ, startLba, osPhysicalToVirtual((uintptr_t) vram), lbaCount - 1, &gDmaMesgQueue);
         osRecvMesg(&gDmaMesgQueue, NULL, OS_MESG_BLOCK);
     }
     diskSize -= nBytes;
-    func_80768AF0(&sp34, OS_READ, (startLba + lbaCount) - 1, osPhysicalToVirtual((uintptr_t) D_8077B4D0), 1,
+    func_80768AF0(&cmdBlock, OS_READ, (startLba + lbaCount) - 1, osPhysicalToVirtual((uintptr_t) D_8077B4D0), 1,
                   &gDmaMesgQueue);
     osRecvMesg(&gDmaMesgQueue, NULL, OS_MESG_BLOCK);
     bcopy(D_8077B4D0, osPhysicalToVirtual((uintptr_t) vram + nBytes), diskSize);
@@ -109,12 +109,12 @@ s32 func_80703B40(s32 startLba, void* vram, s32 diskSize, s32 bssSize) {
     return sp58;
 }
 
-s32 func_80703CA4(s32 startLba, void* vram, s32 diskSize, s32 bssSize) {
+s32 DiskDrive_LoadOverlay(s32 startLba, void* vram, s32 diskSize, s32 bssSize) {
     void* bssStart;
     s32 sp58;
     s32 lbaCount;
     s32 nBytes;
-    LEOCmd sp34;
+    LEOCmd cmdBlock;
 
     nBytes = 0;
     LeoByteToLBA(startLba, diskSize, &lbaCount);
@@ -130,11 +130,11 @@ s32 func_80703CA4(s32 startLba, void* vram, s32 diskSize, s32 bssSize) {
 
     if (lbaCount - 1) {
         LeoLBAToByte(startLba, lbaCount - 1, &nBytes);
-        func_80768A5C(&sp34, OS_READ, startLba, osPhysicalToVirtual((uintptr_t) vram), lbaCount - 1, &gDmaMesgQueue);
+        func_80768A5C(&cmdBlock, OS_READ, startLba, osPhysicalToVirtual((uintptr_t) vram), lbaCount - 1, &gDmaMesgQueue);
         osRecvMesg(&gDmaMesgQueue, NULL, OS_MESG_BLOCK);
     }
     diskSize -= nBytes;
-    func_80768A5C(&sp34, OS_READ, (startLba + lbaCount) - 1, osPhysicalToVirtual((uintptr_t) D_8077B4D0), 1,
+    func_80768A5C(&cmdBlock, OS_READ, (startLba + lbaCount) - 1, osPhysicalToVirtual((uintptr_t) D_8077B4D0), 1,
                   &gDmaMesgQueue);
     osRecvMesg(&gDmaMesgQueue, NULL, OS_MESG_BLOCK);
     bcopy(&D_8077B4D0, osPhysicalToVirtual((uintptr_t) vram + nBytes), diskSize);
@@ -144,7 +144,7 @@ s32 func_80703CA4(s32 startLba, void* vram, s32 diskSize, s32 bssSize) {
 
 extern s32 D_8076C770;
 
-s32 func_80703E08(s32 startLba, void* vram, s32 diskSize, s32 bssSize) {
+s32 DiskDrive_LoadOverlayProgressBar(s32 startLba, void* vram, s32 diskSize, s32 bssSize) {
     void* bssStart;
     s32 sp70;
     s32 lbaCount;

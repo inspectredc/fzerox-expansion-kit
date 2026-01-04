@@ -12,7 +12,7 @@ extern RomOffset gRomSegmentPairs[][2];
 
 void func_i2_800AE100(s32 segAddr, size_t size, u8* startAddr) {
     CLEAR_DATA_CACHE(startAddr, size);
-    func_8070818C(gRomSegmentPairs[4][0] + SEGMENT_OFFSET(segAddr), startAddr, size);
+    Dma_LoadAssets(gRomSegmentPairs[4][0] + SEGMENT_OFFSET(segAddr), startAddr, size);
 }
 
 void func_i2_800AE170(void) {

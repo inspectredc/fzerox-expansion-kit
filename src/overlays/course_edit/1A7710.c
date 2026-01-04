@@ -1,5 +1,5 @@
 #include "global.h"
-#include "assets/segment_21C170.h"
+#include "assets/course_edit_textures.h"
 
 Vec3f D_xk2_8013A740;
 UNUSED s32 D_xk2_8013A750[2];

@@ -1,7 +1,7 @@
 #include "global.h"
 #include "fzx_expansion_kit.h"
-#include "assets/segment_1FB850.h"
-#include "assets/segment_21C170.h"
+#include "assets/expansion_kit_textures.h"
+#include "assets/course_edit_textures.h"
 
 extern MenuDropItem gRoadTypeMenuItems;
 extern MenuDropItem gHRoadTypeMenuItems;

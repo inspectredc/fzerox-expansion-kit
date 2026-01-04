@@ -2,7 +2,7 @@
 #include "leo/leo_functions.h"
 #include "fzx_game.h"
 #include "fzx_assets.h"
-#include "assets/segment_1FB850.h"
+#include "assets/expansion_kit_textures.h"
 
 s32 D_xk1_8003A5D0;
 unk_8003A5D8 D_xk1_8003A5D8[102];

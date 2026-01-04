@@ -108,10 +108,10 @@ void Math_NormalizeXZ(f32*, f32*);
 s32 Math_VectorSetScale(Vec3f*, f32);
 
 void func_807038B0(void);
-s32 func_80703B40(s32 startLba, void* vram, s32 diskSize, s32 bssSize);
+s32 DiskDrive_LoadData(s32 startLba, void* vram, s32 diskSize, s32 bssSize);
 void func_80703948(void);
-s32 func_80703CA4(s32 startLba, void* vram, s32 diskSize, s32 bssSize);
-s32 func_80703E08(s32 startLba, void* vram, s32 diskSize, s32 bssSize);
+s32 DiskDrive_LoadOverlay(s32 startLba, void* vram, s32 diskSize, s32 bssSize);
+s32 DiskDrive_LoadOverlayProgressBar(s32 startLba, void* vram, s32 diskSize, s32 bssSize);
 
 void func_80704050(bool);
 void func_8070405C(bool);
@@ -142,7 +142,7 @@ s32 SLCheckDiskInsert(void);
 bool SLCheckDiskChange2(void);
 void func_80707B08(void);
 void func_80707E58(void);
-void func_8070818C(u8* romAddr, u8* ramAddr, size_t size);
+void Dma_LoadAssets(u8* romAddr, u8* ramAddr, size_t size);
 
 void Arena_DefaultStartInit(void);
 void Arena_EndInit(void);
@@ -167,7 +167,7 @@ void Camera_Update(void);
 void Racer_Init(void);
 void func_8071E988(void);
 void func_8071E9C4(void);
-void func_80708F4C(void);
+void Segment_LoadOverlays(void);
 void func_8071EA88(void);
 void Audio_DDBgmReady(u8 bgm);
 s32 Course_GetBgm(void);
@@ -192,7 +192,7 @@ void Controller_Reset(void);
 
 void func_806F5310(void);
 Gfx* func_806F59E0(Gfx*);
-void func_80709C3C(void);
+void Segment_LoadAssets(void);
 void Audio_Update(void);
 
 bool SLLeoDiskCompare(LEODiskID, LEODiskID);

@@ -3,7 +3,7 @@
     - [0x07,  0x1FB850]
   header:
     code:
-      - '#include "assets/segment_1FB850.h"'
+      - '#include "assets/expansion_kit_textures.h"'
     header:
       - '#include "gfx.h"'
 

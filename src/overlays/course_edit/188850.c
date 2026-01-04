@@ -3,7 +3,7 @@
 #include "fzx_racer.h"
 #include "fzx_course.h"
 #include "fzx_expansion_kit.h"
-#include "assets/segment_21C170.h"
+#include "assets/course_edit_textures.h"
 
 Controller* D_80119720;
 UNUSED s32 D_xk2_80119724;
