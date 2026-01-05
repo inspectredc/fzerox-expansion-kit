@@ -102,6 +102,6 @@ void func_807037A4(void) {
     osPfsFindFile(NULL, 0, 0, NULL, NULL, NULL);
     __osSetCause(0);
     __osSetCount(0);
-    sprintf(NULL, "\0\0\0\0\0\0\0");
+    sprintf(NULL, "");
     temp = sp2C;
 }

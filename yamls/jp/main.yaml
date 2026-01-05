@@ -27,21 +27,21 @@
     vram: 0x80225800
     bss_size: 0x818C0
     subsegments:
-      - { type: .bss, vram: 0x80225800, name: unk_gfx_segment}
+      - { type: .bss, vram: 0x80225800, name: game/unk_gfx_segment}
 
   - name: game_context
     type: code
     vram: 0x802BB140
     bss_size: 0x1EB90
     subsegments:
-      - { type: .bss, vram: 0x802BB140, name: game_context }
+      - { type: .bss, vram: 0x802BB140, name: game/game_context }
 
   - name: buffers
     type: code
     vram: 0x802D9CD0
     bss_size: 0x55000
     subsegments:
-      - { type: .bss, vram: 0x802D9CD0, name: buffers }
+      - { type: .bss, vram: 0x802D9CD0, name: sys/buffers }
 
   - name: audio_heap
     type: code
@@ -62,7 +62,7 @@
     vram: 0x806F2400
     bss_size: 0x3E0
     subsegments:
-      - { type: .bss, vram: 0x806F2400, name: custom_machine_info }
+      - { type: .bss, vram: 0x806F2400, name: game/custom_machine_info }
 
   - name: entry
     type: code
@@ -91,17 +91,18 @@
       - [0x10B20, c]
       - [0x110B0, c, sys/disk_drive]
       - [0x11850, c, sys/sys_leo]
-      - [0x157F0, c]
+      - [0x157F0, c, sys/dma]
       - [0x15AB0, c, sys/segment]
-      - [0x17490, c]
-      - [0x1B6E0, c]
+      - [0x17490, c, game/texture_utils]
+      - [0x1AA00, c, game/common]
+      - [0x1B6E0, c, game/texture_utils2]
       - [0x1C8B0, c]
-      - [0x1C8F0, c]
+      - [0x1C8F0, c, sys/disk_mount]
       - [0x1C970, c, sys/leo_fault]
       - [0x1D580, c, sys/sys_fault]
-      - [0x1E970, c]
-      - [0x1F320, c, camera]
-      - [0x27110, c]
+      - [0x1E970, c, game/bordered_box]
+      - [0x1F320, c, game/camera]
+      - [0x27110, c, game/racer]
       - [0x3BBB0, hasm, game/mio0Decode]
       - [0x3BC60, c, audio/synthesis]
       - [0x3E700, c, audio/heap]
@@ -302,7 +303,7 @@
       - [0x74100, c, leo/mfs/mfs_attr]
       - [0x744C0, c, leo/mfs/mfs_validate]
       - [0x74970, c, leo/mfs/mfs_copy]
-      - [0x75000, c]
+      - [0x75000, c, sys/75000]
       - [0x76660, textbin, aspmain]
 
       # Data
@@ -315,13 +316,13 @@
       - [0x7A340, .data, sys/disk_drive]
       - [0x7A350, .data, sys/sys_leo]
       - [0x7A3D0, .data, sys/segment]
-      - [0x7A450, .data, 17490]
+      - [0x7A450, .data, game/common]
       - [0x7A620, .data, 1C8B0]
-      - [0x7A800, .data, 1C8F0]
+      - [0x7A800, .data, sys/disk_mount]
       - [0x7A810, .data, sys/leo_fault]
       - [0x7ACE0, .data, sys/sys_fault]
-      - [0x7AEC0, .data, camera]
-      - [0x7B0C0, .data, 27110]
+      - [0x7AEC0, .data, game/camera]
+      - [0x7B0C0, .data, game/racer]
       - [0x7CB20, .data, unk_tables]
       - [0x7DB20, .data, audio/filter_data]
       - [0x7DD10, .data, audio/note_data]
@@ -419,13 +420,13 @@
       - [0x81230, .rodata, sys/disk_drive]
       - [0x81500, .rodata, sys/sys_leo]
       - [0x82EE0, .rodata, sys/segment]
-      - [0x831E0, .rodata, 17490]
+      - [0x831E0, .rodata, game/common]
       - [0x83620, .rodata, 1C8B0]
       - [0x83630, .rodata, sys/leo_fault]
       - [0x83670, .rodata, sys/sys_fault]
-      - [0x83BB0, .rodata, 1E970]
-      - [0x83BD0, .rodata, camera]
-      - [0x846F0, .rodata, 27110]
+      - [0x83BB0, .rodata, game/bordered_box]
+      - [0x83BD0, .rodata, game/camera]
+      - [0x846F0, .rodata, game/racer]
       - [0x84970, .rodata, audio/synthesis]
       - [0x84990, .rodata, audio/heap]
       - [0x849C0, .rodata, audio/load]
@@ -467,8 +468,8 @@
       - [0xA25D0, .data, leo/mfs/mfs_save]
       - [0xA25E0, .rodata, leo/mfs/mfs_dir]
       - [0xA25F0, .rodata, leo/mfs/mfs_save]
-      - [0xA2610, .data, 75000]
-      - [0xA2630, .rodata, 75000]
+      - [0xA2610, .data, sys/75000]
+      - [0xA2630, .rodata, sys/75000]
       - [0xA2690, data, aspmain]
       - [0xA2970, .data, audio/audio_tables]
       - { type: .bss, vram: 0x80795670, name: sys/sys_main }
@@ -480,14 +481,14 @@
       - { type: .bss, vram: 0x8079E920, name: game/course_gadgets }
       - { type: .bss, vram: 0x8079F950, name: sys/sys_leo }
       - { type: .bss, vram: 0x8079FA40, name: sys/segment }
-      - { type: .bss, vram: 0x8079FAA0, name: 17490 }
+      - { type: .bss, vram: 0x8079FAA0, name: game/common }
       - { type: .bss, vram: 0x8079FC10, name: 1C8B0 }
       - { type: .bss, vram: 0x8079FC80, name: sys/leo_fault }
       - { type: .bss, vram: 0x8079FE80, name: sys/sys_fault }
-      - { type: .bss, vram: 0x807A0870, name: 1E970 }
-      - { type: .bss, vram: 0x807A0930, name: camera }
-      - { type: .bss, vram: 0x807A15D0, name: 27110 }
-      - { type: .bss, vram: 0x807B3C20, name: course_gadget_context }
+      - { type: .bss, vram: 0x807A0870, name: game/bordered_box }
+      - { type: .bss, vram: 0x807A0930, name: game/camera }
+      - { type: .bss, vram: 0x807A15D0, name: game/racer }
+      - { type: .bss, vram: 0x807B3C20, name: game/course_gadget_context }
       - { type: bss, vram: 0x807C1870, name: 807C1870 } # pad
       - { type: .bss, vram: 0x807C1890, name: audio/load }
       - { type: .bss, vram: 0x807C1BE0, name: audio/general }
@@ -523,11 +524,11 @@
       - { type: bss, vram: 0x807C6E50, name: 807C6E50 } # pad
       - { type: .bss, vram: 0x807C6E60, name: leo/mfs/mfs_prepared_dir }
       - { type: .bss, vram: 0x807C6E70, name:  leo/mfs/mfs_handlers }
-      - { type: .bss, vram: 0x807C6E70, name: 75000 }
+      - { type: .bss, vram: 0x807C6E70, name: sys/75000 }
 
   - name: cartridge_offsets
     type: code
     vram: 0x807C70A0
     bss_size: 0xF0
     subsegments:
-      - { type: .bss, vram: 0x807C70A0, name: cartridge_offsets }
+      - { type: .bss, vram: 0x807C70A0, name: sys/cartridge_offsets }

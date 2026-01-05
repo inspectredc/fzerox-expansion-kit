@@ -181,7 +181,7 @@ void func_8070F8A4(s32 error, s32 errorType);
 void LeoFault_LoadFontSet(void);
 void func_80704CE0(void);
 void func_80704DB0(char*, char*);
-void func_8070F0F0(void);
+void DiskMount_Init(void);
 void func_80704F38(OSThread*);
 void Fault_FillRectangle(s32 xPos, s32 yPos, s32 width, s32 height);
 void Fault_Init(void);
