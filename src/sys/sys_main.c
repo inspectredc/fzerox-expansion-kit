@@ -196,7 +196,7 @@ void Main_ThreadEntry(void* arg0) {
 
         osViBlack(false);
 
-        func_8070F0F0();
+        DiskMount_Init();
     }
 
     osCreateThread(&sResetThread, THREAD_ID_RESET, Reset_ThreadEntry, NULL,

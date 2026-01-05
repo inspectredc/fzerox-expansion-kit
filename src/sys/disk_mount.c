@@ -1,12 +1,13 @@
 #include "global.h"
 #include "leo/mfs.h"
+#include "leo/leo_functions.h"
 
 extern LEODiskID D_8076CB50;
 
 #define LEO_DISK_TIME(yearhi, yearlo, month, day, hour, minute, second) \
     { 0, 0x##yearhi, 0x##yearlo, 0x##month, 0x##day, 0x##hour, 0x##minute, 0x##second }
 
-void func_8070F0F0(void) {
+void DiskMount_Init(void) {
     // 1999-12-31 23:59:59
     LEODiskTime diskTime = LEO_DISK_TIME(19, 99, 12, 31, 23, 59, 59);
 

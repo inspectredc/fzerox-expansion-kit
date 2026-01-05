@@ -96,7 +96,7 @@ void leoCommand(void* cmd_blk_addr) {
                 ((LEOCmd*) cmd_blk_addr)->header.status = LEO_STATUS_CHECK_CONDITION;
             }
     }
-    osSendMesg(&LEOblock_que, (OSMesg) 0, OS_MESG_BLOCK);
+    osSendMesg(&LEOblock_que, NULL, OS_MESG_BLOCK);
 }
 
 void LeoReset(void) {

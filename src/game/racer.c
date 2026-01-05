@@ -1949,7 +1949,7 @@ void func_8071E0C0(void) {
 }
 #else
 void func_8071E0C0(void);
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/27110/func_8071E0C0.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/game/racer/func_8071E0C0.s")
 #endif
 
 void func_8071E564(s32 character, s32 arg1) {
@@ -6768,7 +6768,7 @@ block_115:
     return gfx;
 }
 #else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/27110/Racer_Draw.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/game/racer/Racer_Draw.s")
 #endif
 
 Gfx* func_8072DE6C(Gfx* gfx, s32 arg1, s32 red, s32 green, s32 blue) {
