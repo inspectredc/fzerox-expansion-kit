@@ -19,7 +19,7 @@ Controller* Controller_GetMouse(void) {
     return NULL;
 }
 
-extern RomOffset D_807C70A0[];
+extern RomOffset gRomSegmentPairs[][2];
 
 void func_806F62AC(FrameBuffer* fb) {
     u64* var_s0 = &fb->array[SCREEN_HEIGHT - 1][SCREEN_WIDTH - 4];
@@ -34,7 +34,7 @@ void func_806F62AC(FrameBuffer* fb) {
     var_s0 = &fb->array[70][96];
 
     for (var_s1 = 0; var_s1 < 0x6A00; var_s1 += 0x100, var_s0 += 80) {
-        func_80701C04(D_807C70A0[6] + var_s1 + sizeof(Gfx), var_s0, 0x100);
+        Dma_ClearRomCopy(gRomSegmentPairs[3][0] + var_s1 + sizeof(Gfx), var_s0, 0x100);
     }
 }
 
@@ -778,7 +778,7 @@ void Matrix_SetTransRot(Mtx* mtx, MtxF* mtxF, f32 scale, s32 xRot, s32 yRot, s32
     Matrix_ToMtx(mtxF, mtx);
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/3A10/Matrix_SetAxisRotation.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/sys/math/Matrix_SetAxisRotation.s")
 
 void Matrix_SetShadowProjection(Mtx* mtx, MtxF* mtxF, f32 lightProjectionX, f32 lightProjectionY, f32 lightProjectionZ,
                                 f32 planePointX, f32 planePointY, f32 planePointZ, f32 planeNormalX, f32 planeNormalY,

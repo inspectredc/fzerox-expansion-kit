@@ -5,9 +5,9 @@
 #include "fzx_course.h"
 #include "fzx_assets.h"
 #include "fzx_expansion_kit.h"
-#include "assets/segment_21C170.h"
+#include "assets/course_edit_textures.h"
 #include "segment_symbols.h"
-#include "leo/unk_leo.h"
+#include "leo/mfs.h"
 #include "leo/leo_internal.h"
 
 OSMesg D_8079E920;
@@ -584,7 +584,7 @@ Gfx* Course_GadgetsDraw(Gfx* gfx, s32 arg1) {
     return gfx;
 }
 #else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/6F50/Course_GadgetsDraw.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/game/course_gadgets/Course_GadgetsDraw.s")
 #endif
 
 extern Jump gJumps[];
@@ -3450,46 +3450,46 @@ void Course_SegmentsInit(void) {
     courseInfo->courseSegments[courseInfo->segmentCount - 1].next = courseInfo->courseSegments;
 }
 
-extern OSIoMesg D_8079A308;
+extern OSIoMesg gDmaIOMsg;
 extern OSMesgQueue gDmaMesgQueue;
 extern OSPiHandle* gCartRomHandle;
 
-void func_80701C04(void* romAddr, void* ramAddr, size_t size) {
+void Dma_ClearRomCopy(void* romAddr, void* ramAddr, size_t size) {
     osInvalDCache(osPhysicalToVirtual(ramAddr), size);
-    D_8079A308.hdr.pri = 0;
-    D_8079A308.hdr.retQueue = &gDmaMesgQueue;
-    D_8079A308.dramAddr = osPhysicalToVirtual(ramAddr);
-    D_8079A308.devAddr = romAddr;
-    D_8079A308.size = size;
+    gDmaIOMsg.hdr.pri = OS_MESG_PRI_NORMAL;
+    gDmaIOMsg.hdr.retQueue = &gDmaMesgQueue;
+    gDmaIOMsg.dramAddr = osPhysicalToVirtual(ramAddr);
+    gDmaIOMsg.devAddr = romAddr;
+    gDmaIOMsg.size = size;
     gCartRomHandle->transferInfo.cmdType = LEO_CMD_TYPE_2;
-    osEPiStartDma(gCartRomHandle, &D_8079A308, OS_READ);
+    osEPiStartDma(gCartRomHandle, &gDmaIOMsg, OS_READ);
     osRecvMesg(&gDmaMesgQueue, NULL, OS_MESG_BLOCK);
 }
 
-void func_80701CAC(void* romAddr, void* ramAddr, size_t size) {
+void Dma_RomCopyAsync(void* romAddr, void* ramAddr, size_t size) {
     OSMesg sp20[8];
 
     if (gDmaMesgQueue.validCount >= gDmaMesgQueue.msgCount) {
         osRecvMesg(&gDmaMesgQueue, sp20, OS_MESG_BLOCK);
     }
     osInvalDCache(osPhysicalToVirtual(ramAddr), size);
-    D_8079A308.hdr.pri = OS_MESG_PRI_NORMAL;
-    D_8079A308.hdr.retQueue = &gDmaMesgQueue;
-    D_8079A308.dramAddr = osPhysicalToVirtual(ramAddr);
-    D_8079A308.devAddr = (uintptr_t) romAddr;
-    D_8079A308.size = size;
+    gDmaIOMsg.hdr.pri = OS_MESG_PRI_NORMAL;
+    gDmaIOMsg.hdr.retQueue = &gDmaMesgQueue;
+    gDmaIOMsg.dramAddr = osPhysicalToVirtual(ramAddr);
+    gDmaIOMsg.devAddr = (uintptr_t) romAddr;
+    gDmaIOMsg.size = size;
     gCartRomHandle->transferInfo.cmdType = LEO_CMD_TYPE_2;
-    func_80768B88(gCartRomHandle, &D_8079A308, OS_READ);
+    func_80768B88(gCartRomHandle, &gDmaIOMsg, OS_READ);
     osRecvMesg(&gDmaMesgQueue, sp20, OS_MESG_BLOCK);
 }
 
-void func_80701D7C(u8* romAddr, u8* ramAddr, size_t size) {
+void Dma_LoadAssetsAsync(u8* romAddr, u8* ramAddr, size_t size) {
     s32 remainder;
     s32 i;
     s32 numBlocks = size / 1024;
 
     for (i = 0; i < numBlocks; i++) {
-        func_80701CAC(romAddr, ramAddr, 0x400);
+        Dma_RomCopyAsync(romAddr, ramAddr, 0x400);
 
         romAddr += 0x400;
         ramAddr += 0x400;
@@ -3497,13 +3497,13 @@ void func_80701D7C(u8* romAddr, u8* ramAddr, size_t size) {
 
     remainder = size % 1024;
     if (remainder) {
-        func_80701CAC(romAddr, ramAddr, remainder);
+        Dma_RomCopyAsync(romAddr, ramAddr, remainder);
     }
 }
 
 void func_80701E08(void) {
 
-    func_80704050(1);
+    func_80704050(true);
 
     switch (func_8070595C()) {
         case 1:
@@ -3516,7 +3516,7 @@ void func_80701E08(void) {
             break;
     }
     while (func_8070595C() != 2) {}
-    func_80704050(0);
+    func_80704050(false);
 }
 
 // todo: move these to appropriate places
@@ -3532,8 +3532,8 @@ static const char devrostr08[] = "U ERROR RETRY\n";
 
 extern u8 gEditCupTrackNames[][9];
 extern s16 gPlayer1OverallPosition;
-extern s32 D_807C70C8;
-extern s32 D_800F7404;
+extern RomOffset gRomSegmentPairs[][2];
+extern s32 D_xk2_800F7404;
 extern OSMesgQueue gMFSMesgQ;
 extern s32 D_8079F9B4;
 extern s32 gMfsError;
@@ -3553,8 +3553,8 @@ void Course_Load(s32 courseIndex) {
 
     DDSave_ClearCachedGhostSaves();
     if (courseIndex >= COURSE_DEATH_RACE) {
-        romAddr = D_807C70C8 + (courseIndex - 30) * sizeof(CourseData);
-        func_80701D7C(romAddr, osVirtualToPhysical(&COURSE_CONTEXT()->courseData), sizeof(CourseData));
+        romAddr = gRomSegmentPairs[5][0] + (courseIndex - 30) * sizeof(CourseData);
+        Dma_LoadAssetsAsync(romAddr, osVirtualToPhysical(&COURSE_CONTEXT()->courseData), sizeof(CourseData));
         PRINTF("ENTRY CHECK\n");
         if ((gPlayer1OverallPosition >= 4) && (courseIndex == COURSE_ENDING)) {
             COURSE_CONTEXT()->courseData.skybox = SKYBOX_BLUE;
@@ -3582,8 +3582,8 @@ void Course_Load(s32 courseIndex) {
             }
             PRINTF("DEF LOAD OK\n");
             func_i2_800A8CE4(DDSave_GetCachedCourseRecord(), courseIndex);
-            func_80703B40(SEGMENT_DISK_START(silence_3) + diskCourseIndex, &COURSE_CONTEXT()->courseData,
-                          sizeof(CourseData), 0);
+            DiskDrive_LoadData(SEGMENT_DISK_START(silence_3) + diskCourseIndex, &COURSE_CONTEXT()->courseData,
+                               sizeof(CourseData), 0);
             if ((Course_CalculateChecksum() != COURSE_CONTEXT()->courseData.checksum) ||
                 (COURSE_CONTEXT()->courseData.creatorId != CREATOR_NINTENDO) ||
                 (COURSE_CONTEXT()->courseData.bgm > BGM_NEW_04)) {
@@ -3614,8 +3614,8 @@ void Course_Load(s32 courseIndex) {
                         }
                         PRINTF("DEF LOAD OK\n");
                         func_i2_800A8CE4(DDSave_GetCachedCourseRecord(), courseIndex);
-                        func_80703B40(SEGMENT_DISK_START(silence_3) + diskCourseIndex, &COURSE_CONTEXT()->courseData,
-                                      sizeof(CourseData), 0);
+                        DiskDrive_LoadData(SEGMENT_DISK_START(silence_3) + diskCourseIndex,
+                                           &COURSE_CONTEXT()->courseData, sizeof(CourseData), 0);
                         if ((Course_CalculateChecksum() != COURSE_CONTEXT()->courseData.checksum) ||
                             (COURSE_CONTEXT()->courseData.creatorId != CREATOR_NINTENDO) ||
                             (COURSE_CONTEXT()->courseData.bgm > BGM_NEW_04)) {
@@ -3640,9 +3640,9 @@ void Course_Load(s32 courseIndex) {
             func_8076852C(MFS_ENTRY_WORKING_DIR, ghostName, "GOST", COURSE_CONTEXT(), sizeof(CourseContext));
             osRecvMesg(&gMFSMesgQ, NULL, OS_MESG_BLOCK);
         }
-        romAddr = D_807C70C8 + courseIndex * sizeof(CourseData);
+        romAddr = gRomSegmentPairs[5][0] + courseIndex * sizeof(CourseData);
         PRINTF("UNPACK\n");
-        func_80701D7C(romAddr, osVirtualToPhysical(&COURSE_CONTEXT()->courseData), sizeof(CourseData));
+        Dma_LoadAssetsAsync(romAddr, osVirtualToPhysical(&COURSE_CONTEXT()->courseData), sizeof(CourseData));
         PRINTF("UNPACK OK\n");
         COURSE_CONTEXT()->courseData.bgm = D_i2_800BF044[courseIndex];
         if (gInCourseEditor && (courseIndex == COURSE_RED_CANYON_2)) {
@@ -3653,7 +3653,7 @@ void Course_Load(s32 courseIndex) {
 
     func_80702BC4(courseIndex);
     if (gInCourseEditor) {
-        D_800F7404 = 1;
+        D_xk2_800F7404 = 1;
     }
 }
 
@@ -3667,8 +3667,8 @@ void func_80702448(s32 courseIndex) {
     if (courseIndex >= COURSE_DEATH_RACE) {
         PRINTF("ENTRY CHECK\n");
         PRINTF("INDEX %d\n");
-        romAddr = D_807C70C8 + (courseIndex - 30) * sizeof(CourseData);
-        func_80701D7C(romAddr, osVirtualToPhysical(&COURSE_CONTEXT()->courseData), sizeof(CourseData));
+        romAddr = gRomSegmentPairs[5][0] + (courseIndex - 30) * sizeof(CourseData);
+        Dma_LoadAssetsAsync(romAddr, osVirtualToPhysical(&COURSE_CONTEXT()->courseData), sizeof(CourseData));
         if ((gPlayer1OverallPosition >= 4) && (courseIndex == COURSE_ENDING)) {
             COURSE_CONTEXT()->courseData.skybox = SKYBOX_BLUE;
         }
@@ -3706,8 +3706,8 @@ void func_80702448(s32 courseIndex) {
             PRINTF("course index is %d\n", courseIndex);
             PRINTF("DEF LOAD OK\n");
             func_i2_800A8CE4(DDSave_GetCachedCourseRecord(), courseIndex);
-            func_80703B40(SEGMENT_DISK_START(silence_3) + diskCourseIndex, &COURSE_CONTEXT()->courseData,
-                          sizeof(CourseData), 0);
+            DiskDrive_LoadData(SEGMENT_DISK_START(silence_3) + diskCourseIndex, &COURSE_CONTEXT()->courseData,
+                               sizeof(CourseData), 0);
             if ((Course_CalculateChecksum() != COURSE_CONTEXT()->courseData.checksum) ||
                 (COURSE_CONTEXT()->courseData.creatorId != CREATOR_NINTENDO) ||
                 (COURSE_CONTEXT()->courseData.bgm > BGM_NEW_04)) {
@@ -3740,8 +3740,8 @@ void func_80702448(s32 courseIndex) {
                         PRINTF("course index is %d\n", courseIndex);
                         PRINTF("DEF LOAD OK\n");
                         func_i2_800A8CE4(DDSave_GetCachedCourseRecord(), courseIndex);
-                        func_80703B40(SEGMENT_DISK_START(silence_3) + diskCourseIndex, &COURSE_CONTEXT()->courseData,
-                                      sizeof(CourseData), 0);
+                        DiskDrive_LoadData(SEGMENT_DISK_START(silence_3) + diskCourseIndex,
+                                           &COURSE_CONTEXT()->courseData, sizeof(CourseData), 0);
                         if ((Course_CalculateChecksum() != COURSE_CONTEXT()->courseData.checksum) ||
                             (COURSE_CONTEXT()->courseData.creatorId != CREATOR_NINTENDO) ||
                             (COURSE_CONTEXT()->courseData.bgm > BGM_NEW_04)) {
@@ -3758,9 +3758,9 @@ void func_80702448(s32 courseIndex) {
         }
         gCourseInfos[courseIndex].encodedCourseIndex = (Course_CalculateChecksum() << 5) | COURSE_EDIT_1;
     } else {
-        romAddr = D_807C70C8 + courseIndex * sizeof(CourseData);
+        romAddr = gRomSegmentPairs[5][0] + courseIndex * sizeof(CourseData);
 
-        func_80701D7C(romAddr, osVirtualToPhysical(&COURSE_CONTEXT()->courseData), sizeof(CourseData));
+        Dma_LoadAssetsAsync(romAddr, osVirtualToPhysical(&COURSE_CONTEXT()->courseData), sizeof(CourseData));
         if (gInCourseEditor && courseIndex == COURSE_RED_CANYON_2) {
             COURSE_CONTEXT()->courseData.dirt[21] = DIRT_NONE;
             COURSE_CONTEXT()->courseData.checksum = Course_CalculateChecksum();
@@ -3802,7 +3802,7 @@ extern CourseData D_800D0910;
 void func_80702A94(void) {
     s32 i;
 
-    bzero(SEGMENT_VRAM_START(unk_context), SEGMENT_BSS_SIZE(unk_context));
+    bzero(SEGMENT_VRAM_START(game_context), SEGMENT_BSS_SIZE(game_context));
     D_80030060[0] = '\0';
     func_8070299C();
     D_807B3C20.controlPointCount = 0;
@@ -3966,12 +3966,10 @@ void func_80702F1C(void) {
 
 s32 D_8076CA74[] = { 1, 0, 0, 0, 2, 3, 4, 0, 0, 0, 0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
-extern s32 D_807C70D0;
-
 void func_80702FF4(s32 venue) {
-    void* sp1C = (D_8076CA74[venue] * 0x800) + D_807C70D0;
+    void* romOffset = gRomSegmentPairs[6][0] + (D_8076CA74[venue] * 0x800);
 
-    func_80701D7C(sp1C, Segment_SegmentedToVirtual(D_8014A20), 0x800);
+    Dma_LoadAssetsAsync(romOffset, Segment_SegmentedToVirtual(D_8014A20), 0x800);
 }
 
 extern s8 gGamePaused;

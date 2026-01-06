@@ -531,6 +531,7 @@ void Transition_SetBackgroundBuffer(void) {
                       TRANSITION_BACKGROUND_WIDTH * TRANSITION_BACKGROUND_HEIGHT * sizeof(u16));
     }
     if (transition->flags & TRANSITION_FLAG_CONVERT_TO_PALETTE) {
+        //! @bug passes in size of texture instead of pixel count, causing overflow read
         func_8070EB90(transition->backgroundBuffer, sTransitionPalettePtr,
                       TRANSITION_BACKGROUND_WIDTH * TRANSITION_BACKGROUND_HEIGHT * sizeof(u16));
     }

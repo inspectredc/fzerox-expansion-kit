@@ -1,6 +1,12 @@
 #include "sys.h"
 #include "leo/leo_internal.h"
 
+OSMesgQueue LEOpost_que;
+OSMesg LEOpost_que_buf[1];
+
+bool __leoResetCalled = false;
+bool __leoQueuesCreated = false;
+
 const u8 LEO_ZERO_MESG[] = { 0 };
 
 void leoInitialize(OSPri compri, OSPri intpri, OSMesg* command_que_buf, u32 cmd_buff_size) {
@@ -47,7 +53,7 @@ void leoInitialize(OSPri compri, OSPri intpri, OSMesg* command_que_buf, u32 cmd_
 }
 
 void leoCommand(void* cmd_blk_addr) {
-    if (__leoResetCalled != 0) {
+    if (__leoResetCalled) {
         ((LEOCmd*) cmd_blk_addr)->header.status = LEO_STATUS_CHECK_CONDITION;
         ((LEOCmd*) cmd_blk_addr)->header.sense = LEO_SENSE_WAITING_NMI;
         if ((((LEOCmd*) cmd_blk_addr)->header.control & LEO_CONTROL_POST) != 0) {
@@ -90,7 +96,7 @@ void leoCommand(void* cmd_blk_addr) {
                 ((LEOCmd*) cmd_blk_addr)->header.status = LEO_STATUS_CHECK_CONDITION;
             }
     }
-    osSendMesg(&LEOblock_que, (OSMesg) 0, OS_MESG_BLOCK);
+    osSendMesg(&LEOblock_que, NULL, OS_MESG_BLOCK);
 }
 
 void LeoReset(void) {

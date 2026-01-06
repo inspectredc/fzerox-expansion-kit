@@ -2,6 +2,15 @@
 #include "audio.h"
 #include "audio_funcs.h"
 
+s32 D_807C1890;
+s32 D_807C1894[6];
+OSMesgQueue sScriptLoadQueue;
+OSMesg sScriptLoadMsgBuf[16];
+s8* sScriptLoadDonePointers[16];
+
+unk_807C1948 D_807C1948[4];
+s32 D_807C1BD8;
+
 DmaHandler sDmaHandler = osEPiStartDma;
 LeoHandler sLeoHandler = LeoReadWrite;
 s32 D_80771968 = 0;
@@ -1086,14 +1095,10 @@ extern AudioCustomUpdateFunction gAudioCustomUpdateFunction;
 
 extern bool gAudioContextInitialized;
 
-extern AudioHeapInitSizes gAudioHeapInitSizes;
-
 extern AudioTable gSequenceTable;
 extern AudioTable gSoundFontTable;
 extern AudioTable gSampleBankTable;
 extern u8 gSequenceFontTable[];
-
-extern u8 gAudioHeap[];
 
 void AudioLoad_Init(void* heap, size_t heapSize) {
     s32 pad[18];
@@ -1681,8 +1686,6 @@ void AudioLoad_RelocateSample(TunedSample* tSample, uintptr_t fontDataAddr, Samp
     }
 }
 
-extern s32 D_807C1890;
-
 void AudioLoad_RelocateFontAndPreloadSamples(s32 fontId, uintptr_t fontData, SampleBankRelocInfo* sampleBankReloc,
                                              s32 async) {
     AudioPreloadReq* preload;
@@ -2205,16 +2208,13 @@ s32 AudioLoad_DiskLoad(AudioDiskInfo* diskInfo) {
     }
 }
 
-extern s8* sScriptLoadDonePointers[];
-extern OSMesgQueue sScriptLoadQueue;
-
 void AudioLoad_ScriptLoad(s32 tableType, s32 id, s8* status) {
     static u32 sLoadIndex = 0;
 
     sScriptLoadDonePointers[sLoadIndex] = status;
     AudioLoad_AsyncLoad(tableType, id, 0, sLoadIndex, &sScriptLoadQueue);
     sLoadIndex++;
-    if (sLoadIndex == 0x10) {
+    if (sLoadIndex == ARRAY_COUNT(sScriptLoadDonePointers)) {
         sLoadIndex = 0;
     }
 }
@@ -2233,14 +2233,9 @@ void AudioLoad_ProcessScriptLoads(void) {
     }
 }
 
-extern OSMesg sScriptLoadMsgBuf[16];
-
 void AudioLoad_InitScriptLoads(void) {
     osCreateMesgQueue(&sScriptLoadQueue, sScriptLoadMsgBuf, ARRAY_COUNT(sScriptLoadMsgBuf));
 }
-
-extern unk_807C1948 D_807C1948[];
-extern s32 D_807C1BD8;
 
 void func_80738944(void) {
     s32 i;

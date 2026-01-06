@@ -1,6 +1,6 @@
 #include "leo/leo_functions.h"
 #include "leo/leo_internal.h"
-#include "leo/unk_leo.h"
+#include "leo/mfs.h"
 #include "libc/stdint.h"
 
 extern s32 D_80794CD8;
@@ -38,7 +38,7 @@ void Mfs_EncodeAndSetRtc(s32 year, s32 month, s32 day, s32 hour, s32 minute, s32
     return;
 }
 
-extern LEODiskTime D_807C6E40;
+LEODiskTime sLeoDiskTime;
 
 s32 func_80761DCC(s32* year, s32* month, s32* day, s32* hour, s32* minute, s32* second) {
     LEOCmd cmd;
@@ -46,22 +46,22 @@ s32 func_80761DCC(s32* year, s32* month, s32* day, s32* hour, s32* minute, s32* 
     D_80794CD8 = 9;
     if (D_80794D48) {
         if (year != NULL) {
-            *year = D_807C6E40.yearlo;
+            *year = sLeoDiskTime.yearlo;
         }
         if (month != NULL) {
-            *month = D_807C6E40.month;
+            *month = sLeoDiskTime.month;
         }
         if (day != NULL) {
-            *day = D_807C6E40.day;
+            *day = sLeoDiskTime.day;
         }
         if (hour != NULL) {
-            *hour = D_807C6E40.hour;
+            *hour = sLeoDiskTime.hour;
         }
         if (minute != NULL) {
-            *minute = D_807C6E40.minute;
+            *minute = sLeoDiskTime.minute;
         }
         if (second != NULL) {
-            *second = D_807C6E40.second;
+            *second = sLeoDiskTime.second;
         }
     } else {
         if (gLeoReadRTCFunc(&cmd, &D_80794D0C) < 0) {
@@ -130,7 +130,7 @@ s32 Mfs_ReadRtc(LEODiskTime* diskTime) {
 
     D_80794CD8 = 9;
     if (D_80794D48) {
-        bcopy(&D_807C6E40, diskTime, sizeof(LEODiskTime));
+        bcopy(&sLeoDiskTime, diskTime, sizeof(LEODiskTime));
     } else {
         if (gLeoReadRTCFunc(&sp1C, &D_80794D0C) < 0) {
             gMfsError = N64DD_MANAGER_NOT_CREATED;
@@ -170,7 +170,7 @@ void func_80762330(LEODiskTime* diskTime) {
         return;
     }
     D_80794D48 = true;
-    bcopy(diskTime, &D_807C6E40, sizeof(LEODiskTime));
+    bcopy(diskTime, &sLeoDiskTime, sizeof(LEODiskTime));
 }
 
 extern s32 D_80794CC4;

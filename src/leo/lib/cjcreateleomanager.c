@@ -24,7 +24,7 @@ s32 LeoCJCreateLeoManager(OSPri comPri, OSPri intPri, OSMesg* cmdBuf, s32 cmdMsg
 
     leoDiskHandle = osLeoDiskInit();
     driveRomHandle = osDriveRomInit();
-    __leoActive = 1;
+    __leoActive = true;
 
     __osSetHWIntrRoutine(1, __osLeoInterrupt, leoDiskStack + sizeof(leoDiskStack) - 16);
     leoInitialize(comPri, intPri, cmdBuf, cmdMsgCnt);

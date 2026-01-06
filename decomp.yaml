@@ -34,34 +34,36 @@ tools:
         - id: main
           name: main
           paths:
-            - "60"
-            - CE0
-            - "2260"
-            - "2340"
-            - "3250"
-            - "3A10"
-            - "6F50"
-            - "10AB0"
-            - "10B20"
-            - "110B0"
-            - "11850"
-            - "157F0"
-            - "15AB0"
-            - "17490"
-            - "1B6E0"
-            - "1C8B0"
-            - "1C8F0"
-            - leo_fault
-            - sys_fault
-            - "1E970"
-            - "camera"
-            - "27110"
+            - sys/sys_main
+            - sys/sys_gfx
+            - sys/sys_audio
+            - game/game
+            - sys/controller
+            - sys/math
+            - game/course_gadgets
+            - game/10AB0
+            - game/10B20
+            - sys/disk_drive
+            - sys/sys_leo
+            - sys/dma
+            - sys/segment
+            - game/texture_utils
+            - game/common
+            - game/texture_utils2
+            - game/1C8B0
+            - sys/disk_mount
+            - sys/leo_fault
+            - sys/sys_fault
+            - game/bordered_box
+            - game/camera
+            - game/racer
             - audio
             - libultra
-            - leo
+            - leo/lib
+            - leo/mfs
             - game
-            - leo_bootdisk
-            - "75000"
+            - leo/leo_bootdisk
+            - sys/75000
         - id: main.game
           name: main.game
           paths:

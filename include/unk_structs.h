@@ -7,16 +7,16 @@
 #include "other_types.h"
 
 typedef struct unk_807C6F10 {
-    s32 unk_00;
-    s32 lba;
-    void* vAddr;
-    s32 nLBAs;
-    OSPiHandle* piHandle;
-    OSIoMesg* ioMesg;
-    s32 direction;
-    LEOCmd* cmdBlock;
-    OSMesgQueue* mq;
-} unk_807C6F10;
+    /* 0x00 */ s32 unk_00;
+    /* 0x04 */ s32 lba;
+    /* 0x08 */ void* vAddr;
+    /* 0x0C */ s32 nLBAs;
+    /* 0x10 */ OSPiHandle* piHandle;
+    /* 0x14 */ OSIoMesg* ioMesg;
+    /* 0x18 */ s32 direction;
+    /* 0x1C */ LEOCmd* cmdBlock;
+    /* 0x20 */ OSMesgQueue* mq;
+} unk_807C6F10; // size = 0x24
 
 typedef struct unk_807C6EA8 {
     /* 0x00 */ s32 unk_00;
@@ -109,50 +109,50 @@ typedef struct CourseInfo {
 } CourseInfo; // size = 0xF0
 
 typedef struct SegmentChunk {
-    s32 trackSegmentInfo;
-    s32 segmentIndex;
-    f32 segmentTValue;
-    f32 depth;
-    bool drawState;
-    Vec3f pos;
-    s16 referencePos1[3];
-    s16 referencePos2[3];
-    s16 referencePos3[3];
-    s16 referencePos4[3];
-    s16 referencePos5[3];
-    s16 referencePos6[3];
-    s16 referencePos7[3];
-    s16 referencePos8[3];
-    s16 topTextureCoord;
-    s16 bottomTextureCoord;
-    s16 leftTextureCoord;
-    s16 rightTextureCoord;
-    s16 topTextureCorrection;
-    s16 bottomTextureCorrection;
-    s16 leftTextureCorrection;
-    s16 rightTextureCorrection;
+    /* 0x00 */ s32 trackSegmentInfo;
+    /* 0x04 */ s32 segmentIndex;
+    /* 0x08 */ f32 segmentTValue;
+    /* 0x0C */ f32 depth;
+    /* 0x10 */ bool drawState;
+    /* 0x14 */ Vec3f pos;
+    /* 0x20 */ s16 referencePos1[3];
+    /* 0x26 */ s16 referencePos2[3];
+    /* 0x2C */ s16 referencePos3[3];
+    /* 0x32 */ s16 referencePos4[3];
+    /* 0x38 */ s16 referencePos5[3];
+    /* 0x3E */ s16 referencePos6[3];
+    /* 0x44 */ s16 referencePos7[3];
+    /* 0x4A */ s16 referencePos8[3];
+    /* 0x50 */ s16 topTextureCoord;
+    /* 0x52 */ s16 bottomTextureCoord;
+    /* 0x54 */ s16 leftTextureCoord;
+    /* 0x56 */ s16 rightTextureCoord;
+    /* 0x58 */ s16 topTextureCorrection;
+    /* 0x5A */ s16 bottomTextureCorrection;
+    /* 0x5C */ s16 leftTextureCorrection;
+    /* 0x5E */ s16 rightTextureCorrection;
 } SegmentChunk; // size = 0x60
 
 typedef struct Jump {
-    Vec3f pos;
-    Mtx3F basis;
-    Vec3f dimensions; // width, height, depth
-    s8 unk_3C[0x4];
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ Mtx3F basis;
+    /* 0x30 */ Vec3f dimensions; // width, height, depth
+    /* 0x3C */ s8 unk_3C[0x4];
 } Jump; // size = 0x40
 
 typedef struct Landmine {
-    // s32 unk_00; Field Removed in DD Version
-    Vec3f pos;
-    s8 unk_10[0x4];
+    /* 0x00 */ // s32 unk_00; Field Removed in DD Version
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ s8 unk_10[0x4];
 } Landmine; // size = 0x10
 
 typedef struct Effect {
-    s32 effectType;
-    f32 segmentTValueStart;
-    f32 segmentTValueEnd;
-    Vec3f unk_0C;
-    Vec3f unk_18;
-    s8 unk_24[0x4];
+    /* 0x00 */ s32 effectType;
+    /* 0x04 */ f32 segmentTValueStart;
+    /* 0x08 */ f32 segmentTValueEnd;
+    /* 0x0C */ Vec3f unk_0C;
+    /* 0x18 */ Vec3f unk_18;
+    /* 0x24 */ s8 unk_24[0x4];
 } Effect; // size = 0x28
 
 #define DASH_LATERAL_OFFSET(effect) ((effect)->rightEdgeDistance)
@@ -161,46 +161,46 @@ typedef struct Effect {
 #define DASH_ANGLE2(effect) ((effect)->leftEdgeDistance)
 
 typedef struct CourseEffect {
-    s32 segmentIndex;
-    s32 effectType;
-    f32 segmentTValueStart;
-    f32 segmentTValueEnd;
-    f32 rightEdgeDistance;
-    f32 leftEdgeDistance;
+    /* 0x00 */ s32 segmentIndex;
+    /* 0x04 */ s32 effectType;
+    /* 0x08 */ f32 segmentTValueStart;
+    /* 0x0C */ f32 segmentTValueEnd;
+    /* 0x10 */ f32 rightEdgeDistance;
+    /* 0x14 */ f32 leftEdgeDistance;
 } CourseEffect; // size = 0x18
 
 typedef struct CourseFeature {
-    s32 featureType;
-    s32 segmentIndex;
-    f32 segmentTValue;
-    f32 lateralOffset;
-    Vec3f dimensions;
+    /* 0x00 */ s32 featureType;
+    /* 0x04 */ s32 segmentIndex;
+    /* 0x08 */ f32 segmentTValue;
+    /* 0x0C */ f32 lateralOffset;
+    /* 0x10 */ Vec3f dimensions;
 } CourseFeature; // size = 0x1C
 
 typedef struct CourseFeaturesInfo {
-    CourseFeature* features;
-    s32 featureCount;
-    s32 landmineCount;
-    s32 jumpCount;
-} CourseFeaturesInfo;
+    /* 0x00 */ CourseFeature* features;
+    /* 0x04 */ s32 featureCount;
+    /* 0x08 */ s32 landmineCount;
+    /* 0x0C */ s32 jumpCount;
+} CourseFeaturesInfo; // size = 0x10
 
 typedef struct CourseDecoration {
-    Vec3f pos;
-    Mtx3F basis;
-    f32 scale;
-    struct SegmentChunk* loadChunk;
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ Mtx3F basis;
+    /* 0x30 */ f32 scale;
+    /* 0x34 */ struct SegmentChunk* loadChunk;
 } CourseDecoration; // size = 0x38
 
 typedef struct CourseEffectsInfo {
-    CourseEffect* effects;
-    s32 count;
-} CourseEffectsInfo;
+    /* 0x00 */ CourseEffect* effects;
+    /* 0x04 */ s32 count;
+} CourseEffectsInfo; // size = 0x8
 
 typedef struct EffectDrawData {
-    s32 effectType;
-    Vtx* vtxStart;
-    Vtx* vtxEnd;
-    s8 unk_0C[0x4];
+    /* 0x00 */ s32 effectType;
+    /* 0x04 */ Vtx* vtxStart;
+    /* 0x08 */ Vtx* vtxEnd;
+    /* 0x0C */ s8 unk_0C[0x4];
 } EffectDrawData; // size = 0x10
 
 typedef struct RacerSegmentPositionInfo {
@@ -392,12 +392,12 @@ typedef struct Racer {
 } Racer; // size = 0x3A8
 
 typedef struct RaceStats {
-    s32 raceTime;
-    f32 maxSpeed;
-    s16 position;
-    s16 unk_0A;
-    s16 racersKOd;
-    s8 unk_0E[0x2];
+    /* 0x00 */ s32 raceTime;
+    /* 0x04 */ f32 maxSpeed;
+    /* 0x08 */ s16 position;
+    /* 0x0A */ s16 unk_0A;
+    /* 0x0C */ s16 racersKOd;
+    /* 0x0E */ s8 unk_0E[0x2];
 } RaceStats; // size = 0x10
 
 typedef struct unk_80077D50 {
@@ -409,70 +409,70 @@ typedef struct unk_80077D50 {
 } unk_80077D50; // size = 0x10
 
 typedef struct unk_800E33E0 {
-    void* unk_00; // segmented address
-    TexturePtr unk_04;
+    /* 0x00 */ void* unk_00; // segmented address
+    /* 0x04 */ TexturePtr unk_04;
 } unk_800E33E0; // size = 0x8
 
 typedef struct unk_800792D8 {
-    unk_80077D50* unk_00;
-    s32 unk_04;
+    /* 0x00 */ unk_80077D50* unk_00;
+    /* 0x04 */ s32 unk_04;
 } unk_800792D8;
 
 typedef struct unk_800E3F28 {
-    unk_800792D8* unk_00;
-    s16 unk_04;
-    s16 unk_06;
-    s16 unk_08;
-    s16 unk_0A;
-    TexturePtr unk_0C; // primary texture
-    TexturePtr unk_10; // alternate texture (defaults to primary)
+    /* 0x00 */ unk_800792D8* unk_00;
+    /* 0x04 */ s16 unk_04;
+    /* 0x06 */ s16 unk_06;
+    /* 0x08 */ s16 unk_08;
+    /* 0x0A */ s16 unk_0A;
+    /* 0x0C */ TexturePtr unk_0C; // primary texture
+    /* 0x10 */ TexturePtr unk_10; // alternate texture (defaults to primary)
 } unk_800E3F28; // size = 0x14
 
 typedef struct unk_800E4068 {
-    unk_80077D50* unk_00;
-    TexturePtr unk_04;
+    /* 0x00 */ unk_80077D50* unk_00;
+    /* 0x04 */ TexturePtr unk_04;
 } unk_800E4068; // size = 0x8
 
 typedef struct CustomMachine {
-    u8 body;
-    u8 boost;
-    u8 grip;
-    u8 frontType;
-    u8 rearType;
-    u8 wingType;
-    u8 logo;
-    u8 number;
-    u8 decal;
-    u8 red;
-    u8 green;
-    u8 blue;
-    u8 numberR;
-    u8 numberG;
-    u8 numberB;
-    u8 decalR;
-    u8 decalG;
-    u8 decalB;
-    u8 cockpitR;
-    u8 cockpitG;
-    u8 cockpitB;
-    char machineName[9];
-    u16 checksum;
+    /* 0x00 */ u8 body;
+    /* 0x01 */ u8 boost;
+    /* 0x02 */ u8 grip;
+    /* 0x03 */ u8 frontType;
+    /* 0x04 */ u8 rearType;
+    /* 0x05 */ u8 wingType;
+    /* 0x06 */ u8 logo;
+    /* 0x07 */ u8 number;
+    /* 0x08 */ u8 decal;
+    /* 0x09 */ u8 red;
+    /* 0x0A */ u8 green;
+    /* 0x0B */ u8 blue;
+    /* 0x0C */ u8 numberR;
+    /* 0x0D */ u8 numberG;
+    /* 0x0E */ u8 numberB;
+    /* 0x0F */ u8 decalR;
+    /* 0x10 */ u8 decalG;
+    /* 0x11 */ u8 decalB;
+    /* 0x12 */ u8 cockpitR;
+    /* 0x13 */ u8 cockpitG;
+    /* 0x14 */ u8 cockpitB;
+    /* 0x15 */ char machineName[9];
+    /* 0x1E */ u16 checksum;
 } CustomMachine; // size = 0x20
 
 typedef struct CustomMachinesInfo {
-    CustomMachine customMachines[30];
-    s8 characterCustomState[30];
-    u16 checksum;
+    /* 0x000 */ CustomMachine customMachines[30];
+    /* 0x3C0 */ s8 characterCustomState[30];
+    /* 0x3DE */ u16 checksum;
 } CustomMachinesInfo; // size = 0x3E0
 
 typedef struct unk_8003A5D8 {
-    char name[16];
-    s32 attr;
-    s8 unk_14[0x8];
-    char unk_1C;
-    char extension[5];
-    u8 unk_22;
-    s8 unk_23;
+    /* 0x00 */ char name[16];
+    /* 0x10 */ s32 attr;
+    /* 0x14 */ s8 unk_14[0x8];
+    /* 0x1C */ char unk_1C;
+    /* 0x1D */ char extension[5];
+    /* 0x22 */ u8 unk_22;
+    /* 0x23 */ s8 unk_23;
 } unk_8003A5D8; //size = 0x24
 
 typedef struct unk_80128C94 {
@@ -534,36 +534,37 @@ typedef struct unk_801413F0 {
 } unk_801413F0; // size = 0x60
 
 typedef struct unk_807B3C20 {
-    CourseSegment unk_0000[64];
-    s32 controlPointCount;
+    /* 0x0000 */ CourseSegment unk_0000[64];
+    /* 0x2900 */ s32 controlPointCount;
 } unk_807B3C20; // size 0x2904
 
 typedef struct unk_80128690 {
-    s32 unk_00;
-    s32 unk_04;
-    s32 unk_08;
+    /* 0x00 */ s32 unk_00;
+    /* 0x04 */ s32 unk_04;
+    /* 0x08 */ s32 unk_08;
 } unk_80128690; // size = 0xC
 
 typedef struct unk_8011C220 {
-    s32 unk_00;
-    f32 unk_04;
-    Vec3f pos;
-    Mtx3F basis;
+    /* 0x00 */ s32 unk_00;
+    /* 0x04 */ f32 unk_04;
+    /* 0x08 */ Vec3f pos;
+    /* 0x14 */ Mtx3F basis;
 } unk_8011C220; // size = 0x38
 
 typedef struct unk_800D6CA0 {
-    s32 unk_00;
-    s32 unk_04;
-    s32 unk_08;
-    s32 unk_0C;
-    s32 unk_10;
-    s32 unk_14;
-    s8 unk_18[0x4];
-    s32 unk_1C;
-    s32 unk_20;
-    s32 unk_24;
-    CourseSegment unk_28;
-} unk_800D6CA0; // size >= 0xCC
+    /* 0x00 */ s32 unk_00;
+    /* 0x04 */ s32 unk_04;
+    /* 0x08 */ s32 unk_08;
+    /* 0x0C */ s32 unk_0C;
+    /* 0x10 */ s32 unk_10;
+    /* 0x14 */ s32 unk_14;
+    /* 0x18 */ s8 unk_18[0x4];
+    /* 0x1C */ s32 unk_1C;
+    /* 0x20 */ s32 unk_20;
+    /* 0x24 */ s32 unk_24;
+    /* 0x28 */ CourseSegment unk_28;
+    /* 0xCC */ s8 unk_CC[0x24];
+} unk_800D6CA0; // size = 0xF0
 
 typedef struct TextureInfo {
     /* 0x00 */ TexturePtr texture;

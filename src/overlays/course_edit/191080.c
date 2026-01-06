@@ -1,7 +1,7 @@
 #include "global.h"
 #include "fzx_expansion_kit.h"
-#include "assets/segment_1FB850.h"
-#include "assets/segment_21C170.h"
+#include "assets/expansion_kit_textures.h"
+#include "assets/course_edit_textures.h"
 
 extern MenuDropItem gRoadTypeMenuItems;
 extern MenuDropItem gHRoadTypeMenuItems;
@@ -1261,7 +1261,7 @@ Gfx* func_xk2_800E49FC(Gfx* gfx) {
     return gfx;
 }
 
-extern s32 D_807BCB64;
+extern CourseFeaturesInfo gCourseFeaturesInfo;
 
 Gfx* func_xk2_800E4BA0(Gfx* gfx) {
     u8 sp30[0x40];
@@ -1277,14 +1277,14 @@ Gfx* func_xk2_800E4BA0(Gfx* gfx) {
 
     gSPDisplayList(gfx++, D_3000540);
 
-    if (D_807BCB64 >= 8) {
+    if (gCourseFeaturesInfo.jumpCount >= 8) {
         gDPSetPrimColor(gfx++, 0, 0, 255, 255, 0, 255);
     } else {
         gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, 255);
     }
     D_xk1_80032AD0 = 0;
     gfx = func_xk1_8002924C(gfx, 0xE8, 0xBA, sp28);
-    func_xk2_800EDE68(sp30, D_807BCB64, 1);
+    func_xk2_800EDE68(sp30, gCourseFeaturesInfo.jumpCount, 1);
     func_xk2_800EDAD0(&gfx, 0x10E, 0xBA, sp30);
     gfx = func_xk1_8002924C(gfx, 0x114, 0xBA, "/");
     func_xk2_800EDE68(sp30, 8, 1);
@@ -1292,8 +1292,6 @@ Gfx* func_xk2_800E4BA0(Gfx* gfx) {
 
     return gfx;
 }
-
-extern s32 D_807BCB60;
 
 Gfx* func_xk2_800E4D04(Gfx* gfx) {
     u8 sp30[0x40];
@@ -1309,14 +1307,14 @@ Gfx* func_xk2_800E4D04(Gfx* gfx) {
 
     gSPDisplayList(gfx++, D_3000540);
 
-    if ((D_807BCB60 / 6) >= 8) {
+    if ((gCourseFeaturesInfo.landmineCount / 6) >= 8) {
         gDPSetPrimColor(gfx++, 0, 0, 255, 255, 0, 255);
     } else {
         gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, 255);
     }
     D_xk1_80032AD0 = 0;
     gfx = func_xk1_8002924C(gfx, 0xE8, 0xBA, sp28);
-    func_xk2_800EDE68(sp30, D_807BCB60 / 6, 1);
+    func_xk2_800EDE68(sp30, gCourseFeaturesInfo.landmineCount / 6, 1);
     func_xk2_800EDAD0(&gfx, 0x10E, 0xBA, sp30);
     gfx = func_xk1_8002924C(gfx, 0x114, 0xBA, "/");
     func_xk2_800EDE68(sp30, 8, 1);

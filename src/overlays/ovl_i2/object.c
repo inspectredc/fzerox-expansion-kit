@@ -8,11 +8,11 @@ Object gObjects[32];
 unk_800E3F28 D_800D63F8[16];
 unk_800E4068 D_i2_800D6538[16];
 
-extern s32 D_807C70C0;
+extern RomOffset gRomSegmentPairs[][2];
 
 void func_i2_800AE100(s32 segAddr, size_t size, u8* startAddr) {
     CLEAR_DATA_CACHE(startAddr, size);
-    func_8070818C(D_807C70C0 + SEGMENT_OFFSET(segAddr), startAddr, size);
+    Dma_LoadAssets(gRomSegmentPairs[4][0] + SEGMENT_OFFSET(segAddr), startAddr, size);
 }
 
 void func_i2_800AE170(void) {

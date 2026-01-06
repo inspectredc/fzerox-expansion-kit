@@ -1,5 +1,5 @@
 #include "global.h"
-#include "assets/segment_21C170.h"
+#include "assets/course_edit_textures.h"
 
 u8 D_xk2_80104280[] = {
     255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,

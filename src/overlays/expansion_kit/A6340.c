@@ -2,7 +2,7 @@
 #include "leo/leo_functions.h"
 #include "fzx_game.h"
 #include "fzx_assets.h"
-#include "assets/segment_1FB850.h"
+#include "assets/expansion_kit_textures.h"
 
 // TODO: Unsure on sizes
 u8 gExpansionKitNameEntryStr[16];

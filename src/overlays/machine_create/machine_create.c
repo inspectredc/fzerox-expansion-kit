@@ -34,7 +34,7 @@ void MachineCreate_Init(void) {
     func_xk1_8002AF10(0xC);
     func_xk1_80025F98();
     func_xk1_8002B150(0xA8, 0x57, &D_xk3_80140E50, &D_xk3_80140E54);
-    func_80704810(0);
+    func_80704810(false);
     func_xk1_8002AED0();
 
     for (i = 0; i < 30; i++) {
@@ -96,7 +96,7 @@ s32 MachineCreate_Update(void) {
         func_xk1_8002FBB0();
         func_8071E0C0();
         ExpansionKit_SetMenuHighlightDrawFlag(true);
-        func_80704810(1);
+        func_80704810(true);
         osViSetSpecialFeatures(OS_VI_DITHER_FILTER_OFF);
         return GAMEMODE_FLX_MAIN_MENU;
     }

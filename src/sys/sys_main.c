@@ -39,14 +39,16 @@ OSMesg D_8079A2C4[1];
 UNUSED s8 D_8079A2C8[0x20];
 OSMesgQueue D_8079A2E8;
 OSMesg D_8079A300[1];
-OSIoMesg D_8079A308;
+OSIoMesg gDmaIOMsg;
 OSTask* gCurGfxTask;
 OSTask* gCurAudioOSTask;
 bool gResetStarted;
-s32 D_8079A32C;
+s32 gLeoDriveConnectionState;
 FrameBuffer* gFrameBuffers[3];
 OSPiHandle* gCartRomHandle;
 OSPiHandle* gDriveRomHandle;
+
+#include "src/assets/boot_logo/boot_logo.c"
 
 void Idle_ThreadEntry(void*);
 void Reset_ThreadEntry(void*);
@@ -160,7 +162,7 @@ void Main_ThreadEntry(void* arg0) {
     osViSetEvent(&gMainThreadMesgQueue, (OSMesg) EVENT_MESG_VI, 1);
     gResetStarted = false;
 
-    func_80703F90();
+    DiskDrive_InitRomSegmentPairs();
 
     switch (osResetType) {
         case OS_TV_PAL:
@@ -173,9 +175,9 @@ void Main_ThreadEntry(void* arg0) {
     }
 
     if (gRamDDCompatible) {
-        D_8079A32C = LeoDriveExist();
+        gLeoDriveConnectionState = LeoDriveExist();
         gDriveRomHandle = osDriveRomInit();
-        if (D_8079A32C != 0) {
+        if (gLeoDriveConnectionState != 0) {
             LeoFault_LoadFontSet();
         }
         func_80704DB0("01", leoBootID.gameName);
@@ -194,7 +196,7 @@ void Main_ThreadEntry(void* arg0) {
 
         osViBlack(false);
 
-        func_8070F0F0();
+        DiskMount_Init();
     }
 
     osCreateThread(&sResetThread, THREAD_ID_RESET, Reset_ThreadEntry, NULL,
@@ -215,10 +217,10 @@ void Main_ThreadEntry(void* arg0) {
     osViBlack(false);
 
     if (gRamDDCompatible) {
-        osCreateThread(&D_80799EE0, THREAD_ID_6, func_80767958, 0, D_80797670 + sizeof(D_80797670), 0x1E);
-        if (D_8079A32C == 1) {
+        osCreateThread(&D_80799EE0, THREAD_ID_6, func_80767958, 0, D_80797670 + sizeof(D_80797670), 30);
+        if (gLeoDriveConnectionState == 1) {
             osStartThread(&D_80799EE0);
-            D_8079A32C = 2;
+            gLeoDriveConnectionState = 2;
         }
     }
 
@@ -342,15 +344,13 @@ void Reset_ThreadEntry(void* arg0) {
     gResetStarted = true;
     osViBlack(true);
     osViSetYScale(1.0f);
-    if (gRamDDCompatible && D_8079A32C) {
+    if (gRamDDCompatible && gLeoDriveConnectionState) {
         LeoReset();
     }
     Controller_Reset();
 
     while (true) {}
 }
-
-extern u64 D_80769DF0[];
 
 void func_806F33D0(FrameBuffer* fb) {
     u64* var_s0 = &fb->array[SCREEN_HEIGHT - 1][SCREEN_WIDTH - 4];
@@ -368,7 +368,7 @@ void func_806F33D0(FrameBuffer* fb) {
 
     for (i = 0; i < 39; i++) {
         for (j = 0; j < 34; j++) {
-            var = &D_80769DF0[i * 34 + j];
+            var = &D_80769DF0[i * 136 + j * 4];
             var_s0[j] = *var;
         }
         var_s0 += 80;

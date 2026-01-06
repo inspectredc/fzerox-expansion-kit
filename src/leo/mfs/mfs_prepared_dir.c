@@ -1,11 +1,12 @@
 #include "leo/leo_functions.h"
 #include "leo/leo_internal.h"
-#include "leo/unk_leo.h"
+#include "leo/mfs.h"
+
+u16 gPreparedDirectoryId;
+u16 gPreparedEntryIndexCounter;
 
 extern s32 gMfsError;
 extern u16 gWorkingDirectory;
-extern u16 gPreparedDirectoryId;
-extern u16 gPreparedEntryIndexCounter;
 extern s32 gDirectoryEntryCount;
 extern MfsRamArea gMfsRamArea;
 

@@ -345,7 +345,7 @@ $(BUILD_DIR)/src/libultra/io/motor.o: OPTFLAGS := -O2 -g0
 
 $(BUILD_DIR)/src/libultra/os/%.o: OPTFLAGS := -O1 -g0
 
-$(BUILD_DIR)/src/leo/%.o: OPTFLAGS := -g
+$(BUILD_DIR)/src/leo/mfs/%.o: OPTFLAGS := -g
 $(BUILD_DIR)/src/leo/lib/%.o: OPTFLAGS := -O2 -g0
 
 # per-file flags
@@ -360,7 +360,7 @@ $(BUILD_DIR)/src/libultra/libc/ll.o: MIPS_VERSION := -mips3 -32
 $(BUILD_DIR)/src/libultra/libc/llcvt.o: OPTFLAGS := -O1 -g0
 $(BUILD_DIR)/src/libultra/libc/llcvt.o: MIPS_VERSION := -mips3 -32
 
-$(BUILD_DIR)/src/leo_fault.o: OUT_ENCODING := shift-jis
+$(BUILD_DIR)/src/sys/leo_fault.o: OUT_ENCODING := shift-jis
 $(BUILD_DIR)/src/overlays/expansion_kit/expansion_kit_disk_data.o: OUT_ENCODING := shift-jis
 $(BUILD_DIR)/src/overlays/expansion_kit/expansion_kit_text.o: OUT_ENCODING := shift-jis
 $(BUILD_DIR)/src/overlays/machine_create/machine_create_text.o: OUT_ENCODING := shift-jis
@@ -373,7 +373,7 @@ $(BUILD_DIR)/src/libultra/os/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(IDO53) -
 $(BUILD_DIR)/src/libultra/libc/%.o: CC := $(IDO53)
 
 # libleo
-$(BUILD_DIR)/src/leo_bootdisk.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(IDO53) -- $(AS) $(ASFLAGS) --
+$(BUILD_DIR)/src/leo/leo_bootdisk.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(IDO53) -- $(AS) $(ASFLAGS) --
 $(BUILD_DIR)/src/leo/lib/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(IDO53) -- $(AS) $(ASFLAGS) --
 else
 
