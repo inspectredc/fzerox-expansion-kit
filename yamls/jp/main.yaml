@@ -87,8 +87,8 @@
       - [0x3A10, c, sys/math]
       - [0x6F40, pad]
       - [0x6F50, c, game/course_gadgets]
-      - [0x10AB0, c]
-      - [0x10B20, c]
+      - [0x10AB0, c, game/10AB0]
+      - [0x10B20, c, game/10B20]
       - [0x110B0, c, sys/disk_drive]
       - [0x11850, c, sys/sys_leo]
       - [0x157F0, c, sys/dma]
@@ -96,7 +96,7 @@
       - [0x17490, c, game/texture_utils]
       - [0x1AA00, c, game/common]
       - [0x1B6E0, c, game/texture_utils2]
-      - [0x1C8B0, c]
+      - [0x1C8B0, c, game/1C8B0]
       - [0x1C8F0, c, sys/disk_mount]
       - [0x1C970, c, sys/leo_fault]
       - [0x1D580, c, sys/sys_fault]
@@ -260,8 +260,8 @@
       - [0x67980, c, leo/lib/setrtc]
       - [0x67AF0, c, leo/lib/leomseq_tbl]
       - [0x67CA0, c, leo/lib/leomotor]
-      - [0x67D90, c, leo_bootdisk]
-      - [0x68210, hasm, leo_bootstrap]
+      - [0x67D90, c, leo/leo_bootdisk]
+      - [0x68210, hasm, leo/leo_bootstrap]
       - [0x68260, c, leo/lib/driveexist]
       - [0x68330, c, leo/lib/leomode_sel]
       - [0x683E0, c, leo/lib/leord_capa]
@@ -317,7 +317,7 @@
       - [0x7A350, .data, sys/sys_leo]
       - [0x7A3D0, .data, sys/segment]
       - [0x7A450, .data, game/common]
-      - [0x7A620, .data, 1C8B0]
+      - [0x7A620, .data, game/1C8B0]
       - [0x7A800, .data, sys/disk_mount]
       - [0x7A810, .data, sys/leo_fault]
       - [0x7ACE0, .data, sys/sys_fault]
@@ -416,12 +416,12 @@
       - [0x80AA0, .rodata, game/game]
       - [0x80D70, .rodata, sys/math]
       - [0x80DF0, .rodata, game/course_gadgets]
-      - [0x81210, .rodata, 10B20]
+      - [0x81210, .rodata, game/10B20]
       - [0x81230, .rodata, sys/disk_drive]
       - [0x81500, .rodata, sys/sys_leo]
       - [0x82EE0, .rodata, sys/segment]
       - [0x831E0, .rodata, game/common]
-      - [0x83620, .rodata, 1C8B0]
+      - [0x83620, .rodata, game/1C8B0]
       - [0x83630, .rodata, sys/leo_fault]
       - [0x83670, .rodata, sys/sys_fault]
       - [0x83BB0, .rodata, game/bordered_box]
@@ -482,7 +482,7 @@
       - { type: .bss, vram: 0x8079F950, name: sys/sys_leo }
       - { type: .bss, vram: 0x8079FA40, name: sys/segment }
       - { type: .bss, vram: 0x8079FAA0, name: game/common }
-      - { type: .bss, vram: 0x8079FC10, name: 1C8B0 }
+      - { type: .bss, vram: 0x8079FC10, name: game/1C8B0 }
       - { type: .bss, vram: 0x8079FC80, name: sys/leo_fault }
       - { type: .bss, vram: 0x8079FE80, name: sys/sys_fault }
       - { type: .bss, vram: 0x807A0870, name: game/bordered_box }

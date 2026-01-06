@@ -1751,7 +1751,7 @@ void func_i2_800A9894(GhostRecord* ghostRecord, s32 courseIndex) {
 
 void func_i2_800A98E4(GhostData* ghostData, s32 courseIndex) {
     Dma_RomCopyAsync(gRomSegmentPairs[13][0] + D_i2_800BEE60[courseIndex][1], &ghostData->replayInfo,
-                  sizeof(GhostReplayInfo));
+                     sizeof(GhostReplayInfo));
 }
 
 s32 Save_LoadStaffGhost(s32 courseIndex, s32 encodedCourseIndex) {
@@ -1796,7 +1796,8 @@ void func_i2_800A9A54(GhostData* ghostData, s32 courseIndex) {
     RomOffset romOffset;
 
     Dma_RomCopyAsync(gRomSegmentPairs[13][0] + offsets[1], &ghostData->replayInfo, sizeof(GhostReplayInfo));
-    Dma_RomCopyAsync(gRomSegmentPairs[13][0] + offsets[2], ghostData->replayData, ALIGN_2(ghostData->replayInfo.size + 1));
+    Dma_RomCopyAsync(gRomSegmentPairs[13][0] + offsets[2], ghostData->replayData,
+                     ALIGN_2(ghostData->replayInfo.size + 1));
 }
 
 void func_i2_800A9AE0(s32 arg0) {

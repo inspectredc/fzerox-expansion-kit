@@ -63,7 +63,8 @@ s32 func_807039D4(s32 startLba, void* vram, s32 diskSize, s32 bssSize) {
 
     if (lbaCount - 1) {
         LeoLBAToByte(startLba, lbaCount - 1, &nBytes);
-        SLLeoReadWrite(&cmdBlock, OS_READ, startLba, osPhysicalToVirtual((uintptr_t) vram), lbaCount - 1, &gDmaMesgQueue);
+        SLLeoReadWrite(&cmdBlock, OS_READ, startLba, osPhysicalToVirtual((uintptr_t) vram), lbaCount - 1,
+                       &gDmaMesgQueue);
         osRecvMesg(&gDmaMesgQueue, NULL, OS_MESG_BLOCK);
     }
     diskSize -= nBytes;
@@ -97,7 +98,8 @@ s32 DiskDrive_LoadData(s32 startLba, void* vram, s32 diskSize, s32 bssSize) {
 
     if (lbaCount - 1) {
         LeoLBAToByte(startLba, lbaCount - 1, &nBytes);
-        func_80768AF0(&cmdBlock, OS_READ, startLba, osPhysicalToVirtual((uintptr_t) vram), lbaCount - 1, &gDmaMesgQueue);
+        func_80768AF0(&cmdBlock, OS_READ, startLba, osPhysicalToVirtual((uintptr_t) vram), lbaCount - 1,
+                      &gDmaMesgQueue);
         osRecvMesg(&gDmaMesgQueue, NULL, OS_MESG_BLOCK);
     }
     diskSize -= nBytes;
@@ -130,7 +132,8 @@ s32 DiskDrive_LoadOverlay(s32 startLba, void* vram, s32 diskSize, s32 bssSize) {
 
     if (lbaCount - 1) {
         LeoLBAToByte(startLba, lbaCount - 1, &nBytes);
-        func_80768A5C(&cmdBlock, OS_READ, startLba, osPhysicalToVirtual((uintptr_t) vram), lbaCount - 1, &gDmaMesgQueue);
+        func_80768A5C(&cmdBlock, OS_READ, startLba, osPhysicalToVirtual((uintptr_t) vram), lbaCount - 1,
+                      &gDmaMesgQueue);
         osRecvMesg(&gDmaMesgQueue, NULL, OS_MESG_BLOCK);
     }
     diskSize -= nBytes;

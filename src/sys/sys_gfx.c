@@ -338,8 +338,8 @@ void Game_ThreadEntry(void* entry) {
     CLEAR_OVERLAY_CACHE(SEGMENT_TEXT_START(ovl_i10), SEGMENT_TEXT_SIZE(ovl_i10), SEGMENT_DATA_START(ovl_i10),
                         SEGMENT_DATA_SIZE(ovl_i10));
 
-    DiskDrive_LoadOverlayProgressBar(SEGMENT_DISK_START(ovl_i10), SEGMENT_VRAM_START(ovl_i10), SEGMENT_DISK_SIZE(ovl_i10),
-                  SEGMENT_BSS_SIZE(ovl_i10));
+    DiskDrive_LoadOverlayProgressBar(SEGMENT_DISK_START(ovl_i10), SEGMENT_VRAM_START(ovl_i10),
+                                     SEGMENT_DISK_SIZE(ovl_i10), SEGMENT_BSS_SIZE(ovl_i10));
 
     D_8076CB40 = D_8076C770;
 
@@ -348,55 +348,55 @@ void Game_ThreadEntry(void* entry) {
                         SEGMENT_DATA_END(expansion_kit) - SEGMENT_DATA_START(expansion_kit));
 
     DiskDrive_LoadOverlayProgressBar(SEGMENT_DISK_START(expansion_kit), SEGMENT_VRAM_START(expansion_kit),
-                  SEGMENT_DISK_SIZE(expansion_kit), SEGMENT_BSS_SIZE(expansion_kit));
+                                     SEGMENT_DISK_SIZE(expansion_kit), SEGMENT_BSS_SIZE(expansion_kit));
 
     CLEAR_OVERLAY_CACHE(SEGMENT_TEXT_START(ovl_i3), SEGMENT_TEXT_SIZE(ovl_i3), SEGMENT_DATA_START(ovl_i3),
                         SEGMENT_DATA_SIZE(ovl_i3));
 
     DiskDrive_LoadOverlayProgressBar(SEGMENT_DISK_START(ovl_i3), SEGMENT_VRAM_START(ovl_i3), SEGMENT_DISK_SIZE(ovl_i3),
-                  SEGMENT_BSS_SIZE(ovl_i3));
+                                     SEGMENT_BSS_SIZE(ovl_i3));
 
     CLEAR_OVERLAY_CACHE(SEGMENT_TEXT_START(ovl_i4), SEGMENT_TEXT_SIZE(ovl_i4), SEGMENT_DATA_START(ovl_i4),
                         SEGMENT_DATA_SIZE(ovl_i4));
 
     DiskDrive_LoadOverlayProgressBar(SEGMENT_DISK_START(ovl_i4), SEGMENT_VRAM_START(ovl_i4), SEGMENT_DISK_SIZE(ovl_i4),
-                  SEGMENT_BSS_SIZE(ovl_i4));
+                                     SEGMENT_BSS_SIZE(ovl_i4));
 
     CLEAR_OVERLAY_CACHE(SEGMENT_TEXT_START(course_select), SEGMENT_TEXT_SIZE(course_select),
                         SEGMENT_DATA_START(course_select), SEGMENT_DATA_SIZE(course_select));
 
     DiskDrive_LoadOverlayProgressBar(SEGMENT_DISK_START(course_select), SEGMENT_VRAM_START(course_select),
-                  SEGMENT_DISK_SIZE(course_select), SEGMENT_BSS_SIZE(course_select));
+                                     SEGMENT_DISK_SIZE(course_select), SEGMENT_BSS_SIZE(course_select));
 
     CLEAR_OVERLAY_CACHE(SEGMENT_TEXT_START(ovl_i6), SEGMENT_TEXT_SIZE(ovl_i6), SEGMENT_DATA_START(ovl_i6),
                         SEGMENT_DATA_SIZE(ovl_i6));
 
     DiskDrive_LoadOverlayProgressBar(SEGMENT_DISK_START(ovl_i6), SEGMENT_VRAM_START(ovl_i6), SEGMENT_DISK_SIZE(ovl_i6),
-                  SEGMENT_BSS_SIZE(ovl_i6));
+                                     SEGMENT_BSS_SIZE(ovl_i6));
 
     CLEAR_OVERLAY_CACHE(SEGMENT_TEXT_START(ending), SEGMENT_TEXT_SIZE(ending), SEGMENT_DATA_START(ending),
                         SEGMENT_DATA_SIZE(ending));
 
     DiskDrive_LoadOverlayProgressBar(SEGMENT_DISK_START(ending), SEGMENT_VRAM_START(ending), SEGMENT_DISK_SIZE(ending),
-                  SEGMENT_BSS_SIZE(ending));
+                                     SEGMENT_BSS_SIZE(ending));
 
     CLEAR_OVERLAY_CACHE(SEGMENT_TEXT_START(records), SEGMENT_TEXT_SIZE(records), SEGMENT_DATA_START(records),
                         SEGMENT_DATA_SIZE(records));
 
-    DiskDrive_LoadOverlayProgressBar(SEGMENT_DISK_START(records), SEGMENT_VRAM_START(records), SEGMENT_DISK_SIZE(records),
-                  SEGMENT_BSS_SIZE(records));
+    DiskDrive_LoadOverlayProgressBar(SEGMENT_DISK_START(records), SEGMENT_VRAM_START(records),
+                                     SEGMENT_DISK_SIZE(records), SEGMENT_BSS_SIZE(records));
 
     CLEAR_OVERLAY_CACHE(SEGMENT_TEXT_START(ovl_i2), SEGMENT_TEXT_SIZE(ovl_i2), SEGMENT_DATA_START(ovl_i2),
                         SEGMENT_DATA_END(ovl_i2) - SEGMENT_DATA_START(ovl_i2));
 
     DiskDrive_LoadOverlayProgressBar(SEGMENT_DISK_START(ovl_i2), SEGMENT_VRAM_START(ovl_i2), SEGMENT_DISK_SIZE(ovl_i2),
-                  SEGMENT_BSS_SIZE(ovl_i2));
+                                     SEGMENT_BSS_SIZE(ovl_i2));
 
     CLEAR_OVERLAY_CACHE(SEGMENT_TEXT_START(ovl_i9), SEGMENT_TEXT_SIZE(ovl_i9), SEGMENT_DATA_START(ovl_i9),
                         SEGMENT_DATA_SIZE(ovl_i9));
 
     DiskDrive_LoadOverlay(SEGMENT_DISK_START(ovl_i9), SEGMENT_VRAM_START(ovl_i9), SEGMENT_DISK_SIZE(ovl_i9),
-                  SEGMENT_BSS_SIZE(ovl_i9));
+                          SEGMENT_BSS_SIZE(ovl_i9));
 
     D_8076CB40 = -1;
     func_i10_8012B904();
@@ -404,19 +404,19 @@ void Game_ThreadEntry(void* entry) {
     CLEAR_DATA_CACHE(osPhysicalToVirtual(gSegment16C8A0VramStart), SEGMENT_DATA_SIZE_CONST(segment_16C8A0));
 
     Dma_LoadAssets(gRomSegmentPairs[15][0],
-                  (uintptr_t) osPhysicalToVirtual(gSegment16C8A0VramStart) +
-                      (size_t) SEGMENT_DATA_SIZE_CONST(segment_16C8A0),
-                  SEGMENT_VRAM_SIZE(segment_16C8A0));
+                   (uintptr_t) osPhysicalToVirtual(gSegment16C8A0VramStart) +
+                       (size_t) SEGMENT_DATA_SIZE_CONST(segment_16C8A0),
+                   SEGMENT_VRAM_SIZE(segment_16C8A0));
 
     mio0Decode((uintptr_t) osPhysicalToVirtual(gSegment16C8A0VramStart) +
                    (size_t) SEGMENT_DATA_SIZE_CONST(segment_16C8A0),
                osPhysicalToVirtual(gSegment16C8A0VramStart));
 
     Dma_LoadAssets(gRomSegmentPairs[7][0], (uintptr_t) osPhysicalToVirtual(gSegment17B1E0VramStart),
-                  SEGMENT_VRAM_SIZE(segment_17B1E0));
+                   SEGMENT_VRAM_SIZE(segment_17B1E0));
 
     Dma_LoadAssets(gRomSegmentPairs[10][0], (uintptr_t) osPhysicalToVirtual(gSegment17B960VramStart),
-                  SEGMENT_VRAM_SIZE(segment_17B960));
+                   SEGMENT_VRAM_SIZE(segment_17B960));
 
     if ((gLeoDriveConnectionState != 0) && gRamDDCompatible) {
         if (osAppNMIBuffer[13] != 0x20DE1529) {
