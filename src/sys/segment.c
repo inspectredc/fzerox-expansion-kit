@@ -389,7 +389,7 @@ bool func_80708D88(void) {
         CLEAR_TEXT_CACHE(SEGMENT_TEXT_START(ovl_i9), SEGMENT_TEXT_SIZE(ovl_i9));
         CLEAR_DATA_CACHE(SEGMENT_DATA_START(ovl_i9), SEGMENT_DATA_SIZE(ovl_i9));
         DiskDrive_LoadOverlay(SEGMENT_DISK_START(ovl_i9), SEGMENT_VRAM_START(ovl_i9),
-                      SEGMENT_BSS_START(ovl_i9) - SEGMENT_VRAM_START(ovl_i9), SEGMENT_BSS_SIZE(ovl_i9));
+                              SEGMENT_BSS_START(ovl_i9) - SEGMENT_VRAM_START(ovl_i9), SEGMENT_BSS_SIZE(ovl_i9));
         D_8076CC40 = 1;
     } else {
         Arena_AllocateFront(0, SEGMENT_VRAM_SIZE(ovl_i9));
@@ -397,7 +397,7 @@ bool func_80708D88(void) {
             CLEAR_TEXT_CACHE(SEGMENT_TEXT_START(ovl_i9), SEGMENT_TEXT_SIZE(ovl_i9));
             CLEAR_DATA_CACHE(SEGMENT_DATA_START(ovl_i9), SEGMENT_DATA_SIZE(ovl_i9));
             DiskDrive_LoadOverlay(SEGMENT_DISK_START(ovl_i9), SEGMENT_VRAM_START(ovl_i9),
-                          SEGMENT_BSS_START(ovl_i9) - SEGMENT_VRAM_START(ovl_i9), SEGMENT_BSS_SIZE(ovl_i9));
+                                  SEGMENT_BSS_START(ovl_i9) - SEGMENT_VRAM_START(ovl_i9), SEGMENT_BSS_SIZE(ovl_i9));
             sp54 = true;
         }
         D_8076CC40 = 0;
@@ -564,19 +564,19 @@ void Segment_LoadSegment4(void) {
         case GAMEMODE_GP_END_CS:
         case GAMEMODE_DEATH_RACE:
             Dma_LoadAssetsAsync(gRomSegmentPairs[10][0], osPhysicalToVirtual(gSegment17B960VramStart),
-                          SEGMENT_VRAM_SIZE(segment_17B960));
+                                SEGMENT_VRAM_SIZE(segment_17B960));
             romOffset = gRomSegmentPairs[8][0];
             ramSize = SEGMENT_VRAM_SIZE(segment_1B8550);
             break;
         case GAMEMODE_CREATE_MACHINE:
             Dma_LoadAssetsAsync(gRomSegmentPairs[10][0], osPhysicalToVirtual(gSegment17B960VramStart),
-                          SEGMENT_VRAM_SIZE(segment_17B960));
+                                SEGMENT_VRAM_SIZE(segment_17B960));
             romOffset = gRomSegmentPairs[28][0];
             ramSize = SEGMENT_VRAM_SIZE(create_machine_textures);
             break;
         case GAMEMODE_COURSE_EDIT:
             Dma_LoadAssetsAsync(gRomSegmentPairs[10][0], osPhysicalToVirtual(gSegment17B960VramStart),
-                          SEGMENT_VRAM_SIZE(segment_17B960));
+                                SEGMENT_VRAM_SIZE(segment_17B960));
             romOffset = gRomSegmentPairs[8][0];
             ramSize = SEGMENT_VRAM_SIZE(segment_1B8550);
             break;
@@ -585,7 +585,7 @@ void Segment_LoadSegment4(void) {
         case GAMEMODE_LX_GP_RACE_NEXT_MACHINE_SETTINGS:
         case GAMEMODE_FLX_MACHINE_SELECT:
             Dma_LoadAssetsAsync(gRomSegmentPairs[10][0], osPhysicalToVirtual(gSegment17B960VramStart),
-                          SEGMENT_VRAM_SIZE(segment_17B960));
+                                SEGMENT_VRAM_SIZE(segment_17B960));
         default:
             D_8076CBD0 = 0;
             return;

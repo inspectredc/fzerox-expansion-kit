@@ -269,7 +269,7 @@ void DDSave_LoadDDCourseGhosts(s32 courseIndex) {
         courseIndex = 0;
     }
     DiskDrive_LoadData(SEGMENT_DISK_START(silence_3_staff_ghost) + courseIndex, COURSE_CONTEXT()->ghostSave,
-                  3 * sizeof(GhostSave), 0);
+                       3 * sizeof(GhostSave), 0);
 }
 
 void DDSave_EraseCourseGhostFile(s32 courseIndex) {

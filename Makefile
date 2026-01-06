@@ -345,7 +345,7 @@ $(BUILD_DIR)/src/libultra/io/motor.o: OPTFLAGS := -O2 -g0
 
 $(BUILD_DIR)/src/libultra/os/%.o: OPTFLAGS := -O1 -g0
 
-$(BUILD_DIR)/src/leo/%.o: OPTFLAGS := -g
+$(BUILD_DIR)/src/leo/mfs/%.o: OPTFLAGS := -g
 $(BUILD_DIR)/src/leo/lib/%.o: OPTFLAGS := -O2 -g0
 
 # per-file flags
@@ -373,7 +373,7 @@ $(BUILD_DIR)/src/libultra/os/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(IDO53) -
 $(BUILD_DIR)/src/libultra/libc/%.o: CC := $(IDO53)
 
 # libleo
-$(BUILD_DIR)/src/leo_bootdisk.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(IDO53) -- $(AS) $(ASFLAGS) --
+$(BUILD_DIR)/src/leo/leo_bootdisk.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(IDO53) -- $(AS) $(ASFLAGS) --
 $(BUILD_DIR)/src/leo/lib/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(IDO53) -- $(AS) $(ASFLAGS) --
 else
 

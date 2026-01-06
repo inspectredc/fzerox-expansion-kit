@@ -67,7 +67,7 @@ void func_8070A078(u16* pixel, size_t size, s32 arg2, s32 arg3, s32 arg4) {
         colorBlend = (red + green + blue) >> 8;
 
         *pixel = (((arg2 * colorBlend) >> 8) << 11) + (((arg3 * colorBlend) >> 8) << 6) +
-                (((arg4 * colorBlend) >> 8) << 1) + alpha;
+                 (((arg4 * colorBlend) >> 8) << 1) + alpha;
     }
 }
 

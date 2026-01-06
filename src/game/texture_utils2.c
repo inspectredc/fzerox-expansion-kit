@@ -75,7 +75,7 @@ void func_8070E79C(u16* pixel, s32 textureSize) {
     u32 colorBlend;
     u32 red, green, blue, alpha;
 
-    for (i = 0; i < (textureSize / (s32)sizeof(u16)); i++, pixel++) {
+    for (i = 0; i < (textureSize / (s32) sizeof(u16)); i++, pixel++) {
         red = ((*pixel & 0xF800) >> 11) * 77;
         green = ((*pixel & 0x7C0) >> 6) * 150;
         blue = ((*pixel & 0x3E) >> 1) * 29;

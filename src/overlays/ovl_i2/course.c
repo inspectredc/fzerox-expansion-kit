@@ -670,7 +670,7 @@ void func_i2_800B1AF0(CourseSegment* segment, f32* arg1, f32* arg2) {
 }
 #else
 void func_i2_800B1AF0(CourseSegment*, f32*, f32*);
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/112650/func_i2_800B1AF0.s")
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/ovl_i2/course/func_i2_800B1AF0.s")
 #endif
 
 s32 Course_SplineCalculateTensions(CourseInfo* courseInfo) {
