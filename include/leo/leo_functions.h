@@ -6,7 +6,7 @@
 #include "PR/leo.h"
 #include "libc/stdint.h"
 #include "libc/stdbool.h"
-#include "unk_leo.h"
+#include "mfs.h"
 
 void func_80762330(LEODiskTime* diskTime);
 void Mfs_SetGameCode(char* companyCode, char* gameCode);

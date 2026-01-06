@@ -1,6 +1,6 @@
 #include "leo/leo_functions.h"
 #include "leo/leo_internal.h"
-#include "leo/unk_leo.h"
+#include "leo/mfs.h"
 
 extern s32 gMfsError;
 extern LEOCapacity gRamAreaCapacity;
@@ -34,7 +34,7 @@ s32 Mfs_WriteNewFile(u8* buf, u32 fileSize, bool isEncoded) {
     return 0;
 }
 
-extern u8 D_80794DD0;
+u8 D_80794DD0 = 0;
 
 s32 Mfs_WriteNewFileInDir(u16 parentDirId, char* name, char* extension, u8* buf, s32 fileSize, s32 attr,
                           s32 copyCount) {

@@ -1,8 +1,6 @@
 #include "libultra/ultra64.h"
 #include "leo/leo_internal.h"
 
-extern s32 __leoActive;
-
 s32 LeoByteToLBA(s32 startlba, u32 nbytes, s32* lba) {
     u32 reslba;
     u32 byte_p_blk;

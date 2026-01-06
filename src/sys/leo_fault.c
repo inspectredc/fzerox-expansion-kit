@@ -1,7 +1,7 @@
 #include "global.h"
 #include "leo/leo_internal.h"
 
-extern s32 D_8079A32C;
+extern s32 gLeoDriveConnectionState;
 extern OSPiHandle* gDriveRomHandle;
 
 u16* sLeoPrintFrameBuffer;
@@ -117,7 +117,7 @@ void LeoFault_CopyFontToRam(s32* code, u8* ramAddr) {
     sLeoFontIoMsg.devAddr = fontAddr;
     sLeoFontIoMsg.size = 0x80; // leo font size
     gDriveRomHandle->transferInfo.cmdType = LEO_CMD_TYPE_2;
-    if (D_8079A32C == 2) {
+    if (gLeoDriveConnectionState == 2) {
         func_80768B88(gDriveRomHandle, &sLeoFontIoMsg, OS_READ);
     } else {
         osInvalDCache(osPhysicalToVirtual((uintptr_t) ramAddr), 0x80);
@@ -126,7 +126,7 @@ void LeoFault_CopyFontToRam(s32* code, u8* ramAddr) {
     osRecvMesg(&sLeoFontMsgQueue, NULL, OS_MESG_BLOCK);
 }
 
-extern u8 D_8003BBD8[];
+extern u8 gLeoFontBuffer[];
 
 void LeoFault_LoadFontSet(void) {
     u16 i;
@@ -134,7 +134,7 @@ void LeoFault_LoadFontSet(void) {
     osCreateMesgQueue(&sLeoFontMsgQueue, sLeoFontMsgBuf, ARRAY_COUNT(sLeoFontMsgBuf));
     for (i = 0; i < 110; i++) {
         sLeoFontLoadedCharacters[i] = (sLeoFontCharacters[i * 2] << 8) + sLeoFontCharacters[i * 2 + 1];
-        LeoFault_CopyFontToRam(sLeoFontLoadedCharacters[i], D_8003BBD8 + i * 0x80);
+        LeoFault_CopyFontToRam(sLeoFontLoadedCharacters[i], gLeoFontBuffer + i * 0x80);
     }
 }
 
@@ -152,8 +152,8 @@ void LeoFault_DrawErrorBox(u16 left, u16 top, u16 right, u16 bottom, u16 color) 
     }
 }
 
-void func_8070F3B4(void) {
-    func_80703FC8();
+void LeoFault_DrawErrorBackground(void) {
+    DiskDrive_DrawErrorBackground();
 }
 
 extern u16 sLeoFontPallete[];
@@ -198,19 +198,19 @@ void func_8070F3D4(Gfx** gfxP, s32 posX, s32 posY, u8* fontCharData) {
 }
 
 extern s32* D_8003BBB0;
-extern u8* D_8003BBC0;
+extern u8* gExpansionKitFontPtr;
 
 u8* func_8070F634(s32 code) {
     u16 i;
 
     for (i = 0; i < 110; i++) {
         if (code == sLeoFontLoadedCharacters[i]) {
-            return D_8003BBD8 + i * 0x80;
+            return gLeoFontBuffer + i * 0x80;
         }
     }
     for (i = 0; i < 20; i++) {
         if (code == D_8003BBB0[i]) {
-            return D_8003BBC0 + i * 0x80;
+            return gExpansionKitFontPtr + i * 0x80;
         }
     }
     return NULL;
@@ -236,7 +236,7 @@ void LeoFault_DrawErrorMessageNumber(Gfx** gfxP, s32 posX, s32 posY, s8* str) {
     }
 
     for (i = 0; str[i] != 0; i++) {
-        func_8070F3D4(gfxP, posX, posY, &D_8003BBD8[(str[i] - '0') * 0x80]);
+        func_8070F3D4(gfxP, posX, posY, &gLeoFontBuffer[(str[i] - '0') * 0x80]);
         if (str[i] == '1') {
             posX += 7;
         } else {
@@ -253,7 +253,7 @@ void LeoFault_DrawErrorNumber(s32 errNo) {
     LeoFault_DrawErrorMessageNumber(NULL, 194, 70, errNoStr);
 }
 
-void func_8070F8A4(s32 arg0, s32 arg1) {
+void func_8070F8A4(s32 error, s32 errorType) {
     FrameBuffer* temp_a0;
     u8 i;
     u64* temp_v1;
@@ -261,11 +261,11 @@ void func_8070F8A4(s32 arg0, s32 arg1) {
     u64* var_v0;
 
     func_80767940();
-    if (arg0 == LEO_ERROR_WAITING_NMI) {
+    if (error == LEO_ERROR_WAITING_NMI) {
         return;
     }
 
-    if (arg1 == 10) {
+    if (errorType == 10) {
         for (i = 0; i < ARRAY_COUNT(gFrameBuffers); i++) {
             var_v0 = &gFrameBuffers[i]->buffer[0x3B60];
             temp_v1 = temp = &gFrameBuffers[i]->buffer[0x4060];
@@ -275,7 +275,7 @@ void func_8070F8A4(s32 arg0, s32 arg1) {
             }
         }
         LeoFault_DrawErrorMessage(NULL, 68, 190, sLeoErrorMessages[34]);
-    } else if (arg1 == 11) {
+    } else if (errorType == 11) {
         SLForceWritebackDCacheAll();
         Fault_SetFrameBuffer(osViGetNextFramebuffer(), SCREEN_WIDTH, 16);
         Fault_FillRectangle(62, 187, 196, 22);
@@ -285,11 +285,11 @@ void func_8070F8A4(s32 arg0, s32 arg1) {
         LeoFault_DrawErrorBox(258, 187, 259, 208, GPACK_RGBA5551(130, 130, 255, 1));
         LeoFault_DrawErrorMessage(NULL, 68, 190, sLeoErrorMessages[34]);
     } else {
-        func_8070F3B4();
-        switch (arg1) {
+        LeoFault_DrawErrorBackground();
+        switch (errorType) {
             case 0:
                 LeoFault_DrawErrorMessage(NULL, 52, 110, sLeoErrorMessages[11]);
-                LeoFault_DrawErrorNumber(arg0);
+                LeoFault_DrawErrorNumber(error);
                 break;
             case 1:
                 LeoFault_DrawErrorMessage(NULL, 40, 101, sLeoErrorMessages[12]);
@@ -297,12 +297,12 @@ void func_8070F8A4(s32 arg0, s32 arg1) {
                 LeoFault_DrawErrorMessage(NULL, 40, 141, sLeoErrorMessages[14]);
                 LeoFault_DrawErrorMessage(NULL, 40, 161, sLeoErrorMessages[15]);
                 LeoFault_DrawErrorMessage(NULL, 44, 190, sLeoErrorMessages[16]);
-                LeoFault_DrawErrorNumber(arg0);
+                LeoFault_DrawErrorNumber(error);
                 break;
             case 2:
                 LeoFault_DrawErrorMessage(NULL, 56, 107, sLeoErrorMessages[17]);
                 LeoFault_DrawErrorMessage(NULL, 56, 127, sLeoErrorMessages[23]);
-                LeoFault_DrawErrorNumber(arg0);
+                LeoFault_DrawErrorNumber(error);
                 break;
             case 3:
                 LeoFault_DrawErrorMessage(NULL, 24, 90, sLeoErrorMessages[18]);

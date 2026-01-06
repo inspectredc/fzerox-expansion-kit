@@ -20,39 +20,39 @@ void func_xk2_800EA9B0(s8* arg0, s8* arg1) {
 
 extern s32 gMfsError;
 
-void func_xk2_800EA9DC(s32 arg0) {
+void func_xk2_800EA9DC(char* errorMessage) {
     if (gMfsError < 0x2A) {
-        PRINTF("%s DEVICE COMMUNICATION FAILURE\n");
+        PRINTF("%s DEVICE COMMUNICATION FAILURE\n", errorMessage);
         return;
     }
 
     switch (gMfsError) {
         case N64DD_MEDIA_NOT_INIT:
-            PRINTF("%s MEDIA_NOT_INIT\n");
+            PRINTF("%s MEDIA_NOT_INIT\n", errorMessage);
             break;
         case N64DD_AREA_LACKED:
-            PRINTF("%s AREA_LACKED\n");
+            PRINTF("%s AREA_LACKED\n", errorMessage);
             break;
         case N64DD_NOT_FOUND:
-            PRINTF("%s NOT_FOUND\n");
+            PRINTF("%s NOT_FOUND\n", errorMessage);
             break;
         case N64DD_DISK_DAMAGED:
-            PRINTF("%s DISK_DAMAGED\n");
+            PRINTF("%s DISK_DAMAGED\n", errorMessage);
             break;
         case N64DD_ARGUMENT_ILLEGAL:
-            PRINTF("%s ARGUMENT_ILLEGAL\n");
+            PRINTF("%s ARGUMENT_ILLEGAL\n", errorMessage);
             break;
         case N64DD_DISKID_ILLEGAL:
-            PRINTF("%s DISKID_ILLEGAL\n");
+            PRINTF("%s DISKID_ILLEGAL\n", errorMessage);
             break;
         case N64DD_READ_ONLY_MEDIA:
-            PRINTF("%s READ_ONLY_MEDIA\n");
+            PRINTF("%s READ_ONLY_MEDIA\n", errorMessage);
             break;
         case N64DD_MANAGER_NOT_CREATED:
-            PRINTF("%s MANAGER_NOT_CREATED\n");
+            PRINTF("%s MANAGER_NOT_CREATED\n", errorMessage);
             break;
         default:
-            PRINTF("%s UNKNOWN ERROR -> 0x%X\n");
+            PRINTF("%s UNKNOWN ERROR -> 0x%X\n", errorMessage, gMfsError);
             break;
     }
     // TODO: move to more appropriate place

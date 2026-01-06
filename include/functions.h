@@ -21,7 +21,7 @@ void Audio_ThreadEntry(void* entry);
 
 void Controller_SetGlobalInputs(Controller* controller);
 
-void func_80703F90(void);
+void DiskDrive_InitRomSegmentPairs(void);
 void func_80767958(void*);
 s32 func_80768A5C(LEOCmd* cmdBlock, s32 direction, u32 lba, void* vAddr, u32 nLbas, OSMesgQueue* mq);
 s32 func_80768AF0(LEOCmd* cmdBlock, s32 direction, u32 lba, void* vAddr, u32 nLbas, OSMesgQueue* mq);
@@ -84,9 +84,9 @@ void Course_EffectsViewInteractDataInit(bool);
 void Course_FeaturesInit(s32 courseIndex);
 void Course_EffectsInit(s32 courseIndex);
 void Course_SegmentsInit(void);
-void func_80701C04(void* romAddr, void* ramAddr, size_t size);
-void func_80701CAC(void* romAddr, void* ramAddr, size_t size);
-void func_80701D7C(u8* romAddr, u8* ramAddr, size_t size);
+void Dma_ClearRomCopy(void* romAddr, void* ramAddr, size_t size);
+void Dma_RomCopyAsync(void* romAddr, void* ramAddr, size_t size);
+void Dma_LoadAssetsAsync(u8* romAddr, u8* ramAddr, size_t size);
 void Course_Load(s32 courseIndex);
 void func_80702448(s32 courseIndex);
 void Course_GadgetsInit(s32 courseIndex);
@@ -108,18 +108,18 @@ void Math_NormalizeXZ(f32*, f32*);
 s32 Math_VectorSetScale(Vec3f*, f32);
 
 void func_807038B0(void);
-s32 func_80703B40(s32 startLba, void* vram, s32 diskSize, s32 bssSize);
+s32 DiskDrive_LoadData(s32 startLba, void* vram, s32 diskSize, s32 bssSize);
 void func_80703948(void);
-s32 func_80703CA4(s32 startLba, void* vram, s32 diskSize, s32 bssSize);
-s32 func_80703E08(s32 startLba, void* vram, s32 diskSize, s32 bssSize);
+s32 DiskDrive_LoadOverlay(s32 startLba, void* vram, s32 diskSize, s32 bssSize);
+s32 DiskDrive_LoadOverlayProgressBar(s32 startLba, void* vram, s32 diskSize, s32 bssSize);
 
-void func_80704050(s32);
-void func_8070405C(s32);
+void func_80704050(bool);
+void func_8070405C(bool);
 void func_80704068(void);
 void func_807040C8(void);
 s32 func_80704120(LEODiskID);
 void func_807047AC(void);
-void func_80704810(s32);
+void func_80704810(bool);
 void func_8070481C(void);
 void func_80704AA8(void);
 s32 func_8070595C(void);
@@ -142,7 +142,7 @@ s32 SLCheckDiskInsert(void);
 bool SLCheckDiskChange2(void);
 void func_80707B08(void);
 void func_80707E58(void);
-void func_8070818C(u8* romAddr, u8* ramAddr, size_t size);
+void Dma_LoadAssets(u8* romAddr, u8* ramAddr, size_t size);
 
 void Arena_DefaultStartInit(void);
 void Arena_EndInit(void);
@@ -167,7 +167,7 @@ void Camera_Update(void);
 void Racer_Init(void);
 void func_8071E988(void);
 void func_8071E9C4(void);
-void func_80708F4C(void);
+void Segment_LoadOverlays(void);
 void func_8071EA88(void);
 void Audio_DDBgmReady(u8 bgm);
 s32 Course_GetBgm(void);
@@ -175,13 +175,13 @@ void func_806F4FC8(void);
 
 void func_807034F0(CourseInfo*);
 
-void func_80703FC8(void);
+void DiskDrive_DrawErrorBackground(void);
 
-void func_8070F8A4(s32, s32);
+void func_8070F8A4(s32 error, s32 errorType);
 void LeoFault_LoadFontSet(void);
 void func_80704CE0(void);
 void func_80704DB0(char*, char*);
-void func_8070F0F0(void);
+void DiskMount_Init(void);
 void func_80704F38(OSThread*);
 void Fault_FillRectangle(s32 xPos, s32 yPos, s32 width, s32 height);
 void Fault_Init(void);
@@ -192,7 +192,7 @@ void Controller_Reset(void);
 
 void func_806F5310(void);
 Gfx* func_806F59E0(Gfx*);
-void func_80709C3C(void);
+void Segment_LoadAssets(void);
 void Audio_Update(void);
 
 bool SLLeoDiskCompare(LEODiskID, LEODiskID);

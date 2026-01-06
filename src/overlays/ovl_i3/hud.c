@@ -1746,7 +1746,7 @@ Gfx* Hud_DrawPlayerLives(Gfx* gfx, s32 numPlayersIndex, s32 playerIndex) {
 }
 
 extern u8 D_276FF0[];
-extern s32 D_807C70D0;
+extern RomOffset gRomSegmentPairs[][2];
 
 // Replaces Falcon/Summer/Goroh Portrait Textures With Alternate Texture
 void Hud_ReplaceCharacterPortrait(s32 character) {
@@ -1761,10 +1761,10 @@ void Hud_ReplaceCharacterPortrait(s32 character) {
     vramOffset = (Segment_GetAddress(4) + SEGMENT_OFFSET(aPortraitCaptainFalconTex)) + textureOffset;
 
     textureOffset = textureIndex * 0x800;
-    romOffset = D_807C70D0;
+    romOffset = gRomSegmentPairs[6][0];
     romOffset = (romOffset + SEGMENT_OFFSET(D_276FF0)) + textureOffset;
 
-    func_80701D7C(romOffset, vramOffset, 0x800);
+    Dma_LoadAssetsAsync(romOffset, vramOffset, 0x800);
 }
 
 void Hud_UpdateCharacterPortraits(void) {

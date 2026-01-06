@@ -1,6 +1,6 @@
 #include "leo/leo_functions.h"
 #include "leo/leo_internal.h"
-#include "leo/unk_leo.h"
+#include "leo/mfs.h"
 
 extern MfsRamArea gMfsRamArea;
 extern u8 D_8077B4D0[];

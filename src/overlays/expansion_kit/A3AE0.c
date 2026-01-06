@@ -1,8 +1,8 @@
 #include "global.h"
 #include "fzx_expansion_kit.h"
 #include "fzx_segmentA.h"
-#include "assets/segment_1FB850.h"
-#include "assets/segment_21C170.h"
+#include "assets/expansion_kit_textures.h"
+#include "assets/course_edit_textures.h"
 #include "assets/overlays/expansion_kit/aA3AE0.h"
 #include "assets/overlays/machine_create/machine_create_assets.h"
 
@@ -1676,13 +1676,13 @@ void func_xk1_80028F50(void) {
     }
 }
 
-extern s32 D_800D11D4;
+extern s32 D_800D11C8[];
 
 void func_xk1_80028F94(void) {
 
     if ((gBGMWidget.openIndex != INVALID_OPTION) && (func_807424CC() == 0)) {
         if (gLastCourseBGM != gBGMOptionToCourseBGM[gBGMOption]) {
-            if (D_800D11D4 != 0) {
+            if (D_800D11C8[3] != 0) {
                 Audio_TriggerSystemSE(NA_SE_36);
             }
             gLastCourseBGM = gBGMOptionToCourseBGM[gBGMOption];

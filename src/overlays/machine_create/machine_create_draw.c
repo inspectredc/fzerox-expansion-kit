@@ -6,7 +6,7 @@
 #include "fzx_machine.h"
 #include "fzx_assets.h"
 #include "fzx_bordered_box.h"
-#include "assets/segment_1FB850.h"
+#include "assets/expansion_kit_textures.h"
 #include "assets/overlays/machine_create/machine_create_assets.h"
 
 Vp gMachinePartViewports[3][7];

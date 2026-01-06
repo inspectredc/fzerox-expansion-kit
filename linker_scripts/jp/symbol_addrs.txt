@@ -272,11 +272,11 @@ gPlayerReverseTimer = 0x807B37B8; // size:0x10
 gMachines = 0x807B37D8; // size:0x294
 sCustomMachineInfo = 0x807B3A70;
 
-gCourseDecorations = 0x807BB738;
-gCourseFeatures = 0x807BBE38;
-gCourseFeaturesInfo = 0x807BCB58;
+gCourseDecorations = 0x807BB738; // size:0x700
+gCourseFeatures = 0x807BBE38; // size:0xD20
+gCourseFeaturesInfo = 0x807BCB58; // size:0x10
 gCourseEffects = 0x807BCB68;
-gCourseEffectsInfo = 0x807BDD68;
+gCourseEffectsInfo = 0x807BDD68; // size:0x8
 gEffectsDrawData = 0x807BDD70;
 gLandmines = 0x807BF570;
 gJumps = 0x807BF870;
@@ -538,15 +538,6 @@ __leoVersion = 0x807C5D70;
 leoDiskStack = 0x807C5D80; //size:0x1000
 DriveRomHandle = 0x807C6D80; //size:0x74
 
-gLeoReadWriteFunc = 0x807C6E70;
-gLeoSeekFunc = 0x807C6E74;
-gLeoSpdlMotorFunc = 0x807C6E78;
-gLeoReadDiskIDFunc = 0x807C6E7C;
-gLeoReadRTCFunc = 0x807C6E80;
-gLeoSetRTCFunc = 0x807C6E84;
-gLeoModeSelectAsyncFunc = 0x807C6E88;
-gLeoRezeroFunc = 0x807C6E8C;
-
 gMfsRamArea = 0x80784EF0; // size:0xE730
 gCurrentDirectoryEntry = 0x80793620;
 gFileAllocationTable = 0x80793650;
@@ -582,8 +573,8 @@ sScriptLoadDonePointers = 0x807C1908;
 sScriptLoadQueue = 0x807C18B0;
 sScriptLoadMsgBuf = 0x807C18C8;
 
-gCourseInfos = 0x802BB140; //segment:unk_context size:0x3480
-gRacers = 0x802D2F20; //segment:unk_context size:0x6DB0
+gCourseInfos = 0x802BB140; //segment:game_context size:0x3480
+gRacers = 0x802D2F20; //segment:game_context size:0x6DB0
 
 gCustomMachinesInfo = 0x806F2400; //segment:custom_machine_info size:0x3E0
 

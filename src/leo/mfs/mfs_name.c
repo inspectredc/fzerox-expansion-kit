@@ -1,6 +1,6 @@
 #include "leo/leo_functions.h"
 #include "leo/leo_internal.h"
-#include "leo/unk_leo.h"
+#include "leo/mfs.h"
 
 s32 Mfs_ValidateFileName(char* name) {
     char* ptr;

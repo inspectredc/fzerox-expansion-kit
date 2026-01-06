@@ -1,6 +1,6 @@
 #include "global.h"
-#include "assets/segment_1FB850.h"
-#include "assets/segment_21C170.h"
+#include "assets/expansion_kit_textures.h"
+#include "assets/course_edit_textures.h"
 #include "leo/leo_functions.h"
 
 UNUSED s32 D_xk2_80104EF0 = 0;

@@ -2,11 +2,11 @@
   segments:
     - [0x09,  0x21C170]
   external_files:
-    - "assets/yaml/jp/segment_1FB850.yaml"
+    - "assets/yaml/jp/expansion_kit_textures.yaml"
   header:
     code:
-      - '#include "assets/segment_21C170.h"'
-      - '#include "assets/segment_1FB850.h"'
+      - '#include "assets/course_edit_textures.h"'
+      - '#include "assets/expansion_kit_textures.h"'
     header:
       - '#include "gfx.h"'
 

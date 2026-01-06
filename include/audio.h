@@ -776,7 +776,7 @@ typedef struct NoteSubAttributes {
 } NoteSubAttributes; // size = 0x18
 
 typedef struct TempoData {
-    /* 0x0 */ s16 unk_00; // set to 0x1C00, unused
+    /* 0x0 */ s16 unk_00; // unused
     /* 0x2 */ s16 seqTicksPerBeat;
 } TempoData; // size = 0x4
 
@@ -1244,8 +1244,11 @@ AudioTask* Audio_SetupCreateTask(void);
 
 extern AudioSpec gAudioSpecs[];
 extern TempoData gTempoData;
+extern AudioHeapInitSizes gAudioHeapInitSizes;
 
 extern s16 D_80771228[];
+
+extern u8 gAudioHeap[0x2ECA00];
 
 // Unknown Section:
 

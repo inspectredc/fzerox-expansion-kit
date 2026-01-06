@@ -1,10 +1,19 @@
 #include "global.h"
 #include "leo/leo_functions.h"
 
-extern unk_807C6F10 D_807C6F10[];
-extern vs32 D_80794E28;
-extern vs32 D_80794E2C;
-extern OSMesgQueue D_807C6E90;
+OSMesgQueue D_807C6E90;
+volatile unk_807C6EA8 D_807C6EA8;
+volatile s32 D_807C6F0C;
+unk_807C6F10 D_807C6F10[8];
+
+volatile u8 D_80794E10 = 0;
+u8 D_80794E14 = 0;
+u8 D_80794E18 = 0;
+volatile u8 D_80794E1C = 0;
+volatile u8 D_80794E20 = 0;
+volatile u8 D_80794E24 = 0;
+volatile s32 D_80794E28 = 0;
+volatile s32 D_80794E2C = 0;
 
 void func_80767800(unk_807C6F10 arg0) {
     OSIntMask prevMask;
@@ -29,19 +38,13 @@ void func_80767900(void) {
     }
 }
 
-extern volatile unk_807C6EA8 D_807C6EA8;
-
 void func_80767940(void) {
     D_807C6EA8.unk_04 = 0;
     D_807C6EA8.unk_08 = 0;
     D_807C6EA8.unk_0C = 0;
 }
 
-extern u8 D_80794E14;
-extern u8 D_80794E18;
-
-extern OSMesgQueue D_807C6E90;
-extern OSMesg D_807C7030[8];
+OSMesg D_807C7030[8];
 
 #ifdef NON_MATCHING
 void func_80767958(void* entry) {
@@ -180,7 +183,13 @@ void func_80767958(void* entry) {
     }
 }
 #else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/75000/func_80767958.s")
+unk_807C6F10* D_807C7050;
+OSMesgQueue D_807C7058;
+OSMesg D_807C7070;
+unk_807C6F10* D_807C7074;
+OSMesg D_807C7078;
+OSMesgQueue* D_807C707C;
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/sys/75000/func_80767958.s")
 #endif
 
 s32 func_80767E30(void) {
@@ -553,7 +562,7 @@ bool func_80768C88(u16 dirId, char* name, char* extension) {
 }
 
 extern LEODiskID D_8076CB50;
-extern LEODiskID D_807C7080;
+LEODiskID D_807C7080;
 
 void func_80768D30(void) {
     SLLeoReadDiskID(&D_8076CB50);

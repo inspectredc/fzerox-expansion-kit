@@ -1,20 +1,20 @@
-  - name: segment_1FB850
+  - name: expansion_kit_textures
     exclusive_ram_id: segment_07
     type: code
     dir: assets
     vram: 0x07000000
     start: 0x1FB850
     subsegments:
-      - [0x1FB850, .data, segment_1FB850/segment_1FB850]
+      - [0x1FB850, .data, expansion_kit_textures/expansion_kit_textures]
 
-  - name: segment_21C170
+  - name: course_edit_textures
     exclusive_ram_id: segment_09
     type: code
     dir: assets
     vram: 0x09000000
     start: 0x21C170
     subsegments:
-      - [0x21C170, .data, segment_21C170/segment_21C170]
+      - [0x21C170, .data, course_edit_textures/course_edit_textures]
 
   - name: silence_3
     exclusive_ram_id: course

@@ -3,6 +3,9 @@
 extern Controller gSharedController;
 extern OSMesgQueue gSerialEventQueue;
 
+s32 D_8076CB40 = -1;
+s32 D_8076CB44 = 0;
+
 void func_807038B0(void) {
     s32 sp24;
 
@@ -11,7 +14,7 @@ void func_807038B0(void) {
     PRINTF("WAIT RECOVER MANAGE AREA\n");
 
     func_8070F8A4(-1, 6);
-    sp24 = osRecvMesg(&gSerialEventQueue, NULL, 0);
+    sp24 = osRecvMesg(&gSerialEventQueue, NULL, OS_MESG_NOBLOCK);
     do {
         osContStartReadData(&gSerialEventQueue);
         Controller_UpdateInputs();
@@ -26,7 +29,7 @@ void func_80703948(void) {
     s32 sp24;
 
     func_8070F8A4(-1, 7);
-    sp24 = osRecvMesg(&gSerialEventQueue, NULL, 0);
+    sp24 = osRecvMesg(&gSerialEventQueue, NULL, OS_MESG_NOBLOCK);
     do {
         osContStartReadData(&gSerialEventQueue);
         Controller_UpdateInputs();
@@ -36,7 +39,6 @@ void func_80703948(void) {
     }
 }
 
-extern s32 D_8076CB44;
 extern u8 D_8077B4D0[];
 extern OSMesgQueue gDmaMesgQueue;
 
@@ -45,7 +47,7 @@ s32 func_807039D4(s32 startLba, void* vram, s32 diskSize, s32 bssSize) {
     s32 sp58;
     s32 lbaCount;
     s32 nBytes;
-    LEOCmd sp34;
+    LEOCmd cmdBlock;
 
     nBytes = 0;
     LeoByteToLBA(startLba, diskSize, &lbaCount);
@@ -61,25 +63,26 @@ s32 func_807039D4(s32 startLba, void* vram, s32 diskSize, s32 bssSize) {
 
     if (lbaCount - 1) {
         LeoLBAToByte(startLba, lbaCount - 1, &nBytes);
-        SLLeoReadWrite(&sp34, OS_READ, startLba, osPhysicalToVirtual((uintptr_t) vram), lbaCount - 1, &gDmaMesgQueue);
-        osRecvMesg(&gDmaMesgQueue, NULL, 1);
+        SLLeoReadWrite(&cmdBlock, OS_READ, startLba, osPhysicalToVirtual((uintptr_t) vram), lbaCount - 1,
+                       &gDmaMesgQueue);
+        osRecvMesg(&gDmaMesgQueue, NULL, OS_MESG_BLOCK);
     }
     diskSize -= nBytes;
-    SLLeoReadWrite(&sp34, OS_READ, (startLba + lbaCount) - 1, osPhysicalToVirtual((uintptr_t) D_8077B4D0), 1,
+    SLLeoReadWrite(&cmdBlock, OS_READ, (startLba + lbaCount) - 1, osPhysicalToVirtual((uintptr_t) D_8077B4D0), 1,
                    &gDmaMesgQueue);
-    osRecvMesg(&gDmaMesgQueue, NULL, 1);
+    osRecvMesg(&gDmaMesgQueue, NULL, OS_MESG_BLOCK);
     bcopy(D_8077B4D0, osPhysicalToVirtual((uintptr_t) vram + nBytes), diskSize);
     bzero((uintptr_t) vram + nBytes + diskSize, bssSize);
     D_8076CB44 = 0;
     return sp58;
 }
 
-s32 func_80703B40(s32 startLba, void* vram, s32 diskSize, s32 bssSize) {
+s32 DiskDrive_LoadData(s32 startLba, void* vram, s32 diskSize, s32 bssSize) {
     void* bssStart;
     s32 sp58;
     s32 lbaCount;
     s32 nBytes;
-    LEOCmd sp34;
+    LEOCmd cmdBlock;
 
     nBytes = 0;
     LeoByteToLBA(startLba, diskSize, &lbaCount);
@@ -95,24 +98,25 @@ s32 func_80703B40(s32 startLba, void* vram, s32 diskSize, s32 bssSize) {
 
     if (lbaCount - 1) {
         LeoLBAToByte(startLba, lbaCount - 1, &nBytes);
-        func_80768AF0(&sp34, OS_READ, startLba, osPhysicalToVirtual((uintptr_t) vram), lbaCount - 1, &gDmaMesgQueue);
-        osRecvMesg(&gDmaMesgQueue, NULL, 1);
+        func_80768AF0(&cmdBlock, OS_READ, startLba, osPhysicalToVirtual((uintptr_t) vram), lbaCount - 1,
+                      &gDmaMesgQueue);
+        osRecvMesg(&gDmaMesgQueue, NULL, OS_MESG_BLOCK);
     }
     diskSize -= nBytes;
-    func_80768AF0(&sp34, OS_READ, (startLba + lbaCount) - 1, osPhysicalToVirtual((uintptr_t) D_8077B4D0), 1,
+    func_80768AF0(&cmdBlock, OS_READ, (startLba + lbaCount) - 1, osPhysicalToVirtual((uintptr_t) D_8077B4D0), 1,
                   &gDmaMesgQueue);
-    osRecvMesg(&gDmaMesgQueue, NULL, 1);
+    osRecvMesg(&gDmaMesgQueue, NULL, OS_MESG_BLOCK);
     bcopy(D_8077B4D0, osPhysicalToVirtual((uintptr_t) vram + nBytes), diskSize);
     bzero((uintptr_t) vram + nBytes + diskSize, bssSize);
     return sp58;
 }
 
-s32 func_80703CA4(s32 startLba, void* vram, s32 diskSize, s32 bssSize) {
+s32 DiskDrive_LoadOverlay(s32 startLba, void* vram, s32 diskSize, s32 bssSize) {
     void* bssStart;
     s32 sp58;
     s32 lbaCount;
     s32 nBytes;
-    LEOCmd sp34;
+    LEOCmd cmdBlock;
 
     nBytes = 0;
     LeoByteToLBA(startLba, diskSize, &lbaCount);
@@ -128,22 +132,22 @@ s32 func_80703CA4(s32 startLba, void* vram, s32 diskSize, s32 bssSize) {
 
     if (lbaCount - 1) {
         LeoLBAToByte(startLba, lbaCount - 1, &nBytes);
-        func_80768A5C(&sp34, OS_READ, startLba, osPhysicalToVirtual((uintptr_t) vram), lbaCount - 1, &gDmaMesgQueue);
-        osRecvMesg(&gDmaMesgQueue, NULL, 1);
+        func_80768A5C(&cmdBlock, OS_READ, startLba, osPhysicalToVirtual((uintptr_t) vram), lbaCount - 1,
+                      &gDmaMesgQueue);
+        osRecvMesg(&gDmaMesgQueue, NULL, OS_MESG_BLOCK);
     }
     diskSize -= nBytes;
-    func_80768A5C(&sp34, OS_READ, (startLba + lbaCount) - 1, osPhysicalToVirtual((uintptr_t) D_8077B4D0), 1,
+    func_80768A5C(&cmdBlock, OS_READ, (startLba + lbaCount) - 1, osPhysicalToVirtual((uintptr_t) D_8077B4D0), 1,
                   &gDmaMesgQueue);
-    osRecvMesg(&gDmaMesgQueue, NULL, 1);
+    osRecvMesg(&gDmaMesgQueue, NULL, OS_MESG_BLOCK);
     bcopy(&D_8077B4D0, osPhysicalToVirtual((uintptr_t) vram + nBytes), diskSize);
     bzero((uintptr_t) vram + nBytes + diskSize, bssSize);
     return sp58;
 }
 
 extern s32 D_8076C770;
-extern s32 D_8076CB40;
 
-s32 func_80703E08(s32 startLba, void* vram, s32 diskSize, s32 bssSize) {
+s32 DiskDrive_LoadOverlayProgressBar(s32 startLba, void* vram, s32 diskSize, s32 bssSize) {
     void* bssStart;
     s32 sp70;
     s32 lbaCount;
@@ -168,7 +172,7 @@ s32 func_80703E08(s32 startLba, void* vram, s32 diskSize, s32 bssSize) {
         func_i10_8012B854();
     }
 
-    while (osRecvMesg(&gDmaMesgQueue, &sp48, 0) == -1) {
+    while (osRecvMesg(&gDmaMesgQueue, &sp48, OS_MESG_NOBLOCK) == -1) {
         if (D_8076CB40 != -1) {
             osWritebackDCacheAll();
             progress = (D_8076C770 - D_8076CB40) / 6 + 160;
@@ -183,16 +187,16 @@ s32 func_80703E08(s32 startLba, void* vram, s32 diskSize, s32 bssSize) {
     return sp70;
 }
 
-extern RomOffset D_807C70A0[];
+extern RomOffset gRomSegmentPairs[][2];
 
-void func_80703F90(void) {
+void DiskDrive_InitRomSegmentPairs(void) {
     size_t size = osAppNMIBuffer[1] - osAppNMIBuffer[0];
-    func_80701C04(osAppNMIBuffer[0], D_807C70A0, size);
+    Dma_ClearRomCopy(osAppNMIBuffer[0], gRomSegmentPairs, size);
 }
 
 extern FrameBuffer* gFrameBuffers[];
 
-void func_80703FC8(void) {
+void DiskDrive_DrawErrorBackground(void) {
     u8 i;
     u64* var_v0;
     u64* temp;

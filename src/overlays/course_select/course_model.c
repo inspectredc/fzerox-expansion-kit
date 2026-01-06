@@ -33,9 +33,9 @@ void func_i5_800770B4(void) {
             D_8076CB44 = 0;
         }
         D_i5_8007B07C = 1;
-        func_80704050(1);
+        func_80704050(true);
         func_80702448(gCourseModelCupType * 6 + gCourseModelCupCourseNo);
-        func_80704050(0);
+        func_80704050(false);
     }
 
     if ((D_8076CB44 == 0) && (D_i5_8007B07C == 1)) {
